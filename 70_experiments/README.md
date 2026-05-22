@@ -56,7 +56,11 @@ For semantic-risk ASR experiments, also report:
 
 - semantic-risk counts;
 - SRES distribution;
+- CEIS distribution;
+- decision-unstable variant count;
 - downstream escalation failure rate;
 - high-risk miss rate;
 - recovery policy triggered;
-- reviewer workload added by recovery.
+- automatic recovery budget;
+- machine abstention rate;
+- conservative escalation cost.

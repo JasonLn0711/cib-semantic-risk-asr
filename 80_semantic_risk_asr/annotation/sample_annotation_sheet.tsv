@@ -1,2 +1,2 @@
 sample_id	split	asr_run_id	reference_text	hypothesis_text	wer	cer	error_type	severity	downstream_impact	decision_field	recovery_action	annotator_note
-example_001	train	whisper_small_smoke_test	我已經匯款三萬元	我還沒匯款三萬元	0.2	0.1	negation	5	3	action_state	human_confirmation	Negation reverses whether money was transferred.
+example_001	train	whisper_small_smoke_test	我已經匯款三萬元	我還沒匯款三萬元	0.2	0.1	negation	5	3	action_state	constrained_redecode	Negation reverses whether money was transferred.

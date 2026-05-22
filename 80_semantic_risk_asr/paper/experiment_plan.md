@@ -7,17 +7,20 @@ Canonical detailed design:
 ## FIRST PRINCIPLE Gate
 
 The first publishable unit is not another long fine-tune. It is a small,
-auditable semantic-risk sample that tests whether transcript errors change
-downstream escalation decisions.
+auditable decision-stability sample that tests whether plausible ASR
+alternatives change downstream escalation decisions.
 
 Do not start a long model run until this gate exists:
 
 1. Select the first `300-500` high-stakes call segments.
-2. Generate baseline ASR hypotheses and ordinary WER/CER.
-3. Fill the semantic-risk annotation TSV schema.
-4. Run SRES scoring and WER/CER-vs-SRES comparison.
-5. Run the downstream escalation impact check.
-6. Store only reviewed aggregate outputs and small safe samples in git.
+2. Generate baseline ASR hypotheses, confidence signals, timestamps, and
+   ordinary WER/CER.
+3. Extract risk atoms from top-1 transcripts and reference transcripts.
+4. Generate plausible ASR counterfactual variants.
+5. Compute SRES as the semantic-risk baseline.
+6. Compute CEIS as the proposed decision-stability metric.
+7. Run the downstream escalation impact check.
+8. Store only reviewed aggregate outputs and small safe samples in git.
 
 Publication-safe output path:
 
@@ -26,7 +29,7 @@ Publication-safe output path:
   generated files local unless a separate controlled-data or Git LFS decision
   is made.
 
-## Experiment 1: ASR Baseline
+## Experiment 1: ASR Baseline And Risk-Atom Error Profile
 
 Models:
 
@@ -36,65 +39,113 @@ Models:
 
 Metrics:
 
-- CER
-- WER
+- CER;
+- WER;
+- risk atom error rate;
+- negation flip rate;
+- amount distortion rate;
+- action confusion rate.
 
 Purpose:
 
-Establish ordinary ASR baseline performance on `janus_165_v1`.
+Establish ordinary ASR performance on `janus_165_v1`, then show that ordinary
+metrics do not explain which models are stable on risk atoms.
 
-## Experiment 2: Semantic-Risk Annotation
+## Experiment 2: Counterfactual Generation Quality
 
 Sample:
 
-- 300-500 call segments from train/validation/test.
+- `300-500` high-stakes call segments from train/validation/test.
 
-Labels:
+Signals:
 
-- decision-critical error exists: yes/no;
-- error type;
-- severity;
-- downstream impact;
-- recommended recovery action.
+- ASR confidence / token log probability if available;
+- n-best hypotheses if available;
+- timestamp-aligned unstable spans;
+- Mandarin phonetic confusion sets;
+- fraud-domain slot ontology for amount, action, actor, time, intent, and scam
+  pattern.
 
-Artifact:
+Metrics:
 
-- `annotation/sample_annotation_sheet.tsv` as the schema.
+- counterfactual coverage;
+- risk atom coverage;
+- plausible variant recall against reference-risk differences;
+- acoustic plausibility distribution.
 
-## Experiment 3: WER/CER vs SRES
+Purpose:
 
-Question:
+Show that the generated alternatives are not arbitrary paraphrases. They are
+plausible ASR variants concentrated around decision-critical atoms.
 
-Does SRES identify downstream-failure cases better than WER/CER?
+## Experiment 3: WER/CER/Semantic Metrics/SRES/CEIS Comparison
 
-Comparison:
+Prediction target:
+
+```text
+downstream label changed = yes/no
+```
+
+Comparisons:
 
 - WER thresholding;
 - CER thresholding;
-- SRES thresholding.
+- semantic distance or ASD if implemented;
+- ASR confidence;
+- SRES;
+- CEIS.
 
 Outcome:
 
-- best F1 for downstream failure detection;
-- high-risk miss rate;
-- examples where WER is low but SRES is high.
+- AUC;
+- F1;
+- Recall@HighRisk;
+- Precision@RecoveryBudget;
+- Critical Miss Rate;
+- False Safe Rate;
+- examples where WER is low but CEIS is high;
+- examples where semantic distance is low but CEIS is high;
+- examples where confidence is high but CEIS is high.
 
-## Experiment 4: Recovery Evaluation
+Expected contribution:
+
+Show that CEIS is better aligned with decision instability than transcript
+similarity alone.
+
+## Experiment 4: Automatic Recovery
 
 Conditions:
 
 1. No recovery.
-2. Confidence-only recovery.
-3. Semantic-risk-aware recovery.
+2. Confidence-only LLM correction.
+3. SRES-triggered recovery.
+4. CDS-ASR constrained re-decoding.
+5. CDS-ASR constrained re-decoding plus decision interval estimation.
+
+Automatic CDS-ASR recovery path:
+
+```text
+high-CEIS span
+-> span-level forced alignment
+-> constrained re-decoding over risk-atom grammar
+-> ASR ensemble arbitration
+-> decision interval estimation
+-> conservative automatic action
+```
 
 Metrics:
 
-- escalation accuracy;
-- high-risk miss rate;
-- reviewer workload;
-- recovery-trigger rate.
+- Critical Miss Rate;
+- Unsafe Down-Routing Rate;
+- Over-Escalation Rate;
+- Automatic Recovery Budget;
+- Machine Abstention Rate;
+- Conservative Escalation Cost;
+- Decision Stability Gain;
+- compute cost.
 
 Expected contribution:
 
-Show that semantic-risk-aware recovery catches decision-critical ASR failures
-that conventional transcript similarity metrics under-prioritize.
+Show that counterfactual decision testing plus constrained acoustic recovery can
+reduce unsafe low-risk decisions without using human review as the proposed
+method.

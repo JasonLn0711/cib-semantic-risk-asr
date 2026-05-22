@@ -2,121 +2,137 @@
 
 ## Working Title
 
-Beyond WER: Semantic-Risk-Aware Evaluation and Recovery for ASR in High-Stakes
-Call-Center Conversations
+When Low WER Becomes Dangerous: Counterfactual Semantic Risk Detection for
+Speech-Driven Decision Systems
 
-Alternative sharper title:
+Alternative titles:
 
-When Low WER Still Fails: Semantic-Risk-Aware ASR Evaluation for High-Stakes
-Conversational Decision Support
+1. Beyond WER: Counterfactual Decision-Stability Evaluation for ASR in
+   High-Stakes Call-Center Conversations
+2. Decision-Stable ASR: Detecting and Recovering High-Risk Transcription Errors
+   in Anti-Fraud Call-Center Conversations
+3. From Transcript Accuracy to Decision Safety: Counterfactual Risk Evaluation
+   for ASR
 
 ## Core Hook
 
-> A transcript can be nearly correct and still operationally dangerous.
+> A transcript is unsafe when a plausible ASR alternative changes the decision.
 
-Traditional WER/CER cannot tell whether an ASR error will cause a high-stakes
-downstream decision failure. This paper proposes a semantic-risk-aware ASR
-evaluation and recovery framework to identify, rank, and repair transcription
-errors that matter for subsequent judgment.
+Traditional WER/CER asks how different two transcripts are. Semantic metrics
+ask whether meaning is preserved. CDS-ASR asks a sharper question:
 
-Framing guardrail:
+> If the ASR could plausibly have heard a neighboring transcript, would the
+> downstream decision flip?
 
-- Use `framing_guardrail.md` to keep the paper from sliding back into a plain
-  Whisper/LoRA/CER-improvement story.
+This is the paper's main upgrade from SRA-ASR. SRES remains useful as a
+semantic-risk baseline, but the protagonist is now counterfactual decision
+stability.
 
 ## Rao-Style Research Logic
 
-The paper should not start from the model. It should start from the real-world
-failure.
+The paper should not start from the model. It should start from a real-world
+failure that makes the reader care.
 
-1. A real or foreseeable operational problem is emerging.
-2. Existing methods solve only part of it.
-3. Their remaining gap creates practical risk.
-4. We propose a focused method that directly targets that gap.
-5. Experiments show whether the method reduces decision-critical failures under
-   realistic constraints.
+1. Speech-driven systems increasingly turn conversations into operational
+   decisions.
+2. In high-stakes domains, a small ASR error can land on a decision atom:
+   negation, amount, action, actor, time, intent, or scam pattern.
+3. Existing ASR evaluation and correction methods improve transcript similarity
+   or semantic similarity, but do not directly test whether the downstream
+   decision is stable under plausible ASR alternatives.
+4. We propose CDS-ASR, a counterfactual decision-stability framework.
+5. Experiments show whether CEIS detects unsafe transcripts and whether
+   automatic constrained recovery reduces unsafe down-routing.
 
 The manuscript should be steady, but it needs a clear reason to read it:
 
-> Low WER can still be unsafe when the remaining errors hit decision-critical
-> meaning.
+> Low WER is dangerous when plausible ASR alternatives produce different
+> downstream decisions.
 
 ## Real-World Pain Point
 
-ASR is increasingly used as the text layer for high-stakes speech workflows:
-medical intake, customer service, financial dispute handling, investigation,
-and anti-fraud call review.
+Contact-center AI systems already use speech transcripts as operational input.
+Amazon Connect Customer Contact Lens documentation describes conversational
+analytics across voice, chat, and email using NLP for sentiment analysis, issue
+detection, and automatic categorization. The AWS conversational analytics page
+also describes transcript-based summaries, categories, compliance monitoring,
+and real-time alerts.
 
-Many downstream systems treat ASR transcripts as the basis for classification,
-summarization, risk scoring, routing, or escalation. This creates an operational
-risk:
+Anti-fraud calls make this problem concrete. Taiwan's National Police Agency
+165 anti-fraud hotline records incident details and provides information to
+victims. In the United States, the FBI's 2025 IC3 reporting context described
+`1,008,597` total complaints, approximately `453,000` cyber-enabled fraud
+complaints, and losses exceeding `$17.7 billion`.
+
+These systems create a safety-critical dependency:
 
 ```text
 I did not transfer money.
 -> I transferred money.
 ```
 
-The transcript may be nearly correct at the character or word level, but the
-decision state is reversed. This is not just a transcription-accuracy problem.
-It is a downstream decision-risk problem.
+The transcript may be nearly correct at the character or word level, while the
+decision state is reversed. This is not only a transcription-accuracy problem.
+It is a decision-stability problem.
 
 ## Literature Starting Point
 
-Existing work already supports the premise that WER is insufficient for
-semantic or downstream evaluation.
+Existing work already supports the premise that WER is insufficient.
 
 - Kim et al. propose Semantic Distance because WER measures literal transcript
   difference and may not reflect downstream semantic correctness.
 - Rugayan et al. report that WER does not encode error severity and that
   semantic metrics can better align with human perception and downstream NLP
   performance.
-- Ruan et al. frame ASR errors as upstream noise that can degrade spoken
-  language understanding.
-- Naderi et al. show that LLM-ASR interfaces can use confidence and prompting,
-  but this still leaves the question of which errors are decision-critical.
+- Naderi et al. investigate LLM-based post-hoc ASR correction with
+  confidence-based filtering.
 
-The gap for this paper is narrower:
+These are the right neighbors, but their remaining limitation is important:
 
-> Existing semantic metrics and correction methods do not directly make
-> high-stakes downstream decision failure the ASR evaluation target.
+> They still primarily evaluate or repair the transcript. They do not directly
+> test whether plausible transcript alternatives change the downstream
+> high-stakes decision.
 
 ## Research Question
 
 Main RQ:
 
-> Can semantic-risk-aware ASR evaluation better identify decision-critical
-> transcription failures than conventional WER/CER in high-stakes call-center
-> conversations?
+> Can counterfactual decision-stability evaluation better identify unsafe ASR
+> outputs than transcript-similarity metrics in high-stakes anti-fraud
+> call-center conversations?
 
 Sub-questions:
 
-- RQ1: Can WER/CER reliably identify downstream escalation-label changes?
-- RQ2: Does a Semantic Risk Score better detect high-risk ASR failures?
-- RQ3: Can risk-triggered recovery reduce high-risk misses without making human
-  review workload explode?
+- RQ1: Can WER/CER, semantic distance, or confidence reliably detect downstream
+  escalation-label changes?
+- RQ2: Does CEIS better detect decision-unstable ASR outputs than WER/CER,
+  semantic metrics, confidence, or SRES?
+- RQ3: Can automatic constrained recovery reduce unsafe down-routing without
+  using human review as the method?
 
-## Proposed Framework: SRA-ASR
+## Proposed Framework: CDS-ASR
 
-SRA-ASR means:
+CDS-ASR means:
 
-> Semantic-Risk-Aware ASR Evaluation and Recovery.
+> Counterfactual Decision-Stability ASR.
 
 Pipeline:
 
 ```text
 audio
--> ASR transcript
--> decision-critical error detection
--> Semantic Risk Score
--> downstream escalation impact
--> risk-triggered recovery
+-> ASR transcript + confidence / n-best / timestamps
+-> risk atom extraction
+-> ASR counterfactual generator
+-> downstream decision model
+-> CEIS
+-> constrained re-decoding / decision interval / conservative action
 ```
 
-### Module 1: Decision-Critical Error Taxonomy
+### Module 1: Risk Atom Schema
 
-The taxonomy defines which ASR errors are dangerous in high-stakes calls.
+Risk atoms are transcript spans that can change a downstream decision.
 
-| Category | Examples | Risk |
+| Risk atom | Examples | Risk |
 | --- | --- | --- |
 | Negation | has / has not, did / did not | Reverses event state. |
 | Amount | 30k / 300k | Changes loss severity. |
@@ -124,66 +140,110 @@ The taxonomy defines which ASR errors are dangerous in high-stakes calls.
 | Actor | bank / police / family / service agent | Changes scam-pattern interpretation. |
 | Time | today / yesterday / next week | Changes urgency. |
 | Intent | I want to report / I only want to ask | Changes routing. |
-| Uncertainty | maybe / sure / not sure | Changes reviewer confidence. |
+| Uncertainty | maybe / sure / not sure | Changes confidence and label interval. |
 | Scam pattern | investment / fake police / recurring-payment cancellation | Changes downstream case type. |
 
 Contribution 1:
 
-> A decision-critical ASR error taxonomy for high-stakes call-center
-> conversations.
+> A risk atom schema for high-stakes call-center ASR decisions.
 
-### Module 2: Semantic Risk Score
+### Module 2: ASR Counterfactual Generator
 
-Start with an interpretable formula:
+The system generates plausible transcript alternatives around unstable
+decision-critical spans.
+
+Sources:
+
+1. Acoustic ambiguity: confidence, token log probability, n-best alternatives,
+   and timestamp-aligned unstable spans.
+2. Mandarin phonetic confusion: homophones, near-homophones, tones, number
+   units, and short function words.
+3. Fraud-domain ontology: money amounts, payment actions, caller identity,
+   account status, time, intent, and scam type.
+
+Example:
 
 ```text
-SRS = sum(type_weight * severity * downstream_impact)
+Top-1:
+I transferred 30,000 today.
+
+Counterfactual variants:
+I transferred 300,000 today.
+I did not transfer 30,000 today.
+I only asked about transferring 30,000 today.
+I transferred 30,000 yesterday.
 ```
 
-Optional extension:
+Contribution 2:
+
+> A counterfactual ASR variant contract that produces acoustically and
+> semantically plausible decision alternatives instead of generic paraphrases.
+
+### Module 3: Counterfactual Escalation Instability Score
+
+CEIS measures the maximum decision-flip risk among plausible alternatives.
+
+Formula:
 
 ```text
-SRS = sum(type_weight * severity * downstream_impact * confidence_penalty)
+CEIS(x) = max over v in V(x) [
+    P(v | audio) * RiskAtomWeight(v) * DecisionDistance(f(x), f(v))
+]
 ```
 
 Where:
 
-- `type_weight`: risk weight by category;
-- `severity`: 0-5 semantic corruption severity;
-- `downstream_impact`: 0-3 likely effect on downstream escalation;
-- `confidence_penalty`: optional penalty for dangerous high-confidence errors.
-
-Contribution 2:
-
-> Semantic Risk Score, an interpretable metric that complements WER/CER by
-> weighting transcription errors by decision consequence.
-
-### Module 3: Risk-Triggered Recovery
-
-When SRS crosses a threshold, the system should not directly trust the
-transcript. It triggers one of:
-
-- targeted re-listening;
-- human confirmation;
-- alternative transcript comparison;
-- low-confidence or semantic-risk warning;
-- priority review.
+- `x`: ASR top-1 transcript;
+- `v`: plausible counterfactual transcript variant;
+- `P(v | audio)`: acoustic plausibility;
+- `RiskAtomWeight(v)`: risk weight for the affected atom;
+- `DecisionDistance`: distance between downstream escalation labels.
 
 Contribution 3:
 
-> A risk-triggered recovery policy that reduces high-risk missed escalation
-> while controlling reviewer workload.
+> CEIS reframes ASR evaluation from transcript similarity to downstream
+> decision stability.
+
+### Module 4: Automatic Recovery
+
+The paper must not use human review as the proposed recovery method. Recovery is
+automatic and machine-bounded.
+
+Path:
+
+```text
+high-CEIS span
+-> span-level forced alignment
+-> constrained re-decoding over risk-atom grammar
+-> ASR ensemble arbitration
+-> decision interval estimation
+-> conservative automatic action
+```
+
+Examples:
+
+- Amount span: constrain decoding to amount grammar such as `3,000`, `30,000`,
+  `300,000`.
+- Negation span: constrain decoding to variants such as `has`, `has not`,
+  `already`, `not yet`.
+- Decision interval: if plausible variants range from `review` to
+  `critical_escalation`, do not output `no_escalation`.
+
+Contribution 4:
+
+> An automatic recovery policy that uses acoustic evidence and decision
+> intervals rather than manual review as the method.
 
 ## Experiment Design
 
 Only four experiments belong in the first paper.
 
-### Experiment 1: ASR Baseline
+### Experiment 1: ASR Baseline And Risk-Atom Error Profile
 
 Purpose:
 
-Establish ordinary ASR performance. This is the baseline, not the paper's main
-contribution.
+Establish ordinary ASR performance, then show which models are stable or
+unstable on decision atoms.
 
 Models:
 
@@ -196,57 +256,31 @@ Models:
 Metrics:
 
 - WER;
-- CER.
+- CER;
+- risk atom error rate;
+- negation flip rate;
+- amount distortion rate;
+- action confusion rate.
 
-Outputs:
-
-- `predictions.tsv`;
-- `metrics.csv`;
-- `error_samples.tsv`.
-
-### Experiment 2: Semantic-Risk Annotation
+### Experiment 2: Counterfactual Generation Quality
 
 Purpose:
 
-Create the core research dataset.
+Show that generated alternatives are plausible ASR alternatives around
+decision-critical spans, not arbitrary paraphrases.
 
 Sample target:
 
-- 300-500 utterances.
+- `300-500` high-stakes utterances.
 
-Sampling plan:
+Metrics:
 
-- random samples;
-- high-WER/CER samples;
-- low-WER/CER samples containing risk terms;
-- samples containing negation, amount, action, actor, time, intent,
-  uncertainty, or scam-pattern terms.
+- counterfactual coverage;
+- plausible variant recall;
+- risk atom coverage;
+- acoustic plausibility score distribution.
 
-Annotation fields:
-
-| Field | Meaning |
-| --- | --- |
-| reference transcript | human/canonical transcript |
-| ASR transcript | model output |
-| error type | taxonomy category |
-| decision-critical | yes/no |
-| severity | 0-5 |
-| downstream impact | 0-3 |
-| downstream label changed | yes/no |
-| recovery action | none / human confirmation / targeted re-listening / priority review |
-| reviewer note | why the error matters |
-
-Quality control:
-
-- double-code a 20% subset if possible;
-- report Cohen's kappa or Krippendorff's alpha if a second annotator is
-  available.
-
-### Experiment 3: WER/CER vs SRS
-
-Purpose:
-
-Test whether conventional metrics identify decision-critical ASR failures.
+### Experiment 3: Metric Comparison
 
 Prediction target:
 
@@ -258,11 +292,12 @@ Predictors:
 
 | Predictor | Role |
 | --- | --- |
-| WER | baseline |
-| CER | baseline |
+| WER | surface baseline |
+| CER | surface baseline |
 | semantic distance / ASD | semantic baseline if implemented |
 | confidence score | confidence baseline if available |
-| SRS | proposed metric |
+| SRES | semantic-risk baseline |
+| CEIS | proposed decision-stability metric |
 
 Evaluation:
 
@@ -270,25 +305,21 @@ Evaluation:
 - F1;
 - Recall@HighRisk;
 - Precision@RecoveryBudget;
-- Spearman correlation.
+- Critical Miss Rate;
+- False Safe Rate.
 
-Expected pattern:
+Evidence tables should include:
 
-```text
-SRS > semantic distance > WER/CER
-```
+- low WER + high CEIS;
+- low semantic distance + high CEIS;
+- high confidence + high CEIS.
 
-This does not need to claim that SRS is universally better. The narrower claim
-is enough:
-
-> SRS is better suited for detecting high-risk ASR errors that can change
-> downstream escalation decisions.
-
-### Experiment 4: Recovery Evaluation
+### Experiment 4: Automatic Recovery Evaluation
 
 Purpose:
 
-Show that the framework does not only diagnose failure; it also helps recover.
+Show that the framework does not only diagnose instability; it reduces unsafe
+down-routing automatically.
 
 Downstream task:
 
@@ -306,40 +337,43 @@ Conditions:
 | Condition | Meaning |
 | --- | --- |
 | No recovery | ASR transcript directly enters downstream classifier. |
-| Confidence-only recovery | Low-confidence spans trigger review. |
-| SRS-triggered recovery | High semantic-risk spans trigger targeted review/recovery. |
+| Confidence-only LLM correction | LLM correction triggered by low confidence. |
+| SRES-triggered recovery | Semantic-risk baseline trigger. |
+| CDS-ASR constrained re-decoding | Re-decode high-CEIS spans with risk-atom grammar. |
+| CDS-ASR + decision interval | Use decision interval and conservative automatic action. |
 
 Metrics:
 
 | Metric | Meaning |
 | --- | --- |
-| high-risk miss rate | How many high-risk cases were missed. |
-| downstream F1 | Escalation classification performance. |
-| reviewer workload | Percent of cases/spans requiring review. |
-| recovery precision | Whether triggered reviews were actually useful. |
-| workload-adjusted recall | High-risk detection under fixed review budget. |
+| Critical Miss Rate | High-risk cases incorrectly routed low. |
+| Unsafe Down-Routing Rate | Any decision interval that includes high risk but outputs low risk. |
+| Over-Escalation Rate | Conservative actions that escalate unnecessarily. |
+| Automatic Recovery Budget | Number of spans/cases re-decoded. |
+| Machine Abstention Rate | Cases where the machine returns an interval instead of a single label. |
+| Decision Stability Gain | Reduction in decision flips after recovery. |
+| compute cost | Added cost for constrained recovery. |
 
 Desired result:
 
-> SRS-triggered recovery lowers high-risk miss rate while adding less workload
-> than broad review or naive confidence-only recovery.
+> CDS-ASR reduces critical misses and unsafe down-routing more effectively than
+> transcript-centered baselines, without making human review the method.
 
 ## Paper Contributions
 
-1. We define a decision-critical ASR error taxonomy for high-stakes
-   call-center conversations.
-2. We propose Semantic Risk Score, an interpretable metric that weights ASR
-   errors by semantic category, severity, and downstream decision impact.
-3. We show that SRS-triggered recovery can reduce high-risk missed escalation
-   compared with WER/CER or confidence-only baselines while controlling
-   reviewer workload.
+1. We define a risk atom schema for high-stakes call-center ASR decisions.
+2. We propose CEIS, a counterfactual decision-stability metric for ASR.
+3. We show that CEIS detects unsafe ASR outputs missed by WER/CER, semantic
+   metrics, confidence, and SRES.
+4. We propose an automatic constrained recovery policy using re-decoding,
+   ensemble arbitration, decision intervals, and conservative machine action.
 
 ## Suggested Paper Structure
 
 1. Introduction
 2. Related Work
 3. Problem Formulation
-4. Method
+4. CDS-ASR Method
 5. Experiments
 6. Results
 7. Discussion
@@ -356,46 +390,81 @@ Best initial fit:
 4. Information Processing & Management
 
 ESWA is the most natural first target because the paper is applied AI,
-decision-support, risk-scoring, and empirical framework oriented.
+decision-support, risk scoring, and empirical framework oriented. Computer
+Speech & Language becomes stronger if the acoustic counterfactual and
+constrained re-decoding implementation is mature.
 
 ## Four-Week Execution Plan
 
 ### Week 1
 
-- Freeze taxonomy.
-- Generate 300-500 sample list.
+- Freeze risk atom schema.
+- Generate `300-500` sample list.
 - Run or collect Whisper/Breeze predictions.
-- Create annotation sheet.
+- Build counterfactual variant table.
 
 ### Week 2
 
-- Complete first annotation round.
-- Compute WER/CER/SRS.
-- Build low-WER/high-SRS case table.
+- Score WER/CER/SRES/CEIS.
+- Build low-WER/high-CEIS case table.
+- Build low-semantic-distance/high-CEIS case table if semantic distance is
+  implemented.
 
 ### Week 3
 
 - Create downstream escalation labels.
-- Compare WER/CER/SRS.
-- Produce AUC/F1/Recall@HighRisk table.
+- Compare WER/CER/semantic metrics/SRES/CEIS.
+- Produce AUC/F1/Recall@HighRisk/Critical Miss Rate table.
 
 ### Week 4
 
-- Run recovery experiment.
+- Run automatic recovery experiment.
 - Draft introduction, method, and experiment tables.
 - Decide ESWA vs Computer Speech & Language.
 
+## Introduction Skeleton
+
+High-stakes call-center systems increasingly transform speech into operational
+decisions, including classification, summarization, routing, escalation, and
+compliance monitoring. Commercial contact-center AI systems already analyze
+voice conversations through transcripts, sentiment analysis, issue detection,
+automatic categorization, summaries, and real-time alerts. In anti-fraud
+settings, this creates a safety-critical dependency: a small transcription
+error can change whether a case is treated as routine, reviewed, prioritized,
+or escalated.
+
+Existing ASR evaluation remains largely transcript-centered. WER and CER
+measure surface edit distance, while recent semantic metrics improve evaluation
+by estimating meaning preservation. However, high-stakes decisions often depend
+on a small set of decision-critical atoms, such as negation, amount, action,
+actor, time, and intent. A transcript may remain semantically close to the
+reference while still reversing a downstream decision.
+
+We propose Counterfactual Decision-Stability ASR, a framework that evaluates
+ASR outputs by testing whether plausible transcription alternatives change
+downstream decisions. Instead of asking only how similar a transcript is to the
+reference, CDS-ASR asks whether the decision remains stable under acoustically
+and semantically plausible ASR variants. We introduce Counterfactual Escalation
+Instability Score, risk-atom-guided counterfactual generation, and automatic
+span-level recovery through constrained re-decoding and decision interval
+estimation.
+
 ## Citation Seed
 
+- AWS Contact Lens / Amazon Connect Customer documentation:
+  https://docs.aws.amazon.com/connect/latest/adminguide/analyze-conversations.html
+- AWS conversational analytics:
+  https://aws.amazon.com/products/connect/customer/conversational-analytics/
+- Taiwan National Police Agency 165 anti-fraud hotline:
+  https://www.npa.gov.tw/en/app/artwebsite/view?id=8035&module=artwebsite&serno=ed2427e1-de0a-4f6f-8f68-8f83b604e89b
+- FBI cyber-enabled fraud / IC3 press release:
+  https://www.fbi.gov/news/press-releases/cryptocurrency-and-ai-scams-bilk-americans-of-billions
 - Kim et al. (2021), "Semantic Distance: A New Metric for ASR Performance
   Analysis Towards Spoken Language Understanding",
   https://www.isca-archive.org/interspeech_2021/kim21e_interspeech.html
 - Rugayan et al. (2023), "Perceptual and Task-Oriented Assessment of a Semantic
   Metric for ASR Evaluation",
   https://www.isca-archive.org/interspeech_2023/rugayan23_interspeech.html
-- Ruan et al. (2020), "Towards an ASR error robust spoken language
-  understanding system",
-  https://www.amazon.science/publications/towards-an-asr-error-robust-spoken-language-understanding-system
 - Naderi et al. (2024), "Towards interfacing large language models with ASR
   systems using confidence measures and prompting",
   https://www.isca-archive.org/interspeech_2024/naderi24_interspeech.html

@@ -1,28 +1,30 @@
-# JANUS Semantic-Risk-Aware ASR Workspace
+# JANUS Counterfactual Decision-Stability ASR Workspace
 
 Generated: 2026-05-18T15:17:05+08:00
 
 This repository is a local research workspace for JANUS high-stakes call-center
 ASR data.
 
-The single short-term paper axis is **semantic-risk-aware ASR evaluation and
-recovery**.
+The single short-term paper axis is **Counterfactual Decision-Stability ASR
+(CDS-ASR)**.
 
 The paper is not about fine-tuning Whisper as the main contribution. Whisper and
 Breeze-ASR baselines provide ASR hypotheses. The main contribution is a way to
-identify, score, and recover from transcription errors that can change
-downstream high-stakes decisions.
+test whether downstream decisions remain stable under plausible ASR
+alternatives.
 
-The guardrail is explicit: do not sell this as another ASR benchmark or small
-CER improvement. Sell it as ASR failure consequence in high-stakes
-conversational decision systems.
+The guardrail is explicit: do not sell this as another ASR benchmark, small CER
+improvement, or human-review workflow. Sell it as decision stability under
+plausible transcript alternatives in high-stakes conversational decision
+systems.
 
 ```text
 audio
--> ASR transcript
--> semantic-risk error
--> downstream consequence
--> recovery action
+-> ASR transcript + confidence / n-best / timestamps
+-> risk atom extraction
+-> plausible counterfactual transcript variants
+-> downstream decision stability / CEIS
+-> automatic constrained recovery or conservative machine action
 ```
 
 The original downloaded zip files were kept, and the extracted folders were
@@ -40,7 +42,7 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
 | `50_janus_data_library/` | Purpose/type overlay for navigating source, audio, labels, models, environments, and reports. |
 | `60_whisper_asr_finetuning/` | Primary Whisper ASR fine-tuning workspace, dataset entry point, configs, and validation scripts. |
 | `70_experiments/` | Experiment registry, run records, metric templates, and reviewed ASR outputs. |
-| `80_semantic_risk_asr/` | Main paper axis: decision-critical ASR error taxonomy, SRES scoring, downstream scam escalation task, and recovery policy. |
+| `80_semantic_risk_asr/` | Main paper axis: CDS-ASR, risk atoms, counterfactual variants, CEIS scoring, downstream scam escalation, and automatic recovery policy. |
 | `docs/` | Repo-level data map and handling rules. |
 
 ## Inventory files

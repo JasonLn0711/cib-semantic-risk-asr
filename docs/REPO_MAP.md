@@ -1,12 +1,12 @@
 # Repo Map
 
-This repository is organized as a local JANUS semantic-risk-aware ASR research
-workspace. Large source assets remain in their original archive/extracted
-locations; downstream fine-tuning and semantic-risk experiments should use the
-stable overlays.
+This repository is organized as a local JANUS Counterfactual Decision-Stability
+ASR research workspace. Large source assets remain in their original
+archive/extracted locations; downstream fine-tuning and CDS-ASR experiments
+should use the stable overlays.
 
 The paper-facing research object is narrow: conventional WER/CER can miss
-decision-critical ASR errors in high-stakes call-center conversations.
+decision-unstable ASR outputs in high-stakes call-center conversations.
 
 ## Canonical Layers
 
@@ -20,7 +20,7 @@ decision-critical ASR errors in high-stakes call-center conversations.
 | `50_janus_data_library/` | Purpose-oriented symlink/catalog overlay across all JANUS data. | Navigation/index layer. |
 | `60_whisper_asr_finetuning/` | Whisper-oriented working entry point, configs, and validation scripts. | Primary training workspace. |
 | `70_experiments/` | Experiment registry, run records, metric templates, and reviewed outputs. | Primary experiment log. |
-| `80_semantic_risk_asr/` | Decision-critical ASR error taxonomy, SRES scoring, downstream scam escalation task, and risk-triggered recovery policy. | Primary paper workspace. |
+| `80_semantic_risk_asr/` | CDS-ASR design, risk atom schema, counterfactual variants, CEIS scoring, downstream scam escalation task, and automatic constrained recovery policy. | Primary paper workspace. |
 
 ## Current Fine-Tuning Dataset
 
@@ -60,9 +60,12 @@ organized extracted audio under `10_extracted_parts/`.
 ## Research-Framing Rules
 
 - Do not frame the paper as only Whisper, LoRA, or CER/WER optimization.
-- Treat WER/CER as baseline metrics, not the main contribution.
-- Evaluate transcript errors by decision consequence: negation, amount, action,
-  actor, intent, time, uncertainty, and scam-pattern corruption.
+- Treat WER/CER and SRES as baseline metrics, not the main contribution.
+- Evaluate ASR by whether downstream decisions remain stable under plausible
+  transcript alternatives.
+- Use risk atoms first: negation, amount, action, actor, intent, time,
+  uncertainty, and scam-pattern corruption.
 - Use one downstream task first: scam escalation classification.
-- Use one practical recovery mechanism first: risk-triggered human confirmation,
-  targeted re-listening, or priority review.
+- Use one automatic recovery mechanism first: high-CEIS span alignment,
+  constrained re-decoding, ASR ensemble arbitration, decision interval
+  estimation, and conservative machine action.

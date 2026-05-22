@@ -6,90 +6,123 @@ Canonical detailed design:
 
 ## Proposed Title
 
-Beyond WER: Semantic-Risk-Aware Evaluation and Recovery for ASR in High-Stakes
-Call-Center Conversations
+When Low WER Becomes Dangerous: Counterfactual Semantic Risk Detection for
+Speech-Driven Decision Systems
 
 ## One-Sentence Claim
 
-Conventional WER/CER can miss decision-critical ASR failures in high-stakes
-calls, so we propose Semantic Risk-Weighted ASR evaluation and a risk-triggered
-recovery policy that identifies and mitigates transcription errors likely to
-affect downstream escalation.
+High-stakes ASR should be evaluated by whether downstream decisions remain
+stable under plausible transcript alternatives, not by transcript similarity
+alone.
 
 ## Story Line
 
 ### 1. Real-World Problem
 
-ASR is increasingly used as the text layer for high-stakes speech workflows:
-medical intake, customer service, investigation, financial dispute handling, and
-anti-fraud call review.
+Speech is becoming an operational input to contact-center analytics and
+decision workflows. Commercial systems already use transcripts for sentiment
+analysis, issue detection, categorization, summaries, compliance monitoring,
+and real-time alerts. Anti-fraud hotlines also depend on callers describing
+events, money movement, identity cues, and urgency.
 
-The operational risk is that downstream systems often treat ASR output as the
-basis for summarization, classification, risk scoring, or escalation. Low WER or
-CER does not guarantee semantic safety. A small error such as changing "already
-transferred" into "not transferred" can reverse the downstream decision state.
+The risk is not that every word is wrong. The risk is that a small ASR
+difference lands on a decision atom:
+
+```text
+I did not transfer money.
+-> I transferred money.
+```
+
+or:
+
+```text
+30,000
+-> 300,000
+```
+
+The WER/CER can be low while the downstream escalation state is no longer safe.
 
 ### 2. Existing Work
 
-Prior work already shows that WER is not always a good indicator for downstream
-semantic understanding. Kim et al. propose Semantic Distance because WER only
-measures literal correctness and may not capture semantic correctness for
-downstream NLU tasks. Rugayan et al. similarly argue that WER does not report
-error severity and show semantic metrics can better reflect human perception
-and downstream NLP performance. Ruan et al. discuss how ASR errors can degrade
-spoken-language-understanding systems.
+Prior work already shows that WER is insufficient for downstream semantic
+understanding. Kim et al. propose Semantic Distance because WER measures
+literal correctness rather than semantic correctness for downstream NLU tasks.
+Rugayan et al. show that WER does not provide error-severity information and
+that Aligned Semantic Distance can better align with human perception and
+downstream NLP tasks. Naderi et al. explore LLM-based ASR post-hoc correction
+with confidence-based filtering.
+
+These directions are valuable, but they still mostly evaluate or repair the
+transcript.
 
 ### 3. Gap
 
-Existing semantic ASR metrics and ASR-robust SLU methods improve the evaluation
-or robustness of downstream language understanding, but they do not directly
-make high-risk decision failure the evaluation target.
-
 For high-stakes calls, the central question is not only:
 
-> Is the hypothesis semantically close to the reference?
+> Is the hypothesis close to the reference?
 
 It is:
 
-> Which transcript errors can change escalation, routing, or human review?
+> Would a plausible ASR alternative change the downstream decision?
+
+Existing semantic metrics can say that two transcripts are meaningfully close or
+far. LLM correction can make a transcript more fluent. Confidence filtering can
+avoid some harmful corrections. None of these directly asks whether the
+decision remains stable under acoustically and semantically plausible
+alternatives.
 
 ### 4. Proposed View
 
-We propose Semantic Risk-Weighted ASR:
+We propose CDS-ASR:
 
 ```text
-audio -> transcript -> semantic-risk error -> downstream consequence -> recovery action
+audio
+-> ASR transcript + confidence / n-best / timestamps
+-> risk atom extraction
+-> plausible counterfactual transcript variants
+-> downstream decision model
+-> decision-stability score
+-> automatic constrained recovery
 ```
 
-The core idea is that ASR errors should not be weighted equally. Errors on
-negation, amount, action, actor, intent, time, uncertainty, and scam-pattern
-terms can matter more than ordinary wording differences.
+The key move is to shift from transcript accuracy to decision robustness.
 
 ### 5. Contributions
 
-1. Decision-critical ASR error taxonomy for high-stakes call-center
-   conversations.
-2. Semantic Risk Error Score (SRES), which combines error type, risk weight,
-   severity, and downstream impact.
-3. Empirical comparison of WER/CER and SRES for identifying downstream scam
-   escalation failures.
-4. Risk-triggered recovery policy that flags targeted human confirmation,
-   re-listening, or priority review for decision-critical transcript spans.
+1. A risk atom schema for high-stakes call-center ASR decisions.
+2. A counterfactual ASR variant contract that combines acoustic ambiguity,
+   Mandarin phonetic confusion, and fraud-domain slot ontology.
+3. Counterfactual Escalation Instability Score (CEIS), which measures the
+   maximum decision-flip risk among plausible ASR variants.
+4. An automatic recovery policy using span-level constrained re-decoding, ASR
+   ensemble arbitration, decision intervals, and conservative machine action.
+5. An empirical comparison against WER/CER, semantic metrics, confidence-only
+   approaches, and SRES.
 
 ## Main Research Question
 
-Can semantic-risk-aware ASR evaluation better identify decision-critical
-transcription failures than conventional WER/CER in high-stakes call-center
-conversations?
+Can counterfactual decision-stability evaluation better identify unsafe ASR
+outputs than transcript-similarity metrics in high-stakes anti-fraud
+call-center conversations?
 
 ## Citation Seed
 
+- AWS Contact Lens / Amazon Connect Customer documentation for the real-world
+  contact-center analytics premise:
+  https://docs.aws.amazon.com/connect/latest/adminguide/analyze-conversations.html
+- AWS conversational analytics product page for transcript-based categories,
+  summaries, sentiment, and real-time alerts:
+  https://aws.amazon.com/products/connect/customer/conversational-analytics/
+- Taiwan National Police Agency 165 anti-fraud hotline page:
+  https://www.npa.gov.tw/en/app/artwebsite/view?id=8035&module=artwebsite&serno=ed2427e1-de0a-4f6f-8f68-8f83b604e89b
+- FBI 2025 cyber-enabled fraud / IC3 press release:
+  https://www.fbi.gov/news/press-releases/cryptocurrency-and-ai-scams-bilk-americans-of-billions
 - Kim et al. (2021), "Semantic Distance: A New Metric for ASR Performance
   Analysis Towards Spoken Language Understanding",
   https://www.isca-archive.org/interspeech_2021/kim21e_interspeech.html
 - Rugayan et al. (2023), "Perceptual and Task-Oriented Assessment of a Semantic
   Metric for ASR Evaluation",
   https://www.isca-archive.org/interspeech_2023/rugayan23_interspeech.html
-- Ruan et al. (2020), "Towards an ASR error robust spoken language
-  understanding system",
-  https://www.amazon.science/publications/towards-an-asr-error-robust-spoken-language-understanding-system
+- Naderi et al. (2024), "Towards interfacing large language models with ASR
+  systems using confidence measures and prompting",
+  https://www.isca-archive.org/interspeech_2024/naderi24_interspeech.html

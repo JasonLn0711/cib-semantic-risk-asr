@@ -1,5 +1,5 @@
-version: 0.1.0
-purpose: Decision-critical ASR error taxonomy for high-stakes call-center conversations.
+version: 0.2.0
+purpose: Risk atom schema for counterfactual decision-stability ASR in high-stakes call-center conversations.
 
 categories:
   negation:
@@ -9,6 +9,7 @@ categories:
       - "可以 / 不可以"
       - "已經 / 還沒"
     risk: Directly reverses the decision state.
+    counterfactual_role: finite grammar for constrained re-decoding.
 
   amount:
     weight: 5
@@ -17,6 +18,7 @@ categories:
       - "3000 / 30000"
       - "匯款金額 omitted"
     risk: Changes loss severity, escalation priority, or financial-risk class.
+    counterfactual_role: amount grammar and number-unit confusion set.
 
   action:
     weight: 5
@@ -27,6 +29,7 @@ categories:
       - "報案"
       - "封鎖帳戶"
     risk: Changes whether an event has occurred or what intervention is needed.
+    counterfactual_role: action-slot candidate set.
 
   actor:
     weight: 4
@@ -37,6 +40,7 @@ categories:
       - "客服"
       - "投資老師"
     risk: Changes who is involved and may change scam-pattern interpretation.
+    counterfactual_role: actor-slot candidate set.
 
   intent:
     weight: 4
@@ -45,6 +49,7 @@ categories:
       - "只是詢問"
       - "想確認"
     risk: Changes routing, urgency, or service path.
+    counterfactual_role: intent-slot candidate set.
 
   time:
     weight: 3
@@ -55,6 +60,7 @@ categories:
       - "已經"
       - "即將"
     risk: Changes urgency and sequence of intervention.
+    counterfactual_role: time-slot candidate set.
 
   uncertainty:
     weight: 3
@@ -63,7 +69,8 @@ categories:
       - "可能"
       - "確定"
       - "不確定"
-    risk: Changes confidence and whether human confirmation is needed.
+    risk: Changes confidence and the width of the machine decision interval.
+    counterfactual_role: uncertainty marker candidate set.
 
   scam_pattern:
     weight: 4
@@ -74,6 +81,7 @@ categories:
       - "假檢警"
       - "網購"
     risk: Changes downstream classification and escalation route.
+    counterfactual_role: fraud-domain ontology slot.
 
 severity_levels:
   0: no decision relevance

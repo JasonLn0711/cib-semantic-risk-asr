@@ -1,8 +1,39 @@
 # Citation Seed
 
-These are starting citations for the paper framing. They should be expanded
-with domain-specific high-stakes ASR, call-center, medical, financial, and
+These are starting citations for the CDS-ASR paper framing. Expand them with
+domain-specific high-stakes ASR, contact-center, medical, financial, and
 anti-fraud sources before submission.
+
+## Real-World Contact-Center Analytics Are Speech-To-Decision Systems
+
+AWS documentation for Amazon Connect Customer Contact Lens says conversational
+analytics analyzes customer-agent and customer-conversational-AI conversations
+across voice, chat, and email using NLP, including sentiment analysis, issue
+detection, and automatic categorization.
+
+- Source: https://docs.aws.amazon.com/connect/latest/adminguide/analyze-conversations.html
+
+AWS also describes AI-powered contact-center analytics that use transcripts,
+sentiment analysis, categories, summaries, compliance monitoring, and real-time
+alerts. This supports the premise that transcripts are already operational
+inputs, not just archival text.
+
+- Source: https://aws.amazon.com/products/connect/customer/conversational-analytics/
+
+## Anti-Fraud Calls Are High-Stakes Decision Inputs
+
+Taiwan's National Police Agency describes the 165 anti-fraud hotline as a place
+where fraud-call recipients can call, have incident details recorded, and
+receive information. This anchors the paper's anti-fraud call-center setting.
+
+- Source: https://www.npa.gov.tw/en/app/artwebsite/view?id=8035&module=artwebsite&serno=ed2427e1-de0a-4f6f-8f68-8f83b604e89b
+
+The FBI reported that IC3 received `1,008,597` complaints in its 2025 Internet
+Crime Report context, with approximately `453,000` cyber-enabled fraud
+complaints and losses exceeding `$17.7 billion`. This supports the claim that
+fraud triage is a large and growing operational problem.
+
+- Source: https://www.fbi.gov/news/press-releases/cryptocurrency-and-ai-scams-bilk-americans-of-billions
 
 ## WER Is Not Enough For Downstream Semantics
 
@@ -23,17 +54,24 @@ better correlate with human judgments and downstream NLP tasks.
 - Source: https://www.isca-archive.org/interspeech_2023/rugayan23_interspeech.html
 - DOI: `10.21437/Interspeech.2023-1778`
 
-## ASR Errors Affect Downstream SLU
+## LLM Correction Still Remains Transcript-Centered
 
-Ruan et al. (2020) frame a standard SLU pipeline in which ASR transforms speech
-to text and NLU consumes the text, making downstream NLU susceptible to upstream
-ASR errors.
+Naderi et al. (2024) study post-hoc ASR transcript correction using LLMs and
+confidence-based filtering to reduce the risk of introducing errors into likely
+accurate transcripts. This is a useful baseline, but it still focuses on
+correcting transcripts rather than directly measuring decision stability under
+plausible ASR alternatives.
 
-- Source: https://www.amazon.science/publications/towards-an-asr-error-robust-spoken-language-understanding-system
+- Source: https://www.isca-archive.org/interspeech_2024/naderi24_interspeech.html
+- DOI: `10.21437/Interspeech.2024-989`
 
 ## Gap For This Paper
 
 The existing literature motivates semantic and downstream-aware ASR evaluation.
-This paper narrows the gap further: high-stakes call-center ASR should evaluate
-whether errors alter decision-critical fields and whether recovery policies
-reduce missed escalation or wrong routing.
+CDS-ASR narrows the gap further:
+
+> High-stakes call-center ASR should evaluate whether downstream decisions are
+> stable under acoustically and semantically plausible transcript alternatives.
+
+This is different from transcript similarity, general semantic similarity, and
+post-hoc transcript correction.

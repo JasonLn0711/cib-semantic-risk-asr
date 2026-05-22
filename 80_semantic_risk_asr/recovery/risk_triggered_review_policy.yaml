@@ -1,34 +1,41 @@
-version: 0.1.0
-policy_name: risk_triggered_review_policy
-purpose: Trigger targeted human confirmation or re-listening for decision-critical ASR errors.
+version: 0.2.0
+policy_name: cds_asr_automatic_recovery_policy
+purpose: Trigger automatic constrained recovery for decision-unstable ASR spans without using human review as the method.
 
 triggers:
-  semantic_risk_score:
-    priority_review_threshold: 20
-    critical_review_threshold: 45
+  counterfactual_escalation_instability_score:
+    priority_redecode_threshold: 5
+    critical_interval_threshold: 10
+  semantic_risk_score_baseline:
+    priority_redecode_threshold: 20
+    critical_interval_threshold: 45
   error_types_always_review:
     - negation
     - amount
     - action
   downstream_impact:
-    review_threshold: 2
-    critical_threshold: 3
+    redecode_threshold: 2
+    critical_interval_threshold: 3
 
 actions:
-  human_confirmation:
-    when: SRES is high or error type is decision-critical.
-    output: Flag transcript span for human confirmation.
-  targeted_relistening:
-    when: Critical span is likely corrupted but audio is available.
-    output: Ask reviewer to relisten only to the affected segment.
-  priority_review:
-    when: Possible false low-risk routing affects money/action/identity/urgency.
-    output: Move case to priority human review queue.
-  uncertainty_disclosure:
-    when: transcript is used downstream despite unresolved risk.
-    output: Show uncertainty note with affected field and risk type.
+  span_level_forced_alignment:
+    when: CEIS is high and token timestamps are available.
+    output: Align the high-risk span back to the audio window.
+  constrained_redecoding:
+    when: The high-risk atom has a finite grammar, such as amount, negation, action, time, or intent.
+    output: Re-decode only the affected span using the risk-atom grammar.
+  asr_ensemble_arbitration:
+    when: Multiple ASR models or n-best hypotheses are available.
+    output: Compare candidate risk atoms across models and select the acoustically best-supported variant.
+  decision_interval_estimation:
+    when: Plausible variants produce different downstream labels.
+    output: Emit a label interval instead of a single low-risk label.
+  conservative_machine_action:
+    when: The decision interval includes priority_review or critical_escalation.
+    output: Avoid no_escalation and choose the lowest safe machine label in the interval.
 
 non_goals:
   - automatic final fraud determination
-  - autonomous escalation without human confirmation
+  - using human review as the proposed recovery method
+  - replacing downstream legal or police judgment
   - publication of raw call transcript examples

@@ -2,10 +2,12 @@
 
 ## Goal
 
-Annotate ASR errors that can affect downstream scam escalation decisions.
+Annotate ASR risk atoms and plausible transcript alternatives that can affect
+downstream scam escalation decisions.
 
-Do not mark every typo. Mark errors that change whether a reviewer, classifier,
-or downstream system would understand the case correctly.
+Do not mark every typo. Mark spans where a plausible ASR alternative could
+change whether a downstream system classifies, routes, prioritizes, or escalates
+the case correctly.
 
 ## Unit Of Annotation
 
@@ -64,10 +66,13 @@ Use `0-3`.
 Recommended labels:
 
 - `none`
-- `human_confirmation`
-- `targeted_relistening`
-- `clarification_question`
-- `priority_review`
+- `constrained_redecode`
+- `ensemble_arbitration`
+- `decision_interval`
+- `conservative_machine_action`
+
+Do not use human review as the proposed recovery method. Human/canonical
+transcripts may still be used as research evidence during offline evaluation.
 
 ## Annotation Sheet
 
