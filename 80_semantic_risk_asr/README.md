@@ -107,6 +107,10 @@ stability sample, not another generic ASR fine-tune.
 Use `paper/q1_paper_design.md` as the durable source for the Q1 paper story,
 method, experiment design, target journals, and execution plan.
 
+Use `paper/cds_asr_positioning_memo_zh.md` as the Chinese first-principles
+writing memo for the argument, hook, method logic, experiment plan, and
+source anchors.
+
 Use `paper/framing_guardrail.md` before writing abstracts, introductions,
 cover letters, or repo summaries. It defines what this paper is not: a plain
 ASR fine-tuning, SRES-only, human-review, or small-CER-improvement paper.
