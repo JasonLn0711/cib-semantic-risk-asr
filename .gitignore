@@ -1,0 +1,36 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Local model/download caches.
+.cache/
+cache/
+hf_cache/
+
+# Sensitive / large local JANUS data. Keep these local unless a separate
+# controlled-data publication or Git LFS decision is made.
+00_source_archives/
+10_extracted_parts/
+20_inventory/
+40_breeze_asr25_finetune_dataset/hf_audiofolder/
+40_breeze_asr25_finetune_dataset/manifests/
+40_breeze_asr25_finetune_dataset/reports/
+50_janus_data_library/
+
+# Large training artifacts should stay local unless explicitly packaged.
+**/checkpoint-*/
+**/checkpoints/
+**/wandb/
+**/tensorboard/
+*.ckpt
+*.onnx
+*.gguf
+
+# Keep experiment records trackable, but avoid accidental bulk outputs.
+70_experiments/runs/*/artifacts/
+70_experiments/runs/*/predictions/
+70_experiments/runs/*/logs/

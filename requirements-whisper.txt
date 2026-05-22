@@ -1,0 +1,17 @@
+# Core dataset and ASR fine-tuning dependencies.
+accelerate
+datasets[audio]
+evaluate
+jiwer
+librosa
+numpy
+pandas
+peft
+soundfile
+torch
+torchaudio
+transformers
+
+# Optional experiment tracking and local dashboards.
+tensorboard
+wandb
