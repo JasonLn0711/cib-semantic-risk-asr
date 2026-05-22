@@ -5,11 +5,47 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 .ipynb_checkpoints/
+.env
+.env.*
+!.env.example
 
 # Local model/download caches.
 .cache/
 cache/
 hf_cache/
+
+# Raw media and bulk corpus exports. Keep these local unless a separate
+# publication, redaction, or Git LFS decision is made.
+*.wav
+*.mp3
+*.flac
+*.m4a
+*.aac
+*.ogg
+*.opus
+*.webm
+*.mp4
+*.mov
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+
+# Generated dataset/model files are reproducible outputs, not source docs.
+*.arrow
+*.parquet
+*.npy
+*.npz
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.pt
+*.pth
+*.safetensors
+*.bin
 
 # Sensitive / large local JANUS data. Keep these local unless a separate
 # controlled-data publication or Git LFS decision is made.
@@ -25,7 +61,10 @@ hf_cache/
 **/checkpoint-*/
 **/checkpoints/
 **/wandb/
+**/mlruns/
+**/lightning_logs/
 **/tensorboard/
+**/outputs/
 *.ckpt
 *.onnx
 *.gguf
