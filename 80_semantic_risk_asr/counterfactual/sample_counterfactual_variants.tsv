@@ -1,0 +1,3 @@
+sample_id	variant_id	base_decision	variant_decision	acoustic_plausibility	risk_atom_type	risk_atom_weight	decision_distance	base_transcript	variant_transcript	note
+example_001	v_negation	no_escalation	priority_review	0.82	negation			我還沒匯款三萬元	我已經匯款三萬元	Negation flips whether money was transferred.
+example_001	v_amount	review	critical_escalation	0.72	amount			我今天匯了三萬元	我今天匯了三十萬元	Amount variant changes possible loss severity.
