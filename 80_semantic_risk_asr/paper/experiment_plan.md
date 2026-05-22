@@ -4,6 +4,28 @@ Canonical detailed design:
 
 - `q1_paper_design.md`
 
+## FIRST PRINCIPLE Gate
+
+The first publishable unit is not another long fine-tune. It is a small,
+auditable semantic-risk sample that tests whether transcript errors change
+downstream escalation decisions.
+
+Do not start a long model run until this gate exists:
+
+1. Select the first `300-500` high-stakes call segments.
+2. Generate baseline ASR hypotheses and ordinary WER/CER.
+3. Fill the semantic-risk annotation TSV schema.
+4. Run SRES scoring and WER/CER-vs-SRES comparison.
+5. Run the downstream escalation impact check.
+6. Store only reviewed aggregate outputs and small safe samples in git.
+
+Publication-safe output path:
+
+- put scored summaries and aggregate metrics under `70_experiments/`;
+- keep raw audio, full transcripts, checkpoints, bulk predictions, and large
+  generated files local unless a separate controlled-data or Git LFS decision
+  is made.
+
 ## Experiment 1: ASR Baseline
 
 Models:

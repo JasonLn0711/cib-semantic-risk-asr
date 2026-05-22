@@ -75,6 +75,10 @@ Minimum viable paper experiment:
 5. Compare WER/CER against SRES for predicting downstream escalation failures.
 6. Test risk-triggered recovery against no recovery and confidence-only recovery.
 
+Use `paper/experiment_plan.md` for the FIRST PRINCIPLE gate before starting a
+long model run. The first publishable unit is a small auditable semantic-risk
+sample, not another generic ASR fine-tune.
+
 ## Canonical Paper Design
 
 Use `paper/q1_paper_design.md` as the durable source for the Q1 paper story,
