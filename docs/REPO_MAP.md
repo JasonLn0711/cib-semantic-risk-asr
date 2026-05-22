@@ -1,8 +1,12 @@
 # Repo Map
 
-This repository is organized as a local JANUS ASR data workspace. Large source
-assets remain in their original archive/extracted locations; downstream
-fine-tuning and experiment work should use the stable overlays.
+This repository is organized as a local JANUS semantic-risk-aware ASR research
+workspace. Large source assets remain in their original archive/extracted
+locations; downstream fine-tuning and semantic-risk experiments should use the
+stable overlays.
+
+The paper-facing research object is narrow: conventional WER/CER can miss
+decision-critical ASR errors in high-stakes call-center conversations.
 
 ## Canonical Layers
 
@@ -16,6 +20,7 @@ fine-tuning and experiment work should use the stable overlays.
 | `50_janus_data_library/` | Purpose-oriented symlink/catalog overlay across all JANUS data. | Navigation/index layer. |
 | `60_whisper_asr_finetuning/` | Whisper-oriented working entry point, configs, and validation scripts. | Primary training workspace. |
 | `70_experiments/` | Experiment registry, run records, metric templates, and reviewed outputs. | Primary experiment log. |
+| `80_semantic_risk_asr/` | Decision-critical ASR error taxonomy, SRES scoring, downstream scam escalation task, and risk-triggered recovery policy. | Primary paper workspace. |
 
 ## Current Fine-Tuning Dataset
 
@@ -45,5 +50,19 @@ organized extracted audio under `10_extracted_parts/`.
   archived runtime artifacts. They are not training inputs; delete them only
   after an explicit cleanup decision because the source archive can be used to
   reconstruct them.
+- The repo-level `.gitignore` intentionally excludes raw audio/video, compressed
+  corpora, generated dataset tables/arrays, model weights, checkpoints,
+  experiment artifacts, and local caches. Track source docs, configs, scripts,
+  small samples, and reviewed aggregate records instead.
 - Put model checkpoints and bulk predictions under `70_experiments/runs/...`
   and keep only curated metrics/run records in git.
+
+## Research-Framing Rules
+
+- Do not frame the paper as only Whisper, LoRA, or CER/WER optimization.
+- Treat WER/CER as baseline metrics, not the main contribution.
+- Evaluate transcript errors by decision consequence: negation, amount, action,
+  actor, intent, time, uncertainty, and scam-pattern corruption.
+- Use one downstream task first: scam escalation classification.
+- Use one practical recovery mechanism first: risk-triggered human confirmation,
+  targeted re-listening, or priority review.

@@ -2,6 +2,9 @@
 
 Use this folder for Whisper ASR experiment records and reproducibility notes.
 
+For paper-facing work, record not only CER/WER but also semantic-risk and
+downstream escalation outcomes defined in `../80_semantic_risk_asr/`.
+
 ## Required Flow
 
 1. Choose a config from `../60_whisper_asr_finetuning/configs/`.
@@ -48,3 +51,12 @@ Every completed ASR run should report:
 - seed
 - hardware notes
 - failure notes, if any
+
+For semantic-risk ASR experiments, also report:
+
+- semantic-risk counts;
+- SRES distribution;
+- downstream escalation failure rate;
+- high-risk miss rate;
+- recovery policy triggered;
+- reviewer workload added by recovery.

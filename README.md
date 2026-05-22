@@ -1,8 +1,32 @@
-# JANUS Ubuntu24 Local Organization
+# JANUS Semantic-Risk-Aware ASR Workspace
 
 Generated: 2026-05-18T15:17:05+08:00
 
-This folder is organized as a local archive and working inventory for the JANUS Ubuntu24 export. The original downloaded zip files were kept, and the extracted folders were moved into stable `part-###` names.
+This repository is a local research workspace for JANUS high-stakes call-center
+ASR data.
+
+The single short-term paper axis is **semantic-risk-aware ASR evaluation and
+recovery**.
+
+The paper is not about fine-tuning Whisper as the main contribution. Whisper and
+Breeze-ASR baselines provide ASR hypotheses. The main contribution is a way to
+identify, score, and recover from transcription errors that can change
+downstream high-stakes decisions.
+
+The guardrail is explicit: do not sell this as another ASR benchmark or small
+CER improvement. Sell it as ASR failure consequence in high-stakes
+conversational decision systems.
+
+```text
+audio
+-> ASR transcript
+-> semantic-risk error
+-> downstream consequence
+-> recovery action
+```
+
+The original downloaded zip files were kept, and the extracted folders were
+moved into stable `part-###` names. Large audio/transcript assets remain local.
 
 ## Layout
 
@@ -16,6 +40,7 @@ This folder is organized as a local archive and working inventory for the JANUS 
 | `50_janus_data_library/` | Purpose/type overlay for navigating source, audio, labels, models, environments, and reports. |
 | `60_whisper_asr_finetuning/` | Primary Whisper ASR fine-tuning workspace, dataset entry point, configs, and validation scripts. |
 | `70_experiments/` | Experiment registry, run records, metric templates, and reviewed ASR outputs. |
+| `80_semantic_risk_asr/` | Main paper axis: decision-critical ASR error taxonomy, SRES scoring, downstream scam escalation task, and recovery policy. |
 | `docs/` | Repo-level data map and handling rules. |
 
 ## Inventory files
@@ -62,3 +87,7 @@ Use it to navigate the archive by goal:
 
 For Whisper-specific work, start with `docs/REPO_MAP.md` and
 `60_whisper_asr_finetuning/README.md`.
+
+For the paper-facing research frame, start with
+`80_semantic_risk_asr/README.md` and
+`80_semantic_risk_asr/paper/story_outline.md`.

@@ -1,0 +1,84 @@
+version: 0.1.0
+purpose: Decision-critical ASR error taxonomy for high-stakes call-center conversations.
+
+categories:
+  negation:
+    weight: 5
+    examples:
+      - "有 / 沒有"
+      - "可以 / 不可以"
+      - "已經 / 還沒"
+    risk: Directly reverses the decision state.
+
+  amount:
+    weight: 5
+    examples:
+      - "三萬 / 三十萬"
+      - "3000 / 30000"
+      - "匯款金額 omitted"
+    risk: Changes loss severity, escalation priority, or financial-risk class.
+
+  action:
+    weight: 5
+    examples:
+      - "匯款"
+      - "提領"
+      - "轉帳"
+      - "報案"
+      - "封鎖帳戶"
+    risk: Changes whether an event has occurred or what intervention is needed.
+
+  actor:
+    weight: 4
+    examples:
+      - "警察"
+      - "銀行"
+      - "家人"
+      - "客服"
+      - "投資老師"
+    risk: Changes who is involved and may change scam-pattern interpretation.
+
+  intent:
+    weight: 4
+    examples:
+      - "我要報案"
+      - "只是詢問"
+      - "想確認"
+    risk: Changes routing, urgency, or service path.
+
+  time:
+    weight: 3
+    examples:
+      - "今天"
+      - "昨天"
+      - "下週"
+      - "已經"
+      - "即將"
+    risk: Changes urgency and sequence of intervention.
+
+  uncertainty:
+    weight: 3
+    examples:
+      - "好像"
+      - "可能"
+      - "確定"
+      - "不確定"
+    risk: Changes confidence and whether human confirmation is needed.
+
+  scam_pattern:
+    weight: 4
+    examples:
+      - "投資"
+      - "虛擬貨幣"
+      - "解除分期"
+      - "假檢警"
+      - "網購"
+    risk: Changes downstream classification and escalation route.
+
+severity_levels:
+  0: no decision relevance
+  1: minor wording change
+  2: could affect interpretation
+  3: likely affects routing or escalation
+  4: severe decision-critical corruption
+  5: reverses or hides a critical decision fact

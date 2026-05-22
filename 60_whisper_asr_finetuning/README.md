@@ -3,6 +3,10 @@
 This folder is the primary working entry point for Whisper ASR fine-tuning and
 related JANUS experiment tracking.
 
+Within the broader repository, ASR is the hypothesis-generation subsystem. The
+paper-facing research layer lives in `../80_semantic_risk_asr/` and uses ASR
+outputs to study decision-critical semantic risk and recovery.
+
 It intentionally does not copy audio. Dataset links point back to the stable
 dataset artifact in `../40_breeze_asr25_finetune_dataset/`, which in turn links
 to the organized extracted audio under `../10_extracted_parts/`.

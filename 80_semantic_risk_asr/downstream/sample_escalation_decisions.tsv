@@ -1,0 +1,2 @@
+sample_id	reference_label	asr_label	recovered_label	recovery_action	note
+example_001	priority_review	no_escalation	priority_review	human_confirmation	Negation recovery restores transfer-state interpretation.
