@@ -93,3 +93,29 @@ For Whisper-specific work, start with `docs/REPO_MAP.md` and
 For the paper-facing research frame, start with
 `80_semantic_risk_asr/README.md` and
 `80_semantic_risk_asr/paper/story_outline.md`.
+
+## Automated Version Control
+
+This repo uses SemVer-style automated versioning. Current version:
+
+```text
+v2.5.9
+```
+
+Source of truth:
+
+- `VERSION`
+- `version_manifest.json`
+- `CHANGELOG.md`
+- `version_history.jsonl`
+- `VERSIONING.md`
+
+Install the local git hook once per checkout:
+
+```bash
+python3 scripts/install_version_hooks.py
+```
+
+After installation, every commit that stages versioned repo content runs
+`scripts/auto_version.py --stage`, bumps the version, updates the manifest, and
+records a human-readable plus JSONL version log.

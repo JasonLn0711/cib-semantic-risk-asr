@@ -21,6 +21,7 @@ decision-unstable ASR outputs in high-stakes call-center conversations.
 | `60_whisper_asr_finetuning/` | Whisper-oriented working entry point, configs, and validation scripts. | Primary training workspace. |
 | `70_experiments/` | Experiment registry, run records, metric templates, and reviewed outputs. | Primary experiment log. |
 | `80_semantic_risk_asr/` | CDS-ASR design, risk atom schema, counterfactual variants, CEIS scoring, downstream scam escalation task, and automatic constrained recovery policy. | Primary paper workspace. |
+| `VERSION`, `version_manifest.json`, `CHANGELOG.md`, `version_history.jsonl`, `VERSIONING.md` | Automated SemVer version-control state, human log, machine log, and rules. | Updated automatically by local git hook. |
 
 ## Current Fine-Tuning Dataset
 
@@ -56,6 +57,9 @@ organized extracted audio under `10_extracted_parts/`.
   small samples, and reviewed aggregate records instead.
 - Put model checkpoints and bulk predictions under `70_experiments/runs/...`
   and keep only curated metrics/run records in git.
+- Version-control automation lives in `scripts/auto_version.py` and
+  `.githooks/pre-commit`; install it with
+  `python3 scripts/install_version_hooks.py` in each local checkout.
 
 ## Research-Framing Rules
 
