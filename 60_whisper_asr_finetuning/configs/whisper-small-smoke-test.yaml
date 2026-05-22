@@ -1,0 +1,38 @@
+run:
+  id: whisper_small_smoke_test
+  purpose: Verify dataset loading, preprocessing, trainer wiring, and metric logging.
+
+model:
+  name_or_path: openai/whisper-small
+  language: zh
+  task: transcribe
+  predict_with_generate: true
+
+dataset:
+  name: janus_165_v1
+  audiofolder_path: 60_whisper_asr_finetuning/datasets/janus_165_v1/hf_audiofolder
+  text_column: sentence
+  audio_column: audio
+  sampling_rate: 16000
+  max_train_samples: 64
+  max_eval_samples: 32
+
+training:
+  output_dir: 70_experiments/runs/whisper_small_smoke_test/checkpoints
+  per_device_train_batch_size: 4
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 1
+  learning_rate: 0.00001
+  warmup_steps: 10
+  max_steps: 20
+  fp16: true
+  logging_steps: 5
+  eval_steps: 10
+  save_steps: 10
+  seed: 165
+
+metrics:
+  primary: cer
+  secondary:
+    - wer
+    - eval_loss

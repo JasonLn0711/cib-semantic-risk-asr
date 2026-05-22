@@ -1,0 +1,59 @@
+run:
+  id: whisper_large_v2_lora_baseline
+  purpose: First reproducible Whisper large-v2 LoRA baseline on JANUS 165 v1.
+
+model:
+  name_or_path: openai/whisper-large-v2
+  alternate_domain_model: MediaTek-Research/Breeze-ASR-25
+  language: zh
+  task: transcribe
+  predict_with_generate: true
+
+dataset:
+  name: janus_165_v1
+  audiofolder_path: 60_whisper_asr_finetuning/datasets/janus_165_v1/hf_audiofolder
+  manifests_path: 60_whisper_asr_finetuning/datasets/janus_165_v1/manifests
+  text_column: sentence
+  audio_column: audio
+  sampling_rate: 16000
+  train_rows: 4201
+  validation_rows: 508
+  test_rows: 258
+
+lora:
+  enabled: true
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules:
+    - q_proj
+    - v_proj
+
+training:
+  output_dir: 70_experiments/runs/whisper_large_v2_lora_baseline/checkpoints
+  per_device_train_batch_size: 4
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 4
+  learning_rate: 0.00001
+  warmup_steps: 200
+  num_train_epochs: 3
+  fp16: true
+  gradient_checkpointing: true
+  logging_steps: 25
+  eval_strategy: steps
+  eval_steps: 250
+  save_strategy: steps
+  save_steps: 250
+  save_total_limit: 3
+  seed: 165
+
+generation:
+  max_new_tokens: 225
+  num_beams: 1
+
+metrics:
+  primary: cer
+  secondary:
+    - wer
+    - eval_loss
+  error_analysis_template: 70_experiments/templates/error_analysis.tsv
