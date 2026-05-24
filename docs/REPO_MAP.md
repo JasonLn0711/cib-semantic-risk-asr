@@ -28,6 +28,10 @@ decision-unstable ASR outputs in high-stakes call-center conversations.
 Use `60_whisper_asr_finetuning/datasets/janus_165_v1/` for Whisper work. It
 points back to `40_breeze_asr25_finetune_dataset/` without copying audio.
 
+For the curation workflow that prepares the canonical manifest, health check,
+gold subset review table, NeMo pilot manifest, and ASR comparison plan, use
+`docs/janus_165_audio_curation_workflow.md`.
+
 Dataset snapshot:
 
 | Split | Rows | Hours |

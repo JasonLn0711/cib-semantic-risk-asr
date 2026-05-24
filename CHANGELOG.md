@@ -5,6 +5,18 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.11 - 2026-05-25T00:00:07+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `fae191c`
+- Branch: `main`
+- Summary: Document JANUS curation gate and NeMo pilot workflow.
+- Changed files:
+  - `60_whisper_asr_finetuning/README.md`
+  - `docs/REPO_MAP.md`
+  - `docs/janus_165_audio_curation_workflow.md`
+
 ## v2.5.10 - 2026-05-24T23:59:55+08:00
 
 - Bump: `patch`

@@ -29,15 +29,25 @@ to the organized extracted audio under `../10_extracted_parts/`.
    python 60_whisper_asr_finetuning/scripts/validate_whisper_dataset.py
    ```
 
-3. Pick a config:
+3. Build the local curation artifacts before ASR model comparison:
+
+   ```bash
+   python 60_whisper_asr_finetuning/scripts/build_janus_curation_artifacts.py --sample-size 15
+   ```
+
+   This creates the canonical audio inventory, health check, gold-subset review
+   sheet, NeMo pilot manifest, and ASR comparison plan under ignored local
+   `40_breeze_asr25_finetune_dataset/manifests/` and `reports/` paths.
+
+4. Pick a config:
 
    - `configs/whisper-small-smoke-test.yaml` for a low-cost pipeline check.
    - `configs/whisper-large-v2-lora-baseline.yaml` for the first serious LoRA baseline.
 
-4. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
+5. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
    run template from `../70_experiments/templates/run_record.md`.
 
-5. Register the run in `../70_experiments/registry.tsv` before starting long
+6. Register the run in `../70_experiments/registry.tsv` before starting long
    training.
 
 ## Layout
@@ -47,6 +57,9 @@ to the organized extracted audio under `../10_extracted_parts/`.
 | `datasets/janus_165_v1/` | Whisper-ready JANUS dataset view with manifests and reports. |
 | `configs/` | Reproducible training/evaluation configuration drafts. |
 | `scripts/` | Local validation and helper scripts. |
+
+See `../docs/janus_165_audio_curation_workflow.md` before using NeMo Curator or
+expanding any ASR comparison beyond the selected gold subset.
 
 ## Dataset Entry Point
 
