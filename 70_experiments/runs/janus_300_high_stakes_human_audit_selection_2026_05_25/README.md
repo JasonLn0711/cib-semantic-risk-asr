@@ -138,9 +138,9 @@ Tracked readiness outputs:
 | `human_audit_current_review_batch_status_summary.json` | Repo-safe completion status for the current packet. Current status: `batch_pending`, `0/6` risk/decision rows and `0/18` model assessments reviewed. |
 | `human_audit_current_review_batch_status_rows.tsv` | Repo-safe row-level completion checklist for the current packet. No audio IDs, transcripts, hypotheses, or reviewer notes. |
 | `human_audit_batch_response_template_summary.json` | Repo-safe record for the local response TSV template. Current template has `18` response rows for rows `1-6` and optional review-timing columns. |
-| `human_audit_batch_response_apply_summary.json` | Repo-safe strict dry-run/apply status for the local response TSV. Current `--require-complete` dry-run status is `response_pending`, `ok=false`, `incomplete_response=1`, with `0/6` rows, `0/18` model assessments, and `0/6` row review timings filled. |
-| `human_audit_batch_response_apply_log.tsv` | Append-only repo-safe response dry-run/write log. Current first entry records the blank strict dry-run as `response_pending` with aggregate counts only. |
-| `human_audit_batch_response_apply_log_summary.json` | Repo-safe audit of the response apply log. Current status: `apply_log_valid`, `2` entries, latest status `response_pending`, `0/6` rows and `0/18` model assessments filled. |
+| `human_audit_batch_response_apply_summary.json` | Repo-safe strict dry-run/apply status for the local response TSV. Current `--require-complete --require-session-start-gate` dry-run status is `response_pending`, `ok=false`, `incomplete_response=1`, with `session_start_gate.ok=true`, `0/6` rows, `0/18` model assessments, and `0/6` row review timings filled. |
+| `human_audit_batch_response_apply_log.tsv` | Append-only repo-safe response dry-run/write log. Current entries record blank strict dry-runs as `response_pending` with aggregate counts only. |
+| `human_audit_batch_response_apply_log_summary.json` | Repo-safe audit of the response apply log. Current status: `apply_log_valid`, `3` entries, latest status `response_pending`, `0/6` rows and `0/18` model assessments filled. |
 | `human_audit_reviewer_handoff_summary.json` | Repo-safe current reviewer handoff. Current status: `reviewer_input_pending`, `freshness_status=fresh`, packet rows `1-6`, response template path, latest apply status, apply-log status, source-summary SHA-256 digests, and exact next commands. |
 | `human_audit_reviewer_preflight_summary.json` | Repo-safe pre-review session preflight. Current status: `review_session_ready`, `handoff_fresh`, local packet exists, local response TSV exists, and no reviewer labels have been fabricated. |
 | `human_audit_reviewer_preflight_log.tsv` | Append-only repo-safe preflight log. Current entries record the ready state for `critical_or_high_risk_missed` rows `1-6` / `18` model assessments. |
@@ -171,6 +171,11 @@ refreshes the action checklist, writes
 `human_audit_reviewer_session_start_log.tsv`. It does not read transcript text
 or reviewer notes. The current content gate is still pending: `6/6` packet
 rows, `18/18` model assessments, and `6/6` optional timing rows.
+
+The generated strict dry-run and write commands now include
+`--require-session-start-gate --session-start-summary
+70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json`.
+This keeps response writes tied to the current reviewer-session gate.
 
 For a one-file current-state handoff, run:
 
@@ -232,7 +237,8 @@ recorded, and now requires `rubric_status=rubric_ready` before reviewer entry.
 The blocking content remains `6/6` packet rows and `18/18` model-level
 assessments in the ignored local response TSV. Optional timing fields are also
 pending for `6/6` rows. This checklist does not read transcript text or
-reviewer notes.
+reviewer notes. The current strict dry-run already validates the session-start
+gate and then fails only because reviewer content is still incomplete.
 
 Prepare the next local transcript-bearing review packet before filling rows:
 

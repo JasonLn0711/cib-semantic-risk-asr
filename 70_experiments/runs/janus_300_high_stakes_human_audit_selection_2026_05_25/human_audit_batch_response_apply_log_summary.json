@@ -6,22 +6,22 @@
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
   "apply_log_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_log.tsv",
-  "apply_log_entries": 2,
+  "apply_log_entries": 3,
   "missing_log_columns": [],
   "status_counts": {
-    "response_pending": 2
+    "response_pending": 3
   },
   "mode_counts": {
-    "dry_run": 2
+    "dry_run": 3
   },
   "ok_counts": {
-    "False": 2
+    "False": 3
   },
   "error_key_counts": {
-    "incomplete_response": 2
+    "incomplete_response": 3
   },
   "latest": {
-    "recorded_at": "2026-05-25T22:22:30+08:00",
+    "recorded_at": "2026-05-26T00:51:18+08:00",
     "ok": "False",
     "status": "response_pending",
     "mode": "dry_run",

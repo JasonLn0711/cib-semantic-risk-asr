@@ -90,6 +90,7 @@ ignored local paths.
 | 5.47 | Added reviewer rubric and value-contract gate. | `build_human_audit_reviewer_rubric.py`; `human_audit_reviewer_rubric_summary.json`; `human_audit_reviewer_value_contract.tsv`; `tests/test_human_audit_reviewer_rubric.py`. | Completed as reviewer-entry instrumentation, not as human review. The live rubric reports `rubric_ready`, `validator_constants_match=true`, value counts for `4` row risk labels, `3` decision-change labels, `6` safe actions, `3` confidence labels, and `8` risk atoms, and preserves the policy that supplied transcript ground truth is not re-reviewed for WER/CER. The tracked value contract contains allowed labels and guidance only; sensitive-field scan found no audio IDs, transcripts, hypotheses, reviewer notes, private fixture text, or local row IDs. |
 | 5.48 | Required the rubric gate in the reviewer action checklist. | `build_human_audit_reviewer_action_checklist.py`; `human_audit_reviewer_action_checklist_summary.json`; `human_audit_reviewer_action_checklist.tsv`; `tests/test_human_audit_reviewer_action_checklist.py`. | Completed as workflow hardening, not as human review. The action checklist now blocks if the reviewer value contract is missing or not `rubric_ready`; the live checklist remains `reviewer_action_ready` with `rubric_status=rubric_ready`, `6/6` packet rows, `18/18` model assessments, and `6/6` optional timing rows still pending. Direct rubric/checklist tests passed. |
 | 5.49 | Added one-command reviewer-session start gate. | `start_human_audit_review_session.py`; `human_audit_reviewer_session_start_summary.json`; `human_audit_reviewer_session_start_log.tsv`; `tests/test_human_audit_reviewer_session_start.py`. | Completed as reviewer-session orchestration, not as human review. The live start gate reports `reviewer_session_started` after refreshing the handoff, preflight, reviewer value contract, and action checklist. Current pending content remains unchanged: `6/6` packet rows, `18/18` model assessments, `6/6` optional timing rows, and latest apply status `response_pending`. Compile and direct session-start tests passed; sensitive-field scan over the new tracked outputs found no audio IDs, transcripts, hypotheses, reviewer notes, private fixture text, or local row IDs. |
+| 5.50 | Required reviewer-session gate for response apply/write path. | `apply_human_audit_batch_response.py`; `build_human_audit_reviewer_handoff.py`; `human_audit_batch_response_apply_summary.json`; `tests/test_human_audit_batch_response.py`. | Completed as response-write provenance hardening, not as human review. The generated strict dry-run/write commands now include `--require-session-start-gate` and the current session-start summary path. The live strict dry-run records `session_start_gate.ok=true`, matching row numbers/stratum, `rubric_status=rubric_ready`, and `checklist_status=reviewer_action_ready`, then still fails as expected with `response_pending` and `incomplete_response=1` because `0/6` row decisions and `0/18` model assessments are filled. Compile and direct response/handoff tests passed. |
 
 ## Next Operations
 
@@ -120,7 +121,10 @@ ignored local paths.
    `start_human_audit_review_session.py` as the normal one-command reviewer
    session start gate; require `reviewer_session_started`. It refreshes the
    handoff, preflight, rubric/value contract, action checklist, and append-only
-   session-start log without reading transcript text. Use
+   session-start log without reading transcript text. The generated strict
+   dry-run and write commands require `--require-session-start-gate`, so a
+   response cannot be written through the normal CLI unless it matches the
+   current session-start summary. Use
    `build_human_audit_reviewer_handoff.py` as the one-file current handoff for
    local reviewer routing, then run the same tool with `--check-existing` and
    require `handoff_fresh` before opening the transcript-bearing local packet or

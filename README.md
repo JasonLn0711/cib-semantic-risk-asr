@@ -177,7 +177,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   reviewer-session start command is
   `80_semantic_risk_asr/annotation/start_human_audit_review_session.py`; current
   start status is `reviewer_session_started`, with a tracked aggregate
-  session-start summary/log and no change to human-review completion.
+  session-start summary/log and no change to human-review completion. The
+  strict dry-run/write commands generated from the handoff now require
+  `--require-session-start-gate` against that session-start summary; the live
+  strict dry-run records `session_start_gate.ok=true` and still fails only
+  because reviewer response content is incomplete.
   The strict
   `--require-complete` dry-run currently
   exits nonzero as expected with `ok=false` and `incomplete_response=1`; this is
