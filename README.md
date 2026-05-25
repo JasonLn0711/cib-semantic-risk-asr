@@ -106,7 +106,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   and is not the pending gate. The readiness summary now also reports the
   current reviewer action gate: `reviewer_action_ready` for
   `critical_or_high_risk_missed`, with `6/6` packet rows and `18/18` model
-  assessments still pending in the ignored local response TSV.
+  assessments still pending in the ignored local response TSV. The selected-300
+  validator and response-apply path now enforce decision consistency: a
+  decision-change `yes` needs at least one critical atom and a non-`none` safe
+  action, and critical atoms must be present in the row risk-atom set.
   The post-review evidence checklist
   `80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py`
   now records the aggregate gates that must pass after response closeout,

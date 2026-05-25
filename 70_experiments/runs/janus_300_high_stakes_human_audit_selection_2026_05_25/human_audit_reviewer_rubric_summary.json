@@ -40,6 +40,14 @@
       "rule": "A decision-change yes label should map to a non-none safe action."
     },
     {
+      "check": "decision_yes_requires_critical_atom",
+      "rule": "A decision-change yes label should include at least one critical semantic atom."
+    },
+    {
+      "check": "critical_atoms_are_subset_of_risk_atoms",
+      "rule": "Row-level and model-level critical atoms should be present in the row risk-atom set."
+    },
+    {
       "check": "uncertain_requires_low_or_medium_certainty",
       "rule": "Uncertain decision effects should avoid high confidence unless a second reviewer resolves the ambiguity."
     },

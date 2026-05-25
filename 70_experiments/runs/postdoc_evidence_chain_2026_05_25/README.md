@@ -98,6 +98,7 @@ ignored local paths.
 | 5.55 | Added postdoc roadmap completion audit. | `audit_postdoc_roadmap_completion.py`; `postdoc_roadmap_completion_summary.json`; `postdoc_roadmap_completion.tsv`; `tests/test_postdoc_roadmap_completion_audit.py`. | Completed as an objective-by-objective completion guardrail, not as final paper readiness. The live audit returns `ok=true`, `roadmap_complete=false`, `publishable_ready=false`, `paper_ready=false`, `post_review_evidence_ready=false`, and blocker `selected_300_human_review_and_post_review_refresh`. Status counts are `completed=4`, `proxy_completed=2`, `review_pending=1`, `blocked=1`; current selected-300 review remains `0/30` rows and `0/90` model assessments, with the current packet pending `6/6` rows and `18/18` model assessments. Compile and direct roadmap-audit tests passed. |
 | 5.56 | Wired roadmap completion audit into the human-audit refresh gate. | `refresh_human_audit_evidence.py`; `human_audit_refresh_summary.json`; `postdoc_roadmap_completion_summary.json`; `tests/test_human_audit_refresh.py`. | Completed as refresh orchestration hardening, not as human review. Normal refresh now updates validation, progress, review summary, predictor, readiness, publishable completion, and roadmap completion in one pass. Live refresh reports `roadmap_audit_ok=true`, `roadmap_complete=false`, status counts `completed=4`, `proxy_completed=2`, `review_pending=1`, `blocked=1`. Compile and direct refresh tests passed; `pytest` is unavailable in `.venv`. |
 | 5.57 | Wired post-review evidence status into the human-audit refresh gate. | `refresh_human_audit_evidence.py`; `human_audit_refresh_summary.json`; `human_audit_post_review_evidence_summary.json`; `tests/test_human_audit_refresh.py`. | Completed as paper-claim gate orchestration, not as human review. Normal refresh still returns `ok=true` with `review_pending`, but now also records `post_review_evidence_ok=false`, `post_review_evidence_status=post_review_evidence_blocked`, and blockers `response_closeout_not_ready`, `human_refresh_not_complete`, `human_predictor_not_complete`, `paper_ready_false`, `publishable_ready_false`, `consequence_paper_claims_not_ready`, and `recovery_proxy_only`. Compile and direct refresh tests passed; `pytest` is unavailable in `.venv`. |
+| 5.58 | Hardened selected-300 response consistency checks. | `validate_human_risk_atom_audit.py`; `apply_human_audit_batch_response.py`; `build_human_audit_reviewer_rubric.py`; `human_audit_reviewer_rubric_summary.json`; `tests/test_human_audit_validation.py`; `tests/test_human_audit_batch_response.py`. | Completed as human-review quality control, not as human review. The strict validator and response TSV dry-run now reject decision-change `yes` labels that lack a critical atom or use safe action `none`, and reject row/model critical atoms that are not present in the row risk-atom set. The live rubric now records these consistency checks while the current packet remains pending at `6/6` rows and `18/18` model assessments. Compile and direct validation/response tests passed; `pytest` is unavailable in `.venv`. |
 
 ## Next Operations
 
@@ -155,7 +156,10 @@ ignored local paths.
    packet. After the response closeout/write/refresh path, run
    `build_post_review_evidence_checklist.py` and require
    `post_review_evidence_ready` before promoting proxy recovery or model-safety
-   claims into paper-facing language.
+   claims into paper-facing language. The strict dry-run also rejects
+   inconsistent response semantics: decision-change `yes` must have at least
+   one critical atom and a non-`none` safe action, and row/model critical atoms
+   must be included in the row risk-atom set.
 7. Use `refresh_human_audit_evidence.py` as the normal post-edit aggregate
    refresh. It now updates validation, progress, review summary, predictor,
    evidence-chain readiness, objective-level publishable completion, and

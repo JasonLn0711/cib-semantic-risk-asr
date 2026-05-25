@@ -248,6 +248,9 @@ review-pending、post-review blocked 分開，避免把目前已經很完整的 
   scoring reference 接受。validator 已確認 local sheet schema 可用，正常模式
   `review_pending`、validation errors `0`，但 `--require-complete` 會因
   `30` risk/decision row reviews 與 `90` model reviews 尚未完成而失敗，
+  且現在會額外拒絕不一致的 response semantics：decision-change `yes`
+  必須有 critical atom 與非 `none` safe action，row/model critical atoms
+  必須包含在 row risk-atom set 中。
   所以還不能宣稱 paper-grade main experiment 完成。第一批 local review
   packet 已準備好：`critical_or_high_risk_missed` rows `1-6`、`6` rows /
   `18` model assessments；packet 在 ignored `artifacts/review_batches/`，

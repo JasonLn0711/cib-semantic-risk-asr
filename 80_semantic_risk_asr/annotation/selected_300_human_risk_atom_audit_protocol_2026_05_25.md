@@ -135,6 +135,10 @@ Primary labels:
 8. Do not reward a model for being closer in CER if it loses a critical atom.
 9. Do not penalize harmless wording changes that do not affect routing,
    priority, intervention, or conservative action.
+10. Keep response semantics internally consistent: `yes` for decision change
+    must include at least one critical atom and a non-`none` expected safe
+    action, and row/model critical atoms must be present in the row risk-atom
+    set.
 
 ## Local Review Workflow
 
