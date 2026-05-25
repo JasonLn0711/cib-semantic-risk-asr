@@ -12,6 +12,7 @@ sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "annotation"))
 
 from apply_human_audit_batch_response import (  # noqa: E402
     APPLY_LOG_NAME,
+    APPLY_LOG_SUMMARY_NAME,
     REVIEW_TIMING_FIELDS,
     TEMPLATE_FIELDS,
     apply_response_sheet,
@@ -454,6 +455,7 @@ def test_write_can_refresh_batch_status_and_aggregate_outputs(tmp_path: Path) ->
     assert (run_dir / "human_audit_next_review_batch_summary.json").exists()
     assert (run_dir / "human_audit_batch_response_template_summary.json").exists()
     assert (run_dir / APPLY_LOG_NAME).exists()
+    assert (run_dir / APPLY_LOG_SUMMARY_NAME).exists()
     assert (readiness_dir / "publishable_evidence_completion_summary.json").exists()
     _log_fieldnames, log_rows = read_tsv(run_dir / APPLY_LOG_NAME)
     assert len(log_rows) == 1
@@ -461,6 +463,12 @@ def test_write_can_refresh_batch_status_and_aggregate_outputs(tmp_path: Path) ->
     assert log_rows[0]["post_write_refresh_ran"] == "True"
     assert log_rows[0]["post_write_next_batch_prepared"] == "True"
     assert log_rows[0]["rows_missing_timing"] == "1"
+    log_summary = json.loads((run_dir / APPLY_LOG_SUMMARY_NAME).read_text(encoding="utf-8"))
+    assert log_summary["ok"] is True
+    assert log_summary["status"] == "apply_log_valid"
+    assert log_summary["apply_log_entries"] == 1
+    assert log_summary["latest"]["status"] == "response_complete"
+    assert log_summary["latest"]["rows_missing_timing"] == 1
     tracked = (run_dir / "human_audit_batch_response_apply_summary.json").read_text(
         encoding="utf-8"
     )
@@ -469,3 +477,5 @@ def test_write_can_refresh_batch_status_and_aggregate_outputs(tmp_path: Path) ->
     log_text = (run_dir / APPLY_LOG_NAME).read_text(encoding="utf-8")
     assert "PRIVATE_" not in log_text
     assert "reference_text" not in log_text
+    assert "PRIVATE_" not in json.dumps(log_summary, ensure_ascii=False)
+    assert "reference_text" not in json.dumps(log_summary, ensure_ascii=False)

@@ -48,6 +48,7 @@ DEFAULT_RESPONSE_DIR = DEFAULT_RUN_DIR / "artifacts" / "review_responses"
 TEMPLATE_SUMMARY_NAME = "human_audit_batch_response_template_summary.json"
 APPLY_SUMMARY_NAME = "human_audit_batch_response_apply_summary.json"
 APPLY_LOG_NAME = "human_audit_batch_response_apply_log.tsv"
+APPLY_LOG_SUMMARY_NAME = "human_audit_batch_response_apply_log_summary.json"
 DEFAULT_READINESS_DIR = refresh_audit.DEFAULT_READINESS_DIR
 
 ROW_RESPONSE_FIELDS = [
@@ -443,6 +444,89 @@ def response_apply_log_row(payload: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def int_value(row: dict[str, str], field: str) -> int:
+    raw = (row.get(field) or "").strip()
+    if not raw:
+        return 0
+    try:
+        return int(raw)
+    except ValueError:
+        return 0
+
+
+def response_apply_log_summary(log_path: Path, *, repo_root: Path) -> dict[str, Any]:
+    if not log_path.exists():
+        payload = {
+            "ok": True,
+            "status": "apply_log_empty",
+            "apply_log_entries": 0,
+            "apply_log_path": repo_relative(log_path, repo_root=repo_root),
+            "latest": {},
+        }
+        assert_tracked_safe(payload)
+        return payload
+    fieldnames, rows = read_tsv(log_path)
+    missing_fields = [field for field in APPLY_LOG_FIELDS if field not in fieldnames]
+    latest = rows[-1] if rows else {}
+    status_counts = Counter(row.get("status", "") for row in rows if row.get("status"))
+    mode_counts = Counter(row.get("mode", "") for row in rows if row.get("mode"))
+    ok_counts = Counter(row.get("ok", "") for row in rows if row.get("ok") != "")
+    error_counts = Counter()
+    for row in rows:
+        for key in (row.get("error_keys") or "").split(","):
+            if key:
+                error_counts[key] += 1
+    payload = {
+        "ok": not missing_fields,
+        "status": "apply_log_valid" if not missing_fields else "apply_log_invalid",
+        "input_boundary": "tracked aggregate response apply log only",
+        "output_boundary": "aggregate-only apply-log status; no private row keys or transcript text",
+        "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
+        "remaining_review_scope": REMAINING_REVIEW_SCOPE,
+        "apply_log_path": repo_relative(log_path, repo_root=repo_root),
+        "apply_log_entries": len(rows),
+        "missing_log_columns": missing_fields,
+        "status_counts": dict(sorted(status_counts.items())),
+        "mode_counts": dict(sorted(mode_counts.items())),
+        "ok_counts": dict(sorted(ok_counts.items())),
+        "error_key_counts": dict(sorted(error_counts.items())),
+        "latest": {
+            "recorded_at": latest.get("recorded_at", ""),
+            "ok": latest.get("ok", ""),
+            "status": latest.get("status", ""),
+            "mode": latest.get("mode", ""),
+            "require_complete": latest.get("require_complete", ""),
+            "selection_stratum": latest.get("selection_stratum", ""),
+            "rows_in_batch": int_value(latest, "rows_in_batch"),
+            "reviewed_rows_in_response": int_value(latest, "reviewed_rows_in_response"),
+            "pending_rows_in_response": int_value(latest, "pending_rows_in_response"),
+            "model_assessments_in_response": int_value(latest, "model_assessments_in_response"),
+            "reviewed_model_assessments_in_response": int_value(
+                latest,
+                "reviewed_model_assessments_in_response",
+            ),
+            "pending_model_assessments_in_response": int_value(
+                latest,
+                "pending_model_assessments_in_response",
+            ),
+            "rows_with_timing": int_value(latest, "rows_with_timing"),
+            "rows_missing_timing": int_value(latest, "rows_missing_timing"),
+            "total_review_elapsed_seconds": latest.get("total_review_elapsed_seconds", ""),
+            "mean_review_elapsed_seconds": latest.get("mean_review_elapsed_seconds", ""),
+            "error_count_total": int_value(latest, "error_count_total"),
+            "error_keys": latest.get("error_keys", ""),
+            "response_sheet_path": latest.get("response_sheet_path", ""),
+            "source_batch_summary": latest.get("source_batch_summary", ""),
+        },
+        "next_action": (
+            "Fill all required row and model fields in the local response TSV, rerun "
+            "strict dry-run until response_complete, then write and refresh."
+        ),
+    }
+    assert_tracked_safe(payload)
+    return payload
+
+
 def validate_response_values(rows: list[dict[str, str]]) -> Counter[str]:
     errors: Counter[str] = Counter()
     for row in rows:
@@ -834,7 +918,12 @@ def apply_response_sheet_workflow(
     assert_tracked_safe(payload)
     log_row = response_apply_log_row(payload)
     assert_tracked_safe(log_row)
-    append_tsv(output_dir / APPLY_LOG_NAME, log_row, APPLY_LOG_FIELDS)
+    log_path = output_dir / APPLY_LOG_NAME
+    append_tsv(log_path, log_row, APPLY_LOG_FIELDS)
+    write_json(
+        output_dir / APPLY_LOG_SUMMARY_NAME,
+        response_apply_log_summary(log_path, repo_root=repo_root),
+    )
     write_json(output_dir / APPLY_SUMMARY_NAME, payload)
     return payload
 
