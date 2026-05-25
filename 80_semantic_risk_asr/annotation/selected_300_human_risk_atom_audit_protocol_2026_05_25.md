@@ -191,6 +191,13 @@ for response attempts. The companion
 `human_audit_batch_response_apply_log_summary.json` is the quick machine-readable
 audit of the latest attempt and aggregate attempt counts.
 
+For a single aggregate-only handoff that consolidates the current packet,
+response TSV, batch gate, apply-log status, and next commands, run:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/build_human_audit_reviewer_handoff.py
+```
+
 After filling the ignored response TSV, dry-run it with the strict completion
 gate:
 

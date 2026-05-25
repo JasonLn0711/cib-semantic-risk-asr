@@ -146,7 +146,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   and the tracked apply summary records aggregate timing coverage without
   exposing row content. The response workflow also appends a repo-safe apply
   log row for every dry-run/write attempt and writes a machine-readable
-  apply-log summary. The strict `--require-complete` dry-run currently
+  apply-log summary. A one-file reviewer handoff is available from
+  `80_semantic_risk_asr/annotation/build_human_audit_reviewer_handoff.py`;
+  current handoff status is `reviewer_input_pending`. The strict
+  `--require-complete` dry-run currently
   exits nonzero as expected with `ok=false` and `incomplete_response=1`; this is
   the completion gate before any `--write`. After strict dry-run passes, use
   `--write --refresh-after-write` to update the ignored local sheet, audit the

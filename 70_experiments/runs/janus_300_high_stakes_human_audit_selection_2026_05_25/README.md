@@ -141,6 +141,7 @@ Tracked readiness outputs:
 | `human_audit_batch_response_apply_summary.json` | Repo-safe strict dry-run/apply status for the local response TSV. Current `--require-complete` dry-run status is `response_pending`, `ok=false`, `incomplete_response=1`, with `0/6` rows, `0/18` model assessments, and `0/6` row review timings filled. |
 | `human_audit_batch_response_apply_log.tsv` | Append-only repo-safe response dry-run/write log. Current first entry records the blank strict dry-run as `response_pending` with aggregate counts only. |
 | `human_audit_batch_response_apply_log_summary.json` | Repo-safe audit of the response apply log. Current status: `apply_log_valid`, `2` entries, latest status `response_pending`, `0/6` rows and `0/18` model assessments filled. |
+| `human_audit_reviewer_handoff_summary.json` | Repo-safe current reviewer handoff. Current status: `reviewer_input_pending`, packet rows `1-6`, response template path, latest apply status, apply-log status, and exact next commands. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
@@ -148,6 +149,17 @@ dangerous ASR risk, but only model-level labels can support a reviewer-facing
 claim about which ASR model is safer.
 
 ## Local Review Helper
+
+For a one-file current-state handoff, run:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/build_human_audit_reviewer_handoff.py
+```
+
+The handoff summary does not read transcript-bearing row content. It combines
+the prepared packet summary, current batch status, response template summary,
+apply status, and apply-log summary into
+`human_audit_reviewer_handoff_summary.json`.
 
 Prepare the next local transcript-bearing review packet before filling rows:
 
