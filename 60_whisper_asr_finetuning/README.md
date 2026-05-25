@@ -54,14 +54,17 @@ to the organized extracted audio under `../10_extracted_parts/`.
 
    ```bash
    python 60_whisper_asr_finetuning/scripts/build_janus_human_review_packet.py
+   python 60_whisper_asr_finetuning/scripts/build_janus_human_review_packet.py --import-workbook ~/Downloads/janus_15_human_review_packet_<date>/review_workbook.tsv
    python 60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py --list-incomplete
    python 60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py --mode gold --reviewer <name> --play
    python 60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py --mode long-silence --reviewer <name> --play
    ```
 
    The packet builder writes a local Downloads folder with the guide, copied
-   review audio, and `audio_manifest.tsv`. The interactive helper writes only
-   to ignored local TSV files. Neither step commits transcripts, review notes,
+   review audio, `audio_manifest.tsv`, and a fillable `review_workbook.tsv`.
+   Importing the workbook writes only non-empty review fields back to ignored
+   local TSV files. The interactive helper is still available for direct
+   row-by-row review. None of these steps commits transcripts, review notes,
    audio, or audio-derived manual judgments.
 
 6. Re-run the pilot gate:

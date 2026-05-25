@@ -122,25 +122,28 @@ The script writes:
    all 4,967 rows unless a pattern appears.
 5. Build a local Downloads review packet with copied gate audio:
    `python 60_whisper_asr_finetuning/scripts/build_janus_human_review_packet.py`.
-6. Use `gold_review_packet.md` or the Downloads review packet as the row-by-row
-   listening guide if manually filling the local review sheets, or use the
+6. Fill `review_workbook.tsv` in that Downloads packet, then import non-empty
+   review fields back to the ignored local TSVs:
+   `python 60_whisper_asr_finetuning/scripts/build_janus_human_review_packet.py --import-workbook ~/Downloads/janus_15_human_review_packet_<date>/review_workbook.tsv`.
+7. Use `gold_review_packet.md` or the Downloads review packet as the row-by-row
+   listening guide if directly filling the local review sheets, or use the
    interactive helper:
    `python 60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py --mode gold --reviewer <name> --play`.
-7. Fill the 6 long-silence rows with:
+8. Fill the 6 long-silence rows with:
    `python 60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py --mode long-silence --reviewer <name> --play`.
-8. Run `python 60_whisper_asr_finetuning/scripts/validate_janus_pilot_gate.py`
+9. Run `python 60_whisper_asr_finetuning/scripts/validate_janus_pilot_gate.py`
    and expect it to pass before NeMo/Whisper/Breeze pilot metrics are treated
    as evaluation evidence.
-9. Run the NeMo Curator pilot only on `nemo_pilot_input_manifest.jsonl`.
-10. Verify NeMo output joins back to the gold subset through `audio_id`.
-11. Run the same 15-row subset through Whisper small, Whisper large-v2 or LoRA,
+10. Run the NeMo Curator pilot only on `nemo_pilot_input_manifest.jsonl`.
+11. Verify NeMo output joins back to the gold subset through `audio_id`.
+12. Run the same 15-row subset through Whisper small, Whisper large-v2 or LoRA,
     Breeze-ASR-25, and optional faster-whisper/WhisperX if available.
-12. Build the local metric-input bridge for SRES, CEIS, and downstream checks:
+13. Build the local metric-input bridge for SRES, CEIS, and downstream checks:
     `python 80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py --hypotheses <asr_hypotheses.tsv-or-jsonl>`.
-13. Produce WER/CER plus risk-atom error and downstream label-flip checks.
-14. Generate counterfactual variants and compute CEIS for the same reviewed
+14. Produce WER/CER plus risk-atom error and downstream label-flip checks.
+15. Generate counterfactual variants and compute CEIS for the same reviewed
     subset.
-15. Expand to 300-500 high-stakes segments only after the 15-row gate shows a
+16. Expand to 300-500 high-stakes segments only after the 15-row gate shows a
     usable decision-stability signal.
 
 ## NeMo Reference Points

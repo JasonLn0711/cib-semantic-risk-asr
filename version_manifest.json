@@ -1,20 +1,20 @@
 {
-  "version": "v2.5.16",
+  "version": "v2.5.17",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 16
+    "patch": 17
   },
-  "updated_at": "2026-05-25T09:03:03+08:00",
+  "updated_at": "2026-05-25T09:08:19+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "8054fd9",
+  "base_commit": "1d6590c",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
-  "summary": "Add reproducible JANUS human review packet builder.",
+  "summary": "Add fillable JANUS human review workbook import.",
   "changed_files": [
     "60_whisper_asr_finetuning/README.md",
     "60_whisper_asr_finetuning/scripts/build_janus_human_review_packet.py",

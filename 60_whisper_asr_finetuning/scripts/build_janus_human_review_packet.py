@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import shlex
 import shutil
 from datetime import date
@@ -25,6 +26,36 @@ LONG_SILENCE_REQUIRED_FIELDS = (
     "review_date",
 )
 
+GOLD_REVIEW_FIELDS = GOLD_REQUIRED_FIELDS + (
+    "reviewer",
+    "review_date",
+    "review_notes",
+)
+
+LONG_SILENCE_REVIEW_FIELDS = LONG_SILENCE_REQUIRED_FIELDS + (
+    "review_notes",
+)
+
+WORKBOOK_FIELDS = (
+    "review_set",
+    "index",
+    "audio_id",
+    "split",
+    "packet_audio_path",
+    "source_repo_path",
+    "candidate_reference_transcript",
+    "risk_keyword_hits",
+    "human_verified_transcript",
+    "semantic_risk_label",
+    "risk_atoms",
+    "asr_confusion_terms",
+    "would_asr_error_change_decision",
+    "review_status",
+    "reviewer",
+    "review_date",
+    "review_notes",
+)
+
 
 def repo_root_from_script() -> Path:
     return Path(__file__).resolve().parents[2]
@@ -33,6 +64,12 @@ def repo_root_from_script() -> Path:
 def read_tsv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle, delimiter="\t"))
+
+
+def read_tsv_with_fields(path: Path) -> tuple[list[dict[str, str]], list[str]]:
+    with path.open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle, delimiter="\t")
+        return list(reader), list(reader.fieldnames or [])
 
 
 def write_text(path: Path, text: str) -> None:
@@ -99,6 +136,139 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t")
         writer.writeheader()
         writer.writerows(rows)
+
+
+def write_tsv(path: Path, rows: list[dict[str, str]], fieldnames: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({field: row.get(field, "") for field in fieldnames})
+
+
+def build_workbook_rows(
+    gold_rows: list[dict[str, str]],
+    silence_rows: list[dict[str, str]],
+) -> list[dict[str, str]]:
+    workbook_rows: list[dict[str, str]] = []
+    for review_set, rows in (("gold", gold_rows), ("long_silence", silence_rows)):
+        for index, row in enumerate(rows, start=1):
+            packet_path = packet_audio_path(
+                review_set,
+                index,
+                row["audio_id"],
+                Path(row["path"]),
+            )
+            workbook_rows.append(
+                {
+                    "review_set": review_set,
+                    "index": str(index),
+                    "audio_id": row.get("audio_id", ""),
+                    "split": row.get("split", ""),
+                    "packet_audio_path": packet_path.as_posix(),
+                    "source_repo_path": row.get("path", ""),
+                    "candidate_reference_transcript": row.get(
+                        "candidate_reference_transcript",
+                        "",
+                    ),
+                    "risk_keyword_hits": row.get("risk_keyword_hits", ""),
+                    "human_verified_transcript": row.get(
+                        "human_verified_transcript",
+                        "",
+                    ),
+                    "semantic_risk_label": row.get("semantic_risk_label", ""),
+                    "risk_atoms": row.get("risk_atoms", ""),
+                    "asr_confusion_terms": row.get("asr_confusion_terms", ""),
+                    "would_asr_error_change_decision": row.get(
+                        "would_asr_error_change_decision",
+                        "",
+                    ),
+                    "review_status": row.get("review_status", ""),
+                    "reviewer": row.get("reviewer", ""),
+                    "review_date": row.get("review_date", ""),
+                    "review_notes": row.get("review_notes", ""),
+                }
+            )
+    return workbook_rows
+
+
+def write_workbook(path: Path, rows: list[dict[str, str]]) -> None:
+    write_tsv(path, rows, list(WORKBOOK_FIELDS))
+
+
+def import_review_rows(
+    review_path: Path,
+    workbook_rows: list[dict[str, str]],
+    review_set: str,
+    review_fields: tuple[str, ...],
+    dry_run: bool,
+) -> dict[str, object]:
+    review_rows, fieldnames = read_tsv_with_fields(review_path)
+    rows_by_id = {
+        row.get("audio_id", ""): row
+        for row in review_rows
+        if row.get("audio_id")
+    }
+    workbook_by_id = {
+        row.get("audio_id", ""): row
+        for row in workbook_rows
+        if row.get("review_set") == review_set and row.get("audio_id")
+    }
+    missing_from_review = sorted(set(workbook_by_id) - set(rows_by_id))
+    updated_cells = 0
+    updated_rows: set[str] = set()
+
+    for audio_id, workbook_row in workbook_by_id.items():
+        target = rows_by_id.get(audio_id)
+        if target is None:
+            continue
+        for field in review_fields:
+            value = (workbook_row.get(field) or "").strip()
+            if value and target.get(field, "") != value:
+                target[field] = value
+                updated_cells += 1
+                updated_rows.add(audio_id)
+
+    if not dry_run:
+        write_tsv(review_path, review_rows, fieldnames)
+
+    return {
+        "review_set": review_set,
+        "review_path": str(review_path),
+        "workbook_rows": len(workbook_by_id),
+        "updated_rows": len(updated_rows),
+        "updated_cells": updated_cells,
+        "missing_from_review": missing_from_review,
+        "dry_run": dry_run,
+    }
+
+
+def import_workbook(
+    workbook_path: Path,
+    gold_review_path: Path,
+    long_silence_review_path: Path,
+    dry_run: bool,
+) -> dict[str, object]:
+    workbook_rows = read_tsv(workbook_path)
+    result = {
+        "workbook": str(workbook_path),
+        "gold": import_review_rows(
+            gold_review_path,
+            workbook_rows,
+            "gold",
+            GOLD_REVIEW_FIELDS,
+            dry_run,
+        ),
+        "long_silence": import_review_rows(
+            long_silence_review_path,
+            workbook_rows,
+            "long_silence",
+            LONG_SILENCE_REVIEW_FIELDS,
+            dry_run,
+        ),
+    }
+    return result
 
 
 def build_gold_section(root: Path, rows: list[dict[str, str]]) -> list[str]:
@@ -249,6 +419,9 @@ def build_guide(
         "",
         "```bash",
         f"cd {root}",
+        "python3 60_whisper_asr_finetuning/scripts/build_janus_human_review_packet.py",
+        "# Fill review_workbook.tsv in the generated Downloads packet, then import it:",
+        "python3 60_whisper_asr_finetuning/scripts/build_janus_human_review_packet.py --import-workbook ~/Downloads/janus_15_human_review_packet_<date>/review_workbook.tsv",
         "python3 60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py --list-incomplete",
         "python3 60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py --mode gold --reviewer <your_name> --play",
         "python3 60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py --mode long-silence --reviewer <your_name> --play",
@@ -385,7 +558,19 @@ def main() -> int:
     parser.add_argument("--long-silence-review", type=Path, default=reports_dir / "long_silence_review.tsv")
     parser.add_argument("--output-dir", type=Path, default=default_output)
     parser.add_argument("--date", default=generated_date)
+    parser.add_argument("--import-workbook", type=Path)
+    parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
+
+    if args.import_workbook:
+        result = import_workbook(
+            args.import_workbook.expanduser(),
+            args.gold_review,
+            args.long_silence_review,
+            dry_run=args.dry_run,
+        )
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0
 
     gold_rows = read_tsv(args.gold_review)
     silence_rows = read_tsv(args.long_silence_review)
@@ -400,10 +585,13 @@ def main() -> int:
     manifest_rows.extend(copy_audio(root, packet_dir, "long_silence", silence_rows))
     manifest_path = packet_dir / "audio_manifest.tsv"
     write_manifest(manifest_path, manifest_rows)
+    workbook_path = packet_dir / "review_workbook.tsv"
+    write_workbook(workbook_path, build_workbook_rows(gold_rows, silence_rows))
 
     print(f"packet_dir={packet_dir}")
     print(f"guide={guide_path}")
     print(f"audio_manifest={manifest_path}")
+    print(f"review_workbook={workbook_path}")
     print(f"gold_audio={len(gold_rows)}")
     print(f"long_silence_audio={len(silence_rows)}")
     return 0
