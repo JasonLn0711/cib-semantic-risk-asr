@@ -131,11 +131,13 @@ The script writes:
 8. Run the NeMo Curator pilot only on `nemo_pilot_input_manifest.jsonl`.
 9. Verify NeMo output joins back to the gold subset through `audio_id`.
 10. Run the same 15-row subset through Whisper small, Whisper large-v2 or LoRA,
-   Breeze-ASR-25, and optional faster-whisper/WhisperX if available.
-11. Produce WER/CER plus risk-atom error and downstream label-flip checks.
-12. Generate counterfactual variants and compute CEIS for the same reviewed
-   subset.
-13. Expand to 300-500 high-stakes segments only after the 15-row gate shows a
+    Breeze-ASR-25, and optional faster-whisper/WhisperX if available.
+11. Build the local metric-input bridge for SRES, CEIS, and downstream checks:
+    `python 80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py --hypotheses <asr_hypotheses.tsv-or-jsonl>`.
+12. Produce WER/CER plus risk-atom error and downstream label-flip checks.
+13. Generate counterfactual variants and compute CEIS for the same reviewed
+    subset.
+14. Expand to 300-500 high-stakes segments only after the 15-row gate shows a
     usable decision-stability signal.
 
 ## NeMo Reference Points

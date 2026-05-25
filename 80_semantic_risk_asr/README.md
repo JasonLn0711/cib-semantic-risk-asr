@@ -98,6 +98,20 @@ Minimum viable paper experiment:
 7. Test automatic constrained recovery and decision intervals against no
    recovery and confidence-only correction.
 
+For the JANUS 15-row gate, first convert reviewed gold rows plus ASR
+hypotheses into the three metric-input tables:
+
+```bash
+python 80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py \
+  --hypotheses <asr_hypotheses.tsv-or-jsonl>
+```
+
+The default output path is the ignored local directory
+`70_experiments/runs/janus_15_decision_stability_pilot/artifacts/metric_inputs/`.
+Those files feed `semantic_risk_score.py`,
+`counterfactual_escalation_instability.py`, and
+`downstream/evaluate_downstream_impact.py`.
+
 Use `paper/experiment_plan.md` for the FIRST PRINCIPLE gate before starting a
 long model run. The first publishable unit is a small auditable decision
 stability sample, not another generic ASR fine-tune.

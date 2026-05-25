@@ -271,7 +271,9 @@ decision-critical spans, not arbitrary paraphrases.
 
 Sample target:
 
-- `300-500` high-stakes utterances.
+- First pass: the reviewed 15-row JANUS decision-stability pilot.
+- Scale-up pass: `300-500` high-stakes utterances only after the 15-row pilot
+  produces a usable CEIS/downstream-instability signal.
 
 Metrics:
 
@@ -399,9 +401,9 @@ constrained re-decoding implementation is mature.
 ### Week 1
 
 - Freeze risk atom schema.
-- Generate `300-500` sample list.
-- Run or collect Whisper/Breeze predictions.
-- Build counterfactual variant table.
+- Complete the reviewed 15-row JANUS pilot gate.
+- Run or collect NeMo/Whisper/Breeze hypotheses on the same 15 rows.
+- Build SRES, CEIS, and downstream-impact metric inputs for the pilot.
 
 ### Week 2
 
@@ -409,9 +411,13 @@ constrained re-decoding implementation is mature.
 - Build low-WER/high-CEIS case table.
 - Build low-semantic-distance/high-CEIS case table if semantic distance is
   implemented.
+- Decide whether the pilot supports expansion to `300-500` high-stakes
+  segments.
 
 ### Week 3
 
+- Generate the `300-500` high-stakes sample list only if Week 2 passed the
+  signal gate.
 - Create downstream escalation labels.
 - Compare WER/CER/semantic metrics/SRES/CEIS.
 - Produce AUC/F1/Recall@HighRisk/Critical Miss Rate table.

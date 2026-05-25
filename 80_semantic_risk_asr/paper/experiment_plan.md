@@ -12,15 +12,19 @@ alternatives change downstream escalation decisions.
 
 Do not start a long model run until this gate exists:
 
-1. Select the first `300-500` high-stakes call segments.
+1. Complete the reviewed 15-row JANUS pilot gate.
 2. Generate baseline ASR hypotheses, confidence signals, timestamps, and
    ordinary WER/CER.
-3. Extract risk atoms from top-1 transcripts and reference transcripts.
-4. Generate plausible ASR counterfactual variants.
-5. Compute SRES as the semantic-risk baseline.
-6. Compute CEIS as the proposed decision-stability metric.
-7. Run the downstream escalation impact check.
-8. Store only reviewed aggregate outputs and small safe samples in git.
+3. Build metric inputs with
+   `80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py`.
+4. Extract risk atoms from top-1 transcripts and reference transcripts.
+5. Generate plausible ASR counterfactual variants.
+6. Compute SRES as the semantic-risk baseline.
+7. Compute CEIS as the proposed decision-stability metric.
+8. Run the downstream escalation impact check.
+9. Expand to `300-500` high-stakes call segments only if the 15-row pilot
+   produces usable decision-stability signal.
+10. Store only reviewed aggregate outputs and small safe samples in git.
 
 Publication-safe output path:
 
@@ -55,7 +59,9 @@ metrics do not explain which models are stable on risk atoms.
 
 Sample:
 
-- `300-500` high-stakes call segments from train/validation/test.
+- first the reviewed 15-row gate;
+- then `300-500` high-stakes call segments from train/validation/test after
+  the pilot shows a usable signal.
 
 Signals:
 

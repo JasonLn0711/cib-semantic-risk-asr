@@ -64,3 +64,26 @@ For semantic-risk ASR experiments, also report:
 - automatic recovery budget;
 - machine abstention rate;
 - conservative escalation cost.
+
+## JANUS 15-Row Decision-Stability Pilot
+
+Use `runs/janus_15_decision_stability_pilot/` for the first reviewed CDS-ASR
+gate after `gold_subset_review.tsv` and the bounded long-silence review are
+complete.
+
+Generate local metric-input artifacts with:
+
+```bash
+python 80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py \
+  --hypotheses <asr_hypotheses.tsv-or-jsonl>
+```
+
+The generated `artifacts/metric_inputs/` files are intentionally ignored:
+
+- `sres_annotation.tsv`
+- `counterfactual_variants.tsv`
+- `downstream_escalation_decisions.tsv`
+- `build_summary.json`
+
+Only aggregate metrics, run records, and publication-safe examples should be
+committed after review.
