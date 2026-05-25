@@ -57,7 +57,7 @@
   ],
   "consistency_audit_ok": true,
   "consistency_status_counts": {
-    "pass": 11
+    "pass": 12
   },
   "consistency_failed_checks": [],
   "downstream_outputs_refreshed": true,
@@ -87,6 +87,6 @@
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"
   ],
-  "runtime_seconds": 0.0068,
+  "runtime_seconds": 0.011,
   "next_action": "Complete selected-300 risk-atom, decision-change, expected-action, confidence, per-model assessment, and per-row timing fields, then rerun the session-gated strict dry-run with --require-complete --require-timing before aggregate refresh."
 }

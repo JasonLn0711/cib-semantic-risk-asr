@@ -161,5 +161,5 @@
   ],
   "first_principle_decision": "The repo should now optimize for a publishable consequence evidence chain, not a longer ASR leaderboard. New ASR candidates stop at the locale/runtime gate unless they change the CDS-ASR paper evidence.",
   "next_decision": "Close the selected-300 row/model/timing response gate, run the strict closeout path with --require-complete --require-timing, write/refresh aggregate human review evidence, rerun predictor and recovery analyses, then rerun this roadmap audit before claiming the objective is complete.",
-  "runtime_seconds": 0.0003
+  "runtime_seconds": 0.0002
 }

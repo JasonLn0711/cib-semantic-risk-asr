@@ -104,5 +104,5 @@
     "readiness_dir": "70_experiments/runs/postdoc_evidence_chain_2026_05_25",
     "recovery_summary": "70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json"
   },
-  "runtime_seconds": 0.0006
+  "runtime_seconds": 0.0004
 }

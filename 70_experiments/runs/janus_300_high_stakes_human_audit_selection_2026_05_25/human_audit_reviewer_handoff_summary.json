@@ -4,7 +4,7 @@
   "input_boundary": "tracked aggregate summaries plus local path pointers only",
   "output_boundary": "aggregate-only reviewer handoff; no private row keys or transcript text",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
-  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
+  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
   "source_status": {
     "batch_summary": "present",
     "batch_status": "present",
@@ -31,12 +31,12 @@
     "apply_summary": {
       "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json",
       "status": "present",
-      "sha256": "86f8b204faecd5117da997872ffb7f0322ace8fa03433f4858753b7cdcd08167"
+      "sha256": "83549747cea244f283e4f8577d169ce448613bc4e6ad27ebcbbcddd5104762d7"
     },
     "apply_log_summary": {
       "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_log_summary.json",
       "status": "present",
-      "sha256": "91a828603efa74d715135e5cd535be075f93f8c6fe1696ea1bb37639e3aa849c"
+      "sha256": "9b67eb14c34a2107c102358488c15830309dafd476b32026aeb5c51dfec6658f"
     }
   },
   "freshness_status": "fresh",
@@ -85,15 +85,15 @@
   },
   "apply_log": {
     "status": "apply_log_valid",
-    "entries": 5,
+    "entries": 6,
     "status_counts": {
-      "response_pending": 5
+      "response_pending": 6
     },
     "error_key_counts": {
-      "incomplete_response": 5,
-      "missing_review_timing": 2
+      "incomplete_response": 6,
+      "missing_review_timing": 3
     },
-    "latest_recorded_at": "2026-05-26T02:28:07+08:00"
+    "latest_recorded_at": "2026-05-26T03:26:15+08:00"
   },
   "reviewer_next_steps": [
     "Open the local packet path only in the local workspace; it is transcript-bearing.",
