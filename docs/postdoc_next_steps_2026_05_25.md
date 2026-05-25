@@ -128,8 +128,10 @@ subset predictor table 要由這支工具重算。
   公式形式正確但不適合作為未斷詞中文主指標；最新 audit 已用 canonical
   manifest 驗證 legacy 15-row、六個 258-row run、三個 high-stakes 300-row
   run，並用 `jiwer` 交叉驗算 zh-jieba corpus WER。這次重檢也補上
-  zero-reference-unit gate；目前所有 audit profile 都是 `0`。投稿主表應用
-  aggregate `cer_zh_micro` 欄位，`wer_zh_jieba_micro` 只能作為補充指標。
+  zero-reference-unit gate；目前所有 audit profile 都是 `0`。在重新擔心
+  WER 數據異常後，已再次重跑 15-row、258-row、300-row audit，三個 TSV
+  revalidation outputs 都與 tracked audit TSV byte-for-byte 相同。投稿主表
+  應用 aggregate `cer_zh_micro` 欄位，`wer_zh_jieba_micro` 只能作為補充指標。
 - Whisper large-v3、large-v3 turbo、SenseVoice、Qwen3-ASR、Gemma 4 audio
   候選已加入矩陣，但尚未有完整 runner、smoke、15-row contract、或
   258-row evidence。

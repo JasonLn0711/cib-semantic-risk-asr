@@ -109,6 +109,46 @@ References consulted:
   --summary-json 70_experiments/runs/wer_metric_audit_2026_05_25/summary.json
 ```
 
+## 2026-05-25 Strict Revalidation Pass
+
+After a concern that the repo WER values had been consistently strange, the
+WER path was rechecked from first principles:
+
+1. Formula: WER is edit distance over declared word units divided by reference
+   word units.
+2. Unit policy: Chinese word units are not implicit whitespace tokens. The
+   paper-facing supplemental WER profile is `wer_zh_jieba`, using `zh_asr`
+   normalization and deterministic `jieba` segmentation.
+3. Primary metric policy: Chinese ASR surface comparison uses
+   `cer_zh_micro`; `wer_zh_jieba_micro` is supplemental; raw whitespace WER is
+   legacy audit-only.
+4. Evidence gate: every comparable WER value must have manifest alignment,
+   missing-reference checks, missing-hypothesis checks, zero-reference-unit
+   checks, package versions, and a `jiwer` cross-check.
+
+Validation executed in this recheck:
+
+- Python compile check over the shared metric helper, audit script, split
+  summarizer, and ASR runner paths: passed.
+- Direct invocation of the WER/CER unit-test functions: passed. The local
+  `.venv` did not have `pytest` installed, so the tests were run by importing
+  the test modules directly.
+- `audit_asr_text_metrics.py` rerun over the legacy 15-row set, six-model
+  258-row test split, and three-run high-stakes 300-row set: all returned
+  `ok=true`.
+- The revalidation outputs written under `/tmp/cib_wer_recheck/` matched the
+  tracked TSV audit files byte-for-byte for all three scopes:
+  `legacy_15_row_metric_audit.tsv`, `text_metric_audit.tsv`, and
+  `high_stakes_300_metric_audit.tsv`.
+- Focused code search found no current runner path computing WER as
+  `reference.split()` or `prediction.split()`. Whitespace tokenization remains
+  only as the explicit `wer_raw_whitespace` audit profile in the shared helper.
+
+This revalidation did not change the verdict. The old strange values are
+explained by raw whitespace WER over unsegmented Chinese. They are useful for
+reproducing the historical confusion but are not valid paper-facing model
+quality evidence.
+
 ## 258-Row Audit Result
 
 All six hypothesis files passed the stricter manifest check:
