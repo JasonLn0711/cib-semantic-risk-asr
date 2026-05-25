@@ -5,6 +5,19 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.56 - 2026-05-25T18:55:58+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `b4d03d6`
+- Branch: `main`
+- Summary: Add model-level human audit assessment schema.
+- Changed files:
+  - `80_semantic_risk_asr/annotation/select_human_risk_atom_audit.py`
+  - `80_semantic_risk_asr/annotation/summarize_human_risk_atom_audit.py`
+  - `tests/test_human_audit_selection.py`
+  - `tests/test_human_audit_summary.py`
+
 ## v2.5.55 - 2026-05-25T18:49:27+08:00
 
 - Bump: `patch`

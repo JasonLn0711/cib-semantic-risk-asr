@@ -411,6 +411,7 @@ def write_local_audit_sheet(path: Path, selected: list[AudioCandidate]) -> None:
         "reviewer_decision_change_reason",
         "reviewer_expected_safe_action",
         "reviewer_annotation_confidence",
+        "reviewer_model_assessments_json",
         "reviewer_notes",
     ]
     rows = []
@@ -426,6 +427,16 @@ def write_local_audit_sheet(path: Path, selected: list[AudioCandidate]) -> None:
                 "ceis_max": sample.ceis_max,
                 "sres_top_atom": sample.sres_top_atom,
                 "ceis_top_atom": sample.ceis_top_atom,
+            }
+            for sample in candidate.samples
+        ]
+        model_assessments = [
+            {
+                "asr_run_id": sample.asr_run_id,
+                "reviewer_would_asr_error_change_decision": "",
+                "reviewer_critical_atoms": "",
+                "reviewer_expected_safe_action": "",
+                "reviewer_annotation_confidence": "",
             }
             for sample in candidate.samples
         ]
@@ -453,6 +464,7 @@ def write_local_audit_sheet(path: Path, selected: list[AudioCandidate]) -> None:
                 "reviewer_decision_change_reason": "",
                 "reviewer_expected_safe_action": "",
                 "reviewer_annotation_confidence": "",
+                "reviewer_model_assessments_json": json.dumps(model_assessments, ensure_ascii=False),
                 "reviewer_notes": "",
             }
         )

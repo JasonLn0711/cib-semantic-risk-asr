@@ -13,6 +13,7 @@ from select_human_risk_atom_audit import (  # noqa: E402
     load_model_samples,
     select_candidates,
     summary_payload,
+    write_local_audit_sheet,
 )
 
 
@@ -97,3 +98,9 @@ audio_c__run_1	review	review	review
     assert "audio_a" not in summary_text
     assert "REF_A" not in summary_text
     assert payload["selected_audio_count"] == 2
+
+    sheet = tmp_path / "audit.tsv"
+    write_local_audit_sheet(sheet, selected)
+    sheet_text = sheet.read_text(encoding="utf-8")
+    assert "reviewer_model_assessments_json" in sheet_text
+    assert "reviewer_would_asr_error_change_decision" in sheet_text

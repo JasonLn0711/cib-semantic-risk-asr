@@ -34,6 +34,7 @@ SENSITIVE_FIELDS = {
     "reference_text",
     "hypothesis_text",
     "asr_hypotheses_json",
+    "reviewer_model_assessments_json",
     "reviewer_verified_transcript",
     "reviewer_notes",
 }
@@ -108,23 +109,68 @@ def malformed_counts(rows: list[dict[str, str]]) -> Counter[str]:
         risk_signal = parse_json_field(row.get("risk_signal_json", ""))
         if risk_signal is not None and not isinstance(risk_signal, dict):
             counts["invalid_risk_signal_json"] += 1
+        model_assessments = parse_json_field(row.get("reviewer_model_assessments_json", ""))
+        if model_assessments is not None and not isinstance(model_assessments, list):
+            counts["invalid_reviewer_model_assessments_json"] += 1
     return counts
+
+
+def iter_model_assessments(row: dict[str, str]) -> list[dict[str, Any]]:
+    value = parse_json_field(row.get("reviewer_model_assessments_json", ""))
+    if not isinstance(value, list):
+        return []
+    return [item for item in value if isinstance(item, dict)]
+
+
+def model_assessment_reviewed(item: dict[str, Any]) -> bool:
+    return all(
+        str(item.get(field, "")).strip()
+        for field in [
+            "reviewer_would_asr_error_change_decision",
+            "reviewer_critical_atoms",
+            "reviewer_expected_safe_action",
+            "reviewer_annotation_confidence",
+        ]
+    )
+
+
+def model_assessment_counts(rows: list[dict[str, str]]) -> dict[str, int]:
+    total = reviewed_count = malformed = 0
+    for row in rows:
+        assessments = iter_model_assessments(row)
+        total += len(assessments)
+        for item in assessments:
+            decision_change = str(
+                item.get("reviewer_would_asr_error_change_decision", "")
+            ).strip()
+            if decision_change and decision_change not in VALID_DECISION_CHANGE:
+                malformed += 1
+            if model_assessment_reviewed(item):
+                reviewed_count += 1
+    return {
+        "model_assessments": total,
+        "reviewed_model_assessments": reviewed_count,
+        "pending_model_assessments": total - reviewed_count,
+        "malformed_model_assessments": malformed,
+    }
 
 
 def summarize_completion(rows: list[dict[str, str]]) -> dict[str, Any]:
     reviewed_rows = [row for row in rows if reviewed(row)]
     missing = missing_field_counts(rows)
     malformed = malformed_counts(rows)
+    model_counts = model_assessment_counts(rows)
     status = "review_complete" if len(reviewed_rows) == len(rows) and not malformed else "review_pending"
     if reviewed_rows and len(reviewed_rows) != len(rows):
         status = "partial_review"
-    if malformed:
+    if malformed or model_counts["malformed_model_assessments"]:
         status = "review_needs_cleanup"
     return {
         "status": status,
         "audit_rows": len(rows),
         "reviewed_rows": len(reviewed_rows),
         "pending_rows": len(rows) - len(reviewed_rows),
+        **model_counts,
         "missing_required_field_counts": dict(sorted(missing.items())),
         "malformed_field_counts": dict(sorted(malformed.items())),
     }
@@ -190,19 +236,25 @@ def summarize_human_atoms(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
 
 def summarize_model_proxy_coverage(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
     by_model: dict[str, dict[str, Any]] = defaultdict(lambda: defaultdict(int))
-    reviewed_rows = [row for row in rows if reviewed(row)]
     for row in rows:
         hypotheses = parse_json_field(row.get("asr_hypotheses_json", ""))
         if not isinstance(hypotheses, list):
             continue
-        reviewed_flag = reviewed(row)
-        decision_change = (row.get("reviewer_would_asr_error_change_decision") or "").strip()
         for hypothesis in hypotheses:
             if not isinstance(hypothesis, dict):
                 continue
             model_id = str(hypothesis.get("asr_run_id", "") or "unknown")
             by_model[model_id]["audit_model_samples"] += 1
-            if reviewed_flag:
+    for row in rows:
+        for item in iter_model_assessments(row):
+            model_id = str(item.get("asr_run_id", "") or "unknown")
+            if not model_id:
+                continue
+            by_model[model_id]["model_assessments"] += 1
+            if model_assessment_reviewed(item):
+                decision_change = str(
+                    item.get("reviewer_would_asr_error_change_decision", "")
+                ).strip()
                 by_model[model_id]["reviewed_model_samples"] += 1
                 if decision_change == "yes":
                     by_model[model_id]["human_decision_change_yes_rows"] += 1
@@ -214,12 +266,14 @@ def summarize_model_proxy_coverage(rows: list[dict[str, str]]) -> list[dict[str,
             {
                 "asr_run_id": model_id,
                 "audit_model_samples": counts["audit_model_samples"],
+                "model_assessments": counts["model_assessments"],
                 "reviewed_model_samples": counts["reviewed_model_samples"],
+                "pending_model_samples": counts["model_assessments"]
+                - counts["reviewed_model_samples"],
                 "human_decision_change_yes_rows": counts["human_decision_change_yes_rows"],
                 "human_decision_change_uncertain_rows": counts[
                     "human_decision_change_uncertain_rows"
                 ],
-                "reviewed_audio_rows": len(reviewed_rows),
             }
         )
     return result
@@ -316,10 +370,11 @@ def main() -> int:
         [
             "asr_run_id",
             "audit_model_samples",
+            "model_assessments",
             "reviewed_model_samples",
+            "pending_model_samples",
             "human_decision_change_yes_rows",
             "human_decision_change_uncertain_rows",
-            "reviewed_audio_rows",
         ],
     )
     print(
