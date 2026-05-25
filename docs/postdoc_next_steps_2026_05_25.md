@@ -780,7 +780,10 @@ Interpretation:
    `response_complete` 後再用 `--write --refresh-after-write`；若 reviewer
    可以記錄時間，填 optional timing 欄位，讓 tracked summary 保留 aggregate
    review-time coverage 與 elapsed seconds，並讓 apply log 留下每次
-   dry-run/write attempt 與 apply-log summary。先看
+   dry-run/write attempt 與 apply-log summary。正常入口先跑
+   `start_human_audit_review_session.py`，確認 `reviewer_session_started`；
+   這會刷新 handoff、preflight、rubric/value contract、action checklist，並留下
+   aggregate session-start summary/log。若要分步檢查，再看
    `human_audit_reviewer_handoff_summary.json` 取得目前 packet、response TSV
    與正確命令，並在 reviewer 開始前跑
    `build_human_audit_reviewer_handoff.py --check-existing` 確認

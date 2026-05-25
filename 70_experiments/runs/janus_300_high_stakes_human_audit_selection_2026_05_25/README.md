@@ -148,6 +148,8 @@ Tracked readiness outputs:
 | `human_audit_reviewer_value_contract.tsv` | Repo-safe allowed-value contract for row risk labels, decision-change labels, safe actions, confidence labels, and risk atoms. No audio IDs, transcripts, hypotheses, or reviewer notes. |
 | `human_audit_reviewer_action_checklist_summary.json` | Repo-safe action checklist for the current reviewer batch. Current status: `reviewer_action_ready`, with `rubric_status=rubric_ready`, `6/6` packet rows, `18/18` model assessments, and `6/6` optional timing rows still pending. |
 | `human_audit_reviewer_action_checklist.tsv` | Repo-safe checklist rows for handoff freshness, local packet/template existence, preflight, rubric/value-contract confirmation, required row/model fields, optional timing fields, strict dry-run, and post-completion write/refresh. |
+| `human_audit_reviewer_session_start_summary.json` | Repo-safe one-command reviewer-session start record. Current status: `reviewer_session_started`, after refreshing handoff, preflight, rubric, and action checklist. Human review content remains pending. |
+| `human_audit_reviewer_session_start_log.tsv` | Append-only repo-safe session-start log with aggregate gate statuses, pending counts, and latest apply status only. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
@@ -155,6 +157,20 @@ dangerous ASR risk, but only model-level labels can support a reviewer-facing
 claim about which ASR model is safer.
 
 ## Local Review Helper
+
+For the normal one-command reviewer-session start gate, run:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/start_human_audit_review_session.py
+```
+
+Current session-start status: `reviewer_session_started`. The command refreshes
+the aggregate handoff, records preflight, refreshes the reviewer value contract,
+refreshes the action checklist, writes
+`human_audit_reviewer_session_start_summary.json`, and appends
+`human_audit_reviewer_session_start_log.tsv`. It does not read transcript text
+or reviewer notes. The current content gate is still pending: `6/6` packet
+rows, `18/18` model assessments, and `6/6` optional timing rows.
 
 For a one-file current-state handoff, run:
 

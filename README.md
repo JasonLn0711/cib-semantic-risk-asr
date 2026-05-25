@@ -173,7 +173,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `80_semantic_risk_asr/annotation/build_human_audit_reviewer_action_checklist.py`;
   current checklist status is `reviewer_action_ready` with
   `rubric_status=rubric_ready`, `6/6` packet rows, and `18/18` model
-  assessments still pending in the ignored local response TSV.
+  assessments still pending in the ignored local response TSV. The normal
+  reviewer-session start command is
+  `80_semantic_risk_asr/annotation/start_human_audit_review_session.py`; current
+  start status is `reviewer_session_started`, with a tracked aggregate
+  session-start summary/log and no change to human-review completion.
   The strict
   `--require-complete` dry-run currently
   exits nonzero as expected with `ok=false` and `incomplete_response=1`; this is

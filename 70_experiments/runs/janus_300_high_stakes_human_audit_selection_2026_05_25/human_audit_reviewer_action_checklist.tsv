@@ -1,7 +1,7 @@
 step_id	action	status	evidence	next_action
 1	confirm aggregate handoff freshness	ready	handoff_status=reviewer_input_pending; freshness=fresh	rerun handoff with --check-existing before reviewer work
 2	confirm local packet and response TSV exist	ready	local_packet_exists=True; local_response_template_exists=True	prepare or regenerate the local packet/template if missing
-3	record reviewer session preflight	ready	preflight_status=review_session_ready; recorded_at=2026-05-25T22:47:48+08:00	rerun preflight before opening local review files
+3	record reviewer session preflight	ready	preflight_status=review_session_ready; recorded_at=2026-05-26T00:40:21+08:00	rerun preflight before opening local review files
 3b	confirm reviewer value contract	ready	rubric_status=rubric_ready; constants_match=True	rerun reviewer rubric builder before filling response TSV
 4	fill row-level risk and decision fields in local response TSV	pending	pending_rows=6; rows_in_batch=6	complete row-level required fields; do not re-review ground-truth transcripts
 5	fill per-model assessment fields in local response TSV	pending	pending_model_assessments=18; model_assessments_in_batch=18	complete model-level decision-change and safe-action assessments
