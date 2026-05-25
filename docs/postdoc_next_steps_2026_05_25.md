@@ -193,6 +193,14 @@ outputs。
   WER 數據異常後，已再次重跑 15-row、258-row、300-row audit，三個 TSV
   revalidation outputs 都與 tracked audit TSV byte-for-byte 相同。投稿主表
   應用 aggregate `cer_zh_micro` 欄位，`wer_zh_jieba_micro` 只能作為補充指標。
+  新增 journal-compliance gate 後，結論更明確：paper reporting 在
+  `cer_zh_micro` primary、`wer_zh_jieba_micro` supplemental 的政策下合規；
+  但舊 `metrics.csv` stored WER 欄位不是全部合規，只能保留作 provenance /
+  audit-only。
+- Ground-truth transcript 邊界：manifest/reference transcripts 已視為經過
+  human review 的 WER/CER scoring reference；除非新的人工審查欄位不是這些
+  transcript 欄位與內容，否則不要重開 transcript 人審。剩餘人審 gate 應限
+  縮在 selected-300 的 risk-atom、decision-change、per-model assessment。
 - Whisper large-v3、large-v3 turbo、SenseVoice、Qwen3-ASR、Gemma 4 audio
   候選已加入矩陣，但尚未有完整 runner、smoke、15-row contract、或
   258-row evidence。
@@ -554,7 +562,7 @@ Interpretation:
 - 但是 SRES/CEIS 目前由 proxy risk rows 產生，不能直接把 AUC `1.0000`
   包裝成 human-reviewed paper claim。
 - 下一個 gate 必須是完成 selected-300 human risk-atom audit，而不是再重
-  複改 WER 定義。
+  複改 WER 定義，也不是重審已經 human-reviewed 的 transcript ground truth。
 
 ## Phase 6: Recovery experiment
 
@@ -683,6 +691,8 @@ Interpretation:
   the primary surface metric；即使要列 WER，也必須同時列 tokenizer、
   normalization、macro/micro scope、manifest alignment、package versions、
   zero-reference-unit status；
+- WER/CER reference transcript 已視為 human-reviewed ground truth；人工審查
+  待辦只適用於另行定義的 risk-atom / decision-change / model-assessment 欄位；
 - model outputs depend on prompt/runtime/backend settings；
 - conservative escalation can increase review burden。
 

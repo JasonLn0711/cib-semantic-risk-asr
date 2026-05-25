@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "paper_reporting_compliant": true,
+  "all_stored_wer_fields_journal_compliant": false,
+  "legacy_wer_fields_present": true,
+  "reference_transcript_policy": "Manifest/reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; this audit does not require a new transcript review.",
+  "verdict": {
+    "wer_formula": "compliant edit-distance formula when token unit is declared",
+    "current_paper_facing_wer": "compliant only as supplemental wer_zh_jieba_micro",
+    "primary_chinese_surface_metric": "cer_zh_micro",
+    "legacy_stored_wer": "not journal-compliant as paper-facing evidence for unsegmented Chinese"
+  },
+  "counts": {
+    "audit_tsv_files": 3,
+    "audit_summary_files": 3,
+    "supplemental_zh_jieba_wer_profiles": 15,
+    "raw_whitespace_wer_profiles": 15,
+    "stored_metrics_current_declared_zh_jieba": 4,
+    "stored_metrics_legacy_or_background": 15,
+    "report_rows": 55
+  },
+  "summary_checks": [
+    {
+      "path": "70_experiments/runs/wer_metric_audit_2026_05_25/legacy_15_row_summary.json",
+      "ok": true,
+      "expected_manifest_rows": 15,
+      "expected_rows_requested": 15
+    },
+    {
+      "path": "70_experiments/runs/wer_metric_audit_2026_05_25/summary.json",
+      "ok": true,
+      "expected_manifest_rows": 258,
+      "expected_rows_requested": 258
+    },
+    {
+      "path": "70_experiments/runs/wer_metric_audit_2026_05_25/high_stakes_300_summary.json",
+      "ok": true,
+      "expected_manifest_rows": 300,
+      "expected_rows_requested": 300
+    }
+  ],
+  "proxy_table_policy_ok": true,
+  "notes": [
+    "Use corpus-level micro CER as the primary Chinese ASR surface metric.",
+    "Use corpus-level micro zh-jieba WER only as a supplemental segmented-word metric.",
+    "Treat raw or undocumented stored WER fields as audit-only legacy values."
+  ]
+}

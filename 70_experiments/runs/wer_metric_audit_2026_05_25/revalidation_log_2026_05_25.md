@@ -26,6 +26,16 @@ for Taiwan Mandarin / Traditional Chinese transcripts?
   `run_janus_nemo_curator_pilot.py`
 - Tracked aggregate audit outputs under this run folder.
 - Ignored local prediction JSONL files under `70_experiments/runs/*/predictions/`.
+- Journal-compliance classifier:
+  `80_semantic_risk_asr/scoring/audit_wer_journal_compliance.py`
+
+## Reference Transcript Boundary
+
+The manifest/reference transcripts used for WER/CER scoring are treated as
+already human-reviewed ground truth supplied to this repo. This WER revalidation
+does not ask for another transcript review. Any remaining human-review gate must
+therefore be limited to distinct CDS/risk-atom/model-assessment fields, not to
+the transcript ground truth itself.
 
 ## Validation Commands
 
@@ -130,6 +140,16 @@ cmp -s /tmp/cib_wer_recheck/high_stakes_300_metric_audit.tsv \
 
 Result: all comparisons returned exit code `0`, so the revalidation TSV files
 matched the tracked TSV files byte-for-byte.
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/scoring/audit_wer_journal_compliance.py
+```
+
+Result: `paper_reporting_compliant=true`;
+`all_stored_wer_fields_journal_compliant=false`. The false stored-field flag is
+intentional: legacy `metrics.csv` WER values remain tracked for provenance, but
+only `wer_zh_jieba_micro` from manifest-aligned audit outputs is suitable as a
+supplemental paper-facing WER.
 
 ## Verdict
 

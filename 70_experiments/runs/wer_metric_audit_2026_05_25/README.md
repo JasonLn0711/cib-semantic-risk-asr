@@ -269,6 +269,28 @@ Strict compliance status after this re-check:
   zero reference units; the tracked 15-row, 258-row, and 300-row audits have
   none.
 
+## Journal-Compliance Gate
+
+The follow-up gate
+`80_semantic_risk_asr/scoring/audit_wer_journal_compliance.py` converts the WER
+audit outputs into a reviewer-facing compliance table:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/scoring/audit_wer_journal_compliance.py
+```
+
+Current tracked output:
+
+- `journal_compliance_summary.json`: `paper_reporting_compliant=true`;
+- `all_stored_wer_fields_journal_compliant=false`, because old stored `wer`
+  values remain in `metrics.csv` for reproducibility;
+- `journal_compliance_findings.tsv`: every `wer_zh_jieba` corpus-micro audit
+  row is `journal_compliant_supplemental_chinese_wer`;
+- every `wer_raw_whitespace` row is `audit_only`;
+- manifest/reference transcripts are treated as already human-reviewed ground
+  truth for WER/CER scoring, so this WER audit does not request another
+  transcript review.
+
 Reviewer-facing WER claims should therefore say:
 
 - WER formula: edit distance over declared word units divided by reference word

@@ -5,6 +5,23 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.76 - 2026-05-25T20:35:45+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `55faa67`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/README.md`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/journal_compliance_findings.tsv`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/journal_compliance_summary.json`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/revalidation_log_2026_05_25.md`
+  - `README.md`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
 ## v2.5.75 - 2026-05-25T20:35:22+08:00
 
 - Bump: `patch`

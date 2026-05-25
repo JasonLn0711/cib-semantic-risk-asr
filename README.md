@@ -93,9 +93,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
 - Split-aware metric-input generation now lives at
   `80_semantic_risk_asr/scoring/build_janus_metric_inputs.py`, with validation
   recorded in
-  `70_experiments/runs/janus_split_aware_metric_inputs_2026_05_25/`. Full
-  manifest transcripts are available for `4967` rows, but full human-reviewed
-  CDS ground truth currently covers the 15-row gold subset only.
+  `70_experiments/runs/janus_split_aware_metric_inputs_2026_05_25/`. Manifest
+  transcripts used as WER/CER scoring references are treated as already
+  human-reviewed ground truth. CDS/risk-atom labels are a separate review
+  surface; do not reopen transcript review unless the requested human-review
+  fields differ from the provided ground-truth transcript fields.
 - The first automatic recovery policy gate now lives at
   `80_semantic_risk_asr/recovery/evaluate_recovery_policies.py`, with the
   six-model 258-row proxy result recorded in
@@ -143,7 +145,9 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `jiwer`. Pre-audit WER fields are legacy raw whitespace-token values;
   paper-facing ASR tables should use the `cer_zh_micro` aggregate column as the
   primary surface metric and `wer_zh_jieba_micro` only as a supplemental
-  segmented word metric.
+  segmented word metric. `audit_wer_journal_compliance.py` records the current
+  journal-compliance verdict: paper reporting is compliant under that policy,
+  while not all stored legacy `wer` fields are journal-compliant evidence.
 - Treat audio/call data and filenames as sensitive.
 - If storage cleanup is needed later, review `30_review_flags/REVIEW.md` and `20_inventory/largest_files.tsv` first.
 
