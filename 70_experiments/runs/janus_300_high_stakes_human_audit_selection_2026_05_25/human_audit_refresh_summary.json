@@ -36,6 +36,14 @@
     "proxy_completed": 2,
     "review_pending": 1
   },
+  "roadmap_audit_ok": true,
+  "roadmap_complete": false,
+  "roadmap_status_counts": {
+    "blocked": 1,
+    "completed": 4,
+    "proxy_completed": 2,
+    "review_pending": 1
+  },
   "downstream_outputs_refreshed": true,
   "outputs": [
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_validation_summary.json",
@@ -55,8 +63,10 @@
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness.tsv",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"
   ],
-  "runtime_seconds": 0.0121,
+  "runtime_seconds": 0.0079,
   "next_action": "Complete selected-300 risk-atom, decision-change, expected-action, confidence, and per-model assessment fields, then rerun with --require-complete."
 }

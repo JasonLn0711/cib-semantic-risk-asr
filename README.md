@@ -211,10 +211,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py` to rerun
   validation, aggregate review-progress counts, aggregate review summaries,
   human-reviewed predictor outputs, the evidence-chain readiness gate, and the
-  objective-level publishable completion audit in one recorded pass. Current
-  refresh status is still `review_pending`: `0/30` risk/decision row reviews
-  and `0/90` model assessments reviewed; `paper_ready=false` and
-  `publishable_ready=false`. The progress audit recommends six batches,
+  objective-level publishable completion audit, and the roadmap completion
+  audit in one recorded pass. Current refresh status is still
+  `review_pending`: `0/30` risk/decision row reviews and `0/90` model
+  assessments reviewed; `paper_ready=false`, `publishable_ready=false`, and
+  `roadmap_complete=false`. The progress audit recommends six batches,
   starting with `critical_or_high_risk_missed` and `unsafe_downrouting`.
   Batch-by-batch `partial_review` is treated as in-progress evidence, not as
   missing evidence.

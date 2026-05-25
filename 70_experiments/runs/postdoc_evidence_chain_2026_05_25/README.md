@@ -96,6 +96,7 @@ ignored local paths.
 | 5.53 | Promoted SenseVoice and Qwen3-ASR-0.6B to fixed 15-row candidate gates. | `run_janus_sensevoice_pilot.py`; `run_janus_qwen3_asr_pilot.py`; `asr_candidate_15_row_extension_2026_05_26/`. | Completed as candidate rejection evidence, not as paper baseline promotion. SenseVoiceSmall passed the 15-row contract but had `14/15` locale-violation rows, `cer_zh_micro=63.12`, `wer_zh_jieba_micro=78.98`, runner wall time `2.60s`, outer time `6.32s`. Qwen3-ASR-0.6B passed with cuDNN disabled but had `15/15` locale-violation rows, `cer_zh_micro=64.16`, `wer_zh_jieba_micro=81.07`, runner wall time `17.97s`, outer time `21.57s`. Qwen3-ASR-1.7B timed out before inference after `60.06s` at fetch/load. No new candidate should be promoted to 258-row or selected-300 until the strict zh-TW locale policy is solved. |
 | 5.54 | Rechecked ASR/Gemma candidate status at query time. | `docs/asr_candidate_expansion_2026_05_25.md`; `asr_candidate_15_row_extension_2026_05_26/README.md`; `70_experiments/registry.tsv`. | Completed as a status verification, not as a new model run. Whisper large-v3/v3-turbo, SenseVoiceSmall, and Qwen3-ASR-0.6B already have fixed 15-row evidence; SenseVoice/Qwen validators still pass but strict zh-TW locale gates remain failed. Qwen3-ASR-1.7B remains fetch/load-timeout only, and local `transformers 4.57.6` still lacks the Gemma 4 multimodal model classes. |
 | 5.55 | Added postdoc roadmap completion audit. | `audit_postdoc_roadmap_completion.py`; `postdoc_roadmap_completion_summary.json`; `postdoc_roadmap_completion.tsv`; `tests/test_postdoc_roadmap_completion_audit.py`. | Completed as an objective-by-objective completion guardrail, not as final paper readiness. The live audit returns `ok=true`, `roadmap_complete=false`, `publishable_ready=false`, `paper_ready=false`, `post_review_evidence_ready=false`, and blocker `selected_300_human_review_and_post_review_refresh`. Status counts are `completed=4`, `proxy_completed=2`, `review_pending=1`, `blocked=1`; current selected-300 review remains `0/30` rows and `0/90` model assessments, with the current packet pending `6/6` rows and `18/18` model assessments. Compile and direct roadmap-audit tests passed. |
+| 5.56 | Wired roadmap completion audit into the human-audit refresh gate. | `refresh_human_audit_evidence.py`; `human_audit_refresh_summary.json`; `postdoc_roadmap_completion_summary.json`; `tests/test_human_audit_refresh.py`. | Completed as refresh orchestration hardening, not as human review. Normal refresh now updates validation, progress, review summary, predictor, readiness, publishable completion, and roadmap completion in one pass. Live refresh reports `roadmap_audit_ok=true`, `roadmap_complete=false`, status counts `completed=4`, `proxy_completed=2`, `review_pending=1`, `blocked=1`. Compile and direct refresh tests passed; `pytest` is unavailable in `.venv`. |
 
 ## Next Operations
 
@@ -156,7 +157,8 @@ ignored local paths.
    claims into paper-facing language.
 7. Use `refresh_human_audit_evidence.py` as the normal post-edit aggregate
    refresh. It now updates validation, progress, review summary, predictor,
-   evidence-chain readiness, and objective-level publishable completion.
+   evidence-chain readiness, objective-level publishable completion, and
+   roadmap completion.
 8. Use `check_evidence_chain_readiness.py` as the repo-safe status guardrail
    when a standalone readiness audit is needed; it should stay
    `paper_ready=false` until the selected-300 human audit is complete and
@@ -167,11 +169,10 @@ ignored local paths.
    proxy-only or review-pending. The audit now also records consequence-matrix
    alignment and should not turn publishable-ready while
    `paper_claims_ready=false`.
-10. Use `audit_postdoc_roadmap_completion.py` after publishable/consequence
-   refreshes when the question is whether the original 0-6 postdoc roadmap is
-   genuinely complete. It should stay `roadmap_complete=false` while any
-   roadmap row is proxy-only, review-pending, or blocked by post-review
-   evidence.
+10. Use `audit_postdoc_roadmap_completion.py` as a standalone audit only when
+   needed. The normal `refresh_human_audit_evidence.py` path now updates it,
+   and it should stay `roadmap_complete=false` while any roadmap row is
+   proxy-only, review-pending, or blocked by post-review evidence.
 11. After local review edits, run `refresh_human_audit_evidence.py` without
    `--require-complete` to refresh aggregate records, then with
    `--require-complete` before treating the human audit as complete.

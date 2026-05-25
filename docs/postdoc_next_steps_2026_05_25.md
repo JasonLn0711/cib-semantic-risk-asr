@@ -137,9 +137,9 @@ subset predictor table 要由這支工具重算。
 
 這支工具把 validator、progress audit、aggregate review summary、
 human-reviewed predictor gate、evidence-chain readiness、publishable
-completion audit 串成同一個可重跑操作。人工審閱仍必須在 local ignored
-sheet 完成；refresh gate 只負責把完成後的 aggregate evidence 同步到
-tracked outputs。
+completion audit、roadmap completion audit 串成同一個可重跑操作。人工審閱
+仍必須在 local ignored sheet 完成；refresh gate 只負責把完成後的 aggregate
+evidence 同步到 tracked outputs。
 
 13. Publishable evidence completion audit 已建立：
 
@@ -202,7 +202,9 @@ readiness、publishable completion outputs。
 這個 audit 的用途是回答「原始 0-6 roadmap 是否真的完成」，而不是只回答
 某個子 gate 是否已經存在。它明確把 completed、proxy-only、
 review-pending、post-review blocked 分開，避免把目前已經很完整的 proxy
-工程證據誤寫成 publishable human-reviewed evidence。
+工程證據誤寫成 publishable human-reviewed evidence。Normal
+`refresh_human_audit_evidence.py` 現在會同步更新這個 audit；只有需要單獨
+檢查 roadmap 狀態時才直接跑 `audit_postdoc_roadmap_completion.py`。
 
 目前最重要的限制：
 
