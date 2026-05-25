@@ -84,6 +84,16 @@ test whether those hypotheses are decision-stable.
 | `recovery/` | Automatic constrained recovery and decision-interval policy. |
 | `paper/` | Story outline, citation seed, experiment plan, and framing guardrail. |
 
+Current recovery gate:
+
+- `recovery/evaluate_recovery_policies.py` evaluates no-recovery,
+  confidence-only, SRES-triggered, CEIS-triggered, and CEIS+ensemble recovery
+  policies from split-aware metric inputs.
+- The first six-model 258-row proxy recovery record is
+  `../70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/`.
+  It is useful engineering evidence, but not a substitute for human-reviewed
+  risk-atom recovery results.
+
 ## First Experiment Package
 
 Minimum viable paper experiment:

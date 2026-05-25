@@ -1,31 +1,30 @@
 {
-  "version": "v2.5.42",
+  "version": "v2.5.43",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 42
+    "patch": 43
   },
-  "updated_at": "2026-05-25T17:07:27+08:00",
+  "updated_at": "2026-05-25T17:20:30+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "72617eb",
+  "base_commit": "2f5cdf2",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
     "70_experiments/registry.tsv",
-    "70_experiments/runs/breeze_asr26_test_split/README.md",
-    "70_experiments/runs/breeze_asr26_test_split/metrics.csv",
-    "70_experiments/runs/janus_258_test_split_asr_cds_proxy/README.md",
-    "70_experiments/runs/janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv",
-    "70_experiments/runs/janus_258_test_split_asr_cds_proxy/metrics.csv",
-    "70_experiments/runs/janus_258_test_split_asr_cds_proxy/summary.json",
-    "70_experiments/runs/janus_split_aware_metric_inputs_2026_05_25/README.md",
+    "70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/README.md",
+    "70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/metrics.csv",
+    "70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/policy_comparison.tsv",
+    "70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/summary.json",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
+    "80_semantic_risk_asr/README.md",
     "80_semantic_risk_asr/paper/experiment_plan.md",
+    "80_semantic_risk_asr/recovery/evaluate_recovery_policies.py",
     "README.md",
     "docs/postdoc_next_steps_2026_05_25.md"
   ]

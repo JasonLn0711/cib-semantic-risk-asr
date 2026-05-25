@@ -5,6 +5,26 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.43 - 2026-05-25T17:20:30+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `2f5cdf2`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/README.md`
+  - `70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/metrics.csv`
+  - `70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/policy_comparison.tsv`
+  - `70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `80_semantic_risk_asr/README.md`
+  - `80_semantic_risk_asr/paper/experiment_plan.md`
+  - `80_semantic_risk_asr/recovery/evaluate_recovery_policies.py`
+  - `README.md`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
 ## v2.5.42 - 2026-05-25T17:07:27+08:00
 
 - Bump: `patch`

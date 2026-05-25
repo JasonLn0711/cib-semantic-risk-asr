@@ -1,0 +1,24 @@
+metric,value,split,notes
+rows,1548,test_258_proxy,Six ASR hypothesis files times 258 test rows.
+confidence_values_present,0,test_258_proxy,Confidence-only trigger is a no-trigger control until calibrated confidence is logged.
+no_recovery_unsafe_downrouting_count,187,test_258_proxy,Baseline ASR-side routing before recovery.
+no_recovery_high_risk_missed_count,161,test_258_proxy,Baseline high-risk references routed below high-risk.
+no_recovery_critical_miss_count,9,test_258_proxy,Critical references routed below high-risk.
+confidence_only_unsafe_downrouting_count,187,test_258_proxy,No calibrated confidence values were present.
+confidence_only_high_risk_missed_count,161,test_258_proxy,No calibrated confidence values were present.
+sres_triggered_unsafe_downrouting_count,34,test_258_proxy,SRES threshold 20.0.
+sres_triggered_high_risk_missed_count,0,test_258_proxy,SRES threshold 20.0.
+sres_triggered_recovery_budget_rate,0.1311,test_258_proxy,203 triggered rows out of 1548.
+ceis_triggered_unsafe_downrouting_count,75,test_258_proxy,CEIS threshold 5.0 with finite-grammar atoms.
+ceis_triggered_high_risk_missed_count,41,test_258_proxy,CEIS threshold 5.0 with finite-grammar atoms.
+ceis_triggered_unsafe_downrouting_gain,0.5989,test_258_proxy,Reduction versus no recovery.
+ceis_triggered_high_risk_missed_gain,0.7453,test_258_proxy,Reduction versus no recovery.
+ceis_triggered_recovery_budget_rate,0.0969,test_258_proxy,150 triggered rows out of 1548.
+ceis_triggered_conservative_escalation_cost_count,1,test_258_proxy,Over-escalation increase versus no recovery.
+ceis_ensemble_unsafe_downrouting_count,46,test_258_proxy,CEIS plus six-model high-risk interval arbitration.
+ceis_ensemble_high_risk_missed_count,12,test_258_proxy,CEIS plus six-model high-risk interval arbitration.
+ceis_ensemble_unsafe_downrouting_gain,0.754,test_258_proxy,Reduction versus no recovery.
+ceis_ensemble_high_risk_missed_gain,0.9255,test_258_proxy,Reduction versus no recovery.
+ceis_ensemble_recovery_budget_rate,0.323,test_258_proxy,500 triggered rows out of 1548.
+ceis_ensemble_machine_abstention_rate,0.3023,test_258_proxy,468 abstention-burden rows out of 1548.
+ceis_ensemble_conservative_escalation_cost_count,21,test_258_proxy,Over-escalation increase versus no recovery.

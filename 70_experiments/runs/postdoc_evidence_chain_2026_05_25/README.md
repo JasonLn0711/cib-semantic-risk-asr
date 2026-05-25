@@ -49,6 +49,7 @@ ignored local paths.
 | 5.6 | Rebuilt the 258-row proxy bridge over five model hypotheses. | `summarize_janus_asr_test_split.py`; `build_janus_metric_inputs.py`; `semantic_risk_score.py`; `counterfactual_escalation_instability.py`; `evaluate_downstream_impact.py`. | Completed. Five-model aggregate: SRES rows `2648`, CEIS rows `2648`, downstream rows `1290`, SRES total `24120.0`, CEIS unstable samples `164`, CEIS mean `1.184`, downstream mismatch `0.1287`, high-risk missed by ASR `139`. Partial encoder remains the best current ASR hypothesis generator. |
 | 5.7 | Ran canonical 258-row Breeze-ASR-26 comparator. | `run_janus_whisper_family_pilot.py --run-id breeze_asr26_test_split --model-name MediaTek-Research/Breeze-ASR-26 --metric-normalization zh_asr --wer-tokenizer jieba`; local ignored predictions/validation artifacts. | Completed. `258/258` IDs validated. Stored CER `24.87`, stored WER `33.12`, `cer_zh_micro=24.27`, `wer_zh_jieba_micro=32.29`, wall time `187.25s`, unsafe downrouting `27`, high-risk missed `22`, locale violation rows `0`. Raw whitespace WER micro was `1054.79`, confirming it is audit-only for unsegmented Chinese. |
 | 5.8 | Rebuilt WER audit and 258-row proxy bridge over six model hypotheses. | `audit_asr_text_metrics.py --expected-manifest ... --expected-rows 258`; `summarize_janus_asr_test_split.py`; `build_janus_metric_inputs.py`; SRES/CEIS/downstream scorers. | Completed. WER audit: all six runs have `0` missing references, `0` missing hypotheses, `0` missing expected IDs, `0` extra IDs, and `0` reference mismatches; zh-jieba corpus WER matched `jiwer` exactly. Six-model bridge: SRES rows `3184`, CEIS rows `3184`, downstream rows `1548`, SRES total `27810.0`, CEIS unstable samples `192`, CEIS mean `1.1461`, downstream mismatch `0.126`, high-risk missed by ASR `161`. |
+| 5.9 | Added and ran the first automatic recovery policy gate. | `evaluate_recovery_policies.py`; `70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/`; local ignored per-sample policy detail. | Completed. Five conditions compared over `1548` proxy model-samples. No recovery: unsafe downrouting `187`, high-risk missed `161`, critical miss `9`. Confidence-only had no calibrated confidence values and stayed no-trigger. CEIS conservative action reduced unsafe downrouting to `75` and high-risk misses to `41` with budget `0.0969`; CEIS+ensemble reduced them to `46` and `12` with abstention burden `468`. |
 
 ## Next Operations
 
@@ -66,5 +67,6 @@ ignored local paths.
    expanded 258-row baseline set.
 6. Create a small human-reviewed risk-atom audit set so proxy metrics do not
    become overstated as formal CDS evidence.
-7. Run the selected 300-row high-stakes experiment only after the expanded
-   258-row baseline set and audit boundary are clear.
+7. Run the selected 300-row high-stakes experiment and rerun the same recovery
+   policy comparison after the expanded 258-row baseline set and audit boundary
+   are clear.

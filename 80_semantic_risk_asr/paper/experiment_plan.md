@@ -264,3 +264,24 @@ Expected contribution:
 Show that counterfactual decision testing plus constrained acoustic recovery can
 reduce unsafe low-risk decisions without using human review as the proposed
 method.
+
+Current proxy status on 2026-05-25:
+
+- `80_semantic_risk_asr/recovery/evaluate_recovery_policies.py` now evaluates
+  all five recovery conditions from split-aware metric inputs.
+- Six-model 258-row proxy run:
+  `70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/`.
+- No recovery: unsafe downrouting `187`, high-risk missed `161`, critical miss
+  `9`.
+- Confidence-only: no calibrated confidence fields were present, so it is a
+  no-trigger control and matches no recovery.
+- CEIS-triggered conservative action: unsafe downrouting `75`, high-risk missed
+  `41`, critical miss `0`, recovery budget `0.0969`, and one additional
+  over-escalation.
+- CEIS + ensemble arbitration: unsafe downrouting `46`, high-risk missed `12`,
+  critical miss `0`, recovery budget `0.3230`, machine abstention rate
+  `0.3023`, and `21` additional over-escalations.
+- Interpretation: this is useful engineering evidence that CDS-ASR recovery can
+  reduce dangerous routing errors, but it is still proxy-only. Paper-grade
+  claims require the selected 300-row high-stakes experiment and a small
+  human-reviewed risk-atom audit.

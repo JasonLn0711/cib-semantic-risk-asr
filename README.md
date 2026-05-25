@@ -86,6 +86,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `70_experiments/runs/janus_split_aware_metric_inputs_2026_05_25/`. Full
   manifest transcripts are available for `4967` rows, but full human-reviewed
   CDS ground truth currently covers the 15-row gold subset only.
+- The first automatic recovery policy gate now lives at
+  `80_semantic_risk_asr/recovery/evaluate_recovery_policies.py`, with the
+  six-model 258-row proxy result recorded in
+  `70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/`. Treat it
+  as engineering evidence only until the selected 300-row high-stakes and
+  human risk-atom audit gates run.
 - The 2026-05-25 WER audit is recorded in
   `70_experiments/runs/wer_metric_audit_2026_05_25/`. The latest audit checks
   six 258-row hypothesis files against the canonical manifest, records package

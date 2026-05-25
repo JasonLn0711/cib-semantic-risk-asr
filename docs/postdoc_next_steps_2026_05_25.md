@@ -438,6 +438,39 @@ Ensemble arbitration 可以先用：
   downrouting 或 critical misses；
 - 也要誠實回報代價：over-escalation、abstention、runtime。
 
+### 目前 proxy gate 狀態
+
+2026-05-25 已完成第一個 runnable recovery gate：
+
+- Script:
+  `80_semantic_risk_asr/recovery/evaluate_recovery_policies.py`。
+- Run record:
+  `70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/`。
+- Input: 六模型 258-row split-aware proxy metric inputs。
+- Rows: `1548` model-samples。
+- Confidence values present: `0`，所以 confidence-only 目前是 no-trigger
+  control，不可當作已校準 confidence baseline。
+
+結果：
+
+| Policy | Unsafe downrouting | High-risk missed | Critical miss | Over-escalation | Budget | Abstention |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| no recovery | `187` | `161` | `9` | `8` | `0.0000` | `0` |
+| confidence-only | `187` | `161` | `9` | `8` | `0.0000` | `0` |
+| SRES-triggered | `34` | `0` | `0` | `9` | `0.1311` | `0` |
+| CEIS-triggered | `75` | `41` | `0` | `9` | `0.0969` | `0` |
+| CEIS + ensemble | `46` | `12` | `0` | `29` | `0.3230` | `468` |
+
+Interpretation:
+
+- CEIS-triggered conservative action already beats the available
+  confidence-only baseline on unsafe downrouting and high-risk misses.
+- CEIS + ensemble is stronger on safety counts, but has a much larger
+  abstention / review-burden cost.
+- SRES-triggered looks strongest on this proxy input, but because the 258-row
+  risk-atom rows are proxy-generated, it must not be overclaimed before the
+  300-row main experiment and human risk-atom audit.
+
 ## Phase 7: 論文封裝
 
 ### 建議論文 claim
