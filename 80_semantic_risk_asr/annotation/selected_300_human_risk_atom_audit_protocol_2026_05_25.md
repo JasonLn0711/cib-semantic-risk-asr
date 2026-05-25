@@ -165,6 +165,34 @@ status:
 The status audit is aggregate-only. It must read `batch_complete` before this
 packet is treated as ready for aggregate refresh.
 
+For batch entry, generate and fill a local response TSV. This avoids manual
+JSON editing while keeping reviewer decisions local-only until aggregate
+refresh:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py \
+  --write-template \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --expected-rows 30
+```
+
+After filling the ignored response TSV, dry-run it:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py \
+  --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --expected-rows 30
+```
+
+Use `--write` only after dry-run status is `response_complete`. The current
+template dry-run is `response_pending`, as expected before reviewer decisions
+are entered.
+
 Use the local helper to avoid hand-editing JSON in
 `reviewer_model_assessments_json`:
 

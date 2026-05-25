@@ -139,6 +139,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   audited by
   `80_semantic_risk_asr/annotation/audit_human_review_batch_status.py` and
   remains `batch_pending`: `0/6` rows and `0/18` model assessments reviewed.
+  Local TSV response entry is handled by
+  `80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py`; the
+  current ignored response template has `18` rows and its blank dry-run status
+  is `response_pending`.
   After
   review edits, use
   `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py` to rerun

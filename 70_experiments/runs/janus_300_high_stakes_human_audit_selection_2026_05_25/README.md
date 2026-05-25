@@ -132,6 +132,8 @@ Tracked readiness outputs:
 | `human_audit_review_batch_log.tsv` | Append-only repo-safe preparation log for local transcript-bearing review packets. |
 | `human_audit_current_review_batch_status_summary.json` | Repo-safe completion status for the current packet. Current status: `batch_pending`, `0/6` risk/decision rows and `0/18` model assessments reviewed. |
 | `human_audit_current_review_batch_status_rows.tsv` | Repo-safe row-level completion checklist for the current packet. No audio IDs, transcripts, hypotheses, or reviewer notes. |
+| `human_audit_batch_response_template_summary.json` | Repo-safe record for the local response TSV template. Current template has `18` response rows for rows `1-6`. |
+| `human_audit_batch_response_apply_summary.json` | Repo-safe dry-run/apply status for the local response TSV. Current dry-run status is `response_pending`, `0/6` rows and `0/18` model assessments filled. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
@@ -178,6 +180,39 @@ Current batch status:
 - reviewed risk/decision rows in batch: `0 / 6`;
 - reviewed model assessments in batch: `0 / 18`;
 - `batch_ready_for_refresh=false`.
+
+For batch entry, use the local response TSV workflow instead of hand-editing
+`reviewer_model_assessments_json`:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py \
+  --write-template \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --expected-rows 30
+```
+
+Current local response template:
+
+```text
+70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv
+```
+
+After a reviewer fills that ignored TSV, dry-run it first:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py \
+  --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --expected-rows 30
+```
+
+Current dry-run status is `response_pending`: `0/6` row decisions and `0/18`
+model assessments have been filled. Add `--write` only after the dry-run
+returns `response_complete`.
 
 The local helper for filling one row at a time is:
 
