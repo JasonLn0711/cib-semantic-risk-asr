@@ -191,9 +191,7 @@ def write_work_order_tsv_fixture(root: Path, row_numbers: list[int] = ROW_NUMBER
     packet_steps = [
         ("06", "strict_dry_run"),
         ("07", "response_closeout"),
-        ("08", "write_refresh_prepare_next"),
-        ("09", "post_review_checklist"),
-        ("10", "objective_requirements_audit"),
+        ("08", "post_review_sequence_execute"),
     ]
     lines = ["\t".join(header)]
     for row_number in row_numbers:
@@ -225,7 +223,11 @@ def write_work_order_tsv_fixture(root: Path, row_numbers: list[int] = ROW_NUMBER
                     "blocked_until_rows_complete",
                     "all",
                     "run packet closeout step",
-                    "aggregate command",
+                    (
+                        "run_post_review_evidence_sequence.py --execute"
+                        if step_type == "post_review_sequence_execute"
+                        else "aggregate command"
+                    ),
                     "aggregate signal",
                     "aggregate-only",
                 ]
@@ -453,8 +455,8 @@ def write_consistent_fixture(root: Path) -> None:
             review_work_order_overview={
                 "row_count": 6,
                 "row_work_order_steps": 30,
-                "packet_work_order_steps": 5,
-                "total_work_order_steps": 35,
+                "packet_work_order_steps": 3,
+                "total_work_order_steps": 33,
                 "total_action_items": 126,
                 "row_field_action_items": 48,
                 "model_field_action_items": 72,
@@ -596,7 +598,7 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True
-    assert payload["status_counts"] == {"pass": 19}
+    assert payload["status_counts"] == {"pass": 20}
     assert not payload["failed_checks"]
     assert_aggregate_safe(payload)
 
@@ -733,6 +735,25 @@ def test_consistency_audit_fails_review_work_order_row_drift(tmp_path: Path) -> 
 
     assert payload["ok"] is False
     assert any(item["check_id"] == "C071" for item in payload["failed_checks"])
+
+
+def test_consistency_audit_fails_review_work_order_missing_sequence_route(
+    tmp_path: Path,
+) -> None:
+    write_consistent_fixture(tmp_path)
+    work_order_path = tmp_path / REVIEW_WORK_ORDER_TSV_RELATIVE
+    work_order_path.write_text(
+        work_order_path.read_text(encoding="utf-8").replace(
+            "run_post_review_evidence_sequence.py --execute",
+            "build_post_review_evidence_checklist.py",
+        ),
+        encoding="utf-8",
+    )
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C074" for item in payload["failed_checks"])
 
 
 def test_consistency_audit_fails_post_review_sequence_allows_pending_recovery(

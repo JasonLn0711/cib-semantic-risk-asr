@@ -109,8 +109,8 @@ def test_review_work_order_builds_safe_row_and_packet_steps(tmp_path: Path) -> N
     assert payload["review_work_order_overview"] == {
         "row_count": 1,
         "row_work_order_steps": 5,
-        "packet_work_order_steps": 5,
-        "total_work_order_steps": 10,
+        "packet_work_order_steps": 3,
+        "total_work_order_steps": 8,
         "total_action_items": 3,
         "row_field_action_items": 1,
         "model_field_action_items": 1,
@@ -123,6 +123,10 @@ def test_review_work_order_builds_safe_row_and_packet_steps(tmp_path: Path) -> N
     assert by_step["fill_row_fields"]["pending_action_items"] == 1
     assert by_step["fill_model_fields"]["pending_action_items"] == 1
     assert by_step["strict_dry_run"]["row_number"] == "packet"
+    assert by_step["post_review_sequence_execute"]["row_number"] == "packet"
+    assert "run_post_review_evidence_sequence.py --execute" in by_step[
+        "post_review_sequence_execute"
+    ]["command"]
     serialized = json.dumps({"payload": payload, "rows": rows}, ensure_ascii=False)
     assert "PRIVATE_" not in serialized
     assert "reference_text" not in serialized

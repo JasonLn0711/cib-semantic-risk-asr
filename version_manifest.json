@@ -1,26 +1,24 @@
 {
-  "version": "v2.5.186",
+  "version": "v2.5.187",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 186
+    "patch": 187
   },
-  "updated_at": "2026-05-26T07:05:45+08:00",
+  "updated_at": "2026-05-26T07:17:04+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "2ff0930",
+  "base_commit": "cb6ea5b",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/registry.tsv",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json",
-    "README.md",
-    "docs/postdoc_next_steps_2026_05_25.md"
+    "80_semantic_risk_asr/annotation/build_human_audit_review_work_order.py",
+    "80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py",
+    "tests/test_evidence_chain_consistency.py",
+    "tests/test_human_audit_review_work_order.py"
   ]
 }

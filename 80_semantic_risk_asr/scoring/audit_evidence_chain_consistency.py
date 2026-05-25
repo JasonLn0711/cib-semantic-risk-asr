@@ -859,9 +859,7 @@ def add_review_work_order_check(
         "mark_timing_finish",
         "strict_dry_run",
         "response_closeout",
-        "write_refresh_prepare_next",
-        "post_review_checklist",
-        "objective_requirements_audit",
+        "post_review_sequence_execute",
     }
     sensitive = False
     try:
@@ -989,6 +987,49 @@ def add_post_review_sequence_check(
             next_action=(
                 "After local response closeout is ready, run the sequence with --execute; "
                 "do not skip strict human-reviewed recovery or objective audit."
+            ),
+        )
+    )
+
+
+def add_review_work_order_sequence_route_check(
+    root: Path,
+    payloads: dict[str, dict[str, Any]],
+    rows: list[dict[str, str]],
+) -> None:
+    work_order_path = root / REVIEW_WORK_ORDER_TSV_RELATIVE
+    work_order_rows = read_tsv_rows(work_order_path) if work_order_path.exists() else []
+    work_order = payloads.get("work_order", {})
+    route_rows = [
+        item
+        for item in work_order_rows
+        if item.get("step_type", "") == "post_review_sequence_execute"
+    ]
+    route_command = route_rows[0].get("command", "") if route_rows else ""
+    sequence_route_ok = (
+        bool(route_rows)
+        and "run_post_review_evidence_sequence.py --execute" in route_command
+        and "--allow-pending-summary" not in route_command
+    )
+    status_ok = work_order.get("status") == "review_work_order_ready"
+    passed = sequence_route_ok and status_ok
+    rows.append(
+        check_row(
+            check_id="C074",
+            invariant="review work-order routes post-closeout through sequence runner",
+            passed=passed,
+            evidence=REVIEW_WORK_ORDER_TSV_RELATIVE,
+            result=(
+                "review work-order post-closeout packet step routes through run_post_review_evidence_sequence.py --execute"
+                if passed
+                else (
+                    f"sequence_route_ok={sequence_route_ok}; "
+                    f"status={work_order.get('status', '')}"
+                )
+            ),
+            next_action=(
+                "Regenerate review work order so packet-level execution uses "
+                "run_post_review_evidence_sequence.py --execute after response closeout."
             ),
         )
     )
@@ -1134,6 +1175,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_gap_tsv_command_check(root, payloads, rows)
         add_response_action_items_check(root, payloads, rows)
         add_review_work_order_check(root, payloads, rows)
+        add_review_work_order_sequence_route_check(root, payloads, rows)
         add_post_review_sequence_check(root, payloads, rows)
         add_sequence_aware_objective_check(payloads, rows)
         add_candidate_check(payloads, rows)

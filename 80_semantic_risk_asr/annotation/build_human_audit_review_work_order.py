@@ -38,13 +38,10 @@ CLOSEOUT_SUMMARY_NAME = "human_audit_response_closeout_summary.json"
 RESPONSE_ACTION_ITEMS_TSV_NAME = "human_audit_response_action_items.tsv"
 HANDOFF_SUMMARY_NAME = "human_audit_reviewer_handoff_summary.json"
 SESSION_START_SUMMARY_NAME = "human_audit_reviewer_session_start_summary.json"
-POST_REVIEW_CHECKLIST_COMMAND = (
+POST_REVIEW_SEQUENCE_COMMAND = (
     ".venv/bin/python "
-    "80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py"
-)
-OBJECTIVE_AUDIT_COMMAND = (
-    ".venv/bin/python "
-    "80_semantic_risk_asr/scoring/audit_postdoc_objective_requirements.py"
+    "80_semantic_risk_asr/annotation/run_post_review_evidence_sequence.py "
+    "--execute --allow-blocked-summary"
 )
 
 SENSITIVE_TOKENS = (
@@ -287,40 +284,19 @@ def build_packet_work_order(handoff: dict[str, Any]) -> list[dict[str, Any]]:
             "privacy_boundary": "closeout is aggregate-only",
         },
         {
-            "work_order_id": "packet:08-write-refresh-prepare-next",
+            "work_order_id": "packet:08-post-review-sequence-execute",
             "row_number": "packet",
             "step_order": "08",
-            "step_type": "write_refresh_prepare_next",
+            "step_type": "post_review_sequence_execute",
             "status": "blocked_until_closeout_ready",
-            "pending_action_items": "all",
-            "reviewer_instruction": "write local sheet, refresh aggregate evidence, then prepare next packet",
-            "command": commands.get("write_refresh_prepare_next", ""),
-            "completion_signal": "batch status, refresh, readiness, and next packet outputs are updated",
-            "privacy_boundary": "write touches ignored local audit sheet; tracked outputs remain aggregate-only",
-        },
-        {
-            "work_order_id": "packet:09-post-review-checklist",
-            "row_number": "packet",
-            "step_order": "09",
-            "step_type": "post_review_checklist",
-            "status": "blocked_until_write_refresh",
-            "pending_action_items": "post_write",
-            "reviewer_instruction": "verify post-review predictor/recovery readiness before paper claims",
-            "command": POST_REVIEW_CHECKLIST_COMMAND,
-            "completion_signal": "post_review_evidence_ready is true only after review and recovery rerun",
-            "privacy_boundary": "aggregate-only paper-claim checklist",
-        },
-        {
-            "work_order_id": "packet:10-objective-audit",
-            "row_number": "packet",
-            "step_order": "10",
-            "step_type": "objective_requirements_audit",
-            "status": "blocked_until_post_review_ready",
-            "pending_action_items": "post_write",
-            "reviewer_instruction": "rerun original-objective audit before declaring the goal complete",
-            "command": OBJECTIVE_AUDIT_COMMAND,
-            "completion_signal": "objective_requirements_ready is true",
-            "privacy_boundary": "aggregate-only objective audit",
+            "pending_action_items": "post_closeout",
+            "reviewer_instruction": (
+                "execute the strict post-review sequence so write/refresh, "
+                "human-reviewed recovery, post-review checklist, and objective audit stay ordered"
+            ),
+            "command": POST_REVIEW_SEQUENCE_COMMAND,
+            "completion_signal": "post-review sequence summary records executed_step_count and stopped_step",
+            "privacy_boundary": "sequence writes aggregate summaries/logs; local response TSV remains ignored",
         },
     ]
 
@@ -396,7 +372,8 @@ def build_work_order(
         },
         "next_concrete_action": (
             "Use the work-order TSV during local review: start timing, inspect one local row, "
-            "fill row/model fields, finish timing, then run strict dry-run and closeout."
+            "fill row/model fields, finish timing, then run strict dry-run, closeout, and "
+            "the post-review sequence runner."
         ),
     }
     assert_work_order_safe({"payload": payload, "rows": rows})
