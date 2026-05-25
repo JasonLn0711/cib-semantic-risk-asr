@@ -34,6 +34,12 @@ Do not start a long model run until this gate exists:
    First three-model pass: SRES rows `156`, total SRES `4868.0`, CEIS unstable
    model-samples `17 / 45`, max CEIS `15.0`, downstream ASR mismatch rate
    `0.3778`, and high-risk missed by ASR `3`.
+   Legacy best-model extension on 2026-05-25: the fixed 15-row bridge now also
+   includes `breeze_asr25_lora_legacy_best_15_row` and
+   `breeze_asr25_partial_encoder_legacy_best_15_row`. The five-model pass
+   produced SRES rows `260`, CEIS rows `260`, downstream rows `75`, CEIS
+   unstable model-samples `26 / 75`, max CEIS `15.0`, downstream ASR mismatch
+   rate `0.3467`, and high-risk missed by ASR `4`.
 9. Expand to `300-500` high-stakes call segments only if the 15-row pilot
    produces usable decision-stability signal.
    Current local status: selected `300` expansion candidates from `2704`
@@ -73,6 +79,13 @@ Purpose:
 
 Establish ordinary ASR performance on `janus_165_v1`, then show that ordinary
 metrics do not explain which models are stable on risk atoms.
+
+Current 15-row signal: the legacy partial encoder is the strongest transcript
+candidate on CER/WER (`12.77` CER, `83.33` WER) and matches base Breeze-ASR-25
+on mean CEIS, unstable-sample count, downstream mismatch, and high-risk misses.
+The legacy LoRA improves CER over base Breeze-ASR-25 (`30.99` vs `36.13`) but
+is worse on CEIS and downstream safety counts. Treat this as early evidence
+that lower CER alone is not sufficient for the paper claim.
 
 ## Experiment 2: Counterfactual Generation Quality
 

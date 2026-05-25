@@ -143,10 +143,34 @@ to the organized extracted audio under `../10_extracted_parts/`.
    The same runner is used for `openai/whisper-large-v2` and
    `MediaTek-Research/Breeze-ASR-25` in the 15-row model-comparison gate.
 
-11. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
+11. Run curated legacy Breeze-ASR-25 model checks only after the local model
+    import has been recorded:
+
+   ```bash
+   .venv/bin/python 60_whisper_asr_finetuning/scripts/run_legacy_breeze_asr25_smoke.py \
+     --model-kind lora \
+     --run-id breeze_asr25_lora_legacy_best_15_row \
+     --runtime cuda \
+     --disable-cudnn \
+     --max-samples 15
+   .venv/bin/python 60_whisper_asr_finetuning/scripts/run_legacy_breeze_asr25_smoke.py \
+     --model-kind partial_encoder \
+     --run-id breeze_asr25_partial_encoder_legacy_best_15_row \
+     --runtime cuda \
+     --disable-cudnn \
+     --max-samples 15
+   ```
+
+   This runner writes ignored local predictions, summaries, and a JSONL runtime
+   log with `smoke_start`, `load_model_*`, `sample_*`, and `summary_written`
+   events. Record the exact command and pass/fail result in the corresponding
+   `70_experiments/runs/*legacy_best/README.md` before using the outputs in
+   CDS-ASR scoring.
+
+12. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
    run template from `../70_experiments/templates/run_record.md`.
 
-12. Register the run in `../70_experiments/registry.tsv` before starting long
+13. Register the run in `../70_experiments/registry.tsv` before starting long
    training.
 
 ## Layout

@@ -49,3 +49,77 @@ Run a local model-load smoke test first. If the reconstructed shard pair loads
 cleanly, evaluate the canonical `janus_165_v1` test split and compare both
 CER/WER and CDS-ASR decision-stability metrics against the selected LoRA and
 existing baselines.
+
+## Smoke-Test Record
+
+Planned one-row command:
+
+```bash
+.venv/bin/python 60_whisper_asr_finetuning/scripts/run_legacy_breeze_asr25_smoke.py \
+  --model-kind partial_encoder \
+  --run-id breeze_asr25_partial_encoder_legacy_best_smoke \
+  --runtime cuda \
+  --disable-cudnn \
+  --max-samples 1
+```
+
+Expected local artifacts:
+
+- `70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_smoke/predictions/`
+- `70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_smoke/artifacts/`
+- runtime log:
+  `70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_smoke/artifacts/breeze_asr25_partial_encoder_legacy_best_smoke_runtime_log.jsonl`
+
+Result: passed on 2026-05-25.
+
+- Runtime: CUDA, cuDNN disabled, `torch_dtype=float16`.
+- Rows: 1.
+- Audio ID: `janus_train_004201`.
+- Output contract: `audio_id`, `hypothesis_text`, `wer`, `cer`, `asr_label`,
+  `asr_run_id`, and `runtime` all present.
+- Smoke CER: `20.0`.
+- Smoke WER: `50.0`.
+- ASR label: `critical_escalation`.
+- Wall time: `7.03` seconds.
+- Summary:
+  `70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_smoke/artifacts/breeze_asr25_partial_encoder_legacy_best_smoke_summary.json`
+- Runtime log:
+  `70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_smoke/artifacts/breeze_asr25_partial_encoder_legacy_best_smoke_runtime_log.jsonl`
+- Predictions:
+  `70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_smoke/predictions/breeze_asr25_partial_encoder_legacy_best_smoke_predictions.jsonl`
+
+## 15-Row Pilot Record
+
+Command:
+
+```bash
+.venv/bin/python 60_whisper_asr_finetuning/scripts/run_legacy_breeze_asr25_smoke.py \
+  --model-kind partial_encoder \
+  --run-id breeze_asr25_partial_encoder_legacy_best_15_row \
+  --runtime cuda \
+  --disable-cudnn \
+  --max-samples 15
+```
+
+Validation:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py \
+  --hypotheses 70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_15_row/predictions/breeze_asr25_partial_encoder_legacy_best_15_row_predictions.jsonl \
+  --require-labels \
+  --require-quality-signal
+```
+
+Result: passed on 2026-05-25.
+
+- Rows: 15.
+- Validator: `ok=true`; no missing IDs, duplicate IDs, missing hypothesis text,
+  missing ASR labels, or missing quality signals.
+- Runtime: CUDA, cuDNN disabled, `torch_dtype=float16`.
+- Mean CER: `12.77`.
+- Mean WER: `83.33`.
+- Wall time: `18.81` seconds.
+- Summary:
+  `70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_15_row/artifacts/breeze_asr25_partial_encoder_legacy_best_15_row_summary.json`
+- Validation:
+  `70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_15_row/artifacts/breeze_asr25_partial_encoder_legacy_best_15_row_validation.json`

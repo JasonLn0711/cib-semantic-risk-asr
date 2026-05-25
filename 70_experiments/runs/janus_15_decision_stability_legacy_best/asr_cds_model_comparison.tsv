@@ -1,0 +1,6 @@
+run_id	rows	cer_mean	wer_mean	mean_ceis	max_ceis	unstable_samples	downstream_mismatch_rate	high_risk_missed_by_asr
+whisper_small_15_row_baseline	15	53.08	500.00	2.47	8.00	7	0.4667	1
+whisper_large_v2_15_row_baseline	15	40.01	100.00	2.80	15.00	6	0.4000	2
+breeze_asr25_15_row_baseline	15	36.13	380.00	1.27	5.00	4	0.2667	0
+breeze_asr25_lora_legacy_best_15_row	15	30.99	100.00	1.80	8.00	5	0.3333	1
+breeze_asr25_partial_encoder_legacy_best_15_row	15	12.77	83.33	1.27	5.00	4	0.2667	0

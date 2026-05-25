@@ -1,30 +1,31 @@
 {
-  "version": "v2.5.30",
+  "version": "v2.5.31",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 30
+    "patch": 31
   },
-  "updated_at": "2026-05-25T14:24:46+08:00",
+  "updated_at": "2026-05-25T14:45:54+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "5382496",
+  "base_commit": "405328c",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    ".gitignore",
+    "60_whisper_asr_finetuning/README.md",
+    "60_whisper_asr_finetuning/scripts/run_legacy_breeze_asr25_smoke.py",
     "70_experiments/registry.tsv",
     "70_experiments/runs/breeze_asr25_lora_legacy_best/README.md",
-    "70_experiments/runs/breeze_asr25_lora_legacy_best/metrics.csv",
     "70_experiments/runs/breeze_asr25_partial_encoder_legacy_best/README.md",
-    "70_experiments/runs/breeze_asr25_partial_encoder_legacy_best/metrics.csv",
-    "70_experiments/runs/janus_old_train_legacy_import/README.md",
-    "README.md",
-    "docs/REPO_MAP.md",
+    "70_experiments/runs/janus_15_decision_stability_legacy_best/README.md",
+    "70_experiments/runs/janus_15_decision_stability_legacy_best/asr_cds_model_comparison.tsv",
+    "70_experiments/runs/janus_15_decision_stability_legacy_best/metrics.csv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
+    "80_semantic_risk_asr/paper/experiment_plan.md",
     "docs/janus_old_train_legacy_import.md"
   ]
 }

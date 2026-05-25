@@ -1,0 +1,13 @@
+metric,value,split,notes
+gold_rows,15,pilot,fixed reviewed JANUS pilot set
+hypothesis_files,5,pilot,whisper small; whisper large-v2; Breeze-ASR-25 base; legacy LoRA; legacy partial encoder
+sres_rows,260,pilot,metric bridge output
+ceis_rows,260,pilot,metric bridge output
+downstream_rows,75,pilot,metric bridge output
+sres_total,8106.0,pilot,semantic_risk_score output
+sres_mean,31.177,pilot,semantic_risk_score output
+ceis_mean,1.92,pilot,counterfactual_escalation_instability output
+ceis_max,15.0,pilot,counterfactual_escalation_instability output
+ceis_unstable_samples,26,pilot,counterfactual_escalation_instability output
+downstream_mismatch_rate,0.3467,pilot,evaluate_downstream_impact output
+high_risk_missed_by_asr,4,pilot,evaluate_downstream_impact output

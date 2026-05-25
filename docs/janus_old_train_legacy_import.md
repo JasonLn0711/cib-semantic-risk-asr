@@ -96,18 +96,27 @@ evidence is in
 
 ## Next Steps
 
-1. Run a local load smoke test for both curated model artifacts and record the
-   exact inference command in the corresponding run records.
-2. Evaluate both selected artifacts on the canonical `janus_165_v1` test split,
+Completed after import:
+
+- One-row load/inference smoke tests passed for both curated artifacts.
+- Fixed 15-row pilot inference passed for both curated artifacts.
+- Both 15-row prediction files passed `validate_janus_asr_hypotheses.py` with
+  required labels and quality signals.
+- A five-model CDS-ASR bridge was recorded under
+  `70_experiments/runs/janus_15_decision_stability_legacy_best/`.
+
+Remaining next steps:
+
+1. Evaluate both selected artifacts on the canonical `janus_165_v1` test split,
    using the same normalization used by the existing baseline records.
-3. Produce a comparable table across `breeze_asr25_15_row_baseline`,
+2. Produce a comparable table across `breeze_asr25_15_row_baseline`,
    `breeze_asr25_lora_legacy_best`, and
    `breeze_asr25_partial_encoder_legacy_best`.
-4. Feed the best ASR hypothesis set into the CDS-ASR pipeline as a baseline
+3. Feed the best ASR hypothesis set into the CDS-ASR pipeline as a baseline
    input, not as the paper's main contribution.
-5. Run CEIS/SRES and downstream scam-escalation stability checks on the same
+4. Run CEIS/SRES and downstream scam-escalation stability checks on the same
    rows, then decide whether lower CER changes the decision-stability story.
-6. Keep raw transcripts, model weights, predictions, and bulk outputs local.
+5. Keep raw transcripts, model weights, predictions, and bulk outputs local.
    Track only aggregate metrics, scripts, configs, and reviewer-safe summaries.
-7. If either selected artifact will be reused outside this workstation, package
+6. If either selected artifact will be reused outside this workstation, package
    it through a controlled storage decision rather than normal git.

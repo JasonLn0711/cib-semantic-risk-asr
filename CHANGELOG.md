@@ -5,6 +5,26 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.31 - 2026-05-25T14:45:54+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `405328c`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/README.md`
+  - `60_whisper_asr_finetuning/scripts/run_legacy_breeze_asr25_smoke.py`
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/breeze_asr25_lora_legacy_best/README.md`
+  - `70_experiments/runs/breeze_asr25_partial_encoder_legacy_best/README.md`
+  - `70_experiments/runs/janus_15_decision_stability_legacy_best/README.md`
+  - `70_experiments/runs/janus_15_decision_stability_legacy_best/asr_cds_model_comparison.tsv`
+  - `70_experiments/runs/janus_15_decision_stability_legacy_best/metrics.csv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `80_semantic_risk_asr/paper/experiment_plan.md`
+  - `docs/janus_old_train_legacy_import.md`
+
 ## v2.5.30 - 2026-05-25T14:24:46+08:00
 
 - Bump: `patch`

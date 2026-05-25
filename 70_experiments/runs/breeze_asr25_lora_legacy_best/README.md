@@ -44,3 +44,77 @@ decision-stability testing. Do not frame this as the paper's contribution.
 Run a load and one-row inference smoke test from the local model store, then run
 the canonical `janus_165_v1` test split evaluation with the same normalization
 used by existing baseline records.
+
+## Smoke-Test Record
+
+Planned one-row command:
+
+```bash
+.venv/bin/python 60_whisper_asr_finetuning/scripts/run_legacy_breeze_asr25_smoke.py \
+  --model-kind lora \
+  --run-id breeze_asr25_lora_legacy_best_smoke \
+  --runtime cuda \
+  --disable-cudnn \
+  --max-samples 1
+```
+
+Expected local artifacts:
+
+- `70_experiments/runs/breeze_asr25_lora_legacy_best_smoke/predictions/`
+- `70_experiments/runs/breeze_asr25_lora_legacy_best_smoke/artifacts/`
+- runtime log:
+  `70_experiments/runs/breeze_asr25_lora_legacy_best_smoke/artifacts/breeze_asr25_lora_legacy_best_smoke_runtime_log.jsonl`
+
+Result: passed on 2026-05-25.
+
+- Runtime: CUDA, cuDNN disabled, `torch_dtype=float16`.
+- Rows: 1.
+- Audio ID: `janus_train_004201`.
+- Output contract: `audio_id`, `hypothesis_text`, `wer`, `cer`, `asr_label`,
+  `asr_run_id`, and `runtime` all present.
+- Smoke CER: `25.0`.
+- Smoke WER: `100.0`.
+- ASR label: `critical_escalation`.
+- Wall time: `253.53` seconds, including first-time base-model download/load.
+- Summary:
+  `70_experiments/runs/breeze_asr25_lora_legacy_best_smoke/artifacts/breeze_asr25_lora_legacy_best_smoke_summary.json`
+- Runtime log:
+  `70_experiments/runs/breeze_asr25_lora_legacy_best_smoke/artifacts/breeze_asr25_lora_legacy_best_smoke_runtime_log.jsonl`
+- Predictions:
+  `70_experiments/runs/breeze_asr25_lora_legacy_best_smoke/predictions/breeze_asr25_lora_legacy_best_smoke_predictions.jsonl`
+
+## 15-Row Pilot Record
+
+Command:
+
+```bash
+.venv/bin/python 60_whisper_asr_finetuning/scripts/run_legacy_breeze_asr25_smoke.py \
+  --model-kind lora \
+  --run-id breeze_asr25_lora_legacy_best_15_row \
+  --runtime cuda \
+  --disable-cudnn \
+  --max-samples 15
+```
+
+Validation:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py \
+  --hypotheses 70_experiments/runs/breeze_asr25_lora_legacy_best_15_row/predictions/breeze_asr25_lora_legacy_best_15_row_predictions.jsonl \
+  --require-labels \
+  --require-quality-signal
+```
+
+Result: passed on 2026-05-25.
+
+- Rows: 15.
+- Validator: `ok=true`; no missing IDs, duplicate IDs, missing hypothesis text,
+  missing ASR labels, or missing quality signals.
+- Runtime: CUDA, cuDNN disabled, `torch_dtype=float16`.
+- Mean CER: `30.99`.
+- Mean WER: `100.00`.
+- Wall time: `44.42` seconds after base model cache was available.
+- Summary:
+  `70_experiments/runs/breeze_asr25_lora_legacy_best_15_row/artifacts/breeze_asr25_lora_legacy_best_15_row_summary.json`
+- Validation:
+  `70_experiments/runs/breeze_asr25_lora_legacy_best_15_row/artifacts/breeze_asr25_lora_legacy_best_15_row_validation.json`
