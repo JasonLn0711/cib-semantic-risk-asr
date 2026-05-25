@@ -323,6 +323,46 @@ def test_require_complete_passes_complete_dry_run(tmp_path: Path) -> None:
     assert payload["error_counts"] == {}
 
 
+def test_require_complete_rejects_inconsistent_response_decisions(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    response = complete_response_row()
+    response.update(
+        {
+            "reviewer_risk_atoms": "amount",
+            "reviewer_critical_atoms": "negation",
+            "reviewer_expected_safe_action": "none",
+            "model_reviewer_critical_atoms": "negation",
+            "model_reviewer_expected_safe_action": "none",
+        }
+    )
+    write_tsv(response_sheet, [response], TEMPLATE_FIELDS)
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=False,
+        require_complete=True,
+    )
+
+    assert payload["ok"] is False
+    assert payload["status"] == "response_invalid"
+    assert payload["error_counts"]["critical_atom_not_in_risk_atoms"] == 1
+    assert payload["error_counts"]["decision_change_yes_requires_non_none_safe_action"] == 1
+    assert payload["error_counts"]["model_critical_atom_not_in_row_risk_atoms"] == 1
+    assert (
+        payload["error_counts"]["model_decision_change_yes_requires_non_none_safe_action"]
+        == 1
+    )
+
+
 def test_require_session_start_gate_blocks_complete_dry_run_when_missing(
     tmp_path: Path,
 ) -> None:

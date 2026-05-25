@@ -362,6 +362,44 @@ def validate_review_timing_values(
     return Counter({key: value for key, value in errors.items() if value})
 
 
+def validate_response_consistency(
+    grouped_response_rows: dict[int, list[dict[str, str]]],
+    row_numbers: list[int],
+) -> Counter[str]:
+    errors: Counter[str] = Counter()
+    for row_number in row_numbers:
+        responses = grouped_response_rows.get(row_number, [])
+        if not responses:
+            continue
+        row = responses[0]
+        row_risk_atoms = set(split_atoms(row.get("reviewer_risk_atoms", "")))
+        row_critical_atoms = set(split_atoms(row.get("reviewer_critical_atoms", "")))
+        missing_row_atoms = row_critical_atoms - row_risk_atoms
+        if missing_row_atoms:
+            errors["critical_atom_not_in_risk_atoms"] += len(missing_row_atoms)
+        if row.get("reviewer_would_asr_error_change_decision", "").strip() == "yes":
+            if row.get("reviewer_expected_safe_action", "").strip() == "none":
+                errors["decision_change_yes_requires_non_none_safe_action"] += 1
+            if not row_critical_atoms:
+                errors["decision_change_yes_requires_critical_atom"] += 1
+
+        for response in responses:
+            model_critical_atoms = set(
+                split_atoms(response.get("model_reviewer_critical_atoms", ""))
+            )
+            missing_model_atoms = model_critical_atoms - row_risk_atoms
+            if missing_model_atoms:
+                errors["model_critical_atom_not_in_row_risk_atoms"] += len(
+                    missing_model_atoms
+                )
+            if response.get("model_reviewer_would_asr_error_change_decision", "").strip() == "yes":
+                if response.get("model_reviewer_expected_safe_action", "").strip() == "none":
+                    errors["model_decision_change_yes_requires_non_none_safe_action"] += 1
+                if not model_critical_atoms:
+                    errors["model_decision_change_yes_requires_critical_atom"] += 1
+    return Counter({key: value for key, value in errors.items() if value})
+
+
 def review_timing_elapsed_seconds(rows: list[dict[str, str]]) -> float | None:
     if not rows:
         return None
@@ -780,7 +818,8 @@ def apply_response_sheet(
     )
     value_errors = validate_response_values(response_rows)
     timing_errors = validate_review_timing_values(grouped, row_numbers)
-    errors = shape_errors + value_errors + timing_errors
+    consistency_errors = validate_response_consistency(grouped, row_numbers)
+    errors = shape_errors + value_errors + timing_errors + consistency_errors
     session_start_gate: dict[str, Any] = {"required": require_session_start}
     if require_session_start:
         if session_start_summary is None:

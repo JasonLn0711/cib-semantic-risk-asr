@@ -130,6 +130,10 @@ def split_atoms(value: str) -> list[str]:
     return atoms
 
 
+def atom_set(value: str) -> set[str]:
+    return set(split_atoms(value))
+
+
 def row_review_complete(row: dict[str, str]) -> bool:
     return all((row.get(field) or "").strip() for field in ROW_REVIEW_FIELDS)
 
@@ -140,6 +144,43 @@ def model_review_complete(item: dict[str, Any]) -> bool:
 
 def count_invalid_atoms(value: str) -> int:
     return sum(1 for atom in split_atoms(value) if atom not in VALID_ATOMS)
+
+
+def row_review_consistency_errors(row: dict[str, str]) -> Counter[str]:
+    errors: Counter[str] = Counter()
+    risk_atoms = atom_set(row.get("reviewer_risk_atoms", ""))
+    critical_atoms = atom_set(row.get("reviewer_critical_atoms", ""))
+    unknown_critical_atoms = critical_atoms - risk_atoms
+    if unknown_critical_atoms:
+        errors["critical_atom_not_in_risk_atoms"] += len(unknown_critical_atoms)
+
+    decision_change = row.get("reviewer_would_asr_error_change_decision", "")
+    safe_action = row.get("reviewer_expected_safe_action", "")
+    if decision_change == "yes" and safe_action == "none":
+        errors["decision_change_yes_requires_non_none_safe_action"] += 1
+    if decision_change == "yes" and not critical_atoms:
+        errors["decision_change_yes_requires_critical_atom"] += 1
+    return errors
+
+
+def model_review_consistency_errors(
+    item: dict[str, Any],
+    *,
+    row_risk_atoms: set[str],
+) -> Counter[str]:
+    errors: Counter[str] = Counter()
+    critical_atoms = atom_set(str(item.get("reviewer_critical_atoms", "")))
+    unknown_critical_atoms = critical_atoms - row_risk_atoms
+    if unknown_critical_atoms:
+        errors["model_critical_atom_not_in_row_risk_atoms"] += len(unknown_critical_atoms)
+
+    decision_change = str(item.get("reviewer_would_asr_error_change_decision", ""))
+    safe_action = str(item.get("reviewer_expected_safe_action", ""))
+    if decision_change == "yes" and safe_action == "none":
+        errors["model_decision_change_yes_requires_non_none_safe_action"] += 1
+    if decision_change == "yes" and not critical_atoms:
+        errors["model_decision_change_yes_requires_critical_atom"] += 1
+    return errors
 
 
 def status_for(
@@ -225,11 +266,13 @@ def validate_rows(
             errors["invalid_reviewer_critical_atom"] += count_invalid_atoms(
                 row.get("reviewer_critical_atoms", "")
             )
+            errors.update(row_review_consistency_errors(row))
         else:
             warnings["pending_row_review"] += 1
             if require_complete:
                 errors["incomplete_row_review"] += 1
 
+        row_risk_atoms = atom_set(row.get("reviewer_risk_atoms", ""))
         model_assessments += len(assessments)
         for item in assessments:
             if not isinstance(item, dict):
@@ -245,6 +288,12 @@ def validate_rows(
                     errors["invalid_model_annotation_confidence"] += 1
                 errors["invalid_model_critical_atom"] += count_invalid_atoms(
                     str(item.get("reviewer_critical_atoms", ""))
+                )
+                errors.update(
+                    model_review_consistency_errors(
+                        item,
+                        row_risk_atoms=row_risk_atoms,
+                    )
                 )
             else:
                 warnings["pending_model_review"] += 1

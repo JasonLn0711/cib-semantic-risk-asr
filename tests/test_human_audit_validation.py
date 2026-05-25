@@ -181,3 +181,48 @@ def test_mismatched_model_assessment_run_id_fails_without_sensitive_leak(tmp_pat
     assert payload["status"] == "validation_failed"
     assert payload["error_counts"]["model_assessment_run_id_mismatch"] == 1
     assert "PRIVATE_" not in json.dumps(payload, ensure_ascii=False)
+
+
+def test_completed_sheet_requires_consistent_decision_atoms(tmp_path: Path) -> None:
+    sheet = tmp_path / "audit.tsv"
+    write_rows(
+        sheet,
+        [
+            base_row(
+                reviewer_semantic_risk_label="priority_review",
+                reviewer_risk_atoms="amount",
+                reviewer_critical_atoms="negation",
+                reviewer_asr_confusion_terms="negation dropped",
+                reviewer_would_asr_error_change_decision="yes",
+                reviewer_decision_change_reason="routing changed",
+                reviewer_expected_safe_action="none",
+                reviewer_annotation_confidence="high",
+                reviewer_model_assessments_json=json.dumps(
+                    [
+                        {
+                            "asr_run_id": "run_a",
+                            "reviewer_would_asr_error_change_decision": "yes",
+                            "reviewer_critical_atoms": "negation",
+                            "reviewer_expected_safe_action": "none",
+                            "reviewer_annotation_confidence": "high",
+                        }
+                    ],
+                    ensure_ascii=False,
+                ),
+            )
+        ],
+    )
+    fieldnames, rows = read_tsv(sheet)
+
+    payload = validate_rows(fieldnames, rows, require_complete=True, expected_rows=1)
+    assert_aggregate_safe(payload)
+
+    assert payload["ok"] is False
+    assert payload["status"] == "validation_failed"
+    assert payload["error_counts"]["critical_atom_not_in_risk_atoms"] == 1
+    assert payload["error_counts"]["decision_change_yes_requires_non_none_safe_action"] == 1
+    assert payload["error_counts"]["model_critical_atom_not_in_row_risk_atoms"] == 1
+    assert (
+        payload["error_counts"]["model_decision_change_yes_requires_non_none_safe_action"]
+        == 1
+    )
