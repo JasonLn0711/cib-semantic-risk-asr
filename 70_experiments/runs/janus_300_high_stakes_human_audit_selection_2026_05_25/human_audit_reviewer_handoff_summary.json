@@ -31,12 +31,12 @@
     "apply_summary": {
       "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json",
       "status": "present",
-      "sha256": "83549747cea244f283e4f8577d169ce448613bc4e6ad27ebcbbcddd5104762d7"
+      "sha256": "2f36cf8b16bacdb53d0023d5d479df1f7c0eb4799cc1325ce1a9570ed1a46e54"
     },
     "apply_log_summary": {
       "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_log_summary.json",
       "status": "present",
-      "sha256": "9b67eb14c34a2107c102358488c15830309dafd476b32026aeb5c51dfec6658f"
+      "sha256": "b53a30f721c0fc67cc0e663f69d2094f2303f192ce2d6ba3d53261b8bd36a94f"
     }
   },
   "freshness_status": "fresh",
@@ -85,15 +85,15 @@
   },
   "apply_log": {
     "status": "apply_log_valid",
-    "entries": 6,
+    "entries": 7,
     "status_counts": {
-      "response_pending": 6
+      "response_pending": 7
     },
     "error_key_counts": {
-      "incomplete_response": 6,
-      "missing_review_timing": 3
+      "incomplete_response": 7,
+      "missing_review_timing": 4
     },
-    "latest_recorded_at": "2026-05-26T03:26:15+08:00"
+    "latest_recorded_at": "2026-05-26T04:58:41+08:00"
   },
   "reviewer_next_steps": [
     "Open the local packet path only in the local workspace; it is transcript-bearing.",

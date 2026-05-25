@@ -1,7 +1,7 @@
 {
   "ok": true,
   "status": "review_session_ready",
-  "recorded_at": "2026-05-26T04:58:26+08:00",
+  "recorded_at": "2026-05-26T05:08:03+08:00",
   "input_boundary": "tracked aggregate handoff plus local path existence checks only",
   "output_boundary": "aggregate-only review-session preflight; no row keys or transcript text",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
@@ -63,5 +63,5 @@
     "preflight_log": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_preflight_log.tsv",
     "handoff_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_handoff_summary.json"
   },
-  "runtime_seconds": 0.0033
+  "runtime_seconds": 0.0007
 }

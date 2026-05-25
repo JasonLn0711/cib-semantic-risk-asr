@@ -1,7 +1,7 @@
 {
   "ok": true,
   "status_counts": {
-    "pass": 13
+    "pass": 14
   },
   "failed_checks": [],
   "reference_transcript_policy": "Reference transcripts are already human-reviewed for WER/CER; this audit does not reopen transcript review.",
@@ -11,7 +11,7 @@
       "check_id": "C001",
       "invariant": "required aggregate summaries exist and are parseable",
       "status": "pass",
-      "evidence": "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_handoff_summary.json; 70_experiments/runs/asr_candidate_current_recheck_2026_05_26/summary.json",
+      "evidence": "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_handoff_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json; 70_experiments/runs/asr_candidate_current_recheck_2026_05_26/summary.json",
       "result": "all required summaries loaded",
       "next_action": "Regenerate missing or invalid aggregate summaries before publishing evidence-chain claims."
     },
@@ -96,6 +96,14 @@
       "next_action": "Refresh the post-review checklist before local response write/refresh and do not promote proxy recovery."
     },
     {
+      "check_id": "C067",
+      "invariant": "per-row timing helper commands cover the current reviewer packet",
+      "status": "pass",
+      "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_handoff_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json",
+      "result": "timing helper commands cover rows 1-6 across handoff, action checklist, and session start",
+      "next_action": "Regenerate reviewer handoff, action checklist, and session start before local review timing entry."
+    },
+    {
       "check_id": "C070",
       "invariant": "expanded ASR/Gemma candidates stay behind locale/runtime gates",
       "status": "pass",
@@ -113,5 +121,5 @@
     }
   ],
   "next_decision": "If this audit is pass, continue with the local selected-300 row/model/timing response closeout; if it fails, refresh the stale aggregate generator before paper-facing claims.",
-  "runtime_seconds": 0.0033
+  "runtime_seconds": 0.001
 }

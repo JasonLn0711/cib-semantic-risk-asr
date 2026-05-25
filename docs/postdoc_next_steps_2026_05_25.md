@@ -277,7 +277,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - New check: `C066`。
 - Current state:
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
-  現在是 `ok=true`、`13/13` checks passing、`failed_checks=[]`。
+  現在是 `ok=true`、`14/14` checks passing、`failed_checks=[]`。
 - 檢查內容：post-review command plan 必須先完成 response closeout；post-write
   order 必須是 refresh、strict human-reviewed recovery、post-review checklist、
   objective audit；strict recovery command 不能帶
@@ -297,6 +297,19 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   packet rows `1-6`；row `1` 的 `timing_start_write` /
   `timing_finish_write` 仍保留作為 compatibility alias。這是 timing
   capture support，不是 human review completion。
+
+21. Per-row timing helper command coverage 已納入 consistency audit：
+
+- Source:
+  `80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py`。
+- New check: `C067`。
+- Current state:
+  `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
+  現在是 `ok=true`、`14/14` checks passing、`failed_checks=[]`。
+- 檢查內容：reviewer handoff、action checklist、session-start summary 都必須
+  提供 `timing_start_write_by_row` 和 `timing_finish_write_by_row`，且涵蓋
+  目前 packet rows `1-6`；row `1` compatibility alias 也必須和 by-row map
+  對齊。
 
 目前最重要的限制：
 

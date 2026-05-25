@@ -132,13 +132,14 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   The aggregate consistency audit
   `80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py` now checks
   these summaries together, including reviewer handoff freshness and timing
-  awareness plus the post-review command plan. Current status is `ok=true` with
-  `13/13` checks passing:
+  awareness, per-row timing-helper command coverage, and the post-review
+  command plan. Current status is `ok=true` with `14/14` checks passing:
   transcript ground truth is not reopened, remaining review scope includes
   row/model/timing fields, proxy evidence is not promoted to paper claims, and
   expanded ASR/Gemma candidates remain behind locale/runtime gates. It also
-  checks that post-review recovery is rerun strictly, without the pending-summary
-  allowance, before objective completion can be claimed.
+  checks that post-review recovery is rerun strictly, without the
+  pending-summary allowance, and that timing helper commands cover current
+  packet rows `1-6` before objective completion can be claimed.
   The normal `refresh_human_audit_evidence.py` path now also refreshes this
   consistency status and records `consistency_audit_ok=true` in
   `human_audit_refresh_summary.json`.
