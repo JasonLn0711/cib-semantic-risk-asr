@@ -432,14 +432,17 @@ def write_long_silence_review(
         "review_date",
         "review_notes",
     ]
+    existing_reviews = read_existing_gold_reviews(path)
     out_rows = []
     for row in rows:
         if "long_silence" not in str(row.get("health_flags", "")):
             continue
+        audio_id = str(row["audio_id"])
+        existing = existing_reviews.get(audio_id, {})
         stats = stats_by_id[str(row["audio_id"])]
         out_rows.append(
             {
-                "audio_id": row["audio_id"],
+                "audio_id": audio_id,
                 "split": row["split"],
                 "path": row["overlay_rel"],
                 "duration_sec": row["duration_sec"],
@@ -450,10 +453,10 @@ def write_long_silence_review(
                 "peak_ratio": round(stats.peak_ratio, 6) if stats.peak_ratio is not None else "",
                 "candidate_reference_transcript": row["text"],
                 "risk_keyword_hits": "|".join(row.get("risk_terms", [])),
-                "review_status": "",
-                "reviewer": "",
-                "review_date": "",
-                "review_notes": "",
+                "review_status": existing.get("review_status", ""),
+                "reviewer": existing.get("reviewer", ""),
+                "review_date": existing.get("review_date", ""),
+                "review_notes": existing.get("review_notes", ""),
             }
         )
     write_tsv(path, out_rows, fields)

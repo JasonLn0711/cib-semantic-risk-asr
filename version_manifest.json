@@ -1,30 +1,21 @@
 {
-  "version": "v2.5.22",
+  "version": "v2.5.23",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 22
+    "patch": 23
   },
-  "updated_at": "2026-05-25T10:07:01+08:00",
+  "updated_at": "2026-05-25T10:22:45+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "4fad10c",
+  "base_commit": "820bb20",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "60_whisper_asr_finetuning/README.md",
-    "60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml",
-    "60_whisper_asr_finetuning/datasets/janus_165_v1/DATASET_CARD.md",
-    "60_whisper_asr_finetuning/scripts/build_janus_curation_artifacts.py",
-    "70_experiments/runs/janus_15_decision_stability_pilot/README.md",
-    "80_semantic_risk_asr/paper/cds_asr_positioning_memo_zh.md",
-    "80_semantic_risk_asr/paper/experiment_plan.md",
-    "80_semantic_risk_asr/paper/q1_paper_design.md",
-    "80_semantic_risk_asr/paper/story_outline.md",
-    "docs/janus_165_audio_curation_workflow.md"
+    "60_whisper_asr_finetuning/scripts/build_janus_curation_artifacts.py"
   ]
 }

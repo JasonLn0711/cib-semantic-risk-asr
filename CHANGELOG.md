@@ -5,6 +5,16 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.23 - 2026-05-25T10:22:45+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `820bb20`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/scripts/build_janus_curation_artifacts.py`
+
 ## v2.5.22 - 2026-05-25T10:07:01+08:00
 
 - Bump: `patch`
