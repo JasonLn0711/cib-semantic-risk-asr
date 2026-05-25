@@ -27,6 +27,17 @@ def readiness_row(requirement: str, status: str) -> dict[str, str]:
 
 def base_readiness() -> dict:
     return {
+        "reviewer_action_gate": {
+            "available": True,
+            "ok": True,
+            "status": "reviewer_action_ready",
+            "selection_stratum": "critical_or_high_risk_missed",
+            "rows_in_batch": 6,
+            "pending_rows_in_batch": 6,
+            "model_assessments_in_batch": 18,
+            "pending_model_assessments_in_batch": 18,
+            "latest_apply_status": "response_pending",
+        },
         "readiness_rows": [
             readiness_row("migration and best-model selection checkpoint", "completed"),
             readiness_row("legacy-best load smoke tests", "completed"),
@@ -75,6 +86,7 @@ def test_objective_audit_keeps_proxy_and_human_review_separate() -> None:
     assert by_id["6"]["status"] == "proxy_completed"
     assert "selected-300 risk-atom" in by_id["5"]["blocking_dependency"]
     assert "not transcript ground truth" in by_id["5"]["next_action"]
+    assert "reviewer_action_ready" in by_id["5"]["result"]
     assert_completion_safe({"completion_rows": rows})
 
 
@@ -147,6 +159,7 @@ def test_completion_audit_requires_consequence_claim_readiness() -> None:
 
     assert payload["objective_requirements_ready"] is True
     assert payload["publishable_ready"] is False
+    assert payload["reviewer_action_gate"]["status"] == "reviewer_action_ready"
     assert payload["consequence_matrix_alignment"]["paper_claims_ready"] is False
     assert payload["consequence_matrix_alignment"]["blocking_or_proxy_items"] == 1
 

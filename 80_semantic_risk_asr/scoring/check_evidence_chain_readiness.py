@@ -117,6 +117,37 @@ def json_ok(path: Path) -> bool:
     return path.exists() and bool(read_json(path).get("ok"))
 
 
+def reviewer_action_gate(root: Path) -> dict[str, Any]:
+    path = (
+        root
+        / "70_experiments"
+        / "runs"
+        / "janus_300_high_stakes_human_audit_selection_2026_05_25"
+        / "human_audit_reviewer_action_checklist_summary.json"
+    )
+    payload = read_json(path) if path.exists() else {}
+    return {
+        "available": bool(payload),
+        "ok": bool(payload.get("ok")),
+        "status": payload.get("status", "missing"),
+        "selection_stratum": payload.get("selection_stratum", ""),
+        "rows_in_batch": payload.get("rows_in_batch", 0),
+        "pending_rows_in_batch": payload.get("pending_rows_in_batch", 0),
+        "model_assessments_in_batch": payload.get("model_assessments_in_batch", 0),
+        "pending_model_assessments_in_batch": payload.get(
+            "pending_model_assessments_in_batch",
+            0,
+        ),
+        "rows_missing_timing": payload.get("rows_missing_timing", 0),
+        "latest_apply_status": payload.get("latest_apply_status", ""),
+        "evidence": (
+            "70_experiments/runs/"
+            "janus_300_high_stakes_human_audit_selection_2026_05_25/"
+            "human_audit_reviewer_action_checklist_summary.json"
+        ),
+    }
+
+
 def smoke_gate(root: Path) -> dict[str, str]:
     lora = root / "70_experiments/runs/breeze_asr25_lora_legacy_best_smoke/artifacts/breeze_asr25_lora_legacy_best_smoke_summary.json"
     partial = root / "70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_smoke/artifacts/breeze_asr25_partial_encoder_legacy_best_smoke_summary.json"
@@ -310,6 +341,17 @@ def recovery_gate(root: Path) -> dict[str, str]:
 def human_audit_gate(root: Path) -> dict[str, str]:
     path = root / "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_validation_summary.json"
     payload = read_json(path) if path.exists() else {}
+    action_gate = reviewer_action_gate(root)
+    action_status = action_gate["status"]
+    action_detail = ""
+    if action_gate["available"]:
+        action_detail = (
+            f"; current reviewer action gate is {action_status} with "
+            f"{action_gate['pending_rows_in_batch']}/{action_gate['rows_in_batch']} "
+            "packet rows and "
+            f"{action_gate['pending_model_assessments_in_batch']}/"
+            f"{action_gate['model_assessments_in_batch']} model assessments pending"
+        )
     complete = (
         payload.get("ok")
         and payload.get("status") == "review_complete"
@@ -330,11 +372,12 @@ def human_audit_gate(root: Path) -> dict[str, str]:
             "review fields complete and "
             f"{payload.get('reviewed_model_assessments', 0)}/90 model assessments "
             "are complete; transcript ground truth is not the pending item"
+            f"{action_detail}"
         )
         next_action = (
-            "Fill selected-300 risk-atom, decision-change, expected-action, "
-            "confidence, and per-model assessment fields; then run validator "
-            "with --require-complete."
+            "Run the reviewer action checklist, fill selected-300 risk-atom, "
+            "decision-change, expected-action, confidence, and per-model "
+            "assessment fields; then run validator with --require-complete."
         )
     else:
         status = "missing"
@@ -346,7 +389,10 @@ def human_audit_gate(root: Path) -> dict[str, str]:
         requirement="selected-300 human risk-atom audit completion",
         status=status,
         paper_claim_status=paper_status,
-        evidence="human_audit_validation_summary.json",
+        evidence=(
+            "human_audit_validation_summary.json; "
+            "human_audit_reviewer_action_checklist_summary.json"
+        ),
         result=result,
         next_action=next_action,
     )
@@ -399,6 +445,7 @@ def checkpoint_gate(root: Path) -> dict[str, str]:
 
 
 def build_readiness(root: Path) -> dict[str, Any]:
+    action_gate = reviewer_action_gate(root)
     rows = [
         checkpoint_gate(root),
         smoke_gate(root),
@@ -423,6 +470,7 @@ def build_readiness(root: Path) -> dict[str, Any]:
         "status_counts": dict(sorted(counts.items())),
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
         "remaining_review_scope": REMAINING_REVIEW_SCOPE,
+        "reviewer_action_gate": action_gate,
         "readiness_rows": rows,
         "blocking_gates": [
             {

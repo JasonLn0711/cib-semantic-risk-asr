@@ -358,10 +358,15 @@ def run_completion_audit_gate(
     output_dir: Path,
 ) -> tuple[dict[str, Any], list[Path]]:
     started = time.time()
+    consequence_matrix = completion_audit.read_json(
+        output_dir / completion_audit.CONSEQUENCE_SUMMARY_NAME
+    )
     payload = completion_audit.build_completion_audit_from_payloads(
         readiness_payload=readiness_payload,
         human_refresh=human_refresh_payload,
         human_predictor=predictor_payload,
+        consequence_matrix=consequence_matrix,
+        reviewer_action_gate=readiness_payload.get("reviewer_action_gate", {}),
     )
     payload["runtime_seconds"] = round(time.time() - started, 4)
     output_json = output_dir / completion_audit.SUMMARY_NAME

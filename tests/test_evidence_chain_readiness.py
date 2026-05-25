@@ -178,6 +178,21 @@ def write_minimal_tree(root: Path) -> None:
             "reviewed_model_assessments": 0,
         },
     )
+    write_json(
+        root
+        / "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist_summary.json",
+        {
+            "ok": True,
+            "status": "reviewer_action_ready",
+            "selection_stratum": "critical_or_high_risk_missed",
+            "rows_in_batch": 6,
+            "pending_rows_in_batch": 6,
+            "model_assessments_in_batch": 18,
+            "pending_model_assessments_in_batch": 18,
+            "rows_missing_timing": 6,
+            "latest_apply_status": "response_pending",
+        },
+    )
 
 
 def test_readiness_marks_proxy_and_human_review_pending(tmp_path: Path) -> None:
@@ -192,6 +207,8 @@ def test_readiness_marks_proxy_and_human_review_pending(tmp_path: Path) -> None:
     assert statuses["five-condition recovery experiment"] == "proxy_completed"
     assert payload["status_counts"]["review_pending"] == 1
     assert payload["status_counts"]["proxy_completed"] == 4
+    assert payload["reviewer_action_gate"]["status"] == "reviewer_action_ready"
+    assert payload["reviewer_action_gate"]["pending_rows_in_batch"] == 6
     assert "already human-reviewed ground truth" in payload["reference_transcript_policy"]
     assert "risk-atom labels" in payload["remaining_review_scope"]
     audit_row = next(
@@ -200,6 +217,7 @@ def test_readiness_marks_proxy_and_human_review_pending(tmp_path: Path) -> None:
         if row["requirement"] == "selected-300 human risk-atom audit completion"
     )
     assert "transcript ground truth is not the pending item" in audit_row["result"]
+    assert "reviewer_action_ready" in audit_row["result"]
     assert_aggregate_safe(payload)
 
 

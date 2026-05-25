@@ -144,7 +144,9 @@ def objective_rows_from_payloads(
     readiness_payload: dict[str, Any],
     human_refresh: dict[str, Any],
     human_predictor: dict[str, Any],
+    reviewer_action_gate: dict[str, Any] | None = None,
 ) -> list[dict[str, str]]:
+    reviewer_action_gate = reviewer_action_gate or readiness_payload.get("reviewer_action_gate", {})
     migration = gate_status(readiness_payload, "migration and best-model selection checkpoint")
     smoke = gate_status(readiness_payload, "legacy-best load smoke tests")
     fixed_15 = gate_status(
@@ -185,6 +187,16 @@ def objective_rows_from_payloads(
     )
 
     main_status = "review_pending"
+    reviewer_action_detail = ""
+    if reviewer_action_gate.get("available"):
+        reviewer_action_detail = (
+            f" Current reviewer action gate is {reviewer_action_gate.get('status', '')}: "
+            f"{reviewer_action_gate.get('pending_rows_in_batch', 0)}/"
+            f"{reviewer_action_gate.get('rows_in_batch', 0)} packet rows and "
+            f"{reviewer_action_gate.get('pending_model_assessments_in_batch', 0)}/"
+            f"{reviewer_action_gate.get('model_assessments_in_batch', 0)} model "
+            "assessments pending."
+        )
     main_result = (
         "Selected-300 proxy inputs, metric-predictor proxy, and refresh gate exist, "
         f"but selected-300 risk-atom review is {human_refresh.get('reviewed_rows', 0)}/"
@@ -192,6 +204,7 @@ def objective_rows_from_payloads(
         f"{human_refresh.get('reviewed_model_assessments', 0)}/"
         f"{human_refresh.get('model_assessments', 90)} model assessments; "
         "transcript ground truth is already accepted for WER/CER scoring."
+        f"{reviewer_action_detail}"
     )
     main_paper_status = "not paper-ready"
     if (
@@ -309,11 +322,14 @@ def build_completion_audit_from_payloads(
     human_refresh: dict[str, Any],
     human_predictor: dict[str, Any],
     consequence_matrix: dict[str, Any] | None = None,
+    reviewer_action_gate: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    reviewer_action_gate = reviewer_action_gate or readiness_payload.get("reviewer_action_gate", {})
     rows = objective_rows_from_payloads(
         readiness_payload=readiness_payload,
         human_refresh=human_refresh,
         human_predictor=human_predictor,
+        reviewer_action_gate=reviewer_action_gate,
     )
     counts: dict[str, int] = {}
     for row in rows:
@@ -352,6 +368,23 @@ def build_completion_audit_from_payloads(
         "objective_requirements_ready": objective_requirements_ready,
         "paper_claim_status_ready": paper_claim_status_ready,
         "consequence_matrix_alignment": consequence_alignment,
+        "reviewer_action_gate": {
+            "available": bool(reviewer_action_gate.get("available")),
+            "ok": bool(reviewer_action_gate.get("ok")),
+            "status": reviewer_action_gate.get("status", "missing"),
+            "selection_stratum": reviewer_action_gate.get("selection_stratum", ""),
+            "pending_rows_in_batch": reviewer_action_gate.get("pending_rows_in_batch", 0),
+            "rows_in_batch": reviewer_action_gate.get("rows_in_batch", 0),
+            "pending_model_assessments_in_batch": reviewer_action_gate.get(
+                "pending_model_assessments_in_batch",
+                0,
+            ),
+            "model_assessments_in_batch": reviewer_action_gate.get(
+                "model_assessments_in_batch",
+                0,
+            ),
+            "latest_apply_status": reviewer_action_gate.get("latest_apply_status", ""),
+        },
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
         "remaining_review_scope": REMAINING_REVIEW_SCOPE,
         "completion_rows": rows,
@@ -376,6 +409,7 @@ def build_completion_audit(root: Path) -> dict[str, Any]:
     audit_dir = root / "70_experiments" / "runs" / "janus_300_high_stakes_human_audit_selection_2026_05_25"
     human_refresh = read_json(audit_dir / "human_audit_refresh_summary.json")
     human_predictor = read_json(audit_dir / "human_audit_predictor_summary.json")
+    reviewer_action_gate = readiness_payload.get("reviewer_action_gate", {})
     consequence_matrix = read_json(
         root
         / "70_experiments"
@@ -388,6 +422,7 @@ def build_completion_audit(root: Path) -> dict[str, Any]:
         human_refresh=human_refresh,
         human_predictor=human_predictor,
         consequence_matrix=consequence_matrix,
+        reviewer_action_gate=reviewer_action_gate,
     )
 
 
