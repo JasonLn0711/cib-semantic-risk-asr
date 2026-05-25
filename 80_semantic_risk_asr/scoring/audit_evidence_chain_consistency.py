@@ -81,6 +81,14 @@ SUMMARY_SPECS = {
         "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
         "human_audit_reviewer_handoff_summary.json"
     ),
+    "action_checklist": (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+        "human_audit_reviewer_action_checklist_summary.json"
+    ),
+    "session_start": (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+        "human_audit_reviewer_session_start_summary.json"
+    ),
     "candidate_recheck": (
         "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/"
         "summary.json"
@@ -190,6 +198,8 @@ def add_policy_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
         "closeout",
         "apply",
         "handoff",
+        "action_checklist",
+        "session_start",
     ]
     transcript_failures = [
         name
@@ -491,6 +501,117 @@ def add_command_plan_check(payloads: dict[str, dict[str, Any]], rows: list[dict[
     )
 
 
+def timing_command_coverage(
+    commands: dict[str, Any],
+    row_numbers: list[int],
+) -> tuple[bool, list[str]]:
+    start_by_row = commands.get("timing_start_write_by_row")
+    finish_by_row = commands.get("timing_finish_write_by_row")
+    if not isinstance(start_by_row, dict) or not isinstance(finish_by_row, dict):
+        return False, ["missing_by_row_command_maps"]
+
+    missing_or_invalid: list[str] = []
+    for row_number in row_numbers:
+        key = str(row_number)
+        start = str(start_by_row.get(key, "") or "")
+        finish = str(finish_by_row.get(key, "") or "")
+        if not all(
+            token in start
+            for token in (
+                "mark_human_audit_response_timing.py",
+                f"--row-number {row_number}",
+                "--mark-start",
+                "--write",
+            )
+        ):
+            missing_or_invalid.append(f"start:{key}")
+        if not all(
+            token in finish
+            for token in (
+                "mark_human_audit_response_timing.py",
+                f"--row-number {row_number}",
+                "--mark-finish",
+                "--write",
+            )
+        ):
+            missing_or_invalid.append(f"finish:{key}")
+
+    first = str(row_numbers[0]) if row_numbers else ""
+    alias_ok = True
+    if first:
+        alias_ok = (
+            commands.get("timing_start_write") == start_by_row.get(first)
+            and commands.get("timing_finish_write") == finish_by_row.get(first)
+        )
+        if not alias_ok:
+            missing_or_invalid.append("row_1_alias")
+    return not missing_or_invalid, missing_or_invalid
+
+
+def add_reviewer_timing_command_check(
+    payloads: dict[str, dict[str, Any]],
+    rows: list[dict[str, str]],
+) -> None:
+    handoff = payloads.get("handoff", {})
+    action = payloads.get("action_checklist", {})
+    session = payloads.get("session_start", {})
+    packet = handoff.get("current_packet") if isinstance(handoff.get("current_packet"), dict) else {}
+    row_numbers = [
+        int(item)
+        for item in packet.get("row_numbers", [])
+        if isinstance(item, int) or (isinstance(item, str) and item.isdigit())
+    ]
+    expected_rows = [1, 2, 3, 4, 5, 6]
+    handoff_ok, handoff_errors = timing_command_coverage(
+        handoff.get("commands", {}) if isinstance(handoff.get("commands"), dict) else {},
+        row_numbers,
+    )
+    action_ok, action_errors = timing_command_coverage(
+        action.get("timing_helper_commands", {})
+        if isinstance(action.get("timing_helper_commands"), dict)
+        else {},
+        row_numbers,
+    )
+    session_ok, session_errors = timing_command_coverage(
+        session.get("commands", {}) if isinstance(session.get("commands"), dict) else {},
+        row_numbers,
+    )
+    passed = (
+        row_numbers == expected_rows
+        and handoff_ok
+        and action_ok
+        and session_ok
+    )
+    error_text = "; ".join(
+        part
+        for part in (
+            f"row_numbers={row_numbers}" if row_numbers != expected_rows else "",
+            f"handoff={','.join(handoff_errors)}" if handoff_errors else "",
+            f"action={','.join(action_errors)}" if action_errors else "",
+            f"session={','.join(session_errors)}" if session_errors else "",
+        )
+        if part
+    )
+    rows.append(
+        check_row(
+            check_id="C067",
+            invariant="per-row timing helper commands cover the current reviewer packet",
+            passed=passed,
+            evidence=(
+                f"{SUMMARY_SPECS['handoff']}; "
+                f"{SUMMARY_SPECS['action_checklist']}; "
+                f"{SUMMARY_SPECS['session_start']}"
+            ),
+            result=(
+                "timing helper commands cover rows 1-6 across handoff, action checklist, and session start"
+                if passed
+                else f"per-row timing command coverage drifted: {error_text or 'unknown'}"
+            ),
+            next_action="Regenerate reviewer handoff, action checklist, and session start before local review timing entry.",
+        )
+    )
+
+
 def add_candidate_check(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
     candidate = payloads.get("candidate_recheck", {})
     bounded_statuses = {
@@ -552,6 +673,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_timing_checks(payloads, rows)
         add_readiness_checks(payloads, rows)
         add_command_plan_check(payloads, rows)
+        add_reviewer_timing_command_check(payloads, rows)
         add_candidate_check(payloads, rows)
         add_safety_check(payloads, rows)
 

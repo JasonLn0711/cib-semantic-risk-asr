@@ -239,6 +239,8 @@ def build_session_payload(
             "strict_dry_run": commands.get("strict_dry_run", ""),
             "write_refresh_prepare_next": commands.get("write_refresh_prepare_next", ""),
             "batch_status_audit": commands.get("batch_status_audit", ""),
+            "timing_start_write": commands.get("timing_start_write", ""),
+            "timing_finish_write": commands.get("timing_finish_write", ""),
             "timing_start_write_by_row": commands.get("timing_start_write_by_row", {}),
             "timing_finish_write_by_row": commands.get("timing_finish_write_by_row", {}),
         },

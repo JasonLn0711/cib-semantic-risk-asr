@@ -38,6 +38,8 @@ def test_session_start_refreshes_all_reviewer_gates_without_private_content(
     assert payload["current_gate"]["pending_rows_in_batch"] == 2
     assert payload["current_gate"]["pending_model_assessments_in_batch"] == 6
     assert payload["current_gate"]["latest_apply_status"] == "response_pending"
+    assert "--row-number 1" in payload["commands"]["timing_start_write"]
+    assert "--row-number 1" in payload["commands"]["timing_finish_write"]
     assert sorted(payload["commands"]["timing_start_write_by_row"]) == ["1", "2"]
     assert "--row-number 2" in payload["commands"]["timing_finish_write_by_row"]["2"]
     assert (run_dir / "human_audit_reviewer_session_start_summary.json").exists()

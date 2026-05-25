@@ -24,6 +24,7 @@ REVIEW_SCOPE = (
     "expected safe action, confidence, per-model assessment fields, and "
     "per-row review timing."
 )
+ROW_NUMBERS = [1, 2, 3, 4, 5, 6]
 
 
 def write_summary(root: Path, name: str, payload: dict) -> None:
@@ -40,6 +41,29 @@ def base_summary(**extra: object) -> dict:
     }
     payload.update(extra)
     return payload
+
+
+def timing_commands(row_numbers: list[int] = ROW_NUMBERS) -> dict:
+    start_by_row = {
+        str(row_number): (
+            "mark_human_audit_response_timing.py --row-number "
+            f"{row_number} --mark-start --write"
+        )
+        for row_number in row_numbers
+    }
+    finish_by_row = {
+        str(row_number): (
+            "mark_human_audit_response_timing.py --row-number "
+            f"{row_number} --mark-finish --write"
+        )
+        for row_number in row_numbers
+    }
+    return {
+        "timing_start_write": start_by_row[str(row_numbers[0])],
+        "timing_finish_write": finish_by_row[str(row_numbers[0])],
+        "timing_start_write_by_row": start_by_row,
+        "timing_finish_write_by_row": finish_by_row,
+    }
 
 
 def write_consistent_fixture(root: Path) -> None:
@@ -147,6 +171,24 @@ def write_consistent_fixture(root: Path) -> None:
             status="response_closeout_blocked",
             require_timing=True,
             review_timing={"rows_missing_timing": 6},
+            checklist=[
+                {
+                    "step_id": "2",
+                    "next_action": (
+                        "apply_human_audit_batch_response.py --require-complete "
+                        "--require-timing --require-session-start-gate"
+                    ),
+                },
+                {
+                    "step_id": "7",
+                    "next_action": (
+                        "apply_human_audit_batch_response.py --write "
+                        "--refresh-after-write --prepare-next-after-write "
+                        "--require-complete --require-timing "
+                        "--require-session-start-gate"
+                    ),
+                },
+            ],
         ),
     )
     write_summary(
@@ -166,12 +208,36 @@ def write_consistent_fixture(root: Path) -> None:
         base_summary(
             status="reviewer_input_pending",
             freshness_status="fresh",
+            current_packet={"row_numbers": ROW_NUMBERS},
             current_gate={
                 "latest_apply_status": "response_pending",
                 "pending_rows_in_batch": 6,
                 "pending_model_assessments_in_batch": 18,
                 "rows_missing_timing": 6,
             },
+            commands=timing_commands(),
+        ),
+    )
+    write_summary(
+        root,
+        "action_checklist",
+        base_summary(
+            status="reviewer_action_ready",
+            rows_in_batch=6,
+            pending_rows_in_batch=6,
+            model_assessments_in_batch=18,
+            pending_model_assessments_in_batch=18,
+            rows_missing_timing=6,
+            timing_helper_commands=timing_commands(),
+        ),
+    )
+    write_summary(
+        root,
+        "session_start",
+        base_summary(
+            status="reviewer_session_started",
+            current_packet={"row_numbers": ROW_NUMBERS},
+            commands=timing_commands(),
         ),
     )
     write_summary(
@@ -193,7 +259,7 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True
-    assert payload["status_counts"] == {"pass": 13}
+    assert payload["status_counts"] == {"pass": 14}
     assert not payload["failed_checks"]
     assert_aggregate_safe(payload)
 
@@ -275,6 +341,19 @@ def test_consistency_audit_rejects_pending_recovery_command_plan(tmp_path: Path)
 
     assert payload["ok"] is False
     assert any(item["check_id"] == "C066" for item in payload["failed_checks"])
+
+
+def test_consistency_audit_fails_incomplete_per_row_timing_commands(tmp_path: Path) -> None:
+    write_consistent_fixture(tmp_path)
+    action_path = tmp_path / SUMMARY_SPECS["action_checklist"]
+    action = json.loads(action_path.read_text(encoding="utf-8"))
+    del action["timing_helper_commands"]["timing_start_write_by_row"]["6"]
+    action_path.write_text(json.dumps(action, ensure_ascii=False), encoding="utf-8")
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C067" for item in payload["failed_checks"])
 
 
 def test_consistency_safety_rejects_raw_field_tokens() -> None:
