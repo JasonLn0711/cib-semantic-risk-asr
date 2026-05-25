@@ -3,6 +3,8 @@
 Canonical detailed design:
 
 - `q1_paper_design.md`
+- `../../docs/postdoc_next_steps_2026_05_25.md` for the current postdoc-level
+  sequence after the 258-row gate.
 
 ## FIRST PRINCIPLE Gate
 
@@ -125,6 +127,20 @@ generator for the next split-aware CDS metric builder. Keep LoRA as contrast
 evidence, not the next primary hypothesis generator. WER is currently retained
 as a compatibility field only because whitespace-token WER is not informative
 for unsegmented Chinese transcripts.
+
+Current execution priority after the 258-row gate:
+
+1. Complete comparable 258-row baselines for Breeze-ASR-25 base, Whisper small,
+   Whisper large-v2, optional Breeze-ASR-26, Whisper large-v3, and Whisper
+   large-v3 turbo.
+2. Build new SenseVoice and Qwen3-ASR runners only through smoke and 15-row
+   contract before full split runs.
+3. Keep Gemma 4 E2B/E4B as a separate prompted multimodal ASR lane, not as a
+   pure ASR baseline.
+4. Add a split-aware `build_janus_metric_inputs.py` so 15-row, 258-row, and
+   300-row experiments use the same metric-input contract.
+5. Run the selected 300-row high-stakes expansion as the main experiment only
+   after the split-aware builder is validated.
 
 ## Experiment 2: Counterfactual Generation Quality
 

@@ -40,16 +40,22 @@ ignored local paths.
 | 4.3 | Ran canonical 258-row test split with the legacy LoRA. | `run_legacy_breeze_asr25_smoke.py --model-kind lora --run-id breeze_asr25_lora_legacy_best_test_split --manifest .../test.jsonl --max-samples 258`; local summary/runtime/prediction artifacts. | Passed. Rows `258`, CER `22.86`, WER `100.0`, wall time `403.37` seconds, `1.563` sec/row, `0.640` rows/sec, CUDA, cuDNN disabled, `torch_dtype=float16`. Validator: `ok=true`, no missing/duplicate IDs, no missing text/label/quality signal. |
 | 4.4 | Produced tracked aggregate ASR/CDS proxy comparison for the 258-row split. | `summarize_janus_asr_test_split.py`; `70_experiments/runs/janus_258_test_split_asr_cds_proxy/`. | Completed. Partial encoder beat LoRA on CER, runtime, unsafe downrouting, high-risk misses, risk-atom error rate, negation flips, amount distortion, and action confusion. Both candidates had `simplified_char_count=0` and `locale_violation_rows=0`. |
 | 4.5 | Added expanded ASR candidate matrix and locale contract. | `60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml`; `docs/asr_candidate_expansion_2026_05_25.md`. | Added Whisper large-v3, Whisper large-v3 turbo, FunASR SenseVoice, Qwen3-ASR 0.6B/1.7B, and Gemma 4 E2B/E4B audio candidates. All new candidates are planned behind smoke, 15-row contract, runtime logging, and Taiwan Traditional Chinese locale gates. |
+| 4.6 | Wrote the postdoc-level next-step roadmap after the 258-row gate. | `docs/postdoc_next_steps_2026_05_25.md`. | Completed. The roadmap defines the next ordered gates: comparable 258-row baselines, new runner smoke/15-row contracts, split-aware metric input builder, human risk-atom audit, 300-row high-stakes main experiment, recovery experiment, and paper packaging. |
 
 ## Next Operations
 
-1. Run comparable 258-row baselines for Breeze-ASR-25 base, Whisper large-v3,
-   and Whisper large-v3 turbo.
-2. Build smoke/15-row runners for FunASR SenseVoice and Qwen3-ASR, with strict
+1. Complete comparable 258-row baselines for the already-gated ASR models:
+   Whisper small, Whisper large-v2, Breeze-ASR-25 base, optional Breeze-ASR-26,
+   legacy LoRA, and legacy partial encoder.
+2. Run Whisper large-v3 and Whisper large-v3 turbo through smoke, 15-row
+   contract, locale gate, and then 258-row if they pass.
+3. Build smoke/15-row runners for FunASR SenseVoice and Qwen3-ASR, with strict
    Taiwan Traditional Chinese locale gates.
-3. Build a separate multimodal prompted-ASR runner for Gemma 4 E2B/E4B only
+4. Build a separate multimodal prompted-ASR runner for Gemma 4 E2B/E4B only
    after the prompt, audio-length, hallucination, runtime, and locale logging
    contract is explicit.
-4. Generalize the 15-row pilot metric-input builder into a split-aware
+5. Generalize the 15-row pilot metric-input builder into a split-aware
    `build_janus_metric_inputs.py` before running the 300-row high-stakes
    experiment.
+6. Create a small human-reviewed risk-atom audit set so proxy metrics do not
+   become overstated as formal CDS evidence.

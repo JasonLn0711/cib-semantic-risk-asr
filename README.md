@@ -74,6 +74,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml`.
   New candidates must pass smoke, 15-row hypothesis contract, runtime logging,
   and Taiwan Traditional Chinese locale gates before any full split run.
+- The postdoc-level roadmap after the 258-row gate is recorded in
+  `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
+  complete comparable 258-row baselines, add split-aware metric inputs, run the
+  300-row high-stakes main experiment, then evaluate recovery policies.
 - Treat audio/call data and filenames as sensitive.
 - If storage cleanup is needed later, review `30_review_flags/REVIEW.md` and `20_inventory/largest_files.tsv` first.
 
@@ -106,7 +110,8 @@ For Whisper-specific work, start with `docs/REPO_MAP.md` and
 
 For the paper-facing research frame, start with
 `80_semantic_risk_asr/README.md` and
-`80_semantic_risk_asr/paper/story_outline.md`.
+`80_semantic_risk_asr/paper/story_outline.md`. For the current postdoc-level
+execution sequence, start with `docs/postdoc_next_steps_2026_05_25.md`.
 
 ## Automated Version Control
 

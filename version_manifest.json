@@ -1,30 +1,25 @@
 {
-  "version": "v2.5.34",
+  "version": "v2.5.35",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 34
+    "patch": 35
   },
-  "updated_at": "2026-05-25T15:23:46+08:00",
+  "updated_at": "2026-05-25T15:32:29+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "ed01bcd",
+  "base_commit": "f933d9f",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml",
     "70_experiments/registry.tsv",
-    "70_experiments/runs/janus_258_test_split_asr_cds_proxy/README.md",
-    "70_experiments/runs/janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv",
-    "70_experiments/runs/janus_258_test_split_asr_cds_proxy/metrics.csv",
-    "70_experiments/runs/janus_258_test_split_asr_cds_proxy/summary.json",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
     "80_semantic_risk_asr/paper/experiment_plan.md",
     "README.md",
-    "docs/asr_candidate_expansion_2026_05_25.md"
+    "docs/postdoc_next_steps_2026_05_25.md"
   ]
 }
