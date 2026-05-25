@@ -1,0 +1,166 @@
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "annotation"))
+
+from refresh_human_audit_evidence import refresh_human_audit_evidence  # noqa: E402
+
+
+FIELDS = [
+    "audio_id",
+    "split",
+    "selection_stratum",
+    "selection_reason",
+    "reference_label",
+    "reference_text",
+    "asr_hypotheses_json",
+    "risk_signal_json",
+    "reviewer_verified_transcript",
+    "reviewer_semantic_risk_label",
+    "reviewer_risk_atoms",
+    "reviewer_critical_atoms",
+    "reviewer_asr_confusion_terms",
+    "reviewer_would_asr_error_change_decision",
+    "reviewer_decision_change_reason",
+    "reviewer_expected_safe_action",
+    "reviewer_annotation_confidence",
+    "reviewer_model_assessments_json",
+    "reviewer_notes",
+]
+
+
+def write_rows(path: Path, rows: list[dict[str, str]]) -> None:
+    lines = ["\t".join(FIELDS)]
+    for row in rows:
+        lines.append("\t".join(row.get(field, "") for field in FIELDS))
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def base_row(*, reviewed: bool, model_reviewed: bool) -> dict[str, str]:
+    model_assessment = {
+        "asr_run_id": "run_a",
+        "reviewer_would_asr_error_change_decision": "yes" if model_reviewed else "",
+        "reviewer_critical_atoms": "negation" if model_reviewed else "",
+        "reviewer_expected_safe_action": "priority_review" if model_reviewed else "",
+        "reviewer_annotation_confidence": "high" if model_reviewed else "",
+    }
+    row = {
+        "audio_id": "private_audio_001",
+        "split": "test",
+        "selection_stratum": "unsafe_downrouting",
+        "selection_reason": "private",
+        "reference_label": "priority_review",
+        "reference_text": "PRIVATE_REFERENCE",
+        "asr_hypotheses_json": json.dumps(
+            [
+                {
+                    "asr_run_id": "run_a",
+                    "hypothesis_text": "PRIVATE_HYP",
+                    "wer": 3.0,
+                    "cer": 1.5,
+                    "sres_total": 10.0,
+                    "ceis_max": 8.0,
+                }
+            ],
+            ensure_ascii=False,
+        ),
+        "risk_signal_json": "{}",
+        "reviewer_verified_transcript": "",
+        "reviewer_semantic_risk_label": "",
+        "reviewer_risk_atoms": "",
+        "reviewer_critical_atoms": "",
+        "reviewer_asr_confusion_terms": "",
+        "reviewer_would_asr_error_change_decision": "",
+        "reviewer_decision_change_reason": "",
+        "reviewer_expected_safe_action": "",
+        "reviewer_annotation_confidence": "",
+        "reviewer_model_assessments_json": json.dumps([model_assessment], ensure_ascii=False),
+        "reviewer_notes": "PRIVATE_NOTE",
+    }
+    if reviewed:
+        row.update(
+            {
+                "reviewer_semantic_risk_label": "priority_review",
+                "reviewer_risk_atoms": "negation",
+                "reviewer_critical_atoms": "negation",
+                "reviewer_asr_confusion_terms": "negation dropped",
+                "reviewer_would_asr_error_change_decision": "yes",
+                "reviewer_decision_change_reason": "routing changed",
+                "reviewer_expected_safe_action": "priority_review",
+                "reviewer_annotation_confidence": "high",
+            }
+        )
+    return row
+
+
+def run_refresh(
+    tmp_path: Path,
+    *,
+    reviewed: bool,
+    model_reviewed: bool,
+    require_complete: bool = False,
+) -> tuple[dict, Path]:
+    sheet = tmp_path / "audit.tsv"
+    output_dir = tmp_path / "aggregate"
+    readiness_dir = tmp_path / "readiness"
+    write_rows(sheet, [base_row(reviewed=reviewed, model_reviewed=model_reviewed)])
+    payload = refresh_human_audit_evidence(
+        audit_sheet=sheet,
+        output_dir=output_dir,
+        readiness_output_dir=readiness_dir,
+        repo_root=tmp_path,
+        expected_rows=1,
+        require_complete=require_complete,
+        skip_readiness=True,
+    )
+    return payload, output_dir
+
+
+def test_refresh_allows_pending_review_without_strict_mode(tmp_path: Path) -> None:
+    payload, output_dir = run_refresh(tmp_path, reviewed=False, model_reviewed=False)
+
+    assert payload["ok"] is True
+    assert payload["status"] == "review_pending"
+    assert payload["pending_rows"] == 1
+    assert payload["pending_model_assessments"] == 1
+    assert (output_dir / "human_audit_validation_summary.json").exists()
+    assert (output_dir / "human_audit_review_summary.json").exists()
+    assert (output_dir / "human_audit_predictor_summary.json").exists()
+    assert "PRIVATE_" not in (output_dir / "human_audit_refresh_summary.json").read_text(
+        encoding="utf-8"
+    )
+
+
+def test_refresh_require_complete_fails_pending_review(tmp_path: Path) -> None:
+    payload, output_dir = run_refresh(
+        tmp_path,
+        reviewed=False,
+        model_reviewed=False,
+        require_complete=True,
+    )
+
+    assert payload["ok"] is False
+    assert payload["status"] == "validation_failed"
+    assert payload["validation_error_counts"]["incomplete_row_review"] == 1
+    assert payload["validation_error_counts"]["incomplete_model_review"] == 1
+    assert (output_dir / "human_audit_validation_summary.json").exists()
+    assert not (output_dir / "human_audit_predictor_summary.json").exists()
+
+
+def test_refresh_complete_review_writes_predictor_aggregate(tmp_path: Path) -> None:
+    payload, output_dir = run_refresh(tmp_path, reviewed=True, model_reviewed=True)
+
+    assert payload["ok"] is True
+    assert payload["status"] == "review_complete"
+    assert payload["reviewed_rows"] == 1
+    assert payload["reviewed_model_assessments"] == 1
+    predictor_payload = json.loads(
+        (output_dir / "human_audit_predictor_summary.json").read_text(encoding="utf-8")
+    )
+    assert predictor_payload["status"] == "review_complete"
+    assert predictor_payload["pending_model_assessments"] == 0

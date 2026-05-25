@@ -1,0 +1,416 @@
+#!/usr/bin/env python3
+"""Refresh aggregate evidence after local human audit review.
+
+The audit sheet is intentionally local-only and may contain transcripts. This
+orchestrator writes only aggregate outputs that are safe to track.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import time
+from pathlib import Path
+from typing import Any
+
+
+SCRIPT_PATH = Path(__file__).resolve()
+ANNOTATION_DIR = SCRIPT_PATH.parent
+REPO_ROOT = SCRIPT_PATH.parents[2]
+SCORING_DIR = REPO_ROOT / "80_semantic_risk_asr" / "scoring"
+for import_path in (ANNOTATION_DIR, SCORING_DIR):
+    if str(import_path) not in sys.path:
+        sys.path.insert(0, str(import_path))
+
+import analyze_human_audit_predictors as predictors  # noqa: E402
+import check_evidence_chain_readiness as readiness  # noqa: E402
+import summarize_human_risk_atom_audit as review_summary  # noqa: E402
+import validate_human_risk_atom_audit as validation  # noqa: E402
+
+
+DEFAULT_AUDIT_RUN_DIR = (
+    REPO_ROOT
+    / "70_experiments"
+    / "runs"
+    / "janus_300_high_stakes_human_audit_selection_2026_05_25"
+)
+DEFAULT_AUDIT_SHEET = DEFAULT_AUDIT_RUN_DIR / "artifacts" / "human_risk_atom_audit_sheet.tsv"
+DEFAULT_READINESS_DIR = (
+    REPO_ROOT
+    / "70_experiments"
+    / "runs"
+    / "postdoc_evidence_chain_2026_05_25"
+)
+REFRESH_SUMMARY_NAME = "human_audit_refresh_summary.json"
+SENSITIVE_TOKENS = (
+    "audio_id",
+    "sample_id",
+    "reference_text",
+    "hypothesis_text",
+    "asr_hypotheses_json",
+    "reviewer_model_assessments_json",
+    "reviewer_notes",
+    "reviewer_verified_transcript",
+    "PRIVATE_",
+)
+
+
+def repo_relative(path: Path, *, repo_root: Path = REPO_ROOT) -> str:
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(repo_root.resolve()))
+    except ValueError:
+        return str(resolved)
+
+
+def assert_refresh_safe(payload: dict[str, Any]) -> None:
+    text = json.dumps(payload, ensure_ascii=False)
+    for token in SENSITIVE_TOKENS:
+        if token in text:
+            raise ValueError(f"sensitive token leaked into refresh summary: {token}")
+
+
+def write_refresh_summary(output_dir: Path, payload: dict[str, Any]) -> Path:
+    assert_refresh_safe(payload)
+    path = output_dir / REFRESH_SUMMARY_NAME
+    validation.write_json(path, payload)
+    return path
+
+
+def run_validation_gate(
+    *,
+    audit_sheet: Path,
+    output_dir: Path,
+    expected_rows: int | None,
+    require_complete: bool,
+) -> tuple[dict[str, Any], list[Path]]:
+    started = time.time()
+    fieldnames, rows = validation.read_tsv(audit_sheet)
+    payload = validation.validate_rows(
+        fieldnames,
+        rows,
+        require_complete=require_complete,
+        expected_rows=expected_rows,
+    )
+    payload["input_boundary"] = "local transcript-bearing audit sheet; do not commit input"
+    payload["output_boundary"] = "aggregate-only validation counts"
+    payload["runtime_seconds"] = round(time.time() - started, 4)
+    validation.assert_aggregate_safe(payload)
+
+    output_json = output_dir / "human_audit_validation_summary.json"
+    counts_tsv = output_dir / "human_audit_validation_counts.tsv"
+    validation.write_json(output_json, payload)
+    validation.write_tsv(
+        counts_tsv,
+        validation.validation_count_rows(payload),
+        ["severity", "check", "count"],
+    )
+    return payload, [output_json, counts_tsv]
+
+
+def run_review_summary_gate(
+    *,
+    audit_sheet: Path,
+    output_dir: Path,
+) -> tuple[dict[str, Any], list[Path]]:
+    started = time.time()
+    rows = review_summary.read_tsv(audit_sheet)
+    completion = review_summary.summarize_completion(rows)
+    stratum_rows = review_summary.summarize_selection(rows)
+    atom_rows = review_summary.summarize_human_atoms(rows)
+    model_rows = review_summary.summarize_model_proxy_coverage(rows)
+
+    payload = {
+        "ok": True,
+        "input_boundary": "local transcript-bearing audit sheet; do not commit input",
+        "output_boundary": "aggregate-only; no audio IDs, sample IDs, transcripts, hypotheses, or reviewer notes",
+        **completion,
+        "label_counts": review_summary.summarize_labels(rows),
+        "wall_time_seconds": round(time.time() - started, 4),
+    }
+    review_summary.assert_aggregate_safe(payload, stratum_rows + atom_rows + model_rows)
+
+    output_json = output_dir / "human_audit_review_summary.json"
+    strata_tsv = output_dir / "human_audit_strata_review.tsv"
+    atoms_tsv = output_dir / "human_audit_risk_atom_review.tsv"
+    model_tsv = output_dir / "human_audit_model_review.tsv"
+    review_summary.write_json(output_json, payload)
+    review_summary.write_tsv(
+        strata_tsv,
+        stratum_rows,
+        [
+            "selection_stratum",
+            "audit_rows",
+            "reviewed_rows",
+            "decision_change_yes_count",
+            "decision_change_uncertain_count",
+            "confidence_low_count",
+        ],
+    )
+    review_summary.write_tsv(
+        atoms_tsv,
+        atom_rows,
+        [
+            "risk_atom_type",
+            "reviewed_row_count",
+            "critical_atom_row_count",
+            "decision_change_yes_count",
+        ],
+    )
+    review_summary.write_tsv(
+        model_tsv,
+        model_rows,
+        [
+            "asr_run_id",
+            "audit_model_samples",
+            "model_assessments",
+            "reviewed_model_samples",
+            "pending_model_samples",
+            "human_decision_change_yes_rows",
+            "human_decision_change_uncertain_rows",
+        ],
+    )
+    return payload, [output_json, strata_tsv, atoms_tsv, model_tsv]
+
+
+def run_predictor_gate(
+    *,
+    audit_sheet: Path,
+    output_dir: Path,
+) -> tuple[dict[str, Any], list[Path]]:
+    started = time.time()
+    audit_rows = predictors.read_tsv(audit_sheet)
+    model_rows, counters = predictors.extract_model_rows(audit_rows)
+    comparison = predictors.predictor_rows(model_rows)
+    model_summary = predictors.model_summary_rows(model_rows)
+
+    status = "review_complete" if counters["pending_model_assessments"] == 0 else "review_pending"
+    if counters["reviewed_model_assessments"] and counters["pending_model_assessments"]:
+        status = "partial_review"
+    if counters["invalid_decision_change_value"]:
+        status = "review_needs_cleanup"
+
+    payload = {
+        "ok": True,
+        "status": status,
+        "input_boundary": "local transcript-bearing audit sheet; do not commit input",
+        "output_boundary": "aggregate-only; no audio IDs, sample IDs, transcripts, hypotheses, or reviewer notes",
+        "audit_rows": len(audit_rows),
+        "model_assessments": counters["model_assessments"],
+        "reviewed_model_assessments": counters["reviewed_model_assessments"],
+        "pending_model_assessments": counters["pending_model_assessments"],
+        "warning_counts": {
+            key: value
+            for key, value in sorted(counters.items())
+            if key
+            not in {
+                "model_assessments",
+                "reviewed_model_assessments",
+                "pending_model_assessments",
+            }
+            and value
+        },
+        "notes": [
+            "Predictor metrics are computed only over reviewed model-level assessments.",
+            "Uncertain decisions are excluded from the yes-only target and included in the yes-or-uncertain target.",
+        ],
+        "wall_time_seconds": round(time.time() - started, 4),
+    }
+    predictors.assert_aggregate_safe(payload, comparison + model_summary)
+
+    output_json = output_dir / "human_audit_predictor_summary.json"
+    comparison_tsv = output_dir / "human_audit_predictor_comparison.tsv"
+    model_tsv = output_dir / "human_audit_predictor_model_summary.tsv"
+    predictors.write_json(output_json, payload)
+    predictors.write_tsv(
+        comparison_tsv,
+        comparison,
+        [
+            "scope",
+            "asr_run_id",
+            "target",
+            "metric",
+            "reviewed_model_samples",
+            "positive_rows",
+            "positive_rate",
+            "auc",
+            "best_threshold",
+            "best_f1",
+            "precision",
+            "recall",
+            "true_positive",
+            "false_positive",
+            "false_negative",
+        ],
+    )
+    predictors.write_tsv(
+        model_tsv,
+        model_summary,
+        [
+            "asr_run_id",
+            "model_assessments",
+            "reviewed_model_assessments",
+            "pending_model_assessments",
+            "human_decision_change_yes_count",
+            "human_decision_change_yes_or_uncertain_count",
+            "human_uncertain_count",
+        ],
+    )
+    return payload, [output_json, comparison_tsv, model_tsv]
+
+
+def run_readiness_gate(
+    *,
+    repo_root: Path,
+    output_dir: Path,
+) -> tuple[dict[str, Any], list[Path]]:
+    started = time.time()
+    payload = readiness.build_readiness(repo_root.resolve())
+    payload["runtime_seconds"] = round(time.time() - started, 4)
+    output_json = output_dir / "evidence_chain_readiness_summary.json"
+    output_tsv = output_dir / "evidence_chain_readiness.tsv"
+    readiness.write_json(output_json, payload)
+    readiness.write_tsv(output_tsv, payload["readiness_rows"])
+    return payload, [output_json, output_tsv]
+
+
+def refresh_human_audit_evidence(
+    *,
+    audit_sheet: Path,
+    output_dir: Path,
+    readiness_output_dir: Path,
+    repo_root: Path = REPO_ROOT,
+    expected_rows: int | None = 30,
+    require_complete: bool = False,
+    skip_readiness: bool = False,
+) -> dict[str, Any]:
+    started = time.time()
+    output_dir.mkdir(parents=True, exist_ok=True)
+    readiness_output_dir.mkdir(parents=True, exist_ok=True)
+    output_paths: list[Path] = []
+
+    validation_payload, validation_outputs = run_validation_gate(
+        audit_sheet=audit_sheet,
+        output_dir=output_dir,
+        expected_rows=expected_rows,
+        require_complete=require_complete,
+    )
+    output_paths.extend(validation_outputs)
+
+    review_payload: dict[str, Any] | None = None
+    predictor_payload: dict[str, Any] | None = None
+    readiness_payload: dict[str, Any] | None = None
+    downstream_refreshed = False
+
+    if validation_payload["ok"]:
+        review_payload, review_outputs = run_review_summary_gate(
+            audit_sheet=audit_sheet,
+            output_dir=output_dir,
+        )
+        output_paths.extend(review_outputs)
+        predictor_payload, predictor_outputs = run_predictor_gate(
+            audit_sheet=audit_sheet,
+            output_dir=output_dir,
+        )
+        output_paths.extend(predictor_outputs)
+        downstream_refreshed = True
+        if not skip_readiness:
+            readiness_payload, readiness_outputs = run_readiness_gate(
+                repo_root=repo_root,
+                output_dir=readiness_output_dir,
+            )
+            output_paths.extend(readiness_outputs)
+
+    strict_complete = (
+        validation_payload["ok"]
+        and validation_payload["status"] == "review_complete"
+        and validation_payload["pending_rows"] == 0
+        and validation_payload["pending_model_assessments"] == 0
+    )
+    ok = bool(validation_payload["ok"]) and (not require_complete or strict_complete)
+    if readiness_payload is not None:
+        ok = ok and bool(readiness_payload.get("ok"))
+
+    payload = {
+        "ok": ok,
+        "status": validation_payload["status"],
+        "require_complete": require_complete,
+        "input_boundary": "local ignored audit sheet only; no private row content is emitted",
+        "output_boundary": "aggregate tracked outputs only",
+        "audit_rows": validation_payload["audit_rows"],
+        "reviewed_rows": validation_payload["reviewed_rows"],
+        "pending_rows": validation_payload["pending_rows"],
+        "model_assessments": validation_payload["model_assessments"],
+        "reviewed_model_assessments": validation_payload["reviewed_model_assessments"],
+        "pending_model_assessments": validation_payload["pending_model_assessments"],
+        "validation_ok": validation_payload["ok"],
+        "validation_error_counts": validation_payload["error_counts"],
+        "validation_warning_counts": validation_payload["warning_counts"],
+        "review_summary_status": review_payload.get("status") if review_payload else "",
+        "predictor_status": predictor_payload.get("status") if predictor_payload else "",
+        "readiness_ok": readiness_payload.get("ok") if readiness_payload else "",
+        "readiness_paper_ready": readiness_payload.get("paper_ready") if readiness_payload else "",
+        "readiness_status_counts": readiness_payload.get("status_counts") if readiness_payload else {},
+        "downstream_outputs_refreshed": downstream_refreshed,
+        "outputs": [repo_relative(path, repo_root=repo_root) for path in output_paths],
+        "runtime_seconds": round(time.time() - started, 4),
+        "next_action": (
+            "Complete all local row-level and model-level human review fields, then rerun with --require-complete."
+            if not strict_complete
+            else "Use refreshed aggregate summaries for paper-table drafting and human-reviewed predictor analysis."
+        ),
+    }
+    summary_path = output_dir / REFRESH_SUMMARY_NAME
+    payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
+    write_refresh_summary(output_dir, payload)
+    return payload
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--audit-sheet", type=Path, default=DEFAULT_AUDIT_SHEET)
+    parser.add_argument("--output-dir", type=Path, default=DEFAULT_AUDIT_RUN_DIR)
+    parser.add_argument("--readiness-output-dir", type=Path, default=DEFAULT_READINESS_DIR)
+    parser.add_argument("--repo-root", type=Path, default=REPO_ROOT)
+    parser.add_argument("--expected-rows", type=int, default=30)
+    parser.add_argument("--require-complete", action="store_true")
+    parser.add_argument(
+        "--skip-readiness",
+        action="store_true",
+        help="Refresh local audit aggregates without rewriting evidence-chain readiness outputs.",
+    )
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    payload = refresh_human_audit_evidence(
+        audit_sheet=args.audit_sheet,
+        output_dir=args.output_dir,
+        readiness_output_dir=args.readiness_output_dir,
+        repo_root=args.repo_root,
+        expected_rows=args.expected_rows,
+        require_complete=args.require_complete,
+        skip_readiness=args.skip_readiness,
+    )
+    print(
+        json.dumps(
+            {
+                "ok": payload["ok"],
+                "status": payload["status"],
+                "reviewed_rows": payload["reviewed_rows"],
+                "pending_rows": payload["pending_rows"],
+                "reviewed_model_assessments": payload["reviewed_model_assessments"],
+                "pending_model_assessments": payload["pending_model_assessments"],
+                "readiness_paper_ready": payload["readiness_paper_ready"],
+                "output_summary": str(args.output_dir / REFRESH_SUMMARY_NAME),
+            },
+            ensure_ascii=False,
+        )
+    )
+    return 0 if payload["ok"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
