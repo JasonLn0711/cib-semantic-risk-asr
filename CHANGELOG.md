@@ -5,6 +5,19 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.81 - 2026-05-25T21:14:14+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `369635d`
+- Branch: `main`
+- Summary: Add selected-300 current review batch status audit.
+- Changed files:
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_current_review_batch_status_rows.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_current_review_batch_status_summary.json`
+  - `80_semantic_risk_asr/annotation/audit_human_review_batch_status.py`
+  - `tests/test_human_audit_batch_status.py`
+
 ## v2.5.80 - 2026-05-25T21:08:19+08:00
 
 - Bump: `patch`
