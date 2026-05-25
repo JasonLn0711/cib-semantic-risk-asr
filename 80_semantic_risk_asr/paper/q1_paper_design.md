@@ -252,6 +252,7 @@ Models:
 | `openai/whisper-small` | smoke baseline |
 | `openai/whisper-large-v2` or LoRA variant | main ASR baseline |
 | `MediaTek-Research/Breeze-ASR-25` | Mandarin/Taiwanese Mandarin domain alternative |
+| `MediaTek-Research/Breeze-ASR-26` | optional Taigi/Taiwanese Hokkien stress test; not the main Mandarin baseline |
 
 Metrics:
 

@@ -8,6 +8,13 @@ paper-facing research layer lives in `../80_semantic_risk_asr/` and uses ASR
 outputs to study counterfactual decision stability under plausible transcript
 alternatives.
 
+The current JANUS pilot language profile is Taiwan-used Traditional Chinese:
+Taiwan Mandarin call-center speech, `zh-TW` evaluation assumptions, and
+Traditional Chinese transcript output. Breeze-ASR-25 is the primary
+Taiwan-facing Breeze baseline. Breeze-ASR-26 is available as an optional
+Taigi/Taiwanese Hokkien stress test and should not replace Breeze-ASR-25 as the
+main Mandarin baseline.
+
 It intentionally does not copy audio. Dataset links point back to the stable
 dataset artifact in `../40_breeze_asr25_finetune_dataset/`, which in turn links
 to the organized extracted audio under `../10_extracted_parts/`.
@@ -94,6 +101,9 @@ to the organized extracted audio under `../10_extracted_parts/`.
 
    - `configs/whisper-small-smoke-test.yaml` for a low-cost pipeline check.
    - `configs/whisper-large-v2-lora-baseline.yaml` for the first serious LoRA baseline.
+   - `configs/janus-15-asr-model-candidates.yaml` for the fixed 15-row
+     Whisper, NeMo, Breeze-ASR-25, and optional Breeze-ASR-26 comparison
+     contract.
 
 9. Run the Whisper small smoke test before any long training:
 

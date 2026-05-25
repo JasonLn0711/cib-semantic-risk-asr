@@ -42,6 +42,9 @@ shows a usable decision-stability signal.
   ASR escalation label.
 - `validate_janus_asr_hypotheses.py` accepts every hypothesis file before the
   metric-input bridge is run.
+- No second required listening review is needed before the 15-row model
+  comparison. Use the local Downloads spot-check guide only after model outputs
+  disagree on decision-critical spans or labels.
 
 ## Execution
 

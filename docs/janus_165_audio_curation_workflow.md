@@ -19,6 +19,12 @@ canonical ASR unit in this repo is not every duplicated wav under
 That overlay points back to source audio under `10_extracted_parts/` without
 copying audio.
 
+The current language assumption for this pilot is Taiwan-used Traditional
+Chinese call-center speech: `zh-TW`, Taiwan Mandarin as the primary speech
+profile, Traditional Chinese as the transcript script, and possible local
+Taiwan code-switching or dialect traces to be handled as error-analysis
+features rather than as a reason to reopen the full dataset.
+
 ## FIRST PRINCIPLE Next Gate
 
 The scarce resource is not another ASR-cleaning pass or a full fine-tune. The
@@ -101,8 +107,11 @@ The script writes:
 
 7. ASR comparison plan: complete as a run plan.
    `asr_comparison_plan.tsv` compares NeMo ASR, Whisper small, Whisper
-   large-v2 LoRA, Breeze-ASR-25, and optional faster-whisper/WhisperX on the
-   same gold subset.
+   large-v2 LoRA, Breeze-ASR-25, optional Breeze-ASR-26, and optional
+   faster-whisper/WhisperX on the same gold subset. Breeze-ASR-25 is the
+   Taiwan Mandarin / Traditional Chinese domain baseline. Breeze-ASR-26 is a
+   Taigi/Taiwanese Hokkien stress-test candidate, not the primary Mandarin
+   baseline.
 
 8. Full 4,967-row run: blocked by the pilot gate.
    Do not expand to the full dataset until NeMo output joins back to `audio_id`
@@ -141,7 +150,10 @@ The script writes:
 11. Verify NeMo output joins back to the gold subset through `audio_id`:
     `python 80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py --hypotheses 40_breeze_asr25_finetune_dataset/manifests/asr_outputs_nemo.jsonl --require-quality-signal`.
 12. Run the same 15-row subset through Whisper small, Whisper large-v2 or LoRA,
-    Breeze-ASR-25, and optional faster-whisper/WhisperX if available.
+    Breeze-ASR-25, optional Breeze-ASR-26, and optional
+    faster-whisper/WhisperX if available. Use
+    `60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml` as
+    the model-scope contract.
 13. Build the local metric-input bridge for SRES, CEIS, and downstream checks:
     `python 80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py --hypotheses <asr_hypotheses.tsv-or-jsonl>`.
 14. Produce WER/CER plus risk-atom error and downstream label-flip checks.
@@ -149,6 +161,27 @@ The script writes:
     subset.
 16. Expand to 300-500 high-stakes segments only after the 15-row gate shows a
     usable decision-stability signal.
+
+## Manual Review After Model Comparison
+
+No second required listening review is needed before the first 15-row model
+comparison. The already completed gold review is the reference. A bounded
+human spot check is useful only after model outputs exist and one of these
+conditions appears:
+
+- a model output reverses a critical span such as payment completed vs not
+  completed, amount, actor, time, or account/action direction;
+- Breeze, Whisper, and NeMo outputs disagree on the downstream escalation
+  label;
+- Breeze-ASR-26 behaves differently because the row contains possible
+  Taigi/Hokkien speech;
+- a long pause or truncation appears to create hallucination or dropped speech.
+
+The local optional spot-check packet lives with the existing copied audio in:
+
+```text
+/home/jnln3799/Downloads/janus_15_human_review_packet_2026-05-25/
+```
 
 ## NeMo Reference Points
 

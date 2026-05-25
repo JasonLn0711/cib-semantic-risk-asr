@@ -5,6 +5,16 @@
 Fine-tuning and evaluating Whisper-family ASR models on JANUS 165 call-center
 audio/transcript pairs.
 
+## Language Profile
+
+- Speech locale: Taiwan-used Traditional Chinese call-center speech (`zh-TW`).
+- Primary spoken variety: Taiwan Mandarin.
+- Transcript script: Traditional Chinese.
+- Evaluation note: local code-switching or Taigi/Taiwanese Hokkien traces
+  should be recorded during error analysis, but they do not by themselves
+  require reopening the full 4,967-row dataset before the 15-row pilot
+  comparison.
+
 ## Physical Storage
 
 This dataset view is an overlay:

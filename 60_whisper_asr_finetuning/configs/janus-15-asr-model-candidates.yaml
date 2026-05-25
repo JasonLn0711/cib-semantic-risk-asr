@@ -1,0 +1,73 @@
+gate:
+  id: janus_15_asr_model_comparison
+  scope: reviewed 15-row JANUS pilot subset only
+  locale: zh-TW
+  speech_language_profile: Taiwan Traditional Chinese call-center Mandarin
+  transcript_script: Traditional Chinese
+  input_manifest: 40_breeze_asr25_finetune_dataset/manifests/nemo_pilot_input_manifest.jsonl
+  gold_review: 40_breeze_asr25_finetune_dataset/reports/gold_subset_review.tsv
+  output_contract:
+    required_columns:
+      - audio_id
+      - hypothesis_text
+    quality_columns:
+      - wer
+      - cer
+    decision_columns:
+      - asr_label
+      - would_asr_error_change_decision
+  human_review:
+    additional_required_before_15_row_model_comparison: false
+    reason: >
+      The fixed 15-row gold review and 6-row long-silence review already provide
+      the human reference needed for the first model comparison. Additional
+      manual review is only a bounded spot check when model outputs disagree on
+      decision-critical spans.
+    optional_spot_check_packet: /home/jnln3799/Downloads/janus_15_human_review_packet_2026-05-25/janus_15_model_output_spot_check_guide_2026-05-25.md
+
+candidate_models:
+  - run_id: nemo_curator_zh_citrinet_cpu_pilot
+    model_name_or_path: nvidia/stt_zh_citrinet_1024_gamma_0_25
+    family: NeMo ASR
+    role: curation output-contract and joinability check
+    current_status: pilot_contract_passed_cpu
+    direct_quality_baseline: false
+    notes: Existing pilot quality was too weak for Taiwan 165 calls; keep it as
+      a pipeline check unless a better NeMo Mandarin or Taiwan-facing model is
+      selected later.
+
+  - run_id: whisper_small_15_row_baseline
+    model_name_or_path: openai/whisper-small
+    family: Whisper
+    role: low-cost full 15-row baseline after the 1-row smoke pass
+    current_status: one_row_cpu_smoke_passed
+    direct_quality_baseline: true
+    notes: Use this before large models to verify the complete 15-row
+      hypothesis, metric, and label bridge.
+
+  - run_id: whisper_large_v2_15_row_baseline
+    model_name_or_path: openai/whisper-large-v2
+    family: Whisper
+    role: main Whisper-family 15-row baseline before LoRA training
+    current_status: planned
+    direct_quality_baseline: true
+    notes: Run inference on the reviewed subset before any long LoRA training.
+
+  - run_id: breeze_asr25_15_row_baseline
+    model_name_or_path: MediaTek-Research/Breeze-ASR-25
+    family: Breeze ASR
+    role: Taiwan Mandarin and Traditional Chinese domain baseline
+    current_status: verified_model_id_planned
+    direct_quality_baseline: true
+    notes: Primary Breeze candidate for this corpus because the model card
+      targets Traditional Chinese and Taiwanese Mandarin/code-switching.
+
+  - run_id: breeze_asr26_15_row_stress_test
+    model_name_or_path: MediaTek-Research/Breeze-ASR-26
+    family: Breeze ASR
+    role: optional Taigi/Taiwanese Hokkien stress test
+    current_status: verified_model_id_optional
+    direct_quality_baseline: false
+    notes: Breeze-ASR-26 is Taigi/Hokkien-oriented and outputs Chinese
+      characters. Use it to test possible Taigi/Hokkien speech or dialect
+      robustness, not as the primary Taiwan Mandarin baseline.

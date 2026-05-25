@@ -99,7 +99,10 @@ Current local evidence: the reviewed 15-row gate is complete, and a NeMo Curator
 CPU pilot has produced a 15-row `audio_id`-joinable hypothesis file with WER/CER
 fields. Its high CER confirms that this pass is only a pipeline/output-contract
 check. Whisper small has passed a 1-row CPU smoke test; the next evidence step
-is full 15-row ASR comparison on the same fixed subset.
+is full 15-row ASR comparison on the same fixed subset. Breeze-ASR-25 should be
+treated as the primary Taiwan Mandarin / Traditional Chinese Breeze baseline;
+Breeze-ASR-26 can be added as an optional Taigi/Taiwanese Hokkien stress test,
+not as a direct replacement for the Mandarin baseline.
 
 Only after that pilot shows a usable decision-stability signal should the study
 expand to `300-500` high-stakes segments selected for risk-term coverage, split

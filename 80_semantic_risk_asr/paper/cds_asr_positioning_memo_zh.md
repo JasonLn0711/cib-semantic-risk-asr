@@ -178,7 +178,8 @@ High CEIS span
 
 ### Experiment 1: ASR Baseline
 
-比較 Whisper-small、Whisper-large-v2 / LoRA、Breeze-ASR-25。
+比較 Whisper-small、Whisper-large-v2 / LoRA、Breeze-ASR-25。Breeze-ASR-26
+只作為台語/閩南語 robustness stress test，不當作主要台灣華語 baseline。
 
 指標：
 

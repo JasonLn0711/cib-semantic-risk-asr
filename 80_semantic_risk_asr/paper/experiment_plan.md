@@ -44,6 +44,8 @@ Models:
 - `openai/whisper-small`
 - `openai/whisper-large-v2`
 - `MediaTek-Research/Breeze-ASR-25`
+- optional `MediaTek-Research/Breeze-ASR-26` as a Taigi/Taiwanese Hokkien
+  stress test, not as the primary Taiwan Mandarin baseline
 
 Metrics:
 

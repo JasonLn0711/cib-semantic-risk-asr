@@ -646,7 +646,7 @@ def write_asr_comparison_plan(path: Path) -> None:
             "role": "low-cost smoke baseline",
             "input_manifest": "gold_subset_review.tsv",
             "output_path": "70_experiments/runs/whisper_small_smoke_test/",
-            "primary_checks": "Taiwan Mandarin; fraud terms; timestamps if available; semantic-risk impact",
+            "primary_checks": "zh-TW Traditional Chinese; fraud terms; timestamps if available; semantic-risk impact",
             "notes": "Existing run folder is present; refresh only after gold subset review.",
         },
         {
@@ -659,11 +659,19 @@ def write_asr_comparison_plan(path: Path) -> None:
         },
         {
             "system": "MediaTek-Research/Breeze-ASR-25",
-            "role": "Mandarin/Taiwan-facing ASR candidate",
+            "role": "Taiwan Mandarin and Traditional Chinese domain baseline",
             "input_manifest": "gold_subset_review.tsv",
             "output_path": "70_experiments/runs/breeze_asr25_baseline/",
-            "primary_checks": "Mandarin call-center fit; fraud-domain vocabulary; compute cost",
+            "primary_checks": "Taiwan Mandarin call-center fit; Traditional Chinese output; fraud-domain vocabulary; compute cost",
             "notes": "Add run folder before long evaluation.",
+        },
+        {
+            "system": "MediaTek-Research/Breeze-ASR-26",
+            "role": "optional Taigi/Taiwanese Hokkien stress test",
+            "input_manifest": "gold_subset_review.tsv",
+            "output_path": "70_experiments/runs/breeze_asr26_stress_test/",
+            "primary_checks": "Taigi/Hokkien speech sensitivity; Chinese-character output; do not rank as primary Mandarin baseline",
+            "notes": "Use only as a dialect robustness probe unless the selected audio contains Taigi/Hokkien speech.",
         },
         {
             "system": "faster-whisper / WhisperX",
