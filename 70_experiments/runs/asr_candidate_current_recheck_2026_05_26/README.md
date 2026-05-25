@@ -84,6 +84,31 @@ no reference mismatches. The aggregate recheck command finished in `0.36s`;
 the field-contract validator finished in `0.02s`. The Gemma runtime class probe
 finished in `1.30s`.
 
+## 2026-05-26 03:43 CST Follow-Up
+
+The same bounded decision gate was rerun after the user again asked whether to
+test the remaining ASR and multimodal Gemma 4 models now.
+
+Additional live checks:
+
+- Hugging Face metadata still reports all seven requested model pages as public
+  and ungated. Current SHA prefixes are `06f233fe06e7`, `41f01f3fe87f`,
+  `716d31dbfd64`, `5eb144179a02`, `7278e1e70fe2`, `ed37665cc131`, and
+  `5bf6a20911f0`.
+- The four existing 15-row hypothesis files still pass the fixed field-contract
+  validator in `0.02s`.
+- The aggregate locale/metric summary rebuild finishes in `0.38s` and still
+  shows the same locale blockers.
+- Qwen3-ASR-1.7B still times out before inference after `60.07s` at fetch/load
+  with exit status `124`.
+- Local `transformers 4.57.6` still lacks `AutoModelForMultimodalLM` and
+  `Gemma4ForConditionalGeneration`; a config probe also fails because this
+  runtime does not recognize `model_type=gemma4`.
+
+This follow-up used `/tmp` output paths for transient validation artifacts.
+Tracked conclusions remain aggregate-only; raw predictions, runtime logs, and
+model caches remain ignored/local.
+
 ## Decision
 
 Do not run these candidates on the 258-row test split or selected-300 main

@@ -208,6 +208,19 @@ not run 258-row or selected-300 experiments for these candidates until either
 the Taiwan Traditional Chinese output policy is solved or the Gemma 4 audio
 runtime is isolated and can emit the same logged hypothesis contract.
 
+2026-05-26 03:43 CST follow-up: the same bounded gate was rerun after the user
+again asked whether to test the remaining ASR and multimodal Gemma 4 models.
+Hugging Face metadata still reports the seven requested model pages as public
+and ungated; the four existing 15-row hypothesis files still pass the fixed
+field contract in `0.02s`, and the aggregate locale/metric summary rebuild
+finishes in `0.38s`. Qwen3-ASR-1.7B still times out before inference after
+`60.07s` at fetch/load. Local `transformers 4.57.6` still exposes neither
+`AutoModelForMultimodalLM` nor `Gemma4ForConditionalGeneration`, and an
+`AutoConfig.from_pretrained(..., trust_remote_code=True)` probe fails because
+the checkpoint declares `model_type=gemma4`, which this runtime does not
+recognize. The decision therefore remains: no 258-row or selected-300 promotion
+for these candidates until the zh-TW locale or Gemma runtime gate changes.
+
 ## Required Extra Metrics
 
 Record these for every future model, including failed runs:

@@ -98,7 +98,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   Qwen3-ASR-0.6B against the fixed 15-row contract, reran a 60-second
   Qwen3-ASR-1.7B load gate, and repeated the Gemma 4 class probe. Decision:
   no remaining requested candidate should move to full-split runtime before
-  locale/runtime policy changes.
+  locale/runtime policy changes. A follow-up live check at 2026-05-26 03:43
+  CST confirmed the same decision: public model metadata is still available,
+  the four 15-row candidates still validate, Qwen3-ASR-1.7B still times out at
+  fetch/load, and Gemma 4 still needs an isolated runtime because local
+  Transformers does not recognize `model_type=gemma4`.
 - The postdoc-level roadmap after the 258-row gate is recorded in
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
   complete comparable 258-row baselines, add split-aware metric inputs, run the
@@ -127,10 +131,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   elapsed-time evidence.
   The aggregate consistency audit
   `80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py` now checks
-  these summaries together. Current status is `ok=true` with `11/11` checks
-  passing: transcript ground truth is not reopened, remaining review scope
-  includes row/model/timing fields, proxy evidence is not promoted to paper
-  claims, and expanded ASR/Gemma candidates remain behind locale/runtime gates.
+  these summaries together, including reviewer handoff freshness and timing
+  awareness. Current status is `ok=true` with `12/12` checks passing:
+  transcript ground truth is not reopened, remaining review scope includes
+  row/model/timing fields, proxy evidence is not promoted to paper claims, and
+  expanded ASR/Gemma candidates remain behind locale/runtime gates.
   The normal `refresh_human_audit_evidence.py` path now also refreshes this
   consistency status and records `consistency_audit_ok=true` in
   `human_audit_refresh_summary.json`.

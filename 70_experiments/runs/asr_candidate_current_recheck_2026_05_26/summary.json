@@ -5,6 +5,18 @@
   "strict_locale_policy": "Taiwan Traditional Chinese; no Simplified Chinese output accepted for promotion",
   "contract_validation_seconds": 0.02,
   "aggregate_summary_seconds": 0.36,
+  "latest_follow_up": {
+    "checked_at": "2026-05-26 03:43 CST",
+    "model_metadata_status": "all seven requested model pages public and ungated",
+    "contract_validation_seconds": 0.02,
+    "aggregate_summary_seconds": 0.38,
+    "qwen3_asr_1_7b_timeout_seconds": 60.07,
+    "qwen3_asr_1_7b_exit_status": 124,
+    "gemma4_class_probe_seconds": 1.31,
+    "gemma4_config_probe_seconds": 1.78,
+    "gemma4_runtime_status": "blocked: local transformers 4.57.6 does not recognize model_type=gemma4 and exposes no multimodal class",
+    "decision": "No 258-row or selected-300 promotion until strict zh-TW locale policy or isolated Gemma multimodal runtime changes."
+  },
   "promotion_decision": "No requested ASR/Gemma candidate should be promoted to 258-row or selected-300 runtime until the strict Taiwan Traditional Chinese locale policy is clean or the Gemma 4 multimodal runtime is isolated.",
   "hypothesis_files": [
     "70_experiments/runs/whisper_large_v3_15_row_baseline/predictions/whisper_large_v3_15_row_baseline_predictions.jsonl",
