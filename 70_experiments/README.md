@@ -2,8 +2,9 @@
 
 Use this folder for Whisper ASR experiment records and reproducibility notes.
 
-For paper-facing work, record not only CER/WER but also semantic-risk and
-downstream escalation outcomes defined in `../80_semantic_risk_asr/`.
+For paper-facing work, record not only ASR surface metrics but also
+semantic-risk and downstream escalation outcomes defined in
+`../80_semantic_risk_asr/`.
 
 ## Required Flow
 
@@ -41,10 +42,10 @@ made.
 
 Every completed ASR run should report:
 
-- validation CER
-- validation WER
-- test CER
-- test WER
+- validation CER, with normalization and macro/micro scope stated
+- validation WER, with tokenizer, normalization, and macro/micro scope stated
+- test CER, with normalization and macro/micro scope stated
+- test WER, with tokenizer, normalization, and macro/micro scope stated
 - model name or checkpoint
 - dataset version
 - config path
@@ -64,6 +65,11 @@ For semantic-risk ASR experiments, also report:
 - automatic recovery budget;
 - machine abstention rate;
 - conservative escalation cost.
+
+The 2026-05-25 WER audit defines the repo policy:
+`cer_zh_normalized` corpus-level micro rate is the primary paper-facing ASR
+surface metric; `wer_zh_jieba` is supplemental; raw whitespace WER is legacy
+audit-only for unsegmented Chinese transcripts.
 
 ## JANUS 15-Row Decision-Stability Pilot
 

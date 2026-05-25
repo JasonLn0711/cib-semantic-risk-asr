@@ -42,22 +42,26 @@ ignored local paths.
 | 4.5 | Added expanded ASR candidate matrix and locale contract. | `60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml`; `docs/asr_candidate_expansion_2026_05_25.md`. | Added Whisper large-v3, Whisper large-v3 turbo, FunASR SenseVoice, Qwen3-ASR 0.6B/1.7B, and Gemma 4 E2B/E4B audio candidates. All new candidates are planned behind smoke, 15-row contract, runtime logging, and Taiwan Traditional Chinese locale gates. |
 | 4.6 | Wrote the postdoc-level next-step roadmap after the 258-row gate. | `docs/postdoc_next_steps_2026_05_25.md`. | Completed. The roadmap defines the next ordered gates: comparable 258-row baselines, new runner smoke/15-row contracts, split-aware metric input builder, human risk-atom audit, 300-row high-stakes main experiment, recovery experiment, and paper packaging. |
 | 5.1 | Added split-aware metric input builder. | `80_semantic_risk_asr/scoring/build_janus_metric_inputs.py`; `70_experiments/runs/janus_split_aware_metric_inputs_2026_05_25/README.md`. | Completed. Human-reviewed 15-row validation reproduced `260` SRES rows, `260` CEIS rows, `75` downstream rows, SRES total `8106.0`, CEIS mean `1.92`, downstream mismatch `0.3467`, and high-risk missed `4`. Proxy 258-row validation loaded `258/258` references and `516` hypotheses, producing `1057` SRES/CEIS rows and `516` downstream rows. |
+| 5.2 | Audited WER calculation for publication readiness. | `asr_text_metrics.py`; `audit_asr_text_metrics.py`; `wer_metric_audit_2026_05_25/text_metric_audit.tsv`. | Completed. Found two incompatible WER definitions: current inference used raw whitespace WER, while legacy training used normalized `jieba` WER. Future runners now default to `zh_asr` normalization plus `jieba` WER, preserve legacy raw whitespace WER as an audit field, and keep Traditional Chinese without simplified conversion. |
 
 ## Next Operations
 
-1. Complete comparable 258-row baselines for the already-gated ASR models:
+1. Treat pre-audit `wer` values as legacy compatibility fields. For paper-facing
+   tables, use `cer_zh_normalized` corpus-level micro rate as the primary ASR
+   surface metric and `wer_zh_jieba` only as a supplemental metric.
+2. Complete comparable 258-row baselines for the already-gated ASR models:
    Whisper small, Whisper large-v2, Breeze-ASR-25 base, optional Breeze-ASR-26,
    legacy LoRA, and legacy partial encoder.
-2. Run Whisper large-v3 and Whisper large-v3 turbo through smoke, 15-row
+3. Run Whisper large-v3 and Whisper large-v3 turbo through smoke, 15-row
    contract, locale gate, and then 258-row if they pass.
-3. Build smoke/15-row runners for FunASR SenseVoice and Qwen3-ASR, with strict
+4. Build smoke/15-row runners for FunASR SenseVoice and Qwen3-ASR, with strict
    Taiwan Traditional Chinese locale gates.
-4. Build a separate multimodal prompted-ASR runner for Gemma 4 E2B/E4B only
+5. Build a separate multimodal prompted-ASR runner for Gemma 4 E2B/E4B only
    after the prompt, audio-length, hallucination, runtime, and locale logging
    contract is explicit.
-5. Use `build_janus_metric_inputs.py` to regenerate metric inputs for the
+6. Use `build_janus_metric_inputs.py` to regenerate metric inputs for the
    expanded 258-row baseline set.
-6. Create a small human-reviewed risk-atom audit set so proxy metrics do not
+7. Create a small human-reviewed risk-atom audit set so proxy metrics do not
    become overstated as formal CDS evidence.
-7. Run the selected 300-row high-stakes experiment only after the expanded
+8. Run the selected 300-row high-stakes experiment only after the expanded
    258-row baseline set and audit boundary are clear.

@@ -1,0 +1,2 @@
+step,epoch,split,loss,cer,wer,learning_rate,wall_time_seconds,checkpoint,notes
+0,0,test_258,,33.11,299.89,,164.41,MediaTek-Research/Breeze-ASR-25,pilot_inference;runtime=cuda;max_samples=258;label_mode=heuristic;disable_cudnn=True;torch_dtype=float16;wer=legacy_raw_whitespace_pre_audit

@@ -76,6 +76,7 @@ Aggregate comparison:
   --manifest 40_breeze_asr25_finetune_dataset/manifests/test.jsonl \
   --hypotheses 70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_test_split/predictions/breeze_asr25_partial_encoder_legacy_best_test_split_predictions.jsonl \
   --hypotheses 70_experiments/runs/breeze_asr25_lora_legacy_best_test_split/predictions/breeze_asr25_lora_legacy_best_test_split_predictions.jsonl \
+  --hypotheses 70_experiments/runs/breeze_asr25_base_test_split/predictions/breeze_asr25_base_test_split_predictions.jsonl \
   --output-tsv 70_experiments/runs/janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv \
   --summary-json 70_experiments/runs/janus_258_test_split_asr_cds_proxy/summary.json
 ```
@@ -86,6 +87,7 @@ Aggregate comparison:
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `breeze_asr25_partial_encoder_legacy_best_test_split` | 258 | 18.24 | 100.0 | 213.79 | 0.829 | 1.207 | 7 | 4 | 0.0431 | 0.0155 | 0.3264 | 0.0614 | 0 |
 | `breeze_asr25_lora_legacy_best_test_split` | 258 | 22.86 | 100.0 | 403.37 | 1.563 | 0.640 | 10 | 7 | 0.0613 | 0.0310 | 0.3992 | 0.0982 | 0 |
+| `breeze_asr25_base_test_split` | 258 | 33.11 | 299.89 | 164.41 | 0.637 | 1.569 | 34 | 30 | 0.1145 | 0.0271 | 0.6694 | 0.1504 | 0 |
 
 Validation:
 
@@ -93,6 +95,9 @@ Validation:
   no missing hypothesis text, no missing labels, no missing quality signals.
 - LoRA: `ok=true`, `258/258` expected IDs observed, no duplicate IDs, no
   missing hypothesis text, no missing labels, no missing quality signals.
+- Breeze-ASR-25 base: `ok=true`, `258/258` expected IDs observed, no duplicate
+  IDs, no missing hypothesis text, no missing labels, no missing quality
+  signals.
 
 ## Interpretation
 
@@ -105,11 +110,13 @@ The 258-row test split strengthens the 15-row conclusion:
 - LoRA does not justify replacing partial encoder as the next ASR hypothesis
   generator. It remains useful as contrast evidence that fine-tuning type and
   lower CER are not enough; downstream risk behavior still matters.
-- WER is `100.0` for both runs because the current WER implementation is
-  whitespace-token based and is not informative for unsegmented Chinese
-  transcripts. Keep WER as a compatibility field, but do not use it for model
-  selection on this corpus.
-- Locale gate passed for both candidates in this aggregate check:
+- Breeze-ASR-25 base is faster than both fine-tuned variants in this local run,
+  but much weaker on surface quality and proxy safety counts.
+- The WER values in this table are legacy raw whitespace-token fields. The
+  2026-05-25 WER audit shows they are not publication-grade primary metrics for
+  unsegmented Chinese. Use `wer_metric_audit_2026_05_25/text_metric_audit.tsv`
+  for segmented WER and corpus-level micro rates.
+- Locale gate passed for all three candidates in this aggregate check:
   `simplified_char_count=0`, `locale_violation_rows=0`.
 
 ## Next Decision

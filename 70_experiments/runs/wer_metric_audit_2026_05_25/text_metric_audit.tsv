@@ -1,0 +1,13 @@
+run_id	rows	metric	unit	normalization	wer_tokenizer	macro_percent	micro_percent	edit_count	reference_unit_count	stored_cer_mean	stored_wer_mean	missing_reference_rows	missing_hypothesis_rows	notes
+breeze_asr25_partial_encoder_legacy_best_test_split	258	cer_raw_char	char	none	whitespace	18.24	17.6	4521	25689	18.24	100.0	0	0	Raw character edit rate; preserves punctuation, spaces, and case.
+breeze_asr25_partial_encoder_legacy_best_test_split	258	wer_raw_whitespace	word	none	whitespace	100.0	100.0	365	365	18.24	100.0	0	0	Legacy whitespace-token WER; invalid as a primary Chinese ASR metric.
+breeze_asr25_partial_encoder_legacy_best_test_split	258	cer_zh_normalized	char	zh_asr	jieba	15.44	15.04	3400	22601	18.24	100.0	0	0	Chinese ASR normalized CER; no traditional/simplified conversion.
+breeze_asr25_partial_encoder_legacy_best_test_split	258	wer_zh_jieba	word	zh_asr	jieba	22.15	21.53	2984	13860	18.24	100.0	0	0	Supplemental Chinese word-level metric using deterministic jieba segmentation.
+breeze_asr25_lora_legacy_best_test_split	258	cer_raw_char	char	none	whitespace	22.86	21.76	5590	25689	22.86	100.0	0	0	Raw character edit rate; preserves punctuation, spaces, and case.
+breeze_asr25_lora_legacy_best_test_split	258	wer_raw_whitespace	word	none	whitespace	100.0	100.0	365	365	22.86	100.0	0	0	Legacy whitespace-token WER; invalid as a primary Chinese ASR metric.
+breeze_asr25_lora_legacy_best_test_split	258	cer_zh_normalized	char	zh_asr	jieba	18.91	18.23	4120	22601	22.86	100.0	0	0	Chinese ASR normalized CER; no traditional/simplified conversion.
+breeze_asr25_lora_legacy_best_test_split	258	wer_zh_jieba	word	zh_asr	jieba	26.61	25.59	3547	13860	22.86	100.0	0	0	Supplemental Chinese word-level metric using deterministic jieba segmentation.
+breeze_asr25_base_test_split	258	cer_raw_char	char	none	whitespace	33.11	33.08	8498	25689	33.11	299.89	0	0	Raw character edit rate; preserves punctuation, spaces, and case.
+breeze_asr25_base_test_split	258	wer_raw_whitespace	word	none	whitespace	299.89	242.47	885	365	33.11	299.89	0	0	Legacy whitespace-token WER; invalid as a primary Chinese ASR metric.
+breeze_asr25_base_test_split	258	cer_zh_normalized	char	zh_asr	jieba	22.83	22.72	5136	22601	33.11	299.89	0	0	Chinese ASR normalized CER; no traditional/simplified conversion.
+breeze_asr25_base_test_split	258	wer_zh_jieba	word	zh_asr	jieba	30.72	30.39	4212	13860	33.11	299.89	0	0	Supplemental Chinese word-level metric using deterministic jieba segmentation.

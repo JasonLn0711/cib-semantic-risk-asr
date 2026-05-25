@@ -15,6 +15,12 @@ Taiwan-facing Breeze baseline. Breeze-ASR-26 is available as an optional
 Taigi/Taiwanese Hokkien stress test and should not replace Breeze-ASR-25 as the
 main Mandarin baseline.
 
+ASR text metrics must declare their text unit. Future runners default to
+`metric_normalization=zh_asr` and `wer_tokenizer=jieba`, preserving Traditional
+Chinese without any Traditional/Simplified conversion. Raw whitespace WER is
+available only for legacy audits and should not be used as the primary metric
+for unsegmented Chinese transcripts.
+
 It intentionally does not copy audio. Dataset links point back to the stable
 dataset artifact in `../40_breeze_asr25_finetune_dataset/`, which in turn links
 to the organized extracted audio under `../10_extracted_parts/`.

@@ -45,12 +45,16 @@ Status: active roadmap after the 258-row partial-vs-LoRA gate
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Legacy partial encoder | `18.24` | `213.79s` | `0.829` | `7` | `4` | `0.0431` | `0` |
 | Legacy LoRA | `22.86` | `403.37s` | `1.563` | `10` | `7` | `0.0613` | `0` |
+| Breeze-ASR-25 base | `33.11` | `164.41s` | `0.637` | `34` | `30` | `0.1145` | `0` |
 
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS
   evidence。
-- WER 對未斷詞中文 transcript 幾乎不可用，只能保留為相容欄位。
+- 2026-05-25 WER audit 確認：舊推論欄位是 raw whitespace WER，
+  公式形式正確但不適合作為未斷詞中文主指標；投稿主表應用
+  `cer_zh_normalized` corpus-level micro rate，`wer_zh_jieba` 只能作為
+  補充指標。
 - 新模型候選已加入矩陣，但尚未有 runner、smoke、15-row contract、或
   258-row evidence。
 - 300 high-stakes rows 已選出，但尚未變成 main experiment。
@@ -126,7 +130,8 @@ Status: active roadmap after the 258-row partial-vs-LoRA gate
 - model load time，如果 runner 能拆出來；
 - peak GPU memory，如果能取到；
 - CER；
-- WER；
+- WER：必須標明 tokenizer / normalization / macro or micro；舊 raw
+  whitespace WER 只能作為 legacy audit field；
 - unsafe downrouting count；
 - high-risk missed count；
 - over-escalation count；
@@ -465,7 +470,8 @@ Ensemble arbitration 可以先用：
 
 - private high-stakes call data cannot be released raw；
 - proxy 258-row metrics are not identical to human-reviewed risk-atom evidence；
-- Chinese WER is weak without segmentation；
+- Chinese WER is weak without a declared segmentation policy and should not be
+  the primary surface metric；
 - model outputs depend on prompt/runtime/backend settings；
 - conservative escalation can increase review burden。
 

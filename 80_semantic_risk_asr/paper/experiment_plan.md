@@ -109,8 +109,9 @@ Establish ordinary ASR performance on `janus_165_v1`, then show that ordinary
 metrics do not explain which models are stable on risk atoms.
 
 Current 15-row signal: the legacy partial encoder is the strongest transcript
-candidate on CER/WER (`12.77` CER, `83.33` WER) and matches base Breeze-ASR-25
-on mean CEIS, unstable-sample count, downstream mismatch, and high-risk misses.
+candidate on legacy stored CER/WER (`12.77` CER, `83.33` WER) and matches base
+Breeze-ASR-25 on mean CEIS, unstable-sample count, downstream mismatch, and
+high-risk misses.
 The legacy LoRA improves CER over base Breeze-ASR-25 (`30.99` vs `36.13`) but
 is worse on CEIS and downstream safety counts. Treat this as early evidence
 that lower CER alone is not sufficient for the paper claim.
@@ -124,9 +125,10 @@ risk-atom proxy error rate `0.0613`, and locale violations `0`.
 
 Decision: promote the legacy partial encoder as the current ASR hypothesis
 generator for the next split-aware CDS metric builder. Keep LoRA as contrast
-evidence, not the next primary hypothesis generator. WER is currently retained
-as a compatibility field only because whitespace-token WER is not informative
-for unsegmented Chinese transcripts.
+evidence, not the next primary hypothesis generator. Treat pre-audit `wer`
+values as legacy raw whitespace fields. Paper-facing ASR tables should use
+`cer_zh_normalized` corpus-level micro rate as the primary surface metric and
+`wer_zh_jieba` only as a supplemental segmented word metric.
 
 Current execution priority after the 258-row gate:
 
@@ -183,8 +185,8 @@ downstream label changed = yes/no
 
 Comparisons:
 
-- WER thresholding;
-- CER thresholding;
+- WER thresholding with declared tokenizer/normalization only;
+- CER thresholding, preferably `cer_zh_normalized` corpus-level micro rate;
 - semantic distance or ASD if implemented;
 - ASR confidence;
 - SRES;
