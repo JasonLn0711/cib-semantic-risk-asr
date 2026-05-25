@@ -5,6 +5,22 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.25 - 2026-05-25T10:23:18+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `667b995`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/janus_15_decision_stability_pilot/README.md`
+  - `80_semantic_risk_asr/downstream/evaluate_downstream_impact.py`
+  - `80_semantic_risk_asr/paper/experiment_plan.md`
+  - `80_semantic_risk_asr/paper/q1_paper_design.md`
+  - `80_semantic_risk_asr/paper/story_outline.md`
+  - `80_semantic_risk_asr/scoring/counterfactual_escalation_instability.py`
+  - `80_semantic_risk_asr/scoring/semantic_risk_score.py`
+
 ## v2.5.24 - 2026-05-25T10:23:09+08:00
 
 - Bump: `patch`

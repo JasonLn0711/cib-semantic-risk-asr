@@ -15,6 +15,7 @@ HIGH_RISK = {"priority_review", "critical_escalation"}
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("decisions_tsv", type=Path)
+    parser.add_argument("--output-json", type=Path)
     args = parser.parse_args()
 
     with args.decisions_tsv.open(newline="", encoding="utf-8") as handle:
@@ -50,7 +51,12 @@ def main() -> int:
         "high_risk_missed_after_recovery": high_risk_missed_after_recovery,
         "recovery_trigger_rate": round(recovery_triggered / total, 4) if total else 0.0,
     }
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+    text = json.dumps(result, ensure_ascii=False, indent=2)
+    if args.output_json:
+        args.output_json.parent.mkdir(parents=True, exist_ok=True)
+        args.output_json.write_text(text + "\n", encoding="utf-8")
+    else:
+        print(text)
     return 0
 
 

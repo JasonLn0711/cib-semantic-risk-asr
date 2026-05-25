@@ -31,6 +31,8 @@ shows a usable decision-stability signal.
 - NeMo Curator pilot hypotheses:
   `40_breeze_asr25_finetune_dataset/manifests/asr_outputs_nemo.jsonl`
 - Other ASR hypotheses: local TSV/CSV/JSONL files passed with `--hypotheses`
+- First Whisper-family 15-row run:
+  `70_experiments/runs/whisper_small_15_row_baseline/predictions/whisper_small_15_row_baseline_predictions.jsonl`
 - Previous run: none
 
 ## Gate Prerequisites
@@ -73,9 +75,9 @@ python 80_semantic_risk_asr/downstream/evaluate_downstream_impact.py \
 
 | Metric Family | Status | Notes |
 | --- | --- | --- |
-| SRES | pending | Requires reviewed gold rows and ASR hypotheses. |
-| CEIS | pending | Requires counterfactual rows from the metric-input bridge. |
-| Downstream escalation impact | pending | Requires ASR and recovered labels. |
+| SRES | first-pass complete | Whisper-small 15-row pass produced 52 rows, total SRES `1630.0`, mean SRES `31.346`. |
+| CEIS | first-pass complete | Whisper-small 15-row pass produced 52 variant rows across 15 samples; 7 samples were unstable, max CEIS `8.0`, mean CEIS `2.4667`. |
+| Downstream escalation impact | first-pass complete | 15 rows; ASR mismatch rate `0.4667`; high-risk missed by ASR `1`; recovery not yet applied. |
 
 ## Observations
 
@@ -86,6 +88,10 @@ python 80_semantic_risk_asr/downstream/evaluate_downstream_impact.py \
   baseline for these Taiwanese 165 calls: aggregate WER was `100.0`; CER ranged
   from `74.32` to `89.81` with mean `83.66`. Treat it as an output-contract
   check before the Whisper/Breeze smoke comparisons.
+- 2026-05-25: `openai/whisper-small` completed the fixed 15-row inference pass
+  on local CUDA with cuDNN disabled. The output passed the hypothesis validator
+  with labels and WER/CER quality fields, then built SRES, CEIS, and downstream
+  metric inputs without unmatched IDs or missing hypothesis text.
 
 ## Failure Or Risk Notes
 
@@ -93,13 +99,15 @@ python 80_semantic_risk_asr/downstream/evaluate_downstream_impact.py \
   `audio_filepath` as a pandas Series, so the repo runner feeds explicit
   `AudioTask` rows to the same Curator ASR stage.
 - CUDA runtime failed on this environment with
-  `CUDNN_STATUS_SUBLIBRARY_VERSION_MISMATCH`; the 15-row pilot therefore ran on
-  CPU. Do not start full-dataset NeMo work until the CUDA/cuDNN stack is fixed.
+  `CUDNN_STATUS_SUBLIBRARY_VERSION_MISMATCH` when cuDNN kernels are enabled.
+  PyTorch CUDA convolution passes with cuDNN disabled, and the Whisper-small
+  15-row pass used `--runtime cuda --disable-cudnn`. Do not start full-dataset
+  GPU work until this remains stable across the next model candidate.
 - Keep raw audio, full transcripts, ASR bulk predictions, and generated metric
   inputs under ignored local paths.
 
 ## Artifacts
 
 - Local metric inputs: `artifacts/metric_inputs/`
-- Aggregate metrics: pending
+- Aggregate metric outputs: `artifacts/metric_outputs/` (ignored local)
 - Publication-safe case examples: pending

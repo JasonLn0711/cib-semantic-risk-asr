@@ -125,11 +125,13 @@ def main() -> int:
     output = {"summary": summarize(rows), "rows": rows}
     text = json.dumps(output, ensure_ascii=False, indent=2)
     if args.output_json:
+        args.output_json.parent.mkdir(parents=True, exist_ok=True)
         args.output_json.write_text(text + "\n", encoding="utf-8")
     else:
         print(text)
 
     if args.output_tsv:
+        args.output_tsv.parent.mkdir(parents=True, exist_ok=True)
         fieldnames = list(rows[0].keys()) if rows else []
         with args.output_tsv.open("w", newline="", encoding="utf-8") as handle:
             writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t")
