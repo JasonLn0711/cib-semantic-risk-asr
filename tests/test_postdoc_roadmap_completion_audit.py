@@ -101,6 +101,7 @@ def test_roadmap_audit_blocks_current_proxy_and_review_pending_state() -> None:
     assert payload["candidate_gate"]["blocked_or_stopped_count"] == 1
     assert payload["status_counts"]["blocked"] == 1
     assert "row/model/timing response gate" in payload["next_decision"]
+    assert "--require-complete --require-timing" in payload["next_decision"]
     assert_roadmap_safe(payload)
 
 

@@ -223,6 +223,7 @@ def test_readiness_marks_proxy_and_human_review_pending(tmp_path: Path) -> None:
     assert "6/6 timing rows pending" in audit_row["result"]
     assert "--require-timing" in audit_row["next_action"]
     assert "per-row timing fields" in payload["next_decision"]
+    assert "--require-complete --require-timing" in payload["next_decision"]
     assert_aggregate_safe(payload)
 
 

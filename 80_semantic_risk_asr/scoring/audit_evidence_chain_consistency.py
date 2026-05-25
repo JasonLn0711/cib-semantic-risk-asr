@@ -1,0 +1,519 @@
+#!/usr/bin/env python3
+"""Audit cross-summary consistency for the CDS-ASR evidence chain.
+
+This checker guards against evidence-chain drift after many aggregate summaries
+are refreshed independently. It intentionally reads only tracked aggregate
+records and writes only aggregate-safe pass/fail rows.
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+import time
+from pathlib import Path
+from typing import Any
+
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_OUTPUT_DIR = (
+    REPO_ROOT / "70_experiments" / "runs" / "postdoc_evidence_chain_2026_05_25"
+)
+SUMMARY_NAME = "evidence_chain_consistency_summary.json"
+TSV_NAME = "evidence_chain_consistency.tsv"
+
+SENSITIVE_TOKENS = (
+    "audio_id",
+    "sample_id",
+    "reference_text",
+    "hypothesis_text",
+    "asr_hypotheses_json",
+    "reviewer_model_assessments_json",
+    "reviewer_notes",
+    "reviewer_verified_transcript",
+    "PRIVATE_",
+)
+
+REQUIRED_SCOPE_TERMS = (
+    "risk",
+    "decision",
+    "expected safe action",
+    "confidence",
+    "per-model",
+    "per-row review timing",
+)
+
+SUMMARY_SPECS = {
+    "readiness": (
+        "70_experiments/runs/postdoc_evidence_chain_2026_05_25/"
+        "evidence_chain_readiness_summary.json"
+    ),
+    "publishable": (
+        "70_experiments/runs/postdoc_evidence_chain_2026_05_25/"
+        "publishable_evidence_completion_summary.json"
+    ),
+    "consequence": (
+        "70_experiments/runs/postdoc_evidence_chain_2026_05_25/"
+        "consequence_evidence_matrix_summary.json"
+    ),
+    "roadmap": (
+        "70_experiments/runs/postdoc_evidence_chain_2026_05_25/"
+        "postdoc_roadmap_completion_summary.json"
+    ),
+    "refresh": (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+        "human_audit_refresh_summary.json"
+    ),
+    "post_review": (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+        "human_audit_post_review_evidence_summary.json"
+    ),
+    "closeout": (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+        "human_audit_response_closeout_summary.json"
+    ),
+    "apply": (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+        "human_audit_batch_response_apply_summary.json"
+    ),
+    "candidate_recheck": (
+        "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/"
+        "summary.json"
+    ),
+}
+
+TSV_FIELDS = [
+    "check_id",
+    "invariant",
+    "status",
+    "evidence",
+    "result",
+    "next_action",
+]
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def write_json(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def write_tsv(path: Path, rows: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=TSV_FIELDS, delimiter="\t", lineterminator="\n")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({field: row.get(field, "") for field in TSV_FIELDS})
+
+
+def assert_aggregate_safe(payload: Any) -> None:
+    text = json.dumps(payload, ensure_ascii=False)
+    for token in SENSITIVE_TOKENS:
+        if token in text:
+            raise ValueError("sensitive field token leaked into consistency audit")
+
+
+def check_row(
+    *,
+    check_id: str,
+    invariant: str,
+    passed: bool,
+    evidence: str,
+    result: str,
+    next_action: str,
+) -> dict[str, str]:
+    return {
+        "check_id": check_id,
+        "invariant": invariant,
+        "status": "pass" if passed else "fail",
+        "evidence": evidence,
+        "result": result,
+        "next_action": next_action,
+    }
+
+
+def load_summaries(root: Path) -> tuple[dict[str, dict[str, Any]], list[dict[str, str]]]:
+    payloads: dict[str, dict[str, Any]] = {}
+    rows: list[dict[str, str]] = []
+    missing: list[str] = []
+    parse_errors: list[str] = []
+    for name, relative in SUMMARY_SPECS.items():
+        path = root / relative
+        if not path.exists():
+            missing.append(name)
+            continue
+        try:
+            payloads[name] = read_json(path)
+        except json.JSONDecodeError:
+            parse_errors.append(name)
+
+    passed = not missing and not parse_errors
+    rows.append(
+        check_row(
+            check_id="C001",
+            invariant="required aggregate summaries exist and are parseable",
+            passed=passed,
+            evidence="; ".join(SUMMARY_SPECS.values()),
+            result=(
+                "all required summaries loaded"
+                if passed
+                else f"missing={','.join(missing) or 'none'}; parse_errors={','.join(parse_errors) or 'none'}"
+            ),
+            next_action="Regenerate missing or invalid aggregate summaries before publishing evidence-chain claims.",
+        )
+    )
+    return payloads, rows
+
+
+def text_has_all_terms(text: str, terms: tuple[str, ...]) -> bool:
+    lowered = text.lower()
+    return all(term.lower() in lowered for term in terms)
+
+
+def add_policy_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
+    policy_names = [
+        "readiness",
+        "publishable",
+        "consequence",
+        "roadmap",
+        "refresh",
+        "post_review",
+        "closeout",
+        "apply",
+    ]
+    transcript_failures = [
+        name
+        for name in policy_names
+        if not (
+            "human-reviewed" in str(payloads.get(name, {}).get("reference_transcript_policy", "")).lower()
+            and "wer/cer" in str(payloads.get(name, {}).get("reference_transcript_policy", "")).lower()
+            and (
+                "do not route duplicate" in str(payloads.get(name, {}).get("reference_transcript_policy", "")).lower()
+                or "does not ask" in str(payloads.get(name, {}).get("reference_transcript_policy", "")).lower()
+            )
+        )
+    ]
+    rows.append(
+        check_row(
+            check_id="C010",
+            invariant="transcript ground truth policy is not reopened",
+            passed=not transcript_failures,
+            evidence="reference_transcript_policy fields across aggregate summaries",
+            result=(
+                "all summaries keep transcript ground truth as already reviewed"
+                if not transcript_failures
+                else f"policy drift in {','.join(transcript_failures)}"
+            ),
+            next_action="Refresh the stale summaries from source constants before routing reviewer work.",
+        )
+    )
+
+    scope_failures = [
+        name
+        for name in policy_names
+        if not text_has_all_terms(
+            str(payloads.get(name, {}).get("remaining_review_scope", "")),
+            REQUIRED_SCOPE_TERMS,
+        )
+    ]
+    rows.append(
+        check_row(
+            check_id="C020",
+            invariant="remaining selected-300 review scope includes row/model/timing fields",
+            passed=not scope_failures,
+            evidence="remaining_review_scope fields across aggregate summaries",
+            result=(
+                "all summaries name risk, decision, expected action, confidence, per-model fields, and per-row timing"
+                if not scope_failures
+                else f"scope drift in {','.join(scope_failures)}"
+            ),
+            next_action="Rerun the stale aggregate generator and do not proceed to write/refresh while scope is inconsistent.",
+        )
+    )
+
+
+def add_timing_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
+    apply = payloads.get("apply", {})
+    apply_timing = apply.get("review_timing", {})
+    apply_passed = (
+        apply.get("require_timing") is True
+        and apply_timing.get("rows_missing_timing", -1) == 6
+        and "--require-timing" in str(apply.get("next_action", ""))
+    )
+    rows.append(
+        check_row(
+            check_id="C030",
+            invariant="strict response apply gate requires timing",
+            passed=apply_passed,
+            evidence=SUMMARY_SPECS["apply"],
+            result=(
+                "apply dry-run records require_timing=true and 6 timing rows pending"
+                if apply_passed
+                else "apply dry-run timing requirement is stale or incomplete"
+            ),
+            next_action="Run the session-gated strict response dry-run with --require-complete --require-timing.",
+        )
+    )
+
+    closeout = payloads.get("closeout", {})
+    closeout_timing = closeout.get("review_timing", {})
+    closeout_passed = (
+        closeout.get("require_timing") is True
+        and closeout.get("status") == "response_closeout_blocked"
+        and closeout_timing.get("rows_missing_timing", -1) == 6
+    )
+    rows.append(
+        check_row(
+            check_id="C031",
+            invariant="response closeout blocks on missing timing",
+            passed=closeout_passed,
+            evidence=SUMMARY_SPECS["closeout"],
+            result=(
+                "closeout blocks write/refresh while 6 timing rows are missing"
+                if closeout_passed
+                else "closeout timing blocker is not aligned with current packet state"
+            ),
+            next_action="Keep write/refresh blocked until timing coverage is complete.",
+        )
+    )
+
+    high_level = {
+        "readiness": str(payloads.get("readiness", {}).get("next_decision", "")),
+        "publishable": str(payloads.get("publishable", {}).get("next_decision", "")),
+        "consequence": str(payloads.get("consequence", {}).get("next_decision", "")),
+        "roadmap": str(payloads.get("roadmap", {}).get("next_decision", "")),
+        "refresh": str(payloads.get("refresh", {}).get("next_action", "")),
+    }
+    next_action_failures = [
+        name
+        for name, text in high_level.items()
+        if "timing" not in text.lower() or "--require-timing" not in text
+    ]
+    rows.append(
+        check_row(
+            check_id="C032",
+            invariant="top-level next actions route through the timing gate",
+            passed=not next_action_failures,
+            evidence="readiness/publishable/consequence/roadmap/refresh next action fields",
+            result=(
+                "all top-level next actions mention timing and --require-timing"
+                if not next_action_failures
+                else f"timing next-action drift in {','.join(next_action_failures)}"
+            ),
+            next_action="Refresh top-level summaries so reviewers cannot bypass timing closeout.",
+        )
+    )
+
+
+def add_readiness_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
+    refresh = payloads.get("refresh", {})
+    readiness = payloads.get("readiness", {})
+    publishable = payloads.get("publishable", {})
+    consequence = payloads.get("consequence", {})
+    roadmap = payloads.get("roadmap", {})
+    post_review = payloads.get("post_review", {})
+    closeout = payloads.get("closeout", {})
+
+    review_pending = refresh.get("status") == "review_pending"
+    not_ready = (
+        readiness.get("paper_ready") is False
+        and publishable.get("publishable_ready") is False
+        and consequence.get("paper_claims_ready") is False
+        and roadmap.get("roadmap_complete") is False
+        and post_review.get("status") == "post_review_evidence_blocked"
+        and closeout.get("status") == "response_closeout_blocked"
+    )
+    rows.append(
+        check_row(
+            check_id="C040",
+            invariant="review-pending state cannot be paper-ready",
+            passed=bool(review_pending and not_ready),
+            evidence="readiness, publishable, consequence, roadmap, post-review, closeout summaries",
+            result=(
+                "selected-300 review is pending and every paper-facing gate remains closed"
+                if review_pending and not_ready
+                else "at least one paper-facing gate conflicts with pending selected-300 review"
+            ),
+            next_action="Keep claims proxy-only until response closeout, write, refresh, predictor, and recovery are complete.",
+        )
+    )
+
+    proxy_passed = (
+        publishable.get("publishable_ready") is False
+        and consequence.get("paper_claims_ready") is False
+        and len(publishable.get("blocking_or_proxy_items", [])) > 0
+        and len(consequence.get("blocking_or_proxy_items", [])) > 0
+    )
+    rows.append(
+        check_row(
+            check_id="C050",
+            invariant="proxy evidence is not promoted to paper claims",
+            passed=proxy_passed,
+            evidence="publishable_evidence_completion_summary and consequence_evidence_matrix_summary",
+            result=(
+                "blocking/proxy items remain explicit while publishable and consequence gates are closed"
+                if proxy_passed
+                else "proxy evidence may be over-promoted or missing blocker detail"
+            ),
+            next_action="Keep 258-row/300-row proxy results as engineering evidence until human labels refresh them.",
+        )
+    )
+
+    action_gate = readiness.get("reviewer_action_gate", {})
+    action_passed = (
+        action_gate.get("status") == "reviewer_action_ready"
+        and action_gate.get("rows_in_batch") == 6
+        and action_gate.get("pending_rows_in_batch") == 6
+        and action_gate.get("model_assessments_in_batch") == 18
+        and action_gate.get("pending_model_assessments_in_batch") == 18
+        and action_gate.get("rows_missing_timing") == 6
+    )
+    rows.append(
+        check_row(
+            check_id="C060",
+            invariant="current reviewer action packet remains ready but unfilled",
+            passed=action_passed,
+            evidence=SUMMARY_SPECS["readiness"],
+            result=(
+                "current packet has 6 rows, 18 model assessments, and 6 timing rows pending"
+                if action_passed
+                else "reviewer action packet counts drifted from expected selected batch"
+            ),
+            next_action="Fill only local response fields and timing; do not reopen transcript review.",
+        )
+    )
+
+
+def add_candidate_check(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
+    candidate = payloads.get("candidate_recheck", {})
+    bounded_statuses = {
+        str(item.get("status", ""))
+        for item in candidate.get("bounded_probes", [])
+        if isinstance(item, dict)
+    }
+    promotion = str(candidate.get("promotion_decision", "")).lower()
+    candidate_passed = (
+        candidate.get("ok") is True
+        and "no requested asr/gemma candidate" in promotion
+        and "timeout_before_inference" in bounded_statuses
+        and "blocked_local_transformers_multimodal_class_missing" in bounded_statuses
+    )
+    rows.append(
+        check_row(
+            check_id="C070",
+            invariant="expanded ASR/Gemma candidates stay behind locale/runtime gates",
+            passed=candidate_passed,
+            evidence=SUMMARY_SPECS["candidate_recheck"],
+            result=(
+                "current recheck keeps Whisper v3/v3-turbo, SenseVoice, Qwen3-ASR, and Gemma from promotion"
+                if candidate_passed
+                else "candidate promotion decision or blocked/runtime evidence is incomplete"
+            ),
+            next_action="Do not run 258-row or selected-300 promotion for these candidates before locale/runtime policy changes.",
+        )
+    )
+
+
+def add_safety_check(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
+    safe = True
+    for payload in payloads.values():
+        try:
+            assert_aggregate_safe(payload)
+        except ValueError:
+            safe = False
+            break
+    rows.append(
+        check_row(
+            check_id="C080",
+            invariant="source summaries remain aggregate-safe",
+            passed=safe,
+            evidence="all input aggregate summaries",
+            result=(
+                "no transcript-bearing field tokens were found in source summaries"
+                if safe
+                else "one or more source summaries contains a blocked raw-field token"
+            ),
+            next_action="Remove raw row-level content from tracked summaries before committing.",
+        )
+    )
+
+
+def build_consistency_audit(root: Path) -> dict[str, Any]:
+    payloads, rows = load_summaries(root)
+    if len(payloads) == len(SUMMARY_SPECS):
+        add_policy_checks(payloads, rows)
+        add_timing_checks(payloads, rows)
+        add_readiness_checks(payloads, rows)
+        add_candidate_check(payloads, rows)
+        add_safety_check(payloads, rows)
+
+    counts: dict[str, int] = {}
+    for row in rows:
+        counts[row["status"]] = counts.get(row["status"], 0) + 1
+    failed = [row for row in rows if row["status"] != "pass"]
+    payload = {
+        "ok": not failed,
+        "status_counts": dict(sorted(counts.items())),
+        "failed_checks": [
+            {
+                "check_id": row["check_id"],
+                "invariant": row["invariant"],
+                "result": row["result"],
+                "next_action": row["next_action"],
+            }
+            for row in failed
+        ],
+        "reference_transcript_policy": "Reference transcripts are already human-reviewed for WER/CER; this audit does not reopen transcript review.",
+        "remaining_review_scope": "Selected-300 completion still requires risk, decision, expected safe action, confidence, per-model fields, and per-row review timing.",
+        "consistency_rows": rows,
+        "next_decision": (
+            "If this audit is pass, continue with the local selected-300 "
+            "row/model/timing response closeout; if it fails, refresh the stale "
+            "aggregate generator before paper-facing claims."
+        ),
+    }
+    assert_aggregate_safe(payload)
+    return payload
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--repo-root", type=Path, default=REPO_ROOT)
+    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument("--output-json", type=Path)
+    parser.add_argument("--output-tsv", type=Path)
+    return parser.parse_args()
+
+
+def main() -> int:
+    started = time.time()
+    args = parse_args()
+    payload = build_consistency_audit(args.repo_root.resolve())
+    payload["runtime_seconds"] = round(time.time() - started, 4)
+    assert_aggregate_safe(payload)
+    output_json = args.output_json or args.output_dir / SUMMARY_NAME
+    output_tsv = args.output_tsv or args.output_dir / TSV_NAME
+    write_json(output_json, payload)
+    write_tsv(output_tsv, payload["consistency_rows"])
+    print(
+        json.dumps(
+            {
+                "ok": payload["ok"],
+                "status_counts": payload["status_counts"],
+                "failed_checks": payload["failed_checks"],
+                "output_json": str(output_json),
+                "output_tsv": str(output_tsv),
+            },
+            ensure_ascii=False,
+        )
+    )
+    return 0 if payload["ok"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

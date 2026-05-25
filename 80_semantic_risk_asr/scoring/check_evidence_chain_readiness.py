@@ -496,9 +496,9 @@ def build_readiness(root: Path) -> dict[str, Any]:
         "next_decision": (
             "Complete the selected-300 risk-atom, decision-change, per-model "
             "assessment, and per-row timing fields, then rerun the strict "
-            "response closeout, aggregate summarizer, human-reviewed predictor "
-            "gate, and recovery analysis before making paper-grade CDS-ASR "
-            "claims."
+            "response closeout with --require-complete --require-timing, "
+            "aggregate summarizer, human-reviewed predictor gate, and recovery "
+            "analysis before making paper-grade CDS-ASR claims."
         ),
     }
     assert_aggregate_safe(payload)

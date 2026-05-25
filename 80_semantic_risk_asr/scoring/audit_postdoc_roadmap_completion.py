@@ -378,9 +378,10 @@ def build_roadmap_audit_from_payloads(
         ),
         "next_decision": (
             "Close the selected-300 row/model/timing response gate, "
-            "write/refresh aggregate human review evidence, rerun predictor and "
-            "recovery analyses, then rerun this roadmap audit before claiming "
-            "the objective is complete."
+            "run the strict closeout path with --require-complete "
+            "--require-timing, write/refresh aggregate human review evidence, "
+            "rerun predictor and recovery analyses, then rerun this roadmap "
+            "audit before claiming the objective is complete."
         ),
     }
     assert_roadmap_safe(payload)

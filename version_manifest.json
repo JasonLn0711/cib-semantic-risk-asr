@@ -1,24 +1,26 @@
 {
-  "version": "v2.5.142",
+  "version": "v2.5.143",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 142
+    "patch": 143
   },
-  "updated_at": "2026-05-26T03:15:00+08:00",
+  "updated_at": "2026-05-26T03:29:00+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "7026477",
+  "base_commit": "f0a467d",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/registry.tsv",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix.tsv",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json"
+    "80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py",
+    "80_semantic_risk_asr/scoring/audit_postdoc_roadmap_completion.py",
+    "80_semantic_risk_asr/scoring/check_evidence_chain_readiness.py",
+    "tests/test_evidence_chain_consistency.py",
+    "tests/test_evidence_chain_readiness.py",
+    "tests/test_postdoc_roadmap_completion_audit.py"
   ]
 }
