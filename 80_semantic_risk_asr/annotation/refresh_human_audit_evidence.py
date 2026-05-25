@@ -24,6 +24,7 @@ for import_path in (ANNOTATION_DIR, SCORING_DIR):
         sys.path.insert(0, str(import_path))
 
 import analyze_human_audit_predictors as predictors  # noqa: E402
+import audit_publishable_evidence_chain as completion_audit  # noqa: E402
 import audit_human_review_progress as progress_audit  # noqa: E402
 import check_evidence_chain_readiness as readiness  # noqa: E402
 import summarize_human_risk_atom_audit as review_summary  # noqa: E402
@@ -347,6 +348,27 @@ def run_readiness_gate(
     return payload, [output_json, output_tsv]
 
 
+def run_completion_audit_gate(
+    *,
+    readiness_payload: dict[str, Any],
+    human_refresh_payload: dict[str, Any],
+    predictor_payload: dict[str, Any],
+    output_dir: Path,
+) -> tuple[dict[str, Any], list[Path]]:
+    started = time.time()
+    payload = completion_audit.build_completion_audit_from_payloads(
+        readiness_payload=readiness_payload,
+        human_refresh=human_refresh_payload,
+        human_predictor=predictor_payload,
+    )
+    payload["runtime_seconds"] = round(time.time() - started, 4)
+    output_json = output_dir / completion_audit.SUMMARY_NAME
+    output_tsv = output_dir / completion_audit.TSV_NAME
+    completion_audit.write_json(output_json, payload)
+    completion_audit.write_tsv(output_tsv, payload["completion_rows"])
+    return payload, [output_json, output_tsv]
+
+
 def refresh_human_audit_evidence(
     *,
     audit_sheet: Path,
@@ -379,6 +401,7 @@ def refresh_human_audit_evidence(
     review_payload: dict[str, Any] | None = None
     predictor_payload: dict[str, Any] | None = None
     readiness_payload: dict[str, Any] | None = None
+    completion_payload: dict[str, Any] | None = None
     downstream_refreshed = False
 
     if validation_payload["ok"]:
@@ -434,6 +457,9 @@ def refresh_human_audit_evidence(
         "readiness_ok": readiness_payload.get("ok") if readiness_payload else "",
         "readiness_paper_ready": readiness_payload.get("paper_ready") if readiness_payload else "",
         "readiness_status_counts": readiness_payload.get("status_counts") if readiness_payload else {},
+        "completion_audit_ok": "",
+        "publishable_ready": "",
+        "completion_status_counts": {},
         "downstream_outputs_refreshed": downstream_refreshed,
         "outputs": [repo_relative(path, repo_root=repo_root) for path in output_paths],
         "runtime_seconds": round(time.time() - started, 4),
@@ -445,6 +471,20 @@ def refresh_human_audit_evidence(
             else "Use refreshed aggregate summaries for paper-table drafting and human-reviewed predictor analysis."
         ),
     }
+    if readiness_payload is not None and predictor_payload is not None:
+        completion_payload, completion_outputs = run_completion_audit_gate(
+            readiness_payload=readiness_payload,
+            human_refresh_payload=payload,
+            predictor_payload=predictor_payload,
+            output_dir=readiness_output_dir,
+        )
+        output_paths.extend(completion_outputs)
+        ok = ok and bool(completion_payload.get("ok"))
+        payload["ok"] = ok
+        payload["completion_audit_ok"] = completion_payload.get("ok")
+        payload["publishable_ready"] = completion_payload.get("publishable_ready")
+        payload["completion_status_counts"] = completion_payload.get("status_counts", {})
+        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
     summary_path = output_dir / REFRESH_SUMMARY_NAME
     payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
     write_refresh_summary(output_dir, payload)

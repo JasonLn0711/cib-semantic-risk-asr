@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 import sys
 from pathlib import Path
@@ -121,6 +122,15 @@ def run_refresh(
     return payload, output_dir
 
 
+def load_readiness_fixture_writer():
+    path = REPO_ROOT / "tests" / "test_evidence_chain_readiness.py"
+    spec = importlib.util.spec_from_file_location("test_evidence_chain_readiness", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module.write_minimal_tree
+
+
 def test_refresh_allows_pending_review_without_strict_mode(tmp_path: Path) -> None:
     payload, output_dir = run_refresh(tmp_path, reviewed=False, model_reviewed=False)
 
@@ -167,3 +177,45 @@ def test_refresh_complete_review_writes_predictor_aggregate(tmp_path: Path) -> N
     )
     assert predictor_payload["status"] == "review_complete"
     assert predictor_payload["pending_model_assessments"] == 0
+
+
+def test_refresh_updates_publishable_completion_audit(tmp_path: Path) -> None:
+    load_readiness_fixture_writer()(tmp_path)
+    sheet = tmp_path / "audit.tsv"
+    output_dir = (
+        tmp_path
+        / "70_experiments"
+        / "runs"
+        / "janus_300_high_stakes_human_audit_selection_2026_05_25"
+    )
+    readiness_dir = (
+        tmp_path / "70_experiments" / "runs" / "postdoc_evidence_chain_2026_05_25"
+    )
+    write_rows(sheet, [base_row(reviewed=False, model_reviewed=False)])
+
+    payload = refresh_human_audit_evidence(
+        audit_sheet=sheet,
+        output_dir=output_dir,
+        readiness_output_dir=readiness_dir,
+        repo_root=tmp_path,
+        expected_rows=1,
+        require_complete=False,
+        skip_readiness=False,
+    )
+    completion_path = readiness_dir / "publishable_evidence_completion_summary.json"
+    completion_payload = json.loads(completion_path.read_text(encoding="utf-8"))
+    objective_5 = next(
+        row
+        for row in completion_payload["completion_rows"]
+        if row["objective_id"] == "5"
+    )
+
+    assert payload["ok"] is True
+    assert payload["completion_audit_ok"] is True
+    assert payload["publishable_ready"] is False
+    assert payload["completion_status_counts"]["review_pending"] == 1
+    assert completion_path.exists()
+    assert (readiness_dir / "publishable_evidence_completion.tsv").exists()
+    assert objective_5["status"] == "review_pending"
+    assert "0/1 rows" in objective_5["result"]
+    assert "PRIVATE_" not in completion_path.read_text(encoding="utf-8")

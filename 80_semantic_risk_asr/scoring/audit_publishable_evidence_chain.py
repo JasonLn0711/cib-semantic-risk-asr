@@ -299,11 +299,12 @@ def objective_rows_from_payloads(
     return rows
 
 
-def build_completion_audit(root: Path) -> dict[str, Any]:
-    readiness_payload = readiness.build_readiness(root)
-    audit_dir = root / "70_experiments" / "runs" / "janus_300_high_stakes_human_audit_selection_2026_05_25"
-    human_refresh = read_json(audit_dir / "human_audit_refresh_summary.json")
-    human_predictor = read_json(audit_dir / "human_audit_predictor_summary.json")
+def build_completion_audit_from_payloads(
+    *,
+    readiness_payload: dict[str, Any],
+    human_refresh: dict[str, Any],
+    human_predictor: dict[str, Any],
+) -> dict[str, Any]:
     rows = objective_rows_from_payloads(
         readiness_payload=readiness_payload,
         human_refresh=human_refresh,
@@ -345,6 +346,18 @@ def build_completion_audit(root: Path) -> dict[str, Any]:
     }
     assert_completion_safe(payload)
     return payload
+
+
+def build_completion_audit(root: Path) -> dict[str, Any]:
+    readiness_payload = readiness.build_readiness(root)
+    audit_dir = root / "70_experiments" / "runs" / "janus_300_high_stakes_human_audit_selection_2026_05_25"
+    human_refresh = read_json(audit_dir / "human_audit_refresh_summary.json")
+    human_predictor = read_json(audit_dir / "human_audit_predictor_summary.json")
+    return build_completion_audit_from_payloads(
+        readiness_payload=readiness_payload,
+        human_refresh=human_refresh,
+        human_predictor=human_predictor,
+    )
 
 
 def parse_args() -> argparse.Namespace:

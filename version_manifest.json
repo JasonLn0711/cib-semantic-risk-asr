@@ -1,26 +1,28 @@
 {
-  "version": "v2.5.86",
+  "version": "v2.5.87",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 86
+    "patch": 87
   },
-  "updated_at": "2026-05-25T21:31:27+08:00",
+  "updated_at": "2026-05-25T21:39:44+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "f5ece6c",
+  "base_commit": "d6cc2a5",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/registry.tsv",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/README.md",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
-    "80_semantic_risk_asr/annotation/selected_300_human_risk_atom_audit_protocol_2026_05_25.md",
-    "README.md",
-    "docs/postdoc_next_steps_2026_05_25.md"
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_summary.json",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_progress_summary.json",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json",
+    "80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py",
+    "80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py",
+    "tests/test_human_audit_refresh.py"
   ]
 }
