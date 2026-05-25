@@ -113,11 +113,13 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   review.
 - The 2026-05-25 WER audit is recorded in
   `70_experiments/runs/wer_metric_audit_2026_05_25/`. The latest audit checks
-  six 258-row hypothesis files against the canonical manifest, records package
-  versions, and cross-checks zh-jieba corpus WER against `jiwer`. Pre-audit WER
-  fields are legacy raw whitespace-token values; paper-facing ASR tables should
-  use the `cer_zh_micro` aggregate column as the primary surface metric and
-  `wer_zh_jieba_micro` only as a supplemental segmented word metric.
+  legacy 15-row, six 258-row, and high-stakes 300-row hypothesis files against
+  canonical manifests, records package versions, fails paper-facing summaries
+  on zero-reference metric units, and cross-checks zh-jieba corpus WER against
+  `jiwer`. Pre-audit WER fields are legacy raw whitespace-token values;
+  paper-facing ASR tables should use the `cer_zh_micro` aggregate column as the
+  primary surface metric and `wer_zh_jieba_micro` only as a supplemental
+  segmented word metric.
 - Treat audio/call data and filenames as sensitive.
 - If storage cleanup is needed later, review `30_review_flags/REVIEW.md` and `20_inventory/largest_files.tsv` first.
 

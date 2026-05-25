@@ -145,9 +145,11 @@ generator for the next split-aware CDS metric builder. Keep LoRA as contrast
 evidence, not the next primary hypothesis generator. Treat pre-audit `wer`
 values as legacy raw whitespace fields. The current WER audit validates all six
 258-row hypothesis files against the canonical manifest and cross-checks
-zh-jieba corpus WER against `jiwer`. Paper-facing ASR tables should use the
-aggregate `cer_zh_micro` column as the primary surface metric and
-`wer_zh_jieba_micro` only as a supplemental segmented word metric.
+zh-jieba corpus WER against `jiwer`; the re-check also validates legacy 15-row
+and high-stakes 300-row runs and records zero-reference-unit counts. Paper-facing
+ASR tables should use the aggregate `cer_zh_micro` column as the primary
+surface metric and `wer_zh_jieba_micro` only as a supplemental segmented word
+metric.
 
 Current execution priority after the 258-row gate:
 

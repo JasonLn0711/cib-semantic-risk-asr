@@ -5,6 +5,26 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.61 - 2026-05-25T19:16:12+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `01806a9`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/README.md`
+  - `70_experiments/README.md`
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/README.md`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/high_stakes_300_summary.json`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/legacy_15_row_summary.json`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/summary.json`
+  - `80_semantic_risk_asr/paper/experiment_plan.md`
+  - `README.md`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
 ## v2.5.60 - 2026-05-25T19:15:52+08:00
 
 - Bump: `patch`

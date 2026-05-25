@@ -34,7 +34,13 @@
       "missing_hypothesis_rows": 0,
       "missing_expected_ids": [],
       "extra_ids": [],
-      "reference_mismatch_rows": 0
+      "reference_mismatch_rows": 0,
+      "zero_reference_unit_rows": {
+        "cer_raw_char": 0,
+        "wer_raw_whitespace": 0,
+        "cer_zh_normalized": 0,
+        "wer_zh_jieba": 0
+      }
     },
     {
       "path": "70_experiments/runs/breeze_asr25_lora_legacy_best_15_row/predictions/breeze_asr25_lora_legacy_best_15_row_predictions.jsonl",
@@ -45,7 +51,13 @@
       "missing_hypothesis_rows": 0,
       "missing_expected_ids": [],
       "extra_ids": [],
-      "reference_mismatch_rows": 0
+      "reference_mismatch_rows": 0,
+      "zero_reference_unit_rows": {
+        "cer_raw_char": 0,
+        "wer_raw_whitespace": 0,
+        "cer_zh_normalized": 0,
+        "wer_zh_jieba": 0
+      }
     },
     {
       "path": "70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_15_row/predictions/breeze_asr25_partial_encoder_legacy_best_15_row_predictions.jsonl",
@@ -56,7 +68,13 @@
       "missing_hypothesis_rows": 0,
       "missing_expected_ids": [],
       "extra_ids": [],
-      "reference_mismatch_rows": 0
+      "reference_mismatch_rows": 0,
+      "zero_reference_unit_rows": {
+        "cer_raw_char": 0,
+        "wer_raw_whitespace": 0,
+        "cer_zh_normalized": 0,
+        "wer_zh_jieba": 0
+      }
     },
     {
       "path": "70_experiments/runs/breeze_asr26_15_row_stress_test/predictions/breeze_asr26_15_row_stress_test_predictions.jsonl",
@@ -67,7 +85,13 @@
       "missing_hypothesis_rows": 0,
       "missing_expected_ids": [],
       "extra_ids": [],
-      "reference_mismatch_rows": 0
+      "reference_mismatch_rows": 0,
+      "zero_reference_unit_rows": {
+        "cer_raw_char": 0,
+        "wer_raw_whitespace": 0,
+        "cer_zh_normalized": 0,
+        "wer_zh_jieba": 0
+      }
     },
     {
       "path": "70_experiments/runs/whisper_large_v2_15_row_baseline/predictions/whisper_large_v2_15_row_baseline_predictions.jsonl",
@@ -78,7 +102,13 @@
       "missing_hypothesis_rows": 0,
       "missing_expected_ids": [],
       "extra_ids": [],
-      "reference_mismatch_rows": 0
+      "reference_mismatch_rows": 0,
+      "zero_reference_unit_rows": {
+        "cer_raw_char": 0,
+        "wer_raw_whitespace": 0,
+        "cer_zh_normalized": 0,
+        "wer_zh_jieba": 0
+      }
     },
     {
       "path": "70_experiments/runs/whisper_small_15_row_baseline/predictions/whisper_small_15_row_baseline_predictions.jsonl",
@@ -89,7 +119,13 @@
       "missing_hypothesis_rows": 0,
       "missing_expected_ids": [],
       "extra_ids": [],
-      "reference_mismatch_rows": 0
+      "reference_mismatch_rows": 0,
+      "zero_reference_unit_rows": {
+        "cer_raw_char": 0,
+        "wer_raw_whitespace": 0,
+        "cer_zh_normalized": 0,
+        "wer_zh_jieba": 0
+      }
     }
   ]
 }

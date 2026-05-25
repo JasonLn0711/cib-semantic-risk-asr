@@ -31,7 +31,13 @@
       "missing_hypothesis_rows": 0,
       "missing_expected_ids": [],
       "extra_ids": [],
-      "reference_mismatch_rows": 0
+      "reference_mismatch_rows": 0,
+      "zero_reference_unit_rows": {
+        "cer_raw_char": 0,
+        "wer_raw_whitespace": 0,
+        "cer_zh_normalized": 0,
+        "wer_zh_jieba": 0
+      }
     },
     {
       "path": "70_experiments/runs/breeze_asr25_base_high_stakes_300/predictions/breeze_asr25_base_high_stakes_300_predictions.jsonl",
@@ -42,7 +48,13 @@
       "missing_hypothesis_rows": 0,
       "missing_expected_ids": [],
       "extra_ids": [],
-      "reference_mismatch_rows": 0
+      "reference_mismatch_rows": 0,
+      "zero_reference_unit_rows": {
+        "cer_raw_char": 0,
+        "wer_raw_whitespace": 0,
+        "cer_zh_normalized": 0,
+        "wer_zh_jieba": 0
+      }
     },
     {
       "path": "70_experiments/runs/breeze_asr25_lora_high_stakes_300/predictions/breeze_asr25_lora_high_stakes_300_predictions.jsonl",
@@ -53,7 +65,13 @@
       "missing_hypothesis_rows": 0,
       "missing_expected_ids": [],
       "extra_ids": [],
-      "reference_mismatch_rows": 0
+      "reference_mismatch_rows": 0,
+      "zero_reference_unit_rows": {
+        "cer_raw_char": 0,
+        "wer_raw_whitespace": 0,
+        "cer_zh_normalized": 0,
+        "wer_zh_jieba": 0
+      }
     }
   ]
 }

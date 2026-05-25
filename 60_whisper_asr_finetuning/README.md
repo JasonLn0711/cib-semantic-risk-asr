@@ -19,7 +19,8 @@ ASR text metrics must declare their text unit. Future runners default to
 `metric_normalization=zh_asr` and `wer_tokenizer=jieba`, preserving Traditional
 Chinese without any Traditional/Simplified conversion. Raw whitespace WER is
 available only for legacy audits and should not be used as the primary metric
-for unsegmented Chinese transcripts.
+for unsegmented Chinese transcripts. This applies to the Whisper-family,
+legacy Breeze, and NeMo Curator pilot runners.
 
 It intentionally does not copy audio. Dataset links point back to the stable
 dataset artifact in `../40_breeze_asr25_finetune_dataset/`, which in turn links
@@ -98,7 +99,10 @@ to the organized extracted audio under `../10_extracted_parts/`.
      --require-quality-signal
    ```
 
-   The script uses NeMo Curator's ASR stage and writes the ignored local output
+   The script uses NeMo Curator's ASR stage and then computes CER/WER through
+   the shared repo metric helper: `metric_normalization=zh_asr`,
+   `wer_tokenizer=jieba`, plus explicit `cer_raw` and `wer_raw_whitespace`
+   audit fields. It writes the ignored local output
    `40_breeze_asr25_finetune_dataset/manifests/asr_outputs_nemo.jsonl`.
    Use `--runtime cuda` only after the local CUDA/cuDNN wheel stack is known to
    be compatible.

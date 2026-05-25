@@ -27,7 +27,9 @@ segment with `jieba.cut`, then run `jiwer.wer`. Therefore the old trainer
 `eval_wer`/`test_wer` values and the earliest inference `wer` fields were not
 directly comparable. Current runners now write `wer` with `zh_asr`
 normalization plus `jieba` tokenization, and retain raw whitespace WER only in
-explicit audit fields.
+explicit audit fields. The final remaining legacy runner path,
+`run_janus_nemo_curator_pilot.py`, was also moved onto the shared metric helper
+so future NeMo pilot output follows the same policy.
 
 ## International-Norm Decision
 
@@ -82,6 +84,13 @@ References consulted:
 - Updated the legacy `run_whisper_small_smoke.py` runner so any future smoke
   output uses the same `zh_asr` normalization plus `jieba` WER profile by
   default, while still retaining raw whitespace WER as an audit field.
+- Updated the NeMo Curator pilot runner so it uses NeMo only for ASR inference;
+  CER/WER are then computed by `asr_text_metrics.py` with
+  `metric_normalization=zh_asr`, `wer_tokenizer=jieba`, and retained raw audit
+  fields.
+- Hardened `audit_asr_text_metrics.py` so `ok` is false if any metric profile
+  has zero reference units. Current tracked audits all have `0`
+  zero-reference-unit rows.
 - Added `jieba` to `requirements-whisper.txt`.
 
 ## Audit Command
@@ -110,6 +119,7 @@ All six hypothesis files passed the stricter manifest check:
 - missing expected IDs: `0`;
 - extra IDs: `0`;
 - reference mismatch rows: `0`.
+- zero reference unit rows: `0` for all four metric profiles.
 
 Package versions recorded in `summary.json`: `editdistance 0.8.1`,
 `jieba 0.42.1`, `jiwer 3.1.0`.
@@ -205,6 +215,19 @@ Current and future comparable runs must use `metric_normalization=zh_asr`,
 aggregation for paper-facing WER. Even then, `wer_zh_jieba_micro` remains
 supplemental for Mandarin Chinese; `cer_zh_micro` is the primary surface ASR
 metric, and CDS-ASR decision metrics carry the safety argument.
+
+Strict compliance status after this re-check:
+
+- Formula: compliant with the conventional edit-distance WER formula.
+- Token unit: compliant only when reported as `wer_zh_jieba_micro` with the
+  `jieba` tokenizer declared.
+- Chinese primary metric: compliant when the main ASR surface table uses
+  `cer_zh_micro`, not WER, as the primary score.
+- Legacy stored `wer` fields: not compliant as paper-facing evidence unless the
+  run explicitly records `metric_normalization=zh_asr` and `wer_tokenizer=jieba`.
+- Empty-reference handling: paper-facing audit now fails if any profile has
+  zero reference units; the tracked 15-row, 258-row, and 300-row audits have
+  none.
 
 Reviewer-facing WER claims should therefore say:
 

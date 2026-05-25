@@ -58,12 +58,15 @@ ignored local paths.
 | 5.15 | Created selected-300 human risk-atom audit queue. | `select_human_risk_atom_audit.py`; `janus_300_high_stakes_human_audit_selection_2026_05_25/`. | Review pending. Selected `30` audio rows and `90` model-samples from `300` candidate audio rows. The local transcript-bearing audit sheet is ignored under `artifacts/`; tracked outputs contain only aggregate strata, risk-atom coverage, and model-signal coverage. Selected rows cover all currently available high-risk-missed, unsafe-downrouting, low-WER danger, high-proxy-risk, and model-disagreement signals. |
 | 5.16 | Added human audit aggregate summarizer and readiness record. | `summarize_human_risk_atom_audit.py`; `human_audit_review_summary.json`. | Review still pending. The summarizer validates the local sheet and writes aggregate-only review counts without audio IDs, transcripts, hypotheses, or reviewer notes. Current state: `30` audit rows, `0` reviewed rows, `30` pending rows, `90` model-level assessments, and `0` reviewed model-level assessments. |
 | 5.17 | Added human-reviewed predictor gate. | `analyze_human_audit_predictors.py`; `human_audit_predictor_summary.json`. | Review still pending. The predictor gate will compare WER/CER/SRES/CEIS against model-level human decision-change labels after review. Current state: `90` model assessments, `0` reviewed, `90` pending; predictor metrics intentionally remain empty until review is complete. |
+| 5.18 | Re-inspected WER calculation against paper-facing requirements. | `asr_text_metrics.py`; `run_janus_nemo_curator_pilot.py`; `audit_asr_text_metrics.py`; `wer_metric_audit_2026_05_25/*summary.json`. | Completed. The remaining NeMo pilot runner now uses the shared `zh_asr` + `jieba` metric helper after ASR inference. The WER audit now records zero-reference-unit counts and fails `ok` if any profile has zero reference units. Re-ran 15-row, 258-row, and 300-row audits: all returned `ok=true`, all manifest/reference/hypothesis checks stayed clean, and all zero-reference-unit counts were `0`. Verdict unchanged: old raw whitespace WER is audit-only; paper-facing tables use `cer_zh_micro` primary and `wer_zh_jieba_micro` supplemental. |
 
 ## Next Operations
 
 1. Treat pre-audit `wer` values as legacy compatibility fields. For paper-facing
    tables, use `cer_zh_micro` as the primary ASR surface metric and
-   `wer_zh_jieba_micro` only as supplemental.
+   `wer_zh_jieba_micro` only as supplemental. Do not cite a WER value unless
+   its tokenizer, normalization, manifest alignment, package versions,
+   macro/micro scope, and zero-reference-unit status are recorded.
 2. Run Whisper large-v3 and Whisper large-v3 turbo through smoke, 15-row
    contract, locale gate, and then 258-row if they pass.
 3. Build smoke/15-row runners for FunASR SenseVoice and Qwen3-ASR, with strict

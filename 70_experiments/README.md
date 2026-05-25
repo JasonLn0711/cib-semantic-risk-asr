@@ -73,7 +73,8 @@ The 2026-05-25 WER audit defines the repo policy: the aggregate
 `cer_zh_micro` column is the primary paper-facing ASR surface metric;
 `wer_zh_jieba_micro` is supplemental; raw whitespace WER is legacy audit-only
 for unsegmented Chinese transcripts. The audit should be run with the canonical
-split manifest so missing/extra IDs and reference mismatches are recorded.
+split manifest so missing/extra IDs, reference mismatches, zero-reference
+metric units, tokenizer, normalization, and package versions are recorded.
 
 For metric-predictor evidence, use
 `../80_semantic_risk_asr/scoring/analyze_metric_predictors.py`. It reads local

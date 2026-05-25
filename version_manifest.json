@@ -1,23 +1,31 @@
 {
-  "version": "v2.5.60",
+  "version": "v2.5.61",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 60
+    "patch": 61
   },
-  "updated_at": "2026-05-25T19:15:52+08:00",
+  "updated_at": "2026-05-25T19:16:12+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "157b610",
+  "base_commit": "01806a9",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "60_whisper_asr_finetuning/scripts/run_janus_nemo_curator_pilot.py",
-    "80_semantic_risk_asr/scoring/audit_asr_text_metrics.py",
-    "tests/test_wer_metric_audit.py"
+    "60_whisper_asr_finetuning/README.md",
+    "70_experiments/README.md",
+    "70_experiments/registry.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
+    "70_experiments/runs/wer_metric_audit_2026_05_25/README.md",
+    "70_experiments/runs/wer_metric_audit_2026_05_25/high_stakes_300_summary.json",
+    "70_experiments/runs/wer_metric_audit_2026_05_25/legacy_15_row_summary.json",
+    "70_experiments/runs/wer_metric_audit_2026_05_25/summary.json",
+    "80_semantic_risk_asr/paper/experiment_plan.md",
+    "README.md",
+    "docs/postdoc_next_steps_2026_05_25.md"
   ]
 }
