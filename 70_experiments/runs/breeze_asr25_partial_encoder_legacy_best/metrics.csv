@@ -1,0 +1,7 @@
+metric,value,split,notes
+eval_loss,0.3664558231830597,validation,checkpoint-480 trainer_state
+eval_cer_norm,0.15062168738957965,validation,checkpoint-480 trainer_state
+eval_cer_raw,0.17507466182584763,validation,checkpoint-480 trainer_state
+eval_wer,0.20617297067573312,validation,checkpoint-480 trainer_state
+best_metric,0.15062168738957965,validation,checkpoint-480 trainer_state
+checkpoint_step,480,validation,selected checkpoint

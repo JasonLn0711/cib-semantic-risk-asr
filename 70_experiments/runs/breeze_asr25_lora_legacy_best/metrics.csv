@@ -1,0 +1,10 @@
+metric,value,split,notes
+test_loss,0.4086827039718628,test,legacy final_test_results.txt
+test_cer,0.2235133881998377,test,legacy final_test_results.txt
+test_wer,0.289627321013125,test,legacy final_test_results.txt
+test_sub_rate,0.13520038628681796,test,legacy final_test_results.txt
+test_del_rate,0.057855230235722754,test,legacy final_test_results.txt
+test_ins_rate,0.09657170449058426,test,legacy final_test_results.txt
+rtf,0.19078642709216767,test,legacy final_test_results.txt
+inference_time_seconds,1569.8525369167328,test,legacy final_test_results.txt
+trainer_best_metric,0.22503982811792045,validation,trainer_state checkpoint-360

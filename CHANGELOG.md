@@ -5,6 +5,25 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.30 - 2026-05-25T14:24:46+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `5382496`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `.gitignore`
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/breeze_asr25_lora_legacy_best/README.md`
+  - `70_experiments/runs/breeze_asr25_lora_legacy_best/metrics.csv`
+  - `70_experiments/runs/breeze_asr25_partial_encoder_legacy_best/README.md`
+  - `70_experiments/runs/breeze_asr25_partial_encoder_legacy_best/metrics.csv`
+  - `70_experiments/runs/janus_old_train_legacy_import/README.md`
+  - `README.md`
+  - `docs/REPO_MAP.md`
+  - `docs/janus_old_train_legacy_import.md`
+
 ## v2.5.29 - 2026-05-25T11:48:23+08:00
 
 - Bump: `patch`

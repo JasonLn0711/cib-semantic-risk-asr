@@ -21,6 +21,7 @@ decision-unstable ASR outputs in high-stakes call-center conversations.
 | `60_whisper_asr_finetuning/` | Whisper-oriented working entry point, configs, and validation scripts. | Primary training workspace. |
 | `70_experiments/` | Experiment registry, run records, metric templates, and reviewed outputs. | Primary experiment log. |
 | `80_semantic_risk_asr/` | CDS-ASR design, risk atom schema, counterfactual variants, CEIS scoring, downstream scam escalation task, and automatic constrained recovery policy. | Primary paper workspace. |
+| `90_legacy_imports/` | Local-only imports from legacy training exports, including copy manifests, pruning logs, and source-provenance evidence. | Local append-only evidence; never commit raw exports or weights. |
 | `VERSION`, `version_manifest.json`, `CHANGELOG.md`, `version_history.jsonl`, `VERSIONING.md` | Automated SemVer version-control state, human log, machine log, and rules. | Updated automatically by local git hook. |
 
 ## Current Fine-Tuning Dataset
@@ -59,6 +60,10 @@ organized extracted audio under `10_extracted_parts/`.
   corpora, generated dataset tables/arrays, model weights, checkpoints,
   experiment artifacts, and local caches. Track source docs, configs, scripts,
   small samples, and reviewed aggregate records instead.
+- Keep legacy imports under `90_legacy_imports/` local-only. For the
+  2026-05-25 `janus_old_train` migration, the original
+  `/home/jnln3799/Downloads/janus_old_train` source was not modified; only the
+  repo copy was pruned.
 - Put model checkpoints and bulk predictions under `70_experiments/runs/...`
   and keep only curated metrics/run records in git.
 - Version-control automation lives in `scripts/auto_version.py` and

@@ -56,6 +56,7 @@ hf_cache/
 40_breeze_asr25_finetune_dataset/manifests/
 40_breeze_asr25_finetune_dataset/reports/
 50_janus_data_library/
+90_legacy_imports/
 
 # Large training artifacts should stay local unless explicitly packaged.
 **/checkpoint-*/
@@ -73,3 +74,4 @@ hf_cache/
 70_experiments/runs/*/artifacts/
 70_experiments/runs/*/predictions/
 70_experiments/runs/*/logs/
+70_experiments/runs/*/models/

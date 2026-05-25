@@ -43,6 +43,7 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
 | `60_whisper_asr_finetuning/` | Primary Whisper ASR fine-tuning workspace, dataset entry point, configs, and validation scripts. |
 | `70_experiments/` | Experiment registry, run records, metric templates, and reviewed ASR outputs. |
 | `80_semantic_risk_asr/` | Main paper axis: CDS-ASR, risk atoms, counterfactual variants, CEIS scoring, downstream scam escalation, and automatic recovery policy. |
+| `90_legacy_imports/` | Local-only legacy import area for old JANUS training exports, including pruned manifests and provenance records. |
 | `docs/` | Repo-level data map and handling rules. |
 
 ## Inventory files
@@ -60,6 +61,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
 
 - Missing expected part: `004`.
 - The 2026-05-18 archive organization pass performed no data deletion.
+- The 2026-05-25 `janus_old_train` import is local-only under
+  `90_legacy_imports/`; non-selected LoRA and partial-encoder parameter files
+  were pruned from the repo copy while experiment metadata and analysis records
+  were retained.
 - Treat audio/call data and filenames as sensitive.
 - If storage cleanup is needed later, review `30_review_flags/REVIEW.md` and `20_inventory/largest_files.tsv` first.
 
