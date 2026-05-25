@@ -148,10 +148,11 @@ candidate triage, and case selection, not as final human-reviewed CDS evidence.
 Use `build_janus_metric_inputs.py` for new split-level work. The next execution
 gate is:
 
-1. complete comparable 258-row baselines for Breeze-ASR-25 base, Whisper small,
-   Whisper large-v2, optional Breeze-ASR-26, Whisper large-v3, and Whisper
+1. complete comparable 258-row baselines for Whisper large-v3 and Whisper
    large-v3 turbo;
-2. rerun this builder over the expanded hypothesis set;
+2. rerun this builder over the expanded hypothesis set. The later six-model
+   validation including Breeze-ASR-26 is recorded under
+   `70_experiments/runs/janus_258_test_split_asr_cds_proxy/`;
 3. create a small human-reviewed risk-atom audit set before treating 258-row or
    300-row proxy results as paper-grade CDS evidence;
 4. use the same builder interface for the selected 300-row high-stakes main

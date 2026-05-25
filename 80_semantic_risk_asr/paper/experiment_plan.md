@@ -68,7 +68,9 @@ Models:
 - optional `MediaTek-Research/Breeze-ASR-26` as a Taigi/Taiwanese Hokkien
   stress test, not as the primary Taiwan Mandarin baseline. Local 15-row status
   on 2026-05-25: completed, CER `38.49`, WER `1493.33`, CUDA with cuDNN
-  disabled.
+  disabled. Local 258-row status on 2026-05-25: completed,
+  `cer_zh_micro=24.27`, `wer_zh_jieba_micro=32.29`, wall time `187.25s`,
+  unsafe downrouting `27`, high-risk missed `22`, locale violations `0`.
 - `FunAudioLLM/SenseVoiceSmall` after a FunASR runner emits the standard
   hypothesis contract.
 - `Qwen/Qwen3-ASR-0.6B` first, then `Qwen/Qwen3-ASR-1.7B` only if the smaller
@@ -117,36 +119,40 @@ is worse on CEIS and downstream safety counts. Treat this as early evidence
 that lower CER alone is not sufficient for the paper claim.
 
 Current 258-row test-split signal: partial encoder remains stronger than LoRA,
-Breeze-ASR-25 base, Whisper large-v2, and Whisper small. Partial encoder
-produced `cer_zh_micro=15.04` in `213.79` seconds (`0.829` sec/row), with
+Breeze-ASR-25 base, Breeze-ASR-26, Whisper large-v2, and Whisper small.
+Partial encoder produced `cer_zh_micro=15.04` in `213.79` seconds
+(`0.829` sec/row), with
 unsafe downrouting `7`, high-risk misses `4`, risk-atom proxy error rate
 `0.0431`, and locale violations `0`.
 LoRA produced `cer_zh_micro=18.23` in `403.37` seconds (`1.563` sec/row), with
 unsafe downrouting `10`, high-risk misses `7`, risk-atom proxy error rate
 `0.0613`, and locale violations `0`. Breeze-ASR-25 base produced
 `cer_zh_micro=22.72`, unsafe downrouting `34`, high-risk misses `30`, and
-locale violations `0`. Whisper large-v2 produced `cer_zh_micro=24.72`,
+locale violations `0`. Breeze-ASR-26 produced `cer_zh_micro=24.27`,
+`wer_zh_jieba_micro=32.29`, unsafe downrouting `27`, high-risk misses `22`,
+and locale violations `0`. Whisper large-v2 produced `cer_zh_micro=24.72`,
 unsafe downrouting `33`, high-risk misses `28`, and `1` locale-violation row.
 Whisper small produced `cer_zh_micro=34.86`, unsafe downrouting `76`,
 high-risk misses `70`, and `4` locale-violation rows.
 
-The five-model split-aware proxy bridge produced `2648` SRES rows, `2648`
-CEIS variant rows, and `1290` downstream rows. Aggregate SRES total was
-`24120.0`; CEIS unstable samples were `164`; downstream ASR mismatch rate was
-`0.1287`; high-risk missed by ASR was `139`.
+The six-model split-aware proxy bridge produced `3184` SRES rows, `3184`
+CEIS variant rows, and `1548` downstream rows. Aggregate SRES total was
+`27810.0`; CEIS unstable samples were `192`; downstream ASR mismatch rate was
+`0.126`; high-risk missed by ASR was `161`.
 
 Decision: promote the legacy partial encoder as the current ASR hypothesis
 generator for the next split-aware CDS metric builder. Keep LoRA as contrast
 evidence, not the next primary hypothesis generator. Treat pre-audit `wer`
-values as legacy raw whitespace fields. Paper-facing ASR tables should use the
+values as legacy raw whitespace fields. The current WER audit validates all six
+258-row hypothesis files against the canonical manifest and cross-checks
+zh-jieba corpus WER against `jiwer`. Paper-facing ASR tables should use the
 aggregate `cer_zh_micro` column as the primary surface metric and
 `wer_zh_jieba_micro` only as a supplemental segmented word metric.
 
 Current execution priority after the 258-row gate:
 
-1. Complete remaining comparable 258-row baselines for optional Breeze-ASR-26,
-   Whisper large-v3, and Whisper large-v3 turbo under the `zh_asr` metric
-   profile.
+1. Complete remaining comparable 258-row baselines for Whisper large-v3 and
+   Whisper large-v3 turbo under the `zh_asr` metric profile.
 2. Build new SenseVoice and Qwen3-ASR runners only through smoke and 15-row
    contract before full split runs.
 3. Keep Gemma 4 E2B/E4B as a separate prompted multimodal ASR lane, not as a
@@ -154,7 +160,7 @@ Current execution priority after the 258-row gate:
 4. Use the split-aware `build_janus_metric_inputs.py` so 15-row, 258-row, and
    300-row experiments share the same metric-input contract. Current local
    validation: the script reproduces the 15-row human-reviewed legacy bridge
-   counts and can process the five-model 258-row proxy comparison.
+   counts and can process the six-model 258-row proxy comparison.
 5. Run the selected 300-row high-stakes expansion as the main experiment only
    after the split-aware builder is validated.
 

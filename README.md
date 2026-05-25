@@ -66,11 +66,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   were pruned from the repo copy while experiment metadata and analysis records
   were retained.
 - The 2026-05-25 canonical 258-row test split comparison now has aggregate
-  five-model evidence under
+  six-model evidence under
   `70_experiments/runs/janus_258_test_split_asr_cds_proxy/`: legacy partial
-  encoder, legacy LoRA, Breeze-ASR-25 base, Whisper large-v2, and Whisper
-  small. The partial encoder remains the current ASR hypothesis generator
-  candidate.
+  encoder, legacy LoRA, Breeze-ASR-25 base, Breeze-ASR-26, Whisper large-v2,
+  and Whisper small. The partial encoder remains the current ASR hypothesis
+  generator candidate.
 - The expanded ASR candidate matrix is recorded in
   `docs/asr_candidate_expansion_2026_05_25.md` and
   `60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml`.
@@ -87,9 +87,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   manifest transcripts are available for `4967` rows, but full human-reviewed
   CDS ground truth currently covers the 15-row gold subset only.
 - The 2026-05-25 WER audit is recorded in
-  `70_experiments/runs/wer_metric_audit_2026_05_25/`. Pre-audit WER fields are
-  legacy raw whitespace-token values; paper-facing ASR tables should use the
-  `cer_zh_micro` aggregate column as the primary surface metric and
+  `70_experiments/runs/wer_metric_audit_2026_05_25/`. The latest audit checks
+  six 258-row hypothesis files against the canonical manifest, records package
+  versions, and cross-checks zh-jieba corpus WER against `jiwer`. Pre-audit WER
+  fields are legacy raw whitespace-token values; paper-facing ASR tables should
+  use the `cer_zh_micro` aggregate column as the primary surface metric and
   `wer_zh_jieba_micro` only as a supplemental segmented word metric.
 - Treat audio/call data and filenames as sensitive.
 - If storage cleanup is needed later, review `30_review_flags/REVIEW.md` and `20_inventory/largest_files.tsv` first.

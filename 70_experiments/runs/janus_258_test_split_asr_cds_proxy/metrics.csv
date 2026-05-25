@@ -1,6 +1,6 @@
 metric,value,split,notes
 rows,258,test,Canonical janus_165_v1 test split rows.
-hypothesis_files,5,test,Legacy partial encoder, legacy LoRA, Breeze-ASR-25 base, Whisper small, and Whisper large-v2.
+hypothesis_files,6,test,Legacy partial encoder, legacy LoRA, Breeze-ASR-25 base, Whisper small, Whisper large-v2, and Breeze-ASR-26.
 partial_encoder_cer_mean,18.24,test,breeze_asr25_partial_encoder_legacy_best_test_split.
 partial_encoder_wer_mean,100.0,test,Legacy raw whitespace-token WER; not a publication-grade primary metric for unsegmented Chinese.
 partial_encoder_cer_zh_micro,15.04,test,Paper-facing primary ASR surface metric from summarizer.
@@ -56,16 +56,27 @@ whisper_large_v2_unsafe_downrouting_count,33,test,Proxy decision metric from sum
 whisper_large_v2_high_risk_missed_count,28,test,Proxy decision metric from summarizer.
 whisper_large_v2_risk_atom_error_rate,0.1276,test,Proxy atom-presence metric; not a substitute for human annotation.
 whisper_large_v2_simplified_char_count,12,test,Taiwan Traditional Chinese locale gate.
-wer_audit_run,wer_metric_audit_2026_05_25,test,Use text_metric_audit.tsv for zh-jieba WER and corpus-level micro rates.
-metric_bridge_reference_rows,258,test,Split-aware five-model proxy metric bridge.
-metric_bridge_hypothesis_rows,1290,test,Five hypothesis files times 258 rows.
-metric_bridge_sres_rows,2648,test,Generated local metric input rows; raw rows remain ignored.
-metric_bridge_ceis_rows,2648,test,Generated local metric input rows; raw rows remain ignored.
-metric_bridge_downstream_rows,1290,test,Generated local metric input rows; raw rows remain ignored.
-metric_bridge_sres_total,24120.0,test,Aggregate summary from semantic_risk_score.py.
-metric_bridge_sres_mean,9.109,test,Aggregate summary from semantic_risk_score.py.
-metric_bridge_ceis_unstable_samples,164,test,Aggregate summary from counterfactual_escalation_instability.py.
+breeze_asr26_cer_mean,24.87,test,breeze_asr26_test_split.
+breeze_asr26_wer_mean,33.12,test,Stored zh_asr + jieba WER mean from the inference runner.
+breeze_asr26_cer_zh_micro,24.27,test,Paper-facing primary ASR surface metric from summarizer.
+breeze_asr26_wer_zh_jieba_micro,32.29,test,Supplemental segmented Chinese WER from summarizer.
+breeze_asr26_wall_time_seconds,187.25,test,CUDA with cuDNN disabled and torch_dtype float16.
+breeze_asr26_seconds_per_row,0.726,test,Derived from wall_time_seconds / rows.
+breeze_asr26_rows_per_second,1.378,test,Derived from rows / wall_time_seconds.
+breeze_asr26_unsafe_downrouting_count,27,test,Proxy decision metric from summarizer.
+breeze_asr26_high_risk_missed_count,22,test,Proxy decision metric from summarizer.
+breeze_asr26_risk_atom_error_rate,0.1034,test,Proxy atom-presence metric; not a substitute for human annotation.
+breeze_asr26_simplified_char_count,0,test,Taiwan Traditional Chinese locale gate.
+wer_audit_run,wer_metric_audit_2026_05_25,test,Use text_metric_audit.tsv for manifest-validated zh-jieba WER and corpus-level micro rates.
+metric_bridge_reference_rows,258,test,Split-aware six-model proxy metric bridge.
+metric_bridge_hypothesis_rows,1548,test,Six hypothesis files times 258 rows.
+metric_bridge_sres_rows,3184,test,Generated local metric input rows; raw rows remain ignored.
+metric_bridge_ceis_rows,3184,test,Generated local metric input rows; raw rows remain ignored.
+metric_bridge_downstream_rows,1548,test,Generated local metric input rows; raw rows remain ignored.
+metric_bridge_sres_total,27810.0,test,Aggregate summary from semantic_risk_score.py.
+metric_bridge_sres_mean,8.734,test,Aggregate summary from semantic_risk_score.py.
+metric_bridge_ceis_unstable_samples,192,test,Aggregate summary from counterfactual_escalation_instability.py.
 metric_bridge_ceis_max,15.0,test,Aggregate summary from counterfactual_escalation_instability.py.
-metric_bridge_ceis_mean,1.184,test,Aggregate summary from counterfactual_escalation_instability.py.
-metric_bridge_downstream_asr_mismatch_rate,0.1287,test,Aggregate summary from evaluate_downstream_impact.py.
-metric_bridge_high_risk_missed_by_asr,139,test,Aggregate summary from evaluate_downstream_impact.py.
+metric_bridge_ceis_mean,1.1461,test,Aggregate summary from counterfactual_escalation_instability.py.
+metric_bridge_downstream_asr_mismatch_rate,0.126,test,Aggregate summary from evaluate_downstream_impact.py.
+metric_bridge_high_risk_missed_by_asr,161,test,Aggregate summary from evaluate_downstream_impact.py.
