@@ -137,8 +137,8 @@ Tracked readiness outputs:
 | `human_audit_review_batch_log.tsv` | Append-only repo-safe preparation log for local transcript-bearing review packets. |
 | `human_audit_current_review_batch_status_summary.json` | Repo-safe completion status for the current packet. Current status: `batch_pending`, `0/6` risk/decision rows and `0/18` model assessments reviewed. |
 | `human_audit_current_review_batch_status_rows.tsv` | Repo-safe row-level completion checklist for the current packet. No audio IDs, transcripts, hypotheses, or reviewer notes. |
-| `human_audit_batch_response_template_summary.json` | Repo-safe record for the local response TSV template. Current template has `18` response rows for rows `1-6`. |
-| `human_audit_batch_response_apply_summary.json` | Repo-safe strict dry-run/apply status for the local response TSV. Current `--require-complete` dry-run status is `response_pending`, `ok=false`, `incomplete_response=1`, with `0/6` rows and `0/18` model assessments filled. |
+| `human_audit_batch_response_template_summary.json` | Repo-safe record for the local response TSV template. Current template has `18` response rows for rows `1-6` and optional review-timing columns. |
+| `human_audit_batch_response_apply_summary.json` | Repo-safe strict dry-run/apply status for the local response TSV. Current `--require-complete` dry-run status is `response_pending`, `ok=false`, `incomplete_response=1`, with `0/6` rows, `0/18` model assessments, and `0/6` row review timings filled. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
@@ -201,8 +201,13 @@ For batch entry, use the local response TSV workflow instead of hand-editing
 Current local response template:
 
 ```text
-70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv
+70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv
 ```
+
+The response TSV includes optional timing columns:
+`review_started_at`, `review_finished_at`, and `review_elapsed_seconds`.
+These fields are not completion gates, but filled values are summarized as
+aggregate review-time counts and seconds in the tracked apply summary.
 
 After a reviewer fills that ignored TSV, dry-run it first. Use
 `--require-complete` as the completion gate; it should fail until all required
@@ -211,7 +216,7 @@ row-level and model-level reviewer fields are filled:
 ```bash
 .venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py \
   --require-complete \
-  --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv \
+  --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv \
   --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
   --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
   --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
@@ -220,7 +225,8 @@ row-level and model-level reviewer fields are filled:
 
 Current strict dry-run status is `response_pending`: `ok=false`,
 `incomplete_response=1`, `0/6` row decisions and `0/18` model assessments have
-been filled. A non-strict dry-run may be used for progress inspection, but
+been filled. The timing summary currently records `0/6` rows with review-time
+values. A non-strict dry-run may be used for progress inspection, but
 `--require-complete` must return `response_complete` before adding `--write`.
 
 After strict dry-run returns `response_complete`, apply and refresh the
@@ -232,7 +238,7 @@ aggregate status in one pass:
   --write \
   --refresh-after-write \
   --prepare-next-after-write \
-  --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv \
+  --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv \
   --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
   --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
   --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \

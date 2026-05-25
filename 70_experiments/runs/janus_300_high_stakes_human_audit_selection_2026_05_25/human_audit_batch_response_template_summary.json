@@ -1,7 +1,7 @@
 {
   "ok": true,
   "status": "response_template_prepared",
-  "created_at": "2026-05-25T21:20:10+08:00",
+  "created_at": "2026-05-25T22:09:15+08:00",
   "input_boundary": "local ignored audit sheet plus tracked batch summary",
   "output_boundary": "tracked summary only; editable response TSV is local ignored",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
@@ -18,9 +18,9 @@
   "rows_in_batch": 6,
   "response_rows": 18,
   "model_assessments_in_template": 18,
-  "template_column_count": 16,
-  "local_response_template_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv",
+  "template_column_count": 19,
+  "local_response_template_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv",
   "source_batch_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json",
-  "next_action": "Fill the local response TSV with reviewer decisions, then dry-run apply_human_audit_batch_response.py --response-sheet before using --write.",
+  "next_action": "Fill the local response TSV with reviewer decisions and optional timing fields, then dry-run apply_human_audit_batch_response.py --response-sheet before using --write.",
   "runtime_seconds": 0.0012
 }

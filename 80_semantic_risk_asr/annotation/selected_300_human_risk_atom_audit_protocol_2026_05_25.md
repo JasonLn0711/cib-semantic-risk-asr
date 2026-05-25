@@ -180,13 +180,19 @@ refresh:
   --expected-rows 30
 ```
 
+The generated TSV may include optional timing columns:
+`review_started_at`, `review_finished_at`, and `review_elapsed_seconds`. These
+fields are not part of the review-completion gate, but they should be filled
+when available so the tracked apply summary can report aggregate review-time
+coverage and elapsed seconds without exposing transcript-bearing row content.
+
 After filling the ignored response TSV, dry-run it with the strict completion
 gate:
 
 ```bash
 .venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py \
   --require-complete \
-  --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv \
+  --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv \
   --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
   --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
   --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \

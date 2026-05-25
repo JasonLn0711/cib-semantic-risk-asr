@@ -142,7 +142,9 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   Local TSV response entry is handled by
   `80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py`; the
   current ignored response template has `18` rows and its blank dry-run status
-  is `response_pending`. The strict `--require-complete` dry-run currently
+  is `response_pending`. The template now has optional review-timing columns,
+  and the tracked apply summary records aggregate timing coverage without
+  exposing row content. The strict `--require-complete` dry-run currently
   exits nonzero as expected with `ok=false` and `incomplete_response=1`; this is
   the completion gate before any `--write`. After strict dry-run passes, use
   `--write --refresh-after-write` to update the ignored local sheet, audit the
