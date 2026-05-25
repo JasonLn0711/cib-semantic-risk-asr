@@ -39,12 +39,22 @@ python 60_whisper_asr_finetuning/scripts/select_janus_high_stakes_expansion.py \
   --sample-size 300
 ```
 
+The selected IDs were converted into a runner-readable manifest with:
+
+```bash
+.venv/bin/python 60_whisper_asr_finetuning/scripts/prepare_janus_high_stakes_manifest.py
+```
+
 ## Artifacts
 
 - Local candidate IDs and risk metadata:
   `artifacts/expansion_candidates.tsv` (ignored local)
+- Local runner manifest:
+  `artifacts/high_stakes_300_manifest.jsonl` (ignored local)
 - Repo-safe aggregate summary:
   `selection_summary.tsv`
+- Repo-safe manifest summary:
+  `high_stakes_manifest_summary.tsv`
 
 Do not commit raw transcripts, copied audio, or full prediction outputs for the
 expansion set.
@@ -60,3 +70,24 @@ expansion set.
 
 The selected IDs are local-only under ignored `artifacts/`; git tracks only the
 aggregate summary and selection method.
+
+## First ASR Pass
+
+The first 300-row high-stakes pass completed with the legacy partial-encoder
+Breeze-ASR-25 checkpoint:
+
+- Run ID: `breeze_asr25_partial_encoder_high_stakes_300`
+- Rows: `300/300`
+- Runtime: CUDA, cuDNN disabled, `float16`
+- Metric profile: `metric_normalization=zh_asr`, `wer_tokenizer=jieba`
+- Wall time: `275.74` seconds
+- Stored row-mean CER/WER: CER `7.03`, WER `9.55`
+- Corpus micro rates from manifest-validated audit: `cer_zh_micro=6.86`,
+  `wer_zh_jieba_micro=9.38`
+- `jiwer` corpus-WER delta for zh-jieba WER: `0.0`
+- Hypothesis validation: passed `300/300` expected IDs, no missing labels, no
+  missing quality fields, no duplicate IDs
+
+Raw predictions, runtime logs, and validation JSON remain ignored under the
+run's `predictions/` and `artifacts/` directories. The repo tracks only the
+aggregate `text_metric_audit.tsv` and run README.

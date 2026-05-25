@@ -5,6 +5,22 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.45 - 2026-05-25T17:45:10+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `de10503`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/scripts/prepare_janus_high_stakes_manifest.py`
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/breeze_asr25_partial_encoder_high_stakes_300/README.md`
+  - `70_experiments/runs/breeze_asr25_partial_encoder_high_stakes_300/metric_audit_summary.json`
+  - `70_experiments/runs/breeze_asr25_partial_encoder_high_stakes_300/text_metric_audit.tsv`
+  - `70_experiments/runs/janus_300_500_high_stakes_expansion/README.md`
+  - `70_experiments/runs/janus_300_500_high_stakes_expansion/high_stakes_manifest_summary.tsv`
+
 ## v2.5.44 - 2026-05-25T17:43:13+08:00
 
 - Bump: `patch`

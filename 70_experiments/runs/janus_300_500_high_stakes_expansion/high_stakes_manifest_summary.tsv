@@ -1,0 +1,10 @@
+metric	value	notes
+selected_rows	300	manifest rows
+source_manifest_rows	4967	40_breeze_asr25_finetune_dataset/manifests/all.jsonl
+missing_selected_ids	0	must be zero
+duration_min_sec	15.838	selected manifest rows
+duration_max_sec	29.736	selected manifest rows
+duration_mean_sec	24.437	selected manifest rows
+split_test	30	manifest rows
+split_train	240	manifest rows
+split_validation	30	manifest rows
