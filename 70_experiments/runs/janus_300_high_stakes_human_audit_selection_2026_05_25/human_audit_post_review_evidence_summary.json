@@ -40,6 +40,44 @@
     "consequence_paper_claims_not_ready",
     "recovery_proxy_only"
   ],
+  "post_review_command_plan": {
+    "purpose": "Exact post-review command order after the local selected-300 response TSV has human row/model/timing fields filled.",
+    "current_first_action": "complete_response_closeout",
+    "closeout_commands": {
+      "strict_dry_run": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30",
+      "write_refresh_prepare_next": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --write --refresh-after-write --prepare-next-after-write --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30"
+    },
+    "post_write_order": [
+      {
+        "order": 1,
+        "gate": "human_audit_refresh",
+        "command_key": "human_audit_refresh",
+        "command": ".venv/bin/python 80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py",
+        "success_condition": "human_audit_refresh_summary.status == review_complete"
+      },
+      {
+        "order": 2,
+        "gate": "strict_human_reviewed_recovery",
+        "command_key": "strict_human_reviewed_recovery",
+        "command": ".venv/bin/python 80_semantic_risk_asr/recovery/evaluate_human_reviewed_recovery_policies.py",
+        "success_condition": "summary.evidence_mode == human_reviewed and five policies emitted"
+      },
+      {
+        "order": 3,
+        "gate": "post_review_checklist",
+        "command_key": "post_review_checklist",
+        "command": ".venv/bin/python 80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py",
+        "success_condition": "human_audit_post_review_evidence_summary.status == post_review_evidence_ready"
+      },
+      {
+        "order": 4,
+        "gate": "objective_requirements_audit",
+        "command_key": "objective_requirements_audit",
+        "command": ".venv/bin/python 80_semantic_risk_asr/scoring/audit_postdoc_objective_requirements.py",
+        "success_condition": "postdoc_objective_requirements_summary.objective_requirements_ready == true"
+      }
+    ]
+  },
   "checklist": [
     {
       "step_id": "1",

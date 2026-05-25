@@ -253,6 +253,23 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 這個路徑讓 objective `6` 的 recovery experiment 有明確 post-review rerun
 入口；目前仍然不能把 proxy recovery 寫成 paper-facing intervention claim。
 
+18. Post-review command plan 已寫入 checklist summary：
+
+- Source:
+  `80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py`。
+- Current tracked field:
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json`
+  的 `post_review_command_plan`。
+- Current first action: `complete_response_closeout`。
+- Post-write order:
+  `refresh_human_audit_evidence.py`、
+  `evaluate_human_reviewed_recovery_policies.py`、
+  `build_post_review_evidence_checklist.py`、
+  `audit_postdoc_objective_requirements.py`。
+- 這是執行順序 guardrail，不是人工審查完成證據；它的功能是避免
+  selected-300 local response 寫入後漏掉 human-reviewed recovery 與 objective
+  audit。
+
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS

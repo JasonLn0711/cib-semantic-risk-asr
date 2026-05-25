@@ -144,8 +144,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   now records the aggregate gates that must pass after response closeout,
   write, and refresh; current status is `post_review_evidence_blocked`
   because human refresh/predictor outputs are incomplete and recovery evidence
-  is still proxy-only. Normal `refresh_human_audit_evidence.py` now updates
-  this post-review evidence status in `human_audit_refresh_summary.json`.
+  is still proxy-only. Its summary now also carries a post-review command plan:
+  complete the current response closeout first, then run aggregate refresh,
+  strict human-reviewed recovery, post-review checklist, and objective
+  requirements audit in order. Normal `refresh_human_audit_evidence.py` now
+  updates this post-review evidence status in
+  `human_audit_refresh_summary.json`.
   A stricter objective-by-objective publication audit is
   `80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py`; its
   current output records `publishable_ready=false` with objective `5`
