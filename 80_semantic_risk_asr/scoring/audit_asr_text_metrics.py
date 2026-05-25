@@ -217,6 +217,7 @@ def summarize(
         "missing_expected_ids": sorted(expected_ids - observed_ids),
         "extra_ids": sorted(observed_ids - expected_ids),
         "reference_mismatch_rows": reference_mismatch,
+        "zero_reference_unit_rows": profile_zero_ref_rows,
     }
 
 
@@ -312,18 +313,19 @@ def main() -> int:
     write_tsv(args.output_tsv, all_rows)
     args.summary_json.parent.mkdir(parents=True, exist_ok=True)
     setup_ok = setup_checks["expected_manifest_row_count"] in ("", True)
+    audit_ok = setup_ok and all(
+        summary["missing_reference_rows"] == 0
+        and summary["missing_hypothesis_rows"] == 0
+        and not summary["missing_expected_ids"]
+        and not summary["extra_ids"]
+        and summary["reference_mismatch_rows"] == 0
+        and all(count == 0 for count in summary["zero_reference_unit_rows"].values())
+        for summary in summaries
+    )
     args.summary_json.write_text(
         json.dumps(
             {
-                "ok": setup_ok
-                and all(
-                    summary["missing_reference_rows"] == 0
-                    and summary["missing_hypothesis_rows"] == 0
-                    and not summary["missing_expected_ids"]
-                    and not summary["extra_ids"]
-                    and summary["reference_mismatch_rows"] == 0
-                    for summary in summaries
-                ),
+                "ok": audit_ok,
                 "setup_checks": setup_checks,
                 "hypothesis_files": [str(path) for path in args.hypotheses],
                 "metric_environment": {
@@ -346,11 +348,15 @@ def main() -> int:
     )
     print(
         json.dumps(
-            {"ok": True, "output_tsv": str(args.output_tsv), "summary_json": str(args.summary_json)},
+            {
+                "ok": audit_ok,
+                "output_tsv": str(args.output_tsv),
+                "summary_json": str(args.summary_json),
+            },
             ensure_ascii=False,
         )
     )
-    return 0
+    return 0 if audit_ok else 1
 
 
 if __name__ == "__main__":

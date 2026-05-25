@@ -17,6 +17,8 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+from asr_text_metrics import NORMALIZATION_MODES, WER_TOKENIZERS, compute_pair_metrics
+
 
 REQUIRED_GOLD_FIELDS = (
     "human_verified_transcript",
@@ -89,7 +91,6 @@ def validate_gate(
 def import_curator_runtime() -> dict[str, Any]:
     try:
         from nemo_curator.stages.audio.inference.asr_nemo import InferenceAsrNemoStage
-        from nemo_curator.stages.audio.metrics.get_wer import GetPairwiseWerStage, get_cer
         from nemo_curator.stages.resources import Resources
         from nemo_curator.tasks import AudioTask
     except ModuleNotFoundError as exc:
@@ -99,10 +100,8 @@ def import_curator_runtime() -> dict[str, Any]:
         ) from exc
     return {
         "AudioTask": AudioTask,
-        "GetPairwiseWerStage": GetPairwiseWerStage,
         "InferenceAsrNemoStage": InferenceAsrNemoStage,
         "Resources": Resources,
-        "get_cer": get_cer,
     }
 
 
@@ -150,6 +149,18 @@ def main() -> int:
     parser.add_argument("--skip-gate-check", action="store_true")
     parser.add_argument("--quiet", action="store_true")
     parser.add_argument(
+        "--metric-normalization",
+        choices=NORMALIZATION_MODES,
+        default="zh_asr",
+        help="Text normalization for reported CER/WER. zh_asr preserves Traditional Chinese.",
+    )
+    parser.add_argument(
+        "--wer-tokenizer",
+        choices=WER_TOKENIZERS,
+        default="jieba",
+        help="Tokenization used for reported WER. Use whitespace only for legacy audits.",
+    )
+    parser.add_argument(
         "--disable-cudnn",
         action="store_true",
         help="Use CUDA while bypassing cuDNN kernels; useful for local cuDNN sublibrary mismatches.",
@@ -180,10 +191,8 @@ def main() -> int:
 
         torch.backends.cudnn.enabled = False
     AudioTask = runtime["AudioTask"]
-    GetPairwiseWerStage = runtime["GetPairwiseWerStage"]
     InferenceAsrNemoStage = runtime["InferenceAsrNemoStage"]
     Resources = runtime["Resources"]
-    get_cer = runtime["get_cer"]
 
     tasks = [
         AudioTask(
@@ -202,17 +211,26 @@ def main() -> int:
     ).with_(resources=Resources(gpus=gpus, cpus=8.0), batch_size=args.batch_size)
     stage.setup_on_node()
     stage.setup()
-    wer_stage = GetPairwiseWerStage(text_key="text", pred_text_key="pred_text", wer_key="wer")
 
     processed: list[dict[str, Any]] = []
     for start in range(0, len(tasks), args.batch_size):
         batch = tasks[start : start + args.batch_size]
         for task in stage.process_batch(batch):
-            task = wer_stage.process(task)
             row = dict(task.data)
             row["pred_text"] = output_text(row.get("pred_text"))
             row["hypothesis_text"] = row["pred_text"]
-            row["cer"] = get_cer(row["text"], row["pred_text"])
+            text_metrics = compute_pair_metrics(
+                str(row.get("text", "")),
+                row["pred_text"],
+                normalization=args.metric_normalization,
+                wer_tokenizer=args.wer_tokenizer,
+            )
+            row["cer"] = text_metrics["cer"]
+            row["wer"] = text_metrics["wer"]
+            row["metric_normalization"] = args.metric_normalization
+            row["wer_tokenizer"] = args.wer_tokenizer
+            row["cer_raw"] = text_metrics["cer_raw"]
+            row["wer_raw_whitespace"] = text_metrics["wer_raw_whitespace"]
             row["model"] = args.model_name
             row["asr_run_id"] = args.asr_run_id
             row["runtime"] = args.runtime
@@ -244,6 +262,10 @@ def main() -> int:
         "hypothesis_text",
         "wer",
         "cer",
+        "metric_normalization",
+        "wer_tokenizer",
+        "cer_raw",
+        "wer_raw_whitespace",
         "model",
         "asr_run_id",
         "runtime",
@@ -264,6 +286,8 @@ def main() -> int:
         "model": args.model_name,
         "asr_run_id": args.asr_run_id,
         "runtime": args.runtime,
+        "metric_normalization": args.metric_normalization,
+        "wer_tokenizer": args.wer_tokenizer,
         "gate": gate,
         "audio_ids": [row["audio_id"] for row in output_rows],
     }

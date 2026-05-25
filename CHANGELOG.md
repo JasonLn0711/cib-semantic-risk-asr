@@ -5,6 +5,18 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.60 - 2026-05-25T19:15:52+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `157b610`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/scripts/run_janus_nemo_curator_pilot.py`
+  - `80_semantic_risk_asr/scoring/audit_asr_text_metrics.py`
+  - `tests/test_wer_metric_audit.py`
+
 ## v2.5.59 - 2026-05-25T19:02:57+08:00
 
 - Bump: `patch`
