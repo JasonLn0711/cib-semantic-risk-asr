@@ -85,6 +85,7 @@ ignored local paths.
 | 5.42 | Checked remaining ASR and multimodal model readiness. | Hugging Face metadata check; local package-version check; `docs/asr_candidate_expansion_2026_05_25.md`. | Completed as runner planning. SenseVoice, Qwen3-ASR 0.6B/1.7B, and Gemma 4 E2B/E4B model pages are public and not gated, but local runnable tests need new family-specific runners. `funasr`, `modelscope`, and `qwen-asr` are not installed in the current `.venv`. Gemma 4 remains a separate prompted multimodal-ASR lane, not a pure ASR baseline. |
 | 5.43 | Added consequence-to-evidence matrix gate. | `build_consequence_evidence_matrix.py`; `consequence_evidence_matrix_summary.json`; `consequence_evidence_matrix.tsv`; `tests/test_consequence_evidence_matrix.py`. | Added a paper-facing map from metric reporting, metric insufficiency, model comparison, split generalization, recovery, human evidence, and publishability claims to current aggregate evidence. The gate keeps proxy evidence separate from paper-ready claims and rejects transcript/sample-key field-name leakage. |
 | 5.44 | Cross-linked publishable completion audit with the consequence matrix. | `audit_publishable_evidence_chain.py`; `publishable_evidence_completion_summary.json`; `tests/test_publishable_evidence_audit.py`. | Completed as a completion-audit hardening pass. The publishable audit now records `objective_requirements_ready=false`, `paper_claim_status_ready=false`, and `consequence_matrix_alignment.available=true`, `ok=true`, `paper_claims_ready=false`. This prevents a future status summary from treating objective rows and consequence claims as separate, potentially inconsistent readiness gates. Direct publishable-audit tests passed; `pytest` remains unavailable in `.venv`. |
+| 5.45 | Added current reviewer action checklist for selected-300 human audit. | `build_human_audit_reviewer_action_checklist.py`; `human_audit_reviewer_action_checklist_summary.json`; `human_audit_reviewer_action_checklist.tsv`; `tests/test_human_audit_reviewer_action_checklist.py`. | Completed as reviewer routing and provenance, not as human review. The live checklist reports `reviewer_action_ready`: handoff fresh, local packet exists, local response TSV exists, and preflight recorded. Required reviewer content remains pending: `6/6` packet rows, `18/18` model assessments, and `6/6` optional timing rows. Compile and direct checklist tests passed; sensitive-field scan over outputs found no audio IDs, transcripts, hypotheses, reviewer notes, private fixture text, or absolute local paths. |
 
 ## Next Operations
 
@@ -116,7 +117,10 @@ ignored local paths.
    local reviewer routing, then run the same tool with `--check-existing` and
    require `handoff_fresh` before opening the transcript-bearing local packet or
    response TSV. Run `preflight_human_audit_review_session.py` to record the
-   aggregate session start; require `review_session_ready`. Dry-run the filled response TSV with
+   aggregate session start; require `review_session_ready`. Run
+   `build_human_audit_reviewer_action_checklist.py` to record the current
+   aggregate action checklist; require `reviewer_action_ready` before filling
+   the local response TSV. Dry-run the filled response TSV with
    `--require-complete` before using `--write --refresh-after-write`, and add
    `--prepare-next-after-write` when the next local packet and response TSV
    should be prepared immediately. Use
