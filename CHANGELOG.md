@@ -5,6 +5,17 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.99 - 2026-05-25T22:30:44+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `bba484b`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/annotation/build_human_audit_reviewer_handoff.py`
+  - `tests/test_human_audit_reviewer_handoff.py`
+
 ## v2.5.98 - 2026-05-25T22:24:24+08:00
 
 - Bump: `patch`
