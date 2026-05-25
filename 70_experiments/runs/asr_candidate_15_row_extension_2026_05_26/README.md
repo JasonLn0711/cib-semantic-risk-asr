@@ -64,6 +64,13 @@ first changing the gate decision:
   human risk/decision/model assessment, not a 258-row rerun for these
   locale-failed candidates.
 
+2026-05-26 02:44 CST: a second query-time check repeated the live metadata,
+local runtime, and existing 15-row hypothesis validation checks. The result did
+not change: the seven requested model pages are public and ungated, the two
+runnable non-Whisper candidates still validate at 15 rows but remain locale
+failures, Qwen3-ASR-1.7B remains a fetch/load gate, and Gemma 4 still needs an
+isolated multimodal runtime before any prompted-ASR test.
+
 ## Artifacts
 
 - Aggregate table: `candidate_15_row_summary.tsv`

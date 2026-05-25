@@ -173,6 +173,11 @@ Result:
 - Gemma 4 E2B/E4B remain blocked before inference because the local runtime is
   still `transformers 4.57.6` and exposes neither
   `AutoModelForMultimodalLM` nor `Gemma4ForConditionalGeneration`.
+- 2026-05-26 02:44 CST recheck: live Hugging Face metadata remained unchanged
+  for the seven requested models, SenseVoiceSmall and Qwen3-ASR-0.6B still had
+  15-row local prediction files that pass the hypothesis validator, and the
+  local runtime still exposed no Gemma 4 multimodal/audio model class. This was
+  recorded as a status verification, not a new model experiment.
 
 Decision: no additional full-split ASR run is justified from this candidate set
 right now. The next executable alternatives are to resolve/audit the

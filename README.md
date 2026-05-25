@@ -88,10 +88,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   runtime exposes `AutoModelForMultimodalLM`. A 2026-05-26 query-time
   verification rechecked the registry, reran SenseVoice/Qwen 0.6B hypothesis
   validators, and confirmed the local Transformers runtime still lacks the
-  Gemma 4 multimodal model classes. A later 2026-05-26 02:03 CST live
-  metadata check also confirmed all requested model pages remain public and
-  ungated; no remaining requested candidate should move to full-split runtime
-  before locale/runtime policy changes.
+  Gemma 4 multimodal model classes. Later 2026-05-26 02:03 and 02:44 CST live
+  checks also confirmed all requested model pages remain public and ungated,
+  SenseVoice/Qwen3-ASR-0.6B 15-row validators still pass, and the local
+  Gemma 4 multimodal classes are still absent; no remaining requested candidate
+  should move to full-split runtime before locale/runtime policy changes.
 - The postdoc-level roadmap after the 258-row gate is recorded in
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
   complete comparable 258-row baselines, add split-aware metric inputs, run the
