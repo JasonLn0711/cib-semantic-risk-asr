@@ -5,6 +5,18 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.16 - 2026-05-25T09:03:03+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `8054fd9`
+- Branch: `main`
+- Summary: Add reproducible JANUS human review packet builder.
+- Changed files:
+  - `60_whisper_asr_finetuning/README.md`
+  - `60_whisper_asr_finetuning/scripts/build_janus_human_review_packet.py`
+  - `docs/janus_165_audio_curation_workflow.md`
+
 ## v2.5.15 - 2026-05-25T08:58:23+08:00
 
 - Bump: `patch`
