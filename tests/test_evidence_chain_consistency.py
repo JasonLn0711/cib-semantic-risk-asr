@@ -488,6 +488,44 @@ def write_consistent_fixture(root: Path) -> None:
     )
     write_summary(
         root,
+        "objective",
+        base_summary(
+            objective_requirements_ready=False,
+            status_counts={"satisfied": 8, "proxy_satisfied": 5, "review_pending": 2},
+            requirement_rows=[
+                {
+                    "requirement_id": "6.3",
+                    "status": "review_pending",
+                    "paper_claim_status": "not paper-ready",
+                    "evidence": (
+                        "human_audit_post_review_evidence_summary.json; "
+                        "human_audit_post_review_sequence_summary.json"
+                    ),
+                    "result": (
+                        "recovery_human_ready=False; "
+                        "post_review_sequence_status=post_review_sequence_blocked; "
+                        "post_review_sequence_ok=False; "
+                        "post_review_sequence_executed_step_count=0"
+                    ),
+                    "next_action": (
+                        "After selected-300 response closeout is ready, run "
+                        "run_post_review_evidence_sequence.py --execute so "
+                        "write/refresh, strict human-reviewed recovery, post-review "
+                        "checklist, and objective audit execute in order."
+                    ),
+                }
+            ],
+            next_decision=(
+                "Do not declare the postdoc objective complete. Complete selected-300 "
+                "row/model/timing review, run strict closeout, then execute "
+                "run_post_review_evidence_sequence.py --execute so write/refresh, "
+                "human predictor refresh, strict human-reviewed recovery, post-review "
+                "checklist, and objective audit happen in order."
+            ),
+        ),
+    )
+    write_summary(
+        root,
         "apply",
         base_summary(
             ok=False,
@@ -558,7 +596,7 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True
-    assert payload["status_counts"] == {"pass": 18}
+    assert payload["status_counts"] == {"pass": 19}
     assert not payload["failed_checks"]
     assert_aggregate_safe(payload)
 
@@ -714,6 +752,22 @@ def test_consistency_audit_fails_post_review_sequence_allows_pending_recovery(
 
     assert payload["ok"] is False
     assert any(item["check_id"] == "C072" for item in payload["failed_checks"])
+
+
+def test_consistency_audit_fails_objective_missing_sequence_route(
+    tmp_path: Path,
+) -> None:
+    write_consistent_fixture(tmp_path)
+    objective_path = tmp_path / SUMMARY_SPECS["objective"]
+    objective = json.loads(objective_path.read_text(encoding="utf-8"))
+    objective["requirement_rows"][0]["result"] = "recovery_human_ready=False"
+    objective["next_decision"] = "Rerun objective audit after recovery."
+    objective_path.write_text(json.dumps(objective, ensure_ascii=False), encoding="utf-8")
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C073" for item in payload["failed_checks"])
 
 
 def test_consistency_safety_rejects_raw_field_tokens() -> None:

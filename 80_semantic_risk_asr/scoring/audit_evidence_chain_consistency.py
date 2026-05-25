@@ -113,6 +113,10 @@ SUMMARY_SPECS = {
         "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
         "human_audit_post_review_sequence_summary.json"
     ),
+    "objective": (
+        "70_experiments/runs/postdoc_evidence_chain_2026_05_25/"
+        "postdoc_objective_requirements_summary.json"
+    ),
     "candidate_recheck": (
         "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/"
         "summary.json"
@@ -990,6 +994,81 @@ def add_post_review_sequence_check(
     )
 
 
+def add_sequence_aware_objective_check(
+    payloads: dict[str, dict[str, Any]],
+    rows: list[dict[str, str]],
+) -> None:
+    objective = payloads.get("objective", {})
+    sequence = payloads.get("post_review_sequence", {})
+    requirement_rows = objective.get("requirement_rows")
+    requirement_rows = requirement_rows if isinstance(requirement_rows, list) else []
+    requirement_63 = next(
+        (
+            item
+            for item in requirement_rows
+            if isinstance(item, dict) and item.get("requirement_id") == "6.3"
+        ),
+        {},
+    )
+    sequence_status = str(sequence.get("status", ""))
+    sequence_ok_text = str(bool(sequence.get("ok")))
+    executed_count_text = str(sequence.get("executed_step_count", ""))
+    evidence = str(requirement_63.get("evidence", ""))
+    result = str(requirement_63.get("result", ""))
+    next_action = str(requirement_63.get("next_action", ""))
+    next_decision = str(objective.get("next_decision", ""))
+    status_ok = (
+        objective.get("ok") is True
+        and objective.get("objective_requirements_ready") is False
+        and requirement_63.get("status") == "review_pending"
+        and requirement_63.get("paper_claim_status") == "not paper-ready"
+    )
+    sequence_status_recorded = (
+        "human_audit_post_review_sequence_summary.json" in evidence
+        and f"post_review_sequence_status={sequence_status}" in result
+        and f"post_review_sequence_ok={sequence_ok_text}" in result
+        and f"post_review_sequence_executed_step_count={executed_count_text}" in result
+    )
+    sequence_route_recorded = (
+        "run_post_review_evidence_sequence.py --execute" in next_action
+        and "run_post_review_evidence_sequence.py --execute" in next_decision
+        and "strict human-reviewed recovery" in next_decision
+    )
+    sensitive = False
+    try:
+        assert_aggregate_safe(objective)
+    except ValueError:
+        sensitive = True
+    passed = (
+        status_ok
+        and sequence_status_recorded
+        and sequence_route_recorded
+        and not sensitive
+    )
+    rows.append(
+        check_row(
+            check_id="C073",
+            invariant="objective audit records post-review sequence gate status",
+            passed=passed,
+            evidence=f"{SUMMARY_SPECS['objective']}; {SUMMARY_SPECS['post_review_sequence']}",
+            result=(
+                "objective requirement 6.3 records sequence blocked/ready status and routes completion through --execute"
+                if passed
+                else (
+                    f"status_ok={status_ok}; "
+                    f"sequence_status_recorded={sequence_status_recorded}; "
+                    f"sequence_route_recorded={sequence_route_recorded}; "
+                    f"sensitive={sensitive}"
+                )
+            ),
+            next_action=(
+                "Regenerate the post-review sequence summary before the objective audit, "
+                "and keep objective completion routed through run_post_review_evidence_sequence.py --execute."
+            ),
+        )
+    )
+
+
 def add_candidate_check(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
     candidate = payloads.get("candidate_recheck", {})
     bounded_statuses = {
@@ -1056,6 +1135,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_response_action_items_check(root, payloads, rows)
         add_review_work_order_check(root, payloads, rows)
         add_post_review_sequence_check(root, payloads, rows)
+        add_sequence_aware_objective_check(payloads, rows)
         add_candidate_check(payloads, rows)
         add_safety_check(payloads, rows)
 
