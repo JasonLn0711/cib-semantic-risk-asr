@@ -166,14 +166,31 @@ WERs are formula-compatible and reproducible, but remain supplemental to
 
 ## 300-Row High-Stakes Check
 
-The first high-stakes 300-row partial-encoder run was audited separately with
-`high_stakes_300_manifest.jsonl`. It passed `300/300` manifest alignment with
-no missing reference rows, no missing hypotheses, no extra IDs, no reference
-mismatches, and no zero-reference-unit rows.
+The high-stakes 300-row Breeze-family runs were audited with
+`high_stakes_300_manifest.jsonl`. The combined audit is tracked in
+`high_stakes_300_metric_audit.tsv` and `high_stakes_300_summary.json`. All three
+runs passed manifest alignment with:
+
+- expected rows: `300`;
+- missing reference rows: `0`;
+- missing hypotheses: `0`;
+- missing expected IDs: `0`;
+- extra IDs: `0`;
+- reference mismatch rows: `0`;
+- zero reference unit rows: `0`;
+- zh-jieba WER `jiwer` delta: `0.0`.
 
 | Run | Stored WER mean | Raw whitespace WER micro | zh-jieba WER micro | zh-normalized CER micro | `jiwer` delta |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | `breeze_asr25_partial_encoder_high_stakes_300` | 9.55 | 93.16 | 9.38 | 6.86 | 0.0 |
+| `breeze_asr25_lora_high_stakes_300` | 22.15 | 101.30 | 21.91 | 15.97 | 0.0 |
+| `breeze_asr25_base_high_stakes_300` | 28.74 | 271.66 | 28.10 | 21.44 | 0.0 |
+
+This re-check explains why old WER values looked unstable while the current
+metric profile is reproducible. Raw whitespace WER still explodes on
+unsegmented Chinese and remains audit-only. The publication-facing table should
+sort these runs by `cer_zh_micro`, with `wer_zh_jieba_micro` shown only as a
+supplemental segmented-word score.
 
 ## Verdict
 
@@ -188,3 +205,14 @@ Current and future comparable runs must use `metric_normalization=zh_asr`,
 aggregation for paper-facing WER. Even then, `wer_zh_jieba_micro` remains
 supplemental for Mandarin Chinese; `cer_zh_micro` is the primary surface ASR
 metric, and CDS-ASR decision metrics carry the safety argument.
+
+Reviewer-facing WER claims should therefore say:
+
+- WER formula: edit distance over declared word units divided by reference word
+  units.
+- Chinese word units: deterministic `jieba 0.42.1` after `zh_asr`
+  normalization.
+- Primary Chinese surface metric: corpus-level micro CER, because Mandarin text
+  lacks reliable whitespace word boundaries.
+- Legacy raw whitespace WER: kept only to reproduce earlier confusing values,
+  never used as model-quality evidence.

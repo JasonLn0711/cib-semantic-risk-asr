@@ -1,0 +1,5 @@
+run_id	rows	expected_rows	metric	unit	normalization	wer_tokenizer	macro_percent	micro_percent	jiwer_micro_percent	jiwer_delta_percent	zero_reference_unit_rows	edit_count	reference_unit_count	stored_cer_mean	stored_wer_mean	missing_reference_rows	missing_hypothesis_rows	missing_expected_ids	extra_ids	reference_mismatch_rows	notes
+breeze_asr25_base_high_stakes_300	300	300	cer_raw_char	char	none	whitespace	31.55	31.2			0	10143	32510	22.07	28.74	0	0	0	0	0	Raw character edit rate; preserves punctuation, spaces, and case.
+breeze_asr25_base_high_stakes_300	300	300	wer_raw_whitespace	word	none	whitespace	273.5	271.66	271.661238	0.0	0	834	307	22.07	28.74	0	0	0	0	0	Legacy whitespace-token WER; invalid as a primary Chinese ASR metric.
+breeze_asr25_base_high_stakes_300	300	300	cer_zh_normalized	char	zh_asr	jieba	22.07	21.44			0	6184	28837	22.07	28.74	0	0	0	0	0	Chinese ASR normalized CER; no traditional/simplified conversion.
+breeze_asr25_base_high_stakes_300	300	300	wer_zh_jieba	word	zh_asr	jieba	28.74	28.1	28.10019	0.0	0	5026	17886	22.07	28.74	0	0	0	0	0	Supplemental Chinese word-level metric using deterministic jieba segmentation.

@@ -71,23 +71,24 @@ expansion set.
 The selected IDs are local-only under ignored `artifacts/`; git tracks only the
 aggregate summary and selection method.
 
-## First ASR Pass
+## ASR Passes
 
-The first 300-row high-stakes pass completed with the legacy partial-encoder
-Breeze-ASR-25 checkpoint:
+Three Breeze-family 300-row high-stakes passes have completed with the same
+manifest, Traditional Chinese-preserving `zh_asr` normalization, and `jieba`
+WER tokenization:
 
-- Run ID: `breeze_asr25_partial_encoder_high_stakes_300`
-- Rows: `300/300`
-- Runtime: CUDA, cuDNN disabled, `float16`
-- Metric profile: `metric_normalization=zh_asr`, `wer_tokenizer=jieba`
-- Wall time: `275.74` seconds
-- Stored row-mean CER/WER: CER `7.03`, WER `9.55`
-- Corpus micro rates from manifest-validated audit: `cer_zh_micro=6.86`,
-  `wer_zh_jieba_micro=9.38`
-- `jiwer` corpus-WER delta for zh-jieba WER: `0.0`
-- Hypothesis validation: passed `300/300` expected IDs, no missing labels, no
-  missing quality fields, no duplicate IDs
+| Run | Rows | Wall time | Stored row-mean CER | Stored row-mean WER | `cer_zh_micro` | `wer_zh_jieba_micro` | Raw whitespace WER micro |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `breeze_asr25_partial_encoder_high_stakes_300` | 300 | `275.74s` | 7.03 | 9.55 | 6.86 | 9.38 | 93.16 |
+| `breeze_asr25_lora_high_stakes_300` | 300 | `481.25s` | 16.15 | 22.15 | 15.97 | 21.91 | 101.30 |
+| `breeze_asr25_base_high_stakes_300` | 300 | `214.96s` | 22.07 | 28.74 | 21.44 | 28.10 | 271.66 |
 
-Raw predictions, runtime logs, and validation JSON remain ignored under the
-run's `predictions/` and `artifacts/` directories. The repo tracks only the
-aggregate `text_metric_audit.tsv` and run README.
+All three passed `300/300` manifest validation with no missing IDs, no extra
+IDs, no duplicate IDs, present hypothesis text, present ASR labels, and quality
+fields `cer` and `wer`. The combined WER audit in
+`70_experiments/runs/wer_metric_audit_2026_05_25/high_stakes_300_metric_audit.tsv`
+also matched `jiwer` corpus WER with `0.0` delta for every word-level profile.
+
+Raw predictions, runtime logs, validation JSON, and the full high-stakes
+manifest remain ignored under `predictions/` and `artifacts/`. The repo tracks
+only aggregate run records and text metric audit summaries.

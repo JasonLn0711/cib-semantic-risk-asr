@@ -5,6 +5,52 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.47 - 2026-05-25T18:08:54+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `d5ab3d8`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/breeze_asr25_base_high_stakes_300/README.md`
+  - `70_experiments/runs/breeze_asr25_base_high_stakes_300/metric_audit_summary.json`
+  - `70_experiments/runs/breeze_asr25_base_high_stakes_300/metrics.csv`
+  - `70_experiments/runs/breeze_asr25_base_high_stakes_300/text_metric_audit.tsv`
+  - `70_experiments/runs/breeze_asr25_lora_high_stakes_300/README.md`
+  - `70_experiments/runs/breeze_asr25_lora_high_stakes_300/metric_audit_summary.json`
+  - `70_experiments/runs/breeze_asr25_lora_high_stakes_300/text_metric_audit.tsv`
+  - `70_experiments/runs/janus_300_500_high_stakes_expansion/README.md`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/README.md`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/high_stakes_300_metric_audit.tsv`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/high_stakes_300_summary.json`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
+## v2.5.46 - 2026-05-25T18:08:38+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `d5ab3d8`
+- Branch: `main`
+- Summary: Record high-stakes 300-row ASR WER audit.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/breeze_asr25_base_high_stakes_300/README.md`
+  - `70_experiments/runs/breeze_asr25_base_high_stakes_300/metric_audit_summary.json`
+  - `70_experiments/runs/breeze_asr25_base_high_stakes_300/metrics.csv`
+  - `70_experiments/runs/breeze_asr25_base_high_stakes_300/text_metric_audit.tsv`
+  - `70_experiments/runs/breeze_asr25_lora_high_stakes_300/README.md`
+  - `70_experiments/runs/breeze_asr25_lora_high_stakes_300/metric_audit_summary.json`
+  - `70_experiments/runs/breeze_asr25_lora_high_stakes_300/text_metric_audit.tsv`
+  - `70_experiments/runs/janus_300_500_high_stakes_expansion/README.md`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/README.md`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/high_stakes_300_metric_audit.tsv`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/high_stakes_300_summary.json`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
 ## v2.5.45 - 2026-05-25T17:45:10+08:00
 
 - Bump: `patch`

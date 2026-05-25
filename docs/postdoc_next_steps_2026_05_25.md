@@ -56,6 +56,15 @@ Status: active roadmap after the six-model 258-row gate and WER audit
    `3184`、downstream rows `1548`、SRES total `27810.0`、CEIS unstable samples
    `192`、downstream ASR mismatch rate `0.126`、high-risk missed by ASR
    `161`。
+7. 300-row high-stakes Breeze-family ASR comparator 已完成 partial encoder、
+   LoRA、base 三個 hypotheses，且三者都通過 manifest `300/300` 驗證與
+   `jiwer` WER 交叉驗算：
+
+| High-stakes run | zh CER micro | zh-jieba WER micro | Stored WER | Raw whitespace WER micro | Wall time |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Legacy partial encoder | `6.86` | `9.38` | `9.55` | `93.16` | `275.74s` |
+| Legacy LoRA | `15.97` | `21.91` | `22.15` | `101.30` | `481.25s` |
+| Breeze-ASR-25 base | `21.44` | `28.10` | `28.74` | `271.66` | `214.96s` |
 
 目前最重要的限制：
 
@@ -69,8 +78,10 @@ Status: active roadmap after the six-model 258-row gate and WER audit
 - Whisper large-v3、large-v3 turbo、SenseVoice、Qwen3-ASR、Gemma 4 audio
   候選已加入矩陣，但尚未有完整 runner、smoke、15-row contract、或
   258-row evidence。
-- 300 high-stakes rows 已選出，但尚未變成 main experiment。
-- Recovery experiment 尚未實作。
+- 300 high-stakes ASR hypotheses 已完成三個 Breeze-family comparator，但
+  high-stakes SRES/CEIS/downstream/recovery 還沒跑完，所以還不能宣稱完整
+  main experiment 完成。
+- 258-row recovery proxy 已完成；300-row high-stakes recovery 尚未實作。
 
 ## FIRST PRINCIPLE
 

@@ -1,27 +1,34 @@
 {
-  "version": "v2.5.45",
+  "version": "v2.5.47",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 45
+    "patch": 47
   },
-  "updated_at": "2026-05-25T17:45:10+08:00",
+  "updated_at": "2026-05-25T18:08:54+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "de10503",
+  "base_commit": "d5ab3d8",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "60_whisper_asr_finetuning/scripts/prepare_janus_high_stakes_manifest.py",
     "70_experiments/registry.tsv",
-    "70_experiments/runs/breeze_asr25_partial_encoder_high_stakes_300/README.md",
-    "70_experiments/runs/breeze_asr25_partial_encoder_high_stakes_300/metric_audit_summary.json",
-    "70_experiments/runs/breeze_asr25_partial_encoder_high_stakes_300/text_metric_audit.tsv",
+    "70_experiments/runs/breeze_asr25_base_high_stakes_300/README.md",
+    "70_experiments/runs/breeze_asr25_base_high_stakes_300/metric_audit_summary.json",
+    "70_experiments/runs/breeze_asr25_base_high_stakes_300/metrics.csv",
+    "70_experiments/runs/breeze_asr25_base_high_stakes_300/text_metric_audit.tsv",
+    "70_experiments/runs/breeze_asr25_lora_high_stakes_300/README.md",
+    "70_experiments/runs/breeze_asr25_lora_high_stakes_300/metric_audit_summary.json",
+    "70_experiments/runs/breeze_asr25_lora_high_stakes_300/text_metric_audit.tsv",
     "70_experiments/runs/janus_300_500_high_stakes_expansion/README.md",
-    "70_experiments/runs/janus_300_500_high_stakes_expansion/high_stakes_manifest_summary.tsv"
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
+    "70_experiments/runs/wer_metric_audit_2026_05_25/README.md",
+    "70_experiments/runs/wer_metric_audit_2026_05_25/high_stakes_300_metric_audit.tsv",
+    "70_experiments/runs/wer_metric_audit_2026_05_25/high_stakes_300_summary.json",
+    "docs/postdoc_next_steps_2026_05_25.md"
   ]
 }
