@@ -5,6 +5,25 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.174 - 2026-05-26T05:50:38+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `4555717`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_gap_checklist.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
+  - `80_semantic_risk_asr/annotation/selected_300_human_risk_atom_audit_protocol_2026_05_25.md`
+  - `README.md`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
 ## v2.5.173 - 2026-05-26T05:50:23+08:00
 
 - Bump: `patch`

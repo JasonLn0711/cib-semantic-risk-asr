@@ -197,7 +197,10 @@ gap report is safe for Git because it does not include audio IDs, transcript
 text, ASR hypotheses, reviewer notes, or selected raw row content.
 The response closeout command also writes the same safe gap map to
 `human_audit_response_gap_checklist.tsv` so the reviewer can use a tracked TSV
-checklist before opening transcript-bearing local files.
+checklist before opening transcript-bearing local files. The TSV also includes
+per-row timing start/finish helper commands copied from the fresh reviewer
+handoff; consistency check `C068` verifies that these commands match the
+handoff command map for rows `1-6`.
 Each dry-run or write appends one aggregate-only row to
 `human_audit_batch_response_apply_log.tsv`; use that file as the operation log
 for response attempts. The companion
@@ -254,8 +257,9 @@ current strict template dry-run is `response_pending`, `ok=false`, with
 reviewer decisions and timing are entered. The current gap report shows `6/6`
 rows with gaps, `48` missing row-level fields, `18` missing model assessments,
 and `72` missing model-assessment fields; the same state is now tracked in
-`human_audit_response_gap_checklist.tsv`. A non-strict dry-run can be used to
-inspect progress, but it is not the completion gate.
+`human_audit_response_gap_checklist.tsv` together with each row's timing helper
+commands. A non-strict dry-run can be used to inspect progress, but it is not
+the completion gate.
 
 When the strict dry-run passes, use `--write --refresh-after-write` so the local
 sheet write, current-batch status audit, aggregate refresh, readiness audit, and

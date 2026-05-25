@@ -208,6 +208,24 @@
       "review_timing_missing": true
     }
   ],
+  "response_gap_timing_commands": {
+    "timing_start_write_by_row": {
+      "1": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 1 --mark-start --write",
+      "2": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 2 --mark-start --write",
+      "3": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 3 --mark-start --write",
+      "4": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 4 --mark-start --write",
+      "5": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 5 --mark-start --write",
+      "6": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 6 --mark-start --write"
+    },
+    "timing_finish_write_by_row": {
+      "1": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 1 --mark-finish --write",
+      "2": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 2 --mark-finish --write",
+      "3": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 3 --mark-finish --write",
+      "4": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 4 --mark-finish --write",
+      "5": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 5 --mark-finish --write",
+      "6": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 6 --mark-finish --write"
+    }
+  },
   "session_start_gate": {
     "required": true,
     "ok": true,
@@ -293,5 +311,5 @@
     "apply_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json",
     "session_start_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json"
   },
-  "runtime_seconds": 0.0005
+  "runtime_seconds": 0.0004
 }
