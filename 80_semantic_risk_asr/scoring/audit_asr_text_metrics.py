@@ -17,7 +17,7 @@ REPO_ROOT = SCRIPT_DIR.parents[2]
 ASR_SCRIPT_DIR = REPO_ROOT / "60_whisper_asr_finetuning" / "scripts"
 sys.path.insert(0, str(ASR_SCRIPT_DIR))
 
-from asr_text_metrics import edit_stats  # noqa: E402
+from asr_text_metrics import edit_stats, units_for_metric  # noqa: E402
 
 
 ID_FIELDS = ("audio_id", "id", "sample_id")
@@ -115,6 +115,9 @@ def summarize(
     profile_rates: dict[str, list[float]] = {profile["metric"]: [] for profile in METRIC_PROFILES}
     profile_edits: dict[str, int] = {profile["metric"]: 0 for profile in METRIC_PROFILES}
     profile_ref_units: dict[str, int] = {profile["metric"]: 0 for profile in METRIC_PROFILES}
+    profile_zero_ref_rows: dict[str, int] = {profile["metric"]: 0 for profile in METRIC_PROFILES}
+    jiwer_refs: dict[str, list[str]] = {profile["metric"]: [] for profile in METRIC_PROFILES}
+    jiwer_hyps: dict[str, list[str]] = {profile["metric"]: [] for profile in METRIC_PROFILES}
 
     for row in rows:
         audio_id = audio_id_for(row)
@@ -129,10 +132,26 @@ def summarize(
         if not hypothesis:
             missing_hypothesis += 1
         for field, target in (("cer", stored_cer), ("wer", stored_wer)):
-            value = str(row.get(field) or "").strip()
+            raw_value = row.get(field)
+            value = "" if raw_value is None else str(raw_value).strip()
             if value:
                 target.append(float(value))
         for profile in METRIC_PROFILES:
+            metric = str(profile["metric"])
+            ref_units = units_for_metric(
+                reference,
+                unit=str(profile["unit"]),
+                normalization=str(profile["normalization"]),
+                wer_tokenizer=str(profile["wer_tokenizer"]),
+            )
+            hyp_units = units_for_metric(
+                hypothesis,
+                unit=str(profile["unit"]),
+                normalization=str(profile["normalization"]),
+                wer_tokenizer=str(profile["wer_tokenizer"]),
+            )
+            if not ref_units:
+                profile_zero_ref_rows[metric] += 1
             stats = edit_stats(
                 reference,
                 hypothesis,
@@ -140,10 +159,12 @@ def summarize(
                 normalization=str(profile["normalization"]),
                 wer_tokenizer=str(profile["wer_tokenizer"]),
             )
-            metric = str(profile["metric"])
             profile_rates[metric].append(stats.rate_percent)
             profile_edits[metric] += stats.edits
             profile_ref_units[metric] += stats.reference_units
+            if profile["unit"] == "word":
+                jiwer_refs[metric].append(" ".join(ref_units))
+                jiwer_hyps[metric].append(" ".join(hyp_units))
 
     for profile in METRIC_PROFILES:
         metric = str(profile["metric"])
@@ -152,6 +173,8 @@ def summarize(
         ref_units = profile_ref_units[metric]
         missing_expected_ids = sorted(expected_ids - observed_ids)
         extra_ids = sorted(observed_ids - expected_ids)
+        jiwer_micro = corpus_jiwer_percent(jiwer_refs[metric], jiwer_hyps[metric])
+        repo_micro = round(edits / ref_units * 100.0, 6) if ref_units else 0.0
         output_rows.append(
             {
                 "run_id": run_id,
@@ -163,6 +186,15 @@ def summarize(
                 "wer_tokenizer": profile["wer_tokenizer"],
                 "macro_percent": round(sum(rates) / len(rates), 2) if rates else 0.0,
                 "micro_percent": round(edits / ref_units * 100.0, 2) if ref_units else 0.0,
+                "jiwer_micro_percent": (
+                    round(jiwer_micro, 6) if jiwer_micro is not None else ""
+                ),
+                "jiwer_delta_percent": (
+                    round(abs(repo_micro - jiwer_micro), 6)
+                    if jiwer_micro is not None
+                    else ""
+                ),
+                "zero_reference_unit_rows": profile_zero_ref_rows[metric],
                 "edit_count": edits,
                 "reference_unit_count": ref_units,
                 "stored_cer_mean": round(sum(stored_cer) / len(stored_cer), 2) if stored_cer else "",
@@ -188,6 +220,18 @@ def summarize(
     }
 
 
+def corpus_jiwer_percent(references: list[str], hypotheses: list[str]) -> float | None:
+    if not references:
+        return None
+    if any(not reference for reference in references):
+        return None
+    try:
+        import jiwer
+    except ImportError:
+        return None
+    return float(jiwer.wer(references, hypotheses) * 100.0)
+
+
 def write_tsv(path: Path, rows: list[dict[str, Any]]) -> None:
     fieldnames = [
         "run_id",
@@ -199,6 +243,9 @@ def write_tsv(path: Path, rows: list[dict[str, Any]]) -> None:
         "wer_tokenizer",
         "macro_percent",
         "micro_percent",
+        "jiwer_micro_percent",
+        "jiwer_delta_percent",
+        "zero_reference_unit_rows",
         "edit_count",
         "reference_unit_count",
         "stored_cer_mean",

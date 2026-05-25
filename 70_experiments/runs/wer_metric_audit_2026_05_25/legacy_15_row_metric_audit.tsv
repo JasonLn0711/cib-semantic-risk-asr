@@ -1,0 +1,25 @@
+run_id	rows	expected_rows	metric	unit	normalization	wer_tokenizer	macro_percent	micro_percent	jiwer_micro_percent	jiwer_delta_percent	zero_reference_unit_rows	edit_count	reference_unit_count	stored_cer_mean	stored_wer_mean	missing_reference_rows	missing_hypothesis_rows	missing_expected_ids	extra_ids	reference_mismatch_rows	notes
+breeze_asr25_15_row_baseline	15	15	cer_raw_char	char	none	whitespace	36.13	35.52			0	579	1630	36.13	380.0	0	0	0	0	0	Raw character edit rate; preserves punctuation, spaces, and case.
+breeze_asr25_15_row_baseline	15	15	wer_raw_whitespace	word	none	whitespace	380.0	368.75	368.75	0.0	0	59	16	36.13	380.0	0	0	0	0	0	Legacy whitespace-token WER; invalid as a primary Chinese ASR metric.
+breeze_asr25_15_row_baseline	15	15	cer_zh_normalized	char	zh_asr	jieba	24.06	22.89			0	329	1437	36.13	380.0	0	0	0	0	0	Chinese ASR normalized CER; no traditional/simplified conversion.
+breeze_asr25_15_row_baseline	15	15	wer_zh_jieba	word	zh_asr	jieba	32.41	30.78	30.778165	0.0	0	265	861	36.13	380.0	0	0	0	0	0	Supplemental Chinese word-level metric using deterministic jieba segmentation.
+breeze_asr25_lora_legacy_best_15_row	15	15	cer_raw_char	char	none	whitespace	30.99	31.53			0	514	1630	30.99	100.0	0	0	0	0	0	Raw character edit rate; preserves punctuation, spaces, and case.
+breeze_asr25_lora_legacy_best_15_row	15	15	wer_raw_whitespace	word	none	whitespace	100.0	100.0	100.0	0.0	0	16	16	30.99	100.0	0	0	0	0	0	Legacy whitespace-token WER; invalid as a primary Chinese ASR metric.
+breeze_asr25_lora_legacy_best_15_row	15	15	cer_zh_normalized	char	zh_asr	jieba	28.6	28.81			0	414	1437	30.99	100.0	0	0	0	0	0	Chinese ASR normalized CER; no traditional/simplified conversion.
+breeze_asr25_lora_legacy_best_15_row	15	15	wer_zh_jieba	word	zh_asr	jieba	34.9	34.61	34.610918	0.0	0	298	861	30.99	100.0	0	0	0	0	0	Supplemental Chinese word-level metric using deterministic jieba segmentation.
+breeze_asr25_partial_encoder_legacy_best_15_row	15	15	cer_raw_char	char	none	whitespace	12.77	11.96			0	195	1630	12.77	83.33	0	0	0	0	0	Raw character edit rate; preserves punctuation, spaces, and case.
+breeze_asr25_partial_encoder_legacy_best_15_row	15	15	wer_raw_whitespace	word	none	whitespace	83.33	81.25	81.25	0.0	0	13	16	12.77	83.33	0	0	0	0	0	Legacy whitespace-token WER; invalid as a primary Chinese ASR metric.
+breeze_asr25_partial_encoder_legacy_best_15_row	15	15	cer_zh_normalized	char	zh_asr	jieba	12.38	11.41			0	164	1437	12.77	83.33	0	0	0	0	0	Chinese ASR normalized CER; no traditional/simplified conversion.
+breeze_asr25_partial_encoder_legacy_best_15_row	15	15	wer_zh_jieba	word	zh_asr	jieba	15.29	14.52	14.518002	0.0	0	125	861	12.77	83.33	0	0	0	0	0	Supplemental Chinese word-level metric using deterministic jieba segmentation.
+breeze_asr26_15_row_stress_test	15	15	cer_raw_char	char	none	whitespace	38.49	37.61			0	613	1630	38.49	1493.33	0	0	0	0	0	Raw character edit rate; preserves punctuation, spaces, and case.
+breeze_asr26_15_row_stress_test	15	15	wer_raw_whitespace	word	none	whitespace	1493.33	1450.0	1450.0	0.0	0	232	16	38.49	1493.33	0	0	0	0	0	Legacy whitespace-token WER; invalid as a primary Chinese ASR metric.
+breeze_asr26_15_row_stress_test	15	15	cer_zh_normalized	char	zh_asr	jieba	26.23	25.4			0	365	1437	38.49	1493.33	0	0	0	0	0	Chinese ASR normalized CER; no traditional/simplified conversion.
+breeze_asr26_15_row_stress_test	15	15	wer_zh_jieba	word	zh_asr	jieba	33.66	32.64	32.636469	0.0	0	281	861	38.49	1493.33	0	0	0	0	0	Supplemental Chinese word-level metric using deterministic jieba segmentation.
+whisper_large_v2_15_row_baseline	15	15	cer_raw_char	char	none	whitespace	40.01	39.88			0	650	1630	40.01	100.0	0	0	0	0	0	Raw character edit rate; preserves punctuation, spaces, and case.
+whisper_large_v2_15_row_baseline	15	15	wer_raw_whitespace	word	none	whitespace	100.0	100.0	100.0	0.0	0	16	16	40.01	100.0	0	0	0	0	0	Legacy whitespace-token WER; invalid as a primary Chinese ASR metric.
+whisper_large_v2_15_row_baseline	15	15	cer_zh_normalized	char	zh_asr	jieba	33.7	33.33			0	479	1437	40.01	100.0	0	0	0	0	0	Chinese ASR normalized CER; no traditional/simplified conversion.
+whisper_large_v2_15_row_baseline	15	15	wer_zh_jieba	word	zh_asr	jieba	41.57	39.61	39.60511	0.0	0	341	861	40.01	100.0	0	0	0	0	0	Supplemental Chinese word-level metric using deterministic jieba segmentation.
+whisper_small_15_row_baseline	15	15	cer_raw_char	char	none	whitespace	53.08	53.62			0	874	1630	53.08	500.0	0	0	0	0	0	Raw character edit rate; preserves punctuation, spaces, and case.
+whisper_small_15_row_baseline	15	15	wer_raw_whitespace	word	none	whitespace	500.0	475.0	475.0	0.0	0	76	16	53.08	500.0	0	0	0	0	0	Legacy whitespace-token WER; invalid as a primary Chinese ASR metric.
+whisper_small_15_row_baseline	15	15	cer_zh_normalized	char	zh_asr	jieba	43.1	43.35			0	623	1437	53.08	500.0	0	0	0	0	0	Chinese ASR normalized CER; no traditional/simplified conversion.
+whisper_small_15_row_baseline	15	15	wer_zh_jieba	word	zh_asr	jieba	50.77	49.83	49.825784	0.0	0	429	861	53.08	500.0	0	0	0	0	0	Supplemental Chinese word-level metric using deterministic jieba segmentation.

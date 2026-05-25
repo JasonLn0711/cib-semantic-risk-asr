@@ -71,7 +71,17 @@ References consulted:
 - Added `80_semantic_risk_asr/scoring/audit_asr_text_metrics.py` for
   aggregate-only metric audits over ignored local prediction files. The script
   now accepts `--expected-manifest` and `--expected-rows`, checks missing/extra
-  IDs and reference mismatches, and records package versions.
+  IDs and reference mismatches, records package versions, and writes an
+  independent `jiwer` corpus-WER cross-check for every word-level profile.
+- Hardened `audit_asr_text_metrics.py` to preserve valid zero-valued stored
+  `cer=0.0` / `wer=0.0` fields instead of treating them as empty, and to record
+  `zero_reference_unit_rows` when a profile cannot produce reference units.
+- Updated `summarize_janus_asr_test_split.py` so aggregate comparison tables
+  use the expected manifest transcript as the scoring reference and fail the
+  summary if prediction-embedded references diverge from the manifest.
+- Updated the legacy `run_whisper_small_smoke.py` runner so any future smoke
+  output uses the same `zh_asr` normalization plus `jieba` WER profile by
+  default, while still retaining raw whitespace WER as an audit field.
 - Added `jieba` to `requirements-whisper.txt`.
 
 ## Audit Command
@@ -104,6 +114,12 @@ All six hypothesis files passed the stricter manifest check:
 Package versions recorded in `summary.json`: `editdistance 0.8.1`,
 `jieba 0.42.1`, `jiwer 3.1.0`.
 
+The 2026-05-25 re-run also added automatic `jiwer_micro_percent` and
+`jiwer_delta_percent` columns to `text_metric_audit.tsv`. All word-level WER
+profiles, including the legacy raw whitespace profile and the supplemental
+zh-jieba profile, matched `jiwer` with `0.0` absolute delta after deterministic
+token joining.
+
 | Run | Stored WER mean | Raw whitespace WER macro | Raw whitespace WER micro | zh-jieba WER macro | zh-jieba WER micro | zh-normalized CER macro | zh-normalized CER micro |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `breeze_asr25_partial_encoder_legacy_best_test_split` | 100.0 | 100.0 | 100.0 | 22.15 | 21.53 | 15.44 | 15.04 |
@@ -125,12 +141,47 @@ implementation exactly after joining the deterministic `jieba` tokens:
 | `whisper_small_test_split` | 43.441558 | 43.441558 | 0.0 |
 | `breeze_asr26_test_split` | 32.287157 | 32.287157 | 0.0 |
 
+## Legacy 15-Row Re-Audit
+
+The six 15-row pilot/stress files were re-audited with the original
+`nemo_pilot_input_manifest.jsonl` reference transcripts because several early
+prediction JSONL files did not embed `reference_text`. All six files now pass
+manifest row count, missing/extra ID, missing reference, missing hypothesis,
+reference mismatch, and zero-reference-unit checks.
+
+| Run | Stored WER mean | zh-jieba WER micro | `jiwer` WER | Delta |
+| --- | ---: | ---: | ---: | ---: |
+| `breeze_asr25_15_row_baseline` | 380.0 | 30.78 | 30.778165 | 0.0 |
+| `breeze_asr25_lora_legacy_best_15_row` | 100.0 | 34.61 | 34.610918 | 0.0 |
+| `breeze_asr25_partial_encoder_legacy_best_15_row` | 83.33 | 14.52 | 14.518002 | 0.0 |
+| `breeze_asr26_15_row_stress_test` | 1493.33 | 32.64 | 32.636469 | 0.0 |
+| `whisper_large_v2_15_row_baseline` | 100.0 | 39.61 | 39.605110 | 0.0 |
+| `whisper_small_15_row_baseline` | 500.0 | 49.83 | 49.825784 | 0.0 |
+
+These values explain the earlier confusion: stored WER values such as `380.0`,
+`500.0`, and `1493.33` are not model-quality evidence. They are legacy raw
+whitespace fields over unsegmented Chinese. The manifest-validated zh-jieba
+WERs are formula-compatible and reproducible, but remain supplemental to
+`cer_zh_micro`.
+
+## 300-Row High-Stakes Check
+
+The first high-stakes 300-row partial-encoder run was audited separately with
+`high_stakes_300_manifest.jsonl`. It passed `300/300` manifest alignment with
+no missing reference rows, no missing hypotheses, no extra IDs, no reference
+mismatches, and no zero-reference-unit rows.
+
+| Run | Stored WER mean | Raw whitespace WER micro | zh-jieba WER micro | zh-normalized CER micro | `jiwer` delta |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `breeze_asr25_partial_encoder_high_stakes_300` | 9.55 | 93.16 | 9.38 | 6.86 | 0.0 |
+
 ## Verdict
 
 The old raw whitespace WER fields are formula-compatible but not
 publication-grade primary metrics for this unsegmented Chinese corpus. Treat all
-existing 15-row/258-row `wer` values before this audit as legacy compatibility
-fields, not as model-selection evidence.
+existing pre-audit `wer` values as legacy compatibility fields unless the run
+explicitly declares `metric_normalization=zh_asr`, `wer_tokenizer=jieba`,
+manifest validation, and corpus-level aggregation.
 
 Current and future comparable runs must use `metric_normalization=zh_asr`,
 `wer_tokenizer=jieba`, manifest-level ID validation, and corpus-level micro

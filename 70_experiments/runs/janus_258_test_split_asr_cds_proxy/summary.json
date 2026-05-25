@@ -6,9 +6,9 @@
     "70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_test_split/predictions/breeze_asr25_partial_encoder_legacy_best_test_split_predictions.jsonl",
     "70_experiments/runs/breeze_asr25_lora_legacy_best_test_split/predictions/breeze_asr25_lora_legacy_best_test_split_predictions.jsonl",
     "70_experiments/runs/breeze_asr25_base_test_split/predictions/breeze_asr25_base_test_split_predictions.jsonl",
-    "70_experiments/runs/whisper_small_test_split/predictions/whisper_small_test_split_predictions.jsonl",
+    "70_experiments/runs/breeze_asr26_test_split/predictions/breeze_asr26_test_split_predictions.jsonl",
     "70_experiments/runs/whisper_large_v2_test_split/predictions/whisper_large_v2_test_split_predictions.jsonl",
-    "70_experiments/runs/breeze_asr26_test_split/predictions/breeze_asr26_test_split_predictions.jsonl"
+    "70_experiments/runs/whisper_small_test_split/predictions/whisper_small_test_split_predictions.jsonl"
   ],
   "details": [
     {
@@ -19,6 +19,7 @@
       "missing_expected_ids": [],
       "extra_ids": [],
       "missing_reference": [],
+      "reference_mismatch_rows": 0,
       "metric_profile": {
         "paper_primary": "cer_zh_micro",
         "supplemental": "wer_zh_jieba_micro",
@@ -37,6 +38,7 @@
       "missing_expected_ids": [],
       "extra_ids": [],
       "missing_reference": [],
+      "reference_mismatch_rows": 0,
       "metric_profile": {
         "paper_primary": "cer_zh_micro",
         "supplemental": "wer_zh_jieba_micro",
@@ -55,42 +57,7 @@
       "missing_expected_ids": [],
       "extra_ids": [],
       "missing_reference": [],
-      "metric_profile": {
-        "paper_primary": "cer_zh_micro",
-        "supplemental": "wer_zh_jieba_micro",
-        "legacy_fields": [
-          "cer_mean",
-          "wer_mean"
-        ],
-        "normalization": "zh_asr preserves Traditional Chinese without conversion"
-      }
-    },
-    {
-      "path": "70_experiments/runs/whisper_small_test_split/predictions/whisper_small_test_split_predictions.jsonl",
-      "run_id": "whisper_small_test_split",
-      "rows": 258,
-      "expected_rows": 258,
-      "missing_expected_ids": [],
-      "extra_ids": [],
-      "missing_reference": [],
-      "metric_profile": {
-        "paper_primary": "cer_zh_micro",
-        "supplemental": "wer_zh_jieba_micro",
-        "legacy_fields": [
-          "cer_mean",
-          "wer_mean"
-        ],
-        "normalization": "zh_asr preserves Traditional Chinese without conversion"
-      }
-    },
-    {
-      "path": "70_experiments/runs/whisper_large_v2_test_split/predictions/whisper_large_v2_test_split_predictions.jsonl",
-      "run_id": "whisper_large_v2_test_split",
-      "rows": 258,
-      "expected_rows": 258,
-      "missing_expected_ids": [],
-      "extra_ids": [],
-      "missing_reference": [],
+      "reference_mismatch_rows": 0,
       "metric_profile": {
         "paper_primary": "cer_zh_micro",
         "supplemental": "wer_zh_jieba_micro",
@@ -109,6 +76,45 @@
       "missing_expected_ids": [],
       "extra_ids": [],
       "missing_reference": [],
+      "reference_mismatch_rows": 0,
+      "metric_profile": {
+        "paper_primary": "cer_zh_micro",
+        "supplemental": "wer_zh_jieba_micro",
+        "legacy_fields": [
+          "cer_mean",
+          "wer_mean"
+        ],
+        "normalization": "zh_asr preserves Traditional Chinese without conversion"
+      }
+    },
+    {
+      "path": "70_experiments/runs/whisper_large_v2_test_split/predictions/whisper_large_v2_test_split_predictions.jsonl",
+      "run_id": "whisper_large_v2_test_split",
+      "rows": 258,
+      "expected_rows": 258,
+      "missing_expected_ids": [],
+      "extra_ids": [],
+      "missing_reference": [],
+      "reference_mismatch_rows": 0,
+      "metric_profile": {
+        "paper_primary": "cer_zh_micro",
+        "supplemental": "wer_zh_jieba_micro",
+        "legacy_fields": [
+          "cer_mean",
+          "wer_mean"
+        ],
+        "normalization": "zh_asr preserves Traditional Chinese without conversion"
+      }
+    },
+    {
+      "path": "70_experiments/runs/whisper_small_test_split/predictions/whisper_small_test_split_predictions.jsonl",
+      "run_id": "whisper_small_test_split",
+      "rows": 258,
+      "expected_rows": 258,
+      "missing_expected_ids": [],
+      "extra_ids": [],
+      "missing_reference": [],
+      "reference_mismatch_rows": 0,
       "metric_profile": {
         "paper_primary": "cer_zh_micro",
         "supplemental": "wer_zh_jieba_micro",

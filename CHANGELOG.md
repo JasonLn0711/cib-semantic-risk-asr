@@ -5,6 +5,27 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.44 - 2026-05-25T17:43:13+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `9e60b5f`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/scripts/run_janus_whisper_family_pilot.py`
+  - `60_whisper_asr_finetuning/scripts/run_legacy_breeze_asr25_smoke.py`
+  - `60_whisper_asr_finetuning/scripts/run_whisper_small_smoke.py`
+  - `70_experiments/runs/janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv`
+  - `70_experiments/runs/janus_258_test_split_asr_cds_proxy/summary.json`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/README.md`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/legacy_15_row_metric_audit.tsv`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/legacy_15_row_summary.json`
+  - `70_experiments/runs/wer_metric_audit_2026_05_25/text_metric_audit.tsv`
+  - `80_semantic_risk_asr/scoring/audit_asr_text_metrics.py`
+  - `80_semantic_risk_asr/scoring/summarize_janus_asr_test_split.py`
+  - `tests/test_asr_text_metrics.py`
+
 ## v2.5.43 - 2026-05-25T17:20:30+08:00
 
 - Bump: `patch`

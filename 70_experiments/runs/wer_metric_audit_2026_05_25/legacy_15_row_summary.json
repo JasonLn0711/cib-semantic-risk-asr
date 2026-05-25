@@ -1,0 +1,95 @@
+{
+  "ok": true,
+  "setup_checks": {
+    "expected_manifest_provided": true,
+    "expected_manifest_rows": 15,
+    "expected_rows_requested": 15,
+    "expected_manifest_row_count": true
+  },
+  "hypothesis_files": [
+    "70_experiments/runs/breeze_asr25_15_row_baseline/predictions/breeze_asr25_15_row_baseline_predictions.jsonl",
+    "70_experiments/runs/breeze_asr25_lora_legacy_best_15_row/predictions/breeze_asr25_lora_legacy_best_15_row_predictions.jsonl",
+    "70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_15_row/predictions/breeze_asr25_partial_encoder_legacy_best_15_row_predictions.jsonl",
+    "70_experiments/runs/breeze_asr26_15_row_stress_test/predictions/breeze_asr26_15_row_stress_test_predictions.jsonl",
+    "70_experiments/runs/whisper_large_v2_15_row_baseline/predictions/whisper_large_v2_15_row_baseline_predictions.jsonl",
+    "70_experiments/runs/whisper_small_15_row_baseline/predictions/whisper_small_15_row_baseline_predictions.jsonl"
+  ],
+  "metric_environment": {
+    "normalization": "zh_asr preserves Traditional Chinese without conversion",
+    "word_tokenizer": "jieba",
+    "packages": {
+      "editdistance": "0.8.1",
+      "jieba": "0.42.1",
+      "jiwer": "3.1.0"
+    }
+  },
+  "output_tsv": "70_experiments/runs/wer_metric_audit_2026_05_25/legacy_15_row_metric_audit.tsv",
+  "summaries": [
+    {
+      "path": "70_experiments/runs/breeze_asr25_15_row_baseline/predictions/breeze_asr25_15_row_baseline_predictions.jsonl",
+      "run_id": "breeze_asr25_15_row_baseline",
+      "rows": 15,
+      "expected_rows": 15,
+      "missing_reference_rows": 0,
+      "missing_hypothesis_rows": 0,
+      "missing_expected_ids": [],
+      "extra_ids": [],
+      "reference_mismatch_rows": 0
+    },
+    {
+      "path": "70_experiments/runs/breeze_asr25_lora_legacy_best_15_row/predictions/breeze_asr25_lora_legacy_best_15_row_predictions.jsonl",
+      "run_id": "breeze_asr25_lora_legacy_best_15_row",
+      "rows": 15,
+      "expected_rows": 15,
+      "missing_reference_rows": 0,
+      "missing_hypothesis_rows": 0,
+      "missing_expected_ids": [],
+      "extra_ids": [],
+      "reference_mismatch_rows": 0
+    },
+    {
+      "path": "70_experiments/runs/breeze_asr25_partial_encoder_legacy_best_15_row/predictions/breeze_asr25_partial_encoder_legacy_best_15_row_predictions.jsonl",
+      "run_id": "breeze_asr25_partial_encoder_legacy_best_15_row",
+      "rows": 15,
+      "expected_rows": 15,
+      "missing_reference_rows": 0,
+      "missing_hypothesis_rows": 0,
+      "missing_expected_ids": [],
+      "extra_ids": [],
+      "reference_mismatch_rows": 0
+    },
+    {
+      "path": "70_experiments/runs/breeze_asr26_15_row_stress_test/predictions/breeze_asr26_15_row_stress_test_predictions.jsonl",
+      "run_id": "breeze_asr26_15_row_stress_test",
+      "rows": 15,
+      "expected_rows": 15,
+      "missing_reference_rows": 0,
+      "missing_hypothesis_rows": 0,
+      "missing_expected_ids": [],
+      "extra_ids": [],
+      "reference_mismatch_rows": 0
+    },
+    {
+      "path": "70_experiments/runs/whisper_large_v2_15_row_baseline/predictions/whisper_large_v2_15_row_baseline_predictions.jsonl",
+      "run_id": "whisper_large_v2_15_row_baseline",
+      "rows": 15,
+      "expected_rows": 15,
+      "missing_reference_rows": 0,
+      "missing_hypothesis_rows": 0,
+      "missing_expected_ids": [],
+      "extra_ids": [],
+      "reference_mismatch_rows": 0
+    },
+    {
+      "path": "70_experiments/runs/whisper_small_15_row_baseline/predictions/whisper_small_15_row_baseline_predictions.jsonl",
+      "run_id": "whisper_small_15_row_baseline",
+      "rows": 15,
+      "expected_rows": 15,
+      "missing_reference_rows": 0,
+      "missing_hypothesis_rows": 0,
+      "missing_expected_ids": [],
+      "extra_ids": [],
+      "reference_mismatch_rows": 0
+    }
+  ]
+}

@@ -274,10 +274,15 @@ def summarize_file(
     generated_chars = 0
     locale_violation_rows = 0
     missing_reference = []
+    reference_mismatch_rows = 0
 
     for row in prediction_rows:
         audio_id = audio_id_for(row)
-        reference = first_value(row, TEXT_FIELDS) or reference_by_id.get(audio_id, "")
+        row_reference = first_value(row, TEXT_FIELDS)
+        manifest_reference = reference_by_id.get(audio_id, "")
+        if row_reference and manifest_reference and row_reference != manifest_reference:
+            reference_mismatch_rows += 1
+        reference = manifest_reference or row_reference
         hypothesis = first_value(row, HYPOTHESIS_TEXT_FIELDS)
         if not reference:
             missing_reference.append(audio_id or "<missing_audio_id>")
@@ -420,6 +425,7 @@ def summarize_file(
         "locale_violation_rows": locale_violation_rows,
         "missing_expected_ids": len(expected_ids - observed_ids),
         "extra_ids": len(observed_ids - expected_ids),
+        "reference_mismatch_rows": reference_mismatch_rows,
         "notes": (
             "aggregate proxy decision metrics from reference transcripts and "
             "heuristic labels; not a substitute for human risk-atom annotation"
@@ -433,6 +439,7 @@ def summarize_file(
         "missing_expected_ids": sorted(expected_ids - observed_ids),
         "extra_ids": sorted(observed_ids - expected_ids),
         "missing_reference": missing_reference,
+        "reference_mismatch_rows": reference_mismatch_rows,
         "metric_profile": {
             "paper_primary": "cer_zh_micro",
             "supplemental": "wer_zh_jieba_micro",
@@ -516,6 +523,7 @@ def main() -> int:
         "locale_violation_rows",
         "missing_expected_ids",
         "extra_ids",
+        "reference_mismatch_rows",
         "notes",
     ]
     comparison_rows.sort(key=lambda row: (float(row["cer_zh_micro"]), row["run_id"]))
@@ -528,6 +536,7 @@ def main() -> int:
             and not detail["missing_expected_ids"]
             and not detail["extra_ids"]
             and not detail["missing_reference"]
+            and detail["reference_mismatch_rows"] == 0
             for detail in details
         ),
         "manifest": str(args.manifest),

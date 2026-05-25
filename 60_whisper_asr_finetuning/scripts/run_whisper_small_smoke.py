@@ -11,6 +11,8 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+from asr_text_metrics import WER_TOKENIZERS, compute_pair_metrics
+
 
 def repo_root_from_script() -> Path:
     return Path(__file__).resolve().parents[2]
@@ -23,21 +25,6 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
             if line.strip():
                 rows.append(json.loads(line))
     return rows
-
-
-def levenshtein_rate(reference: str, prediction: str, unit: str) -> float:
-    import editdistance
-
-    if unit == "word":
-        ref_units = reference.split()
-        pred_units = prediction.split()
-    elif unit == "char":
-        ref_units = list(reference)
-        pred_units = list(prediction)
-    else:
-        raise ValueError(unit)
-    denominator = max(len(ref_units), 1)
-    return round(editdistance.eval(ref_units, pred_units) / denominator * 100.0, 2)
 
 
 def load_audio(path: Path, sampling_rate: int) -> Any:
@@ -96,6 +83,18 @@ def main() -> int:
     parser.add_argument("--runtime", choices=("cpu", "cuda"), default="cpu")
     parser.add_argument("--seed", type=int, default=165)
     parser.add_argument("--max-new-tokens", type=int, default=64)
+    parser.add_argument(
+        "--metric-normalization",
+        choices=("none", "zh_asr"),
+        default="zh_asr",
+        help="Text normalization for reported CER/WER. zh_asr preserves traditional Chinese.",
+    )
+    parser.add_argument(
+        "--wer-tokenizer",
+        choices=WER_TOKENIZERS,
+        default="jieba",
+        help="Tokenization used for reported WER. Use whitespace only for legacy audits.",
+    )
     parser.add_argument("--predictions", type=Path, default=run_dir / "predictions" / "whisper_small_smoke_predictions.jsonl")
     parser.add_argument("--summary", type=Path, default=run_dir / "artifacts" / "whisper_small_smoke_summary.json")
     parser.add_argument("--metrics", type=Path, default=run_dir / "metrics.csv")
@@ -138,8 +137,14 @@ def main() -> int:
             )
         prediction = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
         reference = str(row.get("text", ""))
-        cer = levenshtein_rate(reference, prediction, "char")
-        wer = levenshtein_rate(reference, prediction, "word")
+        text_metrics = compute_pair_metrics(
+            reference,
+            prediction,
+            normalization=args.metric_normalization,
+            wer_tokenizer=args.wer_tokenizer,
+        )
+        cer = text_metrics["cer"]
+        wer = text_metrics["wer"]
         prediction_row = {
             "audio_id": row["audio_id"],
             "split": row.get("split", ""),
@@ -149,6 +154,10 @@ def main() -> int:
             "pred_text": prediction,
             "cer": cer,
             "wer": wer,
+            "metric_normalization": args.metric_normalization,
+            "wer_tokenizer": args.wer_tokenizer,
+            "cer_raw": text_metrics["cer_raw"],
+            "wer_raw_whitespace": text_metrics["wer_raw_whitespace"],
             "model": args.model_name,
             "asr_run_id": "whisper_small_smoke_test",
             "runtime": args.runtime,
@@ -182,6 +191,8 @@ def main() -> int:
         "rows": len(prediction_rows),
         "cer_mean": cer_mean,
         "wer_mean": wer_mean,
+        "metric_normalization": args.metric_normalization,
+        "wer_tokenizer": args.wer_tokenizer,
         "wall_time_seconds": elapsed,
         "audio_ids": [row["audio_id"] for row in prediction_rows],
     }
@@ -199,7 +210,7 @@ def main() -> int:
             "learning_rate": "",
             "wall_time_seconds": elapsed,
             "checkpoint": args.model_name,
-            "notes": f"inference_stub_only;runtime={args.runtime};max_samples={len(prediction_rows)}",
+            "notes": f"inference_stub_only;runtime={args.runtime};max_samples={len(prediction_rows)};metric_normalization={args.metric_normalization};wer_tokenizer={args.wer_tokenizer}",
         },
     )
     print(json.dumps(summary, ensure_ascii=False, indent=2))

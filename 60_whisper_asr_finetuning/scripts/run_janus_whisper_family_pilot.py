@@ -115,21 +115,6 @@ def write_metrics(path: Path, row: dict[str, Any]) -> None:
         writer.writerow({field: row.get(field, "") for field in fieldnames})
 
 
-def levenshtein_rate(reference: str, prediction: str, unit: str) -> float:
-    import editdistance
-
-    if unit == "word":
-        ref_units = reference.split()
-        pred_units = prediction.split()
-    elif unit == "char":
-        ref_units = list(reference)
-        pred_units = list(prediction)
-    else:
-        raise ValueError(unit)
-    denominator = max(len(ref_units), 1)
-    return round(editdistance.eval(ref_units, pred_units) / denominator * 100.0, 2)
-
-
 def load_audio(path: Path, sampling_rate: int) -> Any:
     import librosa
     import soundfile as sf

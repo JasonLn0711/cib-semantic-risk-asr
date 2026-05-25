@@ -15,7 +15,6 @@ from run_janus_whisper_family_pilot import (
     compute_pair_metrics,
     gold_by_audio_id,
     heuristic_asr_label,
-    levenshtein_rate,
     load_audio,
     read_jsonl,
     read_tsv,
