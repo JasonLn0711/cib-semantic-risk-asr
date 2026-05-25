@@ -82,7 +82,7 @@
   "post_review_sequence_executed_step_count": 0,
   "consistency_audit_ok": true,
   "consistency_status_counts": {
-    "pass": 21
+    "pass": 22
   },
   "consistency_failed_checks": [],
   "objective_requirements_audit_ok": true,
