@@ -3,3 +3,4 @@ nemo_curator_zh_citrinet_cpu_pilot	nvidia/stt_zh_citrinet_1024_gamma_0_25	15	cpu
 whisper_small_15_row_baseline	openai/whisper-small	15	cuda	disable_cudnn	float16	pass	yes	53.08	500.0	11.54	included	WER is weak for unsegmented Chinese; use CER and decision-stability metrics.
 whisper_large_v2_15_row_baseline	openai/whisper-large-v2	15	cuda	disable_cudnn	float16	pass	yes	40.01	100.0	18.01	included	First large-v2 inference baseline before LoRA.
 breeze_asr25_15_row_baseline	MediaTek-Research/Breeze-ASR-25	15	cuda	disable_cudnn	float16	pass	yes	36.13	380.0	18.39	included	Best current pilot CER; still evaluate by decision-stability, not CER alone.
+breeze_asr26_15_row_stress_test	MediaTek-Research/Breeze-ASR-26	15	cuda	disable_cudnn	float16	pass	yes	38.49	1493.33	18.18	optional_stress_test	Optional Taigi/Taiwanese Hokkien stress test; do not treat as the primary Taiwan Mandarin baseline.

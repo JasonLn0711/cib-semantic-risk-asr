@@ -40,7 +40,7 @@ candidate_models:
     model_name_or_path: openai/whisper-small
     family: Whisper
     role: low-cost full 15-row baseline after the 1-row smoke pass
-    current_status: one_row_cpu_smoke_passed
+    current_status: completed_15_row_cuda_no_cudnn
     direct_quality_baseline: true
     notes: Use this before large models to verify the complete 15-row
       hypothesis, metric, and label bridge.
@@ -49,7 +49,7 @@ candidate_models:
     model_name_or_path: openai/whisper-large-v2
     family: Whisper
     role: main Whisper-family 15-row baseline before LoRA training
-    current_status: planned
+    current_status: completed_15_row_cuda_no_cudnn
     direct_quality_baseline: true
     notes: Run inference on the reviewed subset before any long LoRA training.
 
@@ -57,7 +57,7 @@ candidate_models:
     model_name_or_path: MediaTek-Research/Breeze-ASR-25
     family: Breeze ASR
     role: Taiwan Mandarin and Traditional Chinese domain baseline
-    current_status: verified_model_id_planned
+    current_status: completed_15_row_cuda_no_cudnn
     direct_quality_baseline: true
     notes: Primary Breeze candidate for this corpus because the model card
       targets Traditional Chinese and Taiwanese Mandarin/code-switching.
@@ -66,7 +66,7 @@ candidate_models:
     model_name_or_path: MediaTek-Research/Breeze-ASR-26
     family: Breeze ASR
     role: optional Taigi/Taiwanese Hokkien stress test
-    current_status: verified_model_id_optional
+    current_status: completed_15_row_cuda_no_cudnn_optional
     direct_quality_baseline: false
     notes: Breeze-ASR-26 is Taigi/Hokkien-oriented and outputs Chinese
       characters. Use it to test possible Taigi/Hokkien speech or dialect

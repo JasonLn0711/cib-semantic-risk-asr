@@ -22,7 +22,8 @@ Do not start a long model run until this gate exists:
    15-row Whisper-small hypothesis pass also completed on 2026-05-25 using
    CUDA with cuDNN disabled; it passed the hypothesis validator with WER/CER and
    heuristic ASR labels. The first 15-row model comparison now includes NeMo
-   Curator, Whisper-small, Whisper-large-v2, and Breeze-ASR-25.
+   Curator, Whisper-small, Whisper-large-v2, Breeze-ASR-25, and optional
+   Breeze-ASR-26 stress test.
 3. Build metric inputs with
    `80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py`.
 4. Extract risk atoms from top-1 transcripts and reference transcripts.
@@ -55,7 +56,9 @@ Models:
 - `openai/whisper-large-v2`
 - `MediaTek-Research/Breeze-ASR-25`
 - optional `MediaTek-Research/Breeze-ASR-26` as a Taigi/Taiwanese Hokkien
-  stress test, not as the primary Taiwan Mandarin baseline
+  stress test, not as the primary Taiwan Mandarin baseline. Local 15-row status
+  on 2026-05-25: completed, CER `38.49`, WER `1493.33`, CUDA with cuDNN
+  disabled.
 
 Metrics:
 

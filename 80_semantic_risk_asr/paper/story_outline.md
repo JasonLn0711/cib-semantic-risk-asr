@@ -98,14 +98,15 @@ examples.
 Current local evidence: the reviewed 15-row gate is complete, and a NeMo Curator
 CPU pilot has produced a 15-row `audio_id`-joinable hypothesis file with WER/CER
 fields. Its high CER confirms that this pass is only a pipeline/output-contract
-check. Whisper small, Whisper large-v2, and Breeze-ASR-25 have now completed
-the same fixed 15-row hypothesis pass with CUDA and cuDNN disabled. The first
-metric bridge pass produced SRES, CEIS, and downstream-impact outputs for the
-three labeled model runs. Breeze-ASR-25 is currently the strongest CER candidate
-on this pilot, but the next decision is based on interpretable decision flips
-and CEIS cases, not CER alone. Breeze-ASR-26 remains an optional
-Taigi/Taiwanese Hokkien stress test, not a direct replacement for the Mandarin
-baseline. The safe case-candidate table now identifies high-CEIS, lower-CER
+check. Whisper small, Whisper large-v2, Breeze-ASR-25, and optional
+Breeze-ASR-26 have now completed the same fixed 15-row hypothesis pass with
+CUDA and cuDNN disabled. The first metric bridge pass produced SRES, CEIS, and
+downstream-impact outputs for the three primary labeled model runs.
+Breeze-ASR-25 is currently the strongest CER candidate on this pilot, but the
+next decision is based on interpretable decision flips and CEIS cases, not CER
+alone. Breeze-ASR-26 is kept as a Taigi/Taiwanese Hokkien stress test, not a
+direct replacement for the Mandarin baseline. The safe case-candidate table now
+identifies high-CEIS, lower-CER
 high-CEIS, SRES-high/CEIS-low, recovery-candidate, and unsafe-downrouting
 examples without tracking transcripts.
 

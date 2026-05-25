@@ -1,0 +1,2 @@
+step,epoch,split,loss,cer,wer,learning_rate,wall_time_seconds,checkpoint,notes
+0,0,janus_15_pilot_15,,38.49,1493.33,,18.18,MediaTek-Research/Breeze-ASR-26,pilot_inference;runtime=cuda;max_samples=15;label_mode=heuristic;disable_cudnn=True;torch_dtype=float16

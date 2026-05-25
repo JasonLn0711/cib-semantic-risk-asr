@@ -78,7 +78,7 @@ python 80_semantic_risk_asr/downstream/evaluate_downstream_impact.py \
 
 | Metric Family | Status | Notes |
 | --- | --- | --- |
-| ASR comparison | first-pass complete | NeMo output-contract check plus Whisper-small, Whisper-large-v2, and Breeze-ASR-25 on the same 15 rows. See `asr_model_comparison.tsv`. |
+| ASR comparison | first-pass complete | NeMo output-contract check plus Whisper-small, Whisper-large-v2, Breeze-ASR-25, and optional Breeze-ASR-26 stress test on the same 15 rows. See `asr_model_comparison.tsv`. |
 | SRES | first-pass complete | Three labeled model runs produced 156 rows, total SRES `4868.0`, mean SRES `31.205`. |
 | CEIS | first-pass complete | Three labeled model runs produced 156 variant rows across 45 model-samples; 17 were unstable, max CEIS `15.0`, mean CEIS `2.1778`. |
 | Downstream escalation impact | first-pass complete | 45 model-sample rows; ASR mismatch rate `0.3778`; high-risk missed by ASR `3`; recovery not yet applied. |
@@ -102,6 +102,10 @@ python 80_semantic_risk_asr/downstream/evaluate_downstream_impact.py \
   cuDNN disabled. Breeze-ASR-25 had the best pilot CER (`36.13`), followed by
   Whisper large-v2 (`40.01`) and Whisper small (`53.08`). NeMo remains an
   output-contract comparison only (`83.66` mean CER).
+- 2026-05-25: `MediaTek-Research/Breeze-ASR-26` completed the optional 15-row
+  stress test on CUDA with cuDNN disabled. Its CER was `38.49`, but it remains a
+  Taigi/Taiwanese Hokkien stress comparator rather than the primary Mandarin
+  baseline.
 - 2026-05-25: `select_janus_pilot_cases.py` produced a transcript-free
   candidate table for paper inspection and recovery design. Confidence-based
   cases are still marked unavailable because these inference runs did not emit

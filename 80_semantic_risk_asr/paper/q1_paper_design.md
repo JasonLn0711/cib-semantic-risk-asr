@@ -410,6 +410,9 @@ constrained re-decoding implementation is mature.
   high for quality comparison. Whisper small has passed the 1-row smoke test
   and the full 15-row hypothesis pass. Whisper large-v2 and Breeze-ASR-25 have
   also completed the full 15-row pass with CUDA and cuDNN disabled.
+- Complete optional Breeze-ASR-26 stress test. Local status on 2026-05-25:
+  completed on the same 15 rows with CER `38.49`; keep it as a
+  Taigi/Taiwanese Hokkien stress comparator, not the primary Mandarin baseline.
 - Build SRES, CEIS, and downstream-impact metric inputs for the pilot. Local
   status on 2026-05-25: complete for the three labeled model runs, producing
   156 SRES rows, 156 CEIS variant rows, and 45 downstream decision rows.
