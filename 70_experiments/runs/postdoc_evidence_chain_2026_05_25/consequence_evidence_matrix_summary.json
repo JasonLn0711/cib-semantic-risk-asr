@@ -133,5 +133,5 @@
   ],
   "first_principle_decision": "Move from model-centric ASR improvement to consequence-centric evidence: claims become paper-ready only when aggregate consequences are tied to human-reviewed risk/decision/model labels.",
   "next_decision": "Use the ready selected-300 packet to complete risk/decision/model review, then rerun predictor and recovery analyses against reviewed labels.",
-  "runtime_seconds": 0.003
+  "runtime_seconds": 0.0029
 }

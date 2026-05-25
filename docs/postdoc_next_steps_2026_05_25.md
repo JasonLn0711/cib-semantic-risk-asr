@@ -150,6 +150,10 @@ tracked outputs。
 - Current state: `ok=true` but `publishable_ready=false`；objective `0-3`
   completed，objective `4` 和 `6` proxy-only，objective `5`
   `review_pending`。
+- The audit now also records consequence-matrix alignment. Current consequence
+  state is available and `ok=true`, but `paper_claims_ready=false`, so the repo
+  must not be described as paper-ready while selected-300 human risk/decision
+  and model-assessment review remains incomplete.
 - FIRST PRINCIPLE decision: 在 selected-300 human audit 把 proxy CDS-ASR
   evidence 轉成 paper-grade evidence 以前，不要再把主要資源投入盲目的
   ASR fine-tuning。

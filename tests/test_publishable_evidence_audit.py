@@ -107,6 +107,50 @@ def test_objective_five_requires_reviewed_predictor_outputs() -> None:
     assert by_id["5"]["paper_claim_status"] == "not paper-ready"
 
 
+def test_completion_audit_requires_consequence_claim_readiness() -> None:
+    from audit_publishable_evidence_chain import build_completion_audit_from_payloads
+
+    readiness = base_readiness()
+    for row in readiness["readiness_rows"]:
+        if row["requirement"] in {
+            "canonical 258-row six-model comparison with decision-risk metrics",
+            "selected-300 high-stakes CDS-ASR main experiment proxy",
+            "WER/CER/SRES/CEIS predictor comparison on selected-300",
+            "five-condition recovery experiment",
+            "selected-300 human risk-atom audit completion",
+        }:
+            row["status"] = "completed"
+    payload = build_completion_audit_from_payloads(
+        readiness_payload=readiness,
+        human_refresh={
+            "ok": True,
+            "status": "review_complete",
+            "audit_rows": 30,
+            "reviewed_rows": 30,
+            "pending_rows": 0,
+            "model_assessments": 90,
+            "reviewed_model_assessments": 90,
+            "pending_model_assessments": 0,
+        },
+        human_predictor={
+            "ok": True,
+            "status": "review_complete",
+            "pending_model_assessments": 0,
+        },
+        consequence_matrix={
+            "ok": True,
+            "paper_claims_ready": False,
+            "status_counts": {"review_pending": 1},
+            "blocking_or_proxy_items": [{"consequence_id": "C6"}],
+        },
+    )
+
+    assert payload["objective_requirements_ready"] is True
+    assert payload["publishable_ready"] is False
+    assert payload["consequence_matrix_alignment"]["paper_claims_ready"] is False
+    assert payload["consequence_matrix_alignment"]["blocking_or_proxy_items"] == 1
+
+
 def test_completion_safety_rejects_private_tokens() -> None:
     try:
         assert_completion_safe({"bad": "reference_text"})

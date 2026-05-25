@@ -84,6 +84,7 @@ ignored local paths.
 | 5.41 | Ran Whisper large-v3 and large-v3 turbo one-row smoke gates. | `run_janus_whisper_family_pilot.py`; `70_experiments/runs/whisper_large_v3_smoke_1_row/`; `70_experiments/runs/whisper_large_v3_turbo_smoke_1_row/`; ignored local predictions and validation artifacts. | Completed as cold-start feasibility checks, not as model ranking. Large-v3 passed with CUDA float16, cuDNN disabled, CER `40.00`, WER `47.92`, wall time `271.91s`, and locale violation rows `0`. Large-v3 turbo passed with CER `77.65`, WER `85.42`, wall time `144.77s`, and locale violation rows `0`. Both one-row validators passed required text/label/quality field checks; raw row content remains ignored. |
 | 5.42 | Checked remaining ASR and multimodal model readiness. | Hugging Face metadata check; local package-version check; `docs/asr_candidate_expansion_2026_05_25.md`. | Completed as runner planning. SenseVoice, Qwen3-ASR 0.6B/1.7B, and Gemma 4 E2B/E4B model pages are public and not gated, but local runnable tests need new family-specific runners. `funasr`, `modelscope`, and `qwen-asr` are not installed in the current `.venv`. Gemma 4 remains a separate prompted multimodal-ASR lane, not a pure ASR baseline. |
 | 5.43 | Added consequence-to-evidence matrix gate. | `build_consequence_evidence_matrix.py`; `consequence_evidence_matrix_summary.json`; `consequence_evidence_matrix.tsv`; `tests/test_consequence_evidence_matrix.py`. | Added a paper-facing map from metric reporting, metric insufficiency, model comparison, split generalization, recovery, human evidence, and publishability claims to current aggregate evidence. The gate keeps proxy evidence separate from paper-ready claims and rejects transcript/sample-key field-name leakage. |
+| 5.44 | Cross-linked publishable completion audit with the consequence matrix. | `audit_publishable_evidence_chain.py`; `publishable_evidence_completion_summary.json`; `tests/test_publishable_evidence_audit.py`. | Completed as a completion-audit hardening pass. The publishable audit now records `objective_requirements_ready=false`, `paper_claim_status_ready=false`, and `consequence_matrix_alignment.available=true`, `ok=true`, `paper_claims_ready=false`. This prevents a future status summary from treating objective rows and consequence claims as separate, potentially inconsistent readiness gates. Direct publishable-audit tests passed; `pytest` remains unavailable in `.venv`. |
 
 ## Next Operations
 
@@ -134,7 +135,9 @@ ignored local paths.
 9. Use `audit_publishable_evidence_chain.py` as the standalone
    objective-level completion audit when needed. The refresh gate also updates
    it, and it should stay `publishable_ready=false` while any objective remains
-   proxy-only or review-pending.
+   proxy-only or review-pending. The audit now also records consequence-matrix
+   alignment and should not turn publishable-ready while
+   `paper_claims_ready=false`.
 10. After local review edits, run `refresh_human_audit_evidence.py` without
    `--require-complete` to refresh aggregate records, then with
    `--require-complete` before treating the human audit as complete.

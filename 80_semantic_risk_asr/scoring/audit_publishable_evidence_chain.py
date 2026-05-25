@@ -44,6 +44,7 @@ DEFAULT_OUTPUT_DIR = (
 )
 SUMMARY_NAME = "publishable_evidence_completion_summary.json"
 TSV_NAME = "publishable_evidence_completion.tsv"
+CONSEQUENCE_SUMMARY_NAME = "consequence_evidence_matrix_summary.json"
 
 STATUS_ORDER = {
     "completed": 0,
@@ -307,6 +308,7 @@ def build_completion_audit_from_payloads(
     readiness_payload: dict[str, Any],
     human_refresh: dict[str, Any],
     human_predictor: dict[str, Any],
+    consequence_matrix: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     rows = objective_rows_from_payloads(
         readiness_payload=readiness_payload,
@@ -327,11 +329,29 @@ def build_completion_audit_from_payloads(
         for row in rows
         if row["status"] != "completed" or row["paper_claim_status"].startswith("proxy")
     ]
+    consequence_matrix = consequence_matrix or {}
+    consequence_alignment = {
+        "available": bool(consequence_matrix),
+        "ok": bool(consequence_matrix.get("ok")),
+        "paper_claims_ready": bool(consequence_matrix.get("paper_claims_ready")),
+        "status_counts": consequence_matrix.get("status_counts", {}),
+        "blocking_or_proxy_items": len(consequence_matrix.get("blocking_or_proxy_items", [])),
+        "evidence": (
+            "70_experiments/runs/postdoc_evidence_chain_2026_05_25/"
+            f"{CONSEQUENCE_SUMMARY_NAME}"
+        ),
+    }
+    objective_requirements_ready = all(row["status"] == "completed" for row in rows)
+    paper_claim_status_ready = objective_requirements_ready and all(
+        not row["paper_claim_status"].startswith("proxy") for row in rows
+    )
     payload = {
         "ok": all(STATUS_ORDER.get(row["status"], 99) <= STATUS_ORDER["review_pending"] for row in rows),
-        "publishable_ready": all(row["status"] == "completed" for row in rows)
-        and all(not row["paper_claim_status"].startswith("proxy") for row in rows),
+        "publishable_ready": paper_claim_status_ready and consequence_alignment["paper_claims_ready"],
         "status_counts": dict(sorted(counts.items())),
+        "objective_requirements_ready": objective_requirements_ready,
+        "paper_claim_status_ready": paper_claim_status_ready,
+        "consequence_matrix_alignment": consequence_alignment,
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
         "remaining_review_scope": REMAINING_REVIEW_SCOPE,
         "completion_rows": rows,
@@ -356,10 +376,18 @@ def build_completion_audit(root: Path) -> dict[str, Any]:
     audit_dir = root / "70_experiments" / "runs" / "janus_300_high_stakes_human_audit_selection_2026_05_25"
     human_refresh = read_json(audit_dir / "human_audit_refresh_summary.json")
     human_predictor = read_json(audit_dir / "human_audit_predictor_summary.json")
+    consequence_matrix = read_json(
+        root
+        / "70_experiments"
+        / "runs"
+        / "postdoc_evidence_chain_2026_05_25"
+        / CONSEQUENCE_SUMMARY_NAME
+    )
     return build_completion_audit_from_payloads(
         readiness_payload=readiness_payload,
         human_refresh=human_refresh,
         human_predictor=human_predictor,
+        consequence_matrix=consequence_matrix,
     )
 
 
