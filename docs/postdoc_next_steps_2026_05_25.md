@@ -208,6 +208,28 @@ review-pending、post-review blocked 分開，避免把目前已經很完整的 
 `refresh_human_audit_evidence.py` 現在會同步更新這個 audit；只有需要單獨
 檢查 roadmap 狀態時才直接跑 `audit_postdoc_roadmap_completion.py`。
 
+16. Original-objective requirements audit 已建立：
+
+- Script:
+  `80_semantic_risk_asr/scoring/audit_postdoc_objective_requirements.py`。
+- Current tracked audit:
+  `70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements_summary.json`。
+- Current state: `objective_requirements_ready=false`；
+  status counts are `satisfied=8`、`proxy_satisfied=5`、
+  `review_pending=2`。
+- What it verifies:
+  legacy checkpoint / ignore boundary、LoRA and partial-encoder smoke、
+  15-row contract、15-row CDS bridge、six-model 258-row decision-risk columns、
+  selected-300 proxy predictor evidence、five recovery conditions and safety
+  metrics。
+- Remaining paper-grade blockers:
+  selected-300 non-transcript risk/decision/model/timing review，以及
+  human-reviewed recovery rerun。
+
+這個 audit 是 completion audit，不是 status 摘要。之後如果要說「0-6
+objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 全部
+轉成 paper-ready evidence。
+
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS

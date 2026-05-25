@@ -1,0 +1,263 @@
+{
+  "ok": true,
+  "objective_requirements_ready": false,
+  "publishable_ready": false,
+  "status_counts": {
+    "satisfied": 8,
+    "proxy_satisfied": 5,
+    "review_pending": 2
+  },
+  "reference_transcript_policy": "Reference transcripts are already human-reviewed for WER/CER scoring; this audit does not reopen transcript review.",
+  "remaining_review_scope": "Selected-300 completion still requires risk, decision, expected safe action, confidence, per-model fields, and per-row review timing.",
+  "requirements_total": 15,
+  "proxy_requirement_count": 5,
+  "blocking_requirement_count": 2,
+  "requirement_rows": [
+    {
+      "requirement_id": "0.1",
+      "objective_step": "0",
+      "requirement": "checkpoint registry records migration, best-model selection, and evidence-chain run",
+      "status": "satisfied",
+      "paper_claim_status": "provenance evidence",
+      "evidence": "70_experiments/registry.tsv",
+      "result": "4/4 required checkpoint rows present",
+      "blocking_dependency": "",
+      "next_action": "Keep this checkpoint immutable except for append-only aggregate records."
+    },
+    {
+      "requirement_id": "0.2",
+      "objective_step": "0",
+      "requirement": "large local data, weights, predictions, and artifacts are ignored",
+      "status": "satisfied",
+      "paper_claim_status": "provenance evidence",
+      "evidence": ".gitignore",
+      "result": "raw audio, model payloads, local artifacts, and local predictions are protected",
+      "blocking_dependency": "",
+      "next_action": "Do not stage raw media, model weights, local predictions, or review sheets."
+    },
+    {
+      "requirement_id": "1.1",
+      "objective_step": "1",
+      "requirement": "legacy LoRA best model load smoke records runtime, dtype, cuDNN policy, and one-row inference",
+      "status": "satisfied",
+      "paper_claim_status": "engineering gate only",
+      "evidence": "breeze_asr25_lora_legacy_best_smoke summary",
+      "result": "ok=True; rows=1; runtime=cuda; dtype=float16; disable_cudnn=True; wall_time=253.53",
+      "blocking_dependency": "",
+      "next_action": "Keep as load gate; use split outputs for evidence."
+    },
+    {
+      "requirement_id": "1.2",
+      "objective_step": "1",
+      "requirement": "legacy partial-encoder best model load smoke records runtime, dtype, cuDNN policy, and one-row inference",
+      "status": "satisfied",
+      "paper_claim_status": "engineering gate only",
+      "evidence": "breeze_asr25_partial_encoder_legacy_best_smoke summary",
+      "result": "ok=True; rows=1; runtime=cuda; dtype=float16; disable_cudnn=True; wall_time=7.03",
+      "blocking_dependency": "",
+      "next_action": "If this fails later, repair artifact reconstruction before retraining."
+    },
+    {
+      "requirement_id": "2.1",
+      "objective_step": "2",
+      "requirement": "legacy LoRA best joins fixed 15-row hypothesis contract",
+      "status": "satisfied",
+      "paper_claim_status": "engineering gate only",
+      "evidence": "breeze_asr25_lora_legacy_best_15_row validation",
+      "result": "15/15 rows valid with text, label, and quality fields",
+      "blocking_dependency": "",
+      "next_action": "Use as gate evidence only."
+    },
+    {
+      "requirement_id": "2.2",
+      "objective_step": "2",
+      "requirement": "legacy partial-encoder best joins fixed 15-row hypothesis contract",
+      "status": "satisfied",
+      "paper_claim_status": "engineering gate only",
+      "evidence": "breeze_asr25_partial_encoder_legacy_best_15_row validation",
+      "result": "15/15 rows valid with text, label, and quality fields",
+      "blocking_dependency": "",
+      "next_action": "Use as gate evidence only."
+    },
+    {
+      "requirement_id": "3.1",
+      "objective_step": "3",
+      "requirement": "15-row CDS-ASR bridge compares CER/WER with CEIS and downstream decision risk",
+      "status": "satisfied",
+      "paper_claim_status": "pilot evidence",
+      "evidence": "janus_15_decision_stability_legacy_best/asr_cds_model_comparison.tsv",
+      "result": "legacy best rows present=True; fields=['cer_mean', 'downstream_mismatch_rate', 'high_risk_missed_by_asr', 'max_ceis', 'mean_ceis', 'wer_mean']",
+      "blocking_dependency": "",
+      "next_action": "Use this only to frame why CER alone is insufficient; do not overclaim from 15 rows."
+    },
+    {
+      "requirement_id": "4.1",
+      "objective_step": "4",
+      "requirement": "canonical 258-row comparison includes six required models and decision-risk columns",
+      "status": "proxy_satisfied",
+      "paper_claim_status": "proxy evidence; not human-reviewed risk evidence",
+      "evidence": "janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv",
+      "result": "6/6 required runs present; missing_runs=[]; missing_columns=[]; row_counts_ok=True",
+      "blocking_dependency": "human-reviewed risk and decision labels before paper-grade risk claims",
+      "next_action": "Keep 258-row risk fields marked proxy unless reviewed labels are added."
+    },
+    {
+      "requirement_id": "4.2",
+      "objective_step": "4",
+      "requirement": "experiment registry records the six 258-row model runs",
+      "status": "satisfied",
+      "paper_claim_status": "aggregate run provenance",
+      "evidence": "70_experiments/registry.tsv",
+      "result": "6/6 required 258-row registry rows present",
+      "blocking_dependency": "",
+      "next_action": "Append only aggregate registry rows for future full-split experiments."
+    },
+    {
+      "requirement_id": "5.1",
+      "objective_step": "5",
+      "requirement": "selected-300 high-stakes proxy metric inputs exist for the main experiment",
+      "status": "proxy_satisfied",
+      "paper_claim_status": "proxy evidence",
+      "evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json",
+      "result": "split=high_stakes_300; review_mode=proxy; references=300; model_samples=900",
+      "blocking_dependency": "human-reviewed risk and decision fields before paper-grade claims",
+      "next_action": "Use proxy outputs to select review rows, not as final human-reviewed evidence."
+    },
+    {
+      "requirement_id": "5.2",
+      "objective_step": "5",
+      "requirement": "selected-300 predictor analysis compares WER/CER/SRES/CEIS and low-WER danger cases",
+      "status": "proxy_satisfied",
+      "paper_claim_status": "proxy evidence",
+      "evidence": "janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json",
+      "result": "model_samples=900; predictor_targets=['critical_miss', 'danger_event', 'high_risk_missed', 'label_flip', 'over_escalation', 'unsafe_downrouting']; low_wer_rows_recorded=4",
+      "blocking_dependency": "human-reviewed labels before formal predictor claims",
+      "next_action": "Rerun predictor analysis after selected-300 review is written and refreshed."
+    },
+    {
+      "requirement_id": "5.3",
+      "objective_step": "5",
+      "requirement": "selected-300 main experiment has reviewed risk/decision/model/timing evidence",
+      "status": "review_pending",
+      "paper_claim_status": "not paper-ready",
+      "evidence": "human_audit_refresh_summary.json; human_audit_predictor_summary.json",
+      "result": "reviewed_rows=0/30; reviewed_model_assessments=0/90; human_predictor_status=review_pending",
+      "blocking_dependency": "selected-300 risk labels, decision-change labels, safe action, confidence, per-model fields, and timing",
+      "next_action": "Complete only the non-transcript reviewer fields plus timing, then rerun strict closeout and refresh."
+    },
+    {
+      "requirement_id": "6.1",
+      "objective_step": "6",
+      "requirement": "recovery experiment contains all five required policy conditions and safety metrics",
+      "status": "proxy_satisfied",
+      "paper_claim_status": "proxy engineering evidence",
+      "evidence": "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+      "result": "5/5 policies present; missing_policies=[]; missing_metrics={}",
+      "blocking_dependency": "human-reviewed labels before intervention claims",
+      "next_action": "Keep this as proxy until selected-300 reviewed labels are available."
+    },
+    {
+      "requirement_id": "6.2",
+      "objective_step": "6",
+      "requirement": "proxy recovery result demonstrates reduced dangerous decisions",
+      "status": "proxy_satisfied",
+      "paper_claim_status": "proxy engineering evidence",
+      "evidence": "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+      "result": "unsafe_gain=0.1724; high_risk_gain=1.0; critical_miss=1->0",
+      "blocking_dependency": "human-reviewed recovery rerun before paper-grade intervention claim",
+      "next_action": "Rerun recovery after human review and compare safety tradeoffs again."
+    },
+    {
+      "requirement_id": "6.3",
+      "objective_step": "6",
+      "requirement": "recovery experiment has human-reviewed post-review evidence",
+      "status": "review_pending",
+      "paper_claim_status": "not paper-ready",
+      "evidence": "human_audit_post_review_evidence_summary.json",
+      "result": "recovery_human_ready=False",
+      "blocking_dependency": "post-review recovery evidence is still proxy-only",
+      "next_action": "After reviewed labels are refreshed, rerun recovery and post-review checklist."
+    }
+  ],
+  "proxy_or_blocking_requirements": [
+    {
+      "requirement_id": "4.1",
+      "objective_step": "4",
+      "requirement": "canonical 258-row comparison includes six required models and decision-risk columns",
+      "status": "proxy_satisfied",
+      "paper_claim_status": "proxy evidence; not human-reviewed risk evidence",
+      "evidence": "janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv",
+      "result": "6/6 required runs present; missing_runs=[]; missing_columns=[]; row_counts_ok=True",
+      "blocking_dependency": "human-reviewed risk and decision labels before paper-grade risk claims",
+      "next_action": "Keep 258-row risk fields marked proxy unless reviewed labels are added."
+    },
+    {
+      "requirement_id": "5.1",
+      "objective_step": "5",
+      "requirement": "selected-300 high-stakes proxy metric inputs exist for the main experiment",
+      "status": "proxy_satisfied",
+      "paper_claim_status": "proxy evidence",
+      "evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json",
+      "result": "split=high_stakes_300; review_mode=proxy; references=300; model_samples=900",
+      "blocking_dependency": "human-reviewed risk and decision fields before paper-grade claims",
+      "next_action": "Use proxy outputs to select review rows, not as final human-reviewed evidence."
+    },
+    {
+      "requirement_id": "5.2",
+      "objective_step": "5",
+      "requirement": "selected-300 predictor analysis compares WER/CER/SRES/CEIS and low-WER danger cases",
+      "status": "proxy_satisfied",
+      "paper_claim_status": "proxy evidence",
+      "evidence": "janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json",
+      "result": "model_samples=900; predictor_targets=['critical_miss', 'danger_event', 'high_risk_missed', 'label_flip', 'over_escalation', 'unsafe_downrouting']; low_wer_rows_recorded=4",
+      "blocking_dependency": "human-reviewed labels before formal predictor claims",
+      "next_action": "Rerun predictor analysis after selected-300 review is written and refreshed."
+    },
+    {
+      "requirement_id": "6.1",
+      "objective_step": "6",
+      "requirement": "recovery experiment contains all five required policy conditions and safety metrics",
+      "status": "proxy_satisfied",
+      "paper_claim_status": "proxy engineering evidence",
+      "evidence": "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+      "result": "5/5 policies present; missing_policies=[]; missing_metrics={}",
+      "blocking_dependency": "human-reviewed labels before intervention claims",
+      "next_action": "Keep this as proxy until selected-300 reviewed labels are available."
+    },
+    {
+      "requirement_id": "6.2",
+      "objective_step": "6",
+      "requirement": "proxy recovery result demonstrates reduced dangerous decisions",
+      "status": "proxy_satisfied",
+      "paper_claim_status": "proxy engineering evidence",
+      "evidence": "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+      "result": "unsafe_gain=0.1724; high_risk_gain=1.0; critical_miss=1->0",
+      "blocking_dependency": "human-reviewed recovery rerun before paper-grade intervention claim",
+      "next_action": "Rerun recovery after human review and compare safety tradeoffs again."
+    },
+    {
+      "requirement_id": "5.3",
+      "objective_step": "5",
+      "requirement": "selected-300 main experiment has reviewed risk/decision/model/timing evidence",
+      "status": "review_pending",
+      "paper_claim_status": "not paper-ready",
+      "evidence": "human_audit_refresh_summary.json; human_audit_predictor_summary.json",
+      "result": "reviewed_rows=0/30; reviewed_model_assessments=0/90; human_predictor_status=review_pending",
+      "blocking_dependency": "selected-300 risk labels, decision-change labels, safe action, confidence, per-model fields, and timing",
+      "next_action": "Complete only the non-transcript reviewer fields plus timing, then rerun strict closeout and refresh."
+    },
+    {
+      "requirement_id": "6.3",
+      "objective_step": "6",
+      "requirement": "recovery experiment has human-reviewed post-review evidence",
+      "status": "review_pending",
+      "paper_claim_status": "not paper-ready",
+      "evidence": "human_audit_post_review_evidence_summary.json",
+      "result": "recovery_human_ready=False",
+      "blocking_dependency": "post-review recovery evidence is still proxy-only",
+      "next_action": "After reviewed labels are refreshed, rerun recovery and post-review checklist."
+    }
+  ],
+  "next_decision": "Do not declare the postdoc objective complete. Complete selected-300 row/model/timing review, run strict closeout, refresh human predictor and recovery evidence, then rerun this audit.",
+  "runtime_seconds": 0.0009
+}
