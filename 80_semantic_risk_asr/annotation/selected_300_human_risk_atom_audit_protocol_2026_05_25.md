@@ -178,10 +178,12 @@ refresh:
   --expected-rows 30
 ```
 
-After filling the ignored response TSV, dry-run it:
+After filling the ignored response TSV, dry-run it with the strict completion
+gate:
 
 ```bash
 .venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py \
+  --require-complete \
   --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv \
   --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
   --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
@@ -189,9 +191,11 @@ After filling the ignored response TSV, dry-run it:
   --expected-rows 30
 ```
 
-Use `--write` only after dry-run status is `response_complete`. The current
-template dry-run is `response_pending`, as expected before reviewer decisions
-are entered.
+Use `--write` only after strict dry-run status is `response_complete`. The
+current strict template dry-run is `response_pending`, `ok=false`, with
+`incomplete_response=1`, as expected before reviewer decisions are entered. A
+non-strict dry-run can be used to inspect progress, but it is not the
+completion gate.
 
 Use the local helper to avoid hand-editing JSON in
 `reviewer_model_assessments_json`:

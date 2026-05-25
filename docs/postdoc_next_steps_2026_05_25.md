@@ -222,7 +222,9 @@ outputs。
   batch status audit 目前是 `batch_pending`：`0/6` risk/decision rows、
   `0/18` model assessments，`batch_ready_for_refresh=false`。Local TSV
   response template 也已建立，涵蓋 `18` response rows；目前 blank dry-run 是
-  `response_pending`，代表尚未填入 reviewer decisions。
+  `response_pending`。嚴格 `--require-complete` dry-run 目前會以 `ok=false`
+  和 `incomplete_response=1` 退出，代表尚未填入 reviewer decisions；這是
+  `--write` 前的完成性 gate。
 - 258-row recovery proxy 與 300-row high-stakes recovery proxy 都已完成；下
   一個缺口是 selected-300 human risk-atom audit，而不是再調 WER 定義。
 
@@ -716,8 +718,10 @@ Interpretation:
    sheet 中「不是 transcript ground truth」的欄位：risk atoms、
    decision-change、expected safe action、confidence、per-model assessment。
    先從已準備好的 `critical_or_high_risk_missed` packet rows `1-6` 開始，
-   填寫 ignored local response TSV，dry-run 到 `response_complete` 後再
-   `--write`，並重跑 batch status audit 直到 `batch_complete`。
+   填寫 ignored local response TSV，用
+   `apply_human_audit_batch_response.py --require-complete` dry-run 到
+   `response_complete` 後再 `--write`，並重跑 batch status audit 直到
+   `batch_complete`。
 2. 跑
    `validate_human_risk_atom_audit.py --require-complete --expected-rows 30`；
    通過後才產出 aggregate human annotation stats，確認沒有 selected IDs 或 transcript

@@ -71,6 +71,7 @@ ignored local paths.
 | 5.28 | Prepared the first selected-300 local review batch. | `prepare_human_audit_review_batch.py`; `human_audit_next_review_batch_summary.json`; `human_audit_next_review_batch_rows.tsv`; `human_audit_review_batch_log.tsv`; ignored local packet under `artifacts/review_batches/`. | Completed as a review-execution aid, not as human review. The next packet is `critical_or_high_risk_missed`, covering row numbers `1-6`, `6` rows, and `18` model assessments. Tracked outputs contain only row numbers, strata, missing-field counts, and the ignored local packet path; sensitive-field scan found no audio IDs, transcripts, hypotheses, reviewer notes, or private text. |
 | 5.29 | Added current review-batch completion status audit. | `audit_human_review_batch_status.py`; `human_audit_current_review_batch_status_summary.json`; `human_audit_current_review_batch_status_rows.tsv`. | Completed as a batch guardrail, not as human review. Current first packet status is `batch_pending`: `0/6` risk/decision rows and `0/18` model assessments reviewed, `batch_ready_for_refresh=false`. Tracked outputs contain only row numbers, strata, completion counts, missing-field counts, and local packet path; sensitive-field scan found no audio IDs, transcripts, hypotheses, reviewer notes, or private text. |
 | 5.30 | Added local response-template and batch apply workflow. | `apply_human_audit_batch_response.py`; `human_audit_batch_response_template_summary.json`; `human_audit_batch_response_apply_summary.json`; ignored local response TSV under `artifacts/review_responses/`. | Completed as a review-entry workflow, not as human review. The response template covers the current `critical_or_high_risk_missed` packet with `18` response rows. Dry-run apply over the blank template returns `response_pending`: `0/6` row decisions and `0/18` model assessments filled. Tracked summaries contain only counts, row numbers, and local paths; sensitive-field scan found no audio IDs, transcripts, hypotheses, reviewer notes, or private text. |
+| 5.31 | Added strict response completion gate. | `apply_human_audit_batch_response.py --require-complete`; `human_audit_batch_response_apply_summary.json`; `tests/test_human_audit_batch_response.py`. | Completed as a guardrail, not as human review. Strict dry-run over the current blank response template exits `1` as expected with `status=response_pending`, `ok=false`, `incomplete_response=1`, `0/6` row decisions, and `0/18` model assessments filled. Non-strict dry-run remains useful for progress inspection; `--require-complete` is the gate before `--write`. Sensitive-field scan over response summaries found no audio IDs, transcripts, hypotheses, reviewer notes, private fixture text, or absolute local paths. |
 
 ## Next Operations
 
@@ -93,9 +94,10 @@ ignored local paths.
    expected safe action, confidence, and per-model assessments. Use
    `prepare_human_audit_review_batch.py` to create local ignored review
    packets, then `apply_human_audit_batch_response.py --write-template` for
-   TSV-based reviewer entry. Dry-run the filled response TSV before using
-   `--write`, and use `review_human_risk_atom_audit.py --list-pending` for
-   row-level checks without leaking transcripts into tracked files. Start with the prepared
+   TSV-based reviewer entry. Dry-run the filled response TSV with
+   `--require-complete` before using `--write`, and use
+   `review_human_risk_atom_audit.py --list-pending` for row-level checks
+   without leaking transcripts into tracked files. Start with the prepared
    `critical_or_high_risk_missed` packet, rerun
    `audit_human_review_batch_status.py` until it reports `batch_complete`, then
    move to `unsafe_downrouting` and `high_proxy_risk`.

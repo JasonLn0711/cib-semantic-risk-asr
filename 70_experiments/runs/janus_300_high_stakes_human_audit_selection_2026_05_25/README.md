@@ -133,7 +133,7 @@ Tracked readiness outputs:
 | `human_audit_current_review_batch_status_summary.json` | Repo-safe completion status for the current packet. Current status: `batch_pending`, `0/6` risk/decision rows and `0/18` model assessments reviewed. |
 | `human_audit_current_review_batch_status_rows.tsv` | Repo-safe row-level completion checklist for the current packet. No audio IDs, transcripts, hypotheses, or reviewer notes. |
 | `human_audit_batch_response_template_summary.json` | Repo-safe record for the local response TSV template. Current template has `18` response rows for rows `1-6`. |
-| `human_audit_batch_response_apply_summary.json` | Repo-safe dry-run/apply status for the local response TSV. Current dry-run status is `response_pending`, `0/6` rows and `0/18` model assessments filled. |
+| `human_audit_batch_response_apply_summary.json` | Repo-safe strict dry-run/apply status for the local response TSV. Current `--require-complete` dry-run status is `response_pending`, `ok=false`, `incomplete_response=1`, with `0/6` rows and `0/18` model assessments filled. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
@@ -199,10 +199,13 @@ Current local response template:
 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv
 ```
 
-After a reviewer fills that ignored TSV, dry-run it first:
+After a reviewer fills that ignored TSV, dry-run it first. Use
+`--require-complete` as the completion gate; it should fail until all required
+row-level and model-level reviewer fields are filled:
 
 ```bash
 .venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py \
+  --require-complete \
   --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv \
   --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
   --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
@@ -210,9 +213,10 @@ After a reviewer fills that ignored TSV, dry-run it first:
   --expected-rows 30
 ```
 
-Current dry-run status is `response_pending`: `0/6` row decisions and `0/18`
-model assessments have been filled. Add `--write` only after the dry-run
-returns `response_complete`.
+Current strict dry-run status is `response_pending`: `ok=false`,
+`incomplete_response=1`, `0/6` row decisions and `0/18` model assessments have
+been filled. A non-strict dry-run may be used for progress inspection, but
+`--require-complete` must return `response_complete` before adding `--write`.
 
 The local helper for filling one row at a time is:
 
