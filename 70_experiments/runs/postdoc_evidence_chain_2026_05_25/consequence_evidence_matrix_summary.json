@@ -28,8 +28,8 @@
       "paper_claim_status": "proxy consequence evidence until human review confirms labels",
       "evidence_files": "janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json; metric_predictor_comparison.tsv",
       "aggregate_result": "Among 900 model-samples, 237 are low-WER at threshold 10.0, yet 2 danger events remain; unsafe-downrouting AUC is WER 0.7683, CER 0.7739, CEIS 0.9971.",
-      "blocking_dependency": "selected-300 human risk/decision/model review",
-      "next_action": "After human review, rerun predictor analysis and verify this relationship against reviewed decision-change labels."
+      "blocking_dependency": "selected-300 human risk/decision/model/timing review",
+      "next_action": "After row/model/timing closeout, rerun predictor analysis and verify this relationship against reviewed decision-change labels."
     },
     {
       "consequence_id": "C2",
@@ -39,8 +39,8 @@
       "paper_claim_status": "proxy model-comparison evidence until human model labels exist",
       "evidence_files": "janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json",
       "aggregate_result": "High-stakes proxy danger events: base 22, LoRA 9, partial encoder 4; partial encoder still has 3 unsafe downrouting and 1 high-risk miss.",
-      "blocking_dependency": "human model-level assessments",
-      "next_action": "Use selected-300 per-model review fields before writing model-safety superiority claims."
+      "blocking_dependency": "selected-300 per-model assessments and per-row timing closeout",
+      "next_action": "Use selected-300 per-model review fields after timing-complete closeout before writing model-safety superiority claims."
     },
     {
       "consequence_id": "C3",
@@ -83,7 +83,7 @@
       "paper_claim_status": "not paper-ready",
       "evidence_files": "postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json",
       "aggregate_result": "Publishable readiness is false; status counts are {'completed': 4, 'proxy_completed': 2, 'review_pending': 1}.",
-      "blocking_dependency": "selected-300 human review and post-review predictor/recovery refresh",
+      "blocking_dependency": "selected-300 human row/model/timing review and post-review predictor/recovery refresh",
       "next_action": "Do not spend GPU time on more fine-tuning until the selected-300 human evidence gate closes."
     }
   ],
@@ -92,15 +92,15 @@
       "consequence_id": "C1",
       "claim_class": "metric_insufficiency",
       "status": "proxy_completed",
-      "blocking_dependency": "selected-300 human risk/decision/model review",
-      "next_action": "After human review, rerun predictor analysis and verify this relationship against reviewed decision-change labels."
+      "blocking_dependency": "selected-300 human risk/decision/model/timing review",
+      "next_action": "After row/model/timing closeout, rerun predictor analysis and verify this relationship against reviewed decision-change labels."
     },
     {
       "consequence_id": "C2",
       "claim_class": "model_comparison",
       "status": "proxy_completed",
-      "blocking_dependency": "human model-level assessments",
-      "next_action": "Use selected-300 per-model review fields before writing model-safety superiority claims."
+      "blocking_dependency": "selected-300 per-model assessments and per-row timing closeout",
+      "next_action": "Use selected-300 per-model review fields after timing-complete closeout before writing model-safety superiority claims."
     },
     {
       "consequence_id": "C3",
@@ -127,11 +127,11 @@
       "consequence_id": "C6",
       "claim_class": "publishability",
       "status": "review_pending",
-      "blocking_dependency": "selected-300 human review and post-review predictor/recovery refresh",
+      "blocking_dependency": "selected-300 human row/model/timing review and post-review predictor/recovery refresh",
       "next_action": "Do not spend GPU time on more fine-tuning until the selected-300 human evidence gate closes."
     }
   ],
   "first_principle_decision": "Move from model-centric ASR improvement to consequence-centric evidence: claims become paper-ready only when aggregate consequences are tied to human-reviewed risk/decision/model labels.",
-  "next_decision": "Use the ready selected-300 packet to complete risk/decision/model review, then rerun predictor and recovery analyses against reviewed labels.",
+  "next_decision": "Use the ready selected-300 packet to complete risk/decision/model/timing review, run the session-gated strict dry-run with --require-complete --require-timing, then rerun predictor and recovery analyses against reviewed labels.",
   "runtime_seconds": 0.0029
 }
