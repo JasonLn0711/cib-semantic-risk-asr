@@ -183,6 +183,27 @@ tracked outputs。
 refresh gate 會同步更新 validation、progress、summary、predictor、
 readiness、publishable completion outputs。
 
+15. Postdoc roadmap completion audit 已建立：
+
+- Script:
+  `80_semantic_risk_asr/scoring/audit_postdoc_roadmap_completion.py`。
+- Current tracked audit:
+  `70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json`。
+- Current state: `ok=true` but `roadmap_complete=false`；
+  `publishable_ready=false`、`paper_ready=false`、
+  `post_review_evidence_ready=false`。狀態計數是 `completed=4`、
+  `proxy_completed=2`、`review_pending=1`、`blocked=1`。
+- Blocking gate:
+  `selected_300_human_review_and_post_review_refresh`。
+- Current selected-300 review count remains `0/30` risk/decision row reviews
+  and `0/90` model assessments reviewed；current packet remains `6/6` rows and
+  `18/18` model assessments pending.
+
+這個 audit 的用途是回答「原始 0-6 roadmap 是否真的完成」，而不是只回答
+某個子 gate 是否已經存在。它明確把 completed、proxy-only、
+review-pending、post-review blocked 分開，避免把目前已經很完整的 proxy
+工程證據誤寫成 publishable human-reviewed evidence。
+
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS

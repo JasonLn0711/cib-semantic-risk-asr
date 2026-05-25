@@ -218,6 +218,15 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   starting with `critical_or_high_risk_missed` and `unsafe_downrouting`.
   Batch-by-batch `partial_review` is treated as in-progress evidence, not as
   missing evidence.
+- The roadmap-level completion audit
+  `80_semantic_risk_asr/scoring/audit_postdoc_roadmap_completion.py` maps the
+  original postdoc objective steps `0-6` plus the human-review/publishable
+  gate to tracked aggregate evidence. Current output:
+  `roadmap_complete=false`, `publishable_ready=false`, `paper_ready=false`,
+  `post_review_evidence_ready=false`, and blocking gate
+  `selected_300_human_review_and_post_review_refresh`. It also records that the
+  expanded ASR/Gemma candidates should not be promoted while strict zh-TW
+  locale or multimodal runtime gates remain unresolved.
 - The 2026-05-25 WER audit is recorded in
   `70_experiments/runs/wer_metric_audit_2026_05_25/`. The latest audit checks
   legacy 15-row, six 258-row, and high-stakes 300-row hypothesis files against

@@ -1,0 +1,162 @@
+{
+  "ok": true,
+  "roadmap_complete": false,
+  "publishable_ready": false,
+  "paper_ready": false,
+  "post_review_evidence_ready": false,
+  "consequence_paper_claims_ready": false,
+  "human_review_complete": false,
+  "blocking_gate": "selected_300_human_review_and_post_review_refresh",
+  "status_counts": {
+    "blocked": 1,
+    "completed": 4,
+    "proxy_completed": 2,
+    "review_pending": 1
+  },
+  "current_review_counts": {
+    "selected_300_rows_reviewed": 0,
+    "selected_300_rows_total": 30,
+    "selected_300_model_assessments_reviewed": 0,
+    "selected_300_model_assessments_total": 90,
+    "current_packet_rows_pending": 6,
+    "current_packet_rows_total": 6,
+    "current_packet_model_assessments_pending": 18,
+    "current_packet_model_assessments_total": 18,
+    "response_closeout_status": "response_closeout_blocked",
+    "latest_apply_status": "response_pending"
+  },
+  "candidate_gate": {
+    "available": true,
+    "ok": true,
+    "strict_locale_policy": "Taiwan Traditional Chinese; no Simplified Chinese output accepted for promotion",
+    "promotion_decision": "No 2026-05-26 candidate should be promoted to 258-row or selected-300 because SenseVoiceSmall and Qwen3-ASR-0.6B both failed the strict locale gate, while Qwen3-ASR-1.7B timed out before inference.",
+    "blocked_or_stopped_count": 2,
+    "blocked_or_stopped_runs": [
+      {
+        "run_id": "qwen3_asr_1_7b_smoke_1_row",
+        "model": "Qwen/Qwen3-ASR-1.7B",
+        "status": "timeout_before_inference",
+        "decision": "Retry only after the 0.6B lane passes the strict Traditional Chinese locale gate or after an isolated cache/download plan exists."
+      },
+      {
+        "run_id": "gemma4_audio_runner_gate_2026_05_25",
+        "model": "unsloth/gemma-4-E2B_and_E4B",
+        "status": "blocked_local_transformers_multimodal_class_missing",
+        "decision": "Keep Gemma 4 in a separate prompted multimodal-ASR lane; do not mix it into pure-ASR tables."
+      }
+    ]
+  },
+  "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
+  "remaining_review_scope": "Remaining selected-300 review work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
+  "roadmap_rows": [
+    {
+      "roadmap_step_id": "0_state_checkpoint",
+      "roadmap_step": "seal migration, best-model selection, gitignore, and run records",
+      "status": "completed",
+      "paper_claim_status": "provenance evidence",
+      "authoritative_evidence": "70_experiments/registry.tsv; legacy import and best-model run records",
+      "current_evidence_result": "Migration, pruning boundary, and best-model selection are registered.",
+      "blocking_dependency": "",
+      "next_action": "Keep raw weights and predictions local; only commit aggregate evidence."
+    },
+    {
+      "roadmap_step_id": "1_best_model_load_smoke",
+      "roadmap_step": "load-smoke LoRA and partial-encoder legacy best models",
+      "status": "completed",
+      "paper_claim_status": "engineering gate only",
+      "authoritative_evidence": "legacy-best smoke summary JSON files",
+      "current_evidence_result": "Both legacy best models loaded one row with runtime, dtype, and cuDNN policy.",
+      "blocking_dependency": "",
+      "next_action": "Use fixed 15-row and split gates only after smoke evidence remains valid."
+    },
+    {
+      "roadmap_step_id": "2_legacy_best_15_row_pilot",
+      "roadmap_step": "connect legacy best models to the fixed 15-row hypothesis contract",
+      "status": "completed",
+      "paper_claim_status": "engineering gate only",
+      "authoritative_evidence": "legacy best 15-row validation JSON files",
+      "current_evidence_result": "Both legacy best models validated against the same 15-row hypothesis contract.",
+      "blocking_dependency": "",
+      "next_action": "Use 15-row output only as a gate before split/high-stakes evidence."
+    },
+    {
+      "roadmap_step_id": "3_cds_asr_metric_bridge",
+      "roadmap_step": "rerun CDS-ASR bridge and avoid CER-only model selection",
+      "status": "completed",
+      "paper_claim_status": "pilot evidence",
+      "authoritative_evidence": "janus_15_decision_stability_legacy_best/asr_cds_model_comparison.tsv",
+      "current_evidence_result": "15-row bridge includes CER/WER, CEIS, downstream mismatch, and high-risk miss evidence.",
+      "blocking_dependency": "",
+      "next_action": "Keep the CER-alone contrast in the paper framing; do not overclaim from 15 rows."
+    },
+    {
+      "roadmap_step_id": "4_canonical_258_test_split",
+      "roadmap_step": "run canonical janus_165_v1 258-row comparison with decision-risk metrics",
+      "status": "proxy_completed",
+      "paper_claim_status": "proxy evidence; not human-reviewed risk-atom evidence",
+      "authoritative_evidence": "janus_258_test_split_asr_cds_proxy summary and comparison TSV",
+      "current_evidence_result": "Six-model 258-row aggregate includes paper-facing zh metrics and decision-risk proxy fields.",
+      "blocking_dependency": "human-reviewed risk-atom and decision-change fields before paper-grade risk claims",
+      "next_action": "Do not convert proxy risk-atom counts into formal human-reviewed conclusions."
+    },
+    {
+      "roadmap_step_id": "5_high_stakes_300_main_experiment",
+      "roadmap_step": "make selected-300 high-stakes expansion the main experiment",
+      "status": "review_pending",
+      "paper_claim_status": "not paper-ready",
+      "authoritative_evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json; janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json; human_audit_refresh_summary.json; human_audit_predictor_summary.json",
+      "current_evidence_result": "Selected-300 proxy inputs, metric-predictor proxy, and refresh gate exist, but selected-300 risk-atom review is 0/30 rows and 0/90 model assessments; transcript ground truth is already accepted for WER/CER scoring. Current reviewer action gate is reviewer_action_ready: 6/6 packet rows and 18/18 model assessments pending.",
+      "blocking_dependency": "selected-300 risk-atom, decision-change, and per-model assessment completion",
+      "next_action": "Fill the selected-300 reviewer fields that are not transcript ground truth, rerun refresh with --require-complete, then use human-reviewed predictor outputs."
+    },
+    {
+      "roadmap_step_id": "6_recovery_experiment",
+      "roadmap_step": "evaluate five-condition recovery policies and safety tradeoffs",
+      "status": "proxy_completed",
+      "paper_claim_status": "proxy engineering evidence until human labels confirm outcomes",
+      "authoritative_evidence": "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+      "current_evidence_result": "Recovery proxy shows CEIS action reduces high-risk missed and critical miss.",
+      "blocking_dependency": "human-reviewed risk/decision labels and post-review recovery re-evaluation",
+      "next_action": "After selected-300 risk/decision review, rerun recovery using reviewed labels before paper-grade intervention claims."
+    },
+    {
+      "roadmap_step_id": "7_human_review_and_publishable_evidence_gate",
+      "roadmap_step": "convert proxy CDS-ASR evidence into paper-ready human-reviewed evidence",
+      "status": "blocked",
+      "paper_claim_status": "not paper-ready",
+      "authoritative_evidence": "human_audit_response_closeout_summary.json; human_audit_refresh_summary.json; human_audit_predictor_summary.json; human_audit_post_review_evidence_summary.json; evidence_chain_readiness_summary.json; publishable_evidence_completion_summary.json; consequence_evidence_matrix_summary.json",
+      "current_evidence_result": "Post-review evidence remains blocked: closeout=False, refresh=False, predictor=False, publishable=False, consequence=False, human_recovery=False. Current selected-300 review is 0/30 rows and 0/90 model assessments; current packet pending 6/6 rows and 18/18 model assessments.",
+      "blocking_dependency": "response_closeout_not_ready, human_refresh_not_complete, human_predictor_not_complete, paper_ready_false, publishable_ready_false, consequence_paper_claims_not_ready, recovery_proxy_only",
+      "next_action": "Complete the response closeout gate first; then write/refresh and rerun this checklist."
+    }
+  ],
+  "blocking_or_proxy_items": [
+    {
+      "roadmap_step_id": "4_canonical_258_test_split",
+      "status": "proxy_completed",
+      "blocking_dependency": "human-reviewed risk-atom and decision-change fields before paper-grade risk claims",
+      "next_action": "Do not convert proxy risk-atom counts into formal human-reviewed conclusions."
+    },
+    {
+      "roadmap_step_id": "5_high_stakes_300_main_experiment",
+      "status": "review_pending",
+      "blocking_dependency": "selected-300 risk-atom, decision-change, and per-model assessment completion",
+      "next_action": "Fill the selected-300 reviewer fields that are not transcript ground truth, rerun refresh with --require-complete, then use human-reviewed predictor outputs."
+    },
+    {
+      "roadmap_step_id": "6_recovery_experiment",
+      "status": "proxy_completed",
+      "blocking_dependency": "human-reviewed risk/decision labels and post-review recovery re-evaluation",
+      "next_action": "After selected-300 risk/decision review, rerun recovery using reviewed labels before paper-grade intervention claims."
+    },
+    {
+      "roadmap_step_id": "7_human_review_and_publishable_evidence_gate",
+      "status": "blocked",
+      "blocking_dependency": "response_closeout_not_ready, human_refresh_not_complete, human_predictor_not_complete, paper_ready_false, publishable_ready_false, consequence_paper_claims_not_ready, recovery_proxy_only",
+      "next_action": "Complete the response closeout gate first; then write/refresh and rerun this checklist."
+    }
+  ],
+  "first_principle_decision": "The repo should now optimize for a publishable consequence evidence chain, not a longer ASR leaderboard. New ASR candidates stop at the locale/runtime gate unless they change the CDS-ASR paper evidence.",
+  "next_decision": "Close the selected-300 response gate, write/refresh aggregate human review evidence, rerun predictor and recovery analyses, then rerun this roadmap audit before claiming the objective is complete.",
+  "runtime_seconds": 0.0026
+}

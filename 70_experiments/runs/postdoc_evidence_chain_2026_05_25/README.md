@@ -94,6 +94,8 @@ ignored local paths.
 | 5.51 | Added response closeout checklist. | `build_human_audit_response_closeout_checklist.py`; `human_audit_response_closeout_summary.json`; `human_audit_response_closeout_checklist.tsv`; `tests/test_human_audit_response_closeout.py`. | Completed as write-readiness routing, not as human review. The live closeout reports `response_closeout_blocked`: session start and session-gated strict dry-run are ready, but row/model response completion is pending with `0/6` row decisions and `0/18` model assessments filled. This keeps the write/refresh/prepare-next command blocked until `response_complete`. Compile and direct closeout tests passed. |
 | 5.52 | Added post-review evidence checklist. | `build_post_review_evidence_checklist.py`; `human_audit_post_review_evidence_summary.json`; `human_audit_post_review_evidence_checklist.tsv`; `tests/test_post_review_evidence_checklist.py`. | Completed as a paper-claim guardrail, not as human review. The live checklist reads only tracked aggregate summaries and reports `post_review_evidence_blocked`: closeout is not ready, refresh and predictor are not complete, paper/publishable/consequence gates are false, and recovery evidence remains proxy-only. Compile and direct tests passed; `pytest` is unavailable in `.venv`. |
 | 5.53 | Promoted SenseVoice and Qwen3-ASR-0.6B to fixed 15-row candidate gates. | `run_janus_sensevoice_pilot.py`; `run_janus_qwen3_asr_pilot.py`; `asr_candidate_15_row_extension_2026_05_26/`. | Completed as candidate rejection evidence, not as paper baseline promotion. SenseVoiceSmall passed the 15-row contract but had `14/15` locale-violation rows, `cer_zh_micro=63.12`, `wer_zh_jieba_micro=78.98`, runner wall time `2.60s`, outer time `6.32s`. Qwen3-ASR-0.6B passed with cuDNN disabled but had `15/15` locale-violation rows, `cer_zh_micro=64.16`, `wer_zh_jieba_micro=81.07`, runner wall time `17.97s`, outer time `21.57s`. Qwen3-ASR-1.7B timed out before inference after `60.06s` at fetch/load. No new candidate should be promoted to 258-row or selected-300 until the strict zh-TW locale policy is solved. |
+| 5.54 | Rechecked ASR/Gemma candidate status at query time. | `docs/asr_candidate_expansion_2026_05_25.md`; `asr_candidate_15_row_extension_2026_05_26/README.md`; `70_experiments/registry.tsv`. | Completed as a status verification, not as a new model run. Whisper large-v3/v3-turbo, SenseVoiceSmall, and Qwen3-ASR-0.6B already have fixed 15-row evidence; SenseVoice/Qwen validators still pass but strict zh-TW locale gates remain failed. Qwen3-ASR-1.7B remains fetch/load-timeout only, and local `transformers 4.57.6` still lacks the Gemma 4 multimodal model classes. |
+| 5.55 | Added postdoc roadmap completion audit. | `audit_postdoc_roadmap_completion.py`; `postdoc_roadmap_completion_summary.json`; `postdoc_roadmap_completion.tsv`; `tests/test_postdoc_roadmap_completion_audit.py`. | Completed as an objective-by-objective completion guardrail, not as final paper readiness. The live audit returns `ok=true`, `roadmap_complete=false`, `publishable_ready=false`, `paper_ready=false`, `post_review_evidence_ready=false`, and blocker `selected_300_human_review_and_post_review_refresh`. Status counts are `completed=4`, `proxy_completed=2`, `review_pending=1`, `blocked=1`; current selected-300 review remains `0/30` rows and `0/90` model assessments, with the current packet pending `6/6` rows and `18/18` model assessments. Compile and direct roadmap-audit tests passed. |
 
 ## Next Operations
 
@@ -165,11 +167,16 @@ ignored local paths.
    proxy-only or review-pending. The audit now also records consequence-matrix
    alignment and should not turn publishable-ready while
    `paper_claims_ready=false`.
-10. After local review edits, run `refresh_human_audit_evidence.py` without
+10. Use `audit_postdoc_roadmap_completion.py` after publishable/consequence
+   refreshes when the question is whether the original 0-6 postdoc roadmap is
+   genuinely complete. It should stay `roadmap_complete=false` while any
+   roadmap row is proxy-only, review-pending, or blocked by post-review
+   evidence.
+11. After local review edits, run `refresh_human_audit_evidence.py` without
    `--require-complete` to refresh aggregate records, then with
    `--require-complete` before treating the human audit as complete.
-11. Record aggregate human annotation statistics without selected IDs or
+12. Record aggregate human annotation statistics without selected IDs or
    transcripts.
-12. After the selected-300 audit, use the refresh gate to rerun
+13. After the selected-300 audit, use the refresh gate to rerun
    `analyze_human_audit_predictors.py` outputs and replace proxy-only predictor
    language with reviewer-facing evidence.
