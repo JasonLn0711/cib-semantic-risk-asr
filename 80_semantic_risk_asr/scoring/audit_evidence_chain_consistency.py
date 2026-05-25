@@ -22,6 +22,10 @@ DEFAULT_OUTPUT_DIR = (
 )
 SUMMARY_NAME = "evidence_chain_consistency_summary.json"
 TSV_NAME = "evidence_chain_consistency.tsv"
+RESPONSE_GAP_TSV_RELATIVE = (
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+    "human_audit_response_gap_checklist.tsv"
+)
 
 SENSITIVE_TOKENS = (
     "audio_id",
@@ -121,6 +125,11 @@ def write_tsv(path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writeheader()
         for row in rows:
             writer.writerow({field: row.get(field, "") for field in TSV_FIELDS})
+
+
+def read_tsv_rows(path: Path) -> list[dict[str, str]]:
+    with path.open(newline="", encoding="utf-8") as handle:
+        return list(csv.DictReader(handle, delimiter="\t"))
 
 
 def assert_aggregate_safe(payload: Any) -> None:
@@ -612,6 +621,84 @@ def add_reviewer_timing_command_check(
     )
 
 
+def add_gap_tsv_command_check(
+    root: Path,
+    payloads: dict[str, dict[str, Any]],
+    rows: list[dict[str, str]],
+) -> None:
+    gap_tsv_path = root / RESPONSE_GAP_TSV_RELATIVE
+    if not gap_tsv_path.exists():
+        rows.append(
+            check_row(
+                check_id="C068",
+                invariant="response gap TSV includes per-row timing helper commands",
+                passed=False,
+                evidence=RESPONSE_GAP_TSV_RELATIVE,
+                result="response gap TSV is missing",
+                next_action="Rerun build_human_audit_response_closeout_checklist.py before reviewer work.",
+            )
+        )
+        return
+
+    gap_rows = read_tsv_rows(gap_tsv_path)
+    closeout = payloads.get("closeout", {})
+    closeout_rows = closeout.get("response_gap_summary_by_row")
+    closeout_rows = closeout_rows if isinstance(closeout_rows, list) else []
+    expected_row_numbers = [
+        str(item.get("row_number", ""))
+        for item in closeout_rows
+        if isinstance(item, dict)
+    ]
+    gap_row_numbers = [str(item.get("row_number", "")) for item in gap_rows]
+    handoff = payloads.get("handoff", {})
+    commands = handoff.get("commands") if isinstance(handoff.get("commands"), dict) else {}
+    start_by_row = commands.get("timing_start_write_by_row")
+    finish_by_row = commands.get("timing_finish_write_by_row")
+    start_by_row = start_by_row if isinstance(start_by_row, dict) else {}
+    finish_by_row = finish_by_row if isinstance(finish_by_row, dict) else {}
+    command_errors: list[str] = []
+    for row in gap_rows:
+        row_number = str(row.get("row_number", ""))
+        start = str(row.get("timing_start_write_command", "") or "")
+        finish = str(row.get("timing_finish_write_command", "") or "")
+        if start != str(start_by_row.get(row_number, "") or ""):
+            command_errors.append(f"start:{row_number}")
+        if finish != str(finish_by_row.get(row_number, "") or ""):
+            command_errors.append(f"finish:{row_number}")
+
+    sensitive = False
+    try:
+        assert_aggregate_safe(gap_rows)
+    except ValueError:
+        sensitive = True
+
+    passed = (
+        gap_row_numbers == expected_row_numbers
+        and expected_row_numbers == ["1", "2", "3", "4", "5", "6"]
+        and not command_errors
+        and not sensitive
+    )
+    rows.append(
+        check_row(
+            check_id="C068",
+            invariant="response gap TSV includes per-row timing helper commands",
+            passed=passed,
+            evidence=RESPONSE_GAP_TSV_RELATIVE,
+            result=(
+                "gap TSV rows 1-6 match closeout gaps and handoff timing commands"
+                if passed
+                else (
+                    f"gap_row_numbers={gap_row_numbers}; "
+                    f"expected={expected_row_numbers}; "
+                    f"command_errors={','.join(command_errors) or 'none'}; "
+                    f"sensitive={sensitive}"
+                )
+            ),
+            next_action="Regenerate closeout gap TSV and reviewer handoff before local review timing entry.",
+        )
+    )
+
+
 def add_candidate_check(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
     candidate = payloads.get("candidate_recheck", {})
     bounded_statuses = {
@@ -674,6 +761,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_readiness_checks(payloads, rows)
         add_command_plan_check(payloads, rows)
         add_reviewer_timing_command_check(payloads, rows)
+        add_gap_tsv_command_check(root, payloads, rows)
         add_candidate_check(payloads, rows)
         add_safety_check(payloads, rows)
 

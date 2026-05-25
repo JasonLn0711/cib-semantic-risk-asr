@@ -124,6 +124,14 @@ def write_closeout_inputs(
             "commands": {
                 "strict_dry_run": "strict command",
                 "write_refresh_prepare_next": "write command",
+                "timing_start_write_by_row": {
+                    "1": "mark_human_audit_response_timing.py --row-number 1 --mark-start --write",
+                    "2": "mark_human_audit_response_timing.py --row-number 2 --mark-start --write",
+                },
+                "timing_finish_write_by_row": {
+                    "1": "mark_human_audit_response_timing.py --row-number 1 --mark-finish --write",
+                    "2": "mark_human_audit_response_timing.py --row-number 2 --mark-finish --write",
+                },
             },
         },
     )
@@ -158,6 +166,7 @@ def test_closeout_blocks_pending_response_without_private_content(tmp_path: Path
     assert payload["response_gap_overview"]["rows_with_any_gap"] == 2
     assert payload["response_gap_summary_by_row"][0]["row_number"] == 1
     assert payload["response_gap_summary_by_row"][0]["has_gap"] is True
+    assert "timing_start_write_by_row" in payload["response_gap_timing_commands"]
     assert payload["tracked_outputs"]["response_gap_tsv"].endswith(RESPONSE_GAP_TSV_NAME)
     assert "response_not_complete" in payload["blocker_keys"]
     assert "incomplete_response" in payload["blocker_keys"]
@@ -183,7 +192,11 @@ def test_write_gap_tsv_is_row_number_only_and_safe(tmp_path: Path) -> None:
         repo_root=tmp_path,
     )
     output_tsv = run_dir / RESPONSE_GAP_TSV_NAME
-    write_gap_tsv(output_tsv, payload["response_gap_summary_by_row"])
+    write_gap_tsv(
+        output_tsv,
+        payload["response_gap_summary_by_row"],
+        timing_commands=payload["response_gap_timing_commands"],
+    )
 
     text = output_tsv.read_text(encoding="utf-8")
     assert text.splitlines()[0] == (
@@ -191,10 +204,21 @@ def test_write_gap_tsv_is_row_number_only_and_safe(tmp_path: Path) -> None:
         "row_fields_missing_count\tmissing_row_fields\t"
         "model_assessments_expected_count\tmodel_assessments_complete_count\t"
         "model_assessments_missing_count\tmodel_fields_missing_count\t"
-        "missing_model_fields\treview_timing_complete\treview_timing_missing"
+        "missing_model_fields\treview_timing_complete\treview_timing_missing\t"
+        "timing_start_write_command\ttiming_finish_write_command"
     )
-    assert "1\ttrue\tfalse\t8\treviewer_risk_atoms\t3\t0\t3\t12\tmodel_reviewer_critical_atoms\tfalse\ttrue" in text
-    assert "2\ttrue\tfalse\t8\treviewer_risk_atoms\t3\t0\t3\t12\tmodel_reviewer_critical_atoms\tfalse\ttrue" in text
+    assert (
+        "1\ttrue\tfalse\t8\treviewer_risk_atoms\t3\t0\t3\t12\t"
+        "model_reviewer_critical_atoms\tfalse\ttrue\t"
+        "mark_human_audit_response_timing.py --row-number 1 --mark-start --write\t"
+        "mark_human_audit_response_timing.py --row-number 1 --mark-finish --write"
+    ) in text
+    assert (
+        "2\ttrue\tfalse\t8\treviewer_risk_atoms\t3\t0\t3\t12\t"
+        "model_reviewer_critical_atoms\tfalse\ttrue\t"
+        "mark_human_audit_response_timing.py --row-number 2 --mark-start --write\t"
+        "mark_human_audit_response_timing.py --row-number 2 --mark-finish --write"
+    ) in text
     assert "PRIVATE_" not in text
     assert "audio_id" not in text
     assert "sample_id" not in text

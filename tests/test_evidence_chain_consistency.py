@@ -9,6 +9,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "scoring"))
 
 from audit_evidence_chain_consistency import (  # noqa: E402
+    RESPONSE_GAP_TSV_RELATIVE,
     SUMMARY_SPECS,
     assert_aggregate_safe,
     build_consistency_audit,
@@ -31,6 +32,51 @@ def write_summary(root: Path, name: str, payload: dict) -> None:
     path = root / SUMMARY_SPECS[name]
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+
+def write_gap_tsv_fixture(root: Path, row_numbers: list[int] = ROW_NUMBERS) -> None:
+    path = root / RESPONSE_GAP_TSV_RELATIVE
+    path.parent.mkdir(parents=True, exist_ok=True)
+    header = [
+        "row_number",
+        "has_gap",
+        "row_response_complete",
+        "row_fields_missing_count",
+        "missing_row_fields",
+        "model_assessments_expected_count",
+        "model_assessments_complete_count",
+        "model_assessments_missing_count",
+        "model_fields_missing_count",
+        "missing_model_fields",
+        "review_timing_complete",
+        "review_timing_missing",
+        "timing_start_write_command",
+        "timing_finish_write_command",
+    ]
+    lines = ["\t".join(header)]
+    commands = timing_commands(row_numbers)
+    for row_number in row_numbers:
+        lines.append(
+            "\t".join(
+                [
+                    str(row_number),
+                    "true",
+                    "false",
+                    "8",
+                    "reviewer_risk_atoms",
+                    "3",
+                    "0",
+                    "3",
+                    "12",
+                    "model_reviewer_critical_atoms",
+                    "false",
+                    "true",
+                    commands["timing_start_write_by_row"][str(row_number)],
+                    commands["timing_finish_write_by_row"][str(row_number)],
+                ]
+            )
+        )
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def base_summary(**extra: object) -> dict:
@@ -171,6 +217,10 @@ def write_consistent_fixture(root: Path) -> None:
             status="response_closeout_blocked",
             require_timing=True,
             review_timing={"rows_missing_timing": 6},
+            response_gap_summary_by_row=[
+                {"row_number": row_number}
+                for row_number in ROW_NUMBERS
+            ],
             checklist=[
                 {
                     "step_id": "2",
@@ -252,6 +302,7 @@ def write_consistent_fixture(root: Path) -> None:
             ],
         },
     )
+    write_gap_tsv_fixture(root)
 
 
 def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Path) -> None:
@@ -259,7 +310,7 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True
-    assert payload["status_counts"] == {"pass": 14}
+    assert payload["status_counts"] == {"pass": 15}
     assert not payload["failed_checks"]
     assert_aggregate_safe(payload)
 
@@ -354,6 +405,21 @@ def test_consistency_audit_fails_incomplete_per_row_timing_commands(tmp_path: Pa
 
     assert payload["ok"] is False
     assert any(item["check_id"] == "C067" for item in payload["failed_checks"])
+
+
+def test_consistency_audit_fails_gap_tsv_timing_command_drift(tmp_path: Path) -> None:
+    write_consistent_fixture(tmp_path)
+    gap_path = tmp_path / RESPONSE_GAP_TSV_RELATIVE
+    text = gap_path.read_text(encoding="utf-8")
+    gap_path.write_text(
+        text.replace("--row-number 6 --mark-finish", "--row-number 999 --mark-finish"),
+        encoding="utf-8",
+    )
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C068" for item in payload["failed_checks"])
 
 
 def test_consistency_safety_rejects_raw_field_tokens() -> None:

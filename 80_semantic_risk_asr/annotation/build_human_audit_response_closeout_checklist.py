@@ -74,7 +74,19 @@ def tsv_value(value: Any) -> Any:
     return value
 
 
-def write_gap_tsv(path: Path, rows: list[dict[str, Any]]) -> None:
+def command_for_row(commands: dict[str, Any], key: str, row_number: Any) -> str:
+    command_map = commands.get(key)
+    if not isinstance(command_map, dict):
+        return ""
+    return str(command_map.get(str(row_number), "") or "")
+
+
+def write_gap_tsv(
+    path: Path,
+    rows: list[dict[str, Any]],
+    *,
+    timing_commands: dict[str, Any] | None = None,
+) -> None:
     fieldnames = [
         "row_number",
         "has_gap",
@@ -88,13 +100,28 @@ def write_gap_tsv(path: Path, rows: list[dict[str, Any]]) -> None:
         "missing_model_fields",
         "review_timing_complete",
         "review_timing_missing",
+        "timing_start_write_command",
+        "timing_finish_write_command",
     ]
+    timing_commands = timing_commands or {}
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t", lineterminator="\n")
         writer.writeheader()
         for row in rows:
-            writer.writerow({field: tsv_value(row.get(field, "")) for field in fieldnames})
+            row_number = row.get("row_number", "")
+            output = {field: tsv_value(row.get(field, "")) for field in fieldnames}
+            output["timing_start_write_command"] = command_for_row(
+                timing_commands,
+                "timing_start_write_by_row",
+                row_number,
+            )
+            output["timing_finish_write_command"] = command_for_row(
+                timing_commands,
+                "timing_finish_write_by_row",
+                row_number,
+            )
+            writer.writerow(output)
 
 
 def bool_status(condition: bool) -> str:
@@ -294,6 +321,10 @@ def build_closeout(
         "review_timing": review_timing,
         "response_gap_overview": response_gap_overview,
         "response_gap_summary_by_row": response_gap_rows,
+        "response_gap_timing_commands": {
+            "timing_start_write_by_row": commands.get("timing_start_write_by_row", {}),
+            "timing_finish_write_by_row": commands.get("timing_finish_write_by_row", {}),
+        },
         "session_start_gate": session_gate,
         "apply_error_keys": apply_errors,
         "blocker_keys": blocker_keys,
@@ -367,7 +398,11 @@ def main() -> int:
     )
     write_json(summary_json, payload)
     write_tsv(output_tsv, rows)
-    write_gap_tsv(gap_output_tsv, payload["response_gap_summary_by_row"])
+    write_gap_tsv(
+        gap_output_tsv,
+        payload["response_gap_summary_by_row"],
+        timing_commands=payload["response_gap_timing_commands"],
+    )
     print(json.dumps(payload, ensure_ascii=False, indent=2))
     return 0 if payload["ok"] else 1
 
