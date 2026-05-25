@@ -5,6 +5,17 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.58 - 2026-05-25T19:02:41+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `e724ff8`
+- Branch: `main`
+- Summary: Add human-reviewed audit predictor analysis gate.
+- Changed files:
+  - `80_semantic_risk_asr/annotation/analyze_human_audit_predictors.py`
+  - `tests/test_human_audit_predictors.py`
+
 ## v2.5.57 - 2026-05-25T18:56:07+08:00
 
 - Bump: `patch`

@@ -1,30 +1,22 @@
 {
-  "version": "v2.5.57",
+  "version": "v2.5.58",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 57
+    "patch": 58
   },
-  "updated_at": "2026-05-25T18:56:07+08:00",
+  "updated_at": "2026-05-25T19:02:41+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "36ee254",
+  "base_commit": "e724ff8",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
-  "summary": "Record model-level human audit readiness.",
+  "summary": "Add human-reviewed audit predictor analysis gate.",
   "changed_files": [
-    "70_experiments/registry.tsv",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/README.md",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_model_review.tsv",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_summary.json",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_selection_summary.json",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
-    "80_semantic_risk_asr/annotation/selected_300_human_risk_atom_audit_protocol_2026_05_25.md",
-    "80_semantic_risk_asr/paper/experiment_plan.md",
-    "README.md",
-    "docs/postdoc_next_steps_2026_05_25.md"
+    "80_semantic_risk_asr/annotation/analyze_human_audit_predictors.py",
+    "tests/test_human_audit_predictors.py"
   ]
 }
