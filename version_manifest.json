@@ -1,24 +1,22 @@
 {
-  "version": "v2.5.125",
+  "version": "v2.5.126",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 125
+    "patch": 126
   },
-  "updated_at": "2026-05-26T01:41:08+08:00",
+  "updated_at": "2026-05-26T01:49:22+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "f0c1402",
+  "base_commit": "a60f653",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/registry.tsv",
-    "70_experiments/runs/asr_candidate_15_row_extension_2026_05_26/README.md",
-    "README.md",
-    "docs/asr_candidate_expansion_2026_05_25.md"
+    "80_semantic_risk_asr/scoring/audit_postdoc_roadmap_completion.py",
+    "tests/test_postdoc_roadmap_completion_audit.py"
   ]
 }
