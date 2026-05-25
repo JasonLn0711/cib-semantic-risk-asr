@@ -106,7 +106,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   CST live recheck repeated the same bounded gate: four 15-row candidate files
   still pass field-contract validation, Qwen3-ASR-1.7B still times out at
   fetch/load after `60.07s`, and Gemma 4 remains runtime-blocked. No
-  full-split promotion is justified until locale/runtime policy changes.
+  full-split promotion is justified until locale/runtime policy changes. A
+  response-time validation at 2026-05-26 06:45 CST revalidated the four
+  existing 15-row hypothesis files and the local Gemma class probe without
+  starting a new full inference run; the decision remains unchanged.
 - The postdoc-level roadmap after the 258-row gate is recorded in
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
   complete comparable 258-row baselines, add split-aware metric inputs, run the

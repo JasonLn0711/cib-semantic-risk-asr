@@ -135,6 +135,32 @@ Additional live checks:
 This follow-up also used `/tmp` output paths for transient validation artifacts.
 Tracked conclusions remain aggregate-only.
 
+## 2026-05-26 06:45 CST Response-Time Validation
+
+After the renewed question about whether to test the remaining ASR and
+multimodal Gemma 4 models now, the tracked 15-row files were revalidated without
+starting a new full inference run.
+
+Additional bounded checks:
+
+- The four existing 15-row hypothesis files still pass the fixed field-contract
+  validator: `ok=true`, `15/15` rows each, no missing expected IDs, no extra
+  IDs, no duplicate IDs, no missing references, and no reference mismatches.
+- The aggregate summary rebuilt to `/tmp` and still shows the same locale
+  blockers: Whisper large-v3 has `2/15` locale-violation rows, Whisper
+  large-v3 turbo has `4/15`, SenseVoiceSmall has `14/15`, and Qwen3-ASR-0.6B
+  has `15/15`.
+- Local `transformers 4.57.6` still exposes no `AutoModelForMultimodalLM` and
+  no `Gemma4ForConditionalGeneration`.
+- Qwen3-ASR-1.7B was not rerun in this response-time check because the current
+  tracked gate already has repeated bounded `60.07s` fetch/load timeouts, and
+  Qwen3-ASR-0.6B still fails strict Taiwan Traditional Chinese locale control.
+
+This validation again used `/tmp` output paths for transient artifacts:
+`/tmp/cib_asr_candidate_contract_validation_now.json`,
+`/tmp/cib_asr_candidate_recheck_summary_now.tsv`, and
+`/tmp/cib_asr_candidate_recheck_summary_now.json`.
+
 ## Decision
 
 Do not run these candidates on the 258-row test split or selected-300 main
