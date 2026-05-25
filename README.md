@@ -109,7 +109,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   full-split promotion is justified until locale/runtime policy changes. A
   response-time validation at 2026-05-26 06:45 CST revalidated the four
   existing 15-row hypothesis files and the local Gemma class probe without
-  starting a new full inference run; the decision remains unchanged.
+  starting a new full inference run; the decision remains unchanged. A 2026-05-26
+  07:24 CST bounded recheck again validated the four 15-row files, confirmed the
+  seven model pages remain public/ungated, confirmed local Gemma multimodal
+  classes are still absent, and intentionally did not rerun Qwen3-ASR-1.7B
+  because repeated tracked bounded gates already timed out before inference.
 - The postdoc-level roadmap after the 258-row gate is recorded in
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
   complete comparable 258-row baselines, add split-aware metric inputs, run the
@@ -175,7 +179,7 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   awareness, per-row timing-helper command coverage, the response gap/action
   TSVs, the aggregate review work order, the post-review sequence gate, and
   the post-review command plan.
-  Current status is `ok=true` with `20/20` checks passing:
+  Current status is `ok=true` with `21/21` checks passing:
   transcript ground truth is not reopened, remaining review scope includes
   row/model/timing fields, proxy evidence is not promoted to paper claims, and
   expanded ASR/Gemma candidates remain behind locale/runtime gates. It also
@@ -189,7 +193,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   closeout order before reviewer work is treated as operationally routed.
   Check `C074` requires the work-order packet step after closeout to route
   through `run_post_review_evidence_sequence.py --execute`, so reviewer
-  operations cannot bypass the strict sequence runner.
+  operations cannot bypass the strict sequence runner. Check `C075` requires the
+  work-order packet strict dry-run to preserve `--require-complete`,
+  `--require-timing`, and `--require-session-start-gate` without write-mode
+  flags, so local reviewer work cannot skip timing/session gates.
   Check `C072` requires the post-review sequence TSV to preserve the strict
   post-review order and to keep the human-reviewed recovery rerun free of
   `--allow-pending-summary`. Check `C073` requires the original-objective audit

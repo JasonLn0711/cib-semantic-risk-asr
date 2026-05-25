@@ -231,6 +231,16 @@ before inference after `60.07s` at fetch/load. Gemma 4 E2B/E4B remain blocked
 because local `transformers 4.57.6` cannot recognize `model_type=gemma4` or
 expose the required multimodal classes.
 
+2026-05-26 07:24 CST bounded recheck: after the same question was raised again,
+the four existing 15-row hypothesis files were revalidated in `0.03s`, the
+aggregate locale/metric summary rebuilt in `0.38s`, and live Hugging Face
+metadata still reported all seven requested model pages as public and ungated
+with the same SHA prefixes. Local `transformers 4.57.6` still exposes neither
+`AutoModelForMultimodalLM` nor `Gemma4ForConditionalGeneration`. Qwen3-ASR-1.7B
+was intentionally not rerun because repeated tracked 60-second bounded gates
+already timed out before inference and Qwen3-ASR-0.6B still fails strict
+Taiwan Traditional Chinese locale control.
+
 ## Required Extra Metrics
 
 Record these for every future model, including failed runs:

@@ -6,14 +6,16 @@
   "contract_validation_seconds": 0.02,
   "aggregate_summary_seconds": 0.36,
   "latest_follow_up": {
-    "checked_at": "2026-05-26 05:19 CST",
+    "checked_at": "2026-05-26 07:24 CST",
     "model_metadata_status": "all seven requested model pages public and ungated",
-    "contract_validation_seconds": 0.02,
-    "aggregate_summary_seconds": 0.39,
+    "contract_validation_seconds": 0.03,
+    "aggregate_summary_seconds": 0.38,
     "qwen3_asr_1_7b_timeout_seconds": 60.07,
     "qwen3_asr_1_7b_exit_status": 124,
-    "gemma4_config_probe_seconds": 1.97,
-    "gemma4_runtime_status": "blocked: local transformers 4.57.6 does not recognize model_type=gemma4 and exposes no multimodal class",
+    "qwen3_asr_1_7b_rerun_policy": "not rerun because repeated tracked bounded gates already timed out before inference and Qwen3-ASR-0.6B still fails strict zh-TW locale control",
+    "gemma4_class_probe_seconds": 1.31,
+    "model_metadata_seconds": 1.59,
+    "gemma4_runtime_status": "blocked: local transformers 4.57.6 exposes no multimodal/audio class",
     "decision": "No 258-row or selected-300 promotion until strict zh-TW locale policy or isolated Gemma multimodal runtime changes."
   },
   "follow_up_history": [
@@ -38,6 +40,19 @@
       "qwen3_asr_1_7b_exit_status": 124,
       "gemma4_config_probe_seconds": 1.97,
       "gemma4_runtime_status": "blocked: local transformers 4.57.6 does not recognize model_type=gemma4 and exposes no multimodal class",
+      "decision": "No 258-row or selected-300 promotion until strict zh-TW locale policy or isolated Gemma multimodal runtime changes."
+    },
+    {
+      "checked_at": "2026-05-26 07:24 CST",
+      "model_metadata_status": "all seven requested model pages public and ungated",
+      "contract_validation_seconds": 0.03,
+      "aggregate_summary_seconds": 0.38,
+      "qwen3_asr_1_7b_timeout_seconds": 60.07,
+      "qwen3_asr_1_7b_exit_status": 124,
+      "qwen3_asr_1_7b_rerun_policy": "not rerun because repeated tracked bounded gates already timed out before inference and Qwen3-ASR-0.6B still fails strict zh-TW locale control",
+      "gemma4_class_probe_seconds": 1.31,
+      "model_metadata_seconds": 1.59,
+      "gemma4_runtime_status": "blocked: local transformers 4.57.6 exposes no multimodal/audio class",
       "decision": "No 258-row or selected-300 promotion until strict zh-TW locale policy or isolated Gemma multimodal runtime changes."
     }
   ],

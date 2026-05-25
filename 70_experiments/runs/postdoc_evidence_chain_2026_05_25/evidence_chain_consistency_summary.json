@@ -1,7 +1,7 @@
 {
   "ok": true,
   "status_counts": {
-    "pass": 20
+    "pass": 21
   },
   "failed_checks": [],
   "reference_transcript_policy": "Reference transcripts are already human-reviewed for WER/CER; this audit does not reopen transcript review.",
@@ -126,6 +126,14 @@
       "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order.tsv",
       "result": "review work-order TSV covers current row/model/timing actions and packet closeout order",
       "next_action": "Regenerate review work order from action-items, closeout, and handoff summaries before local review."
+    },
+    {
+      "check_id": "C075",
+      "invariant": "review work-order strict dry-run preserves session and timing gates",
+      "status": "pass",
+      "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order.tsv",
+      "result": "review work-order strict dry-run requires complete rows, timing, and session-start gate without write mode",
+      "next_action": "Regenerate review work order so packet strict dry-run uses --require-complete --require-timing --require-session-start-gate without write flags."
     },
     {
       "check_id": "C074",
