@@ -5,6 +5,17 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.123 - 2026-05-26T01:30:56+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `c7c2386`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py`
+  - `tests/test_post_review_evidence_checklist.py`
+
 ## v2.5.122 - 2026-05-26T01:01:01+08:00
 
 - Bump: `patch`
