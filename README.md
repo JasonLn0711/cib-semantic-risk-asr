@@ -65,6 +65,15 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `90_legacy_imports/`; non-selected LoRA and partial-encoder parameter files
   were pruned from the repo copy while experiment metadata and analysis records
   were retained.
+- The 2026-05-25 canonical 258-row test split comparison now has aggregate
+  partial-vs-LoRA evidence under
+  `70_experiments/runs/janus_258_test_split_asr_cds_proxy/`. The partial
+  encoder remains the current ASR hypothesis generator candidate.
+- The expanded ASR candidate matrix is recorded in
+  `docs/asr_candidate_expansion_2026_05_25.md` and
+  `60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml`.
+  New candidates must pass smoke, 15-row hypothesis contract, runtime logging,
+  and Taiwan Traditional Chinese locale gates before any full split run.
 - Treat audio/call data and filenames as sensitive.
 - If storage cleanup is needed later, review `30_review_flags/REVIEW.md` and `20_inventory/largest_files.tsv` first.
 

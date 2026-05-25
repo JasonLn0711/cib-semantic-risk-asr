@@ -5,6 +5,25 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.34 - 2026-05-25T15:23:46+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `ed01bcd`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml`
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/janus_258_test_split_asr_cds_proxy/README.md`
+  - `70_experiments/runs/janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv`
+  - `70_experiments/runs/janus_258_test_split_asr_cds_proxy/metrics.csv`
+  - `70_experiments/runs/janus_258_test_split_asr_cds_proxy/summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `80_semantic_risk_asr/paper/experiment_plan.md`
+  - `README.md`
+  - `docs/asr_candidate_expansion_2026_05_25.md`
+
 ## v2.5.33 - 2026-05-25T15:23:32+08:00
 
 - Bump: `patch`

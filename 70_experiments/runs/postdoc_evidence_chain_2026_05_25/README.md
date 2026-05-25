@@ -35,11 +35,21 @@ ignored local paths.
 | 2.2 | Ran partial-encoder legacy-best fixed 15-row pilot and validator. | `run_legacy_breeze_asr25_smoke.py --model-kind partial_encoder --run-id breeze_asr25_partial_encoder_legacy_best_15_row --max-samples 15`; `validate_janus_asr_hypotheses.py --require-labels --require-quality-signal`. | Passed. 15 IDs matched the reviewed pilot set with no missing fields. Mean CER `12.77`, mean WER `83.33`, wall time `18.81` seconds. |
 | 3.1 | Rebuilt CDS-ASR 15-row metric inputs with five model hypotheses. | `build_janus_pilot_metric_inputs.py` with Whisper small, Whisper large-v2, Breeze-ASR-25 base, legacy LoRA, and legacy partial encoder. | Passed. Output had 15 gold rows, 5 hypothesis files, 260 SRES rows, 260 CEIS rows, 75 downstream rows, and no unmatched hypotheses. |
 | 3.2 | Ran SRES, CEIS, and downstream impact scoring for the five-model bridge. | `semantic_risk_score.py`; `counterfactual_escalation_instability.py`; `evaluate_downstream_impact.py`. | Completed. Partial encoder had best CER/WER and matched base Breeze decision-stability profile; LoRA improved CER over base but was worse on CEIS and high-risk-miss behavior. |
+| 4.1 | Generalized ASR runner path handling for canonical test split manifests. | `run_janus_whisper_family_pilot.py`; `run_legacy_breeze_asr25_smoke.py`; `validate_janus_asr_hypotheses.py`. | Added support for `id`/`audio` manifest fields, relative audio paths, split names, and non-pilot expected-ID validation. Regression validation on existing 15-row partial predictions stayed `ok=true`. |
+| 4.2 | Ran canonical 258-row test split with the legacy partial encoder. | `run_legacy_breeze_asr25_smoke.py --model-kind partial_encoder --run-id breeze_asr25_partial_encoder_legacy_best_test_split --manifest .../test.jsonl --max-samples 258`; local summary/runtime/prediction artifacts. | Passed. Rows `258`, CER `18.24`, WER `100.0`, wall time `213.79` seconds, `0.829` sec/row, `1.207` rows/sec, CUDA, cuDNN disabled, `torch_dtype=float16`. Validator: `ok=true`, no missing/duplicate IDs, no missing text/label/quality signal. |
+| 4.3 | Ran canonical 258-row test split with the legacy LoRA. | `run_legacy_breeze_asr25_smoke.py --model-kind lora --run-id breeze_asr25_lora_legacy_best_test_split --manifest .../test.jsonl --max-samples 258`; local summary/runtime/prediction artifacts. | Passed. Rows `258`, CER `22.86`, WER `100.0`, wall time `403.37` seconds, `1.563` sec/row, `0.640` rows/sec, CUDA, cuDNN disabled, `torch_dtype=float16`. Validator: `ok=true`, no missing/duplicate IDs, no missing text/label/quality signal. |
+| 4.4 | Produced tracked aggregate ASR/CDS proxy comparison for the 258-row split. | `summarize_janus_asr_test_split.py`; `70_experiments/runs/janus_258_test_split_asr_cds_proxy/`. | Completed. Partial encoder beat LoRA on CER, runtime, unsafe downrouting, high-risk misses, risk-atom error rate, negation flips, amount distortion, and action confusion. Both candidates had `simplified_char_count=0` and `locale_violation_rows=0`. |
+| 4.5 | Added expanded ASR candidate matrix and locale contract. | `60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml`; `docs/asr_candidate_expansion_2026_05_25.md`. | Added Whisper large-v3, Whisper large-v3 turbo, FunASR SenseVoice, Qwen3-ASR 0.6B/1.7B, and Gemma 4 E2B/E4B audio candidates. All new candidates are planned behind smoke, 15-row contract, runtime logging, and Taiwan Traditional Chinese locale gates. |
 
 ## Next Operations
 
-1. Review the five-model comparison for paper-safe case selection.
-2. Decide whether to promote partial encoder as the ASR hypothesis generator
-   for the 258-row test split.
-3. Generalize the 15-row pilot builder into a split-aware metric-input builder
-   before running the 300-row high-stakes experiment.
+1. Run comparable 258-row baselines for Breeze-ASR-25 base, Whisper large-v3,
+   and Whisper large-v3 turbo.
+2. Build smoke/15-row runners for FunASR SenseVoice and Qwen3-ASR, with strict
+   Taiwan Traditional Chinese locale gates.
+3. Build a separate multimodal prompted-ASR runner for Gemma 4 E2B/E4B only
+   after the prompt, audio-length, hallucination, runtime, and locale logging
+   contract is explicit.
+4. Generalize the 15-row pilot metric-input builder into a split-aware
+   `build_janus_metric_inputs.py` before running the 300-row high-stakes
+   experiment.

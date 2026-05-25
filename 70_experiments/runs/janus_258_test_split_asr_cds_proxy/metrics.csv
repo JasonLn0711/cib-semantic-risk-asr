@@ -1,0 +1,21 @@
+metric,value,split,notes
+rows,258,test,Canonical janus_165_v1 test split rows.
+hypothesis_files,2,test,Legacy LoRA and legacy partial encoder.
+partial_encoder_cer_mean,18.24,test,breeze_asr25_partial_encoder_legacy_best_test_split.
+partial_encoder_wer_mean,100.0,test,Whitespace-token WER is retained for compatibility but not useful for unsegmented Chinese transcripts.
+partial_encoder_wall_time_seconds,213.79,test,CUDA with cuDNN disabled and torch_dtype float16.
+partial_encoder_seconds_per_row,0.829,test,Derived from wall_time_seconds / rows.
+partial_encoder_rows_per_second,1.207,test,Derived from rows / wall_time_seconds.
+partial_encoder_unsafe_downrouting_count,7,test,Proxy decision metric from summarizer.
+partial_encoder_high_risk_missed_count,4,test,Proxy decision metric from summarizer.
+partial_encoder_risk_atom_error_rate,0.0431,test,Proxy atom-presence metric; not a substitute for human annotation.
+partial_encoder_simplified_char_count,0,test,Taiwan Traditional Chinese locale gate.
+lora_cer_mean,22.86,test,breeze_asr25_lora_legacy_best_test_split.
+lora_wer_mean,100.0,test,Whitespace-token WER is retained for compatibility but not useful for unsegmented Chinese transcripts.
+lora_wall_time_seconds,403.37,test,CUDA with cuDNN disabled and torch_dtype float16.
+lora_seconds_per_row,1.563,test,Derived from wall_time_seconds / rows.
+lora_rows_per_second,0.640,test,Derived from rows / wall_time_seconds.
+lora_unsafe_downrouting_count,10,test,Proxy decision metric from summarizer.
+lora_high_risk_missed_count,7,test,Proxy decision metric from summarizer.
+lora_risk_atom_error_rate,0.0613,test,Proxy atom-presence metric; not a substitute for human annotation.
+lora_simplified_char_count,0,test,Taiwan Traditional Chinese locale gate.

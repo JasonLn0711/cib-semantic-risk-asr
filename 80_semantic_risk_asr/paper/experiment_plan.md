@@ -60,11 +60,30 @@ Models:
 
 - `openai/whisper-small`
 - `openai/whisper-large-v2`
+- `openai/whisper-large-v3`
+- `openai/whisper-large-v3-turbo`
 - `MediaTek-Research/Breeze-ASR-25`
 - optional `MediaTek-Research/Breeze-ASR-26` as a Taigi/Taiwanese Hokkien
   stress test, not as the primary Taiwan Mandarin baseline. Local 15-row status
   on 2026-05-25: completed, CER `38.49`, WER `1493.33`, CUDA with cuDNN
   disabled.
+- `FunAudioLLM/SenseVoiceSmall` after a FunASR runner emits the standard
+  hypothesis contract.
+- `Qwen/Qwen3-ASR-0.6B` first, then `Qwen/Qwen3-ASR-1.7B` only if the smaller
+  model passes the 15-row smoke/contract gate.
+- `unsloth/gemma-4-E2B` and `unsloth/gemma-4-E4B` as prompted multimodal audio
+  candidates, not as pure ASR baselines, after a separate prompt/locale/runtime
+  runner exists.
+
+Language and script rule:
+
+- Target locale is `zh-TW`.
+- Output must be Taiwan Traditional Chinese transcription only.
+- Do not accept Simplified Chinese output as a passing result.
+- Record simplified character count, simplified character rate, and locale
+  violation rows for every model.
+- Whisper-family models may use `language=zh` because there is no `zh-TW`
+  token, but they still require the Traditional Chinese locale gate.
 
 Metrics:
 
@@ -74,6 +93,13 @@ Metrics:
 - negation flip rate;
 - amount distortion rate;
 - action confusion rate.
+- unsafe downrouting count;
+- high-risk missed count;
+- over-escalation count;
+- wall time seconds;
+- seconds per row;
+- rows per second;
+- locale violations.
 
 Purpose:
 
@@ -86,6 +112,19 @@ on mean CEIS, unstable-sample count, downstream mismatch, and high-risk misses.
 The legacy LoRA improves CER over base Breeze-ASR-25 (`30.99` vs `36.13`) but
 is worse on CEIS and downstream safety counts. Treat this as early evidence
 that lower CER alone is not sufficient for the paper claim.
+
+Current 258-row test-split signal: partial encoder remains stronger than LoRA.
+Partial encoder produced CER `18.24` in `213.79` seconds (`0.829` sec/row),
+with unsafe downrouting `7`, high-risk misses `4`, risk-atom proxy error rate
+`0.0431`, and locale violations `0`. LoRA produced CER `22.86` in `403.37`
+seconds (`1.563` sec/row), with unsafe downrouting `10`, high-risk misses `7`,
+risk-atom proxy error rate `0.0613`, and locale violations `0`.
+
+Decision: promote the legacy partial encoder as the current ASR hypothesis
+generator for the next split-aware CDS metric builder. Keep LoRA as contrast
+evidence, not the next primary hypothesis generator. WER is currently retained
+as a compatibility field only because whitespace-token WER is not informative
+for unsegmented Chinese transcripts.
 
 ## Experiment 2: Counterfactual Generation Quality
 

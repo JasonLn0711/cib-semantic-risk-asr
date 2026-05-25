@@ -25,6 +25,39 @@ gate:
       decision-critical spans.
     optional_spot_check_packet: /home/jnln3799/Downloads/janus_15_human_review_packet_2026-05-25/janus_15_model_output_spot_check_guide_2026-05-25.md
 
+language_control:
+  required_locale: zh-TW
+  required_script: Traditional Chinese
+  disallowed_script: Simplified Chinese
+  task_policy: transcribe_original_speech_only
+  output_policy:
+    - Use Taiwan Traditional Chinese wording and characters.
+    - Do not translate to English.
+    - Do not summarize.
+    - Do not output Simplified Chinese characters.
+    - Store raw hypotheses only in ignored local prediction paths.
+  model_specific_controls:
+    whisper:
+      language_arg: zh
+      task_arg: transcribe
+      post_decode_gate: traditional_zh_tw_locale_check
+      note: Whisper exposes Chinese language control but not a zh-TW token, so
+        all Whisper-family outputs require an explicit Traditional Chinese
+        locale gate after decoding.
+    sensevoice:
+      language_arg: zh
+      use_itn: true
+      post_decode_gate: traditional_zh_tw_locale_check
+    qwen3_asr:
+      language_arg: zh
+      prompt_or_request_locale: Taiwan Traditional Chinese
+      post_decode_gate: traditional_zh_tw_locale_check
+    gemma4_audio:
+      prompt: >
+        請逐字轉錄以下台灣電話客服語音，輸出繁體中文（台灣用語），不得輸出簡體中文；
+        只輸出轉錄內容，不要翻譯，不要摘要。
+      post_decode_gate: traditional_zh_tw_locale_check
+
 candidate_models:
   - run_id: nemo_curator_zh_citrinet_cpu_pilot
     model_name_or_path: nvidia/stt_zh_citrinet_1024_gamma_0_25
@@ -71,3 +104,88 @@ candidate_models:
     notes: Breeze-ASR-26 is Taigi/Hokkien-oriented and outputs Chinese
       characters. Use it to test possible Taigi/Hokkien speech or dialect
       robustness, not as the primary Taiwan Mandarin baseline.
+
+  - run_id: whisper_large_v3_15_row_baseline
+    model_name_or_path: openai/whisper-large-v3
+    family: Whisper
+    role: newer Whisper large checkpoint for Taiwan Traditional Chinese
+      comparison against large-v2 and Breeze candidates
+    current_status: planned_locale_guard_required
+    direct_quality_baseline: true
+    language_control_ref: language_control.model_specific_controls.whisper
+    source_url: https://huggingface.co/openai/whisper-large-v3
+    notes: Add as a direct ASR baseline after runner smoke. Use `language=zh`,
+      `task=transcribe`, and the Traditional Chinese locale gate.
+
+  - run_id: whisper_large_v3_turbo_15_row_baseline
+    model_name_or_path: openai/whisper-large-v3-turbo
+    family: Whisper
+    role: speed/quality tradeoff comparator against large-v3 and Breeze
+    current_status: planned_locale_guard_required
+    direct_quality_baseline: true
+    language_control_ref: language_control.model_specific_controls.whisper
+    source_url: https://huggingface.co/openai/whisper-large-v3-turbo
+    notes: Add as a direct ASR baseline after runner smoke. It is a faster
+      pruned large-v3 variant, so record wall time, seconds per row, and any
+      locale violations alongside CER/CDS metrics.
+
+  - run_id: sensevoice_small_15_row_candidate
+    model_name_or_path: FunAudioLLM/SenseVoiceSmall
+    family: FunASR SenseVoice
+    role: non-autoregressive multilingual ASR comparator with speech
+      understanding side signals
+    current_status: planned_new_runner_required
+    direct_quality_baseline: true
+    language_control_ref: language_control.model_specific_controls.sensevoice
+    source_url: https://huggingface.co/FunAudioLLM/SenseVoiceSmall
+    notes: Requires a FunASR runner that emits the standard hypothesis contract.
+      Use `language=zh`, force Taiwan Traditional Chinese by post-decode locale
+      gate, and record VAD, ITN, batch size, wall time, and latency separately.
+
+  - run_id: qwen3_asr_0_6b_15_row_candidate
+    model_name_or_path: Qwen/Qwen3-ASR-0.6B
+    family: Qwen3-ASR
+    role: smaller Qwen3-ASR smoke and latency candidate before 1.7B
+    current_status: planned_new_runner_required
+    direct_quality_baseline: true
+    language_control_ref: language_control.model_specific_controls.qwen3_asr
+    source_url: https://huggingface.co/Qwen/Qwen3-ASR-0.6B
+    notes: Use this before Qwen3-ASR-1.7B to check install/runtime feasibility.
+      Record toolkit version, offline vs streaming mode, wall time, throughput,
+      and Traditional Chinese locale violations.
+
+  - run_id: qwen3_asr_1_7b_15_row_candidate
+    model_name_or_path: Qwen/Qwen3-ASR-1.7B
+    family: Qwen3-ASR
+    role: stronger Qwen3-ASR quality candidate after 0.6B smoke
+    current_status: planned_after_qwen3_0_6b_smoke
+    direct_quality_baseline: true
+    language_control_ref: language_control.model_specific_controls.qwen3_asr
+    source_url: https://huggingface.co/Qwen/Qwen3-ASR-1.7B
+    notes: Do not run full test split until the 0.6B runner passes the 15-row
+      contract and locale gate.
+
+  - run_id: gemma4_e4b_audio_15_row_candidate
+    model_name_or_path: unsloth/gemma-4-E4B
+    family: Gemma 4 multimodal audio
+    role: prompted multimodal ASR and decision-text comparator, not a pure ASR
+      model
+    current_status: planned_new_multimodal_runner_required
+    direct_quality_baseline: false
+    language_control_ref: language_control.model_specific_controls.gemma4_audio
+    source_url: https://huggingface.co/unsloth/gemma-4-E4B
+    notes: Use only after a multimodal runner can emit the same hypothesis
+      contract. Record prompt, max_new_tokens, audio length limit, wall time,
+      output verbosity, hallucination markers, and locale violations.
+
+  - run_id: gemma4_e2b_audio_15_row_candidate
+    model_name_or_path: unsloth/gemma-4-E2B
+    family: Gemma 4 multimodal audio
+    role: smaller prompted multimodal ASR and latency candidate
+    current_status: planned_new_multimodal_runner_required
+    direct_quality_baseline: false
+    language_control_ref: language_control.model_specific_controls.gemma4_audio
+    source_url: https://huggingface.co/unsloth/gemma-4-E2B
+    notes: Use as the cheaper multimodal smoke before E4B if VRAM or latency
+      becomes the bottleneck. It must pass the same Traditional Chinese locale
+      gate before any CDS comparison.
