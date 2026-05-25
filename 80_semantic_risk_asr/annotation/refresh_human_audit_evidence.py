@@ -65,8 +65,8 @@ REFERENCE_TRANSCRIPT_POLICY = (
 )
 REMAINING_REVIEW_SCOPE = (
     "Remaining selected-300 review work is limited to risk-atom labels, "
-    "decision-change labels, expected safe action, confidence, and per-model "
-    "assessment fields."
+    "decision-change labels, expected safe action, confidence, per-model "
+    "assessment fields, and per-row review timing."
 )
 
 
@@ -555,8 +555,9 @@ def refresh_human_audit_evidence(
         "runtime_seconds": round(time.time() - started, 4),
         "next_action": (
             "Complete selected-300 risk-atom, decision-change, expected-action, "
-            "confidence, and per-model assessment fields, then rerun with "
-            "--require-complete."
+            "confidence, per-model assessment, and per-row timing fields, then "
+            "rerun the session-gated strict dry-run with --require-complete "
+            "--require-timing before aggregate refresh."
             if not strict_complete
             else "Use refreshed aggregate summaries for paper-table drafting and human-reviewed predictor analysis."
         ),

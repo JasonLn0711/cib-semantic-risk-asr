@@ -117,6 +117,11 @@ def build_post_review_checklist(
     publishable = read_json(publishable_summary_path)
     consequence = read_json(consequence_summary_path)
     recovery = read_json(recovery_summary_path)
+    closeout_timing = (
+        closeout.get("review_timing")
+        if isinstance(closeout.get("review_timing"), dict)
+        else {}
+    )
 
     closeout_ready = closeout.get("ok") is True and closeout.get("status") == "response_complete_ready_to_write"
     refresh_complete = (
@@ -154,9 +159,15 @@ def build_post_review_checklist(
             "evidence": (
                 f"closeout_status={closeout.get('status', '')}; "
                 f"pending_rows={closeout.get('pending_rows_in_response', '')}; "
-                f"pending_model_assessments={closeout.get('pending_model_assessments_in_response', '')}"
+                f"pending_model_assessments={closeout.get('pending_model_assessments_in_response', '')}; "
+                f"require_timing={closeout.get('require_timing', '')}; "
+                f"rows_missing_timing={closeout_timing.get('rows_missing_timing', '')}"
             ),
-            "next_action": "fill the local response TSV, rerun session-gated strict dry-run, then closeout",
+            "next_action": (
+                "fill the local response TSV row/model fields plus per-row timing, "
+                "rerun session-gated strict dry-run with --require-complete "
+                "--require-timing, then closeout"
+            ),
         },
         {
             "step_id": "2",
@@ -257,6 +268,8 @@ def build_post_review_checklist(
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
         "remaining_review_scope": REMAINING_REVIEW_SCOPE,
         "closeout_ready": closeout_ready,
+        "closeout_require_timing": closeout.get("require_timing", ""),
+        "closeout_review_timing": closeout_timing,
         "refresh_complete": refresh_complete,
         "predictor_complete": predictor_complete,
         "paper_ready": paper_ready,
@@ -271,7 +284,10 @@ def build_post_review_checklist(
             "after reviewer response write/refresh before proxy claims can be promoted."
         ),
         "next_concrete_action": (
-            "Complete the response closeout gate first; then write/refresh and rerun this checklist."
+            "Complete the response closeout gate first: fill row/model/timing "
+            "fields, rerun the session-gated strict dry-run with "
+            "--require-complete --require-timing, then write/refresh and "
+            "rerun this checklist."
             if not closeout_ready
             else "Run post-write refresh and paper-facing audits until every gate is ready."
         ),

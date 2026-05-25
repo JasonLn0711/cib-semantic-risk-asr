@@ -33,6 +33,11 @@ def write_inputs(tmp_path: Path, *, ready: bool, human_recovery: bool = False) -
             "status": "response_complete_ready_to_write" if ready else "response_closeout_blocked",
             "pending_rows_in_response": 0 if ready else 2,
             "pending_model_assessments_in_response": 0 if ready else 6,
+            "require_timing": True,
+            "review_timing": {
+                "rows_with_timing": 1 if ready else 0,
+                "rows_missing_timing": 0 if ready else 1,
+            },
         },
     )
     write_json(
@@ -110,9 +115,14 @@ def test_post_review_checklist_blocks_until_closeout_and_refresh_complete(tmp_pa
     assert "response_closeout_not_ready" in payload["blocker_keys"]
     assert "human_refresh_not_complete" in payload["blocker_keys"]
     assert "recovery_proxy_only" in payload["blocker_keys"]
+    assert payload["closeout_require_timing"] is True
+    assert payload["closeout_review_timing"]["rows_missing_timing"] == 1
     status_by_step = {row["step_id"]: row["status"] for row in rows}
     assert status_by_step["1"] == "blocked"
     assert status_by_step["7"] == "proxy_only"
+    step_1 = next(row for row in rows if row["step_id"] == "1")
+    assert "rows_missing_timing=1" in step_1["evidence"]
+    assert "--require-timing" in step_1["next_action"]
     serialized = json.dumps({"payload": payload, "rows": rows}, ensure_ascii=False)
     assert "PRIVATE_" not in serialized
     assert "reference_text" not in serialized
@@ -138,6 +148,7 @@ def test_post_review_checklist_marks_all_gates_ready(tmp_path: Path) -> None:
     assert payload["ok"] is True
     assert payload["status"] == "post_review_evidence_ready"
     assert payload["blocker_keys"] == []
+    assert payload["closeout_review_timing"]["rows_missing_timing"] == 0
     status_by_step = {row["step_id"]: row["status"] for row in rows}
     assert status_by_step["1"] == "ready"
     assert status_by_step["6"] == "ready"

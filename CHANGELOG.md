@@ -5,6 +5,27 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.137 - 2026-05-26T02:56:08+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `388ffd0`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py`
+  - `80_semantic_risk_asr/annotation/prepare_human_audit_review_batch.py`
+  - `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py`
+  - `80_semantic_risk_asr/scoring/audit_postdoc_roadmap_completion.py`
+  - `80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py`
+  - `80_semantic_risk_asr/scoring/build_consequence_evidence_matrix.py`
+  - `80_semantic_risk_asr/scoring/check_evidence_chain_readiness.py`
+  - `tests/test_evidence_chain_readiness.py`
+  - `tests/test_human_audit_refresh.py`
+  - `tests/test_post_review_evidence_checklist.py`
+  - `tests/test_postdoc_roadmap_completion_audit.py`
+  - `tests/test_publishable_evidence_audit.py`
+
 ## v2.5.136 - 2026-05-26T02:47:13+08:00
 
 - Bump: `patch`

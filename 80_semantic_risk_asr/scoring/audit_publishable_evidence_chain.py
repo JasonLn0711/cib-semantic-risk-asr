@@ -34,8 +34,8 @@ REFERENCE_TRANSCRIPT_POLICY = (
 )
 REMAINING_REVIEW_SCOPE = (
     "Remaining selected-300 review work is limited to risk-atom labels, "
-    "decision-change labels, expected safe action, confidence, and per-model "
-    "assessment fields."
+    "decision-change labels, expected safe action, confidence, per-model "
+    "assessment fields, and per-row review timing."
 )
 
 
@@ -290,11 +290,12 @@ def objective_rows_from_payloads(
                 "human_audit_refresh_summary.json; human_audit_predictor_summary.json"
             ),
             result=main_result,
-            blocking_dependency="selected-300 risk-atom, decision-change, and per-model assessment completion",
+            blocking_dependency="selected-300 risk-atom, decision-change, per-model assessment, and per-row timing completion",
             next_action=(
                 "Fill the selected-300 reviewer fields that are not transcript "
-                "ground truth, rerun refresh with --require-complete, then use "
-                "human-reviewed predictor outputs."
+                "ground truth plus per-row review timing, rerun the strict "
+                "response dry-run with --require-complete --require-timing, "
+                "then use human-reviewed predictor outputs."
             ),
         ),
         objective_row(
@@ -383,6 +384,7 @@ def build_completion_audit_from_payloads(
                 "model_assessments_in_batch",
                 0,
             ),
+            "rows_missing_timing": reviewer_action_gate.get("rows_missing_timing", 0),
             "latest_apply_status": reviewer_action_gate.get("latest_apply_status", ""),
         },
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
@@ -395,9 +397,10 @@ def build_completion_audit_from_payloads(
             "into paper-grade evidence; do not duplicate transcript review."
         ),
         "next_decision": (
-            "Complete selected-300 risk-atom, decision-change, and per-model "
-            "assessment fields, run the refresh gate with --require-complete, "
-            "then rerun human-reviewed predictor and recovery claims."
+            "Complete selected-300 risk-atom, decision-change, per-model "
+            "assessment, and per-row timing fields, run the strict response "
+            "gate with --require-complete --require-timing, then rerun "
+            "human-reviewed predictor and recovery claims."
         ),
     }
     assert_completion_safe(payload)

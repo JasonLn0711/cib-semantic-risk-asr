@@ -40,8 +40,8 @@ REFERENCE_TRANSCRIPT_POLICY = (
 )
 REMAINING_REVIEW_SCOPE = (
     "Remaining selected-300 review work is limited to risk-atom labels, "
-    "decision-change labels, expected safe action, confidence, and per-model "
-    "assessment fields."
+    "decision-change labels, expected safe action, confidence, per-model "
+    "assessment fields, and per-row review timing."
 )
 
 
@@ -350,7 +350,9 @@ def human_audit_gate(root: Path) -> dict[str, str]:
             f"{action_gate['pending_rows_in_batch']}/{action_gate['rows_in_batch']} "
             "packet rows and "
             f"{action_gate['pending_model_assessments_in_batch']}/"
-            f"{action_gate['model_assessments_in_batch']} model assessments pending"
+            f"{action_gate['model_assessments_in_batch']} model assessments pending, "
+            f"and {action_gate['rows_missing_timing']}/{action_gate['rows_in_batch']} "
+            "timing rows pending"
         )
     complete = (
         payload.get("ok")
@@ -377,7 +379,9 @@ def human_audit_gate(root: Path) -> dict[str, str]:
         next_action = (
             "Run the reviewer action checklist, fill selected-300 risk-atom, "
             "decision-change, expected-action, confidence, and per-model "
-            "assessment fields; then run validator with --require-complete."
+            "assessment fields plus per-row review timing; then run the "
+            "session-gated strict response dry-run with --require-complete "
+            "--require-timing before the aggregate refresh."
         )
     else:
         status = "missing"
@@ -490,10 +494,11 @@ def build_readiness(root: Path) -> dict[str, Any]:
             for item in proxy_only
         ],
         "next_decision": (
-            "Complete the selected-300 risk-atom, decision-change, and "
-            "per-model assessment fields, then rerun the aggregate summarizer, "
-            "human-reviewed predictor gate, and recovery analysis before "
-            "making paper-grade CDS-ASR claims."
+            "Complete the selected-300 risk-atom, decision-change, per-model "
+            "assessment, and per-row timing fields, then rerun the strict "
+            "response closeout, aggregate summarizer, human-reviewed predictor "
+            "gate, and recovery analysis before making paper-grade CDS-ASR "
+            "claims."
         ),
     }
     assert_aggregate_safe(payload)

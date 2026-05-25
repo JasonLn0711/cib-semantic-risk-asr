@@ -65,7 +65,8 @@ REFERENCE_TRANSCRIPT_POLICY = (
 )
 REMAINING_REVIEW_SCOPE = (
     "The packet asks reviewers to complete risk atoms, decision-change labels, "
-    "expected safe action, confidence, and per-model assessment fields."
+    "expected safe action, confidence, per-model assessment fields, and "
+    "per-row review timing."
 )
 
 

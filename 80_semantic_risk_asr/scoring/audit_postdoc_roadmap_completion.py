@@ -43,8 +43,8 @@ REFERENCE_TRANSCRIPT_POLICY = (
 )
 REMAINING_REVIEW_SCOPE = (
     "Remaining selected-300 review work is limited to risk-atom labels, "
-    "decision-change labels, expected safe action, confidence, and per-model "
-    "assessment fields."
+    "decision-change labels, expected safe action, confidence, per-model "
+    "assessment fields, and per-row review timing."
 )
 
 STATUS_ORDER = {
@@ -150,6 +150,11 @@ def review_counts(
     human_refresh: dict[str, Any],
     response_closeout: dict[str, Any],
 ) -> dict[str, Any]:
+    timing = (
+        response_closeout.get("review_timing")
+        if isinstance(response_closeout.get("review_timing"), dict)
+        else {}
+    )
     return {
         "selected_300_rows_reviewed": int(human_refresh.get("reviewed_rows") or 0),
         "selected_300_rows_total": int(human_refresh.get("audit_rows") or 30),
@@ -168,6 +173,9 @@ def review_counts(
             response_closeout.get("pending_model_assessments_in_response") or 0
         )
         + int(response_closeout.get("reviewed_model_assessments_in_response") or 0),
+        "current_packet_timing_rows_with": int(timing.get("rows_with_timing") or 0),
+        "current_packet_timing_rows_missing": int(timing.get("rows_missing_timing") or 0),
+        "current_packet_timing_required": bool(response_closeout.get("require_timing")),
         "response_closeout_status": str(response_closeout.get("status") or "missing"),
         "latest_apply_status": str(response_closeout.get("latest_apply_status") or ""),
     }
@@ -201,7 +209,8 @@ def post_review_gate_row(
             f"current packet pending {counts['current_packet_rows_pending']}/"
             f"{counts['current_packet_rows_total']} rows and "
             f"{counts['current_packet_model_assessments_pending']}/"
-            f"{counts['current_packet_model_assessments_total']} model assessments."
+            f"{counts['current_packet_model_assessments_total']} model assessments, "
+            f"with {counts['current_packet_timing_rows_missing']} timing rows missing."
         )
     )
     return roadmap_row(
@@ -221,7 +230,7 @@ def post_review_gate_row(
         blocking_dependency=blocker_keys,
         next_action=str(
             post_review.get("next_concrete_action")
-            or "Complete selected-300 reviewer fields, then rerun closeout/write/refresh."
+            or "Complete selected-300 row/model/timing fields, then rerun closeout/write/refresh."
         ),
     )
 
@@ -368,9 +377,10 @@ def build_roadmap_audit_from_payloads(
             "locale/runtime gate unless they change the CDS-ASR paper evidence."
         ),
         "next_decision": (
-            "Close the selected-300 response gate, write/refresh aggregate human "
-            "review evidence, rerun predictor and recovery analyses, then rerun "
-            "this roadmap audit before claiming the objective is complete."
+            "Close the selected-300 row/model/timing response gate, "
+            "write/refresh aggregate human review evidence, rerun predictor and "
+            "recovery analyses, then rerun this roadmap audit before claiming "
+            "the objective is complete."
         ),
     }
     assert_roadmap_safe(payload)

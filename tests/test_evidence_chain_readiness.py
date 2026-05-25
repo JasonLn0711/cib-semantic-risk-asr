@@ -209,8 +209,10 @@ def test_readiness_marks_proxy_and_human_review_pending(tmp_path: Path) -> None:
     assert payload["status_counts"]["proxy_completed"] == 4
     assert payload["reviewer_action_gate"]["status"] == "reviewer_action_ready"
     assert payload["reviewer_action_gate"]["pending_rows_in_batch"] == 6
+    assert payload["reviewer_action_gate"]["rows_missing_timing"] == 6
     assert "already human-reviewed ground truth" in payload["reference_transcript_policy"]
     assert "risk-atom labels" in payload["remaining_review_scope"]
+    assert "per-row review timing" in payload["remaining_review_scope"]
     audit_row = next(
         row
         for row in payload["readiness_rows"]
@@ -218,6 +220,9 @@ def test_readiness_marks_proxy_and_human_review_pending(tmp_path: Path) -> None:
     )
     assert "transcript ground truth is not the pending item" in audit_row["result"]
     assert "reviewer_action_ready" in audit_row["result"]
+    assert "6/6 timing rows pending" in audit_row["result"]
+    assert "--require-timing" in audit_row["next_action"]
+    assert "per-row timing fields" in payload["next_decision"]
     assert_aggregate_safe(payload)
 
 

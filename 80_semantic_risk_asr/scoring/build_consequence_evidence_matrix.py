@@ -42,8 +42,8 @@ REFERENCE_TRANSCRIPT_POLICY = (
 )
 REMAINING_REVIEW_SCOPE = (
     "Remaining selected-300 review work is limited to risk-atom labels, "
-    "decision-change labels, expected safe action, confidence, and per-model "
-    "assessment fields."
+    "decision-change labels, expected safe action, confidence, per-model "
+    "assessment fields, and per-row review timing."
 )
 STATUS_ORDER = {
     "completed": 0,
@@ -325,8 +325,8 @@ def consequence_rows_from_payloads(
                 f"{human_refresh.get('model_assessments', 90)} model assessments; "
                 f"preflight status is {preflight.get('status', 'missing')}."
             ),
-            blocking_dependency="selected-300 risk atoms, decision-change labels, expected safe action, confidence, and per-model assessments",
-            next_action="Fill the current ready packet, run strict dry-run to response_complete, then write and refresh aggregate evidence.",
+            blocking_dependency="selected-300 risk atoms, decision-change labels, expected safe action, confidence, per-model assessments, and per-row timing",
+            next_action="Fill the current ready packet including timing, run strict dry-run with --require-complete --require-timing to response_complete, then write and refresh aggregate evidence.",
         ),
         row(
             consequence_id="C6",

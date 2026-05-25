@@ -138,6 +138,7 @@ def test_refresh_allows_pending_review_without_strict_mode(tmp_path: Path) -> No
     assert payload["status"] == "review_pending"
     assert payload["pending_rows"] == 1
     assert payload["pending_model_assessments"] == 1
+    assert "--require-timing" in payload["next_action"]
     assert (output_dir / "human_audit_validation_summary.json").exists()
     assert (output_dir / "human_audit_progress_summary.json").exists()
     assert (output_dir / "human_audit_review_batches.tsv").exists()

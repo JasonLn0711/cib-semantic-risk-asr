@@ -76,6 +76,11 @@ def test_roadmap_audit_blocks_current_proxy_and_review_pending_state() -> None:
             "reviewed_model_assessments_in_response": 0,
             "pending_model_assessments_in_response": 18,
             "latest_apply_status": "response_pending",
+            "require_timing": True,
+            "review_timing": {
+                "rows_with_timing": 0,
+                "rows_missing_timing": 6,
+            },
         },
         candidate_summary={
             "ok": True,
@@ -91,8 +96,11 @@ def test_roadmap_audit_blocks_current_proxy_and_review_pending_state() -> None:
     assert payload["blocking_gate"] == "selected_300_human_review_and_post_review_refresh"
     assert payload["current_review_counts"]["selected_300_rows_reviewed"] == 0
     assert payload["current_review_counts"]["current_packet_model_assessments_pending"] == 18
+    assert payload["current_review_counts"]["current_packet_timing_rows_missing"] == 6
+    assert payload["current_review_counts"]["current_packet_timing_required"] is True
     assert payload["candidate_gate"]["blocked_or_stopped_count"] == 1
     assert payload["status_counts"]["blocked"] == 1
+    assert "row/model/timing response gate" in payload["next_decision"]
     assert_roadmap_safe(payload)
 
 
@@ -130,6 +138,11 @@ def test_roadmap_audit_can_mark_all_requirements_complete() -> None:
             "pending_rows_in_response": 0,
             "reviewed_model_assessments_in_response": 18,
             "pending_model_assessments_in_response": 0,
+            "require_timing": True,
+            "review_timing": {
+                "rows_with_timing": 6,
+                "rows_missing_timing": 0,
+            },
         },
         candidate_summary={"ok": True},
     )
@@ -180,6 +193,11 @@ def test_recovery_proxy_keeps_roadmap_incomplete_even_when_review_counts_are_don
             "pending_rows_in_response": 0,
             "reviewed_model_assessments_in_response": 18,
             "pending_model_assessments_in_response": 0,
+            "require_timing": True,
+            "review_timing": {
+                "rows_with_timing": 6,
+                "rows_missing_timing": 0,
+            },
         },
         candidate_summary={"ok": True},
     )
