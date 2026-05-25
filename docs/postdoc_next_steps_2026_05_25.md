@@ -283,6 +283,18 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   objective audit；strict recovery command 不能帶
   `--allow-pending-summary`。
 
+20. Local response timing helper 已建立：
+
+- Source:
+  `80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py`。
+- Current tracked dry-run:
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_timing_summary.json`。
+- Current state: dry-run only；row `1` 的 timing proposal 可讓 coverage 變成
+  `1/6`，但 local response TSV 沒有被寫入，closeout 仍是 actual `0/6`
+  timing rows filled。
+- Reviewer handoff 現在提供 `timing_start_write` 和 `timing_finish_write`
+  command；這是 timing capture support，不是 human review completion。
+
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS

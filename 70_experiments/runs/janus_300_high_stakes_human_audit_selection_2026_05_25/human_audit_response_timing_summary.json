@@ -1,0 +1,47 @@
+{
+  "ok": true,
+  "status": "timing_dry_run_ready",
+  "mode": "dry_run",
+  "recorded_at": "2026-05-26T04:42:55+08:00",
+  "action": "start+finish",
+  "input_boundary": "local ignored response TSV only",
+  "output_boundary": "aggregate-only timing summary/log; no transcript text, hypotheses, or reviewer notes",
+  "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
+  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
+  "row_number": 1,
+  "force": false,
+  "rows_in_response": 18,
+  "model_response_rows_for_row": 3,
+  "existing_timing": {
+    "review_started_at": "",
+    "review_finished_at": "",
+    "review_elapsed_seconds": ""
+  },
+  "proposed_timing": {
+    "review_started_at": "2026-05-26T10:00:00+08:00",
+    "review_finished_at": "2026-05-26T10:05:00+08:00",
+    "review_elapsed_seconds": "300"
+  },
+  "changed": true,
+  "write": false,
+  "review_timing": {
+    "timing_scope": "per selected audio row; values come from local response TSV timing columns",
+    "timing_requirement": "required",
+    "timing_fields": [
+      "review_started_at",
+      "review_finished_at",
+      "review_elapsed_seconds"
+    ],
+    "rows_with_timing": 1,
+    "rows_missing_timing": 5,
+    "total_review_elapsed_seconds": 300.0,
+    "mean_review_elapsed_seconds": 300.0,
+    "min_review_elapsed_seconds": 300.0,
+    "max_review_elapsed_seconds": 300.0
+  },
+  "error_counts": {},
+  "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv",
+  "backup_path": "",
+  "next_action": "Continue filling reviewer row/model fields, then run the session-gated strict dry-run with --require-complete --require-timing.",
+  "runtime_seconds": 0.0003
+}

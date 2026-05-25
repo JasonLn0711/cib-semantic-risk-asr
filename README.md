@@ -142,6 +142,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   The normal `refresh_human_audit_evidence.py` path now also refreshes this
   consistency status and records `consistency_audit_ok=true` in
   `human_audit_refresh_summary.json`.
+  The local response timing helper
+  `80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py` now
+  supports dry-run or write-mode updates to the ignored response TSV timing
+  columns. Current live dry-run proves row `1` timing can be proposed without
+  modifying the local response file; closeout still reports `0/6` timing rows
+  filled until a reviewer actually writes timing during review.
   The post-review evidence checklist
   `80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py`
   now records the aggregate gates that must pass after response closeout,
