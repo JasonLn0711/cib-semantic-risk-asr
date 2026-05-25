@@ -1,0 +1,101 @@
+{
+  "ok": true,
+  "status_counts": {
+    "pass": 11
+  },
+  "failed_checks": [],
+  "reference_transcript_policy": "Reference transcripts are already human-reviewed for WER/CER; this audit does not reopen transcript review.",
+  "remaining_review_scope": "Selected-300 completion still requires risk, decision, expected safe action, confidence, per-model fields, and per-row review timing.",
+  "consistency_rows": [
+    {
+      "check_id": "C001",
+      "invariant": "required aggregate summaries exist and are parseable",
+      "status": "pass",
+      "evidence": "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json; 70_experiments/runs/asr_candidate_current_recheck_2026_05_26/summary.json",
+      "result": "all required summaries loaded",
+      "next_action": "Regenerate missing or invalid aggregate summaries before publishing evidence-chain claims."
+    },
+    {
+      "check_id": "C010",
+      "invariant": "transcript ground truth policy is not reopened",
+      "status": "pass",
+      "evidence": "reference_transcript_policy fields across aggregate summaries",
+      "result": "all summaries keep transcript ground truth as already reviewed",
+      "next_action": "Refresh the stale summaries from source constants before routing reviewer work."
+    },
+    {
+      "check_id": "C020",
+      "invariant": "remaining selected-300 review scope includes row/model/timing fields",
+      "status": "pass",
+      "evidence": "remaining_review_scope fields across aggregate summaries",
+      "result": "all summaries name risk, decision, expected action, confidence, per-model fields, and per-row timing",
+      "next_action": "Rerun the stale aggregate generator and do not proceed to write/refresh while scope is inconsistent."
+    },
+    {
+      "check_id": "C030",
+      "invariant": "strict response apply gate requires timing",
+      "status": "pass",
+      "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json",
+      "result": "apply dry-run records require_timing=true and 6 timing rows pending",
+      "next_action": "Run the session-gated strict response dry-run with --require-complete --require-timing."
+    },
+    {
+      "check_id": "C031",
+      "invariant": "response closeout blocks on missing timing",
+      "status": "pass",
+      "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json",
+      "result": "closeout blocks write/refresh while 6 timing rows are missing",
+      "next_action": "Keep write/refresh blocked until timing coverage is complete."
+    },
+    {
+      "check_id": "C032",
+      "invariant": "top-level next actions route through the timing gate",
+      "status": "pass",
+      "evidence": "readiness/publishable/consequence/roadmap/refresh next action fields",
+      "result": "all top-level next actions mention timing and --require-timing",
+      "next_action": "Refresh top-level summaries so reviewers cannot bypass timing closeout."
+    },
+    {
+      "check_id": "C040",
+      "invariant": "review-pending state cannot be paper-ready",
+      "status": "pass",
+      "evidence": "readiness, publishable, consequence, roadmap, post-review, closeout summaries",
+      "result": "selected-300 review is pending and every paper-facing gate remains closed",
+      "next_action": "Keep claims proxy-only until response closeout, write, refresh, predictor, and recovery are complete."
+    },
+    {
+      "check_id": "C050",
+      "invariant": "proxy evidence is not promoted to paper claims",
+      "status": "pass",
+      "evidence": "publishable_evidence_completion_summary and consequence_evidence_matrix_summary",
+      "result": "blocking/proxy items remain explicit while publishable and consequence gates are closed",
+      "next_action": "Keep 258-row/300-row proxy results as engineering evidence until human labels refresh them."
+    },
+    {
+      "check_id": "C060",
+      "invariant": "current reviewer action packet remains ready but unfilled",
+      "status": "pass",
+      "evidence": "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json",
+      "result": "current packet has 6 rows, 18 model assessments, and 6 timing rows pending",
+      "next_action": "Fill only local response fields and timing; do not reopen transcript review."
+    },
+    {
+      "check_id": "C070",
+      "invariant": "expanded ASR/Gemma candidates stay behind locale/runtime gates",
+      "status": "pass",
+      "evidence": "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/summary.json",
+      "result": "current recheck keeps Whisper v3/v3-turbo, SenseVoice, Qwen3-ASR, and Gemma from promotion",
+      "next_action": "Do not run 258-row or selected-300 promotion for these candidates before locale/runtime policy changes."
+    },
+    {
+      "check_id": "C080",
+      "invariant": "source summaries remain aggregate-safe",
+      "status": "pass",
+      "evidence": "all input aggregate summaries",
+      "result": "no transcript-bearing field tokens were found in source summaries",
+      "next_action": "Remove raw row-level content from tracked summaries before committing."
+    }
+  ],
+  "next_decision": "If this audit is pass, continue with the local selected-300 row/model/timing response closeout; if it fails, refresh the stale aggregate generator before paper-facing claims.",
+  "runtime_seconds": 0.0031
+}

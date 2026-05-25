@@ -104,6 +104,7 @@ ignored local paths.
 | 5.61 | Aligned high-level evidence-chain summaries with the timing gate. | `check_evidence_chain_readiness.py`; `audit_publishable_evidence_chain.py`; `build_consequence_evidence_matrix.py`; `build_post_review_evidence_checklist.py`; `audit_postdoc_roadmap_completion.py`; `refresh_human_audit_evidence.py`; refreshed readiness/publishable/consequence/post-review/roadmap/refresh outputs; direct tests. | Completed as paper-readiness guardrail alignment, not as human review. The same per-row timing requirement now appears in `remaining_review_scope`, top-level next actions, publishable blockers, roadmap review counts, post-review closeout evidence, and refresh summaries. Live status remains blocked as intended: selected-300 review is `0/30` rows and `0/90` model assessments, the current packet is `0/6` row decisions, `0/18` model assessments, and `0/6` timing rows filled, and `paper_ready=false` / `publishable_ready=false` / `roadmap_complete=false`. Compile and direct readiness/post-review/publishable/refresh/roadmap tests passed. |
 | 5.62 | Ran current bounded ASR/Gemma candidate recheck. | `asr_candidate_current_recheck_2026_05_26/README.md`; `candidate_current_recheck_summary.tsv`; `summary.json`; local ignored validation artifact. | Completed as candidate-gate evidence, not as baseline promotion. Whisper large-v3, Whisper large-v3-turbo, SenseVoiceSmall, and Qwen3-ASR-0.6B all validated against the fixed 15-row field contract, but the strict Taiwan Traditional Chinese locale gate still blocks promotion. Qwen3-ASR-1.7B timed out before inference after `60.08s` at fetch/load. Gemma 4 E2B/E4B remain blocked because local `transformers 4.57.6` lacks `AutoModelForMultimodalLM` and `Gemma4ForConditionalGeneration`. Decision unchanged: do not run 258-row or selected-300 for these candidates until locale/runtime policy changes. |
 | 5.63 | Aligned consequence matrix next-decision with the timing gate. | `build_consequence_evidence_matrix.py`; `consequence_evidence_matrix_summary.json`; `consequence_evidence_matrix.tsv`; `tests/test_consequence_evidence_matrix.py`. | Completed as paper-claim gate hardening, not as human review. The consequence matrix now makes metric-insufficiency, model-comparison, and publishability blockers depend on selected-300 row/model/timing closeout, and the top-level `next_decision` explicitly requires the session-gated strict dry-run with `--require-complete --require-timing` before post-review predictor/recovery refresh. Compile and direct consequence-matrix tests passed; refreshed consequence outputs remain `ok=true`, `paper_claims_ready=false`. |
+| 5.64 | Added aggregate evidence-chain consistency audit. | `audit_evidence_chain_consistency.py`; `evidence_chain_consistency_summary.json`; `evidence_chain_consistency.tsv`; `tests/test_evidence_chain_consistency.py`; refreshed apply/closeout/readiness/publishable/post-review/roadmap outputs. | Completed as cross-summary drift control, not as human review. The first live audit intentionally failed on a stale apply-summary review-scope string and on top-level next actions that named timing without the explicit `--require-timing` command. The strict session-gated apply dry-run was rerun against the ignored response TSV, failed as expected with `response_pending`, and appended a new aggregate apply-log row. Source generators were then updated so readiness and roadmap next decisions route through `--require-complete --require-timing`; refreshed outputs now pass the consistency audit with `ok=true`, `11/11` checks passing, `paper_ready=false`, `publishable_ready=false`, `roadmap_complete=false`, and no raw transcript fields in tracked outputs. |
 
 ## Next Operations
 
@@ -187,11 +188,16 @@ ignored local paths.
    needed. The normal `refresh_human_audit_evidence.py` path now updates it,
    and it should stay `roadmap_complete=false` while any roadmap row is
    proxy-only, review-pending, or blocked by post-review evidence.
-11. After local review edits, run `refresh_human_audit_evidence.py` without
+11. Use `audit_evidence_chain_consistency.py` after any evidence-chain refresh
+   or candidate-gate change. It should stay `ok=true`; any failure means a
+   tracked aggregate summary has drifted from the transcript policy,
+   row/model/timing review scope, timing closeout command, proxy/paper-ready
+   boundary, or ASR/Gemma promotion gate.
+12. After local review edits, run `refresh_human_audit_evidence.py` without
    `--require-complete` to refresh aggregate records, then with
    `--require-complete` before treating the human audit as complete.
-12. Record aggregate human annotation statistics without selected IDs or
+13. Record aggregate human annotation statistics without selected IDs or
    transcripts.
-13. After the selected-300 audit, use the refresh gate to rerun
+14. After the selected-300 audit, use the refresh gate to rerun
    `analyze_human_audit_predictors.py` outputs and replace proxy-only predictor
    language with reviewer-facing evidence.

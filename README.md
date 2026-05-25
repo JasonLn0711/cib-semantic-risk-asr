@@ -125,6 +125,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   refresh summaries now surface the same timing blocker so the paper-readiness
   path cannot accidentally treat row/model fields as sufficient without review
   elapsed-time evidence.
+  The aggregate consistency audit
+  `80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py` now checks
+  these summaries together. Current status is `ok=true` with `11/11` checks
+  passing: transcript ground truth is not reopened, remaining review scope
+  includes row/model/timing fields, proxy evidence is not promoted to paper
+  claims, and expanded ASR/Gemma candidates remain behind locale/runtime gates.
   The post-review evidence checklist
   `80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py`
   now records the aggregate gates that must pass after response closeout,
