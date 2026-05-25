@@ -66,9 +66,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   were pruned from the repo copy while experiment metadata and analysis records
   were retained.
 - The 2026-05-25 canonical 258-row test split comparison now has aggregate
-  partial-vs-LoRA evidence under
-  `70_experiments/runs/janus_258_test_split_asr_cds_proxy/`. The partial
-  encoder remains the current ASR hypothesis generator candidate.
+  five-model evidence under
+  `70_experiments/runs/janus_258_test_split_asr_cds_proxy/`: legacy partial
+  encoder, legacy LoRA, Breeze-ASR-25 base, Whisper large-v2, and Whisper
+  small. The partial encoder remains the current ASR hypothesis generator
+  candidate.
 - The expanded ASR candidate matrix is recorded in
   `docs/asr_candidate_expansion_2026_05_25.md` and
   `60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml`.

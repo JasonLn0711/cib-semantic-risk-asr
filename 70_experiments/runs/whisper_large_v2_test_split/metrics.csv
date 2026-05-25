@@ -1,0 +1,2 @@
+step,epoch,split,loss,cer,wer,learning_rate,wall_time_seconds,checkpoint,notes
+0,0,test_258,,24.92,32.75,,523.49,openai/whisper-large-v2,pilot_inference;runtime=cuda;max_samples=258;label_mode=heuristic;disable_cudnn=True;torch_dtype=float16;metric_normalization=zh_asr;wer_tokenizer=jieba

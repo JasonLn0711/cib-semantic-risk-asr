@@ -38,19 +38,23 @@ Status: active roadmap after the 258-row partial-vs-LoRA-vs-base gate and WER au
    legacy LoRA、legacy partial encoder 都已接過同一個 15-row contract。
 3. 五模型 15-row CDS-ASR bridge 已完成，證明 LoRA 雖然改善 CER，卻讓
    CEIS/downstream behavior 變差。
-4. Legacy partial encoder、LoRA、Breeze-ASR-25 base 已完成 canonical
-   `258`-row test split。
-5. 258-row aggregate proxy 指標支持 partial encoder 優於 LoRA 與 base：
+4. Legacy partial encoder、LoRA、Breeze-ASR-25 base、Whisper small、Whisper
+   large-v2 已完成 canonical `258`-row test split。
+5. 258-row aggregate proxy 指標支持 partial encoder 優於 LoRA、Breeze base
+   與 Whisper-family baseline：
 
 | Run | zh CER micro | zh-jieba WER micro | Stored CER | Wall time | Sec/row | Unsafe downrouting | High-risk missed | Risk-atom proxy error | Locale violations |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Legacy partial encoder | `15.04` | `21.53` | `18.24` | `213.79s` | `0.829` | `7` | `4` | `0.0431` | `0` |
 | Legacy LoRA | `18.23` | `25.59` | `22.86` | `403.37s` | `1.563` | `10` | `7` | `0.0613` | `0` |
 | Breeze-ASR-25 base | `22.72` | `30.39` | `33.11` | `164.41s` | `0.637` | `34` | `30` | `0.1145` | `0` |
+| Whisper large-v2 | `24.72` | `32.23` | `24.92` | `523.49s` | `2.029` | `33` | `28` | `0.1276` | `1` |
+| Whisper small | `34.86` | `43.44` | `36.11` | `152.92s` | `0.593` | `76` | `70` | `0.2542` | `4` |
 
-6. 三模型 split-aware proxy bridge 已跑完：SRES rows `1589`、CEIS rows
-   `1589`、downstream rows `774`、SRES total `7020.0`、CEIS unstable samples
-   `55`、downstream ASR mismatch rate `0.0736`、high-risk missed by ASR `41`。
+6. 五模型 split-aware proxy bridge 已跑完：SRES rows `2648`、CEIS rows
+   `2648`、downstream rows `1290`、SRES total `24120.0`、CEIS unstable samples
+   `164`、downstream ASR mismatch rate `0.1287`、high-risk missed by ASR
+   `139`。
 
 目前最重要的限制：
 
@@ -59,7 +63,8 @@ Status: active roadmap after the 258-row partial-vs-LoRA-vs-base gate and WER au
 - 2026-05-25 WER audit 確認：舊推論欄位是 raw whitespace WER，
   公式形式正確但不適合作為未斷詞中文主指標；投稿主表應用 aggregate
   `cer_zh_micro` 欄位，`wer_zh_jieba_micro` 只能作為補充指標。
-- 新模型候選已加入矩陣，但尚未有 runner、smoke、15-row contract、或
+- Whisper large-v3、large-v3 turbo、SenseVoice、Qwen3-ASR、Gemma 4 audio
+  候選已加入矩陣，但尚未有完整 runner、smoke、15-row contract、或
   258-row evidence。
 - 300 high-stakes rows 已選出，但尚未變成 main experiment。
 - Recovery experiment 尚未實作。
@@ -85,25 +90,18 @@ Status: active roadmap after the 258-row partial-vs-LoRA-vs-base gate and WER au
 
 ### 目的
 
-目前 258-row 只比較 legacy partial encoder 與 legacy LoRA。這足以決定
-「LoRA 不是最優解」，但還不足以做正式 paper table。正式比較至少需要：
+目前 258-row 已比較 legacy partial encoder、legacy LoRA、Breeze-ASR-25
+base、Whisper small、Whisper large-v2。這足以支持 partial encoder 仍是
+下一個 hypothesis generator，但還不足以做正式 paper table。正式比較還
+需要：
 
-- Whisper small；
-- Whisper large-v2；
 - Whisper large-v3；
 - Whisper large-v3 turbo；
-- Breeze-ASR-25 base；
-- Breeze-ASR-25 LoRA best；
-- Breeze-ASR-25 partial encoder best；
 - optional Breeze-ASR-26 stress comparator。
 
 ### 操作順序
 
-1. 先跑已經通過 15-row gate 的模型：
-   - Whisper small；
-   - Whisper large-v2；
-   - Breeze-ASR-25 base；
-   - optional Breeze-ASR-26。
+1. 先跑已經通過 15-row gate 但尚未進 258-row 的 optional Breeze-ASR-26。
 2. Whisper large-v3 與 large-v3 turbo 先做 1-2 row smoke，再做 15-row
    contract，通過後才跑 258-row。
 3. 所有 run 都使用同一個 manifest：
@@ -111,7 +109,7 @@ Status: active roadmap after the 258-row partial-vs-LoRA-vs-base gate and WER au
 4. 所有 run 都使用同一個 locale rule：
    `zh-TW` Taiwan Traditional Chinese output only。
 5. 每個 run 都要通過：
-   `validate_janus_asr_hypotheses.py --expected-rows 258 --require-labels --require-quality-signal`。
+   `validate_janus_asr_hypotheses.py --expected-manifest 40_breeze_asr25_finetune_dataset/manifests/test.jsonl --expected-rows 258 --require-labels --require-quality-signal`。
 6. 完成後重跑：
    `summarize_janus_asr_test_split.py`。
 
@@ -483,11 +481,10 @@ Ensemble arbitration 可以先用：
 
 如果只能照順序做，建議如下：
 
-1. 補齊 258-row Breeze-ASR-25 base、Whisper small、Whisper large-v2、Breeze-ASR-26
-   comparator。
+1. 補齊 optional Breeze-ASR-26 258-row comparator。
 2. Whisper large-v3 / large-v3 turbo 做 smoke、15-row、258-row。
-3. 建 `build_janus_metric_inputs.py`。
-4. 用新 builder 重現 15-row 與 258-row。
+3. 用新 builder 重現 expanded 258-row proxy bridge。
+4. 做 SenseVoice/Qwen3-ASR smoke 與 15-row runner gate。
 5. 做 30-row test-split human risk-atom audit。
 6. 跑 300-row partial encoder + base Breeze + best Whisper comparator。
 7. 跑 300-row SRES/CEIS/downstream。

@@ -44,20 +44,24 @@ ignored local paths.
 | 5.1 | Added split-aware metric input builder. | `80_semantic_risk_asr/scoring/build_janus_metric_inputs.py`; `70_experiments/runs/janus_split_aware_metric_inputs_2026_05_25/README.md`. | Completed. Human-reviewed 15-row validation reproduced `260` SRES rows, `260` CEIS rows, `75` downstream rows, SRES total `8106.0`, CEIS mean `1.92`, downstream mismatch `0.3467`, and high-risk missed `4`. Proxy 258-row validation loaded `258/258` references and `516` hypotheses, producing `1057` SRES/CEIS rows and `516` downstream rows. |
 | 5.2 | Audited WER calculation for publication readiness. | `asr_text_metrics.py`; `audit_asr_text_metrics.py`; `wer_metric_audit_2026_05_25/text_metric_audit.tsv`. | Completed. Found two incompatible WER definitions: current inference used raw whitespace WER, while legacy training used normalized `jieba` WER. Future runners now default to `zh_asr` normalization plus `jieba` WER, preserve legacy raw whitespace WER as an audit field, and keep Traditional Chinese without simplified conversion. |
 | 5.3 | Promoted paper-facing zh ASR metrics into the 258-row aggregate summarizer. | `summarize_janus_asr_test_split.py`; `janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv`. | Completed. The aggregate table now carries `cer_zh_micro` as the primary surface metric, `wer_zh_jieba_micro` as supplemental, and legacy stored `cer_mean`/`wer_mean` only for reproducibility. |
+| 5.4 | Generalized hypothesis validation beyond the fixed 15-row gate. | `validate_janus_asr_hypotheses.py --expected-manifest ... --expected-rows 258`. | Completed. The validator can now read expected IDs from a split manifest for 258-row and future split-level runs while preserving the original gold+nemo 15-row gate behavior. |
+| 5.5 | Ran canonical 258-row Whisper small and Whisper large-v2 comparators. | `run_janus_whisper_family_pilot.py --run-id whisper_small_test_split`; `run_janus_whisper_family_pilot.py --run-id whisper_large_v2_test_split`; local ignored predictions/validation artifacts. | Completed. Whisper small: `cer_zh_micro=34.86`, `wer_zh_jieba_micro=43.44`, wall time `152.92s`, unsafe downrouting `76`, high-risk missed `70`, locale violation rows `4`. Whisper large-v2: `cer_zh_micro=24.72`, `wer_zh_jieba_micro=32.23`, wall time `523.49s`, unsafe downrouting `33`, high-risk missed `28`, locale violation rows `1`. |
+| 5.6 | Rebuilt the 258-row proxy bridge over five model hypotheses. | `summarize_janus_asr_test_split.py`; `build_janus_metric_inputs.py`; `semantic_risk_score.py`; `counterfactual_escalation_instability.py`; `evaluate_downstream_impact.py`. | Completed. Five-model aggregate: SRES rows `2648`, CEIS rows `2648`, downstream rows `1290`, SRES total `24120.0`, CEIS unstable samples `164`, CEIS mean `1.184`, downstream mismatch `0.1287`, high-risk missed by ASR `139`. Partial encoder remains the best current ASR hypothesis generator. |
 
 ## Next Operations
 
 1. Treat pre-audit `wer` values as legacy compatibility fields. For paper-facing
    tables, use `cer_zh_micro` as the primary ASR surface metric and
    `wer_zh_jieba_micro` only as supplemental.
-2. Run Whisper large-v3 and Whisper large-v3 turbo through smoke, 15-row
-   contract, locale gate, and then 258-row if they pass.
+2. Run optional Breeze-ASR-26, Whisper large-v3, and Whisper large-v3 turbo
+   through smoke, 15-row contract where needed, locale gate, and then 258-row
+   if they pass.
 3. Build smoke/15-row runners for FunASR SenseVoice and Qwen3-ASR, with strict
    Taiwan Traditional Chinese locale gates.
 4. Build a separate multimodal prompted-ASR runner for Gemma 4 E2B/E4B only
    after the prompt, audio-length, hallucination, runtime, and locale logging
    contract is explicit.
-5. Use `build_janus_metric_inputs.py` to regenerate metric inputs for the
+5. Use `build_janus_metric_inputs.py` to regenerate metric inputs for each
    expanded 258-row baseline set.
 6. Create a small human-reviewed risk-atom audit set so proxy metrics do not
    become overstated as formal CDS evidence.

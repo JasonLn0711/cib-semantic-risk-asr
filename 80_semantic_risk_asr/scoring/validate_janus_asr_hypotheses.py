@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate JANUS 15-row ASR hypotheses before metric-input building."""
+"""Validate JANUS ASR hypotheses before metric-input building."""
 
 from __future__ import annotations
 
@@ -112,6 +112,15 @@ def read_nemo_ids(path: Path) -> set[str]:
     }
 
 
+def read_expected_ids(path: Path) -> set[str]:
+    return {
+        audio_id
+        for row in read_rows(path)
+        for audio_id in [audio_id_for(row)]
+        if audio_id
+    }
+
+
 def validate_hypothesis_file(
     path: Path,
     expected_ids: set[str],
@@ -196,6 +205,15 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--gold-review", type=Path, default=default_gold)
     parser.add_argument("--nemo-manifest", type=Path, default=default_nemo)
+    parser.add_argument(
+        "--expected-manifest",
+        type=Path,
+        help=(
+            "Read expected audio_ids from a manifest/CSV/TSV instead of the "
+            "fixed 15-row gold+nemo pilot gate. Use this for 258-row or "
+            "future split-level validation."
+        ),
+    )
     parser.add_argument("--hypotheses", type=Path, action="append", required=True)
     parser.add_argument("--expected-rows", type=int, default=15)
     parser.add_argument("--require-labels", action="store_true")
@@ -203,14 +221,23 @@ def main() -> int:
     parser.add_argument("--output-json", type=Path)
     args = parser.parse_args()
 
-    gold_ids = read_gold_ids(args.gold_review)
-    nemo_ids = read_nemo_ids(args.nemo_manifest)
-    expected_ids = gold_ids
-    setup_checks = {
-        "gold_row_count": len(gold_ids) == args.expected_rows,
-        "nemo_row_count": len(nemo_ids) == args.expected_rows,
-        "gold_audio_ids_match_nemo_manifest": gold_ids == nemo_ids,
-    }
+    if args.expected_manifest:
+        expected_ids = read_expected_ids(args.expected_manifest)
+        setup_checks = {
+            "expected_manifest_row_count": len(expected_ids) == args.expected_rows,
+            "expected_manifest_audio_ids_present": bool(expected_ids),
+        }
+        expected_id_source = str(args.expected_manifest)
+    else:
+        gold_ids = read_gold_ids(args.gold_review)
+        nemo_ids = read_nemo_ids(args.nemo_manifest)
+        expected_ids = gold_ids
+        setup_checks = {
+            "gold_row_count": len(gold_ids) == args.expected_rows,
+            "nemo_row_count": len(nemo_ids) == args.expected_rows,
+            "gold_audio_ids_match_nemo_manifest": gold_ids == nemo_ids,
+        }
+        expected_id_source = str(args.gold_review)
     file_results = [
         validate_hypothesis_file(
             path,
@@ -222,6 +249,7 @@ def main() -> int:
     ]
     result = {
         "ok": all(setup_checks.values()) and all(item["ok"] for item in file_results),
+        "expected_id_source": expected_id_source,
         "setup_checks": setup_checks,
         "expected_audio_ids": sorted(expected_ids),
         "files": file_results,
