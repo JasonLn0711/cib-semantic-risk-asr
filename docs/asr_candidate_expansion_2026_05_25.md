@@ -241,6 +241,13 @@ was intentionally not rerun because repeated tracked 60-second bounded gates
 already timed out before inference and Qwen3-ASR-0.6B still fails strict
 Taiwan Traditional Chinese locale control.
 
+2026-05-26 07:45 CST response-time verification: the four existing 15-row
+hypothesis files still pass field-contract validation, the aggregate summary
+still reports the same locale blockers, Hugging Face metadata still reports all
+seven requested model pages as public and ungated, and local `transformers
+4.57.6` still exposes neither Gemma 4 multimodal class. This is a no-promotion
+decision record, not a new full-split model experiment.
+
 ## Required Extra Metrics
 
 Record these for every future model, including failed runs:

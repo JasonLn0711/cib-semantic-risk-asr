@@ -156,8 +156,8 @@ Tracked readiness outputs:
 | `human_audit_response_action_items.tsv` | Repo-safe field-level action list generated from the response closeout gaps. Current live packet has `126` pending items: `48` row-field items, `72` model-field items, and `6` timing items with timing helper commands. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
 | `human_audit_review_work_order_summary.json` | Repo-safe row-by-row reviewer work-order summary generated from action-items, closeout, handoff, and session-start summaries. Current status: `review_work_order_ready`, `6` rows, `33` total steps, `126` pending action items, and runtime recorded. |
 | `human_audit_review_work_order.tsv` | Repo-safe operational work order for the current packet. It routes each row through timing start, local row open, row-field fill, model-field fill, and timing finish, then routes packet-level strict dry-run, closeout, and `run_post_review_evidence_sequence.py --execute`. The consistency audit now verifies the strict dry-run keeps `--require-complete`, `--require-timing`, and `--require-session-start-gate` without write-mode flags. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
-| `human_audit_post_review_sequence_summary.json` | Repo-safe post-review execution sequence gate. Current status: `post_review_sequence_blocked`, plan-only mode, `0` executed steps, blocked at strict dry-run because row/model/timing response fields are still missing. |
-| `human_audit_post_review_sequence.tsv` | Repo-safe strict post-review command order: strict dry-run, response closeout, write/refresh/prepare-next, aggregate refresh, strict human-reviewed recovery, post-review checklist, and objective requirements audit. The consistency audit verifies the sequence strict dry-run keeps `--require-complete`, `--require-timing`, and `--require-session-start-gate` without write-mode flags. No row content is tracked. |
+| `human_audit_post_review_sequence_summary.json` | Repo-safe post-review execution sequence gate. Current status: `post_review_sequence_blocked`, plan-only mode, `0` executed steps, blocked at strict dry-run because row/model/timing response fields are still missing. It also records the `--execute` safety policy: stop before any blocked gate and record `executed_step_count` plus `stopped_step`. |
+| `human_audit_post_review_sequence.tsv` | Repo-safe strict post-review command order: strict dry-run, response closeout, write/refresh/prepare-next, aggregate refresh, strict human-reviewed recovery, post-review checklist, and objective requirements audit. The consistency audit verifies the sequence strict dry-run keeps `--require-complete`, `--require-timing`, and `--require-session-start-gate` without write-mode flags, and that sequence summary records execute-mode stop-before-blocked safety. No row content is tracked. |
 | `human_audit_post_review_sequence_log.tsv` | Append-only repo-safe run log for standalone sequence invocations. Current entry records a plan-only blocked summary, not executed human review. |
 | `human_audit_post_review_evidence_summary.json` | Repo-safe post-review paper-evidence checklist. Current status: `post_review_evidence_blocked`; blockers are response closeout, human refresh, human predictor, readiness/publishable/consequence gates, and proxy-only recovery evidence. |
 | `human_audit_post_review_evidence_checklist.tsv` | Repo-safe checklist rows for the aggregate gates that must pass after response closeout/write/refresh before proxy claims can be promoted to paper-facing evidence. |
@@ -597,8 +597,8 @@ closeout, run:
 Current sequence status is `post_review_sequence_blocked` in plan-only mode
 with `0` executed steps. After row/model/timing response closeout is ready,
 rerun with `--execute`; the runner will stop at the first still-pending
-aggregate gate. It does not use `--allow-pending-summary` for the
-human-reviewed recovery rerun.
+aggregate gate and record stopped-step / executed-step accounting. It does not
+use `--allow-pending-summary` for the human-reviewed recovery rerun.
 
 ## Boundary
 

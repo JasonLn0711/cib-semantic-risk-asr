@@ -22,6 +22,7 @@
   ],
   "executed_step_count": 0,
   "stopped_step": "",
+  "execute_safety_policy": "In --execute mode, stop before any blocked strict_dry_run, response_closeout, write_refresh_prepare_next, strict_human_reviewed_recovery, post_review_checklist, or objective_requirements_audit step; record executed_step_count and stopped_step in the aggregate summary/log.",
   "sequence": [
     {
       "step_order": 1,

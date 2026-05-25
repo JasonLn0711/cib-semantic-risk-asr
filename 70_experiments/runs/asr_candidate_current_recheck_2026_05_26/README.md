@@ -190,6 +190,34 @@ This validation used `/tmp` output paths for transient artifacts:
 `/tmp/cib_asr_candidate_recheck_summary_2026_05_26_0724.tsv`, and
 `/tmp/cib_asr_candidate_recheck_summary_2026_05_26_0724.json`.
 
+## 2026-05-26 07:45 CST Response-Time Verification
+
+After the same model-test question was raised again, the safe bounded gate was
+rerun without starting a new full inference pass.
+
+Additional bounded checks:
+
+- The four existing 15-row hypothesis files still pass the fixed field-contract
+  validator.
+- The aggregate summary rebuilt to `/tmp` and still shows the same locale
+  blockers: Whisper large-v3 has `2/15` locale-violation rows, Whisper
+  large-v3 turbo has `4/15`, SenseVoiceSmall has `14/15`, and Qwen3-ASR-0.6B
+  has `15/15`.
+- Hugging Face metadata still reports all seven requested model pages as public
+  and ungated. SHA prefixes remain `06f233fe06e7`, `41f01f3fe87f`,
+  `716d31dbfd64`, `5eb144179a02`, `7278e1e70fe2`, `ed37665cc131`, and
+  `5bf6a20911f0`.
+- Local `transformers 4.57.6` still exposes no `AutoModelForMultimodalLM` and
+  no `Gemma4ForConditionalGeneration`.
+- Qwen3-ASR-1.7B was not rerun because repeated tracked bounded gates already
+  timed out at fetch/load, and Qwen3-ASR-0.6B still fails strict Taiwan
+  Traditional Chinese locale control.
+
+This validation used `/tmp` output paths for transient artifacts:
+`/tmp/cib_asr_candidate_contract_validation_latest.json`,
+`/tmp/cib_asr_candidate_recheck_summary_latest.tsv`, and
+`/tmp/cib_asr_candidate_recheck_summary_latest.json`.
+
 ## Decision
 
 Do not run these candidates on the 258-row test split or selected-300 main

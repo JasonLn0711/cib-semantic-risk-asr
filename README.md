@@ -114,6 +114,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   seven model pages remain public/ungated, confirmed local Gemma multimodal
   classes are still absent, and intentionally did not rerun Qwen3-ASR-1.7B
   because repeated tracked bounded gates already timed out before inference.
+  A 2026-05-26 07:45 CST response-time verification repeated the same safe
+  gate: four 15-row files still pass contract validation, locale blockers remain
+  unchanged, all seven model pages are still public/ungated, and the local Gemma
+  4 multimodal classes are still absent. This is a no-promotion decision record,
+  not a new full-split model experiment.
 - The postdoc-level roadmap after the 258-row gate is recorded in
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
   complete comparable 258-row baselines, add split-aware metric inputs, run the
@@ -179,7 +184,7 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   awareness, per-row timing-helper command coverage, the response gap/action
   TSVs, the aggregate review work order, the post-review sequence gate, and
   the post-review command plan.
-  Current status is `ok=true` with `22/22` checks passing:
+  Current status is `ok=true` with `23/23` checks passing:
   transcript ground truth is not reopened, remaining review scope includes
   row/model/timing fields, proxy evidence is not promoted to paper claims, and
   expanded ASR/Gemma candidates remain behind locale/runtime gates. It also
@@ -199,7 +204,9 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   flags, so local reviewer work cannot skip timing/session gates. Check `C076`
   applies the same strict dry-run command safety to the post-review sequence TSV
   before any write/refresh or human-reviewed recovery route can be treated as
-  executable.
+  executable. Check `C077` requires the post-review sequence summary to record
+  that `--execute` stops before blocked gates and records stopped-step /
+  executed-step accounting before any reviewer closeout is ready.
   Check `C072` requires the post-review sequence TSV to preserve the strict
   post-review order and to keep the human-reviewed recovery rerun free of
   `--allow-pending-summary`. Check `C073` requires the original-objective audit

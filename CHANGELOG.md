@@ -5,6 +5,29 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.194 - 2026-05-26T07:50:44+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `fbf2c9d`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/asr_candidate_current_recheck_2026_05_26/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_progress_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json`
+  - `README.md`
+  - `docs/asr_candidate_expansion_2026_05_25.md`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
 ## v2.5.193 - 2026-05-26T07:50:24+08:00
 
 - Bump: `patch`
