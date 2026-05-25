@@ -60,6 +60,15 @@
     "pass": 12
   },
   "consistency_failed_checks": [],
+  "objective_requirements_audit_ok": true,
+  "objective_requirements_ready": false,
+  "objective_requirements_status_counts": {
+    "satisfied": 8,
+    "proxy_satisfied": 5,
+    "review_pending": 2
+  },
+  "objective_requirements_proxy_count": 5,
+  "objective_requirements_blocking_count": 2,
   "downstream_outputs_refreshed": true,
   "outputs": [
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_validation_summary.json",
@@ -85,8 +94,10 @@
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_checklist.tsv",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"
   ],
-  "runtime_seconds": 0.011,
+  "runtime_seconds": 0.0111,
   "next_action": "Complete selected-300 risk-atom, decision-change, expected-action, confidence, per-model assessment, and per-row timing fields, then rerun the session-gated strict dry-run with --require-complete --require-timing before aggregate refresh."
 }

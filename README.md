@@ -158,7 +158,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `objective_requirements_ready=false`, with `8` requirements satisfied, `5`
   proxy-satisfied, and `2` still review-pending. This is the completion audit
   for the postdoc objective: it proves the repo has strong proxy evidence, but
-  not yet paper-ready human-reviewed CDS-ASR evidence.
+  not yet paper-ready human-reviewed CDS-ASR evidence. The normal
+  `refresh_human_audit_evidence.py` path now refreshes this audit too and
+  records `objective_requirements_ready=false` in
+  `human_audit_refresh_summary.json`.
 - Split-aware metric-input generation now lives at
   `80_semantic_risk_asr/scoring/build_janus_metric_inputs.py`, with validation
   recorded in

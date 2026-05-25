@@ -217,6 +217,10 @@ review-pending、post-review blocked 分開，避免把目前已經很完整的 
 - Current state: `objective_requirements_ready=false`；
   status counts are `satisfied=8`、`proxy_satisfied=5`、
   `review_pending=2`。
+- Normal refresh:
+  `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py` now
+  refreshes this audit and records `objective_requirements_ready` in
+  `human_audit_refresh_summary.json`。
 - What it verifies:
   legacy checkpoint / ignore boundary、LoRA and partial-encoder smoke、
   15-row contract、15-row CDS bridge、six-model 258-row decision-risk columns、

@@ -105,5 +105,5 @@
     }
   ],
   "next_decision": "If this audit is pass, continue with the local selected-300 row/model/timing response closeout; if it fails, refresh the stale aggregate generator before paper-facing claims.",
-  "runtime_seconds": 0.0032
+  "runtime_seconds": 0.0007
 }

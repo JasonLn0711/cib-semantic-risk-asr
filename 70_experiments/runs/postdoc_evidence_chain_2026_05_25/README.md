@@ -109,6 +109,7 @@ ignored local paths.
 | 5.66 | Expanded consistency audit to reviewer handoff freshness and timing scope. | `audit_evidence_chain_consistency.py`; `tests/test_evidence_chain_consistency.py`; `tests/test_human_audit_refresh.py`; refreshed handoff/action/checklist/refresh/consistency outputs. | Completed as cross-summary drift control, not as human review. The expanded live audit first failed on stale reviewer-handoff scope, then `build_human_audit_reviewer_handoff.py`, `build_human_audit_reviewer_action_checklist.py`, and `refresh_human_audit_evidence.py` restored alignment. Current refresh reports `consistency_audit_ok=true`, `consistency_status_counts={pass: 12}`, and `consistency_failed_checks=[]`; selected-300 remains `review_pending` with `0/30` row reviews, `0/90` model assessments, and the current packet still missing `6/6` review timing rows. |
 | 5.67 | Rechecked ASR/Gemma candidate run decision after renewed user question. | Hugging Face metadata; `validate_janus_asr_hypotheses.py`; `summarize_janus_asr_test_split.py`; Qwen3-ASR-1.7B bounded load gate; Gemma 4 local class/config probes; `asr_candidate_current_recheck_2026_05_26/README.md`. | Completed as a status verification, not as full model promotion. At `2026-05-26 03:43 CST`, all requested model pages were still public and ungated, the four existing 15-row candidate hypothesis files still passed the fixed contract, Qwen3-ASR-1.7B timed out before inference after `60.07s`, and local `transformers 4.57.6` still could not load `model_type=gemma4`. Decision unchanged: do not run these candidates on 258-row or selected-300 until strict zh-TW locale policy or an isolated Gemma multimodal runtime changes. |
 | 5.68 | Added explicit original-objective requirements audit. | `audit_postdoc_objective_requirements.py`; `postdoc_objective_requirements_summary.json`; `postdoc_objective_requirements.tsv`; `tests/test_postdoc_objective_requirements.py`. | Completed as requirement-to-evidence audit, not as human review. The live audit checks the user-facing 0-6 objective against named artifacts, required model families, required aggregate columns, selected-300 predictor evidence, and all five recovery conditions. Current status is `objective_requirements_ready=false`: `8` requirements are satisfied, `5` are proxy-satisfied, and `2` remain review-pending. The remaining paper-grade blockers are selected-300 non-transcript risk/decision/model/timing review and human-reviewed recovery rerun. |
+| 5.69 | Wired original-objective requirements audit into normal human-audit refresh. | `refresh_human_audit_evidence.py`; `postdoc_objective_requirements_summary.json`; `human_audit_refresh_summary.json`; `tests/test_human_audit_refresh.py`. | Completed as refresh orchestration hardening, not as human review. Normal refresh now updates validation, progress, review summary, predictor, readiness, publishable completion, roadmap completion, post-review evidence status, evidence-chain consistency, and original-objective requirements together. Live refresh stays `ok=true` / `review_pending`, with `objective_requirements_audit_ok=true`, `objective_requirements_ready=false`, and status counts `{satisfied: 8, proxy_satisfied: 5, review_pending: 2}`. Compile and direct fixture-aware refresh/objective tests passed. |
 
 ## Next Operations
 
@@ -176,8 +177,9 @@ ignored local paths.
 7. Use `refresh_human_audit_evidence.py` as the normal post-edit aggregate
    refresh. It now updates validation, progress, review summary, predictor,
    evidence-chain readiness, objective-level publishable completion, and
-   roadmap completion, then records the aggregate post-review evidence status
-   and evidence-chain consistency status in the same refresh summary.
+   roadmap completion, then records the aggregate post-review evidence status,
+   evidence-chain consistency status, and original-objective requirements audit
+   in the same refresh summary.
 8. Use `check_evidence_chain_readiness.py` as the repo-safe status guardrail
    when a standalone readiness audit is needed; it should stay
    `paper_ready=false` until the selected-300 human audit is complete and
@@ -192,10 +194,10 @@ ignored local paths.
    needed. The normal `refresh_human_audit_evidence.py` path now updates it,
    and it should stay `roadmap_complete=false` while any roadmap row is
    proxy-only, review-pending, or blocked by post-review evidence.
-11. Use `audit_postdoc_objective_requirements.py` before any claim that the
-   original 0-6 postdoc objective is complete. It should stay
-   `objective_requirements_ready=false` while any named requirement is
-   proxy-only or review-pending.
+11. Use `audit_postdoc_objective_requirements.py` as the standalone check only
+   when needed. The normal `refresh_human_audit_evidence.py` path now updates
+   it, and it should stay `objective_requirements_ready=false` while any named
+   requirement is proxy-only or review-pending.
 12. Use `audit_evidence_chain_consistency.py` after any evidence-chain refresh
    or candidate-gate change. It should stay `ok=true`; any failure means a
    tracked aggregate summary has drifted from the transcript policy,
