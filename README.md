@@ -146,13 +146,15 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `72` model-field items, and `6` timing items. The normal refresh path now
   also writes `human_audit_review_work_order.tsv` and
   `human_audit_review_work_order_summary.json`, an aggregate-only row-by-row
-  reviewer work order with `35` steps for the current `6` packet rows: start
+  reviewer work order with `33` steps for the current `6` packet rows: start
   timing, open the local row, fill row fields, fill model fields, finish
-  timing, then run strict dry-run, closeout, write/refresh, post-review
-  checklist, and objective audit. This work order records only row numbers,
-  commands, field names, counts, status, privacy boundaries, and runtime; it
-  does not track audio IDs, transcripts, hypotheses, selected sample IDs, local
-  row content, or reviewer notes.
+  timing, then run strict dry-run, closeout, and the post-review sequence
+  runner. The sequence runner is the only packet-level route after closeout; it
+  preserves write/refresh, strict human-reviewed recovery, post-review
+  checklist, and objective audit order. This work order records only row
+  numbers, commands, field names, counts, status, privacy boundaries, and
+  runtime; it does not track audio IDs, transcripts, hypotheses, selected
+  sample IDs, local row content, or reviewer notes.
   Normal refresh also writes
   `human_audit_post_review_sequence_summary.json` and
   `human_audit_post_review_sequence.tsv`, a plan-only post-review sequence gate
@@ -173,7 +175,7 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   awareness, per-row timing-helper command coverage, the response gap/action
   TSVs, the aggregate review work order, the post-review sequence gate, and
   the post-review command plan.
-  Current status is `ok=true` with `19/19` checks passing:
+  Current status is `ok=true` with `20/20` checks passing:
   transcript ground truth is not reopened, remaining review scope includes
   row/model/timing fields, proxy evidence is not promoted to paper claims, and
   expanded ASR/Gemma candidates remain behind locale/runtime gates. It also
@@ -185,6 +187,9 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   before local review is routed from tracked records. Check `C071` requires the
   work-order TSV to cover the current row/model/timing actions and packet
   closeout order before reviewer work is treated as operationally routed.
+  Check `C074` requires the work-order packet step after closeout to route
+  through `run_post_review_evidence_sequence.py --execute`, so reviewer
+  operations cannot bypass the strict sequence runner.
   Check `C072` requires the post-review sequence TSV to preserve the strict
   post-review order and to keep the human-reviewed recovery rerun free of
   `--allow-pending-summary`. Check `C073` requires the original-objective audit

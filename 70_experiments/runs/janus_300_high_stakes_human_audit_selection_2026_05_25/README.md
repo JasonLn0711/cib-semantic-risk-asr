@@ -154,8 +154,8 @@ Tracked readiness outputs:
 | `human_audit_response_closeout_checklist.tsv` | Repo-safe closeout checklist rows for session start, session-gated strict dry-run, row/model completion, response status, and write/refresh readiness. |
 | `human_audit_response_gap_checklist.tsv` | Repo-safe row-number-only response gap checklist for the current packet. Current rows `1-6` all have gaps: `48` row fields missing, `18` model assessments missing, `72` model-assessment fields missing, and `6/6` timing gaps. It now embeds each row's timing start/finish helper commands from the fresh reviewer handoff. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
 | `human_audit_response_action_items.tsv` | Repo-safe field-level action list generated from the response closeout gaps. Current live packet has `126` pending items: `48` row-field items, `72` model-field items, and `6` timing items with timing helper commands. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
-| `human_audit_review_work_order_summary.json` | Repo-safe row-by-row reviewer work-order summary generated from action-items, closeout, handoff, and session-start summaries. Current status: `review_work_order_ready`, `6` rows, `35` total steps, `126` pending action items, and runtime recorded. |
-| `human_audit_review_work_order.tsv` | Repo-safe operational work order for the current packet. It routes each row through timing start, local row open, row-field fill, model-field fill, and timing finish, then routes packet-level strict dry-run, closeout, write/refresh, post-review checklist, and objective audit. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
+| `human_audit_review_work_order_summary.json` | Repo-safe row-by-row reviewer work-order summary generated from action-items, closeout, handoff, and session-start summaries. Current status: `review_work_order_ready`, `6` rows, `33` total steps, `126` pending action items, and runtime recorded. |
+| `human_audit_review_work_order.tsv` | Repo-safe operational work order for the current packet. It routes each row through timing start, local row open, row-field fill, model-field fill, and timing finish, then routes packet-level strict dry-run, closeout, and `run_post_review_evidence_sequence.py --execute`. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
 | `human_audit_post_review_sequence_summary.json` | Repo-safe post-review execution sequence gate. Current status: `post_review_sequence_blocked`, plan-only mode, `0` executed steps, blocked at strict dry-run because row/model/timing response fields are still missing. |
 | `human_audit_post_review_sequence.tsv` | Repo-safe strict post-review command order: strict dry-run, response closeout, write/refresh/prepare-next, aggregate refresh, strict human-reviewed recovery, post-review checklist, and objective requirements audit. No row content is tracked. |
 | `human_audit_post_review_sequence_log.tsv` | Append-only repo-safe run log for standalone sequence invocations. Current entry records a plan-only blocked summary, not executed human review. |
@@ -221,10 +221,12 @@ opening local transcript-bearing files, run:
 ```
 
 Current work-order status: `review_work_order_ready`. It expands the current
-`126` action items into `35` ordered steps for rows `1-6` plus packet closeout:
+`126` action items into `33` ordered steps for rows `1-6` plus packet closeout:
 mark timing start, inspect one local row, fill row fields, fill model fields,
-mark timing finish, run strict dry-run, rerun closeout, write/refresh, check
-post-review evidence, and rerun the objective audit. Normal
+mark timing finish, run strict dry-run, rerun closeout, then execute the
+post-review sequence runner. The sequence runner preserves write/refresh,
+strict human-reviewed recovery, post-review checklist, and objective audit
+order. Normal
 `refresh_human_audit_evidence.py` now regenerates this summary and TSV before
 the evidence-chain consistency audit, so the work order stays aligned with the
 latest closeout gaps and handoff commands.

@@ -17,8 +17,8 @@
   "review_work_order_overview": {
     "row_count": 6,
     "row_work_order_steps": 30,
-    "packet_work_order_steps": 5,
-    "total_work_order_steps": 35,
+    "packet_work_order_steps": 3,
+    "total_work_order_steps": 33,
     "total_action_items": 126,
     "row_field_action_items": 48,
     "model_field_action_items": 72,
@@ -39,6 +39,6 @@
     "response_action_items_tsv": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_action_items.tsv",
     "closeout_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json"
   },
-  "next_concrete_action": "Use the work-order TSV during local review: start timing, inspect one local row, fill row/model fields, finish timing, then run strict dry-run and closeout.",
-  "runtime_seconds": 0.004
+  "next_concrete_action": "Use the work-order TSV during local review: start timing, inspect one local row, fill row/model fields, finish timing, then run strict dry-run, closeout, and the post-review sequence runner.",
+  "runtime_seconds": 0.0011
 }

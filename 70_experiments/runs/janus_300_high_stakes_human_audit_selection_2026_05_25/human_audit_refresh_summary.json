@@ -62,8 +62,8 @@
   "review_work_order_overview": {
     "row_count": 6,
     "row_work_order_steps": 30,
-    "packet_work_order_steps": 5,
-    "total_work_order_steps": 35,
+    "packet_work_order_steps": 3,
+    "total_work_order_steps": 33,
     "total_action_items": 126,
     "row_field_action_items": 48,
     "model_field_action_items": 72,
@@ -82,7 +82,7 @@
   "post_review_sequence_executed_step_count": 0,
   "consistency_audit_ok": true,
   "consistency_status_counts": {
-    "pass": 18
+    "pass": 20
   },
   "consistency_failed_checks": [],
   "objective_requirements_audit_ok": true,
@@ -128,6 +128,6 @@
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"
   ],
-  "runtime_seconds": 0.0068,
+  "runtime_seconds": 0.005,
   "next_action": "Complete selected-300 risk-atom, decision-change, expected-action, confidence, per-model assessment, and per-row timing fields, then rerun the session-gated strict dry-run with --require-complete --require-timing before aggregate refresh."
 }
