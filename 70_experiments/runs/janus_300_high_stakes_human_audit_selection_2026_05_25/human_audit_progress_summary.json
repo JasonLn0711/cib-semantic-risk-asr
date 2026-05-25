@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "status": "review_pending",
+  "input_boundary": "local transcript-bearing audit sheet; do not commit input",
+  "output_boundary": "aggregate-only progress counts; no private row keys or transcript text",
+  "expected_rows": 30,
+  "audit_rows": 30,
+  "reviewed_rows": 0,
+  "pending_rows": 30,
+  "row_completion_rate": 0.0,
+  "model_assessments": 90,
+  "reviewed_model_assessments": 0,
+  "pending_model_assessments": 90,
+  "model_completion_rate": 0.0,
+  "validation_error_counts": {},
+  "validation_warning_counts": {
+    "pending_model_review": 90,
+    "pending_row_review": 30
+  },
+  "missing_row_review_field_counts": {
+    "reviewer_annotation_confidence": 30,
+    "reviewer_asr_confusion_terms": 30,
+    "reviewer_critical_atoms": 30,
+    "reviewer_decision_change_reason": 30,
+    "reviewer_expected_safe_action": 30,
+    "reviewer_risk_atoms": 30,
+    "reviewer_semantic_risk_label": 30,
+    "reviewer_would_asr_error_change_decision": 30
+  },
+  "missing_model_review_field_counts": {
+    "reviewer_annotation_confidence": 90,
+    "reviewer_critical_atoms": 90,
+    "reviewer_expected_safe_action": 90,
+    "reviewer_would_asr_error_change_decision": 90
+  },
+  "invalid_model_bundle_rows": 0,
+  "pending_by_selection_stratum": {
+    "critical_or_high_risk_missed": 6,
+    "unsafe_downrouting": 6,
+    "high_proxy_risk": 6,
+    "model_disagreement": 4,
+    "risk_score_fill": 4,
+    "clean_control": 4
+  },
+  "pending_model_assessments_by_run_id": {
+    "breeze_asr25_base_high_stakes_300": 30,
+    "breeze_asr25_lora_high_stakes_300": 30,
+    "breeze_asr25_partial_encoder_high_stakes_300": 30
+  },
+  "recommended_batch_count": 6,
+  "first_principle_decision": "Reviewer time is the current scarce resource. Review high-safety-risk strata first, then refresh aggregate evidence before making paper-grade CDS-ASR claims.",
+  "next_action": "Review critical/high-risk missed and unsafe-downrouting strata first, fill both row-level and model-level fields, then run refresh_human_audit_evidence.py --require-complete.",
+  "runtime_seconds": 0.0012
+}

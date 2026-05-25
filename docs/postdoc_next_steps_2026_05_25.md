@@ -155,6 +155,27 @@ local ignored sheet 完成；refresh gate 只負責把完成後的 aggregate evi
 「哪些項目真的完成」與「哪些只是 proxy」分開，避免後續論文包裝時誤把
 工程證據寫成 human-reviewed paper evidence。
 
+14. Human review progress audit 已建立：
+
+- Script:
+  `80_semantic_risk_asr/annotation/audit_human_review_progress.py`。
+- Current tracked status:
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_progress_summary.json`。
+- Current state: `review_pending`；`0/30` rows reviewed、`0/90` model
+  assessments reviewed。
+- Recommended batch order:
+  1. `critical_or_high_risk_missed`：6 rows / 18 model assessments；
+  2. `unsafe_downrouting`：6 / 18；
+  3. `high_proxy_risk`：6 / 18；
+  4. `model_disagreement`：4 / 12；
+  5. `risk_score_fill`：4 / 12；
+  6. `clean_control`：4 / 12。
+
+這個 audit 把 reviewer time 視為目前最稀缺資源。實作上它已經接進
+`refresh_human_audit_evidence.py`，所以每次 local sheet 更新後，同一個
+refresh gate 會同步更新 validation、progress、summary、predictor、readiness
+outputs。
+
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS

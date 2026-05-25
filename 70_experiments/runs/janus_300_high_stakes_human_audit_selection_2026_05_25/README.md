@@ -228,6 +228,40 @@ After model-level review, run:
 Current predictor readiness: `0 / 90` model assessments reviewed. Predictor
 metrics are computed only over reviewed model-level assessments.
 
+## Review Progress Batches
+
+The aggregate-only progress audit is:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/audit_human_review_progress.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --expected-rows 30
+```
+
+Current tracked progress:
+
+| Item | Value |
+| --- | ---: |
+| Review status | `review_pending` |
+| Row completion | `0 / 30` |
+| Model-assessment completion | `0 / 90` |
+| Recommended review batches | `6` |
+
+Batch order:
+
+| Order | Stratum | Pending rows | Pending model assessments |
+| ---: | --- | ---: | ---: |
+| 1 | `critical_or_high_risk_missed` | 6 | 18 |
+| 2 | `unsafe_downrouting` | 6 | 18 |
+| 3 | `high_proxy_risk` | 6 | 18 |
+| 4 | `model_disagreement` | 4 | 12 |
+| 5 | `risk_score_fill` | 4 | 12 |
+| 6 | `clean_control` | 4 | 12 |
+
+The model-level pending work is balanced across the three high-stakes ASR
+runs: base, LoRA, and partial encoder each have `30` pending assessments.
+
 ## Aggregate Refresh Gate
 
 After local row/model edits, use the refresh gate instead of manually running
@@ -242,14 +276,15 @@ each aggregate step:
 ```
 
 This writes `human_audit_refresh_summary.json` and refreshes validation,
-review-summary, predictor, and evidence-chain readiness outputs. Current
-recorded result:
+review-progress, review-summary, predictor, and evidence-chain readiness
+outputs. Current recorded result:
 
 | Item | Value |
 | --- | ---: |
 | Refresh status | `review_pending` |
 | Reviewed rows | `0 / 30` |
 | Reviewed model assessments | `0 / 90` |
+| Recommended review batches | `6` |
 | Downstream aggregate outputs refreshed | `true` |
 | Evidence-chain paper ready | `false` |
 
