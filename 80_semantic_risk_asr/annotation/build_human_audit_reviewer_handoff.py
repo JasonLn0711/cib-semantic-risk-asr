@@ -80,7 +80,8 @@ def reviewer_commands(
     readiness_output_dir: str,
     expected_rows: int,
     timing_row_number: int | None = None,
-) -> dict[str, str]:
+    timing_row_numbers: list[int] | None = None,
+) -> dict[str, Any]:
     session_start_summary = f"{output_dir}/human_audit_reviewer_session_start_summary.json"
     base = [
         ".venv/bin/python",
@@ -127,7 +128,7 @@ def reviewer_commands(
         "--expected-rows",
         str(expected_rows),
     ]
-    commands = {
+    commands: dict[str, Any] = {
         "strict_dry_run": command(base),
         "write_refresh_prepare_next": command(write),
         "batch_status_audit": command(
@@ -145,17 +146,29 @@ def reviewer_commands(
             ]
         ),
     }
-    if timing_row_number is not None:
+
+    row_numbers = list(timing_row_numbers or [])
+    if not row_numbers and timing_row_number is not None:
+        row_numbers = [timing_row_number]
+    timing_start_by_row: dict[str, str] = {}
+    timing_finish_by_row: dict[str, str] = {}
+    for row_number in row_numbers:
         timing_base = [
             ".venv/bin/python",
             "80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py",
             "--response-sheet",
             response_sheet,
             "--row-number",
-            str(timing_row_number),
+            str(row_number),
         ]
-        commands["timing_start_write"] = command([*timing_base, "--mark-start", "--write"])
-        commands["timing_finish_write"] = command([*timing_base, "--mark-finish", "--write"])
+        timing_start_by_row[str(row_number)] = command([*timing_base, "--mark-start", "--write"])
+        timing_finish_by_row[str(row_number)] = command([*timing_base, "--mark-finish", "--write"])
+    if timing_start_by_row and timing_finish_by_row:
+        first_row = str(row_numbers[0])
+        commands["timing_start_write"] = timing_start_by_row[first_row]
+        commands["timing_finish_write"] = timing_finish_by_row[first_row]
+        commands["timing_start_write_by_row"] = timing_start_by_row
+        commands["timing_finish_write_by_row"] = timing_finish_by_row
     return commands
 
 
@@ -319,6 +332,7 @@ def build_handoff(
     readiness_rel = repo_relative(readiness_output_dir, repo_root=repo_root)
     row_numbers = batch_summary.get("row_numbers", [])
     timing_row_number = row_numbers[0] if row_numbers and isinstance(row_numbers[0], int) else None
+    timing_row_numbers = [item for item in row_numbers if isinstance(item, int)]
     commands = reviewer_commands(
         response_sheet=str(response_sheet),
         audit_sheet=audit_sheet_rel,
@@ -327,6 +341,7 @@ def build_handoff(
         readiness_output_dir=readiness_rel,
         expected_rows=expected_rows,
         timing_row_number=timing_row_number,
+        timing_row_numbers=timing_row_numbers,
     )
     payload = {
         "ok": not missing_inputs and bool(response_sheet),
@@ -399,7 +414,7 @@ def build_handoff(
         "reviewer_next_steps": [
             "Open the local packet path only in the local workspace; it is transcript-bearing.",
             "Fill the local response TSV row/model fields plus required per-row review timing.",
-            "Use timing_start_write and timing_finish_write if review timing should be written by helper command.",
+            "Use timing_start_write_by_row and timing_finish_write_by_row if review timing should be written by helper command.",
             "Run strict_dry_run until latest_apply_status is response_complete.",
             "Run write_refresh_prepare_next only after strict_dry_run is response_complete.",
         ],

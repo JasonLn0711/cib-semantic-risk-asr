@@ -231,7 +231,7 @@ def build_session_payload(
         "reviewer_next_actions": [
             "Open the local packet only in the local workspace; it is transcript-bearing.",
             "Fill the local response TSV row-level fields and every model-level assessment.",
-            "Fill required per-row timing fields before strict dry-run/write.",
+            "Use timing_start_write_by_row and timing_finish_write_by_row to record per-row review timing when helper commands are preferred.",
             "Run strict_dry_run until latest_apply_status is response_complete.",
             "Run write_refresh_prepare_next only after the strict dry-run is complete.",
         ],
@@ -239,6 +239,8 @@ def build_session_payload(
             "strict_dry_run": commands.get("strict_dry_run", ""),
             "write_refresh_prepare_next": commands.get("write_refresh_prepare_next", ""),
             "batch_status_audit": commands.get("batch_status_audit", ""),
+            "timing_start_write_by_row": commands.get("timing_start_write_by_row", {}),
+            "timing_finish_write_by_row": commands.get("timing_finish_write_by_row", {}),
         },
         "paper_ready_impact": (
             "No paper-readiness change. This starts the reviewer workflow, but the selected-300 "

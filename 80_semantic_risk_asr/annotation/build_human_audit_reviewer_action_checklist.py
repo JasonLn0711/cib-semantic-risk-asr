@@ -93,6 +93,19 @@ def first_present(*values: Any) -> Any:
 
 
 def timing_next_action(commands: dict[str, Any]) -> str:
+    start_by_row = commands.get("timing_start_write_by_row")
+    finish_by_row = commands.get("timing_finish_write_by_row")
+    if isinstance(start_by_row, dict) and isinstance(finish_by_row, dict):
+        row_numbers = sorted(
+            {str(row) for row in start_by_row if str(row) in finish_by_row},
+            key=lambda value: (0, int(value)) if value.isdigit() else (1, value),
+        )
+        if row_numbers:
+            return (
+                "fill review_started_at/review_finished_at or review_elapsed_seconds before strict dry-run/write; "
+                f"helper_rows={','.join(row_numbers)}; "
+                "use timing_start_write_by_row/timing_finish_write_by_row from this summary"
+            )
     start = str(commands.get("timing_start_write", "") or "")
     finish = str(commands.get("timing_finish_write", "") or "")
     if start and finish:
@@ -345,6 +358,8 @@ def build_checklist(
         "timing_helper_commands": {
             "timing_start_write": commands.get("timing_start_write", ""),
             "timing_finish_write": commands.get("timing_finish_write", ""),
+            "timing_start_write_by_row": commands.get("timing_start_write_by_row", {}),
+            "timing_finish_write_by_row": commands.get("timing_finish_write_by_row", {}),
         },
         "handoff_summary": repo_relative(handoff_summary_path, repo_root=repo_root),
         "preflight_summary": repo_relative(preflight_summary_path, repo_root=repo_root),
