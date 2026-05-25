@@ -77,3 +77,8 @@ transcripts may still be used as research evidence during offline evaluation.
 ## Annotation Sheet
 
 Use `sample_annotation_sheet.tsv`.
+
+For the selected-300 high-stakes audit, use the protocol in
+`selected_300_human_risk_atom_audit_protocol_2026_05_25.md`. The working
+annotation sheet for that gate is local-only under the corresponding run
+folder's ignored `artifacts/` directory.

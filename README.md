@@ -99,6 +99,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   It compares WER/CER/SRES/CEIS against downstream label flips, unsafe
   downrouting, high-risk misses, and low-WER danger counts without tracking
   transcript or sample-level rows.
+- The selected-300 human risk-atom audit queue now lives at
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/`.
+  The tracked protocol is
+  `80_semantic_risk_asr/annotation/selected_300_human_risk_atom_audit_protocol_2026_05_25.md`.
+  The transcript-bearing audit sheet remains local-only under ignored
+  `artifacts/`; review is still pending.
 - The 2026-05-25 WER audit is recorded in
   `70_experiments/runs/wer_metric_audit_2026_05_25/`. The latest audit checks
   six 258-row hypothesis files against the canonical manifest, records package

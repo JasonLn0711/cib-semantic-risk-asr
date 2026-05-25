@@ -55,6 +55,7 @@ ignored local paths.
 | 5.12 | Built selected-300 three-model CDS-ASR proxy metric inputs. | `build_janus_metric_inputs.py --split high_stakes_300 --gold-review /dev/null`; `janus_300_high_stakes_cds_proxy_2026_05_25/`. | Completed. Initial build with default gold-review intentionally failed because the 15-row human gate was mixed into the custom split, producing `315` reference IDs. Corrected manifest-only build passed: `300` references, `900` model-samples, `3298` SRES rows, SRES total `9690.0`, `3298` CEIS rows, unstable samples `35`, mean CEIS `0.2278`, max CEIS `15.0`. |
 | 5.13 | Ran selected-300 proxy recovery policy comparison. | `evaluate_recovery_policies.py`; `janus_300_high_stakes_recovery_proxy_2026_05_25/`. | Completed. No recovery: unsafe downrouting `29`, high-risk missed `6`, critical miss `1`. CEIS conservative action: unsafe downrouting `24`, high-risk missed `0`, critical miss `0`, trigger budget `0.0389`. CEIS+ensemble: same safety counts with `47` triggers and `18` abstentions. |
 | 5.14 | Ran selected-300 metric-predictor analysis. | `analyze_metric_predictors.py`; `janus_300_high_stakes_metric_predictor_proxy_2026_05_25/`. | Completed. Aggregate-only outputs compare WER/CER/SRES/CEIS against downstream label flips, unsafe downrouting, high-risk misses, and danger events over `900` model-samples. WER/CER AUC for unsafe downrouting was `0.7683`/`0.7739`, while SRES/CEIS reached `0.9954`/`0.9971`. Low-WER rows still contained `2` unsafe downrouting cases. |
+| 5.15 | Created selected-300 human risk-atom audit queue. | `select_human_risk_atom_audit.py`; `janus_300_high_stakes_human_audit_selection_2026_05_25/`. | Review pending. Selected `30` audio rows and `90` model-samples from `300` candidate audio rows. The local transcript-bearing audit sheet is ignored under `artifacts/`; tracked outputs contain only aggregate strata, risk-atom coverage, and model-signal coverage. Selected rows cover all currently available high-risk-missed, unsafe-downrouting, low-WER danger, high-proxy-risk, and model-disagreement signals. |
 
 ## Next Operations
 
@@ -70,10 +71,10 @@ ignored local paths.
    contract is explicit.
 5. Use `build_janus_metric_inputs.py` to regenerate metric inputs for each
    expanded 258-row baseline set.
-6. Create a small human-reviewed risk-atom audit set so proxy metrics do not
-   become overstated as formal CDS evidence.
-7. Promote a small selected-300 human risk-atom audit set from the proxy outputs
-   before making paper-grade CDS/recovery claims.
+6. Complete the local selected-300 human risk-atom audit sheet so proxy metrics
+   do not become overstated as formal CDS evidence.
+7. Record aggregate human annotation statistics without selected IDs or
+   transcripts.
 8. After the selected-300 audit, rerun `analyze_metric_predictors.py` on the
    reviewed metric inputs and replace proxy-only predictor language with
    reviewer-facing evidence.

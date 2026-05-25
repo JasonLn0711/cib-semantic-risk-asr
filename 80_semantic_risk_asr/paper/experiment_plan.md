@@ -251,6 +251,24 @@ decision task. Because SRES/CEIS rows are proxy-generated here, the next
 publishable gate is a human-reviewed selected-300 risk-atom audit rather than
 another WER definition change.
 
+Current human-audit gate status on 2026-05-25:
+
+- Script:
+  `80_semantic_risk_asr/annotation/select_human_risk_atom_audit.py`.
+- Protocol:
+  `80_semantic_risk_asr/annotation/selected_300_human_risk_atom_audit_protocol_2026_05_25.md`.
+- Run record:
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/`.
+- Queue: `30` selected audio rows and `90` model-samples from `300` candidate
+  selected-300 rows.
+- Local-only sheet:
+  `artifacts/human_risk_atom_audit_sheet.tsv`.
+- Tracked boundary: aggregate selection strata, risk-atom coverage, and
+  model-signal coverage only.
+
+This gate is not complete until the local sheet is reviewed and aggregate human
+annotation stats are produced.
+
 ## Experiment 4: Automatic Recovery
 
 Conditions:

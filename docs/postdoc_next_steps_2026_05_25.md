@@ -78,6 +78,23 @@ Status: active roadmap after the six-model 258-row gate and WER audit
 中，仍有 `2` 個 label flip / unsafe downrouting 風險訊號。這支持「WER
 計算要正確，但正確 WER 仍不足以判斷高風險下游安全」的主張。
 
+9. Selected-300 human risk-atom audit queue 已建立，但尚未完成審查：
+
+| Item | Value |
+| --- | ---: |
+| Candidate audio rows | `300` |
+| Selected audit audio rows | `30` |
+| Selected model-samples | `90` |
+| Selected high-risk-missed audio rows | `6` |
+| Selected unsafe-downrouting audio rows | `22` |
+| Selected low-WER danger audio rows | `2` |
+| Selected high proxy-risk audio rows | `25` |
+| Selected model-disagreement audio rows | `22` |
+
+本地人審 sheet 放在 ignored `artifacts/`，tracked repo 只保留 aggregate
+selection stats 與 protocol。這一步把「需要 human audit」從提醒變成可執
+行 gate，但尚不能宣稱 human-reviewed CDS evidence 已完成。
+
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS
@@ -91,8 +108,8 @@ Status: active roadmap after the six-model 258-row gate and WER audit
   候選已加入矩陣，但尚未有完整 runner、smoke、15-row contract、或
   258-row evidence。
 - 300 high-stakes ASR hypotheses、SRES/CEIS/downstream、metric-predictor、
-  recovery 都已完成三個 Breeze-family comparator 的 proxy mode，但還不能
-  宣稱 paper-grade main experiment 完成。
+  recovery 都已完成三個 Breeze-family comparator 的 proxy mode；human audit
+  queue 已建立但尚未審完，所以還不能宣稱 paper-grade main experiment 完成。
 - 258-row recovery proxy 與 300-row high-stakes recovery proxy 都已完成；下
   一個缺口是 selected-300 human risk-atom audit，而不是再調 WER 定義。
 
@@ -443,8 +460,8 @@ Interpretation:
   究價值的路線。
 - 但是 SRES/CEIS 目前由 proxy risk rows 產生，不能直接把 AUC `1.0000`
   包裝成 human-reviewed paper claim。
-- 下一個 gate 必須是 selected-300 human risk-atom audit，而不是再重複改
-  WER 定義。
+- 下一個 gate 必須是完成 selected-300 human risk-atom audit，而不是再重
+  複改 WER 定義。
 
 ## Phase 6: Recovery experiment
 
@@ -578,17 +595,19 @@ Interpretation:
 
 如果只能照順序做，建議如下：
 
-1. 建立 selected-300 human risk-atom audit protocol 與 30-row stratified
-   audit subset。
-2. 用 human-reviewed subset 重跑 metric predictor analysis，檢查 proxy
+1. 完成 selected-300 human risk-atom audit protocol 所產生的 30-row local
+   sheet。
+2. 產出 aggregate human annotation stats，確認沒有 selected IDs 或 transcript
+   進入 tracked files。
+3. 用 human-reviewed subset 重跑 metric predictor analysis，檢查 proxy
    AUC 是否仍成立。
-3. Whisper large-v3 / large-v3 turbo 做 smoke、15-row、258-row，補強
+4. Whisper large-v3 / large-v3 turbo 做 smoke、15-row、258-row，補強
    reviewer 會期待的 strong Whisper baseline。
-4. 用新 builder 重現 expanded 258-row proxy bridge。
-5. 做 SenseVoice/Qwen3-ASR smoke 與 15-row runner gate。
-6. 將 best Whisper comparator 加入 300-row ASR/CDS proxy lane。
-7. 重跑 300-row SRES/CEIS/downstream/recovery/predictor aggregate tables。
-8. 產出 paper tables / figures / limitation memo。
+5. 用新 builder 重現 expanded 258-row proxy bridge。
+6. 做 SenseVoice/Qwen3-ASR smoke 與 15-row runner gate。
+7. 將 best Whisper comparator 加入 300-row ASR/CDS proxy lane。
+8. 重跑 300-row SRES/CEIS/downstream/recovery/predictor aggregate tables。
+9. 產出 paper tables / figures / limitation memo。
 
 ## 不建議現在做的事
 
