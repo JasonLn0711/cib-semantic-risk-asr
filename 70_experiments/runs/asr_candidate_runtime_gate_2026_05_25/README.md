@@ -50,3 +50,12 @@ runtime. It must not be mixed into the pure ASR table.
 
 Raw predictions, validation artifacts, proxy summaries, model caches, and
 runtime logs remain ignored local artifacts.
+
+## Follow-Up
+
+The 2026-05-26 extension promoted SenseVoiceSmall and Qwen3-ASR-0.6B from
+1-row smoke to fixed 15-row gates and retried Qwen3-ASR-1.7B as a timed load
+gate. See
+`../asr_candidate_15_row_extension_2026_05_26/README.md`. The conclusion did
+not change: no new candidate is ready for 258-row or selected-300 promotion
+under the strict Taiwan Traditional Chinese locale policy.

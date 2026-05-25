@@ -67,9 +67,9 @@ Model availability was checked through Hugging Face metadata on 2026-05-25:
 | --- | --- | --- | --- |
 | `openai/whisper-large-v3` | public, not gated | `06f233fe06e7` | 15-row gate completed; locale not clean |
 | `openai/whisper-large-v3-turbo` | public, not gated | `41f01f3fe87f` | 15-row gate completed; locale not clean |
-| `FunAudioLLM/SenseVoiceSmall` | public, not gated | `3eb3b4eeffc2` | 1-row runner completed; locale failed |
-| `Qwen/Qwen3-ASR-0.6B` | public, not gated | `5eb144179a02` | 1-row runner completed with cuDNN disabled; locale failed |
-| `Qwen/Qwen3-ASR-1.7B` | public, not gated | `7278e1e70fe2` | stopped before inference after 0.6B locale failed |
+| `FunAudioLLM/SenseVoiceSmall` | public, not gated | `3eb3b4eeffc2` | 15-row runner completed; locale failed |
+| `Qwen/Qwen3-ASR-0.6B` | public, not gated | `5eb144179a02` | 15-row runner completed with cuDNN disabled; locale failed |
+| `Qwen/Qwen3-ASR-1.7B` | public, not gated | `7278e1e70fe2` | stopped before inference after repeated fetch/load timeout |
 | `unsloth/gemma-4-E2B` | public, not gated | `ed37665cc131` | blocked: local Transformers lacks multimodal class |
 | `unsloth/gemma-4-E4B` | public, not gated | `5bf6a20911f0` | blocked: local Transformers lacks multimodal class |
 
@@ -110,6 +110,23 @@ runtime with audio config present.
 Strict interpretation: no newly added candidate should move to 258-row or
 selected-300 until the Taiwan Traditional Chinese locale gate is clean, or an
 audited post-decode conversion/reporting policy is explicitly approved.
+
+## 2026-05-26 15-Row Extension
+
+Aggregate records live under
+`70_experiments/runs/asr_candidate_15_row_extension_2026_05_26/`.
+
+| Run | Rows | Runtime | CER mean | WER mean | `cer_zh_micro` | `wer_zh_jieba_micro` | Wall time | Outer time | Locale violation rows | Decision |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| `sensevoice_small_15_row_candidate` | 15 | CUDA, FunASR 1.3.3 | 63.83 | 79.97 | 63.12 | 78.98 | 2.60s | 6.32s | 14 | reject for full split until zh-TW policy is audited |
+| `qwen3_asr_0_6b_15_row_candidate` | 15 | CUDA, bfloat16, cuDNN disabled | 64.93 | 82.70 | 64.16 | 81.07 | 17.97s | 21.57s | 15 | reject for full split until zh-TW policy is audited |
+| `qwen3_asr_1_7b_smoke_1_row` | 0 | 60s load gate | n/a | n/a | n/a | n/a | n/a | 60.06s | n/a | retry only after 0.6B locale gate or isolated download plan |
+
+Both 15-row candidates passed the hypothesis field contract, but the strict
+Taiwan Traditional Chinese locale gate failed. The correct next step is not to
+spend 258-row or 300-row runtime on these candidates. Either reject them from
+the pure-ASR paper table, or explicitly approve an audited post-decode
+conversion/reporting policy before any promotion.
 
 ## Required Extra Metrics
 

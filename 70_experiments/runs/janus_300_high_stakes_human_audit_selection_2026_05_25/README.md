@@ -152,6 +152,8 @@ Tracked readiness outputs:
 | `human_audit_reviewer_session_start_log.tsv` | Append-only repo-safe session-start log with aggregate gate statuses, pending counts, and latest apply status only. |
 | `human_audit_response_closeout_summary.json` | Repo-safe response closeout checklist. Current status: `response_closeout_blocked`, with `session_start_gate.ok=true` but `0/6` row decisions and `0/18` model assessments filled. |
 | `human_audit_response_closeout_checklist.tsv` | Repo-safe closeout checklist rows for session start, session-gated strict dry-run, row/model completion, response status, and write/refresh readiness. |
+| `human_audit_post_review_evidence_summary.json` | Repo-safe post-review paper-evidence checklist. Current status: `post_review_evidence_blocked`; blockers are response closeout, human refresh, human predictor, readiness/publishable/consequence gates, and proxy-only recovery evidence. |
+| `human_audit_post_review_evidence_checklist.tsv` | Repo-safe checklist rows for the aggregate gates that must pass after response closeout/write/refresh before proxy claims can be promoted to paper-facing evidence. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
@@ -532,6 +534,18 @@ The strict post-review gate is:
 
 It currently fails as expected because the local sheet is still unreviewed:
 `30` incomplete row reviews and `90` incomplete model reviews.
+
+After response closeout/write/refresh, run the aggregate-only post-review
+evidence checklist:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py
+```
+
+Current post-review status is `post_review_evidence_blocked`: the response
+closeout is not ready, human refresh/predictor outputs are still pending,
+paper/publishable/consequence gates are false, and recovery evidence remains
+proxy-only until human-reviewed labels are available.
 
 ## Boundary
 

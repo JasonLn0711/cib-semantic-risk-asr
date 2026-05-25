@@ -1,0 +1,8 @@
+step_id	evidence_gate	status	paper_claim_status	evidence	next_action
+1	response closeout write readiness	blocked	not paper-ready	closeout_status=response_closeout_blocked; pending_rows=6; pending_model_assessments=18	fill the local response TSV, rerun session-gated strict dry-run, then closeout
+2	post-write aggregate refresh	blocked	review-pending	refresh_status=review_pending; pending_rows=30; pending_model_assessments=90	run apply response with --write --refresh-after-write, then require refresh review_complete
+3	human-reviewed predictor refresh	blocked	proxy-only	predictor_status=review_pending; pending_model_assessments=90	refresh human-audit predictor outputs after selected rows are reviewed
+4	evidence-chain readiness	blocked	not paper-ready	paper_ready=False	run check_evidence_chain_readiness.py after human refresh
+5	publishable objective completion	blocked	not publishable-ready	publishable_ready=False	run audit_publishable_evidence_chain.py after human refresh
+6	consequence claim matrix	blocked	claims blocked or proxy	"paper_claims_ready=False; status_counts={""completed"": 1, ""proxy_completed"": 4, ""review_pending"": 2}"	rerun build_consequence_evidence_matrix.py after human refresh
+7	recovery policy evidence	proxy_only	proxy-only until human review	recovery_ok=True; evidence_mode=; policy_count=5	rerun recovery policy evaluation after human-reviewed labels are available

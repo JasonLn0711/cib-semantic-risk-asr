@@ -1,0 +1,68 @@
+{
+  "ok": true,
+  "manifest": "40_breeze_asr25_finetune_dataset/manifests/nemo_pilot_input_manifest.jsonl",
+  "output_tsv": "70_experiments/runs/asr_candidate_15_row_extension_2026_05_26/candidate_15_row_summary.tsv",
+  "hypothesis_files": [
+    "70_experiments/runs/sensevoice_small_15_row_candidate/predictions/sensevoice_small_15_row_candidate_predictions.jsonl",
+    "70_experiments/runs/qwen3_asr_0_6b_15_row_candidate/predictions/qwen3_asr_0_6b_15_row_candidate_predictions.jsonl"
+  ],
+  "strict_locale_policy": "Taiwan Traditional Chinese; no Simplified Chinese output accepted for promotion",
+  "promotion_decision": "No 2026-05-26 candidate should be promoted to 258-row or selected-300 because SenseVoiceSmall and Qwen3-ASR-0.6B both failed the strict locale gate, while Qwen3-ASR-1.7B timed out before inference.",
+  "blocked_or_stopped": [
+    {
+      "run_id": "qwen3_asr_1_7b_smoke_1_row",
+      "model": "Qwen/Qwen3-ASR-1.7B",
+      "status": "timeout_before_inference",
+      "outer_wall_time_seconds": 60.06,
+      "exit_status": 124,
+      "observed_state": "Fetching 2 files: 0/2",
+      "decision": "Retry only after the 0.6B lane passes the strict Traditional Chinese locale gate or after an isolated cache/download plan exists."
+    },
+    {
+      "run_id": "gemma4_audio_runner_gate_2026_05_25",
+      "model": "unsloth/gemma-4-E2B_and_E4B",
+      "status": "blocked_local_transformers_multimodal_class_missing",
+      "decision": "Keep Gemma 4 in a separate prompted multimodal-ASR lane; do not mix it into pure-ASR tables."
+    }
+  ],
+  "details": [
+    {
+      "path": "70_experiments/runs/sensevoice_small_15_row_candidate/predictions/sensevoice_small_15_row_candidate_predictions.jsonl",
+      "run_id": "sensevoice_small_15_row_candidate",
+      "rows": 15,
+      "expected_rows": 15,
+      "missing_expected_ids": [],
+      "extra_ids": [],
+      "missing_reference": [],
+      "reference_mismatch_rows": 0,
+      "metric_profile": {
+        "paper_primary": "cer_zh_micro",
+        "supplemental": "wer_zh_jieba_micro",
+        "legacy_fields": [
+          "cer_mean",
+          "wer_mean"
+        ],
+        "normalization": "zh_asr preserves Traditional Chinese without conversion"
+      }
+    },
+    {
+      "path": "70_experiments/runs/qwen3_asr_0_6b_15_row_candidate/predictions/qwen3_asr_0_6b_15_row_candidate_predictions.jsonl",
+      "run_id": "qwen3_asr_0_6b_15_row_candidate",
+      "rows": 15,
+      "expected_rows": 15,
+      "missing_expected_ids": [],
+      "extra_ids": [],
+      "missing_reference": [],
+      "reference_mismatch_rows": 0,
+      "metric_profile": {
+        "paper_primary": "cer_zh_micro",
+        "supplemental": "wer_zh_jieba_micro",
+        "legacy_fields": [
+          "cer_mean",
+          "wer_mean"
+        ],
+        "normalization": "zh_asr preserves Traditional Chinese without conversion"
+      }
+    }
+  ]
+}

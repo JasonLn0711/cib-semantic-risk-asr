@@ -140,46 +140,52 @@ candidate_models:
     family: FunASR SenseVoice
     role: non-autoregressive multilingual ASR comparator with speech
       understanding side signals
-    current_status: smoke_1_row_completed_contract_passed_locale_failed
+    current_status: completed_15_row_contract_passed_locale_failed
     direct_quality_baseline: true
     language_control_ref: language_control.model_specific_controls.sensevoice
     source_url: https://huggingface.co/FunAudioLLM/SenseVoiceSmall
     notes: FunASR/modelscope were installed locally on 2026-05-25 and
       `run_janus_sensevoice_pilot.py` now emits the standard hypothesis
-      contract. One-row CUDA smoke passed with CER 65.88, WER 81.25, cached
-      runner wall time 2.15s, but failed the strict locale gate with 1
-      locale-violation row and 11 simplified characters. Do not promote to
-      15-row until the Taiwan Traditional Chinese output policy is audited.
+      contract. The 2026-05-26 fixed 15-row retry passed the field contract
+      with CER 63.83, WER 79.97, cached runner wall time 2.60s, and outer wall
+      time 6.32s, but failed the strict locale gate with 14 locale-violation
+      rows and 209 simplified characters. Do not promote to 258-row or
+      selected-300 until the Taiwan Traditional Chinese output policy is
+      audited.
 
   - run_id: qwen3_asr_0_6b_15_row_candidate
     model_name_or_path: Qwen/Qwen3-ASR-0.6B
     family: Qwen3-ASR
     role: smaller Qwen3-ASR smoke and latency candidate before 1.7B
-    current_status: smoke_1_row_completed_contract_passed_locale_failed_disable_cudnn
+    current_status: completed_15_row_contract_passed_locale_failed_disable_cudnn
     direct_quality_baseline: true
     language_control_ref: language_control.model_specific_controls.qwen3_asr
     source_url: https://huggingface.co/Qwen/Qwen3-ASR-0.6B
     notes: `qwen-asr` was installed locally on 2026-05-25 and
       `run_janus_qwen3_asr_pilot.py` now emits the standard hypothesis
       contract. The first CUDA attempt failed with a cuDNN sublibrary mismatch;
-      rerun with cuDNN disabled passed one row with CER 74.12, WER 95.83,
-      cached runner wall time 6.45s, but failed the strict locale gate with 1
-      locale-violation row and 13 simplified characters. Do not promote to
-      15-row until the Traditional Chinese gate is fixed.
+      reruns require cuDNN disabled. The 2026-05-26 fixed 15-row retry passed
+      the field contract with CER 64.93, WER 82.70, cached runner wall time
+      17.97s, and outer wall time 21.57s, but failed the strict locale gate on
+      all 15 rows with 260 simplified characters. Do not promote to 258-row or
+      selected-300 until the Traditional Chinese gate is fixed.
 
   - run_id: qwen3_asr_1_7b_15_row_candidate
     model_name_or_path: Qwen/Qwen3-ASR-1.7B
     family: Qwen3-ASR
     role: stronger Qwen3-ASR quality candidate after 0.6B smoke
-    current_status: stopped_before_inference_after_0_6b_locale_failed
+    current_status: stopped_before_inference_after_repeated_fetch_timeout
     direct_quality_baseline: true
     language_control_ref: language_control.model_specific_controls.qwen3_asr
     source_url: https://huggingface.co/Qwen/Qwen3-ASR-1.7B
-    notes: Hugging Face model availability was checked on 2026-05-25. A bounded
-      1-row load attempt was stopped before inference after stalling at model
-      file fetch/load with no GPU activity. Since Qwen3-ASR-0.6B already
-      failed the strict Traditional Chinese locale gate, retry 1.7B only after
-      the 0.6B lane passes locale control.
+    notes: Hugging Face model availability was checked on 2026-05-25. Bounded
+      1-row load attempts on 2026-05-25 and 2026-05-26 stopped before
+      inference after stalling at model file fetch/load with no GPU activity;
+      the 2026-05-26 timed retry exited at 60.06s with status 124 while still
+      at `Fetching 2 files: 0/2`. Since Qwen3-ASR-0.6B already failed the
+      strict Traditional Chinese locale gate, retry 1.7B only after the 0.6B
+      lane passes locale control or after an isolated cache/download plan is in
+      place.
 
   - run_id: gemma4_e4b_audio_15_row_candidate
     model_name_or_path: unsloth/gemma-4-E4B

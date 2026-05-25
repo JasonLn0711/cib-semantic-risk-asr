@@ -92,6 +92,8 @@ ignored local paths.
 | 5.49 | Added one-command reviewer-session start gate. | `start_human_audit_review_session.py`; `human_audit_reviewer_session_start_summary.json`; `human_audit_reviewer_session_start_log.tsv`; `tests/test_human_audit_reviewer_session_start.py`. | Completed as reviewer-session orchestration, not as human review. The live start gate reports `reviewer_session_started` after refreshing the handoff, preflight, reviewer value contract, and action checklist. Current pending content remains unchanged: `6/6` packet rows, `18/18` model assessments, `6/6` optional timing rows, and latest apply status `response_pending`. Compile and direct session-start tests passed; sensitive-field scan over the new tracked outputs found no audio IDs, transcripts, hypotheses, reviewer notes, private fixture text, or local row IDs. |
 | 5.50 | Required reviewer-session gate for response apply/write path. | `apply_human_audit_batch_response.py`; `build_human_audit_reviewer_handoff.py`; `human_audit_batch_response_apply_summary.json`; `tests/test_human_audit_batch_response.py`. | Completed as response-write provenance hardening, not as human review. The generated strict dry-run/write commands now include `--require-session-start-gate` and the current session-start summary path. The live strict dry-run records `session_start_gate.ok=true`, matching row numbers/stratum, `rubric_status=rubric_ready`, and `checklist_status=reviewer_action_ready`, then still fails as expected with `response_pending` and `incomplete_response=1` because `0/6` row decisions and `0/18` model assessments are filled. Compile and direct response/handoff tests passed. |
 | 5.51 | Added response closeout checklist. | `build_human_audit_response_closeout_checklist.py`; `human_audit_response_closeout_summary.json`; `human_audit_response_closeout_checklist.tsv`; `tests/test_human_audit_response_closeout.py`. | Completed as write-readiness routing, not as human review. The live closeout reports `response_closeout_blocked`: session start and session-gated strict dry-run are ready, but row/model response completion is pending with `0/6` row decisions and `0/18` model assessments filled. This keeps the write/refresh/prepare-next command blocked until `response_complete`. Compile and direct closeout tests passed. |
+| 5.52 | Added post-review evidence checklist. | `build_post_review_evidence_checklist.py`; `human_audit_post_review_evidence_summary.json`; `human_audit_post_review_evidence_checklist.tsv`; `tests/test_post_review_evidence_checklist.py`. | Completed as a paper-claim guardrail, not as human review. The live checklist reads only tracked aggregate summaries and reports `post_review_evidence_blocked`: closeout is not ready, refresh and predictor are not complete, paper/publishable/consequence gates are false, and recovery evidence remains proxy-only. Compile and direct tests passed; `pytest` is unavailable in `.venv`. |
+| 5.53 | Promoted SenseVoice and Qwen3-ASR-0.6B to fixed 15-row candidate gates. | `run_janus_sensevoice_pilot.py`; `run_janus_qwen3_asr_pilot.py`; `asr_candidate_15_row_extension_2026_05_26/`. | Completed as candidate rejection evidence, not as paper baseline promotion. SenseVoiceSmall passed the 15-row contract but had `14/15` locale-violation rows, `cer_zh_micro=63.12`, `wer_zh_jieba_micro=78.98`, runner wall time `2.60s`, outer time `6.32s`. Qwen3-ASR-0.6B passed with cuDNN disabled but had `15/15` locale-violation rows, `cer_zh_micro=64.16`, `wer_zh_jieba_micro=81.07`, runner wall time `17.97s`, outer time `21.57s`. Qwen3-ASR-1.7B timed out before inference after `60.06s` at fetch/load. No new candidate should be promoted to 258-row or selected-300 until the strict zh-TW locale policy is solved. |
 
 ## Next Operations
 
@@ -100,12 +102,13 @@ ignored local paths.
    `wer_zh_jieba_micro` only as supplemental. Do not cite a WER value unless
    its tokenizer, normalization, manifest alignment, package versions,
    macro/micro scope, and zero-reference-unit status are recorded.
-2. Run Whisper large-v3 and Whisper large-v3 turbo through the fixed 15-row
-   contract only if an additional Whisper-family comparator is still needed.
-   Their one-row CUDA smoke gates already passed; do not rank models from those
-   single-row results.
-3. Build smoke/15-row runners for FunASR SenseVoice and Qwen3-ASR, with strict
-   Taiwan Traditional Chinese locale gates.
+2. Treat Whisper large-v3, Whisper large-v3 turbo, SenseVoiceSmall, and
+   Qwen3-ASR-0.6B as fixed 15-row candidate evidence, not as promoted baselines:
+   all passed field contracts, but none is clean under the strict Taiwan
+   Traditional Chinese locale gate.
+3. Do not run these new candidates on 258-row or selected-300 until either the
+   model-native locale gate is clean or an audited post-decode
+   conversion/reporting policy is explicitly approved.
 4. Build a separate multimodal prompted-ASR runner for Gemma 4 E2B/E4B only
    after the prompt, audio-length, hallucination, runtime, and locale logging
    contract is explicit.
@@ -145,7 +148,10 @@ ignored local paths.
    without leaking transcripts into tracked files. Start with the prepared
    `critical_or_high_risk_missed` packet; the post-write path will audit
    `batch_complete`, refresh aggregate status, and optionally prepare the next
-   packet.
+   packet. After the response closeout/write/refresh path, run
+   `build_post_review_evidence_checklist.py` and require
+   `post_review_evidence_ready` before promoting proxy recovery or model-safety
+   claims into paper-facing language.
 7. Use `refresh_human_audit_evidence.py` as the normal post-edit aggregate
    refresh. It now updates validation, progress, review summary, predictor,
    evidence-chain readiness, and objective-level publishable completion.

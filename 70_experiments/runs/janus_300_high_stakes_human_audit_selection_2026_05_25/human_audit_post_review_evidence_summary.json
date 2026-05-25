@@ -1,0 +1,92 @@
+{
+  "ok": false,
+  "status": "post_review_evidence_blocked",
+  "input_boundary": "tracked aggregate summaries only",
+  "output_boundary": "aggregate-only post-review evidence checklist; no row keys or transcript text",
+  "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
+  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
+  "closeout_ready": false,
+  "refresh_complete": false,
+  "predictor_complete": false,
+  "paper_ready": false,
+  "publishable_ready": false,
+  "consequence_ready": false,
+  "recovery_proxy_available": true,
+  "recovery_human_ready": false,
+  "blocker_keys": [
+    "response_closeout_not_ready",
+    "human_refresh_not_complete",
+    "human_predictor_not_complete",
+    "paper_ready_false",
+    "publishable_ready_false",
+    "consequence_paper_claims_not_ready",
+    "recovery_proxy_only"
+  ],
+  "checklist": [
+    {
+      "step_id": "1",
+      "evidence_gate": "response closeout write readiness",
+      "status": "blocked",
+      "paper_claim_status": "not paper-ready",
+      "evidence": "closeout_status=response_closeout_blocked; pending_rows=6; pending_model_assessments=18",
+      "next_action": "fill the local response TSV, rerun session-gated strict dry-run, then closeout"
+    },
+    {
+      "step_id": "2",
+      "evidence_gate": "post-write aggregate refresh",
+      "status": "blocked",
+      "paper_claim_status": "review-pending",
+      "evidence": "refresh_status=review_pending; pending_rows=30; pending_model_assessments=90",
+      "next_action": "run apply response with --write --refresh-after-write, then require refresh review_complete"
+    },
+    {
+      "step_id": "3",
+      "evidence_gate": "human-reviewed predictor refresh",
+      "status": "blocked",
+      "paper_claim_status": "proxy-only",
+      "evidence": "predictor_status=review_pending; pending_model_assessments=90",
+      "next_action": "refresh human-audit predictor outputs after selected rows are reviewed"
+    },
+    {
+      "step_id": "4",
+      "evidence_gate": "evidence-chain readiness",
+      "status": "blocked",
+      "paper_claim_status": "not paper-ready",
+      "evidence": "paper_ready=False",
+      "next_action": "run check_evidence_chain_readiness.py after human refresh"
+    },
+    {
+      "step_id": "5",
+      "evidence_gate": "publishable objective completion",
+      "status": "blocked",
+      "paper_claim_status": "not publishable-ready",
+      "evidence": "publishable_ready=False",
+      "next_action": "run audit_publishable_evidence_chain.py after human refresh"
+    },
+    {
+      "step_id": "6",
+      "evidence_gate": "consequence claim matrix",
+      "status": "blocked",
+      "paper_claim_status": "claims blocked or proxy",
+      "evidence": "paper_claims_ready=False; status_counts={\"completed\": 1, \"proxy_completed\": 4, \"review_pending\": 2}",
+      "next_action": "rerun build_consequence_evidence_matrix.py after human refresh"
+    },
+    {
+      "step_id": "7",
+      "evidence_gate": "recovery policy evidence",
+      "status": "proxy_only",
+      "paper_claim_status": "proxy-only until human review",
+      "evidence": "recovery_ok=True; evidence_mode=; policy_count=5",
+      "next_action": "rerun recovery policy evaluation after human-reviewed labels are available"
+    }
+  ],
+  "paper_ready_impact": "No paper-readiness change. This checklist records the gates that must pass after reviewer response write/refresh before proxy claims can be promoted.",
+  "next_concrete_action": "Complete the response closeout gate first; then write/refresh and rerun this checklist.",
+  "tracked_outputs": {
+    "summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json",
+    "checklist_tsv": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_checklist.tsv",
+    "readiness_dir": "70_experiments/runs/postdoc_evidence_chain_2026_05_25",
+    "recovery_summary": "70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json"
+  },
+  "runtime_seconds": 0.0025
+}

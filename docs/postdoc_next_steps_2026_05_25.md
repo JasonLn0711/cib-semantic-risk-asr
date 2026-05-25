@@ -290,13 +290,18 @@ encoder 仍是下一個 hypothesis generator，但還不足以做正式 paper ta
 1. Whisper large-v3 與 large-v3 turbo 已完成 1-row smoke 與 15-row
    contract；兩者 hypothesis contract 通過，但 locale gate 不是 clean，因此
    暫時不升 258-row。
-2. 所有 run 都使用同一個 manifest：
+2. SenseVoiceSmall 與 Qwen3-ASR-0.6B 已於 2026-05-26 補跑固定 15-row；
+   兩者 hypothesis contract 通過，但 strict zh-TW locale gate failed，因此
+   也暫時不升 258-row。
+3. Qwen3-ASR-1.7B 已做 60 秒 bounded load retry，仍停在 fetch/load，未進
+   inference；下一步不是擴大實驗，而是先有 isolated cache/download plan。
+4. 所有 run 都使用同一個 manifest：
    `40_breeze_asr25_finetune_dataset/manifests/test.jsonl`。
-3. 所有 run 都使用同一個 locale rule：
+5. 所有 run 都使用同一個 locale rule：
    `zh-TW` Taiwan Traditional Chinese output only。
-4. 每個 run 都要通過：
+6. 每個 run 都要通過：
    `validate_janus_asr_hypotheses.py --expected-manifest 40_breeze_asr25_finetune_dataset/manifests/test.jsonl --expected-rows 258 --require-labels --require-quality-signal`。
-5. 完成後重跑：
+7. 完成後重跑：
    `summarize_janus_asr_test_split.py`。
 
 ### 必須記錄的資料
@@ -403,8 +408,12 @@ decision-stability evidence」。
   cached runner wall time `2.15s`。
 - 但 strict locale gate failed：locale violation rows `1`、simplified
   character count `11`。
-- 下一步不是 15-row；下一步是先設計並審核繁中輸出控制或 post-decode
-  reporting policy。
+- 2026-05-26 固定 15-row 已完成：CER `63.83`、WER `79.97`、runner wall
+  time `2.60s`、outer wall time `6.32s`，hypothesis contract 通過。
+- 15-row strict locale gate failed：locale violation rows `14`、simplified
+  character count `209`。
+- 下一步不是 258-row；下一步是先設計並審核繁中輸出控制或 post-decode
+  reporting policy，否則從 pure-ASR paper table 排除。
 
 ### Qwen3-ASR
 
@@ -424,9 +433,14 @@ decision-stability evidence」。
   smoke 通過 hypothesis contract。
 - 0.6B 結果：CER `74.12`、WER `95.83`、cached runner wall time `6.45s`、
   locale violation rows `1`、simplified character count `13`。
-- `Qwen/Qwen3-ASR-1.7B` bounded attempt 停在 model file fetch/load，且 0.6B
-  已經 locale failed，所以不繼續花時間。
-- 下一步不是 15-row；下一步是先解決繁中 locale gate。
+- 2026-05-26 固定 15-row 已完成：CER `64.93`、WER `82.70`、runner wall
+  time `17.97s`、outer wall time `21.57s`，hypothesis contract 通過。
+- 15-row strict locale gate failed：locale violation rows `15`、simplified
+  character count `260`。
+- `Qwen/Qwen3-ASR-1.7B` 2026-05-26 bounded retry 仍停在 model file
+  fetch/load；60 秒 timed gate 的 exit status 是 `124`，未進 inference。
+- 下一步不是 258-row；下一步是先解決繁中 locale gate，或建立 isolated
+  cache/download plan 後才重試 1.7B。
 
 ### Gemma 4 E2B/E4B multimodal
 
@@ -810,7 +824,11 @@ Interpretation:
    current stratum 是 `critical_or_high_risk_missed`，`6/6` rows 與
    `18/18` model assessments 仍待填，latest apply status 是
    `response_pending`。這代表 reviewer workflow ready，不代表 human audit
-   complete。
+   complete。完成 response closeout、write、refresh 之後，還要跑
+   `build_post_review_evidence_checklist.py`；目前 status 是
+   `post_review_evidence_blocked`，因為 response closeout、human refresh、
+   human predictor、paper/publishable/consequence gates，以及 human-reviewed
+   recovery evidence 都尚未完成。
 2. 跑
    `validate_human_risk_atom_audit.py --require-complete --expected-rows 30`；
    通過後才產出 aggregate human annotation stats，確認沒有 selected IDs 或 transcript
@@ -820,8 +838,9 @@ Interpretation:
 4. Whisper large-v3 / large-v3 turbo 已做 smoke 與 15-row；因 locale gate
    不 clean，暫不做 258-row。
 5. 用新 builder 重現 expanded 258-row proxy bridge。
-6. SenseVoice/Qwen3-ASR 已做 1-row smoke；下一步先處理繁中 locale gate，
-   通過後才做 15-row。
+6. SenseVoice/Qwen3-ASR-0.6B 已補跑 15-row；兩者 contract pass 但
+   strict zh-TW locale gate failed，因此不升 258-row。下一步先決定要排除
+   這兩個 family，或建立 audited post-decode conversion/reporting policy。
 7. 建立 Gemma 4 isolated multimodal runtime gate；只做 prompted multimodal
    table，不混入 pure ASR table。
 8. locale gate clean 之後，才將 best additional comparator 加入 300-row

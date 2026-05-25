@@ -79,9 +79,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   The 2026-05-25 runtime gate is recorded in
   `70_experiments/runs/asr_candidate_runtime_gate_2026_05_25/`: Whisper
   large-v3 and large-v3-turbo completed the 15-row gate but had locale
-  violations, SenseVoiceSmall and Qwen3-ASR-0.6B completed one-row contract
-  smoke but failed the strict locale gate, Qwen3-ASR-1.7B was stopped before
-  inference, and Gemma 4 E2B/E4B remain blocked until an isolated multimodal
+  violations. The 2026-05-26 extension in
+  `70_experiments/runs/asr_candidate_15_row_extension_2026_05_26/` promoted
+  SenseVoiceSmall and Qwen3-ASR-0.6B to the fixed 15-row gate; both passed the
+  field contract but failed the strict zh-TW locale gate (`14/15` and `15/15`
+  locale-violation rows). Qwen3-ASR-1.7B still times out before inference at
+  fetch/load, and Gemma 4 E2B/E4B remain blocked until an isolated multimodal
   runtime exposes `AutoModelForMultimodalLM`.
 - The postdoc-level roadmap after the 258-row gate is recorded in
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
@@ -98,6 +101,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   current reviewer action gate: `reviewer_action_ready` for
   `critical_or_high_risk_missed`, with `6/6` packet rows and `18/18` model
   assessments still pending in the ignored local response TSV.
+  The post-review evidence checklist
+  `80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py`
+  now records the aggregate gates that must pass after response closeout,
+  write, and refresh; current status is `post_review_evidence_blocked`
+  because human refresh/predictor outputs are incomplete and recovery evidence
+  is still proxy-only.
   A stricter objective-by-objective publication audit is
   `80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py`; its
   current output records `publishable_ready=false` with objective `5`

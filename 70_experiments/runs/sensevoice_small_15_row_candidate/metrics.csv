@@ -1,0 +1,2 @@
+step,epoch,split,loss,cer,wer,learning_rate,wall_time_seconds,checkpoint,notes
+0,0,nemo_pilot_input_manifest_15,,63.83,79.97,,2.6,FunAudioLLM/SenseVoiceSmall,pilot_inference;runtime=cuda;max_samples=15;label_mode=heuristic;language=zh;use_itn=True;disable_cudnn=False;metric_normalization=zh_asr;wer_tokenizer=jieba;locale_violation_rows=14
