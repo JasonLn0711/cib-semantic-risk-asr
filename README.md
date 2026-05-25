@@ -104,7 +104,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   The tracked protocol is
   `80_semantic_risk_asr/annotation/selected_300_human_risk_atom_audit_protocol_2026_05_25.md`.
   The transcript-bearing audit sheet remains local-only under ignored
-  `artifacts/`; review is still pending. Aggregate review status is produced by
+  `artifacts/`; review is still pending. The local sheet is validated by
+  `80_semantic_risk_asr/annotation/validate_human_risk_atom_audit.py`, whose
+  strict `--require-complete` mode currently fails as expected until all
+  `30` rows and `90` model assessments are reviewed. Aggregate review status
+  is produced by
   `80_semantic_risk_asr/annotation/summarize_human_risk_atom_audit.py`, and
   model-level reviewer assessments are required before making model-comparison
   claims from the human audit. Human-reviewed WER/CER/SRES/CEIS predictor

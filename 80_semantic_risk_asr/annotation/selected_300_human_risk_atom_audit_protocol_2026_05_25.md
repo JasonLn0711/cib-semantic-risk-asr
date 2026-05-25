@@ -123,6 +123,25 @@ Primary labels:
 
 ## Minimum Aggregate Outputs After Review
 
+First validate the local sheet:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/validate_human_risk_atom_audit.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --expected-rows 30
+```
+
+Before review this should pass with `status=review_pending` and only pending
+review warnings. After review, the strict completion gate must pass:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/validate_human_risk_atom_audit.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --expected-rows 30 \
+  --require-complete
+```
+
 Use:
 
 ```bash
@@ -161,6 +180,8 @@ labels. It must replace proxy predictor language for reviewer-facing claims.
 This gate is complete only when:
 
 - the local `30`-row sheet has been reviewed;
+- `validate_human_risk_atom_audit.py --require-complete --expected-rows 30`
+  passes;
 - tracked aggregate annotation stats exist;
 - no raw transcript or selected ID leaks into tracked files;
 - `analyze_metric_predictors.py` is rerun on reviewed or reviewer-adjusted

@@ -270,6 +270,11 @@ Current human-audit gate status on 2026-05-25:
 - Aggregate readiness summary:
   `human_audit_review_summary.json` currently records `0 / 30` reviewed rows
   and `30` pending rows, plus `0 / 90` reviewed model-level assessments.
+- Validation gate:
+  `human_audit_validation_summary.json` currently records `status=review_pending`,
+  `30` audit rows, `90` model assessments, and `0` validation errors. The strict
+  `--require-complete` gate fails until all row-level and model-level reviewer
+  fields are filled.
 - Human-reviewed predictor gate:
   `human_audit_predictor_summary.json` currently records `0 / 90` reviewed
   model-level assessments. WER/CER/SRES/CEIS predictor metrics must be computed

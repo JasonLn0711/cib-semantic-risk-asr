@@ -1,0 +1,9 @@
+severity	check	count
+warning	pending_model_review	90
+warning	pending_row_review	30
+info	audit_rows	30
+info	reviewed_rows	0
+info	pending_rows	30
+info	model_assessments	90
+info	reviewed_model_assessments	0
+info	pending_model_assessments	90

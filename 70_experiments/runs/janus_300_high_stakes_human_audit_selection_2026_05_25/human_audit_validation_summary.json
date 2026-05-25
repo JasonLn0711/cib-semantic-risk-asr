@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "status": "review_pending",
+  "require_complete": false,
+  "expected_rows": 30,
+  "audit_rows": 30,
+  "reviewed_rows": 0,
+  "pending_rows": 30,
+  "model_assessments": 90,
+  "reviewed_model_assessments": 0,
+  "pending_model_assessments": 90,
+  "error_counts": {},
+  "warning_counts": {
+    "pending_model_review": 90,
+    "pending_row_review": 30
+  },
+  "input_boundary": "local transcript-bearing audit sheet; do not commit input",
+  "output_boundary": "aggregate-only validation counts",
+  "runtime_seconds": 0.0031
+}

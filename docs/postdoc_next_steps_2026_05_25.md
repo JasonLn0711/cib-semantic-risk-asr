@@ -136,8 +136,10 @@ subset predictor table 要由這支工具重算。
 - 300 high-stakes ASR hypotheses、SRES/CEIS/downstream、metric-predictor、
   recovery 都已完成三個 Breeze-family comparator 的 proxy mode；human audit
   queue、aggregate summarizer、human-reviewed predictor gate 已建立，但目前
-  `0/30` rows reviewed、`0/90` model assessments reviewed，所以還不能宣稱
-  paper-grade main experiment 完成。
+  `0/30` rows reviewed、`0/90` model assessments reviewed。validator 已確認
+  local sheet schema 可用，正常模式 `review_pending`、validation errors `0`，
+  但 `--require-complete` 會因 `30` row reviews 與 `90` model reviews 尚未
+  完成而失敗，所以還不能宣稱 paper-grade main experiment 完成。
 - 258-row recovery proxy 與 300-row high-stakes recovery proxy 都已完成；下
   一個缺口是 selected-300 human risk-atom audit，而不是再調 WER 定義。
 
@@ -627,7 +629,9 @@ Interpretation:
 
 1. 完成 selected-300 human risk-atom audit protocol 所產生的 30-row local
    sheet。
-2. 產出 aggregate human annotation stats，確認沒有 selected IDs 或 transcript
+2. 跑
+   `validate_human_risk_atom_audit.py --require-complete --expected-rows 30`；
+   通過後才產出 aggregate human annotation stats，確認沒有 selected IDs 或 transcript
    進入 tracked files。
 3. 用 human-reviewed subset 重跑 metric predictor analysis，檢查 proxy
    AUC 是否仍成立。

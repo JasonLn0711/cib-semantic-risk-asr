@@ -118,6 +118,8 @@ Tracked readiness outputs:
 
 | File | Content |
 | --- | --- |
+| `human_audit_validation_summary.json` | Schema/completion validation status for the local sheet. Current status: review pending, schema valid. |
+| `human_audit_validation_counts.tsv` | Aggregate validation warnings/errors and completion counts. Current warnings are pending review only. |
 | `human_audit_review_summary.json` | Review completion and missing-field counts. |
 | `human_audit_strata_review.tsv` | Reviewed row counts by selection stratum. |
 | `human_audit_risk_atom_review.tsv` | Human-confirmed risk-atom aggregate counts after review. Currently empty because review is pending. |
@@ -130,6 +132,44 @@ The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
 dangerous ASR risk, but only model-level labels can support a reviewer-facing
 claim about which ASR model is safer.
+
+## Validation Gate
+
+Before and after human review, validate the local sheet with:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/validate_human_risk_atom_audit.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --expected-rows 30
+```
+
+Current validation status:
+
+| Item | Value |
+| --- | ---: |
+| Status | `review_pending` |
+| Audit rows | 30 |
+| Reviewed rows | 0 |
+| Pending rows | 30 |
+| Model assessments | 90 |
+| Reviewed model assessments | 0 |
+| Pending model assessments | 90 |
+| Validation errors | 0 |
+| Pending-row warnings | 30 |
+| Pending-model warnings | 90 |
+
+The strict completion gate is:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/validate_human_risk_atom_audit.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --expected-rows 30 \
+  --require-complete
+```
+
+This currently fails as expected because review is not complete:
+`incomplete_row_review=30`, `incomplete_model_review=90`.
 
 After model-level review, run:
 

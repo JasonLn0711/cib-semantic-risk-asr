@@ -59,6 +59,7 @@ ignored local paths.
 | 5.16 | Added human audit aggregate summarizer and readiness record. | `summarize_human_risk_atom_audit.py`; `human_audit_review_summary.json`. | Review still pending. The summarizer validates the local sheet and writes aggregate-only review counts without audio IDs, transcripts, hypotheses, or reviewer notes. Current state: `30` audit rows, `0` reviewed rows, `30` pending rows, `90` model-level assessments, and `0` reviewed model-level assessments. |
 | 5.17 | Added human-reviewed predictor gate. | `analyze_human_audit_predictors.py`; `human_audit_predictor_summary.json`. | Review still pending. The predictor gate will compare WER/CER/SRES/CEIS against model-level human decision-change labels after review. Current state: `90` model assessments, `0` reviewed, `90` pending; predictor metrics intentionally remain empty until review is complete. |
 | 5.18 | Re-inspected WER calculation against paper-facing requirements. | `asr_text_metrics.py`; `run_janus_nemo_curator_pilot.py`; `audit_asr_text_metrics.py`; `wer_metric_audit_2026_05_25/*summary.json`. | Completed. The remaining NeMo pilot runner now uses the shared `zh_asr` + `jieba` metric helper after ASR inference. The WER audit now records zero-reference-unit counts and fails `ok` if any profile has zero reference units. Re-ran 15-row, 258-row, and 300-row audits: all returned `ok=true`, all manifest/reference/hypothesis checks stayed clean, and all zero-reference-unit counts were `0`. Verdict unchanged: old raw whitespace WER is audit-only; paper-facing tables use `cer_zh_micro` primary and `wer_zh_jieba_micro` supplemental. |
+| 5.19 | Added human audit validation gate. | `validate_human_risk_atom_audit.py`; `human_audit_validation_summary.json`; `human_audit_validation_counts.tsv`. | Review still pending, but the local sheet now has a strict schema/completion gate. Normal validation passes with `status=review_pending`, `30` audit rows, `90` model assessments, and `0` validation errors. `--require-complete` fails as expected with `30` incomplete row reviews and `90` incomplete model reviews. Outputs are aggregate-only and contain no audio IDs, transcripts, hypotheses, selected IDs, or reviewer notes. |
 
 ## Next Operations
 
@@ -78,8 +79,10 @@ ignored local paths.
    expanded 258-row baseline set.
 6. Complete the local selected-300 human risk-atom audit sheet so proxy metrics
    do not become overstated as formal CDS evidence.
-7. Record aggregate human annotation statistics without selected IDs or
+7. Run `validate_human_risk_atom_audit.py --require-complete --expected-rows 30`
+   before treating the human audit as complete.
+8. Record aggregate human annotation statistics without selected IDs or
    transcripts.
-8. After the selected-300 audit, rerun `analyze_metric_predictors.py` on the
+9. After the selected-300 audit, rerun `analyze_metric_predictors.py` on the
    reviewed metric inputs and replace proxy-only predictor language with
    reviewer-facing evidence.
