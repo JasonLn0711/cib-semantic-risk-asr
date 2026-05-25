@@ -38,10 +38,15 @@ shows a usable decision-stability signal.
   optional ASR candidate.
 - Each ASR hypothesis row has `audio_id`, hypothesis text, and a downstream
   ASR escalation label.
+- `validate_janus_asr_hypotheses.py` accepts every hypothesis file before the
+  metric-input bridge is run.
 
 ## Execution
 
 ```bash
+python 80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py \
+  --hypotheses <asr_hypotheses.tsv-or-jsonl> \
+  --require-labels
 python 80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py \
   --hypotheses <asr_hypotheses.tsv-or-jsonl>
 python 80_semantic_risk_asr/scoring/semantic_risk_score.py \

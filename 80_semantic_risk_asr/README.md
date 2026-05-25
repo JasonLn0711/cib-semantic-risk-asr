@@ -99,7 +99,16 @@ Minimum viable paper experiment:
    recovery and confidence-only correction.
 
 For the JANUS 15-row gate, first convert reviewed gold rows plus ASR
-hypotheses into the three metric-input tables:
+hypotheses into the three metric-input tables. Before building those inputs,
+validate each local ASR hypothesis file against the fixed 15-row pilot set:
+
+```bash
+python 80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py \
+  --hypotheses <asr_hypotheses.tsv-or-jsonl> \
+  --require-labels
+```
+
+Then build the paper-facing inputs:
 
 ```bash
 python 80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py \

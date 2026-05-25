@@ -5,6 +5,18 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.19 - 2026-05-25T09:21:52+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `e24e42f`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/janus_15_decision_stability_pilot/README.md`
+  - `80_semantic_risk_asr/README.md`
+  - `80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py`
+
 ## v2.5.18 - 2026-05-25T09:10:42+08:00
 
 - Bump: `patch`
