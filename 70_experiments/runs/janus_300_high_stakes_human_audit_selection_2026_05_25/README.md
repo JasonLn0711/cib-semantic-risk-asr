@@ -152,6 +152,7 @@ Tracked readiness outputs:
 | `human_audit_reviewer_session_start_log.tsv` | Append-only repo-safe session-start log with aggregate gate statuses, pending counts, and latest apply status only. |
 | `human_audit_response_closeout_summary.json` | Repo-safe response closeout checklist. Current status: `response_closeout_blocked`, with `session_start_gate.ok=true` but `0/6` row decisions, `0/18` model assessments, and `0/6` timing rows filled. It mirrors the row-number-only response gap report from the apply summary. |
 | `human_audit_response_closeout_checklist.tsv` | Repo-safe closeout checklist rows for session start, session-gated strict dry-run, row/model completion, response status, and write/refresh readiness. |
+| `human_audit_response_gap_checklist.tsv` | Repo-safe row-number-only response gap checklist for the current packet. Current rows `1-6` all have gaps: `48` row fields missing, `18` model assessments missing, `72` model-assessment fields missing, and `6/6` timing gaps. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
 | `human_audit_post_review_evidence_summary.json` | Repo-safe post-review paper-evidence checklist. Current status: `post_review_evidence_blocked`; blockers are response closeout, human refresh, human predictor, readiness/publishable/consequence gates, and proxy-only recovery evidence. |
 | `human_audit_post_review_evidence_checklist.tsv` | Repo-safe checklist rows for the aggregate gates that must pass after response closeout/write/refresh before proxy claims can be promoted to paper-facing evidence. |
 
@@ -193,6 +194,13 @@ Current closeout status: `response_closeout_blocked`. The session-start gate is
 valid, but the local response TSV still has `0/6` row-level decisions and
 `0/18` model assessments plus `0/6` timing rows filled, so the write/refresh
 command remains blocked.
+
+The same closeout command now also writes
+`human_audit_response_gap_checklist.tsv`, a reviewer-operational checklist that
+contains row numbers, missing row-level field names, model-assessment gap
+counts, missing model field names, and timing-gap booleans only. Use this TSV
+as the tracked checklist before opening the local transcript-bearing packet or
+response TSV.
 
 For a one-file current-state handoff, run:
 

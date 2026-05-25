@@ -372,7 +372,9 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   缺哪些 row-level 欄位、缺幾個 model assessments、timing 是否缺失，不包含
   audio IDs、transcripts、hypotheses 或 reviewer notes。Current packet 仍是
   `6/6` rows 有 gap、`48` row fields missing、`18` model assessments missing、
-  `72` model-assessment fields missing。新增
+  `72` model-assessment fields missing。Closeout command 現在也會輸出
+  `human_audit_response_gap_checklist.tsv`，作為同一批缺口的 tracked
+  row-number-only TSV checklist。新增
   `human_audit_reviewer_handoff_summary.json` 把 current packet、response TSV、
   batch gate、apply-log status、下一步 commands 聚合成一個 safe handoff；
   目前 handoff status 是 `reviewer_input_pending`，且

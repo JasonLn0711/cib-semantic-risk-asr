@@ -134,7 +134,9 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   row fields, model-assessment gaps, and timing gaps without audio IDs,
   transcript text, hypotheses, or reviewer notes. The current packet reports
   `6/6` rows with gaps, `48` row fields missing, `18` model assessments
-  missing, and `72` model-assessment fields missing. The
+  missing, and `72` model-assessment fields missing. The closeout command now
+  also writes `human_audit_response_gap_checklist.tsv` as the tracked
+  row-number-only TSV checklist for the same gaps. The
   high-level readiness, publishable, roadmap, post-review, consequence, and
   refresh summaries now surface the same timing blocker so the paper-readiness
   path cannot accidentally treat row/model fields as sufficient without review
