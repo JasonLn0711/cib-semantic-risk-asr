@@ -116,10 +116,35 @@ to the organized extracted audio under `../10_extracted_parts/`.
    preprocessing, generation, and aggregate metric logging; it is not a model
    comparison.
 
-10. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
+10. Generate the first full 15-row Whisper-family hypothesis file:
+
+   ```bash
+   .venv/bin/python 60_whisper_asr_finetuning/scripts/run_janus_whisper_family_pilot.py \
+     --run-id whisper_small_15_row_baseline \
+     --model-name openai/whisper-small \
+     --runtime cuda \
+     --disable-cudnn
+   .venv/bin/python 80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py \
+     --hypotheses 70_experiments/runs/whisper_small_15_row_baseline/predictions/whisper_small_15_row_baseline_predictions.jsonl \
+     --require-labels \
+     --require-quality-signal
+   ```
+
+   The local RTX 5080 can run CUDA kernels, but cuDNN convolution currently
+   fails with a sublibrary version mismatch. `--disable-cudnn` keeps GPU
+   execution while bypassing the broken cuDNN path. Confirm this with:
+
+   ```bash
+   .venv/bin/python 60_whisper_asr_finetuning/scripts/check_torch_cuda_asr_runtime.py
+   ```
+
+   The runner writes raw predictions under ignored `predictions/`, a local
+   summary under ignored `artifacts/`, and a repo-safe aggregate `metrics.csv`.
+
+11. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
    run template from `../70_experiments/templates/run_record.md`.
 
-11. Register the run in `../70_experiments/registry.tsv` before starting long
+12. Register the run in `../70_experiments/registry.tsv` before starting long
    training.
 
 ## Layout

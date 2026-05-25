@@ -5,6 +5,23 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.24 - 2026-05-25T10:23:09+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `e75625c`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/README.md`
+  - `60_whisper_asr_finetuning/scripts/check_torch_cuda_asr_runtime.py`
+  - `60_whisper_asr_finetuning/scripts/run_janus_nemo_curator_pilot.py`
+  - `60_whisper_asr_finetuning/scripts/run_janus_whisper_family_pilot.py`
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/whisper_small_15_row_baseline/README.md`
+  - `70_experiments/runs/whisper_small_15_row_baseline/metrics.csv`
+  - `docs/janus_165_audio_curation_workflow.md`
+
 ## v2.5.23 - 2026-05-25T10:22:45+08:00
 
 - Bump: `patch`

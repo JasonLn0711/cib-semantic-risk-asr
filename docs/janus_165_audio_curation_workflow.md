@@ -153,7 +153,13 @@ The script writes:
     Breeze-ASR-25, optional Breeze-ASR-26, and optional
     faster-whisper/WhisperX if available. Use
     `60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml` as
-    the model-scope contract.
+    the model-scope contract. For Whisper-family checkpoints, use
+    `60_whisper_asr_finetuning/scripts/run_janus_whisper_family_pilot.py` so
+    the output includes `audio_id`, `hypothesis_text`, WER/CER, and a pilot
+    `asr_label` for downstream metric wiring. If CUDA is available but cuDNN
+    fails with a sublibrary version mismatch, run
+    `check_torch_cuda_asr_runtime.py` and pass `--disable-cudnn` to keep GPU
+    execution while bypassing cuDNN kernels.
 13. Build the local metric-input bridge for SRES, CEIS, and downstream checks:
     `python 80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py --hypotheses <asr_hypotheses.tsv-or-jsonl>`.
 14. Produce WER/CER plus risk-atom error and downstream label-flip checks.

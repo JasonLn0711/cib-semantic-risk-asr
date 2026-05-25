@@ -149,6 +149,11 @@ def main() -> int:
     parser.add_argument("--expected-rows", type=int, default=15)
     parser.add_argument("--skip-gate-check", action="store_true")
     parser.add_argument("--quiet", action="store_true")
+    parser.add_argument(
+        "--disable-cudnn",
+        action="store_true",
+        help="Use CUDA while bypassing cuDNN kernels; useful for local cuDNN sublibrary mismatches.",
+    )
     args = parser.parse_args()
 
     manifest_rows = read_jsonl(args.manifest)
@@ -170,6 +175,10 @@ def main() -> int:
 
     maybe_quiet_nemo_logs(args.quiet)
     runtime = import_curator_runtime()
+    if args.disable_cudnn:
+        import torch
+
+        torch.backends.cudnn.enabled = False
     AudioTask = runtime["AudioTask"]
     GetPairwiseWerStage = runtime["GetPairwiseWerStage"]
     InferenceAsrNemoStage = runtime["InferenceAsrNemoStage"]

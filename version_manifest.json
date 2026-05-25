@@ -1,21 +1,28 @@
 {
-  "version": "v2.5.23",
+  "version": "v2.5.24",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 23
+    "patch": 24
   },
-  "updated_at": "2026-05-25T10:22:45+08:00",
+  "updated_at": "2026-05-25T10:23:09+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "820bb20",
+  "base_commit": "e75625c",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "60_whisper_asr_finetuning/scripts/build_janus_curation_artifacts.py"
+    "60_whisper_asr_finetuning/README.md",
+    "60_whisper_asr_finetuning/scripts/check_torch_cuda_asr_runtime.py",
+    "60_whisper_asr_finetuning/scripts/run_janus_nemo_curator_pilot.py",
+    "60_whisper_asr_finetuning/scripts/run_janus_whisper_family_pilot.py",
+    "70_experiments/registry.tsv",
+    "70_experiments/runs/whisper_small_15_row_baseline/README.md",
+    "70_experiments/runs/whisper_small_15_row_baseline/metrics.csv",
+    "docs/janus_165_audio_curation_workflow.md"
   ]
 }
