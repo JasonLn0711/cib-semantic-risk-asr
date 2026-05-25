@@ -1,0 +1,296 @@
+#!/usr/bin/env python3
+"""Build a repo-safe closeout checklist for the current response TSV."""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+import sys
+import time
+from pathlib import Path
+from typing import Any
+
+
+SCRIPT_PATH = Path(__file__).resolve()
+ANNOTATION_DIR = SCRIPT_PATH.parent
+REPO_ROOT = SCRIPT_PATH.parents[2]
+if str(ANNOTATION_DIR) not in sys.path:
+    sys.path.insert(0, str(ANNOTATION_DIR))
+
+from apply_human_audit_batch_response import (  # noqa: E402
+    APPLY_LOG_SUMMARY_NAME,
+    APPLY_SUMMARY_NAME,
+)
+from build_human_audit_reviewer_action_checklist import (  # noqa: E402
+    CHECKLIST_SUMMARY_NAME,
+)
+from build_human_audit_reviewer_handoff import (  # noqa: E402
+    DEFAULT_RUN_DIR,
+    HANDOFF_SUMMARY_NAME,
+)
+from prepare_human_audit_review_batch import (  # noqa: E402
+    REFERENCE_TRANSCRIPT_POLICY,
+    REMAINING_REVIEW_SCOPE,
+    assert_tracked_safe,
+    repo_relative,
+)
+from start_human_audit_review_session import (  # noqa: E402
+    SESSION_START_SUMMARY_NAME,
+)
+
+
+CLOSEOUT_SUMMARY_NAME = "human_audit_response_closeout_summary.json"
+CLOSEOUT_TSV_NAME = "human_audit_response_closeout_checklist.tsv"
+
+
+def read_json_if_exists(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def write_json(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def write_tsv(path: Path, rows: list[dict[str, Any]]) -> None:
+    fieldnames = ["step_id", "action", "status", "evidence", "next_action"]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t", lineterminator="\n")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({field: row.get(field, "") for field in fieldnames})
+
+
+def bool_status(condition: bool) -> str:
+    return "ready" if condition else "blocked"
+
+
+def error_keys(payload: dict[str, Any]) -> list[str]:
+    errors = payload.get("error_counts")
+    if not isinstance(errors, dict):
+        return []
+    return sorted(key for key, value in errors.items() if int(value or 0) > 0)
+
+
+def session_gate_from_apply(apply_summary: dict[str, Any]) -> dict[str, Any]:
+    gate = apply_summary.get("session_start_gate")
+    return gate if isinstance(gate, dict) else {}
+
+
+def build_closeout(
+    *,
+    run_dir: Path,
+    apply_summary_path: Path,
+    apply_log_summary_path: Path,
+    session_start_summary_path: Path,
+    action_checklist_summary_path: Path,
+    handoff_summary_path: Path,
+    repo_root: Path,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    started = time.time()
+    apply_summary = read_json_if_exists(apply_summary_path)
+    apply_log_summary = read_json_if_exists(apply_log_summary_path)
+    session_start = read_json_if_exists(session_start_summary_path)
+    action_checklist = read_json_if_exists(action_checklist_summary_path)
+    handoff = read_json_if_exists(handoff_summary_path)
+    commands = handoff.get("commands") if isinstance(handoff.get("commands"), dict) else {}
+    apply_errors = error_keys(apply_summary)
+    session_gate = session_gate_from_apply(apply_summary)
+
+    session_ready = bool(session_start.get("ok")) and session_start.get("status") in {
+        "reviewer_session_started",
+        "reviewer_response_complete_ready_to_write",
+    }
+    strict_dry_run_ran = apply_summary.get("require_complete") is True
+    session_gate_ready = bool(session_gate.get("ok")) and session_gate.get("required") is True
+    response_complete = (
+        apply_summary.get("ok") is True
+        and apply_summary.get("status") == "response_complete"
+        and not apply_errors
+    )
+    action_ready = bool(action_checklist.get("ok")) and action_checklist.get("status") in {
+        "reviewer_action_ready",
+        "response_complete_ready_to_write",
+    }
+    closeout_ready = session_ready and strict_dry_run_ran and session_gate_ready and response_complete
+
+    rows = [
+        {
+            "step_id": "1",
+            "action": "confirm reviewer session start gate",
+            "status": bool_status(session_ready),
+            "evidence": (
+                f"session_status={session_start.get('status', '')}; "
+                f"session_ok={session_start.get('ok', '')}"
+            ),
+            "next_action": "rerun start_human_audit_review_session.py if blocked",
+        },
+        {
+            "step_id": "2",
+            "action": "confirm strict dry-run was session-gated",
+            "status": bool_status(strict_dry_run_ran and session_gate_ready),
+            "evidence": (
+                f"require_complete={apply_summary.get('require_complete', '')}; "
+                f"session_gate_ok={session_gate.get('ok', '')}; "
+                f"rows_match={session_gate.get('row_numbers_match', '')}; "
+                f"stratum_match={session_gate.get('selection_stratum_match', '')}"
+            ),
+            "next_action": commands.get("strict_dry_run", ""),
+        },
+        {
+            "step_id": "3",
+            "action": "confirm row-level response completion",
+            "status": "complete" if int(apply_summary.get("pending_rows_in_response") or 0) == 0 else "pending",
+            "evidence": (
+                f"reviewed_rows={apply_summary.get('reviewed_rows_in_response', '')}; "
+                f"pending_rows={apply_summary.get('pending_rows_in_response', '')}"
+            ),
+            "next_action": "fill required row-level risk and decision fields in the local response TSV",
+        },
+        {
+            "step_id": "4",
+            "action": "confirm model-level response completion",
+            "status": (
+                "complete"
+                if int(apply_summary.get("pending_model_assessments_in_response") or 0) == 0
+                else "pending"
+            ),
+            "evidence": (
+                f"reviewed_model_assessments={apply_summary.get('reviewed_model_assessments_in_response', '')}; "
+                f"pending_model_assessments={apply_summary.get('pending_model_assessments_in_response', '')}"
+            ),
+            "next_action": "fill every per-model decision-change and safe-action assessment",
+        },
+        {
+            "step_id": "5",
+            "action": "confirm strict dry-run response status",
+            "status": "complete" if response_complete else "blocked",
+            "evidence": (
+                f"apply_status={apply_summary.get('status', '')}; "
+                f"apply_ok={apply_summary.get('ok', '')}; "
+                f"error_keys={','.join(apply_errors)}"
+            ),
+            "next_action": "rerun strict dry-run until response_complete",
+        },
+        {
+            "step_id": "6",
+            "action": "write, refresh, and prepare next batch",
+            "status": "ready" if closeout_ready else "blocked_until_response_complete",
+            "evidence": f"closeout_ready={closeout_ready}",
+            "next_action": commands.get("write_refresh_prepare_next", ""),
+        },
+    ]
+
+    blocker_keys: list[str] = []
+    if not session_ready:
+        blocker_keys.append("session_start_not_ready")
+    if not strict_dry_run_ran:
+        blocker_keys.append("strict_dry_run_missing")
+    if not session_gate_ready:
+        blocker_keys.append("session_start_gate_not_ready")
+    if not action_ready:
+        blocker_keys.append("reviewer_action_not_ready")
+    if not response_complete:
+        blocker_keys.append("response_not_complete")
+    for key in apply_errors:
+        if key not in blocker_keys:
+            blocker_keys.append(key)
+
+    status = "response_complete_ready_to_write" if closeout_ready else "response_closeout_blocked"
+    payload = {
+        "ok": closeout_ready,
+        "status": status,
+        "input_boundary": "tracked aggregate response/session summaries only",
+        "output_boundary": "aggregate-only response closeout checklist; no row keys or transcript text",
+        "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
+        "remaining_review_scope": REMAINING_REVIEW_SCOPE,
+        "selection_stratum": apply_summary.get("selection_stratum", ""),
+        "rows_in_batch": apply_summary.get("rows_in_batch", ""),
+        "reviewed_rows_in_response": apply_summary.get("reviewed_rows_in_response", ""),
+        "pending_rows_in_response": apply_summary.get("pending_rows_in_response", ""),
+        "reviewed_model_assessments_in_response": apply_summary.get(
+            "reviewed_model_assessments_in_response",
+            "",
+        ),
+        "pending_model_assessments_in_response": apply_summary.get(
+            "pending_model_assessments_in_response",
+            "",
+        ),
+        "latest_apply_status": apply_summary.get("status", ""),
+        "session_start_gate": session_gate,
+        "apply_error_keys": apply_errors,
+        "blocker_keys": blocker_keys,
+        "apply_log_status": apply_log_summary.get("status", ""),
+        "apply_log_entries": apply_log_summary.get("apply_log_entries", ""),
+        "checklist_status": action_checklist.get("status", ""),
+        "checklist": rows,
+        "paper_ready_impact": (
+            "No paper-readiness change. This closeout only permits response write/refresh "
+            "after the current response TSV passes the session-gated strict dry-run."
+        ),
+        "next_concrete_action": (
+            "Run the write/refresh/prepare-next command."
+            if closeout_ready
+            else "Fill missing local response TSV fields, rerun the session-gated strict dry-run, then rerun this closeout checklist."
+        ),
+        "tracked_outputs": {
+            "closeout_summary": repo_relative(run_dir / CLOSEOUT_SUMMARY_NAME, repo_root=repo_root),
+            "closeout_tsv": repo_relative(run_dir / CLOSEOUT_TSV_NAME, repo_root=repo_root),
+            "apply_summary": repo_relative(apply_summary_path, repo_root=repo_root),
+            "session_start_summary": repo_relative(
+                session_start_summary_path,
+                repo_root=repo_root,
+            ),
+        },
+        "runtime_seconds": round(time.time() - started, 4),
+    }
+    assert_tracked_safe(payload)
+    assert_tracked_safe(rows)
+    return payload, rows
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--run-dir", type=Path, default=DEFAULT_RUN_DIR)
+    parser.add_argument("--apply-summary", type=Path)
+    parser.add_argument("--apply-log-summary", type=Path)
+    parser.add_argument("--session-start-summary", type=Path)
+    parser.add_argument("--action-checklist-summary", type=Path)
+    parser.add_argument("--handoff-summary", type=Path)
+    parser.add_argument("--summary-json", type=Path)
+    parser.add_argument("--output-tsv", type=Path)
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    apply_summary = args.apply_summary or args.run_dir / APPLY_SUMMARY_NAME
+    apply_log_summary = args.apply_log_summary or args.run_dir / APPLY_LOG_SUMMARY_NAME
+    session_start_summary = args.session_start_summary or args.run_dir / SESSION_START_SUMMARY_NAME
+    action_checklist_summary = (
+        args.action_checklist_summary or args.run_dir / CHECKLIST_SUMMARY_NAME
+    )
+    handoff_summary = args.handoff_summary or args.run_dir / HANDOFF_SUMMARY_NAME
+    summary_json = args.summary_json or args.run_dir / CLOSEOUT_SUMMARY_NAME
+    output_tsv = args.output_tsv or args.run_dir / CLOSEOUT_TSV_NAME
+    payload, rows = build_closeout(
+        run_dir=args.run_dir,
+        apply_summary_path=apply_summary,
+        apply_log_summary_path=apply_log_summary,
+        session_start_summary_path=session_start_summary,
+        action_checklist_summary_path=action_checklist_summary,
+        handoff_summary_path=handoff_summary,
+        repo_root=REPO_ROOT,
+    )
+    write_json(summary_json, payload)
+    write_tsv(output_tsv, rows)
+    print(json.dumps(payload, ensure_ascii=False, indent=2))
+    return 0 if payload["ok"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
