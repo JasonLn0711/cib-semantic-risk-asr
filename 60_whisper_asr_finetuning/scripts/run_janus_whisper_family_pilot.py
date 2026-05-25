@@ -184,6 +184,16 @@ def forced_decoder_ids_for(processor: Any, language: str, task: str) -> Any:
     return None
 
 
+def resolve_torch_dtype(torch_module: Any, runtime: str, dtype_name: str) -> Any:
+    if dtype_name == "auto":
+        return torch_module.float16 if runtime == "cuda" else torch_module.float32
+    return {
+        "float32": torch_module.float32,
+        "float16": torch_module.float16,
+        "bfloat16": torch_module.bfloat16,
+    }[dtype_name]
+
+
 def parse_args() -> argparse.Namespace:
     root = repo_root_from_script()
     default_manifest = (
@@ -210,6 +220,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-samples", type=int, default=15)
     parser.add_argument("--max-new-tokens", type=int, default=225)
     parser.add_argument("--seed", type=int, default=165)
+    parser.add_argument(
+        "--torch-dtype",
+        choices=("auto", "float32", "float16", "bfloat16"),
+        default="auto",
+        help="Model/input dtype. `auto` uses float16 on CUDA and float32 on CPU.",
+    )
     parser.add_argument("--label-mode", choices=("heuristic", "none"), default="heuristic")
     parser.add_argument(
         "--disable-cudnn",
@@ -240,6 +256,8 @@ def main() -> int:
     if args.runtime == "cuda" and not torch.cuda.is_available():
         raise SystemExit("CUDA runtime requested but torch.cuda.is_available() is false")
     device = torch.device("cuda" if args.runtime == "cuda" else "cpu")
+    model_dtype = resolve_torch_dtype(torch, args.runtime, args.torch_dtype)
+    model_dtype_name = str(model_dtype).replace("torch.", "")
 
     manifest_rows = read_jsonl(args.manifest)
     selected_rows = manifest_rows[: args.max_samples]
@@ -254,7 +272,11 @@ def main() -> int:
 
     started = time.time()
     processor = AutoProcessor.from_pretrained(args.model_name, language=args.language, task=args.task)
-    model = AutoModelForSpeechSeq2Seq.from_pretrained(args.model_name).to(device)
+    model = AutoModelForSpeechSeq2Seq.from_pretrained(
+        args.model_name,
+        torch_dtype=model_dtype,
+        low_cpu_mem_usage=True,
+    ).to(device)
     model.eval()
     forced_decoder_ids = forced_decoder_ids_for(processor, args.language, args.task)
 
@@ -270,7 +292,7 @@ def main() -> int:
             return_attention_mask=True,
             return_tensors="pt",
         )
-        input_features = inputs.input_features.to(device)
+        input_features = inputs.input_features.to(device=device, dtype=model_dtype)
         generate_kwargs: dict[str, Any] = {"max_new_tokens": args.max_new_tokens}
         if getattr(inputs, "attention_mask", None) is not None:
             generate_kwargs["attention_mask"] = inputs.attention_mask.to(device)
@@ -344,6 +366,7 @@ def main() -> int:
         "wer_mean": wer_mean,
         "label_mode": args.label_mode,
         "disable_cudnn": args.disable_cudnn,
+        "torch_dtype": model_dtype_name,
         "wall_time_seconds": elapsed,
         "audio_ids": [row["audio_id"] for row in prediction_rows],
     }
@@ -361,7 +384,7 @@ def main() -> int:
             "learning_rate": "",
             "wall_time_seconds": elapsed,
             "checkpoint": args.model_name,
-            "notes": f"pilot_inference;runtime={args.runtime};max_samples={len(prediction_rows)};label_mode={args.label_mode};disable_cudnn={args.disable_cudnn}",
+            "notes": f"pilot_inference;runtime={args.runtime};max_samples={len(prediction_rows)};label_mode={args.label_mode};disable_cudnn={args.disable_cudnn};torch_dtype={model_dtype_name}",
         },
     )
     print(json.dumps(summary, ensure_ascii=False, indent=2))

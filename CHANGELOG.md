@@ -5,6 +5,16 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.26 - 2026-05-25T10:41:53+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `c667b64`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/scripts/run_janus_whisper_family_pilot.py`
+
 ## v2.5.25 - 2026-05-25T10:23:18+08:00
 
 - Bump: `patch`

@@ -1,27 +1,21 @@
 {
-  "version": "v2.5.25",
+  "version": "v2.5.26",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 25
+    "patch": 26
   },
-  "updated_at": "2026-05-25T10:23:18+08:00",
+  "updated_at": "2026-05-25T10:41:53+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "667b995",
+  "base_commit": "c667b64",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/runs/janus_15_decision_stability_pilot/README.md",
-    "80_semantic_risk_asr/downstream/evaluate_downstream_impact.py",
-    "80_semantic_risk_asr/paper/experiment_plan.md",
-    "80_semantic_risk_asr/paper/q1_paper_design.md",
-    "80_semantic_risk_asr/paper/story_outline.md",
-    "80_semantic_risk_asr/scoring/counterfactual_escalation_instability.py",
-    "80_semantic_risk_asr/scoring/semantic_risk_score.py"
+    "60_whisper_asr_finetuning/scripts/run_janus_whisper_family_pilot.py"
   ]
 }
