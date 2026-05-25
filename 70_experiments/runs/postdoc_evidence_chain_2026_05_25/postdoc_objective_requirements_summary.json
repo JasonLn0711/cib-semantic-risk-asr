@@ -173,10 +173,10 @@
       "requirement": "recovery experiment has human-reviewed post-review evidence",
       "status": "review_pending",
       "paper_claim_status": "not paper-ready",
-      "evidence": "human_audit_post_review_evidence_summary.json",
-      "result": "recovery_human_ready=False",
-      "blocking_dependency": "post-review recovery evidence is still proxy-only",
-      "next_action": "After reviewed labels are refreshed, rerun recovery and post-review checklist."
+      "evidence": "human_audit_post_review_evidence_summary.json; human_audit_post_review_sequence_summary.json",
+      "result": "recovery_human_ready=False; post_review_sequence_status=post_review_sequence_blocked; post_review_sequence_ok=False; post_review_sequence_executed_step_count=0",
+      "blocking_dependency": "post-review recovery evidence is still proxy-only and strict post-review sequence is not complete",
+      "next_action": "After selected-300 response closeout is ready, run run_post_review_evidence_sequence.py --execute so write/refresh, strict human-reviewed recovery, post-review checklist, and objective audit execute in order."
     }
   ],
   "proxy_or_blocking_requirements": [
@@ -252,12 +252,12 @@
       "requirement": "recovery experiment has human-reviewed post-review evidence",
       "status": "review_pending",
       "paper_claim_status": "not paper-ready",
-      "evidence": "human_audit_post_review_evidence_summary.json",
-      "result": "recovery_human_ready=False",
-      "blocking_dependency": "post-review recovery evidence is still proxy-only",
-      "next_action": "After reviewed labels are refreshed, rerun recovery and post-review checklist."
+      "evidence": "human_audit_post_review_evidence_summary.json; human_audit_post_review_sequence_summary.json",
+      "result": "recovery_human_ready=False; post_review_sequence_status=post_review_sequence_blocked; post_review_sequence_ok=False; post_review_sequence_executed_step_count=0",
+      "blocking_dependency": "post-review recovery evidence is still proxy-only and strict post-review sequence is not complete",
+      "next_action": "After selected-300 response closeout is ready, run run_post_review_evidence_sequence.py --execute so write/refresh, strict human-reviewed recovery, post-review checklist, and objective audit execute in order."
     }
   ],
-  "next_decision": "Do not declare the postdoc objective complete. Complete selected-300 row/model/timing review, run strict closeout, refresh human predictor and recovery evidence, then rerun this audit.",
-  "runtime_seconds": 0.0006
+  "next_decision": "Do not declare the postdoc objective complete. Complete selected-300 row/model/timing review, run strict closeout, then execute run_post_review_evidence_sequence.py --execute so write/refresh, human predictor refresh, strict human-reviewed recovery, post-review checklist, and objective audit happen in order.",
+  "runtime_seconds": 0.0007
 }

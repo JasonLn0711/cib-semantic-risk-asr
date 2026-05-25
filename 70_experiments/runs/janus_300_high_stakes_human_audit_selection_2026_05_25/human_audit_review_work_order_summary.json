@@ -40,5 +40,5 @@
     "closeout_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json"
   },
   "next_concrete_action": "Use the work-order TSV during local review: start timing, inspect one local row, fill row/model fields, finish timing, then run strict dry-run and closeout.",
-  "runtime_seconds": 0.0011
+  "runtime_seconds": 0.004
 }

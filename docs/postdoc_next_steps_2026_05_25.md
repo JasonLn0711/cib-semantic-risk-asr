@@ -219,8 +219,8 @@ review-pending、post-review blocked 分開，避免把目前已經很完整的 
   `review_pending=2`。
 - Normal refresh:
   `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py` now
-  refreshes this audit and records `objective_requirements_ready` in
-  `human_audit_refresh_summary.json`。
+  refreshes the strict post-review sequence summary before this audit, then
+  records `objective_requirements_ready` in `human_audit_refresh_summary.json`。
 - What it verifies:
   legacy checkpoint / ignore boundary、LoRA and partial-encoder smoke、
   15-row contract、15-row CDS bridge、six-model 258-row decision-risk columns、
@@ -371,7 +371,8 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   `80_semantic_risk_asr/annotation/run_post_review_evidence_sequence.py`。
 - Refresh integration:
   `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py` 會在
-  objective requirements audit 後重建 sequence summary / TSV，接著跑
+  post-review evidence checklist 後重建 sequence summary / TSV，然後讓
+  objective requirements audit 讀取目前 sequence status，最後再跑
   consistency audit。
 - New check: `C072`。
 - Current tracked outputs:
@@ -469,6 +470,21 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   objective audit 順序固定成 plan-only gate；目前是
   `post_review_sequence_blocked`、`0` executed steps，並由 consistency check
   `C072` 驗證 sequence order 和 strict recovery command。
+
+26. Original-objective audit 已改成 sequence-aware completion audit：
+
+- `80_semantic_risk_asr/scoring/audit_postdoc_objective_requirements.py`
+  現在讀取 `human_audit_post_review_sequence_summary.json`。
+- Requirement `6.3` 不只記錄 `recovery_human_ready=False`，也記錄
+  `post_review_sequence_status=post_review_sequence_blocked`、
+  `post_review_sequence_ok=False`、`post_review_sequence_executed_step_count=0`。
+- Top-level `next_decision` 現在明確要求 selected-300 response closeout
+  完成後使用 `run_post_review_evidence_sequence.py --execute`，讓
+  write/refresh、human predictor refresh、strict human-reviewed recovery、
+  post-review checklist、objective audit 依序發生。
+- Current state 仍是 `objective_requirements_ready=false`、
+  `satisfied=8`、`proxy_satisfied=5`、`review_pending=2`；這是 completion
+  audit hardening，不是 human review completion。
   新增
   `human_audit_reviewer_handoff_summary.json` 把 current packet、response TSV、
   batch gate、apply-log status、下一步 commands 聚合成一個 safe handoff；
