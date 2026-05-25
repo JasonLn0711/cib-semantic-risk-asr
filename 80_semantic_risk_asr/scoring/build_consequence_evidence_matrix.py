@@ -254,8 +254,8 @@ def consequence_rows_from_payloads(
                 f"WER {unsafe_wer.get('auc', '')}, CER {unsafe_cer.get('auc', '')}, "
                 f"CEIS {unsafe_ceis.get('auc', '')}."
             ),
-            blocking_dependency="selected-300 human risk/decision/model review",
-            next_action="After human review, rerun predictor analysis and verify this relationship against reviewed decision-change labels.",
+            blocking_dependency="selected-300 human risk/decision/model/timing review",
+            next_action="After row/model/timing closeout, rerun predictor analysis and verify this relationship against reviewed decision-change labels.",
         ),
         row(
             consequence_id="C2",
@@ -272,8 +272,8 @@ def consequence_rows_from_payloads(
                 f"{partial_run.get('unsafe_downrouting_count', '')} unsafe downrouting and "
                 f"{partial_run.get('high_risk_missed_count', '')} high-risk miss."
             ),
-            blocking_dependency="human model-level assessments",
-            next_action="Use selected-300 per-model review fields before writing model-safety superiority claims.",
+            blocking_dependency="selected-300 per-model assessments and per-row timing closeout",
+            next_action="Use selected-300 per-model review fields after timing-complete closeout before writing model-safety superiority claims.",
         ),
         row(
             consequence_id="C3",
@@ -341,7 +341,7 @@ def consequence_rows_from_payloads(
                 if not completion_audit.get("publishable_ready")
                 else "All objective-level paper evidence is complete."
             ),
-            blocking_dependency="selected-300 human review and post-review predictor/recovery refresh",
+            blocking_dependency="selected-300 human row/model/timing review and post-review predictor/recovery refresh",
             next_action="Do not spend GPU time on more fine-tuning until the selected-300 human evidence gate closes.",
         ),
     ]
@@ -411,8 +411,10 @@ def build_matrix_from_payloads(
             "human-reviewed risk/decision/model labels."
         ),
         "next_decision": (
-            "Use the ready selected-300 packet to complete risk/decision/model review, "
-            "then rerun predictor and recovery analyses against reviewed labels."
+            "Use the ready selected-300 packet to complete risk/decision/model/timing "
+            "review, run the session-gated strict dry-run with --require-complete "
+            "--require-timing, then rerun predictor and recovery analyses against "
+            "reviewed labels."
         ),
     }
     assert_matrix_safe(payload)

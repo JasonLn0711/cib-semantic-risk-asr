@@ -1,22 +1,22 @@
 {
-  "version": "v2.5.140",
+  "version": "v2.5.141",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 140
+    "patch": 141
   },
-  "updated_at": "2026-05-26T03:08:49+08:00",
+  "updated_at": "2026-05-26T03:14:40+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "2ad1b3a",
+  "base_commit": "873d029",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion.tsv",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json"
+    "80_semantic_risk_asr/scoring/build_consequence_evidence_matrix.py",
+    "tests/test_consequence_evidence_matrix.py"
   ]
 }

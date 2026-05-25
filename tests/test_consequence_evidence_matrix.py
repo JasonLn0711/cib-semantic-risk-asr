@@ -9,6 +9,7 @@ sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "scoring"))
 
 from build_consequence_evidence_matrix import (  # noqa: E402
     assert_matrix_safe,
+    build_matrix_from_payloads,
     consequence_rows_from_payloads,
 )
 
@@ -116,6 +117,10 @@ def test_consequence_matrix_separates_proxy_from_human_ready_claims() -> None:
     assert by_id["C5"]["status"] == "review_pending"
     assert by_id["C6"]["paper_claim_status"] == "not paper-ready"
     assert "selected-300" in by_id["C5"]["blocking_dependency"]
+    assert "per-row timing" in by_id["C5"]["blocking_dependency"]
+    assert "timing" in by_id["C1"]["blocking_dependency"]
+    assert "timing" in by_id["C2"]["blocking_dependency"]
+    assert "timing" in by_id["C6"]["blocking_dependency"]
     assert_matrix_safe(rows)
 
 
@@ -143,3 +148,37 @@ def test_consequence_matrix_rows_do_not_leak_transcript_fields() -> None:
     assert "reference_text" not in serialized
     assert "hypothesis_text" not in serialized
     assert "reviewer_notes" not in serialized
+
+
+def test_consequence_matrix_top_level_next_decision_names_timing_gate(tmp_path: Path) -> None:
+    root = tmp_path
+    (root / "70_experiments" / "runs" / "wer_metric_audit_2026_05_25").mkdir(
+        parents=True
+    )
+    (
+        root
+        / "70_experiments"
+        / "runs"
+        / "wer_metric_audit_2026_05_25"
+        / "journal_compliance_summary.json"
+    ).write_text(
+        json.dumps({"paper_reporting_compliant": True}),
+        encoding="utf-8",
+    )
+    payload = build_matrix_from_payloads(
+        root,
+        human_refresh={
+            "ok": True,
+            "status": "review_pending",
+            "reviewed_rows": 0,
+            "audit_rows": 30,
+            "reviewed_model_assessments": 0,
+            "model_assessments": 90,
+            "pending_rows": 30,
+            "pending_model_assessments": 90,
+        },
+        completion_audit={"publishable_ready": False},
+    )
+
+    assert "risk/decision/model/timing review" in payload["next_decision"]
+    assert "--require-complete --require-timing" in payload["next_decision"]
