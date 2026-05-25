@@ -1,7 +1,7 @@
 {
   "ok": true,
   "status_counts": {
-    "pass": 15
+    "pass": 16
   },
   "failed_checks": [],
   "reference_transcript_policy": "Reference transcripts are already human-reviewed for WER/CER; this audit does not reopen transcript review.",
@@ -112,6 +112,14 @@
       "next_action": "Regenerate closeout gap TSV and reviewer handoff before local review timing entry."
     },
     {
+      "check_id": "C069",
+      "invariant": "response action-items TSV matches closeout gap counts",
+      "status": "pass",
+      "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_action_items.tsv",
+      "result": "action-items TSV has unique pending row/model/timing items and matches closeout counts",
+      "next_action": "Regenerate response action-items TSV from closeout before local review."
+    },
+    {
       "check_id": "C070",
       "invariant": "expanded ASR/Gemma candidates stay behind locale/runtime gates",
       "status": "pass",
@@ -129,5 +137,5 @@
     }
   ],
   "next_decision": "If this audit is pass, continue with the local selected-300 row/model/timing response closeout; if it fails, refresh the stale aggregate generator before paper-facing claims.",
-  "runtime_seconds": 0.0096
+  "runtime_seconds": 0.0049
 }

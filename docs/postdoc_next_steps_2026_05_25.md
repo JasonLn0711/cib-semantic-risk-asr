@@ -277,7 +277,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - New check: `C066`。
 - Current state:
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
-  現在是 `ok=true`、`15/15` checks passing、`failed_checks=[]`。
+  現在是 `ok=true`、`16/16` checks passing、`failed_checks=[]`。
 - 檢查內容：post-review command plan 必須先完成 response closeout；post-write
   order 必須是 refresh、strict human-reviewed recovery、post-review checklist、
   objective audit；strict recovery command 不能帶
@@ -305,7 +305,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - New check: `C067`。
 - Current state:
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
-  現在是 `ok=true`、`15/15` checks passing、`failed_checks=[]`。
+  現在是 `ok=true`、`16/16` checks passing、`failed_checks=[]`。
 - 檢查內容：reviewer handoff、action checklist、session-start summary 都必須
   提供 `timing_start_write_by_row` 和 `timing_finish_write_by_row`，且涵蓋
   目前 packet rows `1-6`；row `1` compatibility alias 也必須和 by-row map
@@ -318,13 +318,28 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - New check: `C068`。
 - Current state:
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
-  現在是 `ok=true`、`15/15` checks passing、`failed_checks=[]`。
+  現在是 `ok=true`、`16/16` checks passing、`failed_checks=[]`。
 - 檢查內容：`human_audit_response_gap_checklist.tsv` 必須和 closeout JSON 的
   rows `1-6` 對齊，且每列的 `timing_start_write_command` /
   `timing_finish_write_command` 必須和 fresh reviewer handoff 的 by-row
   timing helper commands 一致。這讓 reviewer 可以從 tracked gap TSV 直接
   取得 row/model/timing 缺口與 timing helper command，同時不追蹤 audio IDs、
   transcripts、hypotheses 或 reviewer notes。
+
+23. Response action-items TSV 已納入 consistency audit：
+
+- Source:
+  `80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py`。
+- New check: `C069`。
+- Current state:
+  `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
+  現在是 `ok=true`、`16/16` checks passing、`failed_checks=[]`。
+- 檢查內容：`human_audit_response_action_items.tsv` 必須和 closeout JSON 的
+  gap counts 對齊，action IDs 必須唯一，且 timing action items 必須含有
+  對應的 start/finish timing helper commands。Current live packet 有 `126`
+  pending action items：`48` row-field items、`72` model-field items、`6`
+  timing items；仍不追蹤 audio IDs、transcripts、hypotheses、selected sample
+  IDs、local row content 或 reviewer notes。
 
 目前最重要的限制：
 
@@ -391,6 +406,10 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   `human_audit_response_gap_checklist.tsv`，作為同一批缺口的 tracked
   row-number-only TSV checklist；這個 TSV 現在也帶有每列 timing start/finish
   helper command，並由 consistency check `C068` 驗證和 fresh handoff 對齊。
+  Closeout command 也會輸出
+  `human_audit_response_action_items.tsv`，把同一批缺口拆成 field-level
+  action items；目前是 `126` pending items，並由 consistency check `C069`
+  驗證和 closeout gap counts 對齊。
   新增
   `human_audit_reviewer_handoff_summary.json` 把 current packet、response TSV、
   batch gate、apply-log status、下一步 commands 聚合成一個 safe handoff；

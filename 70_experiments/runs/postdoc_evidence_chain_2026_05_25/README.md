@@ -119,6 +119,7 @@ ignored local paths.
 | 5.76 | Added row-number-only response gap reporting. | `apply_human_audit_batch_response.py`; `build_human_audit_response_closeout_checklist.py`; `human_audit_batch_response_apply_summary.json`; `human_audit_response_closeout_summary.json`; `tests/test_human_audit_batch_response.py`; `tests/test_human_audit_response_closeout.py`. | Completed as reviewer closeout instrumentation, not as human review. The strict apply summary and closeout summary now include `response_gap_overview` and `response_gap_summary_by_row`, listing only row numbers, missing reviewer field names, model-assessment gap counts, and timing gaps. The current live packet has `6/6` rows with gaps, `48` row fields missing, `18` model assessments missing, and `72` model-assessment fields missing; no audio IDs, transcripts, hypotheses, or reviewer notes are tracked. Compile and direct response/closeout tests passed; live consistency remains `ok=true` with `14/14` checks passing. |
 | 5.77 | Added tracked response gap TSV checklist. | `build_human_audit_response_closeout_checklist.py`; `human_audit_response_gap_checklist.tsv`; `human_audit_response_closeout_summary.json`; `tests/test_human_audit_response_closeout.py`. | Completed as reviewer closeout instrumentation, not as human review. The closeout command now writes a row-number-only TSV checklist for the same response gaps surfaced in JSON. Current live output has rows `1-6`, `6/6` rows with gaps, `48` row fields missing, `18` model assessments missing, `72` model-assessment fields missing, and `6/6` timing gaps. Compile/direct tests passed; the live closeout still exits nonzero as expected with `response_closeout_blocked`, and consistency remains `ok=true` with `14/14` checks passing. |
 | 5.78 | Attached per-row timing commands to the response gap TSV and audited alignment. | `build_human_audit_response_closeout_checklist.py`; `audit_evidence_chain_consistency.py`; `human_audit_response_gap_checklist.tsv`; `evidence_chain_consistency_summary.json`; `tests/test_human_audit_response_closeout.py`; `tests/test_evidence_chain_consistency.py`. | Completed as reviewer closeout instrumentation, not as human review. The gap TSV now includes `timing_start_write_command` and `timing_finish_write_command` for rows `1-6`, sourced from the fresh reviewer handoff command map. New consistency check `C068` verifies the gap TSV row numbers and timing commands match closeout and handoff evidence. Live consistency is `ok=true` with `15/15` checks passing; selected-300 review remains pending with `0/30` rows and `0/90` model assessments reviewed. |
+| 5.79 | Added field-level response action-items TSV and audited closeout count alignment. | `build_human_audit_response_closeout_checklist.py`; `audit_evidence_chain_consistency.py`; `human_audit_response_action_items.tsv`; `evidence_chain_consistency_summary.json`; `tests/test_human_audit_response_closeout.py`; `tests/test_evidence_chain_consistency.py`. | Completed as reviewer closeout instrumentation, not as human review. The closeout command now writes `126` pending field-level action items for the current packet: `48` row-field items, `72` model-field items, and `6` timing items. New consistency check `C069` verifies unique pending action IDs, timing helper command coverage for timing items, and alignment with the closeout gap counts. Live consistency is `ok=true` with `16/16` checks passing; selected-300 review remains pending with `0/30` rows and `0/90` model assessments reviewed. |
 
 ## Next Operations
 
@@ -213,8 +214,8 @@ ignored local paths.
    or candidate-gate change. It should stay `ok=true`; any failure means a
    tracked aggregate summary has drifted from the transcript policy,
    row/model/timing review scope, reviewer handoff freshness, timing closeout
-   command, post-review command order, proxy/paper-ready boundary, or ASR/Gemma
-   promotion gate.
+   command, response gap/action TSV alignment, post-review command order,
+   proxy/paper-ready boundary, or ASR/Gemma promotion gate.
 13. After local review edits, run `refresh_human_audit_evidence.py` without
    `--require-complete` to refresh aggregate records, then with
    `--require-complete` before treating the human audit as complete.
@@ -239,3 +240,7 @@ ignored local paths.
    in the current packet. The helper must not be treated as human review
    completion; it only writes timing fields in the ignored response TSV when
    run with `--write`.
+19. Use `human_audit_response_action_items.tsv` as the tracked field-level
+   closeout checklist before opening local transcript-bearing review files.
+   Current packet scope is `126` pending items: `48` row fields, `72` model
+   fields, and `6` timing items.

@@ -137,23 +137,29 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   missing, and `72` model-assessment fields missing. The closeout command now
   also writes `human_audit_response_gap_checklist.tsv` as the tracked
   row-number-only TSV checklist for the same gaps, with per-row timing
-  start/finish helper commands copied from the fresh reviewer handoff. The
-  high-level readiness, publishable, roadmap, post-review, consequence, and
-  refresh summaries now surface the same timing blocker so the paper-readiness
-  path cannot accidentally treat row/model fields as sufficient without review
-  elapsed-time evidence.
+  start/finish helper commands copied from the fresh reviewer handoff. It also
+  writes `human_audit_response_action_items.tsv`, a field-level action list for
+  the current packet: `126` pending items, split into `48` row-field items,
+  `72` model-field items, and `6` timing items. The high-level readiness,
+  publishable, roadmap, post-review, consequence, and refresh summaries now
+  surface the same timing blocker so the paper-readiness path cannot
+  accidentally treat row/model fields as sufficient without review elapsed-time
+  evidence.
   The aggregate consistency audit
   `80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py` now checks
   these summaries together, including reviewer handoff freshness and timing
-  awareness, per-row timing-helper command coverage, and the post-review
-  command plan. Current status is `ok=true` with `15/15` checks passing:
+  awareness, per-row timing-helper command coverage, the response gap/action
+  TSVs, and the post-review command plan. Current status is `ok=true` with
+  `16/16` checks passing:
   transcript ground truth is not reopened, remaining review scope includes
   row/model/timing fields, proxy evidence is not promoted to paper claims, and
   expanded ASR/Gemma candidates remain behind locale/runtime gates. It also
   checks that post-review recovery is rerun strictly, without the
   pending-summary allowance, that timing helper commands cover current packet
   rows `1-6`, and that the response gap TSV carries the same per-row timing
-  helper commands before objective completion can be claimed.
+  helper commands before objective completion can be claimed. Check `C069`
+  additionally requires the action-items TSV to match the closeout gap counts
+  before local review is routed from tracked records.
   The normal `refresh_human_audit_evidence.py` path now also refreshes this
   consistency status and records `consistency_audit_ok=true` in
   `human_audit_refresh_summary.json`.

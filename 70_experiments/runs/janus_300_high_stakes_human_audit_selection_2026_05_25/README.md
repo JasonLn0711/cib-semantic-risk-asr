@@ -153,6 +153,7 @@ Tracked readiness outputs:
 | `human_audit_response_closeout_summary.json` | Repo-safe response closeout checklist. Current status: `response_closeout_blocked`, with `session_start_gate.ok=true` but `0/6` row decisions, `0/18` model assessments, and `0/6` timing rows filled. It mirrors the row-number-only response gap report from the apply summary. |
 | `human_audit_response_closeout_checklist.tsv` | Repo-safe closeout checklist rows for session start, session-gated strict dry-run, row/model completion, response status, and write/refresh readiness. |
 | `human_audit_response_gap_checklist.tsv` | Repo-safe row-number-only response gap checklist for the current packet. Current rows `1-6` all have gaps: `48` row fields missing, `18` model assessments missing, `72` model-assessment fields missing, and `6/6` timing gaps. It now embeds each row's timing start/finish helper commands from the fresh reviewer handoff. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
+| `human_audit_response_action_items.tsv` | Repo-safe field-level action list generated from the response closeout gaps. Current live packet has `126` pending items: `48` row-field items, `72` model-field items, and `6` timing items with timing helper commands. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
 | `human_audit_post_review_evidence_summary.json` | Repo-safe post-review paper-evidence checklist. Current status: `post_review_evidence_blocked`; blockers are response closeout, human refresh, human predictor, readiness/publishable/consequence gates, and proxy-only recovery evidence. |
 | `human_audit_post_review_evidence_checklist.tsv` | Repo-safe checklist rows for the aggregate gates that must pass after response closeout/write/refresh before proxy claims can be promoted to paper-facing evidence. |
 
@@ -202,6 +203,10 @@ counts, missing model field names, timing-gap booleans, and the corresponding
 per-row timing start/finish helper commands from the fresh reviewer handoff.
 Use this TSV as the tracked checklist before opening the local
 transcript-bearing packet or response TSV.
+The command also writes `human_audit_response_action_items.tsv`, which expands
+the same safe row-number-only gaps into one pending action per missing
+row-level field, model-level field, and timing entry. Current live output is
+`126` pending items: `48` row fields, `72` model fields, and `6` timing items.
 
 For a one-file current-state handoff, run:
 
