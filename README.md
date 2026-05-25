@@ -135,7 +135,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   local review batch is prepared by
   `80_semantic_risk_asr/annotation/prepare_human_audit_review_batch.py`; current
   tracked batch records point to the ignored `critical_or_high_risk_missed`
-  packet for rows `1-6` and `18` model assessments. After
+  packet for rows `1-6` and `18` model assessments. Current batch completion is
+  audited by
+  `80_semantic_risk_asr/annotation/audit_human_review_batch_status.py` and
+  remains `batch_pending`: `0/6` rows and `0/18` model assessments reviewed.
+  After
   review edits, use
   `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py` to rerun
   validation, aggregate review-progress counts, aggregate review summaries,

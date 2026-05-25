@@ -69,6 +69,7 @@ ignored local paths.
 | 5.26 | Added journal-compliance WER classifier and clarified transcript ground-truth boundary. | `audit_wer_journal_compliance.py`; `journal_compliance_summary.json`; `journal_compliance_findings.tsv`. | Completed. The gate reports `paper_reporting_compliant=true` when tables use `cer_zh_micro` as primary and `wer_zh_jieba_micro` as supplemental. It intentionally reports `all_stored_wer_fields_journal_compliant=false` because legacy stored WER values remain tracked only for provenance/audit. Manifest/reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not reopen transcript review unless a new human-review task asks for different fields or content. |
 | 5.27 | Clarified readiness and refresh gates after confirming transcript ground truth is already reviewed. | `check_evidence_chain_readiness.py`; `audit_publishable_evidence_chain.py`; `audit_human_review_progress.py`; `refresh_human_audit_evidence.py`; refreshed aggregate JSON/TSV outputs. | Completed as a guardrail correction. Readiness, publishable completion, refresh, and progress outputs now explicitly state that transcript ground truth is already accepted for WER/CER scoring. The remaining selected-300 work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, and per-model assessment fields. `paper_ready=false` and `publishable_ready=false` remain correct because those fields are still `0/30` risk/decision row reviews and `0/90` model assessments complete. |
 | 5.28 | Prepared the first selected-300 local review batch. | `prepare_human_audit_review_batch.py`; `human_audit_next_review_batch_summary.json`; `human_audit_next_review_batch_rows.tsv`; `human_audit_review_batch_log.tsv`; ignored local packet under `artifacts/review_batches/`. | Completed as a review-execution aid, not as human review. The next packet is `critical_or_high_risk_missed`, covering row numbers `1-6`, `6` rows, and `18` model assessments. Tracked outputs contain only row numbers, strata, missing-field counts, and the ignored local packet path; sensitive-field scan found no audio IDs, transcripts, hypotheses, reviewer notes, or private text. |
+| 5.29 | Added current review-batch completion status audit. | `audit_human_review_batch_status.py`; `human_audit_current_review_batch_status_summary.json`; `human_audit_current_review_batch_status_rows.tsv`. | Completed as a batch guardrail, not as human review. Current first packet status is `batch_pending`: `0/6` risk/decision rows and `0/18` model assessments reviewed, `batch_ready_for_refresh=false`. Tracked outputs contain only row numbers, strata, completion counts, missing-field counts, and local packet path; sensitive-field scan found no audio IDs, transcripts, hypotheses, reviewer notes, or private text. |
 
 ## Next Operations
 
@@ -93,8 +94,9 @@ ignored local paths.
    packets, then `review_human_risk_atom_audit.py --list-pending` and
    row-level dry-runs to fill the ignored sheet without leaking transcripts
    into tracked files. Start with the prepared
-   `critical_or_high_risk_missed` packet, then `unsafe_downrouting`, then
-   `high_proxy_risk`.
+   `critical_or_high_risk_missed` packet, rerun
+   `audit_human_review_batch_status.py` until it reports `batch_complete`, then
+   move to `unsafe_downrouting` and `high_proxy_risk`.
 7. Use `check_evidence_chain_readiness.py` as the repo-safe status guardrail:
    it should stay `paper_ready=false` until the selected-300 human audit is
    complete and post-review predictors/recovery are rerun.

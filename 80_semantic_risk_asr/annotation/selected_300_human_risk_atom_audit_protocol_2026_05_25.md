@@ -151,6 +151,20 @@ The current first packet is `critical_or_high_risk_missed`, covering row
 numbers `1-6` and `18` model assessments. The packet itself is local-only and
 must not be committed.
 
+Before and after editing the local sheet, audit the current packet completion
+status:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/audit_human_review_batch_status.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --expected-rows 30
+```
+
+The status audit is aggregate-only. It must read `batch_complete` before this
+packet is treated as ready for aggregate refresh.
+
 Use the local helper to avoid hand-editing JSON in
 `reviewer_model_assessments_json`:
 

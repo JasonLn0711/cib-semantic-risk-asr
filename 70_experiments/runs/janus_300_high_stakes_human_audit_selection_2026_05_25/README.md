@@ -130,6 +130,8 @@ Tracked readiness outputs:
 | `human_audit_next_review_batch_summary.json` | Repo-safe record for the next prepared local review packet. Current packet: `critical_or_high_risk_missed`, rows `1-6`, `6` rows / `18` model assessments. |
 | `human_audit_next_review_batch_rows.tsv` | Repo-safe row-number and missing-field checklist for the prepared packet. No audio IDs, transcripts, hypotheses, or reviewer notes. |
 | `human_audit_review_batch_log.tsv` | Append-only repo-safe preparation log for local transcript-bearing review packets. |
+| `human_audit_current_review_batch_status_summary.json` | Repo-safe completion status for the current packet. Current status: `batch_pending`, `0/6` risk/decision rows and `0/18` model assessments reviewed. |
+| `human_audit_current_review_batch_status_rows.tsv` | Repo-safe row-level completion checklist for the current packet. No audio IDs, transcripts, hypotheses, or reviewer notes. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
@@ -159,6 +161,23 @@ Current prepared packet:
 The local packet contains transcripts and ASR hypotheses and remains ignored by
 Git. The tracked batch summary contains only row numbers, strata, counts,
 missing-field names, and the local packet path.
+
+Audit the prepared batch completion status before and after filling rows:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/audit_human_review_batch_status.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --expected-rows 30
+```
+
+Current batch status:
+
+- status: `batch_pending`;
+- reviewed risk/decision rows in batch: `0 / 6`;
+- reviewed model assessments in batch: `0 / 18`;
+- `batch_ready_for_refresh=false`.
 
 The local helper for filling one row at a time is:
 
