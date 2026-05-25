@@ -424,6 +424,73 @@ def add_readiness_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[st
     )
 
 
+def add_command_plan_check(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
+    post_review = payloads.get("post_review", {})
+    closeout = payloads.get("closeout", {})
+    plan = post_review.get("post_review_command_plan")
+    plan = plan if isinstance(plan, dict) else {}
+    closeout_commands = plan.get("closeout_commands")
+    closeout_commands = closeout_commands if isinstance(closeout_commands, dict) else {}
+    post_write_order = plan.get("post_write_order")
+    post_write_order = post_write_order if isinstance(post_write_order, list) else []
+    ordered_gates = [
+        str(item.get("gate", ""))
+        for item in post_write_order
+        if isinstance(item, dict)
+    ]
+    commands_by_gate = {
+        str(item.get("gate", "")): str(item.get("command", ""))
+        for item in post_write_order
+        if isinstance(item, dict)
+    }
+    expected_gates = [
+        "human_audit_refresh",
+        "strict_human_reviewed_recovery",
+        "post_review_checklist",
+        "objective_requirements_audit",
+    ]
+    strict_dry_run = str(closeout_commands.get("strict_dry_run", ""))
+    write_refresh = str(closeout_commands.get("write_refresh_prepare_next", ""))
+    strict_recovery = commands_by_gate.get("strict_human_reviewed_recovery", "")
+    plan_passed = (
+        plan.get("current_first_action") == "complete_response_closeout"
+        and closeout.get("status") == "response_closeout_blocked"
+        and all(flag in strict_dry_run for flag in (
+            "--require-complete",
+            "--require-timing",
+            "--require-session-start-gate",
+        ))
+        and all(flag in write_refresh for flag in (
+            "--write",
+            "--refresh-after-write",
+            "--prepare-next-after-write",
+            "--require-complete",
+            "--require-timing",
+            "--require-session-start-gate",
+        ))
+        and ordered_gates == expected_gates
+        and "refresh_human_audit_evidence.py" in commands_by_gate.get("human_audit_refresh", "")
+        and "evaluate_human_reviewed_recovery_policies.py" in strict_recovery
+        and "--allow-pending-summary" not in strict_recovery
+        and "build_post_review_evidence_checklist.py" in commands_by_gate.get("post_review_checklist", "")
+        and "audit_postdoc_objective_requirements.py" in commands_by_gate.get("objective_requirements_audit", "")
+    )
+    rows.append(
+        check_row(
+            check_id="C066",
+            invariant="post-review command plan preserves strict recovery order",
+            passed=plan_passed,
+            evidence=SUMMARY_SPECS["post_review"],
+            result=(
+                "post-review command plan starts with response closeout and routes through refresh, strict recovery, checklist, and objective audit"
+                if plan_passed
+                else "post-review command plan is missing, stale, out of order, or allows pending recovery evidence"
+            ),
+            next_action="Refresh the post-review checklist before local response write/refresh and do not promote proxy recovery.",
+        )
+    )
+
+
 def add_candidate_check(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
     candidate = payloads.get("candidate_recheck", {})
     bounded_statuses = {
@@ -484,6 +551,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_policy_checks(payloads, rows)
         add_timing_checks(payloads, rows)
         add_readiness_checks(payloads, rows)
+        add_command_plan_check(payloads, rows)
         add_candidate_check(payloads, rows)
         add_safety_check(payloads, rows)
 

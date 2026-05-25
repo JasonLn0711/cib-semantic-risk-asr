@@ -104,6 +104,39 @@ def write_consistent_fixture(root: Path) -> None:
             status="post_review_evidence_blocked",
             paper_ready=False,
             publishable_ready=False,
+            post_review_command_plan={
+                "current_first_action": "complete_response_closeout",
+                "closeout_commands": {
+                    "strict_dry_run": (
+                        "apply_human_audit_batch_response.py --require-complete "
+                        "--require-timing --require-session-start-gate"
+                    ),
+                    "write_refresh_prepare_next": (
+                        "apply_human_audit_batch_response.py --write "
+                        "--refresh-after-write --prepare-next-after-write "
+                        "--require-complete --require-timing "
+                        "--require-session-start-gate"
+                    ),
+                },
+                "post_write_order": [
+                    {
+                        "gate": "human_audit_refresh",
+                        "command": "refresh_human_audit_evidence.py",
+                    },
+                    {
+                        "gate": "strict_human_reviewed_recovery",
+                        "command": "evaluate_human_reviewed_recovery_policies.py",
+                    },
+                    {
+                        "gate": "post_review_checklist",
+                        "command": "build_post_review_evidence_checklist.py",
+                    },
+                    {
+                        "gate": "objective_requirements_audit",
+                        "command": "audit_postdoc_objective_requirements.py",
+                    },
+                ],
+            },
         ),
     )
     write_summary(
@@ -160,7 +193,7 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True
-    assert payload["status_counts"] == {"pass": 12}
+    assert payload["status_counts"] == {"pass": 13}
     assert not payload["failed_checks"]
     assert_aggregate_safe(payload)
 
@@ -227,6 +260,21 @@ def test_consistency_audit_fails_stale_reviewer_handoff(tmp_path: Path) -> None:
 
     assert payload["ok"] is False
     assert any(item["check_id"] == "C065" for item in payload["failed_checks"])
+
+
+def test_consistency_audit_rejects_pending_recovery_command_plan(tmp_path: Path) -> None:
+    write_consistent_fixture(tmp_path)
+    post_review_path = tmp_path / SUMMARY_SPECS["post_review"]
+    post_review = json.loads(post_review_path.read_text(encoding="utf-8"))
+    post_review["post_review_command_plan"]["post_write_order"][1]["command"] = (
+        "evaluate_human_reviewed_recovery_policies.py --allow-pending-summary"
+    )
+    post_review_path.write_text(json.dumps(post_review, ensure_ascii=False), encoding="utf-8")
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C066" for item in payload["failed_checks"])
 
 
 def test_consistency_safety_rejects_raw_field_tokens() -> None:
