@@ -234,7 +234,10 @@ readiness、publishable completion outputs。
   `freshness_status=fresh`。這個 handoff 也記錄每個 source summary 的
   SHA-256 digest；reviewer 開始前先跑
   `build_human_audit_reviewer_handoff.py --check-existing`，要求回報
-  `handoff_fresh`，再打開 transcript-bearing local packet 或 response TSV。
+  `handoff_fresh`，再跑
+  `preflight_human_audit_review_session.py` 留下 aggregate-only session-start
+  record；目前 preflight status 是 `review_session_ready`，local packet 與
+  response TSV 都存在，但這不代表 reviewer labels 已完成。
   嚴格
   `--require-complete` dry-run 目前會以 `ok=false` 和
   `incomplete_response=1` 退出，代表尚未填入 reviewer decisions；這是
@@ -747,7 +750,10 @@ Interpretation:
    `human_audit_reviewer_handoff_summary.json` 取得目前 packet、response TSV
    與正確命令，並在 reviewer 開始前跑
    `build_human_audit_reviewer_handoff.py --check-existing` 確認
-   `handoff_fresh`。需要連續產生下一批時加 `--prepare-next-after-write`。
+   `handoff_fresh`，接著跑
+   `preflight_human_audit_review_session.py` 確認 `review_session_ready` 並
+   留下 session-start record。需要連續產生下一批時加
+   `--prepare-next-after-write`。
    這會寫入 local sheet、重跑 batch status audit、並在 `batch_complete` 後刷新
    aggregate readiness / publishable completion。
 2. 跑

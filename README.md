@@ -151,7 +151,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   current handoff status is `reviewer_input_pending` and
   `freshness_status=fresh`. The handoff records source-summary SHA-256 digests;
   run the same tool with `--check-existing` before reviewer work and require
-  `handoff_fresh`. The strict
+  `handoff_fresh`. Before opening local review files, run
+  `80_semantic_risk_asr/annotation/preflight_human_audit_review_session.py`;
+  current preflight status is `review_session_ready`, with both local paths
+  present. The strict
   `--require-complete` dry-run currently
   exits nonzero as expected with `ok=false` and `incomplete_response=1`; this is
   the completion gate before any `--write`. After strict dry-run passes, use

@@ -209,6 +209,16 @@ The check compares source-summary SHA-256 digests and should report
 `handoff_fresh`. If it reports `handoff_stale`, regenerate the handoff before
 opening the transcript-bearing local packet or response TSV.
 
+Then record the review-session preflight before opening the local packet:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/preflight_human_audit_review_session.py
+```
+
+The preflight writes aggregate-only `human_audit_reviewer_preflight_summary.json`
+and appends `human_audit_reviewer_preflight_log.tsv`. It verifies freshness plus
+local packet/response TSV existence; it is not a substitute for human labels.
+
 After filling the ignored response TSV, dry-run it with the strict completion
 gate:
 

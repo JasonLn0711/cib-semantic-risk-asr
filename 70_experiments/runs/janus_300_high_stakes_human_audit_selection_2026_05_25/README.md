@@ -142,6 +142,8 @@ Tracked readiness outputs:
 | `human_audit_batch_response_apply_log.tsv` | Append-only repo-safe response dry-run/write log. Current first entry records the blank strict dry-run as `response_pending` with aggregate counts only. |
 | `human_audit_batch_response_apply_log_summary.json` | Repo-safe audit of the response apply log. Current status: `apply_log_valid`, `2` entries, latest status `response_pending`, `0/6` rows and `0/18` model assessments filled. |
 | `human_audit_reviewer_handoff_summary.json` | Repo-safe current reviewer handoff. Current status: `reviewer_input_pending`, `freshness_status=fresh`, packet rows `1-6`, response template path, latest apply status, apply-log status, source-summary SHA-256 digests, and exact next commands. |
+| `human_audit_reviewer_preflight_summary.json` | Repo-safe pre-review session preflight. Current status: `review_session_ready`, `handoff_fresh`, local packet exists, local response TSV exists, and no reviewer labels have been fabricated. |
+| `human_audit_reviewer_preflight_log.tsv` | Append-only repo-safe preflight log. Current entries record the ready state for `critical_or_high_risk_missed` rows `1-6` / `18` model assessments. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
@@ -171,6 +173,17 @@ handoff still matches its source summaries:
 ```
 
 Current freshness check: `handoff_fresh`.
+
+Before a human review session starts, record the aggregate-only session
+preflight:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/preflight_human_audit_review_session.py
+```
+
+Current preflight status: `review_session_ready`. This means the handoff is
+fresh and the local packet/response TSV paths exist; it does not mean reviewer
+fields are complete.
 
 Prepare the next local transcript-bearing review packet before filling rows:
 
