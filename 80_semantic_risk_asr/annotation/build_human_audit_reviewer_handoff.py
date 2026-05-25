@@ -80,10 +80,14 @@ def reviewer_commands(
     readiness_output_dir: str,
     expected_rows: int,
 ) -> dict[str, str]:
+    session_start_summary = f"{output_dir}/human_audit_reviewer_session_start_summary.json"
     base = [
         ".venv/bin/python",
         "80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py",
         "--require-complete",
+        "--require-session-start-gate",
+        "--session-start-summary",
+        session_start_summary,
         "--response-sheet",
         response_sheet,
         "--audit-sheet",
@@ -101,6 +105,9 @@ def reviewer_commands(
         ".venv/bin/python",
         "80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py",
         "--require-complete",
+        "--require-session-start-gate",
+        "--session-start-summary",
+        session_start_summary,
         "--write",
         "--refresh-after-write",
         "--prepare-next-after-write",

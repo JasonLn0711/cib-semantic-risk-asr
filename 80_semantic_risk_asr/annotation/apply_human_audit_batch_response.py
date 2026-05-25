@@ -49,6 +49,7 @@ TEMPLATE_SUMMARY_NAME = "human_audit_batch_response_template_summary.json"
 APPLY_SUMMARY_NAME = "human_audit_batch_response_apply_summary.json"
 APPLY_LOG_NAME = "human_audit_batch_response_apply_log.tsv"
 APPLY_LOG_SUMMARY_NAME = "human_audit_batch_response_apply_log_summary.json"
+SESSION_START_SUMMARY_NAME = "human_audit_reviewer_session_start_summary.json"
 DEFAULT_READINESS_DIR = refresh_audit.DEFAULT_READINESS_DIR
 
 ROW_RESPONSE_FIELDS = [
@@ -164,6 +165,12 @@ def append_tsv(path: Path, row: dict[str, Any], fieldnames: list[str]) -> None:
 
 def read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def read_json_if_exists(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    return read_json(path)
 
 
 def now_label() -> str:
@@ -561,6 +568,81 @@ def validate_response_values(rows: list[dict[str, str]]) -> Counter[str]:
     return Counter({key: value for key, value in errors.items() if value})
 
 
+def validate_session_start_gate(
+    *,
+    session_start_summary: Path,
+    batch_payload: dict[str, Any],
+    repo_root: Path,
+) -> tuple[dict[str, Any], Counter[str]]:
+    errors: Counter[str] = Counter()
+    payload = read_json_if_exists(session_start_summary)
+    expected_row_numbers = parse_batch_row_numbers(batch_payload)
+    if not payload:
+        errors["session_start_missing"] += 1
+        gate = {
+            "required": True,
+            "ok": False,
+            "status": "missing",
+            "summary_path": repo_relative(session_start_summary, repo_root=repo_root),
+            "row_numbers_match": False,
+            "selection_stratum_match": False,
+            "rubric_status": "",
+            "checklist_status": "",
+            "blocker_keys": [],
+        }
+        assert_tracked_safe(gate)
+        return gate, errors
+
+    packet = payload.get("current_packet") if isinstance(payload.get("current_packet"), dict) else {}
+    session_gate = (
+        payload.get("current_gate") if isinstance(payload.get("current_gate"), dict) else {}
+    )
+    status = str(payload.get("status") or "")
+    allowed_statuses = {
+        "reviewer_session_started",
+        "reviewer_response_complete_ready_to_write",
+    }
+    if not payload.get("ok") or status not in allowed_statuses:
+        errors["session_start_not_ready"] += 1
+
+    row_numbers_match = packet.get("row_numbers", []) == expected_row_numbers
+    if not row_numbers_match:
+        errors["session_start_batch_row_mismatch"] += 1
+
+    selection_stratum_match = packet.get("selection_stratum", "") == batch_payload.get(
+        "selection_stratum",
+        "",
+    )
+    if not selection_stratum_match:
+        errors["session_start_batch_stratum_mismatch"] += 1
+
+    if session_gate.get("rubric_status", "") != "rubric_ready":
+        errors["session_start_rubric_not_ready"] += 1
+    if session_gate.get("checklist_status", "") not in {
+        "reviewer_action_ready",
+        "response_complete_ready_to_write",
+    }:
+        errors["session_start_checklist_not_ready"] += 1
+    blocker_keys = session_gate.get("blocker_keys", [])
+    if blocker_keys:
+        errors["session_start_blockers_present"] += 1
+
+    gate = {
+        "required": True,
+        "ok": not errors,
+        "status": status,
+        "summary_path": repo_relative(session_start_summary, repo_root=repo_root),
+        "row_numbers_match": row_numbers_match,
+        "selection_stratum_match": selection_stratum_match,
+        "rubric_status": session_gate.get("rubric_status", ""),
+        "checklist_status": session_gate.get("checklist_status", ""),
+        "latest_apply_status_at_session_start": session_gate.get("latest_apply_status", ""),
+        "blocker_keys": blocker_keys if isinstance(blocker_keys, list) else [],
+    }
+    assert_tracked_safe(gate)
+    return gate, Counter({key: value for key, value in errors.items() if value})
+
+
 def group_response_rows(rows: list[dict[str, str]]) -> dict[int, list[dict[str, str]]]:
     grouped: dict[int, list[dict[str, str]]] = defaultdict(list)
     for row in rows:
@@ -683,6 +765,8 @@ def apply_response_sheet(
     repo_root: Path,
     write: bool,
     require_complete: bool = False,
+    session_start_summary: Path | None = None,
+    require_session_start: bool = False,
 ) -> dict[str, Any]:
     started = time.time()
     audit_fieldnames, audit_rows = read_tsv(audit_sheet)
@@ -697,6 +781,18 @@ def apply_response_sheet(
     value_errors = validate_response_values(response_rows)
     timing_errors = validate_review_timing_values(grouped, row_numbers)
     errors = shape_errors + value_errors + timing_errors
+    session_start_gate: dict[str, Any] = {"required": require_session_start}
+    if require_session_start:
+        if session_start_summary is None:
+            errors["session_start_summary_path_missing"] += 1
+            session_start_gate = {"required": True, "ok": False, "status": "path_missing"}
+        else:
+            session_start_gate, session_start_errors = validate_session_start_gate(
+                session_start_summary=session_start_summary,
+                batch_payload=batch_payload,
+                repo_root=repo_root,
+            )
+            errors.update(session_start_errors)
     reviewed_rows = sum(
         1
         for row_number in row_numbers
@@ -711,12 +807,18 @@ def apply_response_sheet(
         reviewed_model_assessments=reviewed_models,
         model_assessments=model_assessments,
     )
-    if require_complete and status != "response_complete":
+    content_complete = reviewed_rows == len(row_numbers) and reviewed_models == model_assessments
+    if require_complete and not content_complete:
         errors["incomplete_response"] += 1
+    if errors and status == "response_complete":
+        status = "response_invalid"
     backup_path = ""
     if write:
-        if status != "response_complete":
+        if not content_complete:
             errors["write_requires_response_complete"] += 1
+            status = "response_invalid"
+        elif errors:
+            errors["write_requires_valid_preconditions"] += 1
             status = "response_invalid"
         else:
             backup_path = repo_relative(backup_sheet(audit_sheet), repo_root=repo_root)
@@ -751,6 +853,7 @@ def apply_response_sheet(
         "reviewed_model_assessments_in_response": reviewed_models,
         "pending_model_assessments_in_response": pending_models,
         "review_timing": review_timing_summary(grouped, row_numbers),
+        "session_start_gate": session_start_gate,
         "error_counts": dict(sorted(errors.items())),
         "backup_path": backup_path,
         "response_sheet_path": repo_relative(response_sheet, repo_root=repo_root),
@@ -873,6 +976,8 @@ def apply_response_sheet_workflow(
     repo_root: Path,
     write: bool,
     require_complete: bool = False,
+    session_start_summary: Path | None = None,
+    require_session_start: bool = False,
     refresh_after_write: bool = False,
     skip_readiness: bool = False,
     prepare_next_after_write: bool = False,
@@ -886,6 +991,8 @@ def apply_response_sheet_workflow(
         repo_root=repo_root,
         write=write,
         require_complete=require_complete,
+        session_start_summary=session_start_summary,
+        require_session_start=require_session_start,
     )
     if refresh_after_write:
         if not write:
@@ -940,6 +1047,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--write-template", action="store_true")
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--require-complete", action="store_true")
+    parser.add_argument("--session-start-summary", type=Path)
+    parser.add_argument(
+        "--require-session-start-gate",
+        action="store_true",
+        help="Require a matching aggregate reviewer-session start summary before dry-run/write.",
+    )
+    parser.add_argument(
+        "--skip-session-start-gate",
+        action="store_true",
+        help="Allow --write without the aggregate reviewer-session start gate.",
+    )
     parser.add_argument(
         "--refresh-after-write",
         action="store_true",
@@ -987,6 +1105,12 @@ def main() -> int:
         return 0 if payload["ok"] else 1
     if not args.response_sheet:
         raise SystemExit("use --write-template or provide --response-sheet")
+    if args.require_session_start_gate and args.skip_session_start_gate:
+        raise SystemExit("cannot combine --require-session-start-gate and --skip-session-start-gate")
+    session_start_summary = args.session_start_summary or args.output_dir / SESSION_START_SUMMARY_NAME
+    require_session_start = args.require_session_start_gate or (
+        args.write and not args.skip_session_start_gate
+    )
     payload = apply_response_sheet_workflow(
         audit_sheet=args.audit_sheet,
         response_sheet=args.response_sheet,
@@ -999,6 +1123,8 @@ def main() -> int:
         repo_root=REPO_ROOT,
         write=args.write,
         require_complete=args.require_complete,
+        session_start_summary=session_start_summary,
+        require_session_start=require_session_start,
         refresh_after_write=args.refresh_after_write,
         skip_readiness=args.skip_readiness,
         prepare_next_after_write=args.prepare_next_after_write,

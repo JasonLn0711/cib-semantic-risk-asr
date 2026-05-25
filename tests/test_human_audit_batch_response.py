@@ -116,6 +116,32 @@ def write_batch(path: Path) -> None:
     )
 
 
+def write_session_start(path: Path, *, row_numbers: list[int] | None = None) -> None:
+    path.write_text(
+        json.dumps(
+            {
+                "ok": True,
+                "status": "reviewer_session_started",
+                "current_packet": {
+                    "selection_stratum": "critical_or_high_risk_missed",
+                    "row_numbers": row_numbers or [1],
+                    "rows_in_batch": len(row_numbers or [1]),
+                    "model_assessments_in_batch": len(row_numbers or [1]),
+                },
+                "current_gate": {
+                    "rubric_status": "rubric_ready",
+                    "checklist_status": "reviewer_action_ready",
+                    "latest_apply_status": "response_pending",
+                    "blocker_keys": [],
+                },
+            },
+            ensure_ascii=False,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+
 def complete_response_row() -> dict[str, str]:
     return {
         "row_number": "1",
@@ -295,6 +321,129 @@ def test_require_complete_passes_complete_dry_run(tmp_path: Path) -> None:
     assert payload["review_timing"]["rows_with_timing"] == 0
     assert payload["review_timing"]["rows_missing_timing"] == 1
     assert payload["error_counts"] == {}
+
+
+def test_require_session_start_gate_blocks_complete_dry_run_when_missing(
+    tmp_path: Path,
+) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(response_sheet, [complete_response_row()], TEMPLATE_FIELDS)
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=False,
+        require_complete=True,
+        session_start_summary=tmp_path / "missing_session_start.json",
+        require_session_start=True,
+    )
+
+    assert payload["ok"] is False
+    assert payload["status"] == "response_invalid"
+    assert payload["session_start_gate"]["status"] == "missing"
+    assert payload["error_counts"] == {"session_start_missing": 1}
+
+
+def test_require_session_start_gate_passes_matching_complete_dry_run(
+    tmp_path: Path,
+) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    session_start = tmp_path / "human_audit_reviewer_session_start_summary.json"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(response_sheet, [complete_response_row()], TEMPLATE_FIELDS)
+    write_session_start(session_start)
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=False,
+        require_complete=True,
+        session_start_summary=session_start,
+        require_session_start=True,
+    )
+
+    assert payload["ok"] is True
+    assert payload["status"] == "response_complete"
+    assert payload["session_start_gate"]["ok"] is True
+    assert payload["session_start_gate"]["row_numbers_match"] is True
+    assert payload["session_start_gate"]["selection_stratum_match"] is True
+
+
+def test_write_requires_session_start_gate_when_requested(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(response_sheet, [complete_response_row()], TEMPLATE_FIELDS)
+    before = audit_sheet.read_text(encoding="utf-8")
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=True,
+        require_complete=True,
+        session_start_summary=tmp_path / "missing_session_start.json",
+        require_session_start=True,
+    )
+
+    assert payload["ok"] is False
+    assert payload["status"] == "response_invalid"
+    assert payload["error_counts"] == {
+        "session_start_missing": 1,
+        "write_requires_valid_preconditions": 1,
+    }
+    assert audit_sheet.read_text(encoding="utf-8") == before
+
+
+def test_write_passes_with_matching_session_start_gate(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    session_start = tmp_path / "human_audit_reviewer_session_start_summary.json"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(response_sheet, [complete_response_row()], TEMPLATE_FIELDS)
+    write_session_start(session_start)
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=True,
+        require_complete=True,
+        session_start_summary=session_start,
+        require_session_start=True,
+    )
+    fieldnames, rows = read_tsv(audit_sheet)
+    validation_payload = validate_rows(fieldnames, rows, require_complete=True, expected_rows=1)
+
+    assert payload["ok"] is True
+    assert payload["status"] == "response_complete"
+    assert payload["session_start_gate"]["ok"] is True
+    assert validation_payload["ok"] is True
 
 
 def test_legacy_response_without_timing_columns_still_passes(tmp_path: Path) -> None:
