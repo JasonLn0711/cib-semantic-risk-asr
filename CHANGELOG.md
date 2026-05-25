@@ -5,6 +5,17 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.52 - 2026-05-25T18:42:36+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `6b58bb6`
+- Branch: `main`
+- Summary: Add selected-300 human audit selection tooling.
+- Changed files:
+  - `80_semantic_risk_asr/annotation/select_human_risk_atom_audit.py`
+  - `tests/test_human_audit_selection.py`
+
 ## v2.5.51 - 2026-05-25T18:30:49+08:00
 
 - Bump: `patch`

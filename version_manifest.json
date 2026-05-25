@@ -1,32 +1,22 @@
 {
-  "version": "v2.5.51",
+  "version": "v2.5.52",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 51
+    "patch": 52
   },
-  "updated_at": "2026-05-25T18:30:49+08:00",
+  "updated_at": "2026-05-25T18:42:36+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "3cbe268",
+  "base_commit": "6b58bb6",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
-  "summary": "Record selected-300 metric-predictor proxy evidence.",
+  "summary": "Add selected-300 human audit selection tooling.",
   "changed_files": [
-    "70_experiments/README.md",
-    "70_experiments/registry.tsv",
-    "70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/README.md",
-    "70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/low_wer_danger_summary.tsv",
-    "70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_comparison.tsv",
-    "70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json",
-    "70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/risk_atom_instability.tsv",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
-    "80_semantic_risk_asr/paper/experiment_plan.md",
-    "README.md",
-    "docs/REPO_MAP.md",
-    "docs/postdoc_next_steps_2026_05_25.md"
+    "80_semantic_risk_asr/annotation/select_human_risk_atom_audit.py",
+    "tests/test_human_audit_selection.py"
   ]
 }
