@@ -1,22 +1,25 @@
 {
-  "version": "v2.5.65",
+  "version": "v2.5.66",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 65
+    "patch": 66
   },
-  "updated_at": "2026-05-25T19:44:23+08:00",
+  "updated_at": "2026-05-25T19:44:39+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "8ad3c15",
+  "base_commit": "723395f",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py",
-    "tests/test_human_audit_review_helper.py"
+    "70_experiments/registry.tsv",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/README.md",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
+    "80_semantic_risk_asr/annotation/selected_300_human_risk_atom_audit_protocol_2026_05_25.md",
+    "README.md"
   ]
 }

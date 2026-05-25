@@ -61,6 +61,7 @@ ignored local paths.
 | 5.18 | Re-inspected WER calculation against paper-facing requirements. | `asr_text_metrics.py`; `run_janus_nemo_curator_pilot.py`; `audit_asr_text_metrics.py`; `wer_metric_audit_2026_05_25/*summary.json`. | Completed. The remaining NeMo pilot runner now uses the shared `zh_asr` + `jieba` metric helper after ASR inference. The WER audit now records zero-reference-unit counts and fails `ok` if any profile has zero reference units. Re-ran 15-row, 258-row, and 300-row audits: all returned `ok=true`, all manifest/reference/hypothesis checks stayed clean, and all zero-reference-unit counts were `0`. Verdict unchanged: old raw whitespace WER is audit-only; paper-facing tables use `cer_zh_micro` primary and `wer_zh_jieba_micro` supplemental. |
 | 5.19 | Added human audit validation gate. | `validate_human_risk_atom_audit.py`; `human_audit_validation_summary.json`; `human_audit_validation_counts.tsv`. | Review still pending, but the local sheet now has a strict schema/completion gate. Normal validation passes with `status=review_pending`, `30` audit rows, `90` model assessments, and `0` validation errors. `--require-complete` fails as expected with `30` incomplete row reviews and `90` incomplete model reviews. Outputs are aggregate-only and contain no audio IDs, transcripts, hypotheses, selected IDs, or reviewer notes. |
 | 5.20 | Revalidated WER after renewed concern about strange historical values. | `wer_metric_audit_2026_05_25/revalidation_log_2026_05_25.md`; `/tmp/cib_wer_recheck/`; focused code search. | Completed. Python compile and direct metric tests passed; `pytest` was unavailable in `.venv`, so test functions were imported directly. Legacy 15-row, six-model 258-row, and high-stakes 300-row WER audits all returned `ok=true`; revalidation TSV outputs matched the tracked TSVs byte-for-byte. Focused search found no current runner computing WER from raw `reference.split()` or `prediction.split()`; whitespace WER remains only the explicit legacy audit profile. |
+| 5.21 | Added local-only human audit review helper. | `review_human_risk_atom_audit.py`; `tests/test_human_audit_review_helper.py`; selected-300 audit README/protocol. | Review still pending. The helper lists pending row numbers safely, supports local transcript-bearing row inspection, dry-runs reviewer field updates, updates per-model assessment JSON by `asr_run_id`, and creates ignored backups before `--write`. Compile and direct helper tests passed. Live `--list-pending` over the local sheet reports `30` pending rows across six strata without printing transcripts. |
 
 ## Next Operations
 
@@ -79,7 +80,9 @@ ignored local paths.
 5. Use `build_janus_metric_inputs.py` to regenerate metric inputs for each
    expanded 258-row baseline set.
 6. Complete the local selected-300 human risk-atom audit sheet so proxy metrics
-   do not become overstated as formal CDS evidence.
+   do not become overstated as formal CDS evidence. Use
+   `review_human_risk_atom_audit.py --list-pending` and row-level dry-runs to
+   fill the ignored sheet without leaking transcripts into tracked files.
 7. Run `validate_human_risk_atom_audit.py --require-complete --expected-rows 30`
    before treating the human audit as complete.
 8. Record aggregate human annotation statistics without selected IDs or

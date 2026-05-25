@@ -133,6 +133,52 @@ needed because row-level labels can show that an audio segment contains a
 dangerous ASR risk, but only model-level labels can support a reviewer-facing
 claim about which ASR model is safer.
 
+## Local Review Helper
+
+The local helper for filling one row at a time is:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --list-pending
+```
+
+Current safe pending summary:
+
+- audit rows: `30`;
+- pending rows: `30`;
+- pending strata: `clean_control=4`,
+  `critical_or_high_risk_missed=6`, `high_proxy_risk=6`,
+  `model_disagreement=4`, `risk_score_fill=4`, `unsafe_downrouting=6`.
+
+To inspect a transcript-bearing row locally, use `--show-row --row-number N`.
+That output includes audio ID, reference transcript, ASR hypotheses, and
+current model assessment JSON. Do not commit it, paste it into issues, or copy
+it into tracked notes.
+
+To dry-run an edit without modifying the sheet:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --row-number N \
+  --semantic-risk-label priority_review \
+  --risk-atoms negation,amount \
+  --critical-atoms negation \
+  --asr-confusion-terms "short local note" \
+  --decision-change yes \
+  --decision-change-reason "routing changed" \
+  --expected-safe-action priority_review \
+  --confidence high \
+  --model-review breeze_asr25_partial_encoder_high_stakes_300:yes:negation:priority_review:high
+```
+
+Add `--write` only after the dry-run output is valid. The helper creates a
+local ignored backup under `artifacts/backups/` before writing. Tracked
+evidence must still come from `validate_human_risk_atom_audit.py`,
+`summarize_human_risk_atom_audit.py`, and
+`analyze_human_audit_predictors.py`.
+
 ## Validation Gate
 
 Before and after human review, validate the local sheet with:

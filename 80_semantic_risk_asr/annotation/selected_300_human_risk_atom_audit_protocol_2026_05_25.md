@@ -121,6 +121,54 @@ Primary labels:
 9. Do not penalize harmless wording changes that do not affect routing,
    priority, intervention, or conservative action.
 
+## Local Review Workflow
+
+Use the local helper to avoid hand-editing JSON in
+`reviewer_model_assessments_json`:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --list-pending
+```
+
+The safe pending summary contains row numbers and aggregate strata only. It
+does not print transcripts or hypotheses.
+
+For local review, inspect one row at a time:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --row-number N \
+  --show-row
+```
+
+`--show-row` is transcript-bearing local output. Do not paste it into tracked
+docs, terminal summaries, commits, issues, or external messages.
+
+Dry-run a row update first:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --row-number N \
+  --semantic-risk-label priority_review \
+  --risk-atoms negation,amount \
+  --critical-atoms negation \
+  --asr-confusion-terms "short local note" \
+  --decision-change yes \
+  --decision-change-reason "routing changed" \
+  --expected-safe-action priority_review \
+  --confidence high \
+  --model-review breeze_asr25_partial_encoder_high_stakes_300:yes:negation:priority_review:high
+```
+
+Repeat `--model-review` for every model whose model-level judgement is ready.
+Add `--write` only after the dry-run validation output is acceptable. The
+helper writes a local backup under `artifacts/backups/` before modifying the
+ignored sheet.
+
 ## Minimum Aggregate Outputs After Review
 
 First validate the local sheet:

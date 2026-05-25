@@ -114,7 +114,9 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   claims from the human audit. Human-reviewed WER/CER/SRES/CEIS predictor
   tables are produced by
   `80_semantic_risk_asr/annotation/analyze_human_audit_predictors.py` after
-  review.
+  review. Local row-by-row review support lives in
+  `80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py`; its
+  `--show-row` output is transcript-bearing and must stay local-only.
 - The 2026-05-25 WER audit is recorded in
   `70_experiments/runs/wer_metric_audit_2026_05_25/`. The latest audit checks
   legacy 15-row, six 258-row, and high-stakes 300-row hypothesis files against
