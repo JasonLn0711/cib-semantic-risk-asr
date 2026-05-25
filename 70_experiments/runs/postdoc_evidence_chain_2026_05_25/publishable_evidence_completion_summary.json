@@ -1,0 +1,107 @@
+{
+  "ok": true,
+  "publishable_ready": false,
+  "status_counts": {
+    "completed": 4,
+    "proxy_completed": 2,
+    "review_pending": 1
+  },
+  "completion_rows": [
+    {
+      "objective_id": "0",
+      "objective": "sealed migration and best-model checkpoint",
+      "status": "completed",
+      "paper_claim_status": "provenance evidence",
+      "evidence": "70_experiments/registry.tsv; legacy import and best-model run records",
+      "result": "Migration, pruning boundary, and best-model selection are registered.",
+      "blocking_dependency": "",
+      "next_action": "Keep raw weights and predictions local; only commit aggregate evidence."
+    },
+    {
+      "objective_id": "1",
+      "objective": "legacy-best LoRA and partial-encoder load smoke tests",
+      "status": "completed",
+      "paper_claim_status": "engineering gate only",
+      "evidence": "legacy-best smoke summary JSON files",
+      "result": "Both legacy best models loaded one row with runtime, dtype, and cuDNN policy.",
+      "blocking_dependency": "",
+      "next_action": "Use fixed 15-row and split gates only after smoke evidence remains valid."
+    },
+    {
+      "objective_id": "2",
+      "objective": "legacy best models join the fixed 15-row pilot",
+      "status": "completed",
+      "paper_claim_status": "engineering gate only",
+      "evidence": "legacy best 15-row validation JSON files",
+      "result": "Both legacy best models validated against the same 15-row hypothesis contract.",
+      "blocking_dependency": "",
+      "next_action": "Use 15-row output only as a gate before split/high-stakes evidence."
+    },
+    {
+      "objective_id": "3",
+      "objective": "rerun CDS-ASR metric bridge instead of selecting by CER only",
+      "status": "completed",
+      "paper_claim_status": "pilot evidence",
+      "evidence": "janus_15_decision_stability_legacy_best/asr_cds_model_comparison.tsv",
+      "result": "15-row bridge includes CER/WER, CEIS, downstream mismatch, and high-risk miss evidence.",
+      "blocking_dependency": "",
+      "next_action": "Keep the CER-alone contrast in the paper framing; do not overclaim from 15 rows."
+    },
+    {
+      "objective_id": "4",
+      "objective": "canonical janus_165_v1 258-row test split comparison",
+      "status": "proxy_completed",
+      "paper_claim_status": "proxy evidence; not human-reviewed risk-atom evidence",
+      "evidence": "janus_258_test_split_asr_cds_proxy summary and comparison TSV",
+      "result": "Six-model 258-row aggregate includes paper-facing zh metrics and decision-risk proxy fields.",
+      "blocking_dependency": "human-reviewed risk-atom labels before paper-grade risk claims",
+      "next_action": "Do not convert proxy risk-atom counts into formal human-reviewed conclusions."
+    },
+    {
+      "objective_id": "5",
+      "objective": "selected-300 high-stakes main experiment",
+      "status": "review_pending",
+      "paper_claim_status": "not paper-ready",
+      "evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json; janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json; human_audit_refresh_summary.json; human_audit_predictor_summary.json",
+      "result": "Selected-300 proxy inputs, metric-predictor proxy, and refresh gate exist, but human review is 0/30 rows and 0/90 model assessments.",
+      "blocking_dependency": "selected-300 local human risk-atom audit completion",
+      "next_action": "Fill the local audit sheet, rerun refresh with --require-complete, then use human-reviewed predictor outputs."
+    },
+    {
+      "objective_id": "6",
+      "objective": "five-condition recovery experiment",
+      "status": "proxy_completed",
+      "paper_claim_status": "proxy engineering evidence until human labels confirm outcomes",
+      "evidence": "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+      "result": "Recovery proxy shows CEIS action reduces high-risk missed and critical miss.",
+      "blocking_dependency": "human-reviewed labels and post-review recovery re-evaluation",
+      "next_action": "After human review, rerun recovery using reviewed labels before paper-grade intervention claims."
+    }
+  ],
+  "blocking_or_proxy_items": [
+    {
+      "objective_id": "4",
+      "objective": "canonical janus_165_v1 258-row test split comparison",
+      "status": "proxy_completed",
+      "blocking_dependency": "human-reviewed risk-atom labels before paper-grade risk claims",
+      "next_action": "Do not convert proxy risk-atom counts into formal human-reviewed conclusions."
+    },
+    {
+      "objective_id": "5",
+      "objective": "selected-300 high-stakes main experiment",
+      "status": "review_pending",
+      "blocking_dependency": "selected-300 local human risk-atom audit completion",
+      "next_action": "Fill the local audit sheet, rerun refresh with --require-complete, then use human-reviewed predictor outputs."
+    },
+    {
+      "objective_id": "6",
+      "objective": "five-condition recovery experiment",
+      "status": "proxy_completed",
+      "blocking_dependency": "human-reviewed labels and post-review recovery re-evaluation",
+      "next_action": "After human review, rerun recovery using reviewed labels before paper-grade intervention claims."
+    }
+  ],
+  "first_principle_decision": "Do not spend more GPU time to chase ASR fine-tuning until the selected-300 human audit converts proxy CDS-ASR evidence into paper-grade evidence.",
+  "next_decision": "Complete selected-300 human row/model review, run the refresh gate with --require-complete, then rerun human-reviewed predictor and recovery claims.",
+  "runtime_seconds": 0.0031
+}

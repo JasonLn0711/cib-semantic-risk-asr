@@ -138,6 +138,23 @@ gate、evidence-chain readiness 串成同一個可重跑操作。人工審閱仍
 local ignored sheet 完成；refresh gate 只負責把完成後的 aggregate evidence
 同步到 tracked outputs。
 
+13. Publishable evidence completion audit 已建立：
+
+- Script:
+  `80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py`。
+- Current tracked audit:
+  `70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json`。
+- Current state: `ok=true` but `publishable_ready=false`；objective `0-3`
+  completed，objective `4` 和 `6` proxy-only，objective `5`
+  `review_pending`。
+- FIRST PRINCIPLE decision: 在 selected-300 human audit 把 proxy CDS-ASR
+  evidence 轉成 paper-grade evidence 以前，不要再把主要資源投入盲目的
+  ASR fine-tuning。
+
+這個 audit 是 requirement-to-evidence matrix：它不新增實驗結論，只是把
+「哪些項目真的完成」與「哪些只是 proxy」分開，避免後續論文包裝時誤把
+工程證據寫成 human-reviewed paper evidence。
+
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS

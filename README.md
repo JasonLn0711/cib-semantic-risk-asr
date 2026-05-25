@@ -86,6 +86,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/`. Current status:
   `ok=true`, `paper_ready=false`, because the selected-300 human risk-atom
   audit remains `0/30` rows and `0/90` model assessments reviewed.
+  A stricter objective-by-objective publication audit is
+  `80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py`; its
+  current output records `publishable_ready=false` with objective `5`
+  `review_pending` and objectives `4`/`6` still proxy-only.
 - Split-aware metric-input generation now lives at
   `80_semantic_risk_asr/scoring/build_janus_metric_inputs.py`, with validation
   recorded in

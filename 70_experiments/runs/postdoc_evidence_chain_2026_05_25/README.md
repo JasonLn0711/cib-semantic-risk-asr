@@ -64,6 +64,7 @@ ignored local paths.
 | 5.21 | Added local-only human audit review helper. | `review_human_risk_atom_audit.py`; `tests/test_human_audit_review_helper.py`; selected-300 audit README/protocol. | Review still pending. The helper lists pending row numbers safely, supports local transcript-bearing row inspection, dry-runs reviewer field updates, updates per-model assessment JSON by `asr_run_id`, and creates ignored backups before `--write`. Compile and direct helper tests passed. Live `--list-pending` over the local sheet reports `30` pending rows across six strata without printing transcripts. |
 | 5.22 | Added evidence-chain readiness gate. | `check_evidence_chain_readiness.py`; `evidence_chain_readiness_summary.json`; `evidence_chain_readiness.tsv`. | Completed as a guardrail, not as final paper readiness. The checker verifies the 0-6 evidence chain from tracked aggregate files and returns `ok=true`, `paper_ready=false`, status counts `completed=5`, `proxy_completed=4`, `review_pending=1`. The only blocking gate is selected-300 human risk-atom audit completion: `0/30` rows and `0/90` model assessments reviewed. Sensitive-field scan over the readiness outputs found no transcript or ID leakage. |
 | 5.23 | Added post-review human audit aggregate refresh gate. | `refresh_human_audit_evidence.py`; `human_audit_refresh_summary.json`; refreshed aggregate summaries/readiness outputs. | Review still pending. Compile and direct refresh tests passed; `.venv/bin/python -m pytest tests/test_human_audit_refresh.py` could not run because `pytest` is not installed. Normal refresh passes with `ok=true`, `review_pending`, `0/30` reviewed rows, `0/90` reviewed model assessments, and `paper_ready=false`; `--require-complete` was checked in `/tmp/cib_human_audit_refresh_require_complete/` and exits `1` as expected until all local row/model fields are filled. Sensitive-field scan over refreshed aggregate outputs found no transcript, row key, hypothesis text, reviewer note, or private fixture leakage. |
+| 5.24 | Added objective-level publishable evidence completion audit. | `audit_publishable_evidence_chain.py`; `publishable_evidence_completion_summary.json`; `publishable_evidence_completion.tsv`. | Completed as a status audit, not as final paper readiness. Compile and direct audit tests passed; `.venv/bin/python -m pytest tests/test_publishable_evidence_audit.py` could not run because `pytest` is not installed. Current audit returns `ok=true`, `publishable_ready=false`, status counts `completed=4`, `proxy_completed=2`, `review_pending=1`. Objective `5` is blocked by selected-300 human review (`0/30` rows and `0/90` model assessments reviewed); objectives `4` and `6` are proxy-only until human-reviewed risk labels and post-review recovery evidence exist. Sensitive-field scan over the completion outputs found no transcript, row key, hypothesis text, reviewer note, or private fixture leakage. |
 
 ## Next Operations
 
@@ -88,11 +89,14 @@ ignored local paths.
 7. Use `check_evidence_chain_readiness.py` as the repo-safe status guardrail:
    it should stay `paper_ready=false` until the selected-300 human audit is
    complete and post-review predictors/recovery are rerun.
-8. After local review edits, run `refresh_human_audit_evidence.py` without
+8. Use `audit_publishable_evidence_chain.py` as the objective-level completion
+   audit. It should stay `publishable_ready=false` while any objective remains
+   proxy-only or review-pending.
+9. After local review edits, run `refresh_human_audit_evidence.py` without
    `--require-complete` to refresh aggregate records, then with
    `--require-complete` before treating the human audit as complete.
-9. Record aggregate human annotation statistics without selected IDs or
+10. Record aggregate human annotation statistics without selected IDs or
    transcripts.
-10. After the selected-300 audit, use the refresh gate to rerun
+11. After the selected-300 audit, use the refresh gate to rerun
    `analyze_human_audit_predictors.py` outputs and replace proxy-only predictor
    language with reviewer-facing evidence.
