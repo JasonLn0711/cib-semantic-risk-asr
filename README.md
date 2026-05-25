@@ -173,7 +173,7 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   awareness, per-row timing-helper command coverage, the response gap/action
   TSVs, the aggregate review work order, the post-review sequence gate, and
   the post-review command plan.
-  Current status is `ok=true` with `18/18` checks passing:
+  Current status is `ok=true` with `19/19` checks passing:
   transcript ground truth is not reopened, remaining review scope includes
   row/model/timing fields, proxy evidence is not promoted to paper claims, and
   expanded ASR/Gemma candidates remain behind locale/runtime gates. It also
@@ -187,7 +187,9 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   closeout order before reviewer work is treated as operationally routed.
   Check `C072` requires the post-review sequence TSV to preserve the strict
   post-review order and to keep the human-reviewed recovery rerun free of
-  `--allow-pending-summary`.
+  `--allow-pending-summary`. Check `C073` requires the original-objective audit
+  to record the current post-review sequence status and to route objective
+  completion through `run_post_review_evidence_sequence.py --execute`.
   The normal `refresh_human_audit_evidence.py` path now also refreshes this
   consistency status and records `consistency_audit_ok=true` in
   `human_audit_refresh_summary.json`.

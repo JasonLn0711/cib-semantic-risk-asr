@@ -392,6 +392,26 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   `--allow-pending-summary`。這是 post-review execution-order guardrail，不是
   human review completion。
 
+26. Objective sequence-routing evidence 已納入 consistency audit：
+
+- Source:
+  `80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py`。
+- New check: `C073`。
+- Current tracked outputs:
+  `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
+  和
+  `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv`。
+- Current state:
+  consistency 現在是 `ok=true`、`19/19` checks passing、`failed_checks=[]`。
+- 檢查內容：`C073` 要求 original-objective requirement `6.3` 同時記錄
+  `human_audit_post_review_sequence_summary.json`、目前的
+  `post_review_sequence_status`、`post_review_sequence_ok`、
+  `post_review_sequence_executed_step_count`，並且要求 requirement-level
+  `next_action` 與 top-level `next_decision` 都把 final completion route 指向
+  `run_post_review_evidence_sequence.py --execute`。這是防止 objective audit
+  在 sequence gate 之外被單獨宣告完成的 guardrail，不是 human review
+  completion。
+
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS
