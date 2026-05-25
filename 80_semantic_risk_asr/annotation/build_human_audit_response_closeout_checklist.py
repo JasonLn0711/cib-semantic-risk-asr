@@ -42,6 +42,7 @@ from start_human_audit_review_session import (  # noqa: E402
 
 CLOSEOUT_SUMMARY_NAME = "human_audit_response_closeout_summary.json"
 CLOSEOUT_TSV_NAME = "human_audit_response_closeout_checklist.tsv"
+RESPONSE_GAP_TSV_NAME = "human_audit_response_gap_checklist.tsv"
 
 
 def read_json_if_exists(path: Path) -> dict[str, Any]:
@@ -63,6 +64,37 @@ def write_tsv(path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writeheader()
         for row in rows:
             writer.writerow({field: row.get(field, "") for field in fieldnames})
+
+
+def tsv_value(value: Any) -> Any:
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, list):
+        return ",".join(str(item) for item in value)
+    return value
+
+
+def write_gap_tsv(path: Path, rows: list[dict[str, Any]]) -> None:
+    fieldnames = [
+        "row_number",
+        "has_gap",
+        "row_response_complete",
+        "row_fields_missing_count",
+        "missing_row_fields",
+        "model_assessments_expected_count",
+        "model_assessments_complete_count",
+        "model_assessments_missing_count",
+        "model_fields_missing_count",
+        "missing_model_fields",
+        "review_timing_complete",
+        "review_timing_missing",
+    ]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t", lineterminator="\n")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({field: tsv_value(row.get(field, "")) for field in fieldnames})
 
 
 def bool_status(condition: bool) -> str:
@@ -281,6 +313,10 @@ def build_closeout(
         "tracked_outputs": {
             "closeout_summary": repo_relative(run_dir / CLOSEOUT_SUMMARY_NAME, repo_root=repo_root),
             "closeout_tsv": repo_relative(run_dir / CLOSEOUT_TSV_NAME, repo_root=repo_root),
+            "response_gap_tsv": repo_relative(
+                run_dir / RESPONSE_GAP_TSV_NAME,
+                repo_root=repo_root,
+            ),
             "apply_summary": repo_relative(apply_summary_path, repo_root=repo_root),
             "session_start_summary": repo_relative(
                 session_start_summary_path,
@@ -304,6 +340,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--handoff-summary", type=Path)
     parser.add_argument("--summary-json", type=Path)
     parser.add_argument("--output-tsv", type=Path)
+    parser.add_argument("--gap-output-tsv", type=Path)
     return parser.parse_args()
 
 
@@ -318,6 +355,7 @@ def main() -> int:
     handoff_summary = args.handoff_summary or args.run_dir / HANDOFF_SUMMARY_NAME
     summary_json = args.summary_json or args.run_dir / CLOSEOUT_SUMMARY_NAME
     output_tsv = args.output_tsv or args.run_dir / CLOSEOUT_TSV_NAME
+    gap_output_tsv = args.gap_output_tsv or args.run_dir / RESPONSE_GAP_TSV_NAME
     payload, rows = build_closeout(
         run_dir=args.run_dir,
         apply_summary_path=apply_summary,
@@ -329,6 +367,7 @@ def main() -> int:
     )
     write_json(summary_json, payload)
     write_tsv(output_tsv, rows)
+    write_gap_tsv(gap_output_tsv, payload["response_gap_summary_by_row"])
     print(json.dumps(payload, ensure_ascii=False, indent=2))
     return 0 if payload["ok"] else 1
 

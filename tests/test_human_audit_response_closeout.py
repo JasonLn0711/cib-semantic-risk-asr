@@ -8,7 +8,11 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "annotation"))
 
-from build_human_audit_response_closeout_checklist import build_closeout  # noqa: E402
+from build_human_audit_response_closeout_checklist import (  # noqa: E402
+    RESPONSE_GAP_TSV_NAME,
+    build_closeout,
+    write_gap_tsv,
+)
 
 
 def write_json(path: Path, payload: dict) -> None:
@@ -154,6 +158,7 @@ def test_closeout_blocks_pending_response_without_private_content(tmp_path: Path
     assert payload["response_gap_overview"]["rows_with_any_gap"] == 2
     assert payload["response_gap_summary_by_row"][0]["row_number"] == 1
     assert payload["response_gap_summary_by_row"][0]["has_gap"] is True
+    assert payload["tracked_outputs"]["response_gap_tsv"].endswith(RESPONSE_GAP_TSV_NAME)
     assert "response_not_complete" in payload["blocker_keys"]
     assert "incomplete_response" in payload["blocker_keys"]
     status_by_step = {row["step_id"]: row["status"] for row in rows}
@@ -162,6 +167,43 @@ def test_closeout_blocks_pending_response_without_private_content(tmp_path: Path
     assert "PRIVATE_" not in serialized
     assert "reference_text" not in serialized
     assert "hypothesis_text" not in serialized
+
+
+def test_write_gap_tsv_is_row_number_only_and_safe(tmp_path: Path) -> None:
+    run_dir = tmp_path / "run"
+    paths = write_closeout_inputs(run_dir, response_complete=False)
+
+    payload, _rows = build_closeout(
+        run_dir=run_dir,
+        apply_summary_path=paths["apply_summary"],
+        apply_log_summary_path=paths["apply_log_summary"],
+        session_start_summary_path=paths["session_start"],
+        action_checklist_summary_path=paths["action_checklist"],
+        handoff_summary_path=paths["handoff"],
+        repo_root=tmp_path,
+    )
+    output_tsv = run_dir / RESPONSE_GAP_TSV_NAME
+    write_gap_tsv(output_tsv, payload["response_gap_summary_by_row"])
+
+    text = output_tsv.read_text(encoding="utf-8")
+    assert text.splitlines()[0] == (
+        "row_number\thas_gap\trow_response_complete\t"
+        "row_fields_missing_count\tmissing_row_fields\t"
+        "model_assessments_expected_count\tmodel_assessments_complete_count\t"
+        "model_assessments_missing_count\tmodel_fields_missing_count\t"
+        "missing_model_fields\treview_timing_complete\treview_timing_missing"
+    )
+    assert "1\ttrue\tfalse\t8\treviewer_risk_atoms\t3\t0\t3\t12\tmodel_reviewer_critical_atoms\tfalse\ttrue" in text
+    assert "2\ttrue\tfalse\t8\treviewer_risk_atoms\t3\t0\t3\t12\tmodel_reviewer_critical_atoms\tfalse\ttrue" in text
+    assert "PRIVATE_" not in text
+    assert "audio_id" not in text
+    assert "sample_id" not in text
+    assert "reference_text" not in text
+    assert "hypothesis_text" not in text
+    assert "asr_hypotheses_json" not in text
+    assert "reviewer_model_assessments_json" not in text
+    assert "reviewer_notes" not in text
+    assert "reviewer_verified_transcript" not in text
 
 
 def test_closeout_marks_complete_response_ready_to_write(tmp_path: Path) -> None:
