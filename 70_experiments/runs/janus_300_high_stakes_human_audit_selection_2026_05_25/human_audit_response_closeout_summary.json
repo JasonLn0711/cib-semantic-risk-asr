@@ -1,0 +1,90 @@
+{
+  "ok": false,
+  "status": "response_closeout_blocked",
+  "input_boundary": "tracked aggregate response/session summaries only",
+  "output_boundary": "aggregate-only response closeout checklist; no row keys or transcript text",
+  "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
+  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
+  "selection_stratum": "critical_or_high_risk_missed",
+  "rows_in_batch": 6,
+  "reviewed_rows_in_response": 0,
+  "pending_rows_in_response": 6,
+  "reviewed_model_assessments_in_response": 0,
+  "pending_model_assessments_in_response": 18,
+  "latest_apply_status": "response_pending",
+  "session_start_gate": {
+    "required": true,
+    "ok": true,
+    "status": "reviewer_session_started",
+    "summary_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json",
+    "row_numbers_match": true,
+    "selection_stratum_match": true,
+    "rubric_status": "rubric_ready",
+    "checklist_status": "reviewer_action_ready",
+    "latest_apply_status_at_session_start": "response_pending",
+    "blocker_keys": []
+  },
+  "apply_error_keys": [
+    "incomplete_response"
+  ],
+  "blocker_keys": [
+    "response_not_complete",
+    "incomplete_response"
+  ],
+  "apply_log_status": "apply_log_valid",
+  "apply_log_entries": 3,
+  "checklist_status": "reviewer_action_ready",
+  "checklist": [
+    {
+      "step_id": "1",
+      "action": "confirm reviewer session start gate",
+      "status": "ready",
+      "evidence": "session_status=reviewer_session_started; session_ok=True",
+      "next_action": "rerun start_human_audit_review_session.py if blocked"
+    },
+    {
+      "step_id": "2",
+      "action": "confirm strict dry-run was session-gated",
+      "status": "ready",
+      "evidence": "require_complete=True; session_gate_ok=True; rows_match=True; stratum_match=True",
+      "next_action": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30"
+    },
+    {
+      "step_id": "3",
+      "action": "confirm row-level response completion",
+      "status": "pending",
+      "evidence": "reviewed_rows=0; pending_rows=6",
+      "next_action": "fill required row-level risk and decision fields in the local response TSV"
+    },
+    {
+      "step_id": "4",
+      "action": "confirm model-level response completion",
+      "status": "pending",
+      "evidence": "reviewed_model_assessments=0; pending_model_assessments=18",
+      "next_action": "fill every per-model decision-change and safe-action assessment"
+    },
+    {
+      "step_id": "5",
+      "action": "confirm strict dry-run response status",
+      "status": "blocked",
+      "evidence": "apply_status=response_pending; apply_ok=False; error_keys=incomplete_response",
+      "next_action": "rerun strict dry-run until response_complete"
+    },
+    {
+      "step_id": "6",
+      "action": "write, refresh, and prepare next batch",
+      "status": "blocked_until_response_complete",
+      "evidence": "closeout_ready=False",
+      "next_action": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --write --refresh-after-write --prepare-next-after-write --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30"
+    }
+  ],
+  "paper_ready_impact": "No paper-readiness change. This closeout only permits response write/refresh after the current response TSV passes the session-gated strict dry-run.",
+  "next_concrete_action": "Fill missing local response TSV fields, rerun the session-gated strict dry-run, then rerun this closeout checklist.",
+  "tracked_outputs": {
+    "closeout_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json",
+    "closeout_tsv": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_checklist.tsv",
+    "apply_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json",
+    "session_start_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json"
+  },
+  "runtime_seconds": 0.0005
+}

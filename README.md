@@ -181,7 +181,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   strict dry-run/write commands generated from the handoff now require
   `--require-session-start-gate` against that session-start summary; the live
   strict dry-run records `session_start_gate.ok=true` and still fails only
-  because reviewer response content is incomplete.
+  because reviewer response content is incomplete. Response closeout is tracked
+  by `80_semantic_risk_asr/annotation/build_human_audit_response_closeout_checklist.py`;
+  current closeout status is `response_closeout_blocked` because `0/6` row
+  decisions and `0/18` model assessments are filled.
   The strict
   `--require-complete` dry-run currently
   exits nonzero as expected with `ok=false` and `incomplete_response=1`; this is

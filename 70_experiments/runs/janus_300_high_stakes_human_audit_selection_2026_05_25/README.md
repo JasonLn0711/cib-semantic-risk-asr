@@ -150,6 +150,8 @@ Tracked readiness outputs:
 | `human_audit_reviewer_action_checklist.tsv` | Repo-safe checklist rows for handoff freshness, local packet/template existence, preflight, rubric/value-contract confirmation, required row/model fields, optional timing fields, strict dry-run, and post-completion write/refresh. |
 | `human_audit_reviewer_session_start_summary.json` | Repo-safe one-command reviewer-session start record. Current status: `reviewer_session_started`, after refreshing handoff, preflight, rubric, and action checklist. Human review content remains pending. |
 | `human_audit_reviewer_session_start_log.tsv` | Append-only repo-safe session-start log with aggregate gate statuses, pending counts, and latest apply status only. |
+| `human_audit_response_closeout_summary.json` | Repo-safe response closeout checklist. Current status: `response_closeout_blocked`, with `session_start_gate.ok=true` but `0/6` row decisions and `0/18` model assessments filled. |
+| `human_audit_response_closeout_checklist.tsv` | Repo-safe closeout checklist rows for session start, session-gated strict dry-run, row/model completion, response status, and write/refresh readiness. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
@@ -176,6 +178,17 @@ The generated strict dry-run and write commands now include
 `--require-session-start-gate --session-start-summary
 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json`.
 This keeps response writes tied to the current reviewer-session gate.
+
+After running the session-gated strict dry-run, build the aggregate-only
+response closeout checklist:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/build_human_audit_response_closeout_checklist.py
+```
+
+Current closeout status: `response_closeout_blocked`. The session-start gate is
+valid, but the local response TSV still has `0/6` row-level decisions and
+`0/18` model assessments filled, so the write/refresh command remains blocked.
 
 For a one-file current-state handoff, run:
 

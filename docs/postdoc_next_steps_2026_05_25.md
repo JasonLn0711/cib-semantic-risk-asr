@@ -785,7 +785,9 @@ Interpretation:
    這會刷新 handoff、preflight、rubric/value contract、action checklist，並留下
    aggregate session-start summary/log。之後 strict dry-run/write command 會帶
    `--require-session-start-gate`，所以寫入 local sheet 前必須對上目前
-   session-start summary。若要分步檢查，再看
+   session-start summary。每次 session-gated strict dry-run 後，跑
+   `build_human_audit_response_closeout_checklist.py`，只有
+   `response_complete_ready_to_write` 才能進入 write/refresh。若要分步檢查，再看
    `human_audit_reviewer_handoff_summary.json` 取得目前 packet、response TSV
    與正確命令，並在 reviewer 開始前跑
    `build_human_audit_reviewer_handoff.py --check-existing` 確認
