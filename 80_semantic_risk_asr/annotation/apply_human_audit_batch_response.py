@@ -47,6 +47,7 @@ DEFAULT_BATCH_SUMMARY = DEFAULT_RUN_DIR / "human_audit_next_review_batch_summary
 DEFAULT_RESPONSE_DIR = DEFAULT_RUN_DIR / "artifacts" / "review_responses"
 TEMPLATE_SUMMARY_NAME = "human_audit_batch_response_template_summary.json"
 APPLY_SUMMARY_NAME = "human_audit_batch_response_apply_summary.json"
+APPLY_LOG_NAME = "human_audit_batch_response_apply_log.tsv"
 DEFAULT_READINESS_DIR = refresh_audit.DEFAULT_READINESS_DIR
 
 ROW_RESPONSE_FIELDS = [
@@ -92,6 +93,32 @@ MODEL_FIELD_MAP = {
     "model_reviewer_expected_safe_action": "reviewer_expected_safe_action",
     "model_reviewer_annotation_confidence": "reviewer_annotation_confidence",
 }
+APPLY_LOG_FIELDS = [
+    "recorded_at",
+    "ok",
+    "status",
+    "mode",
+    "require_complete",
+    "post_write_refresh_ran",
+    "post_write_batch_status",
+    "post_write_publishable_ready",
+    "post_write_next_batch_prepared",
+    "selection_stratum",
+    "rows_in_batch",
+    "reviewed_rows_in_response",
+    "pending_rows_in_response",
+    "model_assessments_in_response",
+    "reviewed_model_assessments_in_response",
+    "pending_model_assessments_in_response",
+    "rows_with_timing",
+    "rows_missing_timing",
+    "total_review_elapsed_seconds",
+    "mean_review_elapsed_seconds",
+    "error_count_total",
+    "error_keys",
+    "response_sheet_path",
+    "source_batch_summary",
+]
 
 
 def read_tsv(path: Path) -> tuple[list[str], list[dict[str, str]]]:
@@ -117,6 +144,21 @@ def write_tsv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def append_tsv(path: Path, row: dict[str, Any], fieldnames: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    write_header = not path.exists() or path.stat().st_size == 0
+    with path.open("a", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=fieldnames,
+            delimiter="\t",
+            lineterminator="\n",
+        )
+        if write_header:
+            writer.writeheader()
+        writer.writerow({field: row.get(field, "") for field in fieldnames})
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -356,6 +398,48 @@ def review_timing_summary(
         "mean_review_elapsed_seconds": round(total / len(durations), 4) if durations else "",
         "min_review_elapsed_seconds": round(min(durations), 4) if durations else "",
         "max_review_elapsed_seconds": round(max(durations), 4) if durations else "",
+    }
+
+
+def response_apply_log_row(payload: dict[str, Any]) -> dict[str, Any]:
+    timing = payload.get("review_timing")
+    if not isinstance(timing, dict):
+        timing = {}
+    error_counts = payload.get("error_counts")
+    if not isinstance(error_counts, dict):
+        error_counts = {}
+    error_count_total = sum(int(value) for value in error_counts.values())
+    return {
+        "recorded_at": now_label(),
+        "ok": payload.get("ok", ""),
+        "status": payload.get("status", ""),
+        "mode": payload.get("mode", ""),
+        "require_complete": payload.get("require_complete", ""),
+        "post_write_refresh_ran": payload.get("post_write_refresh_ran", ""),
+        "post_write_batch_status": payload.get("post_write_batch_status", ""),
+        "post_write_publishable_ready": payload.get("post_write_publishable_ready", ""),
+        "post_write_next_batch_prepared": payload.get("post_write_next_batch_prepared", ""),
+        "selection_stratum": payload.get("selection_stratum", ""),
+        "rows_in_batch": payload.get("rows_in_batch", ""),
+        "reviewed_rows_in_response": payload.get("reviewed_rows_in_response", ""),
+        "pending_rows_in_response": payload.get("pending_rows_in_response", ""),
+        "model_assessments_in_response": payload.get("model_assessments_in_response", ""),
+        "reviewed_model_assessments_in_response": payload.get(
+            "reviewed_model_assessments_in_response",
+            "",
+        ),
+        "pending_model_assessments_in_response": payload.get(
+            "pending_model_assessments_in_response",
+            "",
+        ),
+        "rows_with_timing": timing.get("rows_with_timing", ""),
+        "rows_missing_timing": timing.get("rows_missing_timing", ""),
+        "total_review_elapsed_seconds": timing.get("total_review_elapsed_seconds", ""),
+        "mean_review_elapsed_seconds": timing.get("mean_review_elapsed_seconds", ""),
+        "error_count_total": error_count_total,
+        "error_keys": ",".join(sorted(error_counts)),
+        "response_sheet_path": payload.get("response_sheet_path", ""),
+        "source_batch_summary": payload.get("source_batch_summary", ""),
     }
 
 
@@ -748,6 +832,9 @@ def apply_response_sheet_workflow(
                 "requesting post-write refresh."
             )
     assert_tracked_safe(payload)
+    log_row = response_apply_log_row(payload)
+    assert_tracked_safe(log_row)
+    append_tsv(output_dir / APPLY_LOG_NAME, log_row, APPLY_LOG_FIELDS)
     write_json(output_dir / APPLY_SUMMARY_NAME, payload)
     return payload
 
