@@ -109,6 +109,32 @@ This follow-up used `/tmp` output paths for transient validation artifacts.
 Tracked conclusions remain aggregate-only; raw predictions, runtime logs, and
 model caches remain ignored/local.
 
+## 2026-05-26 05:19 CST Live Recheck
+
+The same bounded gate was rerun before deciding whether to spend full-split
+runtime on the remaining ASR and multimodal Gemma 4 candidates.
+
+Additional live checks:
+
+- Hugging Face metadata still reports all seven requested model pages as public
+  and ungated. Current SHA prefixes are `06f233fe06e7`, `41f01f3fe87f`,
+  `716d31dbfd64`, `5eb144179a02`, `7278e1e70fe2`, `ed37665cc131`, and
+  `5bf6a20911f0`.
+- The four existing 15-row hypothesis files still pass the fixed field-contract
+  validator in `0.02s`.
+- The aggregate locale/metric summary rebuild finishes in `0.39s` and still
+  shows the same locale blockers: Whisper large-v3 has `2/15` locale-violation
+  rows, Whisper large-v3 turbo has `4/15`, SenseVoiceSmall has `14/15`, and
+  Qwen3-ASR-0.6B has `15/15`.
+- Qwen3-ASR-1.7B still times out before inference after `60.07s` at fetch/load
+  with exit status `124`.
+- Local `transformers 4.57.6` still lacks `AutoModelForMultimodalLM` and
+  `Gemma4ForConditionalGeneration`; a config probe for both Gemma 4 checkpoints
+  still fails because this runtime does not recognize `model_type=gemma4`.
+
+This follow-up also used `/tmp` output paths for transient validation artifacts.
+Tracked conclusions remain aggregate-only.
+
 ## Decision
 
 Do not run these candidates on the 258-row test split or selected-300 main

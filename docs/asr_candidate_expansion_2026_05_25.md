@@ -221,6 +221,16 @@ the checkpoint declares `model_type=gemma4`, which this runtime does not
 recognize. The decision therefore remains: no 258-row or selected-300 promotion
 for these candidates until the zh-TW locale or Gemma runtime gate changes.
 
+2026-05-26 05:19 CST live recheck: the gate was rerun again before any full
+runtime decision. The four existing 15-row hypothesis files still pass the
+field-contract validator in `0.02s`, the aggregate locale/metric summary
+rebuild finishes in `0.39s`, and locale blockers are unchanged: Whisper
+large-v3 `2/15`, Whisper large-v3 turbo `4/15`, SenseVoiceSmall `14/15`, and
+Qwen3-ASR-0.6B `15/15` locale-violation rows. Qwen3-ASR-1.7B still times out
+before inference after `60.07s` at fetch/load. Gemma 4 E2B/E4B remain blocked
+because local `transformers 4.57.6` cannot recognize `model_type=gemma4` or
+expose the required multimodal classes.
+
 ## Required Extra Metrics
 
 Record these for every future model, including failed runs:

@@ -1,39 +1,25 @@
 {
-  "version": "v2.5.167",
+  "version": "v2.5.168",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 167
+    "patch": 168
   },
-  "updated_at": "2026-05-26T05:13:23+08:00",
+  "updated_at": "2026-05-26T05:23:02+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "d1a9699",
+  "base_commit": "c3cde86",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
     "70_experiments/registry.tsv",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_summary.json",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_progress_summary.json",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_summary.json",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist.tsv",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist_summary.json",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_handoff_summary.json",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_preflight_log.tsv",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_preflight_summary.json",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_log.tsv",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json",
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_validation_summary.json",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json",
+    "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/README.md",
+    "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/summary.json",
     "README.md",
-    "docs/postdoc_next_steps_2026_05_25.md"
+    "docs/asr_candidate_expansion_2026_05_25.md"
   ]
 }

@@ -102,7 +102,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   CST confirmed the same decision: public model metadata is still available,
   the four 15-row candidates still validate, Qwen3-ASR-1.7B still times out at
   fetch/load, and Gemma 4 still needs an isolated runtime because local
-  Transformers does not recognize `model_type=gemma4`.
+  Transformers does not recognize `model_type=gemma4`. The 2026-05-26 05:19
+  CST live recheck repeated the same bounded gate: four 15-row candidate files
+  still pass field-contract validation, Qwen3-ASR-1.7B still times out at
+  fetch/load after `60.07s`, and Gemma 4 remains runtime-blocked. No
+  full-split promotion is justified until locale/runtime policy changes.
 - The postdoc-level roadmap after the 258-row gate is recorded in
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
   complete comparable 258-row baselines, add split-aware metric inputs, run the
