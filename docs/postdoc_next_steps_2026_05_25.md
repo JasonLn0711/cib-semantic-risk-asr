@@ -234,6 +234,25 @@ review-pending、post-review blocked 分開，避免把目前已經很完整的 
 objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 全部
 轉成 paper-ready evidence。
 
+17. Human-reviewed recovery rerun path 已建立：
+
+- Script:
+  `80_semantic_risk_asr/recovery/evaluate_human_reviewed_recovery_policies.py`。
+- Current tracked audit:
+  `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json`。
+- Current state: `status=review_pending`、
+  `evidence_mode=human_reviewed_pending`、`policies={}`。
+- Normal refresh:
+  `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py` now
+  refreshes this pending human-recovery summary before
+  `build_post_review_evidence_checklist.py`。
+- Completion gate:
+  only a complete selected-300 row/model/timing review can produce
+  `evidence_mode=human_reviewed` and clear `recovery_proxy_only`。
+
+這個路徑讓 objective `6` 的 recovery experiment 有明確 post-review rerun
+入口；目前仍然不能把 proxy recovery 寫成 paper-facing intervention claim。
+
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS

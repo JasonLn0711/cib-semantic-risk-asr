@@ -29,6 +29,8 @@
   "consequence_ready": false,
   "recovery_proxy_available": true,
   "recovery_human_ready": false,
+  "human_recovery_status": "review_pending",
+  "human_recovery_evidence_mode": "human_reviewed_pending",
   "blocker_keys": [
     "response_closeout_not_ready",
     "human_refresh_not_complete",
@@ -92,7 +94,7 @@
       "evidence_gate": "recovery policy evidence",
       "status": "proxy_only",
       "paper_claim_status": "proxy-only until human review",
-      "evidence": "recovery_ok=True; evidence_mode=; policy_count=5",
+      "evidence": "recovery_ok=True; proxy_policy_count=5; human_recovery_status=review_pending; human_evidence_mode=human_reviewed_pending; human_policy_count=0",
       "next_action": "rerun recovery policy evaluation after human-reviewed labels are available"
     }
   ],
@@ -102,7 +104,8 @@
     "summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json",
     "checklist_tsv": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_checklist.tsv",
     "readiness_dir": "70_experiments/runs/postdoc_evidence_chain_2026_05_25",
-    "recovery_summary": "70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json"
+    "recovery_proxy_summary": "70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+    "recovery_human_summary": "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json"
   },
-  "runtime_seconds": 0.0004
+  "runtime_seconds": 0.0005
 }

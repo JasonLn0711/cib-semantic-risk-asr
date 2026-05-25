@@ -1,0 +1,21 @@
+{
+  "ok": false,
+  "status": "review_pending",
+  "evidence_mode": "human_reviewed_pending",
+  "human_reviewed": false,
+  "review_status": "review_pending",
+  "input_boundary": "local transcript-bearing audit sheet; do not commit input",
+  "output_boundary": "aggregate-only human-reviewed recovery readiness summary",
+  "audit_rows": 30,
+  "reviewed_rows": 0,
+  "pending_rows": 30,
+  "model_assessments": 90,
+  "reviewed_model_assessments": 0,
+  "pending_model_assessments": 90,
+  "policies": {},
+  "blocker_keys": [
+    "human_review_incomplete"
+  ],
+  "next_action": "Complete selected-300 row/model/timing review, refresh human audit aggregates, then rerun this human-reviewed recovery evaluator.",
+  "runtime_seconds": 0.0005
+}

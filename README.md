@@ -176,6 +176,13 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/`. Treat it
   as engineering evidence only until the selected 300-row high-stakes and
   human risk-atom audit gates run.
+- The selected-300 human-reviewed recovery rerun path now lives at
+  `80_semantic_risk_asr/recovery/evaluate_human_reviewed_recovery_policies.py`,
+  with the current pending aggregate summary recorded in
+  `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/`.
+  Normal human-audit refresh updates this summary before the post-review
+  checklist; current status is `review_pending`, so recovery remains
+  proxy-only for paper claims.
 - The selected-300 metric-predictor proxy gate now lives at
   `80_semantic_risk_asr/scoring/analyze_metric_predictors.py`, with aggregate
   output recorded in

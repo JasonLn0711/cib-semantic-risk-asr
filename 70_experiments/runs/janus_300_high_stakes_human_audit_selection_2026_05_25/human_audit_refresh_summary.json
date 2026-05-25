@@ -55,6 +55,9 @@
     "consequence_paper_claims_not_ready",
     "recovery_proxy_only"
   ],
+  "human_recovery_status": "review_pending",
+  "human_recovery_evidence_mode": "human_reviewed_pending",
+  "human_recovery_ready": false,
   "consistency_audit_ok": true,
   "consistency_status_counts": {
     "pass": 12
@@ -90,6 +93,7 @@
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion.tsv",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion.tsv",
+    "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_checklist.tsv",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json",
@@ -98,6 +102,6 @@
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"
   ],
-  "runtime_seconds": 0.0111,
+  "runtime_seconds": 0.005,
   "next_action": "Complete selected-300 risk-atom, decision-change, expected-action, confidence, per-model assessment, and per-row timing fields, then rerun the session-gated strict dry-run with --require-complete --require-timing before aggregate refresh."
 }

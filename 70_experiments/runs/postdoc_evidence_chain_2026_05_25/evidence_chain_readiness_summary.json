@@ -144,5 +144,5 @@
     }
   ],
   "next_decision": "Complete the selected-300 risk-atom, decision-change, per-model assessment, and per-row timing fields, then rerun the strict response closeout with --require-complete --require-timing, aggregate summarizer, human-reviewed predictor gate, and recovery analysis before making paper-grade CDS-ASR claims.",
-  "runtime_seconds": 0.0019
+  "runtime_seconds": 0.0007
 }

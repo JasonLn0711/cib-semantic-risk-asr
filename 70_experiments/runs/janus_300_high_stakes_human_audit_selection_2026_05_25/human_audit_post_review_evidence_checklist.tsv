@@ -5,4 +5,4 @@ step_id	evidence_gate	status	paper_claim_status	evidence	next_action
 4	evidence-chain readiness	blocked	not paper-ready	paper_ready=False	run check_evidence_chain_readiness.py after human refresh
 5	publishable objective completion	blocked	not publishable-ready	publishable_ready=False	run audit_publishable_evidence_chain.py after human refresh
 6	consequence claim matrix	blocked	claims blocked or proxy	"paper_claims_ready=False; status_counts={""completed"": 1, ""proxy_completed"": 4, ""review_pending"": 2}"	rerun build_consequence_evidence_matrix.py after human refresh
-7	recovery policy evidence	proxy_only	proxy-only until human review	recovery_ok=True; evidence_mode=; policy_count=5	rerun recovery policy evaluation after human-reviewed labels are available
+7	recovery policy evidence	proxy_only	proxy-only until human review	recovery_ok=True; proxy_policy_count=5; human_recovery_status=review_pending; human_evidence_mode=human_reviewed_pending; human_policy_count=0	rerun recovery policy evaluation after human-reviewed labels are available
