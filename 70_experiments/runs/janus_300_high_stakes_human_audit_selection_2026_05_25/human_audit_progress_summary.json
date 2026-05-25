@@ -52,5 +52,5 @@
   "recommended_batch_count": 6,
   "first_principle_decision": "Reviewer time is the current scarce resource for risk/decision labels, not for duplicate transcript review. Review high-safety-risk strata first, then refresh aggregate evidence before making paper-grade CDS-ASR claims.",
   "next_action": "Review critical/high-risk missed and unsafe-downrouting strata first, fill risk-atom, decision-change, expected-action, confidence, and model-level fields, then run refresh_human_audit_evidence.py --require-complete.",
-  "runtime_seconds": 0.002
+  "runtime_seconds": 0.0011
 }

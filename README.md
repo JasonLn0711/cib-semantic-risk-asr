@@ -131,6 +131,9 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   passing: transcript ground truth is not reopened, remaining review scope
   includes row/model/timing fields, proxy evidence is not promoted to paper
   claims, and expanded ASR/Gemma candidates remain behind locale/runtime gates.
+  The normal `refresh_human_audit_evidence.py` path now also refreshes this
+  consistency status and records `consistency_audit_ok=true` in
+  `human_audit_refresh_summary.json`.
   The post-review evidence checklist
   `80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py`
   now records the aggregate gates that must pass after response closeout,
