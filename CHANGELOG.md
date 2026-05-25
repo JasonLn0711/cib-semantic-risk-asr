@@ -5,6 +5,18 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.85 - 2026-05-25T21:31:09+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `9aacff2`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json`
+  - `80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py`
+  - `tests/test_human_audit_batch_response.py`
+
 ## v2.5.84 - 2026-05-25T21:23:24+08:00
 
 - Bump: `patch`

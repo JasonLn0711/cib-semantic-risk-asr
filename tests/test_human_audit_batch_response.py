@@ -159,7 +159,13 @@ def test_blank_response_dry_run_is_pending_and_safe(tmp_path: Path) -> None:
     write_batch(batch_summary)
     write_tsv(
         response_sheet,
-        [{"row_number": "1", "selection_stratum": "critical_or_high_risk_missed", "asr_run_id": "run_a"}],
+        [
+            {
+                "row_number": "1",
+                "selection_stratum": "critical_or_high_risk_missed",
+                "asr_run_id": "run_a",
+            }
+        ],
         TEMPLATE_FIELDS,
     )
 
@@ -181,6 +187,75 @@ def test_blank_response_dry_run_is_pending_and_safe(tmp_path: Path) -> None:
     )
     assert "PRIVATE_" not in tracked
     assert "reference_text" not in tracked
+
+
+def test_require_complete_fails_blank_response_without_writing(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(
+        response_sheet,
+        [
+            {
+                "row_number": "1",
+                "selection_stratum": "critical_or_high_risk_missed",
+                "asr_run_id": "run_a",
+            }
+        ],
+        TEMPLATE_FIELDS,
+    )
+    before = audit_sheet.read_text(encoding="utf-8")
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=False,
+        require_complete=True,
+    )
+
+    assert payload["ok"] is False
+    assert payload["status"] == "response_pending"
+    assert payload["mode"] == "dry_run"
+    assert payload["require_complete"] is True
+    assert payload["error_counts"] == {"incomplete_response": 1}
+    assert audit_sheet.read_text(encoding="utf-8") == before
+    tracked = (tmp_path / "human_audit_batch_response_apply_summary.json").read_text(
+        encoding="utf-8"
+    )
+    assert "PRIVATE_" not in tracked
+    assert "reference_text" not in tracked
+
+
+def test_require_complete_passes_complete_dry_run(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(response_sheet, [complete_response_row()], TEMPLATE_FIELDS)
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=False,
+        require_complete=True,
+    )
+
+    assert payload["ok"] is True
+    assert payload["status"] == "response_complete"
+    assert payload["mode"] == "dry_run"
+    assert payload["require_complete"] is True
+    assert payload["error_counts"] == {}
 
 
 def test_complete_response_write_updates_audit_sheet(tmp_path: Path) -> None:

@@ -396,6 +396,7 @@ def apply_response_sheet(
     expected_rows: int | None,
     repo_root: Path,
     write: bool,
+    require_complete: bool = False,
 ) -> dict[str, Any]:
     started = time.time()
     audit_fieldnames, audit_rows = read_tsv(audit_sheet)
@@ -423,6 +424,8 @@ def apply_response_sheet(
         reviewed_model_assessments=reviewed_models,
         model_assessments=model_assessments,
     )
+    if require_complete and status != "response_complete":
+        errors["incomplete_response"] += 1
     backup_path = ""
     if write:
         if status != "response_complete":
@@ -447,6 +450,7 @@ def apply_response_sheet(
         "ok": not errors,
         "status": status,
         "mode": "write" if write else "dry_run",
+        "require_complete": require_complete,
         "input_boundary": "local ignored audit sheet plus local ignored response TSV",
         "output_boundary": "aggregate-only apply status; no private row keys or transcript text",
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
@@ -464,8 +468,9 @@ def apply_response_sheet(
         "response_sheet_path": repo_relative(response_sheet, repo_root=repo_root),
         "source_batch_summary": repo_relative(batch_summary, repo_root=repo_root),
         "next_action": (
-            "Fill all required row and model fields in the response TSV, rerun dry-run, "
-            "then apply with --write once status is response_complete."
+            "Fill all required row and model fields in the response TSV, rerun "
+            "dry-run with --require-complete, then apply with --write once "
+            "status is response_complete."
             if status != "response_complete"
             else "Rerun audit_human_review_batch_status.py; if batch_complete, refresh aggregate evidence."
         ),
@@ -485,6 +490,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--response-sheet", type=Path)
     parser.add_argument("--write-template", action="store_true")
     parser.add_argument("--write", action="store_true")
+    parser.add_argument("--require-complete", action="store_true")
     parser.add_argument("--expected-rows", type=int, default=30)
     return parser.parse_args()
 
@@ -522,6 +528,7 @@ def main() -> int:
         expected_rows=args.expected_rows,
         repo_root=REPO_ROOT,
         write=args.write,
+        require_complete=args.require_complete,
     )
     print(
         json.dumps(
