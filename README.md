@@ -109,7 +109,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   assessments still pending in the ignored local response TSV. The selected-300
   validator and response-apply path now enforce decision consistency: a
   decision-change `yes` needs at least one critical atom and a non-`none` safe
-  action, and critical atoms must be present in the row risk-atom set.
+  action, and critical atoms must be present in the row risk-atom set. The
+  reviewer handoff and response closeout path now also require per-row review
+  timing in the strict dry-run/write commands, so the current live closeout
+  reports both `incomplete_response` and `missing_review_timing` until the
+  local response TSV records row/model decisions plus timing coverage.
   The post-review evidence checklist
   `80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py`
   now records the aggregate gates that must pass after response closeout,

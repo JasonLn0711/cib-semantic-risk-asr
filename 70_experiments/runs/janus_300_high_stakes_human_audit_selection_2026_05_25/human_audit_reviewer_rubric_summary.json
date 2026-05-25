@@ -16,7 +16,7 @@
   "required_review_surface": {
     "row_level_required_decision_fields": 8,
     "model_level_required_decision_fields": 4,
-    "optional_timing_fields": 3
+    "required_timing_fields": 3
   },
   "current_reviewer_action_gate": {
     "available": true,
@@ -48,6 +48,10 @@
       "rule": "Row-level and model-level critical atoms should be present in the row risk-atom set."
     },
     {
+      "check": "strict_closeout_requires_review_timing",
+      "rule": "Each selected audio row must have review_started_at/review_finished_at or review_elapsed_seconds before strict response closeout."
+    },
+    {
       "check": "uncertain_requires_low_or_medium_certainty",
       "rule": "Uncertain decision effects should avoid high confidence unless a second reviewer resolves the ambiguity."
     },
@@ -66,5 +70,5 @@
     "rubric_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_rubric_summary.json",
     "value_contract_tsv": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_value_contract.tsv"
   },
-  "runtime_seconds": 0.0008
+  "runtime_seconds": 0.0002
 }

@@ -184,11 +184,13 @@ refresh:
   --expected-rows 30
 ```
 
-The generated TSV may include optional timing columns:
+The generated TSV includes review timing columns:
 `review_started_at`, `review_finished_at`, and `review_elapsed_seconds`. These
-fields are not part of the review-completion gate, but they should be filled
-when available so the tracked apply summary can report aggregate review-time
-coverage and elapsed seconds without exposing transcript-bearing row content.
+fields are part of the strict response closeout gate: the reviewer must fill
+either valid start/finish timestamps or `review_elapsed_seconds` for every
+selected audio row before the response TSV can pass strict dry-run/write. The
+tracked apply summary reports only aggregate timing coverage and elapsed seconds
+without exposing transcript-bearing row content.
 Each dry-run or write appends one aggregate-only row to
 `human_audit_batch_response_apply_log.tsv`; use that file as the operation log
 for response attempts. The companion
@@ -229,6 +231,9 @@ gate:
 ```bash
 .venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py \
   --require-complete \
+  --require-timing \
+  --require-session-start-gate \
+  --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json \
   --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv \
   --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
   --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
@@ -238,9 +243,9 @@ gate:
 
 Use `--write` only after strict dry-run status is `response_complete`. The
 current strict template dry-run is `response_pending`, `ok=false`, with
-`incomplete_response=1`, as expected before reviewer decisions are entered. A
-non-strict dry-run can be used to inspect progress, but it is not the
-completion gate.
+`incomplete_response=1` and `missing_review_timing=6`, as expected before
+reviewer decisions and timing are entered. A non-strict dry-run can be used to
+inspect progress, but it is not the completion gate.
 
 When the strict dry-run passes, use `--write --refresh-after-write` so the local
 sheet write, current-batch status audit, aggregate refresh, readiness audit, and

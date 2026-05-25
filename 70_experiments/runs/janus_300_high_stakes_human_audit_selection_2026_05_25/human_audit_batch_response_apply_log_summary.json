@@ -6,26 +6,28 @@
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
   "apply_log_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_log.tsv",
-  "apply_log_entries": 3,
+  "apply_log_entries": 5,
   "missing_log_columns": [],
   "status_counts": {
-    "response_pending": 3
+    "response_pending": 5
   },
   "mode_counts": {
-    "dry_run": 3
+    "dry_run": 5
   },
   "ok_counts": {
-    "False": 3
+    "False": 5
   },
   "error_key_counts": {
-    "incomplete_response": 3
+    "incomplete_response": 5,
+    "missing_review_timing": 2
   },
   "latest": {
-    "recorded_at": "2026-05-26T00:51:18+08:00",
+    "recorded_at": "2026-05-26T02:28:07+08:00",
     "ok": "False",
     "status": "response_pending",
     "mode": "dry_run",
     "require_complete": "True",
+    "require_timing": "True",
     "selection_stratum": "critical_or_high_risk_missed",
     "rows_in_batch": 6,
     "reviewed_rows_in_response": 0,
@@ -37,10 +39,10 @@
     "rows_missing_timing": 6,
     "total_review_elapsed_seconds": "0",
     "mean_review_elapsed_seconds": "",
-    "error_count_total": 1,
-    "error_keys": "incomplete_response",
+    "error_count_total": 7,
+    "error_keys": "incomplete_response,missing_review_timing",
     "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv",
     "source_batch_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json"
   },
-  "next_action": "Fill all required row and model fields in the local response TSV, rerun strict dry-run until response_complete, then write and refresh."
+  "next_action": "Fill all required row, model, and timing fields in the local response TSV, rerun strict dry-run until response_complete, then write and refresh."
 }

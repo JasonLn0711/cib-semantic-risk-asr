@@ -250,7 +250,9 @@ review-pending、post-review blocked 分開，避免把目前已經很完整的 
   `30` risk/decision row reviews 與 `90` model reviews 尚未完成而失敗，
   且現在會額外拒絕不一致的 response semantics：decision-change `yes`
   必須有 critical atom 與非 `none` safe action，row/model critical atoms
-  必須包含在 row risk-atom set 中。
+  必須包含在 row risk-atom set 中。Reviewer handoff 產生的 strict dry-run /
+  write command 現在也會帶 `--require-timing`，所以 response closeout 會在
+  每列 review timing 缺失時以 `missing_review_timing` 阻擋 write/refresh。
   所以還不能宣稱 paper-grade main experiment 完成。第一批 local review
   packet 已準備好：`critical_or_high_risk_missed` rows `1-6`、`6` rows /
   `18` model assessments；packet 在 ignored `artifacts/review_batches/`，
@@ -821,16 +823,18 @@ Interpretation:
    decision-change、expected safe action、confidence、per-model assessment。
    先從已準備好的 `critical_or_high_risk_missed` packet rows `1-6` 開始，
    填寫 ignored local response TSV，用
-   `apply_human_audit_batch_response.py --require-complete` dry-run 到
+   `apply_human_audit_batch_response.py --require-complete --require-timing`
+   dry-run 到
    `response_complete` 後再用 `--write --refresh-after-write`；若 reviewer
-   可以記錄時間，填 optional timing 欄位，讓 tracked summary 保留 aggregate
-   review-time coverage 與 elapsed seconds，並讓 apply log 留下每次
+   填完 row/model 欄位，也必須填 review timing 欄位，讓 tracked summary
+   保留 aggregate review-time coverage 與 elapsed seconds，並讓 apply log 留下每次
    dry-run/write attempt 與 apply-log summary。正常入口先跑
    `start_human_audit_review_session.py`，確認 `reviewer_session_started`；
    這會刷新 handoff、preflight、rubric/value contract、action checklist，並留下
    aggregate session-start summary/log。之後 strict dry-run/write command 會帶
-   `--require-session-start-gate`，所以寫入 local sheet 前必須對上目前
-   session-start summary。每次 session-gated strict dry-run 後，跑
+   `--require-timing --require-session-start-gate`，所以寫入 local sheet 前必須
+   對上目前 session-start summary 並完成 timing coverage。每次 session-gated
+   strict dry-run 後，跑
    `build_human_audit_response_closeout_checklist.py`，只有
    `response_complete_ready_to_write` 才能進入 write/refresh。若要分步檢查，再看
    `human_audit_reviewer_handoff_summary.json` 取得目前 packet、response TSV
@@ -845,7 +849,7 @@ Interpretation:
    `build_human_audit_reviewer_action_checklist.py` 產生 aggregate action
    checklist；目前狀態應是 `reviewer_action_ready` 且
    `rubric_status=rubric_ready`，但 `6/6` rows、
-   `18/18` model assessments 與 `6/6` optional timing rows 仍待填。需要連續產生下一批時加
+   `18/18` model assessments 與 `6/6` required timing rows 仍待填。需要連續產生下一批時加
    `--prepare-next-after-write`。
    這會寫入 local sheet、重跑 batch status audit、並在 `batch_complete` 後刷新
    aggregate readiness / publishable completion。
@@ -911,7 +915,8 @@ feat: add split-aware JANUS metric input builder
 
 這會把 repo 從「已經有幾個成功實驗」推進到「可以穩定產生主實驗」。
 下一個實驗 gate 已更新：不是直接跑更多 258-row，而是先完成
-selected-300 human risk/decision/model assessment review，同時把新增模型的
-strict Taiwan Traditional Chinese locale gate 解乾淨。新增 candidate 的
+selected-300 human risk/decision/model assessment review，並在同一個 response
+closeout 中留下每列 review timing；同時把新增模型的 strict Taiwan
+Traditional Chinese locale gate 解乾淨。新增 candidate 的
 runtime gate aggregate record 位於
 `70_experiments/runs/asr_candidate_runtime_gate_2026_05_25/`。

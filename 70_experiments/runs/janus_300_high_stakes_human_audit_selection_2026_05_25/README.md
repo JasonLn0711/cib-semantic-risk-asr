@@ -137,20 +137,20 @@ Tracked readiness outputs:
 | `human_audit_review_batch_log.tsv` | Append-only repo-safe preparation log for local transcript-bearing review packets. |
 | `human_audit_current_review_batch_status_summary.json` | Repo-safe completion status for the current packet. Current status: `batch_pending`, `0/6` risk/decision rows and `0/18` model assessments reviewed. |
 | `human_audit_current_review_batch_status_rows.tsv` | Repo-safe row-level completion checklist for the current packet. No audio IDs, transcripts, hypotheses, or reviewer notes. |
-| `human_audit_batch_response_template_summary.json` | Repo-safe record for the local response TSV template. Current template has `18` response rows for rows `1-6` and optional review-timing columns. |
-| `human_audit_batch_response_apply_summary.json` | Repo-safe strict dry-run/apply status for the local response TSV. Current `--require-complete --require-session-start-gate` dry-run status is `response_pending`, `ok=false`, `incomplete_response=1`, with `session_start_gate.ok=true`, `0/6` rows, `0/18` model assessments, and `0/6` row review timings filled. |
+| `human_audit_batch_response_template_summary.json` | Repo-safe record for the local response TSV template. Current template has `18` response rows for rows `1-6` and review-timing columns. |
+| `human_audit_batch_response_apply_summary.json` | Repo-safe strict dry-run/apply status for the local response TSV. Current `--require-complete --require-timing --require-session-start-gate` dry-run status is `response_pending`, `ok=false`, `incomplete_response=1`, `missing_review_timing=6`, with `session_start_gate.ok=true`, `0/6` rows, `0/18` model assessments, and `0/6` row review timings filled. |
 | `human_audit_batch_response_apply_log.tsv` | Append-only repo-safe response dry-run/write log. Current entries record blank strict dry-runs as `response_pending` with aggregate counts only. |
-| `human_audit_batch_response_apply_log_summary.json` | Repo-safe audit of the response apply log. Current status: `apply_log_valid`, `3` entries, latest status `response_pending`, `0/6` rows and `0/18` model assessments filled. |
+| `human_audit_batch_response_apply_log_summary.json` | Repo-safe audit of the response apply log. Current status: `apply_log_valid`, `5` entries, latest status `response_pending`, `require_timing=True`, `0/6` rows, `0/18` model assessments, and `0/6` timing rows filled. |
 | `human_audit_reviewer_handoff_summary.json` | Repo-safe current reviewer handoff. Current status: `reviewer_input_pending`, `freshness_status=fresh`, packet rows `1-6`, response template path, latest apply status, apply-log status, source-summary SHA-256 digests, and exact next commands. |
 | `human_audit_reviewer_preflight_summary.json` | Repo-safe pre-review session preflight. Current status: `review_session_ready`, `handoff_fresh`, local packet exists, local response TSV exists, and no reviewer labels have been fabricated. |
 | `human_audit_reviewer_preflight_log.tsv` | Append-only repo-safe preflight log. Current entries record the ready state for `critical_or_high_risk_missed` rows `1-6` / `18` model assessments. |
 | `human_audit_reviewer_rubric_summary.json` | Repo-safe reviewer value-contract readiness. Current status: `rubric_ready`, validator constants match the strict audit validator, and the remaining scope excludes duplicate transcript review. |
 | `human_audit_reviewer_value_contract.tsv` | Repo-safe allowed-value contract for row risk labels, decision-change labels, safe actions, confidence labels, and risk atoms. No audio IDs, transcripts, hypotheses, or reviewer notes. |
-| `human_audit_reviewer_action_checklist_summary.json` | Repo-safe action checklist for the current reviewer batch. Current status: `reviewer_action_ready`, with `rubric_status=rubric_ready`, `6/6` packet rows, `18/18` model assessments, and `6/6` optional timing rows still pending. |
-| `human_audit_reviewer_action_checklist.tsv` | Repo-safe checklist rows for handoff freshness, local packet/template existence, preflight, rubric/value-contract confirmation, required row/model fields, optional timing fields, strict dry-run, and post-completion write/refresh. |
+| `human_audit_reviewer_action_checklist_summary.json` | Repo-safe action checklist for the current reviewer batch. Current status: `reviewer_action_ready`, with `rubric_status=rubric_ready`, `6/6` packet rows, `18/18` model assessments, and `6/6` required timing rows still pending. |
+| `human_audit_reviewer_action_checklist.tsv` | Repo-safe checklist rows for handoff freshness, local packet/template existence, preflight, rubric/value-contract confirmation, required row/model fields, required timing fields, strict dry-run, and post-completion write/refresh. |
 | `human_audit_reviewer_session_start_summary.json` | Repo-safe one-command reviewer-session start record. Current status: `reviewer_session_started`, after refreshing handoff, preflight, rubric, and action checklist. Human review content remains pending. |
 | `human_audit_reviewer_session_start_log.tsv` | Append-only repo-safe session-start log with aggregate gate statuses, pending counts, and latest apply status only. |
-| `human_audit_response_closeout_summary.json` | Repo-safe response closeout checklist. Current status: `response_closeout_blocked`, with `session_start_gate.ok=true` but `0/6` row decisions and `0/18` model assessments filled. |
+| `human_audit_response_closeout_summary.json` | Repo-safe response closeout checklist. Current status: `response_closeout_blocked`, with `session_start_gate.ok=true` but `0/6` row decisions, `0/18` model assessments, and `0/6` timing rows filled. |
 | `human_audit_response_closeout_checklist.tsv` | Repo-safe closeout checklist rows for session start, session-gated strict dry-run, row/model completion, response status, and write/refresh readiness. |
 | `human_audit_post_review_evidence_summary.json` | Repo-safe post-review paper-evidence checklist. Current status: `post_review_evidence_blocked`; blockers are response closeout, human refresh, human predictor, readiness/publishable/consequence gates, and proxy-only recovery evidence. |
 | `human_audit_post_review_evidence_checklist.tsv` | Repo-safe checklist rows for the aggregate gates that must pass after response closeout/write/refresh before proxy claims can be promoted to paper-facing evidence. |
@@ -174,12 +174,13 @@ refreshes the action checklist, writes
 `human_audit_reviewer_session_start_summary.json`, and appends
 `human_audit_reviewer_session_start_log.tsv`. It does not read transcript text
 or reviewer notes. The current content gate is still pending: `6/6` packet
-rows, `18/18` model assessments, and `6/6` optional timing rows.
+rows, `18/18` model assessments, and `6/6` required timing rows.
 
 The generated strict dry-run and write commands now include
-`--require-session-start-gate --session-start-summary
+`--require-timing --require-session-start-gate --session-start-summary
 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json`.
-This keeps response writes tied to the current reviewer-session gate.
+This keeps response writes tied to the current reviewer-session gate and blocks
+write/refresh unless every selected audio row has aggregate review timing.
 
 After running the session-gated strict dry-run, build the aggregate-only
 response closeout checklist:
@@ -190,7 +191,8 @@ response closeout checklist:
 
 Current closeout status: `response_closeout_blocked`. The session-start gate is
 valid, but the local response TSV still has `0/6` row-level decisions and
-`0/18` model assessments filled, so the write/refresh command remains blocked.
+`0/18` model assessments plus `0/6` timing rows filled, so the write/refresh
+command remains blocked.
 
 For a one-file current-state handoff, run:
 
@@ -237,7 +239,7 @@ validator constants for row risk labels, decision-change labels, safe actions,
 confidence labels, and risk atoms. It also records that the supplied transcript
 ground truth has already been human-reviewed for WER/CER scoring, so the
 remaining review scope is risk, decision, safe-action, confidence, model-level
-assessment, and optional timing fields.
+assessment, and required timing fields.
 
 To produce a one-page aggregate action checklist for the current reviewer
 batch, run:
@@ -312,10 +314,11 @@ Current local response template:
 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv
 ```
 
-The response TSV includes optional timing columns:
+The response TSV includes timing columns:
 `review_started_at`, `review_finished_at`, and `review_elapsed_seconds`.
-These fields are not completion gates, but filled values are summarized as
-aggregate review-time counts and seconds in the tracked apply summary.
+These fields are strict response closeout gates when using the generated
+`--require-timing` commands; filled values are summarized as aggregate
+review-time counts and seconds in the tracked apply summary.
 Every dry-run or write through the workflow also appends one repo-safe row to
 `human_audit_batch_response_apply_log.tsv` so failed, partial, and completed
 attempts remain auditable without storing transcript-bearing row content.
