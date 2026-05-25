@@ -5,6 +5,18 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.108 - 2026-05-26T00:01:02+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `e468ed6`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/scripts/run_janus_qwen3_asr_pilot.py`
+  - `60_whisper_asr_finetuning/scripts/run_janus_sensevoice_pilot.py`
+  - `requirements-asr-candidates.txt`
+
 ## v2.5.107 - 2026-05-25T23:28:19+08:00
 
 - Bump: `patch`

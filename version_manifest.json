@@ -1,27 +1,23 @@
 {
-  "version": "v2.5.107",
+  "version": "v2.5.108",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 107
+    "patch": 108
   },
-  "updated_at": "2026-05-25T23:28:19+08:00",
+  "updated_at": "2026-05-26T00:01:02+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "2c31006",
+  "base_commit": "e468ed6",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/registry.tsv",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json",
-    "80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py",
-    "docs/postdoc_next_steps_2026_05_25.md",
-    "tests/test_publishable_evidence_audit.py"
+    "60_whisper_asr_finetuning/scripts/run_janus_qwen3_asr_pilot.py",
+    "60_whisper_asr_finetuning/scripts/run_janus_sensevoice_pilot.py",
+    "requirements-asr-candidates.txt"
   ]
 }
