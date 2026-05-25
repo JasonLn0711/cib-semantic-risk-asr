@@ -101,12 +101,14 @@ selection stats 與 protocol。這一步把「需要 human audit」從提醒變�
   `80_semantic_risk_asr/annotation/summarize_human_risk_atom_audit.py`。
 - Current tracked readiness status:
   `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_summary.json`。
-- Current state: `30` audit rows、`0` reviewed rows、`30` pending rows、
-  `90` model-level assessments、`0` reviewed model-level assessments。
+- Current state: `30` audit rows、`0` risk/decision row reviews、`30`
+  pending risk/decision row reviews、`90` model-level assessments、`0`
+  reviewed model-level assessments。Transcript ground truth 已接受為 WER/CER
+  reference，不是這個 gate 的待審項目。
 
-這表示下一步很明確：不是再產生 proxy table，而是填完 local audit sheet，
-包含 row-level 與 per-model reviewer assessment，再用同一支 summarizer 產
-出 aggregate human annotation stats。
+這表示下一步很明確：不是再產生 proxy table，也不是重審 transcript，而是
+填完 local audit sheet 中的 risk/decision 欄位與 per-model reviewer
+assessment，再用同一支 summarizer 產出 aggregate human annotation stats。
 
 11. Human-reviewed predictor gate 已建立：
 
@@ -127,11 +129,11 @@ subset predictor table 要由這支工具重算。
 - Current tracked refresh status:
   `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json`。
 - Current state: normal refresh `ok=true` but `review_pending`；`0/30`
-  rows reviewed、`0/90` model assessments reviewed、evidence-chain
+  risk/decision row reviews、`0/90` model assessments reviewed、evidence-chain
   `paper_ready=false`。
 - Strict post-review mode:
-  `--require-complete` 目前會因 `30` row reviews 與 `90` model reviews
-  尚未完成而失敗，這是正確 guardrail。
+  `--require-complete` 目前會因 `30` risk/decision row reviews 與 `90`
+  model reviews 尚未完成而失敗，這是正確 guardrail。
 
 這支工具把 validator、aggregate review summary、human-reviewed predictor
 gate、evidence-chain readiness 串成同一個可重跑操作。人工審閱仍必須在
@@ -161,8 +163,8 @@ local ignored sheet 完成；refresh gate 只負責把完成後的 aggregate evi
   `80_semantic_risk_asr/annotation/audit_human_review_progress.py`。
 - Current tracked status:
   `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_progress_summary.json`。
-- Current state: `review_pending`；`0/30` rows reviewed、`0/90` model
-  assessments reviewed。
+- Current state: `review_pending`；`0/30` risk/decision row reviews、`0/90`
+  model assessments reviewed。
 - Recommended batch order:
   1. `critical_or_high_risk_missed`：6 rows / 18 model assessments；
   2. `unsafe_downrouting`：6 / 18；
@@ -183,8 +185,9 @@ outputs。
 - Evidence-chain readiness gate 已建立：
   `80_semantic_risk_asr/scoring/check_evidence_chain_readiness.py`。目前輸出
   `ok=true` 但 `paper_ready=false`，因為 selected-300 human audit 仍是
-  `0/30` rows reviewed、`0/90` model assessments reviewed。這個 gate 是防
-  止 proxy-only 結果被誤寫成 paper-grade conclusion 的主要 guardrail。
+  `0/30` risk/decision row reviews、`0/90` model assessments reviewed；
+  transcript ground truth 不是 pending item。這個 gate 是防止 proxy-only
+  結果被誤寫成 paper-grade conclusion 的主要 guardrail。
 - 2026-05-25 WER audit 確認：舊推論欄位是 raw whitespace WER，
   公式形式正確但不適合作為未斷詞中文主指標；最新 audit 已用 canonical
   manifest 驗證 legacy 15-row、六個 258-row run、三個 high-stakes 300-row
@@ -207,10 +210,12 @@ outputs。
 - 300 high-stakes ASR hypotheses、SRES/CEIS/downstream、metric-predictor、
   recovery 都已完成三個 Breeze-family comparator 的 proxy mode；human audit
   queue、aggregate summarizer、human-reviewed predictor gate 已建立，但目前
-  `0/30` rows reviewed、`0/90` model assessments reviewed。validator 已確認
-  local sheet schema 可用，正常模式 `review_pending`、validation errors `0`，
-  但 `--require-complete` 會因 `30` row reviews 與 `90` model reviews 尚未
-  完成而失敗，所以還不能宣稱 paper-grade main experiment 完成。
+  `0/30` risk/decision row-review fields reviewed、`0/90` model assessments
+  reviewed。這不是 transcript ground truth 待審；transcript 已作為 WER/CER
+  scoring reference 接受。validator 已確認 local sheet schema 可用，正常模式
+  `review_pending`、validation errors `0`，但 `--require-complete` 會因
+  `30` risk/decision row reviews 與 `90` model reviews 尚未完成而失敗，
+  所以還不能宣稱 paper-grade main experiment 完成。
 - 258-row recovery proxy 與 300-row high-stakes recovery proxy 都已完成；下
   一個缺口是 selected-300 human risk-atom audit，而不是再調 WER 定義。
 
@@ -701,7 +706,8 @@ Interpretation:
 如果只能照順序做，建議如下：
 
 1. 完成 selected-300 human risk-atom audit protocol 所產生的 30-row local
-   sheet。
+   sheet 中「不是 transcript ground truth」的欄位：risk atoms、
+   decision-change、expected safe action、confidence、per-model assessment。
 2. 跑
    `validate_human_risk_atom_audit.py --require-complete --expected-rows 30`；
    通過後才產出 aggregate human annotation stats，確認沒有 selected IDs 或 transcript

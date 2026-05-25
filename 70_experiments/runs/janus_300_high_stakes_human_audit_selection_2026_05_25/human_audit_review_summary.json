@@ -27,5 +27,5 @@
     "reviewer_would_asr_error_change_decision": {},
     "reviewer_annotation_confidence": {}
   },
-  "wall_time_seconds": 0.001
+  "wall_time_seconds": 0.0035
 }

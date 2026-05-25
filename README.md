@@ -85,7 +85,9 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   current aggregate output under
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/`. Current status:
   `ok=true`, `paper_ready=false`, because the selected-300 human risk-atom
-  audit remains `0/30` rows and `0/90` model assessments reviewed.
+  audit remains `0/30` risk/decision row reviews and `0/90` model assessments
+  reviewed. Transcript ground truth is already accepted for WER/CER scoring
+  and is not the pending gate.
   A stricter objective-by-objective publication audit is
   `80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py`; its
   current output records `publishable_ready=false` with objective `5`
@@ -119,7 +121,8 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `artifacts/`; review is still pending. The local sheet is validated by
   `80_semantic_risk_asr/annotation/validate_human_risk_atom_audit.py`, whose
   strict `--require-complete` mode currently fails as expected until all
-  `30` rows and `90` model assessments are reviewed. Aggregate review status
+  `30` risk/decision row-review fields and `90` model assessments are reviewed;
+  this is not a duplicate transcript-review requirement. Aggregate review status
   is produced by
   `80_semantic_risk_asr/annotation/summarize_human_risk_atom_audit.py`, and
   model-level reviewer assessments are required before making model-comparison
@@ -134,8 +137,8 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   validation, aggregate review-progress counts, aggregate review summaries,
   human-reviewed predictor outputs, and the evidence-chain readiness gate in
   one recorded pass. Current refresh status is still `review_pending`: `0/30`
-  rows and `0/90` model assessments reviewed. The progress audit recommends
-  six batches, starting with `critical_or_high_risk_missed` and
+  risk/decision row reviews and `0/90` model assessments reviewed. The progress
+  audit recommends six batches, starting with `critical_or_high_risk_missed` and
   `unsafe_downrouting`.
 - The 2026-05-25 WER audit is recorded in
   `70_experiments/runs/wer_metric_audit_2026_05_25/`. The latest audit checks

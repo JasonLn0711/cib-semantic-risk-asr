@@ -68,13 +68,20 @@ The model-level field is required for reviewer-facing claims about whether
 partial encoder, LoRA, or base Breeze is safer. Without model-level review, the
 audit can only support row-level risk coverage, not model comparison.
 
+## Transcript Policy
+
+The reference transcripts used for WER/CER scoring are already accepted as
+human-reviewed ground truth. Do not route duplicate transcript review.
+`reviewer_verified_transcript` is optional and correction-only: use it only if
+the reviewer discovers an exception that should be explicitly recorded in the
+local ignored sheet.
+
 ## Required Reviewer Fields
 
 Fill these columns in the local sheet:
 
 | Field | Meaning |
 | --- | --- |
-| `reviewer_verified_transcript` | Human-checked transcript if the reference needs correction; otherwise leave blank or copy only the corrected span. |
 | `reviewer_semantic_risk_label` | Final human label: `no_escalation`, `review`, `priority_review`, or `critical_escalation`. |
 | `reviewer_risk_atoms` | Comma-separated atoms present in the row. |
 | `reviewer_critical_atoms` | Comma-separated atoms whose ASR corruption could change the downstream decision. |
@@ -85,6 +92,12 @@ Fill these columns in the local sheet:
 | `reviewer_annotation_confidence` | `high`, `medium`, or `low`. |
 | `reviewer_model_assessments_json` | Per-model reviewer fields for each ASR hypothesis. Fill decision-change, critical atoms, expected safe action, and confidence for every model entry. |
 | `reviewer_notes` | Minimal note for unresolved ambiguity. Keep raw personal/call details out of tracked summaries. |
+
+Optional correction field:
+
+| Field | Meaning |
+| --- | --- |
+| `reviewer_verified_transcript` | Correction-only field if the accepted ground-truth reference needs an exception record; otherwise leave blank. This field is not a completion gate for `--require-complete`. |
 
 ## Risk Atom Labels
 
@@ -227,7 +240,8 @@ labels. It must replace proxy predictor language for reviewer-facing claims.
 
 This gate is complete only when:
 
-- the local `30`-row sheet has been reviewed;
+- the local `30`-row sheet has complete risk/decision reviewer fields, not a
+  duplicate transcript review;
 - `validate_human_risk_atom_audit.py --require-complete --expected-rows 30`
   passes;
 - tracked aggregate annotation stats exist;

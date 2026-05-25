@@ -17,6 +17,8 @@
     "pending_model_review": 90,
     "pending_row_review": 30
   },
+  "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review.",
+  "remaining_review_scope": "Progress counts cover selected-300 risk-atom, decision-change, expected safe action, confidence, and per-model assessment fields only.",
   "missing_row_review_field_counts": {
     "reviewer_annotation_confidence": 30,
     "reviewer_asr_confusion_terms": 30,
@@ -48,7 +50,7 @@
     "breeze_asr25_partial_encoder_high_stakes_300": 30
   },
   "recommended_batch_count": 6,
-  "first_principle_decision": "Reviewer time is the current scarce resource. Review high-safety-risk strata first, then refresh aggregate evidence before making paper-grade CDS-ASR claims.",
-  "next_action": "Review critical/high-risk missed and unsafe-downrouting strata first, fill both row-level and model-level fields, then run refresh_human_audit_evidence.py --require-complete.",
-  "runtime_seconds": 0.0012
+  "first_principle_decision": "Reviewer time is the current scarce resource for risk/decision labels, not for duplicate transcript review. Review high-safety-risk strata first, then refresh aggregate evidence before making paper-grade CDS-ASR claims.",
+  "next_action": "Review critical/high-risk missed and unsafe-downrouting strata first, fill risk-atom, decision-change, expected-action, confidence, and model-level fields, then run refresh_human_audit_evidence.py --require-complete.",
+  "runtime_seconds": 0.002
 }
