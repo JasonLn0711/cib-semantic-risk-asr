@@ -292,8 +292,11 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - Current state: dry-run only；row `1` 的 timing proposal 可讓 coverage 變成
   `1/6`，但 local response TSV 沒有被寫入，closeout 仍是 actual `0/6`
   timing rows filled。
-- Reviewer handoff 現在提供 `timing_start_write` 和 `timing_finish_write`
-  command；這是 timing capture support，不是 human review completion。
+- Reviewer handoff、action checklist、session-start summary 現在提供
+  `timing_start_write_by_row` 和 `timing_finish_write_by_row`，涵蓋目前
+  packet rows `1-6`；row `1` 的 `timing_start_write` /
+  `timing_finish_write` 仍保留作為 compatibility alias。這是 timing
+  capture support，不是 human review completion。
 
 目前最重要的限制：
 

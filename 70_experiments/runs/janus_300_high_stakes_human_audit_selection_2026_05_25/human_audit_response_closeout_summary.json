@@ -51,7 +51,7 @@
     "missing_review_timing"
   ],
   "apply_log_status": "apply_log_valid",
-  "apply_log_entries": 6,
+  "apply_log_entries": 7,
   "checklist_status": "reviewer_action_ready",
   "checklist": [
     {

@@ -4,7 +4,7 @@
   "input_boundary": "validator constants plus aggregate reviewer action status only",
   "output_boundary": "repo-safe reviewer value contract; no row keys or transcript text",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
-  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
+  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
   "validator_constants_match": true,
   "value_category_counts": {
     "row_risk_label": 4,
