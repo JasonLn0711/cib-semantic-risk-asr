@@ -1,25 +1,24 @@
 {
-  "version": "v2.5.168",
+  "version": "v2.5.169",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 168
+    "patch": 169
   },
-  "updated_at": "2026-05-26T05:23:02+08:00",
+  "updated_at": "2026-05-26T05:33:15+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "c3cde86",
+  "base_commit": "17d9e03",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/registry.tsv",
-    "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/README.md",
-    "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/summary.json",
-    "README.md",
-    "docs/asr_candidate_expansion_2026_05_25.md"
+    "80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py",
+    "80_semantic_risk_asr/annotation/build_human_audit_response_closeout_checklist.py",
+    "tests/test_human_audit_batch_response.py",
+    "tests/test_human_audit_response_closeout.py"
   ]
 }

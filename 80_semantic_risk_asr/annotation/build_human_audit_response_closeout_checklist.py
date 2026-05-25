@@ -115,6 +115,16 @@ def build_closeout(
         if isinstance(apply_summary.get("review_timing"), dict)
         else {}
     )
+    response_gap_overview = (
+        apply_summary.get("response_gap_overview")
+        if isinstance(apply_summary.get("response_gap_overview"), dict)
+        else {}
+    )
+    response_gap_rows = (
+        apply_summary.get("response_gap_summary_by_row")
+        if isinstance(apply_summary.get("response_gap_summary_by_row"), list)
+        else []
+    )
     rows_missing_timing = int(review_timing.get("rows_missing_timing") or 0)
     review_timing_complete = rows_missing_timing == 0
     response_complete = (
@@ -159,9 +169,10 @@ def build_closeout(
             "status": "complete" if int(apply_summary.get("pending_rows_in_response") or 0) == 0 else "pending",
             "evidence": (
                 f"reviewed_rows={apply_summary.get('reviewed_rows_in_response', '')}; "
-                f"pending_rows={apply_summary.get('pending_rows_in_response', '')}"
+                f"pending_rows={apply_summary.get('pending_rows_in_response', '')}; "
+                f"rows_with_row_field_gaps={response_gap_overview.get('rows_with_row_field_gaps', '')}"
             ),
-            "next_action": "fill required row-level risk and decision fields in the local response TSV",
+            "next_action": "fill required row-level risk and decision fields in the local response TSV; use response_gap_summary_by_row for row-number-only gaps",
         },
         {
             "step_id": "4",
@@ -173,7 +184,8 @@ def build_closeout(
             ),
             "evidence": (
                 f"reviewed_model_assessments={apply_summary.get('reviewed_model_assessments_in_response', '')}; "
-                f"pending_model_assessments={apply_summary.get('pending_model_assessments_in_response', '')}"
+                f"pending_model_assessments={apply_summary.get('pending_model_assessments_in_response', '')}; "
+                f"rows_with_model_assessment_gaps={response_gap_overview.get('rows_with_model_assessment_gaps', '')}"
             ),
             "next_action": "fill every per-model decision-change and safe-action assessment",
         },
@@ -183,7 +195,8 @@ def build_closeout(
             "status": "complete" if review_timing_complete else "pending",
             "evidence": (
                 f"rows_with_timing={review_timing.get('rows_with_timing', '')}; "
-                f"rows_missing_timing={rows_missing_timing}"
+                f"rows_missing_timing={rows_missing_timing}; "
+                f"rows_with_timing_gaps={response_gap_overview.get('rows_with_timing_gaps', '')}"
             ),
             "next_action": "fill review_started_at/review_finished_at or review_elapsed_seconds and rerun strict dry-run",
         },
@@ -247,6 +260,8 @@ def build_closeout(
         "latest_apply_status": apply_summary.get("status", ""),
         "require_timing": apply_summary.get("require_timing", ""),
         "review_timing": review_timing,
+        "response_gap_overview": response_gap_overview,
+        "response_gap_summary_by_row": response_gap_rows,
         "session_start_gate": session_gate,
         "apply_error_keys": apply_errors,
         "blocker_keys": blocker_keys,

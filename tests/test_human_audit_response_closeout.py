@@ -58,6 +58,46 @@ def write_closeout_inputs(
                 "rows_with_timing": 2 if response_complete else 0,
                 "rows_missing_timing": 0 if response_complete else 2,
             },
+            "response_gap_overview": {
+                "rows_reported": 2,
+                "rows_with_any_gap": 0 if response_complete else 2,
+                "rows_with_row_field_gaps": 0 if response_complete else 2,
+                "rows_with_model_assessment_gaps": 0 if response_complete else 2,
+                "rows_with_timing_gaps": 0 if response_complete else 2,
+                "total_row_fields_missing": 0 if response_complete else 16,
+                "total_model_assessments_missing": 0 if response_complete else 6,
+                "total_model_fields_missing": 0 if response_complete else 24,
+            },
+            "response_gap_summary_by_row": [
+                {
+                    "row_number": 1,
+                    "has_gap": not response_complete,
+                    "row_response_complete": response_complete,
+                    "row_fields_missing_count": 0 if response_complete else 8,
+                    "missing_row_fields": [] if response_complete else ["reviewer_risk_atoms"],
+                    "model_assessments_expected_count": 3,
+                    "model_assessments_complete_count": 3 if response_complete else 0,
+                    "model_assessments_missing_count": 0 if response_complete else 3,
+                    "model_fields_missing_count": 0 if response_complete else 12,
+                    "missing_model_fields": [] if response_complete else ["model_reviewer_critical_atoms"],
+                    "review_timing_complete": response_complete,
+                    "review_timing_missing": not response_complete,
+                },
+                {
+                    "row_number": 2,
+                    "has_gap": not response_complete,
+                    "row_response_complete": response_complete,
+                    "row_fields_missing_count": 0 if response_complete else 8,
+                    "missing_row_fields": [] if response_complete else ["reviewer_risk_atoms"],
+                    "model_assessments_expected_count": 3,
+                    "model_assessments_complete_count": 3 if response_complete else 0,
+                    "model_assessments_missing_count": 0 if response_complete else 3,
+                    "model_fields_missing_count": 0 if response_complete else 12,
+                    "missing_model_fields": [] if response_complete else ["model_reviewer_critical_atoms"],
+                    "review_timing_complete": response_complete,
+                    "review_timing_missing": not response_complete,
+                },
+            ],
             "error_counts": {} if response_complete else {"incomplete_response": 1},
         },
     )
@@ -111,6 +151,9 @@ def test_closeout_blocks_pending_response_without_private_content(tmp_path: Path
     assert payload["session_start_gate"]["ok"] is True
     assert payload["pending_rows_in_response"] == 2
     assert payload["pending_model_assessments_in_response"] == 6
+    assert payload["response_gap_overview"]["rows_with_any_gap"] == 2
+    assert payload["response_gap_summary_by_row"][0]["row_number"] == 1
+    assert payload["response_gap_summary_by_row"][0]["has_gap"] is True
     assert "response_not_complete" in payload["blocker_keys"]
     assert "incomplete_response" in payload["blocker_keys"]
     status_by_step = {row["step_id"]: row["status"] for row in rows}

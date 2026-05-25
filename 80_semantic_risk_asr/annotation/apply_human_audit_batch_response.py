@@ -63,6 +63,7 @@ ROW_RESPONSE_FIELDS = [
     "reviewer_annotation_confidence",
     "reviewer_notes",
 ]
+ROW_REQUIRED_RESPONSE_FIELDS = ROW_RESPONSE_FIELDS[:-1]
 MODEL_RESPONSE_FIELDS = [
     "model_reviewer_would_asr_error_change_decision",
     "model_reviewer_critical_atoms",
@@ -295,10 +296,14 @@ def complete_fields(row: dict[str, str], fields: list[str]) -> bool:
     return all((row.get(field) or "").strip() for field in fields)
 
 
+def missing_fields(row: dict[str, str], fields: list[str]) -> list[str]:
+    return [field for field in fields if not (row.get(field) or "").strip()]
+
+
 def row_response_complete(rows: list[dict[str, str]]) -> bool:
     if not rows:
         return False
-    return complete_fields(rows[0], ROW_RESPONSE_FIELDS[:-1])
+    return complete_fields(rows[0], ROW_REQUIRED_RESPONSE_FIELDS)
 
 
 def model_response_complete(row: dict[str, str]) -> bool:
@@ -453,6 +458,79 @@ def review_timing_summary(
         "min_review_elapsed_seconds": round(min(durations), 4) if durations else "",
         "max_review_elapsed_seconds": round(max(durations), 4) if durations else "",
     }
+
+
+def response_gap_report(
+    *,
+    audit_rows: list[dict[str, str]],
+    grouped_response_rows: dict[int, list[dict[str, str]]],
+    row_numbers: list[int],
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    rows: list[dict[str, Any]] = []
+    for row_number in row_numbers:
+        responses = grouped_response_rows.get(row_number, [])
+        row = responses[0] if responses else {}
+        expected_models = 0
+        if 1 <= row_number <= len(audit_rows):
+            expected_models = sum(
+                1
+                for item in iter_model_assessments(audit_rows[row_number - 1])
+                if item.get("asr_run_id")
+            )
+        row_missing = missing_fields(row, ROW_REQUIRED_RESPONSE_FIELDS)
+        model_missing_fields = sorted(
+            {
+                field
+                for response in responses
+                for field in missing_fields(response, MODEL_RESPONSE_FIELDS)
+            }
+        )
+        if not responses and expected_models:
+            model_missing_fields = list(MODEL_RESPONSE_FIELDS)
+        model_complete_count = sum(1 for response in responses if model_response_complete(response))
+        missing_model_assessments = max(expected_models - model_complete_count, 0)
+        missing_model_cells = sum(
+            len(missing_fields(response, MODEL_RESPONSE_FIELDS)) for response in responses
+        )
+        if expected_models > len(responses):
+            missing_model_cells += (expected_models - len(responses)) * len(MODEL_RESPONSE_FIELDS)
+        timing_complete = review_timing_elapsed_seconds(responses) is not None
+        has_gap = bool(row_missing or missing_model_assessments or missing_model_cells or not timing_complete)
+        rows.append(
+            {
+                "row_number": row_number,
+                "has_gap": has_gap,
+                "row_response_complete": not row_missing and bool(responses),
+                "row_fields_missing_count": len(row_missing),
+                "missing_row_fields": row_missing,
+                "model_assessments_expected_count": expected_models,
+                "model_assessments_complete_count": model_complete_count,
+                "model_assessments_missing_count": missing_model_assessments,
+                "model_fields_missing_count": missing_model_cells,
+                "missing_model_fields": model_missing_fields,
+                "review_timing_complete": timing_complete,
+                "review_timing_missing": not timing_complete,
+            }
+        )
+    overview = {
+        "rows_reported": len(rows),
+        "rows_with_any_gap": sum(1 for row in rows if row["has_gap"]),
+        "rows_with_row_field_gaps": sum(
+            1 for row in rows if int(row["row_fields_missing_count"]) > 0
+        ),
+        "rows_with_model_assessment_gaps": sum(
+            1 for row in rows if int(row["model_assessments_missing_count"]) > 0
+        ),
+        "rows_with_timing_gaps": sum(1 for row in rows if row["review_timing_missing"]),
+        "total_row_fields_missing": sum(int(row["row_fields_missing_count"]) for row in rows),
+        "total_model_assessments_missing": sum(
+            int(row["model_assessments_missing_count"]) for row in rows
+        ),
+        "total_model_fields_missing": sum(int(row["model_fields_missing_count"]) for row in rows),
+    }
+    assert_tracked_safe(overview)
+    assert_tracked_safe(rows)
+    return overview, rows
 
 
 def response_apply_log_row(payload: dict[str, Any]) -> dict[str, Any]:
@@ -851,6 +929,11 @@ def apply_response_sheet(
     reviewed_models = sum(1 for row in response_rows if model_response_complete(row))
     model_assessments = len(response_rows)
     timing_summary = review_timing_summary(grouped, row_numbers, required=require_timing)
+    gap_overview, gap_rows = response_gap_report(
+        audit_rows=audit_rows,
+        grouped_response_rows=grouped,
+        row_numbers=row_numbers,
+    )
     status = response_status(
         errors=errors,
         reviewed_rows=reviewed_rows,
@@ -907,6 +990,8 @@ def apply_response_sheet(
         "reviewed_model_assessments_in_response": reviewed_models,
         "pending_model_assessments_in_response": pending_models,
         "review_timing": timing_summary,
+        "response_gap_overview": gap_overview,
+        "response_gap_summary_by_row": gap_rows,
         "session_start_gate": session_start_gate,
         "error_counts": dict(sorted(errors.items())),
         "backup_path": backup_path,

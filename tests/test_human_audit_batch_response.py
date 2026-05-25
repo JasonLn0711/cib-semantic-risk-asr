@@ -246,6 +246,18 @@ def test_blank_response_dry_run_is_pending_and_safe(tmp_path: Path) -> None:
     assert payload["ok"] is True
     assert payload["status"] == "response_pending"
     assert payload["pending_rows_in_response"] == 1
+    assert payload["response_gap_overview"]["rows_with_any_gap"] == 1
+    assert payload["response_gap_overview"]["total_row_fields_missing"] == 8
+    assert payload["response_gap_overview"]["total_model_assessments_missing"] == 1
+    assert payload["response_gap_overview"]["rows_with_timing_gaps"] == 1
+    row_gap = payload["response_gap_summary_by_row"][0]
+    assert row_gap["row_number"] == 1
+    assert row_gap["row_fields_missing_count"] == 8
+    assert row_gap["model_assessments_expected_count"] == 1
+    assert row_gap["model_assessments_missing_count"] == 1
+    assert row_gap["model_fields_missing_count"] == 4
+    assert row_gap["review_timing_missing"] is True
+    assert "reviewer_notes" not in row_gap["missing_row_fields"]
     tracked = (tmp_path / "human_audit_batch_response_apply_summary.json").read_text(
         encoding="utf-8"
     )
@@ -593,6 +605,11 @@ def test_require_timing_passes_complete_response_with_timing(tmp_path: Path) -> 
     assert payload["status"] == "response_complete"
     assert payload["require_timing"] is True
     assert payload["review_timing"]["rows_missing_timing"] == 0
+    assert payload["response_gap_overview"]["rows_with_any_gap"] == 0
+    assert payload["response_gap_overview"]["total_row_fields_missing"] == 0
+    assert payload["response_gap_overview"]["total_model_assessments_missing"] == 0
+    assert payload["response_gap_overview"]["rows_with_timing_gaps"] == 0
+    assert payload["response_gap_summary_by_row"][0]["has_gap"] is False
     assert payload["error_counts"] == {}
 
 
