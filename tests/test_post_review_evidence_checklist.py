@@ -26,6 +26,7 @@ def write_inputs(tmp_path: Path, *, ready: bool, human_recovery: bool = False) -
     publishable = readiness_dir / "publishable_evidence_completion_summary.json"
     consequence = readiness_dir / "consequence_evidence_matrix_summary.json"
     recovery = tmp_path / "recovery" / "summary.json"
+    human_recovery_summary = tmp_path / "human_recovery" / "summary.json"
     write_json(
         closeout,
         {
@@ -71,7 +72,7 @@ def write_inputs(tmp_path: Path, *, ready: bool, human_recovery: bool = False) -
         recovery,
         {
             "ok": True,
-            "evidence_mode": "human_reviewed" if human_recovery else "proxy",
+            "evidence_mode": "proxy",
             "policies": {
                 "no_recovery": {},
                 "confidence_only_trigger": {},
@@ -81,6 +82,24 @@ def write_inputs(tmp_path: Path, *, ready: bool, human_recovery: bool = False) -
             },
         },
     )
+    if human_recovery:
+        write_json(
+            human_recovery_summary,
+            {
+                "ok": True,
+                "status": "human_reviewed_complete",
+                "evidence_mode": "human_reviewed",
+                "human_reviewed": True,
+                "review_status": "human_reviewed_complete",
+                "policies": {
+                    "no_recovery": {},
+                    "confidence_only_trigger": {},
+                    "sres_triggered_recovery": {},
+                    "ceis_triggered_conservative_action": {},
+                    "ceis_ensemble_arbitration": {},
+                },
+            },
+        )
     return {
         "run_dir": run_dir,
         "readiness_dir": readiness_dir,
@@ -91,6 +110,7 @@ def write_inputs(tmp_path: Path, *, ready: bool, human_recovery: bool = False) -
         "publishable": publishable,
         "consequence": consequence,
         "recovery": recovery,
+        "human_recovery": human_recovery_summary,
     }
 
 
@@ -107,6 +127,7 @@ def test_post_review_checklist_blocks_until_closeout_and_refresh_complete(tmp_pa
         publishable_summary_path=paths["publishable"],
         consequence_summary_path=paths["consequence"],
         recovery_summary_path=paths["recovery"],
+        human_recovery_summary_path=paths["human_recovery"],
         repo_root=tmp_path,
     )
 
@@ -142,6 +163,7 @@ def test_post_review_checklist_marks_all_gates_ready(tmp_path: Path) -> None:
         publishable_summary_path=paths["publishable"],
         consequence_summary_path=paths["consequence"],
         recovery_summary_path=paths["recovery"],
+        human_recovery_summary_path=paths["human_recovery"],
         repo_root=tmp_path,
     )
 
@@ -170,6 +192,7 @@ def test_post_review_checklist_blocks_proxy_recovery_even_when_other_gates_ready
         publishable_summary_path=paths["publishable"],
         consequence_summary_path=paths["consequence"],
         recovery_summary_path=paths["recovery"],
+        human_recovery_summary_path=paths["human_recovery"],
         repo_root=tmp_path,
     )
 

@@ -19,7 +19,8 @@ SCRIPT_PATH = Path(__file__).resolve()
 ANNOTATION_DIR = SCRIPT_PATH.parent
 REPO_ROOT = SCRIPT_PATH.parents[2]
 SCORING_DIR = REPO_ROOT / "80_semantic_risk_asr" / "scoring"
-for import_path in (ANNOTATION_DIR, SCORING_DIR):
+RECOVERY_DIR = REPO_ROOT / "80_semantic_risk_asr" / "recovery"
+for import_path in (ANNOTATION_DIR, SCORING_DIR, RECOVERY_DIR):
     if str(import_path) not in sys.path:
         sys.path.insert(0, str(import_path))
 
@@ -30,6 +31,7 @@ import audit_postdoc_roadmap_completion as roadmap_audit  # noqa: E402
 import audit_publishable_evidence_chain as completion_audit  # noqa: E402
 import audit_human_review_progress as progress_audit  # noqa: E402
 import check_evidence_chain_readiness as readiness  # noqa: E402
+import evaluate_human_reviewed_recovery_policies as human_recovery  # noqa: E402
 import summarize_human_risk_atom_audit as review_summary  # noqa: E402
 import validate_human_risk_atom_audit as validation  # noqa: E402
 
@@ -444,6 +446,13 @@ def run_post_review_evidence_gate(
             / "janus_300_high_stakes_recovery_proxy_2026_05_25"
             / "summary.json"
         ),
+        human_recovery_summary_path=(
+            repo_root
+            / "70_experiments"
+            / "runs"
+            / "janus_300_high_stakes_recovery_human_reviewed_2026_05_26"
+            / "summary.json"
+        ),
         repo_root=repo_root,
     )
     output_json = output_dir / post_review_checklist.POST_REVIEW_SUMMARY_NAME
@@ -451,6 +460,41 @@ def run_post_review_evidence_gate(
     post_review_checklist.write_json(output_json, payload)
     post_review_checklist.write_tsv(output_tsv, rows)
     return payload, [output_json, output_tsv]
+
+
+def run_human_reviewed_recovery_gate(
+    *,
+    audit_sheet: Path,
+    repo_root: Path,
+    expected_rows: int | None,
+) -> tuple[dict[str, Any], list[Path]]:
+    output_dir = (
+        repo_root
+        / "70_experiments"
+        / "runs"
+        / "janus_300_high_stakes_recovery_human_reviewed_2026_05_26"
+    )
+    summary_path = output_dir / "summary.json"
+    comparison_path = output_dir / "policy_comparison.tsv"
+    payload, _detail_rows, _exit_code = human_recovery.build_human_reviewed_recovery(
+        audit_sheet=audit_sheet,
+        expected_rows=expected_rows,
+        allow_pending_summary=True,
+        confidence_threshold=0.70,
+        sres_threshold=20.0,
+        ceis_threshold=5.0,
+        ensemble_mode="priority",
+    )
+    human_recovery.write_json(summary_path, payload)
+    outputs = [summary_path]
+    if payload.get("policies"):
+        human_recovery.write_tsv(
+            comparison_path,
+            human_recovery.comparison_rows(payload["policies"]),
+            human_recovery.COMPARISON_FIELDS,
+        )
+        outputs.append(comparison_path)
+    return payload, outputs
 
 
 def run_consistency_audit_gate(
@@ -516,6 +560,7 @@ def refresh_human_audit_evidence(
     completion_payload: dict[str, Any] | None = None
     roadmap_payload: dict[str, Any] | None = None
     post_review_payload: dict[str, Any] | None = None
+    human_recovery_payload: dict[str, Any] | None = None
     consistency_payload: dict[str, Any] | None = None
     objective_payload: dict[str, Any] | None = None
     downstream_refreshed = False
@@ -582,6 +627,9 @@ def refresh_human_audit_evidence(
         "post_review_evidence_ok": "",
         "post_review_evidence_status": "",
         "post_review_blocker_keys": [],
+        "human_recovery_status": "",
+        "human_recovery_evidence_mode": "",
+        "human_recovery_ready": "",
         "consistency_audit_ok": "",
         "consistency_status_counts": {},
         "consistency_failed_checks": [],
@@ -635,6 +683,21 @@ def refresh_human_audit_evidence(
     payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
     write_refresh_summary(output_dir, payload)
     if readiness_payload is not None and predictor_payload is not None:
+        human_recovery_payload, human_recovery_outputs = run_human_reviewed_recovery_gate(
+            audit_sheet=audit_sheet,
+            repo_root=repo_root,
+            expected_rows=expected_rows,
+        )
+        output_paths.extend(human_recovery_outputs)
+        payload["human_recovery_status"] = human_recovery_payload.get("status", "")
+        payload["human_recovery_evidence_mode"] = human_recovery_payload.get(
+            "evidence_mode",
+            "",
+        )
+        payload["human_recovery_ready"] = bool(human_recovery_payload.get("human_reviewed"))
+        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
+        payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
+        write_refresh_summary(output_dir, payload)
         post_review_payload, post_review_outputs = run_post_review_evidence_gate(
             output_dir=output_dir,
             readiness_output_dir=readiness_output_dir,

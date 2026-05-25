@@ -40,6 +40,13 @@ DEFAULT_RECOVERY_SUMMARY = (
     / "janus_300_high_stakes_recovery_proxy_2026_05_25"
     / "summary.json"
 )
+DEFAULT_HUMAN_RECOVERY_SUMMARY = (
+    REPO_ROOT
+    / "70_experiments"
+    / "runs"
+    / "janus_300_high_stakes_recovery_human_reviewed_2026_05_26"
+    / "summary.json"
+)
 POST_REVIEW_SUMMARY_NAME = "human_audit_post_review_evidence_summary.json"
 POST_REVIEW_TSV_NAME = "human_audit_post_review_evidence_checklist.tsv"
 REFRESH_SUMMARY_NAME = "human_audit_refresh_summary.json"
@@ -107,6 +114,7 @@ def build_post_review_checklist(
     publishable_summary_path: Path,
     consequence_summary_path: Path,
     recovery_summary_path: Path,
+    human_recovery_summary_path: Path,
     repo_root: Path,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     started = time.time()
@@ -117,6 +125,7 @@ def build_post_review_checklist(
     publishable = read_json(publishable_summary_path)
     consequence = read_json(consequence_summary_path)
     recovery = read_json(recovery_summary_path)
+    human_recovery = read_json(human_recovery_summary_path)
     closeout_timing = (
         closeout.get("review_timing")
         if isinstance(closeout.get("review_timing"), dict)
@@ -139,7 +148,7 @@ def build_post_review_checklist(
     publishable_ready = publishable.get("ok") is True and publishable.get("publishable_ready") is True
     consequence_ready = consequence.get("ok") is True and consequence.get("paper_claims_ready") is True
     recovery_proxy = recovery_proxy_available(recovery)
-    recovery_ready = recovery_human_ready(recovery)
+    recovery_ready = recovery_human_ready(human_recovery)
     all_ready = (
         closeout_ready
         and refresh_complete
@@ -234,8 +243,10 @@ def build_post_review_checklist(
             ),
             "evidence": (
                 f"recovery_ok={recovery.get('ok', '')}; "
-                f"evidence_mode={recovery.get('evidence_mode', '')}; "
-                f"policy_count={len(recovery.get('policies', {}) if isinstance(recovery.get('policies'), dict) else {})}"
+                f"proxy_policy_count={len(recovery.get('policies', {}) if isinstance(recovery.get('policies'), dict) else {})}; "
+                f"human_recovery_status={human_recovery.get('status', '')}; "
+                f"human_evidence_mode={human_recovery.get('evidence_mode', '')}; "
+                f"human_policy_count={len(human_recovery.get('policies', {}) if isinstance(human_recovery.get('policies'), dict) else {})}"
             ),
             "next_action": "rerun recovery policy evaluation after human-reviewed labels are available",
         },
@@ -277,6 +288,8 @@ def build_post_review_checklist(
         "consequence_ready": consequence_ready,
         "recovery_proxy_available": recovery_proxy,
         "recovery_human_ready": recovery_ready,
+        "human_recovery_status": human_recovery.get("status", "missing"),
+        "human_recovery_evidence_mode": human_recovery.get("evidence_mode", ""),
         "blocker_keys": blocker_keys,
         "checklist": rows,
         "paper_ready_impact": (
@@ -295,7 +308,8 @@ def build_post_review_checklist(
             "summary": repo_relative(run_dir / POST_REVIEW_SUMMARY_NAME, repo_root=repo_root),
             "checklist_tsv": repo_relative(run_dir / POST_REVIEW_TSV_NAME, repo_root=repo_root),
             "readiness_dir": repo_relative(readiness_dir, repo_root=repo_root),
-            "recovery_summary": repo_relative(recovery_summary_path, repo_root=repo_root),
+            "recovery_proxy_summary": repo_relative(recovery_summary_path, repo_root=repo_root),
+            "recovery_human_summary": repo_relative(human_recovery_summary_path, repo_root=repo_root),
         },
         "runtime_seconds": round(time.time() - started, 4),
     }
@@ -315,6 +329,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--publishable-summary", type=Path)
     parser.add_argument("--consequence-summary", type=Path)
     parser.add_argument("--recovery-summary", type=Path, default=DEFAULT_RECOVERY_SUMMARY)
+    parser.add_argument("--human-recovery-summary", type=Path, default=DEFAULT_HUMAN_RECOVERY_SUMMARY)
     parser.add_argument("--summary-json", type=Path)
     parser.add_argument("--output-tsv", type=Path)
     return parser.parse_args()
@@ -340,6 +355,7 @@ def main() -> int:
         publishable_summary_path=publishable_summary,
         consequence_summary_path=consequence_summary,
         recovery_summary_path=args.recovery_summary,
+        human_recovery_summary_path=args.human_recovery_summary,
         repo_root=REPO_ROOT,
     )
     write_json(summary_json, payload)

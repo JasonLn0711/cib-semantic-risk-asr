@@ -524,9 +524,21 @@ def test_refresh_updates_post_review_evidence_checklist(tmp_path: Path) -> None:
     assert payload["post_review_evidence_status"] == "post_review_evidence_blocked"
     assert "response_closeout_not_ready" in payload["post_review_blocker_keys"]
     assert "human_refresh_not_complete" in payload["post_review_blocker_keys"]
+    assert payload["human_recovery_status"] == "review_pending"
+    assert payload["human_recovery_evidence_mode"] == "human_reviewed_pending"
+    assert payload["human_recovery_ready"] is False
     assert post_review_payload["ok"] is False
     assert post_review_payload["status"] == "post_review_evidence_blocked"
+    assert post_review_payload["human_recovery_status"] == "review_pending"
+    assert post_review_payload["human_recovery_evidence_mode"] == "human_reviewed_pending"
     assert (output_dir / "human_audit_post_review_evidence_checklist.tsv").exists()
+    assert (
+        tmp_path
+        / "70_experiments"
+        / "runs"
+        / "janus_300_high_stakes_recovery_human_reviewed_2026_05_26"
+        / "summary.json"
+    ).exists()
     assert "PRIVATE_" not in post_review_path.read_text(encoding="utf-8")
 
 
