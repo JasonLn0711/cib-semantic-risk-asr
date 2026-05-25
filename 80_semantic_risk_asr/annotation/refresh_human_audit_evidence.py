@@ -785,6 +785,24 @@ def refresh_human_audit_evidence(
         payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
         payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
         write_refresh_summary(output_dir, payload)
+        post_review_sequence_payload, sequence_outputs = run_post_review_sequence_gate(
+            output_dir=output_dir,
+            readiness_output_dir=readiness_output_dir,
+            repo_root=repo_root,
+        )
+        output_paths.extend(sequence_outputs)
+        payload["post_review_sequence_status"] = post_review_sequence_payload.get("status", "")
+        payload["post_review_sequence_blocker_keys"] = post_review_sequence_payload.get(
+            "blocker_keys",
+            [],
+        )
+        payload["post_review_sequence_executed_step_count"] = post_review_sequence_payload.get(
+            "executed_step_count",
+            "",
+        )
+        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
+        payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
+        write_refresh_summary(output_dir, payload)
         objective_payload, objective_outputs = run_objective_requirements_gate(
             repo_root=repo_root,
             output_dir=readiness_output_dir,
@@ -806,24 +824,6 @@ def refresh_human_audit_evidence(
         )
         payload["objective_requirements_blocking_count"] = objective_payload.get(
             "blocking_requirement_count",
-            "",
-        )
-        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
-        payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
-        write_refresh_summary(output_dir, payload)
-        post_review_sequence_payload, sequence_outputs = run_post_review_sequence_gate(
-            output_dir=output_dir,
-            readiness_output_dir=readiness_output_dir,
-            repo_root=repo_root,
-        )
-        output_paths.extend(sequence_outputs)
-        payload["post_review_sequence_status"] = post_review_sequence_payload.get("status", "")
-        payload["post_review_sequence_blocker_keys"] = post_review_sequence_payload.get(
-            "blocker_keys",
-            [],
-        )
-        payload["post_review_sequence_executed_step_count"] = post_review_sequence_payload.get(
-            "executed_step_count",
             "",
         )
         payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]

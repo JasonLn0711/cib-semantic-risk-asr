@@ -201,6 +201,11 @@ def base_payloads(**overrides: object) -> dict:
         "post_review": {
             "recovery_human_ready": False,
         },
+        "post_review_sequence": {
+            "ok": False,
+            "status": "post_review_sequence_blocked",
+            "executed_step_count": 0,
+        },
     }
     payload.update(overrides)
     return payload
@@ -217,9 +222,12 @@ def test_objective_requirement_audit_classifies_current_proxy_state() -> None:
     assert by_id["4.1"]["status"] == "proxy_satisfied"
     assert by_id["5.3"]["status"] == "review_pending"
     assert by_id["6.3"]["status"] == "review_pending"
+    assert "post_review_sequence_blocked" in by_id["6.3"]["result"]
+    assert "run_post_review_evidence_sequence.py --execute" in by_id["6.3"]["next_action"]
     assert payload["proxy_requirement_count"] == 5
     assert payload["blocking_requirement_count"] == 2
     assert "strict closeout" in payload["next_decision"]
+    assert "run_post_review_evidence_sequence.py --execute" in payload["next_decision"]
     assert_requirement_audit_safe(payload)
 
 
@@ -255,6 +263,7 @@ def test_objective_requirement_audit_keeps_recovery_proxy_until_post_review() ->
 
     assert by_id["5.3"]["status"] == "satisfied"
     assert by_id["6.3"]["status"] == "review_pending"
+    assert "post_review_sequence_blocked" in by_id["6.3"]["result"]
     assert payload["objective_requirements_ready"] is False
 
 

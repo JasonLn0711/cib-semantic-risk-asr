@@ -1,23 +1,23 @@
 {
-  "version": "v2.5.182",
+  "version": "v2.5.183",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 182
+    "patch": 183
   },
-  "updated_at": "2026-05-26T06:47:13+08:00",
+  "updated_at": "2026-05-26T06:56:53+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "f659930",
+  "base_commit": "79f6f9c",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/registry.tsv",
-    "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/README.md",
-    "README.md"
+    "80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py",
+    "80_semantic_risk_asr/scoring/audit_postdoc_objective_requirements.py",
+    "tests/test_postdoc_objective_requirements.py"
   ]
 }

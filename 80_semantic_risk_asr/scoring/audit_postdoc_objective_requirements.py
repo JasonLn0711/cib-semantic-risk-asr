@@ -293,9 +293,11 @@ def build_objective_requirement_audit_from_payloads(
     human_refresh: dict[str, Any],
     human_predictor: dict[str, Any],
     post_review: dict[str, Any],
+    post_review_sequence: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     rows: list[dict[str, str]] = []
     reg_ids = registry_ids(registry)
+    post_review_sequence = post_review_sequence or {}
 
     checkpoint_required = {
         "janus_old_train_legacy_import",
@@ -501,6 +503,9 @@ def build_objective_requirement_audit_from_payloads(
     recovery_ok, recovery_result = recovery_policy_complete(recovery_summary)
     recovery_gain_ok, recovery_gain_result = recovery_reduces_proxy_risk(recovery_summary)
     recovery_human_ready = bool(post_review.get("recovery_human_ready"))
+    post_review_sequence_status = str(post_review_sequence.get("status", "missing"))
+    post_review_sequence_ok = bool(post_review_sequence.get("ok"))
+    post_review_sequence_executed_steps = post_review_sequence.get("executed_step_count", "")
     rows.extend([
         requirement_row(
             requirement_id="6.1",
@@ -530,10 +535,23 @@ def build_objective_requirement_audit_from_payloads(
             requirement="recovery experiment has human-reviewed post-review evidence",
             status="satisfied" if recovery_human_ready else "review_pending",
             paper_claim_status="paper-ready" if recovery_human_ready else "not paper-ready",
-            evidence="human_audit_post_review_evidence_summary.json",
-            result=f"recovery_human_ready={recovery_human_ready}",
-            blocking_dependency="post-review recovery evidence is still proxy-only",
-            next_action="After reviewed labels are refreshed, rerun recovery and post-review checklist.",
+            evidence="human_audit_post_review_evidence_summary.json; human_audit_post_review_sequence_summary.json",
+            result=(
+                f"recovery_human_ready={recovery_human_ready}; "
+                f"post_review_sequence_status={post_review_sequence_status}; "
+                f"post_review_sequence_ok={post_review_sequence_ok}; "
+                f"post_review_sequence_executed_step_count={post_review_sequence_executed_steps}"
+            ),
+            blocking_dependency=(
+                "post-review recovery evidence is still proxy-only and strict "
+                "post-review sequence is not complete"
+            ),
+            next_action=(
+                "After selected-300 response closeout is ready, run "
+                "run_post_review_evidence_sequence.py --execute so write/refresh, "
+                "strict human-reviewed recovery, post-review checklist, and "
+                "objective audit execute in order."
+            ),
         ),
     ])
 
@@ -557,8 +575,10 @@ def build_objective_requirement_audit_from_payloads(
         "proxy_or_blocking_requirements": proxy_rows + blocking_rows,
         "next_decision": (
             "Do not declare the postdoc objective complete. Complete selected-300 "
-            "row/model/timing review, run strict closeout, refresh human predictor "
-            "and recovery evidence, then rerun this audit."
+            "row/model/timing review, run strict closeout, then execute "
+            "run_post_review_evidence_sequence.py --execute so write/refresh, "
+            "human predictor refresh, strict human-reviewed recovery, post-review "
+            "checklist, and objective audit happen in order."
             if not publishable_ready
             else "All objective requirements have paper-ready evidence."
         ),
@@ -585,6 +605,7 @@ def load_current_payloads(root: Path) -> dict[str, Any]:
         "human_refresh": read_json(root / "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"),
         "human_predictor": read_json(root / "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_summary.json"),
         "post_review": read_json(root / "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json"),
+        "post_review_sequence": read_json(root / "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_summary.json"),
     }
 
 
