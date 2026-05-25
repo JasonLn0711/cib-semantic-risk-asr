@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import re
+import shlex
 import statistics
 import warnings
 import wave
@@ -459,6 +460,98 @@ def write_long_silence_review(
     return out_rows
 
 
+def ffplay_command(path: object) -> str:
+    return f"ffplay -nodisp -autoexit {shlex.quote(str(path))}"
+
+
+def write_gold_review_packet(
+    path: Path,
+    gold_rows: list[dict[str, object]],
+    long_silence_rows: list[dict[str, object]],
+) -> None:
+    gold_sections = []
+    for index, row in enumerate(gold_rows, start=1):
+        audio_path = row["path"]
+        gold_sections.append(
+            f"""### {index}. {row['audio_id']}
+
+- Split: `{row['split']}`
+- Duration: `{row['duration_sec']}` seconds
+- Risk keyword hits: `{row['risk_keyword_hits']}`
+- Audio:
+  ```bash
+  {ffplay_command(audio_path)}
+  ```
+- Candidate reference transcript:
+  ```text
+  {row['candidate_reference_transcript']}
+  ```
+- Fill in `gold_subset_review.tsv`:
+  - `human_verified_transcript`:
+  - `semantic_risk_label`: one of `no_escalation`, `review`, `priority_review`, `critical_escalation`
+  - `risk_atoms`: pipe-delimited subset of `negation|amount|action|actor|intent|time|uncertainty|scam_pattern`
+  - `asr_confusion_terms`: compact note such as `匯款/未匯款`, `三萬/三十萬`, or `none_observed`
+  - `would_asr_error_change_decision`: `yes`, `no`, or `unclear`
+"""
+        )
+
+    silence_sections = []
+    for index, row in enumerate(long_silence_rows, start=1):
+        audio_path = row["path"]
+        silence_sections.append(
+            f"""### {index}. {row['audio_id']}
+
+- Split: `{row['split']}`
+- Duration: `{row['duration_sec']}` seconds
+- Max silence: `{row['max_silence_sec']}` seconds
+- Audio:
+  ```bash
+  {ffplay_command(audio_path)}
+  ```
+- Candidate reference transcript:
+  ```text
+  {row['candidate_reference_transcript']}
+  ```
+- Fill in `long_silence_review.tsv`:
+  - `review_status`: one of `valid_call_pause`, `contextual_silence_ok`, `segmentation_review_needed`, `exclude_from_pilot`
+  - `reviewer`:
+  - `review_date`: YYYY-MM-DD
+  - `review_notes`:
+"""
+        )
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        f"""# JANUS 15-Row Gold Review Packet
+
+Generated: {datetime.now().isoformat(timespec="seconds")}
+
+This file is a local review aid. It may contain candidate transcript text and
+audio paths, so it stays under the ignored `reports/` directory and is not a
+Git artifact.
+
+## Review Rules
+
+1. Listen to the audio before filling `human_verified_transcript`.
+2. Correct only what you can verify from the audio.
+3. Mark decision-critical atoms, not every typo.
+4. Use `none_observed` in `asr_confusion_terms` only if no plausible
+   decision-changing ASR confusion is visible after listening.
+5. The NeMo/Whisper/Breeze pilot gate stays closed until
+   `validate_janus_pilot_gate.py` returns `ok: true`.
+
+## Gold Subset Rows
+
+{chr(10).join(gold_sections)}
+
+## Long-Silence Rows
+
+{chr(10).join(silence_sections)}
+""",
+        encoding="utf-8",
+    )
+
+
 def write_nemo_manifest(path: Path, selected: list[dict[str, object]]) -> None:
     rows = []
     for row in selected:
@@ -855,6 +948,7 @@ def main() -> int:
     gold_path = reports_dir / "gold_subset_review.tsv"
     gold_summary_path = reports_dir / "gold_subset_completion_summary.md"
     long_silence_path = reports_dir / "long_silence_review.tsv"
+    review_packet_path = reports_dir / "gold_review_packet.md"
     task_path = reports_dir / "asr_evaluation_task.md"
     nemo_manifest_path = manifests_dir / "nemo_pilot_input_manifest.jsonl"
     nemo_runbook_path = reports_dir / "nemo_curator_pilot_runbook.md"
@@ -913,6 +1007,7 @@ def main() -> int:
     gold_rows = write_gold_subset(gold_path, selected)
     write_gold_completion_summary(gold_summary_path, gold_rows)
     long_silence_rows = write_long_silence_review(long_silence_path, rows, stats_by_id)
+    write_gold_review_packet(review_packet_path, gold_rows, long_silence_rows)
     write_nemo_manifest(nemo_manifest_path, selected)
     write_task_definition(task_path, args.sample_size)
     write_asr_comparison_plan(comparison_path)
@@ -932,6 +1027,7 @@ def main() -> int:
             gold_path,
             gold_summary_path,
             long_silence_path,
+            review_packet_path,
             task_path,
             nemo_manifest_path,
             nemo_runbook_path,
@@ -958,6 +1054,7 @@ def main() -> int:
                 gold_path,
                 gold_summary_path,
                 long_silence_path,
+                review_packet_path,
                 task_path,
                 nemo_manifest_path,
                 nemo_runbook_path,

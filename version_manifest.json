@@ -1,24 +1,23 @@
 {
-  "version": "v2.5.12",
+  "version": "v2.5.13",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 12
+    "patch": 13
   },
-  "updated_at": "2026-05-25T08:34:12+08:00",
+  "updated_at": "2026-05-25T08:38:42+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "31ef90b",
+  "base_commit": "8c17153",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
-  "summary": "Add JANUS pilot gate validation and preserve gold review fields.",
+  "summary": "Add local JANUS gold review packet generation.",
   "changed_files": [
     "60_whisper_asr_finetuning/README.md",
     "60_whisper_asr_finetuning/scripts/build_janus_curation_artifacts.py",
-    "60_whisper_asr_finetuning/scripts/validate_janus_pilot_gate.py",
     "docs/janus_165_audio_curation_workflow.md"
   ]
 }

@@ -37,7 +37,7 @@ to the organized extracted audio under `../10_extracted_parts/`.
 
    This creates the canonical audio inventory, health check, gold-subset review
    sheet, gold completion summary, long-silence review sheet, NeMo pilot
-   manifest, and ASR comparison plan under ignored local
+   manifest, local review packet, and ASR comparison plan under ignored local
    `40_breeze_asr25_finetune_dataset/manifests/` and `reports/` paths. Existing
    gold-review columns are preserved when the script is rerun.
 
