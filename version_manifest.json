@@ -1,22 +1,25 @@
 {
-  "version": "v2.5.162",
+  "version": "v2.5.163",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 162
+    "patch": 163
   },
-  "updated_at": "2026-05-26T04:50:15+08:00",
+  "updated_at": "2026-05-26T04:50:22+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "5cdb308",
+  "base_commit": "550ba7e",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "80_semantic_risk_asr/annotation/build_human_audit_reviewer_action_checklist.py",
-    "tests/test_human_audit_reviewer_action_checklist.py"
+    "70_experiments/registry.tsv",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist.tsv",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md"
   ]
 }
