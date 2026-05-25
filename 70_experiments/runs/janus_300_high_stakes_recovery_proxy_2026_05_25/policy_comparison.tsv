@@ -1,0 +1,6 @@
+policy	rows	unsafe_downrouting_count	unsafe_downrouting_rate	high_risk_missed_count	high_risk_missed_rate	critical_miss_count	critical_miss_rate	over_escalation_count	over_escalation_rate	triggered_count	recovery_budget_rate	machine_abstention_count	machine_abstention_rate	unsafe_downrouting_reduction_vs_no_recovery	unsafe_downrouting_gain	high_risk_missed_reduction_vs_no_recovery	high_risk_missed_gain	conservative_escalation_cost_count	exact_recovered_error_count
+no_recovery	900	29	0.0322	6	0.0067	1	0.0011	6	0.0067	0	0.0	0	0.0	0	0.0	0	0.0	0	0
+confidence_only_trigger	900	29	0.0322	6	0.0067	1	0.0011	6	0.0067	0	0.0	0	0.0	0	0.0	0	0.0	0	0
+sres_triggered_recovery	900	24	0.0267	0	0.0	0	0.0	6	0.0067	35	0.0389	0	0.0	5	0.1724	6	1.0	0	5
+ceis_triggered_conservative_action	900	24	0.0267	0	0.0	0	0.0	6	0.0067	35	0.0389	0	0.0	5	0.1724	6	1.0	0	5
+ceis_ensemble_arbitration	900	24	0.0267	0	0.0	0	0.0	6	0.0067	47	0.0522	18	0.02	5	0.1724	6	1.0	0	5

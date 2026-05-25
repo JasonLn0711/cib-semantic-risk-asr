@@ -52,6 +52,8 @@ ignored local paths.
 | 5.9 | Added and ran the first automatic recovery policy gate. | `evaluate_recovery_policies.py`; `70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/`; local ignored per-sample policy detail. | Completed. Five conditions compared over `1548` proxy model-samples. No recovery: unsafe downrouting `187`, high-risk missed `161`, critical miss `9`. Confidence-only had no calibrated confidence values and stayed no-trigger. CEIS conservative action reduced unsafe downrouting to `75` and high-risk misses to `41` with budget `0.0969`; CEIS+ensemble reduced them to `46` and `12` with abstention burden `468`. |
 | 5.10 | Completed Breeze-family 300-row high-stakes ASR comparator passes. | `breeze_asr25_partial_encoder_high_stakes_300`; `breeze_asr25_base_high_stakes_300`; `breeze_asr25_lora_high_stakes_300`; local ignored predictions/runtime artifacts. | Completed. All three runs passed `300/300` manifest validation with quality fields. Paper-facing micro metrics: partial encoder `cer_zh_micro=6.86`, `wer_zh_jieba_micro=9.38`, wall time `275.74s`; LoRA `15.97`, `21.91`, `481.25s`; base `21.44`, `28.10`, `214.96s`. |
 | 5.11 | Re-ran WER audit over the three high-stakes 300-row hypotheses. | `70_experiments/runs/wer_metric_audit_2026_05_25/high_stakes_300_metric_audit.tsv`; `high_stakes_300_summary.json`. | Completed. All three runs had `0` missing references, `0` missing hypotheses, `0` missing expected IDs, `0` extra IDs, `0` reference mismatches, and `0.0` zh-jieba `jiwer` delta. Raw whitespace WER remained audit-only: partial encoder `93.16`, LoRA `101.30`, base `271.66`. |
+| 5.12 | Built selected-300 three-model CDS-ASR proxy metric inputs. | `build_janus_metric_inputs.py --split high_stakes_300 --gold-review /dev/null`; `janus_300_high_stakes_cds_proxy_2026_05_25/`. | Completed. Initial build with default gold-review intentionally failed because the 15-row human gate was mixed into the custom split, producing `315` reference IDs. Corrected manifest-only build passed: `300` references, `900` model-samples, `3298` SRES rows, SRES total `9690.0`, `3298` CEIS rows, unstable samples `35`, mean CEIS `0.2278`, max CEIS `15.0`. |
+| 5.13 | Ran selected-300 proxy recovery policy comparison. | `evaluate_recovery_policies.py`; `janus_300_high_stakes_recovery_proxy_2026_05_25/`. | Completed. No recovery: unsafe downrouting `29`, high-risk missed `6`, critical miss `1`. CEIS conservative action: unsafe downrouting `24`, high-risk missed `0`, critical miss `0`, trigger budget `0.0389`. CEIS+ensemble: same safety counts with `47` triggers and `18` abstentions. |
 
 ## Next Operations
 
@@ -69,6 +71,5 @@ ignored local paths.
    expanded 258-row baseline set.
 6. Create a small human-reviewed risk-atom audit set so proxy metrics do not
    become overstated as formal CDS evidence.
-7. Build the 300-row high-stakes CDS-ASR metric inputs from the completed
-   partial-encoder, LoRA, and base hypotheses, then rerun SRES, CEIS,
-   downstream impact, and recovery policy comparison.
+7. Promote a small selected-300 human risk-atom audit set from the proxy outputs
+   before making paper-grade CDS/recovery claims.

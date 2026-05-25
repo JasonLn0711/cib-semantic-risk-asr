@@ -1,0 +1,244 @@
+{
+  "ok": true,
+  "inputs": {
+    "downstream_decisions": "70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/artifacts/metric_inputs_three_model/downstream_escalation_decisions.tsv",
+    "sres_annotation": "70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/artifacts/metric_inputs_three_model/sres_annotation.tsv",
+    "counterfactual_variants": "70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/artifacts/metric_inputs_three_model/counterfactual_variants.tsv"
+  },
+  "thresholds": {
+    "confidence_threshold": 0.7,
+    "sres_threshold": 20.0,
+    "ceis_threshold": 5.0,
+    "ensemble_mode": "priority"
+  },
+  "notes": [
+    "Proxy experiment over metric inputs; not a substitute for human-reviewed risk-atom evidence.",
+    "Confidence-only condition triggers only when calibrated confidence fields are present.",
+    "Conservative actions route low-risk outputs to priority_review instead of using reference labels."
+  ],
+  "sample_count": 900,
+  "confidence_values_present": 0,
+  "policies": {
+    "no_recovery": {
+      "rows": 900,
+      "mismatch_count": 35,
+      "mismatch_rate": 0.0389,
+      "unsafe_downrouting_count": 29,
+      "unsafe_downrouting_rate": 0.0322,
+      "high_risk_missed_count": 6,
+      "high_risk_missed_rate": 0.0067,
+      "critical_miss_count": 1,
+      "critical_miss_rate": 0.0011,
+      "over_escalation_count": 6,
+      "over_escalation_rate": 0.0067,
+      "triggered_count": 0,
+      "recovery_budget_rate": 0.0,
+      "machine_abstention_count": 0,
+      "machine_abstention_rate": 0.0,
+      "exact_recovered_error_count": 0,
+      "unsafe_downrouting_reduction_vs_no_recovery": 0,
+      "unsafe_downrouting_gain": 0.0,
+      "high_risk_missed_reduction_vs_no_recovery": 0,
+      "high_risk_missed_gain": 0.0,
+      "conservative_escalation_cost_count": 0,
+      "action_counts": {
+        "none": 900
+      },
+      "by_run": {
+        "breeze_asr25_base_high_stakes_300": {
+          "rows": 300,
+          "unsafe_downrouting_count": 20,
+          "high_risk_missed_count": 5
+        },
+        "breeze_asr25_lora_high_stakes_300": {
+          "rows": 300,
+          "unsafe_downrouting_count": 6
+        },
+        "breeze_asr25_partial_encoder_high_stakes_300": {
+          "rows": 300,
+          "unsafe_downrouting_count": 3,
+          "high_risk_missed_count": 1
+        }
+      }
+    },
+    "confidence_only_trigger": {
+      "rows": 900,
+      "mismatch_count": 35,
+      "mismatch_rate": 0.0389,
+      "unsafe_downrouting_count": 29,
+      "unsafe_downrouting_rate": 0.0322,
+      "high_risk_missed_count": 6,
+      "high_risk_missed_rate": 0.0067,
+      "critical_miss_count": 1,
+      "critical_miss_rate": 0.0011,
+      "over_escalation_count": 6,
+      "over_escalation_rate": 0.0067,
+      "triggered_count": 0,
+      "recovery_budget_rate": 0.0,
+      "machine_abstention_count": 0,
+      "machine_abstention_rate": 0.0,
+      "exact_recovered_error_count": 0,
+      "unsafe_downrouting_reduction_vs_no_recovery": 0,
+      "unsafe_downrouting_gain": 0.0,
+      "high_risk_missed_reduction_vs_no_recovery": 0,
+      "high_risk_missed_gain": 0.0,
+      "conservative_escalation_cost_count": 0,
+      "action_counts": {
+        "none": 900
+      },
+      "by_run": {
+        "breeze_asr25_base_high_stakes_300": {
+          "rows": 300,
+          "unsafe_downrouting_count": 20,
+          "high_risk_missed_count": 5
+        },
+        "breeze_asr25_lora_high_stakes_300": {
+          "rows": 300,
+          "unsafe_downrouting_count": 6
+        },
+        "breeze_asr25_partial_encoder_high_stakes_300": {
+          "rows": 300,
+          "unsafe_downrouting_count": 3,
+          "high_risk_missed_count": 1
+        }
+      }
+    },
+    "sres_triggered_recovery": {
+      "rows": 900,
+      "mismatch_count": 30,
+      "mismatch_rate": 0.0333,
+      "unsafe_downrouting_count": 24,
+      "unsafe_downrouting_rate": 0.0267,
+      "high_risk_missed_count": 0,
+      "high_risk_missed_rate": 0.0,
+      "critical_miss_count": 0,
+      "critical_miss_rate": 0.0,
+      "over_escalation_count": 6,
+      "over_escalation_rate": 0.0067,
+      "triggered_count": 35,
+      "recovery_budget_rate": 0.0389,
+      "machine_abstention_count": 0,
+      "machine_abstention_rate": 0.0,
+      "exact_recovered_error_count": 5,
+      "unsafe_downrouting_reduction_vs_no_recovery": 5,
+      "unsafe_downrouting_gain": 0.1724,
+      "high_risk_missed_reduction_vs_no_recovery": 6,
+      "high_risk_missed_gain": 1.0,
+      "conservative_escalation_cost_count": 0,
+      "action_counts": {
+        "none": 865,
+        "sres_conservative_escalation": 35
+      },
+      "by_run": {
+        "breeze_asr25_base_high_stakes_300": {
+          "rows": 300,
+          "triggered_count": 22,
+          "unsafe_downrouting_count": 16
+        },
+        "breeze_asr25_lora_high_stakes_300": {
+          "rows": 300,
+          "triggered_count": 9,
+          "unsafe_downrouting_count": 6
+        },
+        "breeze_asr25_partial_encoder_high_stakes_300": {
+          "rows": 300,
+          "unsafe_downrouting_count": 2,
+          "triggered_count": 4
+        }
+      }
+    },
+    "ceis_triggered_conservative_action": {
+      "rows": 900,
+      "mismatch_count": 30,
+      "mismatch_rate": 0.0333,
+      "unsafe_downrouting_count": 24,
+      "unsafe_downrouting_rate": 0.0267,
+      "high_risk_missed_count": 0,
+      "high_risk_missed_rate": 0.0,
+      "critical_miss_count": 0,
+      "critical_miss_rate": 0.0,
+      "over_escalation_count": 6,
+      "over_escalation_rate": 0.0067,
+      "triggered_count": 35,
+      "recovery_budget_rate": 0.0389,
+      "machine_abstention_count": 0,
+      "machine_abstention_rate": 0.0,
+      "exact_recovered_error_count": 5,
+      "unsafe_downrouting_reduction_vs_no_recovery": 5,
+      "unsafe_downrouting_gain": 0.1724,
+      "high_risk_missed_reduction_vs_no_recovery": 6,
+      "high_risk_missed_gain": 1.0,
+      "conservative_escalation_cost_count": 0,
+      "action_counts": {
+        "ceis_conservative_escalation": 35,
+        "none": 865
+      },
+      "by_run": {
+        "breeze_asr25_base_high_stakes_300": {
+          "rows": 300,
+          "triggered_count": 22,
+          "unsafe_downrouting_count": 16
+        },
+        "breeze_asr25_lora_high_stakes_300": {
+          "rows": 300,
+          "triggered_count": 9,
+          "unsafe_downrouting_count": 6
+        },
+        "breeze_asr25_partial_encoder_high_stakes_300": {
+          "rows": 300,
+          "unsafe_downrouting_count": 2,
+          "triggered_count": 4
+        }
+      }
+    },
+    "ceis_ensemble_arbitration": {
+      "rows": 900,
+      "mismatch_count": 30,
+      "mismatch_rate": 0.0333,
+      "unsafe_downrouting_count": 24,
+      "unsafe_downrouting_rate": 0.0267,
+      "high_risk_missed_count": 0,
+      "high_risk_missed_rate": 0.0,
+      "critical_miss_count": 0,
+      "critical_miss_rate": 0.0,
+      "over_escalation_count": 6,
+      "over_escalation_rate": 0.0067,
+      "triggered_count": 47,
+      "recovery_budget_rate": 0.0522,
+      "machine_abstention_count": 18,
+      "machine_abstention_rate": 0.02,
+      "exact_recovered_error_count": 5,
+      "unsafe_downrouting_reduction_vs_no_recovery": 5,
+      "unsafe_downrouting_gain": 0.1724,
+      "high_risk_missed_reduction_vs_no_recovery": 6,
+      "high_risk_missed_gain": 1.0,
+      "conservative_escalation_cost_count": 0,
+      "action_counts": {
+        "ceis_ensemble_conservative_escalation": 29,
+        "ensemble_interval_conservative_abstention": 18,
+        "none": 853
+      },
+      "by_run": {
+        "breeze_asr25_base_high_stakes_300": {
+          "rows": 300,
+          "triggered_count": 23,
+          "unsafe_downrouting_count": 16,
+          "machine_abstention_count": 6
+        },
+        "breeze_asr25_lora_high_stakes_300": {
+          "rows": 300,
+          "triggered_count": 15,
+          "unsafe_downrouting_count": 6,
+          "machine_abstention_count": 6
+        },
+        "breeze_asr25_partial_encoder_high_stakes_300": {
+          "rows": 300,
+          "triggered_count": 9,
+          "machine_abstention_count": 6,
+          "unsafe_downrouting_count": 2
+        }
+      }
+    }
+  },
+  "wall_time_seconds": 0.0395
+}

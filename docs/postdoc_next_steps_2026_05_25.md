@@ -79,9 +79,10 @@ Status: active roadmap after the six-model 258-row gate and WER audit
   候選已加入矩陣，但尚未有完整 runner、smoke、15-row contract、或
   258-row evidence。
 - 300 high-stakes ASR hypotheses 已完成三個 Breeze-family comparator，但
-  high-stakes SRES/CEIS/downstream/recovery 還沒跑完，所以還不能宣稱完整
-  main experiment 完成。
-- 258-row recovery proxy 已完成；300-row high-stakes recovery 尚未實作。
+  high-stakes SRES/CEIS/downstream/recovery 目前仍是 proxy mode，還不能宣稱
+  paper-grade main experiment 完成。
+- 258-row recovery proxy 與 300-row high-stakes recovery proxy 都已完成；下
+  一個缺口是 selected-300 human risk-atom audit，而不是再調 WER 定義。
 
 ## FIRST PRINCIPLE
 

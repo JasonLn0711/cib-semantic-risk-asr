@@ -1,0 +1,49 @@
+{
+  "ok": true,
+  "split": "high_stakes_300",
+  "review_mode": "proxy",
+  "reference_rows": 300,
+  "hypothesis_files": 3,
+  "model_samples": 900,
+  "sres": {
+    "rows": 3298,
+    "total_sres": 9690.0,
+    "mean_sres": 2.938,
+    "by_error_type": {
+      "action": {
+        "count": 788,
+        "total_sres": 2625.0,
+        "mean_sres": 3.331
+      },
+      "actor": {
+        "count": 705,
+        "total_sres": 1500.0,
+        "mean_sres": 2.128
+      },
+      "amount": {
+        "count": 639,
+        "total_sres": 2325.0,
+        "mean_sres": 3.638
+      },
+      "negation": {
+        "count": 405,
+        "total_sres": 1500.0,
+        "mean_sres": 3.704
+      },
+      "scam_pattern": {
+        "count": 761,
+        "total_sres": 1740.0,
+        "mean_sres": 2.286
+      }
+    }
+  },
+  "ceis": {
+    "variant_rows": 3298,
+    "samples": 900,
+    "unstable_samples": 35,
+    "max_ceis": 15.0,
+    "mean_ceis": 0.2278
+  },
+  "downstream_rows": 900,
+  "boundary": "Aggregate proxy summary only; raw metric inputs with transcripts remain ignored under artifacts/."
+}

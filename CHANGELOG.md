@@ -5,6 +5,40 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.49 - 2026-05-25T18:16:48+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `4fefa97`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/policy_comparison.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
+## v2.5.48 - 2026-05-25T18:16:48+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `4fefa97`
+- Branch: `main`
+- Summary: Record selected-300 CDS recovery proxy evidence.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/policy_comparison.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
 ## v2.5.47 - 2026-05-25T18:08:54+08:00
 
 - Bump: `patch`
