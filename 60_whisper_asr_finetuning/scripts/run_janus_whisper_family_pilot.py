@@ -39,6 +39,53 @@ def read_tsv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle, delimiter="\t"))
 
 
+def row_audio_id(row: dict[str, Any]) -> str:
+    for field in ("audio_id", "id", "sample_id"):
+        raw_value = row.get(field)
+        value = "" if raw_value is None else str(raw_value).strip()
+        if value:
+            return value
+    return ""
+
+
+def resolve_audio_path(row: dict[str, Any], manifest_path: Path, root: Path) -> Path:
+    value = (
+        row.get("audio_filepath")
+        or row.get("audio")
+        or row.get("file_name")
+        or ""
+    )
+    raw_path = Path(str(value))
+    if raw_path.is_absolute():
+        return raw_path
+
+    split = str(row.get("split", "")).strip()
+    candidates = [
+        manifest_path.parent / raw_path,
+        root / raw_path,
+    ]
+    if split:
+        candidates.append(
+            root
+            / "40_breeze_asr25_finetune_dataset"
+            / "hf_audiofolder"
+            / split
+            / raw_path
+        )
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return candidates[0]
+
+
+def gold_by_audio_id(rows: list[dict[str, str]]) -> dict[str, dict[str, str]]:
+    return {
+        row_audio_id(row): row
+        for row in rows
+        if row_audio_id(row)
+    }
+
+
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as handle:
@@ -175,6 +222,26 @@ def heuristic_asr_label(text: str) -> tuple[str, str]:
     return "no_escalation", "no_risk_terms_detected"
 
 
+def reference_text_for(row: dict[str, Any], gold: dict[str, str]) -> str:
+    for value in (
+        gold.get("human_verified_transcript"),
+        row.get("reference_text"),
+        row.get("text"),
+        row.get("sentence"),
+    ):
+        if value is not None and str(value).strip():
+            return str(value).strip()
+    return ""
+
+
+def reference_label_for(reference: str, gold: dict[str, str]) -> tuple[str, str]:
+    explicit = (gold.get("semantic_risk_label") or "").strip()
+    if explicit:
+        return explicit, "gold_review"
+    label, _reason = heuristic_asr_label(reference)
+    return label, "heuristic_v0"
+
+
 def forced_decoder_ids_for(processor: Any, language: str, task: str) -> Any:
     if hasattr(processor, "get_decoder_prompt_ids"):
         return processor.get_decoder_prompt_ids(language=language, task=task)
@@ -218,6 +285,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--task", default="transcribe")
     parser.add_argument("--sampling-rate", type=int, default=16000)
     parser.add_argument("--max-samples", type=int, default=15)
+    parser.add_argument("--split-name", default="")
     parser.add_argument("--max-new-tokens", type=int, default=225)
     parser.add_argument("--seed", type=int, default=165)
     parser.add_argument(
@@ -260,12 +328,15 @@ def main() -> int:
     model_dtype_name = str(model_dtype).replace("torch.", "")
 
     manifest_rows = read_jsonl(args.manifest)
-    selected_rows = manifest_rows[: args.max_samples]
-    gold_by_id = {row["audio_id"]: row for row in read_tsv(args.gold_review)}
+    selected_rows = (
+        manifest_rows if args.max_samples <= 0 else manifest_rows[: args.max_samples]
+    )
+    split_name = args.split_name or args.manifest.stem
+    gold_by_id = gold_by_audio_id(read_tsv(args.gold_review))
     missing_paths = [
-        str(row.get("audio_filepath", ""))
+        str(resolve_audio_path(row, args.manifest, root))
         for row in selected_rows
-        if not Path(str(row.get("audio_filepath", ""))).exists()
+        if not resolve_audio_path(row, args.manifest, root).exists()
     ]
     if missing_paths:
         raise SystemExit({"missing_audio_paths": missing_paths})
@@ -282,10 +353,12 @@ def main() -> int:
 
     prediction_rows: list[dict[str, Any]] = []
     for index, row in enumerate(selected_rows, start=1):
-        audio_id = str(row["audio_id"])
+        audio_id = row_audio_id(row)
         gold = gold_by_id.get(audio_id, {})
-        reference = gold.get("human_verified_transcript") or str(row.get("text", ""))
-        audio = load_audio(Path(row["audio_filepath"]), args.sampling_rate)
+        reference = reference_text_for(row, gold)
+        reference_label, reference_label_method = reference_label_for(reference, gold)
+        audio_path = resolve_audio_path(row, args.manifest, root)
+        audio = load_audio(audio_path, args.sampling_rate)
         inputs = processor(
             audio,
             sampling_rate=args.sampling_rate,
@@ -311,8 +384,10 @@ def main() -> int:
         prediction_row = {
             "audio_id": audio_id,
             "split": row.get("split", ""),
-            "audio_filepath": row.get("audio_filepath", ""),
-            "reference_label": gold.get("semantic_risk_label", ""),
+            "audio_filepath": str(audio_path),
+            "reference_text": reference,
+            "reference_label": reference_label,
+            "reference_label_method": reference_label_method,
             "risk_atoms": gold.get("risk_atoms", ""),
             "hypothesis_text": prediction,
             "pred_text": prediction,
@@ -362,6 +437,7 @@ def main() -> int:
         "gold_review": str(args.gold_review),
         "predictions": str(predictions_path),
         "rows": len(prediction_rows),
+        "split_name": split_name,
         "cer_mean": cer_mean,
         "wer_mean": wer_mean,
         "label_mode": args.label_mode,
@@ -377,7 +453,7 @@ def main() -> int:
         {
             "step": 0,
             "epoch": 0,
-            "split": f"janus_15_pilot_{len(prediction_rows)}",
+            "split": f"{split_name}_{len(prediction_rows)}",
             "loss": "",
             "cer": cer_mean,
             "wer": wer_mean,

@@ -5,6 +5,29 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.33 - 2026-05-25T15:23:32+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `54453be`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/scoring/summarize_janus_asr_test_split.py`
+
+## v2.5.32 - 2026-05-25T15:22:16+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `e06acd6`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/scripts/run_janus_whisper_family_pilot.py`
+  - `60_whisper_asr_finetuning/scripts/run_legacy_breeze_asr25_smoke.py`
+  - `80_semantic_risk_asr/scoring/summarize_janus_asr_test_split.py`
+  - `80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py`
+
 ## v2.5.31 - 2026-05-25T14:45:54+08:00
 
 - Bump: `patch`

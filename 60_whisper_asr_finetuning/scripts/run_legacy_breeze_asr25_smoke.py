@@ -12,12 +12,17 @@ from typing import Any
 
 from run_janus_whisper_family_pilot import (
     forced_decoder_ids_for,
+    gold_by_audio_id,
     heuristic_asr_label,
     levenshtein_rate,
     load_audio,
     read_jsonl,
     read_tsv,
+    reference_label_for,
+    reference_text_for,
+    resolve_audio_path,
     resolve_torch_dtype,
+    row_audio_id,
     write_jsonl,
 )
 
@@ -73,6 +78,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--task", default="transcribe")
     parser.add_argument("--sampling-rate", type=int, default=16000)
     parser.add_argument("--max-samples", type=int, default=1)
+    parser.add_argument("--split-name", default="")
     parser.add_argument("--max-new-tokens", type=int, default=225)
     parser.add_argument("--seed", type=int, default=165)
     parser.add_argument(
@@ -154,12 +160,15 @@ def main() -> int:
     model_dtype_name = str(model_dtype).replace("torch.", "")
 
     manifest_rows = read_jsonl(args.manifest)
-    selected_rows = manifest_rows[: args.max_samples]
-    gold_by_id = {row["audio_id"]: row for row in read_tsv(args.gold_review)}
+    selected_rows = (
+        manifest_rows if args.max_samples <= 0 else manifest_rows[: args.max_samples]
+    )
+    split_name = args.split_name or args.manifest.stem
+    gold_by_id = gold_by_audio_id(read_tsv(args.gold_review))
     missing_paths = [
-        str(row.get("audio_filepath", ""))
+        str(resolve_audio_path(row, args.manifest, root))
         for row in selected_rows
-        if not Path(str(row.get("audio_filepath", ""))).exists()
+        if not resolve_audio_path(row, args.manifest, root).exists()
     ]
     if missing_paths:
         raise SystemExit({"missing_audio_paths": missing_paths})
@@ -194,15 +203,17 @@ def main() -> int:
 
     prediction_rows: list[dict[str, Any]] = []
     for index, row in enumerate(selected_rows, start=1):
-        audio_id = str(row["audio_id"])
+        audio_id = row_audio_id(row)
         append_runtime_log(
             runtime_log_path,
             "sample_start",
             {"index": index, "rows": len(selected_rows), "audio_id": audio_id},
         )
         gold = gold_by_id.get(audio_id, {})
-        reference = gold.get("human_verified_transcript") or str(row.get("text", ""))
-        audio = load_audio(Path(row["audio_filepath"]), args.sampling_rate)
+        reference = reference_text_for(row, gold)
+        reference_label, reference_label_method = reference_label_for(reference, gold)
+        audio_path = resolve_audio_path(row, args.manifest, root)
+        audio = load_audio(audio_path, args.sampling_rate)
         inputs = processor(
             audio,
             sampling_rate=args.sampling_rate,
@@ -229,8 +240,10 @@ def main() -> int:
             {
                 "audio_id": audio_id,
                 "split": row.get("split", ""),
-                "audio_filepath": row.get("audio_filepath", ""),
-                "reference_label": gold.get("semantic_risk_label", ""),
+                "audio_filepath": str(audio_path),
+                "reference_text": reference,
+                "reference_label": reference_label,
+                "reference_label_method": reference_label_method,
                 "risk_atoms": gold.get("risk_atoms", ""),
                 "hypothesis_text": prediction,
                 "pred_text": prediction,
@@ -298,6 +311,7 @@ def main() -> int:
         "predictions": str(predictions_path),
         "runtime_log": str(runtime_log_path),
         "rows": len(prediction_rows),
+        "split_name": split_name,
         "cer_mean": cer_mean,
         "wer_mean": wer_mean,
         "label_mode": args.label_mode,

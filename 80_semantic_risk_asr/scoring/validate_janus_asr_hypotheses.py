@@ -84,20 +84,31 @@ def load_jsonl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def id_from_row(row: dict[str, Any]) -> str:
+    for field in AUDIO_ID_FIELDS:
+        raw_value = row.get(field)
+        value = "" if raw_value is None else str(raw_value).strip()
+        if value:
+            return value
+    return ""
+
+
 def read_gold_ids(path: Path) -> set[str]:
+    delimiter = "," if path.suffix == ".csv" else "\t"
     with path.open(newline="", encoding="utf-8") as handle:
         return {
-            row["audio_id"]
-            for row in csv.DictReader(handle, delimiter="\t")
-            if row.get("audio_id")
+            audio_id
+            for row in csv.DictReader(handle, delimiter=delimiter)
+            for audio_id in [id_from_row(row)]
+            if audio_id
         }
 
 
 def read_nemo_ids(path: Path) -> set[str]:
     return {
-        str(row.get("audio_id", "")).strip()
+        id_from_row(row)
         for row in load_jsonl(path)
-        if str(row.get("audio_id", "")).strip()
+        if id_from_row(row)
     }
 
 
