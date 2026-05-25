@@ -187,7 +187,9 @@ when available so the tracked apply summary can report aggregate review-time
 coverage and elapsed seconds without exposing transcript-bearing row content.
 Each dry-run or write appends one aggregate-only row to
 `human_audit_batch_response_apply_log.tsv`; use that file as the operation log
-for response attempts.
+for response attempts. The companion
+`human_audit_batch_response_apply_log_summary.json` is the quick machine-readable
+audit of the latest attempt and aggregate attempt counts.
 
 After filling the ignored response TSV, dry-run it with the strict completion
 gate:
