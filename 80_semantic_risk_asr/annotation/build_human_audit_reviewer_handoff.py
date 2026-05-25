@@ -85,6 +85,7 @@ def reviewer_commands(
         ".venv/bin/python",
         "80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py",
         "--require-complete",
+        "--require-timing",
         "--require-session-start-gate",
         "--session-start-summary",
         session_start_summary,
@@ -105,6 +106,7 @@ def reviewer_commands(
         ".venv/bin/python",
         "80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py",
         "--require-complete",
+        "--require-timing",
         "--require-session-start-gate",
         "--session-start-summary",
         session_start_summary,
@@ -332,6 +334,11 @@ def build_handoff(
             "local_response_template_path": response_sheet,
             "response_rows": template_summary.get("response_rows", ""),
             "template_column_count": template_summary.get("template_column_count", ""),
+            "required_timing_fields": [
+                "review_started_at",
+                "review_finished_at",
+                "review_elapsed_seconds",
+            ],
             "optional_timing_fields": [
                 "review_started_at",
                 "review_finished_at",
@@ -375,7 +382,7 @@ def build_handoff(
         },
         "reviewer_next_steps": [
             "Open the local packet path only in the local workspace; it is transcript-bearing.",
-            "Fill the local response TSV row/model fields; timing fields are optional but useful.",
+            "Fill the local response TSV row/model fields plus required per-row review timing.",
             "Run strict_dry_run until latest_apply_status is response_complete.",
             "Run write_refresh_prepare_next only after strict_dry_run is response_complete.",
         ],

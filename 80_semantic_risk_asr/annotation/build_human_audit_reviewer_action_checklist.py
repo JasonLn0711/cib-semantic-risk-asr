@@ -188,7 +188,8 @@ def build_checklist(
             gate.get("latest_apply_status"),
         )
     )
-    response_complete = latest_apply_status == "response_complete"
+    timing_complete = rows_in_batch == 0 or rows_missing_timing == 0
+    response_complete = latest_apply_status == "response_complete" and timing_complete
     handoff_ready = bool(handoff.get("ok")) and handoff.get("freshness_status") == "fresh"
     preflight_ready = bool(preflight.get("ok")) and preflight.get("status") == "review_session_ready"
     rubric_ready = bool(rubric_summary.get("ok")) and rubric_summary.get("status") == "rubric_ready"
@@ -257,15 +258,11 @@ def build_checklist(
         },
         {
             "step_id": "6",
-            "action": "fill optional review-time fields when available",
-            "status": (
-                "optional_complete"
-                if rows_missing_timing == 0 and rows_in_batch
-                else "optional_pending"
-            ),
+            "action": "fill required per-row review-time fields",
+            "status": "complete" if timing_complete and rows_in_batch else "pending",
             "evidence": f"rows_missing_timing={rows_missing_timing}; rows_in_batch={rows_in_batch}",
             "next_action": (
-                "fill review_started_at/review_finished_at/review_elapsed_seconds when available"
+                "fill review_started_at/review_finished_at or review_elapsed_seconds before strict dry-run/write"
             ),
         },
         {
@@ -326,6 +323,10 @@ def build_checklist(
             "template_column_count",
             template_summary.get("template_column_count", ""),
         ),
+        "required_timing_fields": response.get(
+            "optional_timing_fields",
+            template_summary.get("optional_timing_fields", []),
+        ),
         "optional_timing_fields": response.get(
             "optional_timing_fields",
             template_summary.get("optional_timing_fields", []),
@@ -340,11 +341,12 @@ def build_checklist(
         "checklist": rows,
         "paper_ready_impact": (
             "No paper-readiness change. The selected-300 human review remains pending "
-            "until required row-level fields and per-model assessments are completed."
+            "until required row-level fields, per-model assessments, and per-row timing "
+            "are completed."
         ),
         "next_concrete_action": (
             "Fill the local response TSV for the current packet, including required "
-            "row-level and per-model fields, then rerun the strict dry-run."
+            "row-level, per-model, and timing fields, then rerun the strict dry-run."
             if action_ready and not response_complete
             else "Resolve blocker keys before reviewer work."
         ),

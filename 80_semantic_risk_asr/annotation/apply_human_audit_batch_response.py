@@ -101,6 +101,7 @@ APPLY_LOG_FIELDS = [
     "status",
     "mode",
     "require_complete",
+    "require_timing",
     "post_write_refresh_ran",
     "post_write_batch_status",
     "post_write_publishable_ready",
@@ -150,6 +151,10 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
 
 def append_tsv(path: Path, row: dict[str, Any], fieldnames: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists() and path.stat().st_size > 0:
+        existing_fieldnames, existing_rows = read_tsv(path)
+        if existing_fieldnames != fieldnames:
+            write_tsv(path, existing_rows, fieldnames)
     write_header = not path.exists() or path.stat().st_size == 0
     with path.open("a", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(
@@ -427,6 +432,8 @@ def review_timing_elapsed_seconds(rows: list[dict[str, str]]) -> float | None:
 def review_timing_summary(
     grouped_response_rows: dict[int, list[dict[str, str]]],
     row_numbers: list[int],
+    *,
+    required: bool = False,
 ) -> dict[str, Any]:
     durations = [
         duration
@@ -436,7 +443,8 @@ def review_timing_summary(
     ]
     total = round(sum(durations), 4)
     return {
-        "timing_scope": "per selected audio row; values come from optional local response TSV timing columns",
+        "timing_scope": "per selected audio row; values come from local response TSV timing columns",
+        "timing_requirement": "required" if required else "optional",
         "timing_fields": REVIEW_TIMING_FIELDS,
         "rows_with_timing": len(durations),
         "rows_missing_timing": len(row_numbers) - len(durations),
@@ -461,6 +469,7 @@ def response_apply_log_row(payload: dict[str, Any]) -> dict[str, Any]:
         "status": payload.get("status", ""),
         "mode": payload.get("mode", ""),
         "require_complete": payload.get("require_complete", ""),
+        "require_timing": payload.get("require_timing", ""),
         "post_write_refresh_ran": payload.get("post_write_refresh_ran", ""),
         "post_write_batch_status": payload.get("post_write_batch_status", ""),
         "post_write_publishable_ready": payload.get("post_write_publishable_ready", ""),
@@ -541,6 +550,7 @@ def response_apply_log_summary(log_path: Path, *, repo_root: Path) -> dict[str, 
             "status": latest.get("status", ""),
             "mode": latest.get("mode", ""),
             "require_complete": latest.get("require_complete", ""),
+            "require_timing": latest.get("require_timing", ""),
             "selection_stratum": latest.get("selection_stratum", ""),
             "rows_in_batch": int_value(latest, "rows_in_batch"),
             "reviewed_rows_in_response": int_value(latest, "reviewed_rows_in_response"),
@@ -564,8 +574,8 @@ def response_apply_log_summary(log_path: Path, *, repo_root: Path) -> dict[str, 
             "source_batch_summary": latest.get("source_batch_summary", ""),
         },
         "next_action": (
-            "Fill all required row and model fields in the local response TSV, rerun "
-            "strict dry-run until response_complete, then write and refresh."
+            "Fill all required row, model, and timing fields in the local response TSV, "
+            "rerun strict dry-run until response_complete, then write and refresh."
         ),
     }
     assert_tracked_safe(payload)
@@ -803,6 +813,7 @@ def apply_response_sheet(
     repo_root: Path,
     write: bool,
     require_complete: bool = False,
+    require_timing: bool = False,
     session_start_summary: Path | None = None,
     require_session_start: bool = False,
 ) -> dict[str, Any]:
@@ -839,6 +850,7 @@ def apply_response_sheet(
     )
     reviewed_models = sum(1 for row in response_rows if model_response_complete(row))
     model_assessments = len(response_rows)
+    timing_summary = review_timing_summary(grouped, row_numbers, required=require_timing)
     status = response_status(
         errors=errors,
         reviewed_rows=reviewed_rows,
@@ -849,6 +861,8 @@ def apply_response_sheet(
     content_complete = reviewed_rows == len(row_numbers) and reviewed_models == model_assessments
     if require_complete and not content_complete:
         errors["incomplete_response"] += 1
+    if require_timing and int(timing_summary["rows_missing_timing"]) > 0:
+        errors["missing_review_timing"] += int(timing_summary["rows_missing_timing"])
     if errors and status == "response_complete":
         status = "response_invalid"
     backup_path = ""
@@ -879,6 +893,7 @@ def apply_response_sheet(
         "status": status,
         "mode": "write" if write else "dry_run",
         "require_complete": require_complete,
+        "require_timing": require_timing,
         "input_boundary": "local ignored audit sheet plus local ignored response TSV",
         "output_boundary": "aggregate-only apply status; no private row keys or transcript text",
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
@@ -891,7 +906,7 @@ def apply_response_sheet(
         "model_assessments_in_response": model_assessments,
         "reviewed_model_assessments_in_response": reviewed_models,
         "pending_model_assessments_in_response": pending_models,
-        "review_timing": review_timing_summary(grouped, row_numbers),
+        "review_timing": timing_summary,
         "session_start_gate": session_start_gate,
         "error_counts": dict(sorted(errors.items())),
         "backup_path": backup_path,
@@ -899,8 +914,8 @@ def apply_response_sheet(
         "source_batch_summary": repo_relative(batch_summary, repo_root=repo_root),
         "next_action": (
             "Fill all required row and model fields in the response TSV, rerun "
-            "dry-run with --require-complete, then apply with --write once "
-            "status is response_complete."
+            "dry-run with --require-complete and --require-timing, then apply "
+            "with --write once status is response_complete."
             if status != "response_complete"
             else "Rerun audit_human_review_batch_status.py; if batch_complete, refresh aggregate evidence."
         ),
@@ -1015,6 +1030,7 @@ def apply_response_sheet_workflow(
     repo_root: Path,
     write: bool,
     require_complete: bool = False,
+    require_timing: bool = False,
     session_start_summary: Path | None = None,
     require_session_start: bool = False,
     refresh_after_write: bool = False,
@@ -1030,6 +1046,7 @@ def apply_response_sheet_workflow(
         repo_root=repo_root,
         write=write,
         require_complete=require_complete,
+        require_timing=require_timing,
         session_start_summary=session_start_summary,
         require_session_start=require_session_start,
     )
@@ -1086,6 +1103,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--write-template", action="store_true")
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--require-complete", action="store_true")
+    parser.add_argument(
+        "--require-timing",
+        action="store_true",
+        help=(
+            "Require every selected audio row in the response TSV to have valid "
+            "review timing before strict dry-run/write can pass."
+        ),
+    )
     parser.add_argument("--session-start-summary", type=Path)
     parser.add_argument(
         "--require-session-start-gate",
@@ -1162,6 +1187,7 @@ def main() -> int:
         repo_root=REPO_ROOT,
         write=args.write,
         require_complete=args.require_complete,
+        require_timing=args.require_timing,
         session_start_summary=session_start_summary,
         require_session_start=require_session_start,
         refresh_after_write=args.refresh_after_write,

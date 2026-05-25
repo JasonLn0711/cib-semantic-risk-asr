@@ -178,6 +178,10 @@ def build_preflight(
             "local_response_template_exists": local_response_exists,
             "response_rows": response.get("response_rows", ""),
             "template_column_count": response.get("template_column_count", ""),
+            "required_timing_fields": response.get(
+                "required_timing_fields",
+                response.get("optional_timing_fields", []),
+            ),
             "optional_timing_fields": response.get("optional_timing_fields", []),
         },
         "current_gate": {
@@ -199,7 +203,7 @@ def build_preflight(
         "error_keys": errors,
         "next_action": (
             "Open the local packet and response TSV in the local workspace, fill "
-            "risk/decision/model fields plus optional timing fields, then run the "
+            "risk/decision/model fields plus required timing fields, then run the "
             "strict response dry-run."
             if not errors
             else "Regenerate the handoff or local review artifacts, then rerun this preflight."

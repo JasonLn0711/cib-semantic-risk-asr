@@ -203,6 +203,10 @@ def build_session_payload(
                 "response_template_column_count",
                 response.get("template_column_count", ""),
             ),
+            "required_timing_fields": checklist.get(
+                "required_timing_fields",
+                response.get("required_timing_fields", []),
+            ),
             "optional_timing_fields": checklist.get(
                 "optional_timing_fields",
                 response.get("optional_timing_fields", []),
@@ -227,7 +231,7 @@ def build_session_payload(
         "reviewer_next_actions": [
             "Open the local packet only in the local workspace; it is transcript-bearing.",
             "Fill the local response TSV row-level fields and every model-level assessment.",
-            "Fill optional timing fields when available.",
+            "Fill required per-row timing fields before strict dry-run/write.",
             "Run strict_dry_run until latest_apply_status is response_complete.",
             "Run write_refresh_prepare_next only after the strict dry-run is complete.",
         ],
@@ -238,8 +242,8 @@ def build_session_payload(
         },
         "paper_ready_impact": (
             "No paper-readiness change. This starts the reviewer workflow, but the selected-300 "
-            "human review remains pending until required row-level fields and per-model "
-            "assessments are completed."
+            "human review remains pending until required row-level fields, per-model "
+            "assessments, and per-row timing are completed."
         ),
         "tracked_outputs": {
             "session_start_summary": repo_relative(

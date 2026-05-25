@@ -37,6 +37,7 @@ def write_closeout_inputs(
             "status": status,
             "mode": "dry_run",
             "require_complete": True,
+            "require_timing": True,
             "selection_stratum": "critical_or_high_risk_missed",
             "rows_in_batch": 2,
             "reviewed_rows_in_response": 2 - pending_rows,
@@ -52,6 +53,10 @@ def write_closeout_inputs(
                 "rubric_status": "rubric_ready" if session_gate_ok else "",
                 "checklist_status": "reviewer_action_ready" if session_gate_ok else "",
                 "blocker_keys": [],
+            },
+            "review_timing": {
+                "rows_with_timing": 2 if response_complete else 0,
+                "rows_missing_timing": 0 if response_complete else 2,
             },
             "error_counts": {} if response_complete else {"incomplete_response": 1},
         },
@@ -109,7 +114,7 @@ def test_closeout_blocks_pending_response_without_private_content(tmp_path: Path
     assert "response_not_complete" in payload["blocker_keys"]
     assert "incomplete_response" in payload["blocker_keys"]
     status_by_step = {row["step_id"]: row["status"] for row in rows}
-    assert status_by_step["6"] == "blocked_until_response_complete"
+    assert status_by_step["7"] == "blocked_until_response_complete"
     serialized = json.dumps({"payload": payload, "rows": rows}, ensure_ascii=False)
     assert "PRIVATE_" not in serialized
     assert "reference_text" not in serialized
@@ -136,7 +141,35 @@ def test_closeout_marks_complete_response_ready_to_write(tmp_path: Path) -> None
     status_by_step = {row["step_id"]: row["status"] for row in rows}
     assert status_by_step["3"] == "complete"
     assert status_by_step["4"] == "complete"
-    assert status_by_step["6"] == "ready"
+    assert status_by_step["5"] == "complete"
+    assert status_by_step["7"] == "ready"
+
+
+def test_closeout_blocks_complete_response_without_review_timing(tmp_path: Path) -> None:
+    run_dir = tmp_path / "run"
+    paths = write_closeout_inputs(run_dir, response_complete=True)
+    apply_summary = json.loads(paths["apply_summary"].read_text(encoding="utf-8"))
+    apply_summary["ok"] = False
+    apply_summary["status"] = "response_invalid"
+    apply_summary["review_timing"] = {"rows_with_timing": 1, "rows_missing_timing": 1}
+    apply_summary["error_counts"] = {"missing_review_timing": 1}
+    write_json(paths["apply_summary"], apply_summary)
+
+    payload, rows = build_closeout(
+        run_dir=run_dir,
+        apply_summary_path=paths["apply_summary"],
+        apply_log_summary_path=paths["apply_log_summary"],
+        session_start_summary_path=paths["session_start"],
+        action_checklist_summary_path=paths["action_checklist"],
+        handoff_summary_path=paths["handoff"],
+        repo_root=tmp_path,
+    )
+
+    assert payload["ok"] is False
+    assert "review_timing_not_complete" in payload["blocker_keys"]
+    assert "missing_review_timing" in payload["blocker_keys"]
+    status_by_step = {row["step_id"]: row["status"] for row in rows}
+    assert status_by_step["5"] == "pending"
 
 
 def test_closeout_blocks_session_gate_mismatch(tmp_path: Path) -> None:

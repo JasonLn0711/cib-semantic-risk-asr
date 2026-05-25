@@ -105,11 +105,22 @@ def build_closeout(
         "reviewer_session_started",
         "reviewer_response_complete_ready_to_write",
     }
-    strict_dry_run_ran = apply_summary.get("require_complete") is True
+    strict_dry_run_ran = (
+        apply_summary.get("require_complete") is True
+        and apply_summary.get("require_timing") is True
+    )
     session_gate_ready = bool(session_gate.get("ok")) and session_gate.get("required") is True
+    review_timing = (
+        apply_summary.get("review_timing")
+        if isinstance(apply_summary.get("review_timing"), dict)
+        else {}
+    )
+    rows_missing_timing = int(review_timing.get("rows_missing_timing") or 0)
+    review_timing_complete = rows_missing_timing == 0
     response_complete = (
         apply_summary.get("ok") is True
         and apply_summary.get("status") == "response_complete"
+        and review_timing_complete
         and not apply_errors
     )
     action_ready = bool(action_checklist.get("ok")) and action_checklist.get("status") in {
@@ -135,6 +146,7 @@ def build_closeout(
             "status": bool_status(strict_dry_run_ran and session_gate_ready),
             "evidence": (
                 f"require_complete={apply_summary.get('require_complete', '')}; "
+                f"require_timing={apply_summary.get('require_timing', '')}; "
                 f"session_gate_ok={session_gate.get('ok', '')}; "
                 f"rows_match={session_gate.get('row_numbers_match', '')}; "
                 f"stratum_match={session_gate.get('selection_stratum_match', '')}"
@@ -167,6 +179,16 @@ def build_closeout(
         },
         {
             "step_id": "5",
+            "action": "confirm required review timing completion",
+            "status": "complete" if review_timing_complete else "pending",
+            "evidence": (
+                f"rows_with_timing={review_timing.get('rows_with_timing', '')}; "
+                f"rows_missing_timing={rows_missing_timing}"
+            ),
+            "next_action": "fill review_started_at/review_finished_at or review_elapsed_seconds and rerun strict dry-run",
+        },
+        {
+            "step_id": "6",
             "action": "confirm strict dry-run response status",
             "status": "complete" if response_complete else "blocked",
             "evidence": (
@@ -177,7 +199,7 @@ def build_closeout(
             "next_action": "rerun strict dry-run until response_complete",
         },
         {
-            "step_id": "6",
+            "step_id": "7",
             "action": "write, refresh, and prepare next batch",
             "status": "ready" if closeout_ready else "blocked_until_response_complete",
             "evidence": f"closeout_ready={closeout_ready}",
@@ -189,11 +211,13 @@ def build_closeout(
     if not session_ready:
         blocker_keys.append("session_start_not_ready")
     if not strict_dry_run_ran:
-        blocker_keys.append("strict_dry_run_missing")
+        blocker_keys.append("strict_dry_run_missing_or_missing_timing_gate")
     if not session_gate_ready:
         blocker_keys.append("session_start_gate_not_ready")
     if not action_ready:
         blocker_keys.append("reviewer_action_not_ready")
+    if not review_timing_complete:
+        blocker_keys.append("review_timing_not_complete")
     if not response_complete:
         blocker_keys.append("response_not_complete")
     for key in apply_errors:
@@ -221,6 +245,8 @@ def build_closeout(
             "",
         ),
         "latest_apply_status": apply_summary.get("status", ""),
+        "require_timing": apply_summary.get("require_timing", ""),
+        "review_timing": review_timing,
         "session_start_gate": session_gate,
         "apply_error_keys": apply_errors,
         "blocker_keys": blocker_keys,

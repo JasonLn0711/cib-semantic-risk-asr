@@ -11,6 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "annotation"))
 
 from apply_human_audit_batch_response import (  # noqa: E402
+    APPLY_LOG_FIELDS,
     APPLY_LOG_NAME,
     APPLY_LOG_SUMMARY_NAME,
     REVIEW_TIMING_FIELDS,
@@ -539,6 +540,109 @@ def test_review_timing_is_aggregated_without_becoming_required(tmp_path: Path) -
     )
     assert "PRIVATE_" not in tracked
     assert "reference_text" not in tracked
+
+
+def test_require_timing_rejects_complete_response_without_timing(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(response_sheet, [complete_response_row()], TEMPLATE_FIELDS)
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=False,
+        require_complete=True,
+        require_timing=True,
+    )
+
+    assert payload["ok"] is False
+    assert payload["status"] == "response_invalid"
+    assert payload["require_timing"] is True
+    assert payload["review_timing"]["timing_requirement"] == "required"
+    assert payload["error_counts"] == {"missing_review_timing": 1}
+
+
+def test_require_timing_passes_complete_response_with_timing(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(response_sheet, [complete_response_row_with_timing()], TEMPLATE_FIELDS)
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=False,
+        require_complete=True,
+        require_timing=True,
+    )
+
+    assert payload["ok"] is True
+    assert payload["status"] == "response_complete"
+    assert payload["require_timing"] is True
+    assert payload["review_timing"]["rows_missing_timing"] == 0
+    assert payload["error_counts"] == {}
+
+
+def test_apply_log_schema_migrates_when_require_timing_is_added(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(response_sheet, [complete_response_row_with_timing()], TEMPLATE_FIELDS)
+    legacy_log_fields = [field for field in APPLY_LOG_FIELDS if field != "require_timing"]
+    write_tsv(
+        tmp_path / APPLY_LOG_NAME,
+        [
+            {
+                "recorded_at": "2026-05-25T22:16:17+08:00",
+                "ok": "False",
+                "status": "response_pending",
+                "mode": "dry_run",
+                "require_complete": "True",
+                "error_count_total": "1",
+                "error_keys": "incomplete_response",
+            }
+        ],
+        legacy_log_fields,
+    )
+
+    payload = apply_response_sheet_workflow(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        readiness_output_dir=tmp_path / "readiness",
+        local_packet_dir=tmp_path / "artifacts" / "review_batches",
+        response_dir=tmp_path / "artifacts" / "review_responses",
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=False,
+        require_complete=True,
+        require_timing=True,
+    )
+    log_fieldnames, log_rows = read_tsv(tmp_path / APPLY_LOG_NAME)
+    log_summary = json.loads((tmp_path / APPLY_LOG_SUMMARY_NAME).read_text(encoding="utf-8"))
+
+    assert payload["ok"] is True
+    assert log_fieldnames == APPLY_LOG_FIELDS
+    assert len(log_rows) == 2
+    assert log_rows[-1]["require_timing"] == "True"
+    assert log_summary["ok"] is True
+    assert log_summary["missing_log_columns"] == []
 
 
 def test_invalid_review_timing_fails_value_validation(tmp_path: Path) -> None:

@@ -94,3 +94,4 @@ def test_rubric_safe_value_contract_contains_expected_roles(tmp_path: Path) -> N
     assert "recovery-policy target" in roles
     assert payload["required_review_surface"]["row_level_required_decision_fields"] == 8
     assert payload["required_review_surface"]["model_level_required_decision_fields"] == 4
+    assert payload["required_review_surface"]["required_timing_fields"] == 3

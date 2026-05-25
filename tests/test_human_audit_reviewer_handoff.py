@@ -121,6 +121,8 @@ def test_handoff_collects_current_reviewer_gate_without_private_content(tmp_path
     assert payload["current_gate"]["latest_error_keys"] == "incomplete_response"
     assert payload["apply_log"]["entries"] == 1
     assert "--require-complete" in payload["commands"]["strict_dry_run"]
+    assert "--require-timing" in payload["commands"]["strict_dry_run"]
+    assert "--require-timing" in payload["commands"]["write_refresh_prepare_next"]
     assert "--write" in payload["commands"]["write_refresh_prepare_next"]
     serialized = json.dumps(payload, ensure_ascii=False)
     assert "PRIVATE_" not in serialized

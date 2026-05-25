@@ -205,7 +205,7 @@ def build_rubric(
         "required_review_surface": {
             "row_level_required_decision_fields": 8,
             "model_level_required_decision_fields": 4,
-            "optional_timing_fields": 3,
+            "required_timing_fields": 3,
         },
         "current_reviewer_action_gate": current_gate,
         "consistency_checks": [
@@ -224,6 +224,10 @@ def build_rubric(
             {
                 "check": "critical_atoms_are_subset_of_risk_atoms",
                 "rule": "Row-level and model-level critical atoms should be present in the row risk-atom set.",
+            },
+            {
+                "check": "strict_closeout_requires_review_timing",
+                "rule": "Each selected audio row must have review_started_at/review_finished_at or review_elapsed_seconds before strict response closeout.",
             },
             {
                 "check": "uncertain_requires_low_or_medium_certainty",
