@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import importlib.util
 import json
 import sys
 from pathlib import Path
@@ -12,6 +13,7 @@ sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "annotation"))
 from apply_human_audit_batch_response import (  # noqa: E402
     TEMPLATE_FIELDS,
     apply_response_sheet,
+    apply_response_sheet_workflow,
     prepare_response_template,
 )
 from validate_human_risk_atom_audit import read_tsv, validate_rows  # noqa: E402
@@ -78,6 +80,15 @@ def audit_row() -> dict[str, str]:
     }
 
 
+def load_readiness_fixture_writer():
+    path = REPO_ROOT / "tests" / "test_evidence_chain_readiness.py"
+    spec = importlib.util.spec_from_file_location("test_evidence_chain_readiness", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module.write_minimal_tree
+
+
 def write_tsv(path: Path, rows: list[dict[str, str]], fieldnames: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
@@ -121,6 +132,13 @@ def complete_response_row() -> dict[str, str]:
         "model_reviewer_expected_safe_action": "priority_review",
         "model_reviewer_annotation_confidence": "high",
     }
+
+
+def pending_audit_row(index: int) -> dict[str, str]:
+    row = audit_row()
+    row["audio_id"] = f"private_audio_{index:03d}"
+    row["selection_stratum"] = "clean_control"
+    return row
 
 
 def test_prepare_response_template_tracks_only_safe_summary(tmp_path: Path) -> None:
@@ -283,3 +301,51 @@ def test_complete_response_write_updates_audit_sheet(tmp_path: Path) -> None:
     assert payload["mode"] == "write"
     assert validation_payload["ok"] is True
     assert validation_payload["status"] == "review_complete"
+
+
+def test_write_can_refresh_batch_status_and_aggregate_outputs(tmp_path: Path) -> None:
+    load_readiness_fixture_writer()(tmp_path)
+    run_dir = (
+        tmp_path
+        / "70_experiments"
+        / "runs"
+        / "janus_300_high_stakes_human_audit_selection_2026_05_25"
+    )
+    readiness_dir = tmp_path / "70_experiments" / "runs" / "postdoc_evidence_chain_2026_05_25"
+    audit_sheet = run_dir / "artifacts" / "audit.tsv"
+    batch_summary = run_dir / "batch.json"
+    response_sheet = run_dir / "artifacts" / "response.tsv"
+    rows = [audit_row()] + [pending_audit_row(index) for index in range(2, 31)]
+    write_tsv(audit_sheet, rows, AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(response_sheet, [complete_response_row()], TEMPLATE_FIELDS)
+
+    payload = apply_response_sheet_workflow(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=run_dir,
+        readiness_output_dir=readiness_dir,
+        expected_rows=30,
+        repo_root=tmp_path,
+        write=True,
+        require_complete=True,
+        refresh_after_write=True,
+    )
+
+    assert payload["ok"] is True
+    assert payload["status"] == "response_complete"
+    assert payload["post_write_batch_status"] == "batch_complete"
+    assert payload["post_write_refresh_ran"] is True
+    assert payload["post_write_refresh_status"] == "partial_review"
+    assert payload["post_write_refresh_ok"] is True
+    assert payload["post_write_paper_ready"] is False
+    assert payload["post_write_publishable_ready"] is False
+    assert (run_dir / "human_audit_current_review_batch_status_summary.json").exists()
+    assert (run_dir / "human_audit_refresh_summary.json").exists()
+    assert (readiness_dir / "publishable_evidence_completion_summary.json").exists()
+    tracked = (run_dir / "human_audit_batch_response_apply_summary.json").read_text(
+        encoding="utf-8"
+    )
+    assert "PRIVATE_" not in tracked
+    assert "reference_text" not in tracked

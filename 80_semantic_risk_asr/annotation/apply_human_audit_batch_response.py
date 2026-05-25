@@ -22,6 +22,8 @@ if str(ANNOTATION_DIR) not in sys.path:
     sys.path.insert(0, str(ANNOTATION_DIR))
 
 import validate_human_risk_atom_audit as validation  # noqa: E402
+import audit_human_review_batch_status as batch_status_audit  # noqa: E402
+import refresh_human_audit_evidence as refresh_audit  # noqa: E402
 from prepare_human_audit_review_batch import (  # noqa: E402
     REFERENCE_TRANSCRIPT_POLICY,
     REMAINING_REVIEW_SCOPE,
@@ -42,6 +44,7 @@ DEFAULT_BATCH_SUMMARY = DEFAULT_RUN_DIR / "human_audit_next_review_batch_summary
 DEFAULT_RESPONSE_DIR = DEFAULT_RUN_DIR / "artifacts" / "review_responses"
 TEMPLATE_SUMMARY_NAME = "human_audit_batch_response_template_summary.json"
 APPLY_SUMMARY_NAME = "human_audit_batch_response_apply_summary.json"
+DEFAULT_READINESS_DIR = refresh_audit.DEFAULT_READINESS_DIR
 
 ROW_RESPONSE_FIELDS = [
     "reviewer_semantic_risk_label",
@@ -481,16 +484,129 @@ def apply_response_sheet(
     return summary
 
 
+def post_write_refresh(
+    *,
+    audit_sheet: Path,
+    batch_summary: Path,
+    output_dir: Path,
+    readiness_output_dir: Path,
+    expected_rows: int | None,
+    repo_root: Path,
+    skip_readiness: bool,
+) -> dict[str, Any]:
+    batch_payload = batch_status_audit.audit_batch_status(
+        audit_sheet=audit_sheet,
+        batch_summary=batch_summary,
+        output_dir=output_dir,
+        expected_rows=expected_rows,
+        repo_root=repo_root,
+    )
+    refresh_payload: dict[str, Any] | None = None
+    if batch_payload["batch_ready_for_refresh"]:
+        refresh_payload = refresh_audit.refresh_human_audit_evidence(
+            audit_sheet=audit_sheet,
+            output_dir=output_dir,
+            readiness_output_dir=readiness_output_dir,
+            repo_root=repo_root,
+            expected_rows=expected_rows,
+            require_complete=False,
+            skip_readiness=skip_readiness,
+        )
+    payload = {
+        "post_write_batch_status": batch_payload["status"],
+        "post_write_batch_ready_for_refresh": batch_payload["batch_ready_for_refresh"],
+        "post_write_batch_summary_path": batch_payload["tracked_summary_path"],
+        "post_write_refresh_ran": refresh_payload is not None,
+        "post_write_refresh_status": refresh_payload.get("status") if refresh_payload else "",
+        "post_write_refresh_ok": refresh_payload.get("ok") if refresh_payload else "",
+        "post_write_paper_ready": refresh_payload.get("readiness_paper_ready") if refresh_payload else "",
+        "post_write_publishable_ready": refresh_payload.get("publishable_ready") if refresh_payload else "",
+        "post_write_next_action": (
+            "Prepare or audit the next review batch; after all selected-300 rows are "
+            "reviewed, rerun refresh_human_audit_evidence.py --require-complete."
+            if refresh_payload
+            else "Complete the current batch before refreshing aggregate evidence."
+        ),
+    }
+    assert_tracked_safe(payload)
+    return payload
+
+
+def apply_response_sheet_workflow(
+    *,
+    audit_sheet: Path,
+    response_sheet: Path,
+    batch_summary: Path,
+    output_dir: Path,
+    readiness_output_dir: Path,
+    expected_rows: int | None,
+    repo_root: Path,
+    write: bool,
+    require_complete: bool = False,
+    refresh_after_write: bool = False,
+    skip_readiness: bool = False,
+) -> dict[str, Any]:
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=output_dir,
+        expected_rows=expected_rows,
+        repo_root=repo_root,
+        write=write,
+        require_complete=require_complete,
+    )
+    if refresh_after_write:
+        if not write:
+            payload["error_counts"] = {
+                **payload["error_counts"],
+                "refresh_after_write_requires_write": 1,
+            }
+            payload["ok"] = False
+        elif payload["ok"] and payload["status"] == "response_complete":
+            payload.update(
+                post_write_refresh(
+                    audit_sheet=audit_sheet,
+                    batch_summary=batch_summary,
+                    output_dir=output_dir,
+                    readiness_output_dir=readiness_output_dir,
+                    expected_rows=expected_rows,
+                    repo_root=repo_root,
+                    skip_readiness=skip_readiness,
+                )
+            )
+        else:
+            payload["post_write_refresh_ran"] = False
+            payload["post_write_next_action"] = (
+                "Fix response TSV errors and rerun with --require-complete before "
+                "requesting post-write refresh."
+            )
+    assert_tracked_safe(payload)
+    write_json(output_dir / APPLY_SUMMARY_NAME, payload)
+    return payload
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--audit-sheet", type=Path, default=DEFAULT_AUDIT_SHEET)
     parser.add_argument("--batch-summary", type=Path, default=DEFAULT_BATCH_SUMMARY)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_RUN_DIR)
     parser.add_argument("--response-dir", type=Path, default=DEFAULT_RESPONSE_DIR)
+    parser.add_argument("--readiness-output-dir", type=Path, default=DEFAULT_READINESS_DIR)
     parser.add_argument("--response-sheet", type=Path)
     parser.add_argument("--write-template", action="store_true")
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--require-complete", action="store_true")
+    parser.add_argument(
+        "--refresh-after-write",
+        action="store_true",
+        help="After a successful --write, audit the batch status and refresh aggregate outputs.",
+    )
+    parser.add_argument(
+        "--skip-readiness",
+        action="store_true",
+        help="When using --refresh-after-write, refresh local audit aggregates without readiness outputs.",
+    )
     parser.add_argument("--expected-rows", type=int, default=30)
     return parser.parse_args()
 
@@ -520,15 +636,18 @@ def main() -> int:
         return 0 if payload["ok"] else 1
     if not args.response_sheet:
         raise SystemExit("use --write-template or provide --response-sheet")
-    payload = apply_response_sheet(
+    payload = apply_response_sheet_workflow(
         audit_sheet=args.audit_sheet,
         response_sheet=args.response_sheet,
         batch_summary=args.batch_summary,
         output_dir=args.output_dir,
+        readiness_output_dir=args.readiness_output_dir,
         expected_rows=args.expected_rows,
         repo_root=REPO_ROOT,
         write=args.write,
         require_complete=args.require_complete,
+        refresh_after_write=args.refresh_after_write,
+        skip_readiness=args.skip_readiness,
     )
     print(
         json.dumps(
@@ -544,6 +663,9 @@ def main() -> int:
                 "pending_model_assessments_in_response": payload[
                     "pending_model_assessments_in_response"
                 ],
+                "post_write_refresh_ran": payload.get("post_write_refresh_ran", ""),
+                "post_write_batch_status": payload.get("post_write_batch_status", ""),
+                "post_write_publishable_ready": payload.get("post_write_publishable_ready", ""),
             },
             ensure_ascii=False,
         )

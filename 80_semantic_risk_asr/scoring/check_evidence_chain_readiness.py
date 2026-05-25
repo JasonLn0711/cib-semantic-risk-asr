@@ -15,6 +15,7 @@ STATUS_ORDER = {
     "completed": 0,
     "proxy_completed": 1,
     "review_pending": 2,
+    "partial_review": 2,
     "planned": 3,
     "missing": 4,
     "failed": 5,
@@ -313,14 +314,14 @@ def human_audit_gate(root: Path) -> dict[str, str]:
         and payload.get("reviewed_rows") == 30
         and payload.get("reviewed_model_assessments") == 90
     )
-    pending = payload.get("status") == "review_pending"
+    pending = payload.get("status") in {"review_pending", "partial_review"}
     if complete:
         status = "completed"
         paper_status = "human-reviewed evidence ready"
         result = "Human audit complete"
         next_action = "Rerun summarizer, predictor gate, and recovery with human-reviewed labels."
     elif pending:
-        status = "review_pending"
+        status = str(payload.get("status"))
         paper_status = "not paper-ready"
         result = (
             f"{payload.get('reviewed_rows', 0)}/30 selected rows have risk-atom "

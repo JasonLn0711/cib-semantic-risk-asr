@@ -210,3 +210,29 @@ def test_aggregate_safety_rejects_private_fields() -> None:
         assert "sensitive token" in str(exc)
     else:
         raise AssertionError("sensitive field did not fail")
+
+
+def test_readiness_treats_partial_human_review_as_in_progress(tmp_path: Path) -> None:
+    write_minimal_tree(tmp_path)
+    write_json(
+        tmp_path
+        / "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_validation_summary.json",
+        {
+            "ok": True,
+            "status": "partial_review",
+            "reviewed_rows": 1,
+            "reviewed_model_assessments": 3,
+        },
+    )
+
+    payload = build_readiness(tmp_path)
+    audit_row = next(
+        row
+        for row in payload["readiness_rows"]
+        if row["requirement"] == "selected-300 human risk-atom audit completion"
+    )
+
+    assert payload["ok"] is True
+    assert payload["paper_ready"] is False
+    assert audit_row["status"] == "partial_review"
+    assert "1/30 selected rows" in audit_row["result"]

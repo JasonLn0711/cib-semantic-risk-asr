@@ -47,6 +47,7 @@ STATUS_ORDER = {
     "completed": 0,
     "proxy_completed": 1,
     "review_pending": 2,
+    "partial_review": 2,
     "planned": 3,
     "missing": 4,
     "failed": 5,
