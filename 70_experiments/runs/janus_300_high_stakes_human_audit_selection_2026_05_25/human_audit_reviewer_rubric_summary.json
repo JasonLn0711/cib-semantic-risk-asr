@@ -1,0 +1,62 @@
+{
+  "ok": true,
+  "status": "rubric_ready",
+  "input_boundary": "validator constants plus aggregate reviewer action status only",
+  "output_boundary": "repo-safe reviewer value contract; no row keys or transcript text",
+  "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
+  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
+  "validator_constants_match": true,
+  "value_category_counts": {
+    "row_risk_label": 4,
+    "decision_change": 3,
+    "safe_action": 6,
+    "confidence": 3,
+    "risk_atom": 8
+  },
+  "required_review_surface": {
+    "row_level_required_decision_fields": 8,
+    "model_level_required_decision_fields": 4,
+    "optional_timing_fields": 3
+  },
+  "current_reviewer_action_gate": {
+    "available": true,
+    "ok": true,
+    "status": "reviewer_action_ready",
+    "selection_stratum": "critical_or_high_risk_missed",
+    "pending_rows_in_batch": 6,
+    "rows_in_batch": 6,
+    "pending_model_assessments_in_batch": 18,
+    "model_assessments_in_batch": 18,
+    "rows_missing_timing": 6,
+    "latest_apply_status": "response_pending"
+  },
+  "consistency_checks": [
+    {
+      "check": "no_duplicate_transcript_review",
+      "rule": "Reference transcripts are accepted for scoring; only record a correction exception if future evidence requires it."
+    },
+    {
+      "check": "decision_yes_requires_safe_action",
+      "rule": "A decision-change yes label should map to a non-none safe action."
+    },
+    {
+      "check": "uncertain_requires_low_or_medium_certainty",
+      "rule": "Uncertain decision effects should avoid high confidence unless a second reviewer resolves the ambiguity."
+    },
+    {
+      "check": "model_level_complete_for_comparison",
+      "rule": "Each ASR run in the packet needs model-level decision-change, critical-atom, safe-action, and confidence labels."
+    },
+    {
+      "check": "do_not_rank_by_cer_only",
+      "rule": "Do not reward a lower CER model if it drops a decision-critical semantic atom."
+    }
+  ],
+  "first_principle_decision": "Reviewer time should convert proxy CDS-ASR evidence into decision-grade human evidence; it should not duplicate transcript review or chase more ASR runs.",
+  "next_action": "Use this value contract while filling the ignored local response TSV, then run strict response dry-run until response_complete.",
+  "tracked_outputs": {
+    "rubric_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_rubric_summary.json",
+    "value_contract_tsv": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_value_contract.tsv"
+  },
+  "runtime_seconds": 0.0003
+}

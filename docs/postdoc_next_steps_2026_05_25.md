@@ -787,8 +787,12 @@ Interpretation:
    `handoff_fresh`，接著跑
    `preflight_human_audit_review_session.py` 確認 `review_session_ready` 並
    留下 session-start record。再跑
+   `build_human_audit_reviewer_rubric.py` 產生 reviewer value contract 並確認
+   `rubric_ready`；這個 contract 只固定 risk/decision/safe-action/confidence/risk-atom
+   的可用值，不重新審查已接受的 transcript ground truth。再跑
    `build_human_audit_reviewer_action_checklist.py` 產生 aggregate action
-   checklist；目前狀態應是 `reviewer_action_ready`，但 `6/6` rows、
+   checklist；目前狀態應是 `reviewer_action_ready` 且
+   `rubric_status=rubric_ready`，但 `6/6` rows、
    `18/18` model assessments 與 `6/6` optional timing rows 仍待填。需要連續產生下一批時加
    `--prepare-next-after-write`。
    這會寫入 local sheet、重跑 batch status audit、並在 `batch_complete` 後刷新

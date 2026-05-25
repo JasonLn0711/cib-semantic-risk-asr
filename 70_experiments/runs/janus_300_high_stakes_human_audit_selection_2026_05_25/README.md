@@ -144,8 +144,10 @@ Tracked readiness outputs:
 | `human_audit_reviewer_handoff_summary.json` | Repo-safe current reviewer handoff. Current status: `reviewer_input_pending`, `freshness_status=fresh`, packet rows `1-6`, response template path, latest apply status, apply-log status, source-summary SHA-256 digests, and exact next commands. |
 | `human_audit_reviewer_preflight_summary.json` | Repo-safe pre-review session preflight. Current status: `review_session_ready`, `handoff_fresh`, local packet exists, local response TSV exists, and no reviewer labels have been fabricated. |
 | `human_audit_reviewer_preflight_log.tsv` | Append-only repo-safe preflight log. Current entries record the ready state for `critical_or_high_risk_missed` rows `1-6` / `18` model assessments. |
-| `human_audit_reviewer_action_checklist_summary.json` | Repo-safe action checklist for the current reviewer batch. Current status: `reviewer_action_ready`, with `6/6` packet rows, `18/18` model assessments, and `6/6` optional timing rows still pending. |
-| `human_audit_reviewer_action_checklist.tsv` | Repo-safe checklist rows for handoff freshness, local packet/template existence, preflight, required row/model fields, optional timing fields, strict dry-run, and post-completion write/refresh. |
+| `human_audit_reviewer_rubric_summary.json` | Repo-safe reviewer value-contract readiness. Current status: `rubric_ready`, validator constants match the strict audit validator, and the remaining scope excludes duplicate transcript review. |
+| `human_audit_reviewer_value_contract.tsv` | Repo-safe allowed-value contract for row risk labels, decision-change labels, safe actions, confidence labels, and risk atoms. No audio IDs, transcripts, hypotheses, or reviewer notes. |
+| `human_audit_reviewer_action_checklist_summary.json` | Repo-safe action checklist for the current reviewer batch. Current status: `reviewer_action_ready`, with `rubric_status=rubric_ready`, `6/6` packet rows, `18/18` model assessments, and `6/6` optional timing rows still pending. |
+| `human_audit_reviewer_action_checklist.tsv` | Repo-safe checklist rows for handoff freshness, local packet/template existence, preflight, rubric/value-contract confirmation, required row/model fields, optional timing fields, strict dry-run, and post-completion write/refresh. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
@@ -187,6 +189,20 @@ Current preflight status: `review_session_ready`. This means the handoff is
 fresh and the local packet/response TSV paths exist; it does not mean reviewer
 fields are complete.
 
+Before filling the local response TSV, build the aggregate-only reviewer value
+contract:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/build_human_audit_reviewer_rubric.py
+```
+
+Current rubric status: `rubric_ready`. The value contract mirrors the strict
+validator constants for row risk labels, decision-change labels, safe actions,
+confidence labels, and risk atoms. It also records that the supplied transcript
+ground truth has already been human-reviewed for WER/CER scoring, so the
+remaining review scope is risk, decision, safe-action, confidence, model-level
+assessment, and optional timing fields.
+
 To produce a one-page aggregate action checklist for the current reviewer
 batch, run:
 
@@ -196,10 +212,11 @@ batch, run:
 
 Current checklist status: `reviewer_action_ready`. The checklist confirms that
 the handoff is fresh, local packet/response paths exist, and preflight is
-recorded. The blocking content remains `6/6` packet rows and `18/18`
-model-level assessments in the ignored local response TSV. Optional timing
-fields are also pending for `6/6` rows. This checklist does not read transcript
-text or reviewer notes.
+recorded, and now requires `rubric_status=rubric_ready` before reviewer entry.
+The blocking content remains `6/6` packet rows and `18/18` model-level
+assessments in the ignored local response TSV. Optional timing fields are also
+pending for `6/6` rows. This checklist does not read transcript text or
+reviewer notes.
 
 Prepare the next local transcript-bearing review packet before filling rows:
 

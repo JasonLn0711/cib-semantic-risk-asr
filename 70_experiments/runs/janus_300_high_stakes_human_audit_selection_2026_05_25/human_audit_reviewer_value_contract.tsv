@@ -1,0 +1,25 @@
+category	value	use_when	paper_evidence_role	caution
+row_risk_label	critical_escalation	Immediate escalation is warranted because the risk could be severe.	row-level human risk target	
+row_risk_label	no_escalation	No high-stakes routing or intervention should be triggered.	row-level human risk target	
+row_risk_label	priority_review	Priority human review is warranted because a safety-relevant risk is present.	row-level human risk target	
+row_risk_label	review	Manual review is warranted, but not urgent escalation.	row-level human risk target	
+decision_change	no	The ASR difference is harmless for the downstream decision.	decision-stability target	
+decision_change	uncertain	The decision effect is unresolved from the available review context.	decision-stability target	Prefer low or medium confidence and consider abstain or review actions.
+decision_change	yes	The ASR difference could change escalation, routing, or conservative action.	decision-stability target	Use only for a plausible downstream decision change, not a harmless wording error.
+safe_action	abstain	Do not make an automated decision.	recovery-policy target	
+safe_action	conservative_machine_action	Use a conservative automated action instead of unsafe downrouting.	recovery-policy target	
+safe_action	critical_escalation	Escalate immediately.	recovery-policy target	
+safe_action	manual_review	Route to normal human review.	recovery-policy target	
+safe_action	none	No additional action is needed after review.	recovery-policy target	Use only when the decision remains safe.
+safe_action	priority_review	Route to high-priority human review.	recovery-policy target	
+confidence	high	Clear evidence supports the review decision.	review-quality stratifier	Use only when the decision-relevant span is clear.
+confidence	low	The decision is tentative or needs a second reviewer.	review-quality stratifier	
+confidence	medium	Evidence supports the decision, but some ambiguity remains.	review-quality stratifier	
+risk_atom	action	A requested or reported action changes the risk.	semantic consequence category	
+risk_atom	actor	The person or organization involved changes the risk.	semantic consequence category	
+risk_atom	amount	A money, count, or magnitude term changes the risk.	semantic consequence category	
+risk_atom	intent	Intent, willingness, or pressure changes the risk.	semantic consequence category	
+risk_atom	negation	A negation or denial changes the safety meaning.	semantic consequence category	
+risk_atom	scam_pattern	A scam-specific pattern or scenario changes the risk.	semantic consequence category	
+risk_atom	time	Timing, deadline, or sequence changes the risk.	semantic consequence category	
+risk_atom	uncertainty	A hedge, doubt, or ambiguity changes the risk.	semantic consequence category	
