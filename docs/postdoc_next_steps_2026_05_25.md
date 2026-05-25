@@ -108,6 +108,18 @@ selection stats 與 protocol。這一步把「需要 human audit」從提醒變�
 包含 row-level 與 per-model reviewer assessment，再用同一支 summarizer 產
 出 aggregate human annotation stats。
 
+11. Human-reviewed predictor gate 已建立：
+
+- Script:
+  `80_semantic_risk_asr/annotation/analyze_human_audit_predictors.py`。
+- Current tracked readiness status:
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_summary.json`。
+- Current state: `90` model-level assessments、`0` reviewed、`90` pending。
+
+這支工具會在 review 完成後，把 WER/CER/SRES/CEIS 對上 model-level human
+decision-change labels。換句話說，proxy AUC 不能直接進 paper；reviewed
+subset predictor table 要由這支工具重算。
+
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS
@@ -122,8 +134,9 @@ selection stats 與 protocol。這一步把「需要 human audit」從提醒變�
   258-row evidence。
 - 300 high-stakes ASR hypotheses、SRES/CEIS/downstream、metric-predictor、
   recovery 都已完成三個 Breeze-family comparator 的 proxy mode；human audit
-  queue 與 aggregate summarizer 已建立，但目前 `0/30` rows reviewed、`0/90`
-  model assessments reviewed，所以還不能宣稱 paper-grade main experiment 完成。
+  queue、aggregate summarizer、human-reviewed predictor gate 已建立，但目前
+  `0/30` rows reviewed、`0/90` model assessments reviewed，所以還不能宣稱
+  paper-grade main experiment 完成。
 - 258-row recovery proxy 與 300-row high-stakes recovery proxy 都已完成；下
   一個缺口是 selected-300 human risk-atom audit，而不是再調 WER 定義。
 

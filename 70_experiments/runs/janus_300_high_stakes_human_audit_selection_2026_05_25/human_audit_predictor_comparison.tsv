@@ -1,0 +1,9 @@
+scope	asr_run_id	target	metric	reviewed_model_samples	positive_rows	positive_rate	auc	best_threshold	best_f1	precision	recall	true_positive	false_positive	false_negative
+overall	ALL	human_decision_change_yes	wer	0	0	0.0			0.0	0.0	0.0	0	0	0
+overall	ALL	human_decision_change_yes	cer	0	0	0.0			0.0	0.0	0.0	0	0	0
+overall	ALL	human_decision_change_yes	sres_total	0	0	0.0			0.0	0.0	0.0	0	0	0
+overall	ALL	human_decision_change_yes	ceis_max	0	0	0.0			0.0	0.0	0.0	0	0	0
+overall	ALL	human_decision_change_yes_or_uncertain	wer	0	0	0.0			0.0	0.0	0.0	0	0	0
+overall	ALL	human_decision_change_yes_or_uncertain	cer	0	0	0.0			0.0	0.0	0.0	0	0	0
+overall	ALL	human_decision_change_yes_or_uncertain	sres_total	0	0	0.0			0.0	0.0	0.0	0	0	0
+overall	ALL	human_decision_change_yes_or_uncertain	ceis_max	0	0	0.0			0.0	0.0	0.0	0	0	0

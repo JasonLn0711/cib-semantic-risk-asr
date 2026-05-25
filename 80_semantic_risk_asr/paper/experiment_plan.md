@@ -268,6 +268,10 @@ Current human-audit gate status on 2026-05-25:
 - Aggregate readiness summary:
   `human_audit_review_summary.json` currently records `0 / 30` reviewed rows
   and `30` pending rows, plus `0 / 90` reviewed model-level assessments.
+- Human-reviewed predictor gate:
+  `human_audit_predictor_summary.json` currently records `0 / 90` reviewed
+  model-level assessments. WER/CER/SRES/CEIS predictor metrics must be computed
+  from this gate after review, not copied from the proxy predictor table.
 
 This gate is not complete until the local sheet is reviewed and aggregate human
 annotation stats are produced.

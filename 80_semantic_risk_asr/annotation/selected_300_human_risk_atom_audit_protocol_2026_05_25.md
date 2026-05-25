@@ -145,6 +145,17 @@ aggregate files with:
 - per-model human-confirmed signal counts;
 - reviewer agreement check if a second reviewer is available.
 
+Then run the human-reviewed predictor gate:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/analyze_human_audit_predictors.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25
+```
+
+This compares WER/CER/SRES/CEIS against model-level human decision-change
+labels. It must replace proxy predictor language for reviewer-facing claims.
+
 ## Completion Criteria
 
 This gate is complete only when:

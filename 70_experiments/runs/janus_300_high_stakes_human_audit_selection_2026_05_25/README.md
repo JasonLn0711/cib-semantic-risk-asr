@@ -122,11 +122,25 @@ Tracked readiness outputs:
 | `human_audit_strata_review.tsv` | Reviewed row counts by selection stratum. |
 | `human_audit_risk_atom_review.tsv` | Human-confirmed risk-atom aggregate counts after review. Currently empty because review is pending. |
 | `human_audit_model_review.tsv` | Per-model reviewed-sample aggregate counts. Currently zero reviewed rows. |
+| `human_audit_predictor_summary.json` | Human-reviewed predictor gate readiness. Currently review pending. |
+| `human_audit_predictor_comparison.tsv` | WER/CER/SRES/CEIS vs human model-level decision-change targets after review. Currently zero reviewed samples. |
+| `human_audit_predictor_model_summary.tsv` | Per-model human-reviewed predictor target counts. Currently zero reviewed samples. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
 dangerous ASR risk, but only model-level labels can support a reviewer-facing
 claim about which ASR model is safer.
+
+After model-level review, run:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/analyze_human_audit_predictors.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25
+```
+
+Current predictor readiness: `0 / 90` model assessments reviewed. Predictor
+metrics are computed only over reviewed model-level assessments.
 
 ## Boundary
 

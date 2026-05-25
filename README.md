@@ -107,7 +107,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `artifacts/`; review is still pending. Aggregate review status is produced by
   `80_semantic_risk_asr/annotation/summarize_human_risk_atom_audit.py`, and
   model-level reviewer assessments are required before making model-comparison
-  claims from the human audit.
+  claims from the human audit. Human-reviewed WER/CER/SRES/CEIS predictor
+  tables are produced by
+  `80_semantic_risk_asr/annotation/analyze_human_audit_predictors.py` after
+  review.
 - The 2026-05-25 WER audit is recorded in
   `70_experiments/runs/wer_metric_audit_2026_05_25/`. The latest audit checks
   six 258-row hypothesis files against the canonical manifest, records package

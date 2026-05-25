@@ -5,6 +5,25 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.59 - 2026-05-25T19:02:57+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `3efedd3`
+- Branch: `main`
+- Summary: Record human-reviewed predictor gate readiness.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_comparison.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_model_summary.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `80_semantic_risk_asr/annotation/selected_300_human_risk_atom_audit_protocol_2026_05_25.md`
+  - `80_semantic_risk_asr/paper/experiment_plan.md`
+  - `README.md`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
 ## v2.5.58 - 2026-05-25T19:02:41+08:00
 
 - Bump: `patch`
