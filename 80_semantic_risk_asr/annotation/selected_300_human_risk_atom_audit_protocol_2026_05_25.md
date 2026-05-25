@@ -198,6 +198,17 @@ response TSV, batch gate, apply-log status, and next commands, run:
 .venv/bin/python 80_semantic_risk_asr/annotation/build_human_audit_reviewer_handoff.py
 ```
 
+Before reviewer work begins, verify that the existing handoff is still current
+against the latest tracked source summaries:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/build_human_audit_reviewer_handoff.py --check-existing
+```
+
+The check compares source-summary SHA-256 digests and should report
+`handoff_fresh`. If it reports `handoff_stale`, regenerate the handoff before
+opening the transcript-bearing local packet or response TSV.
+
 After filling the ignored response TSV, dry-run it with the strict completion
 gate:
 

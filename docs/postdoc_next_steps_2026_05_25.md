@@ -230,7 +230,12 @@ readiness、publishable completion outputs。
   `human_audit_batch_response_apply_log_summary.json`。新增
   `human_audit_reviewer_handoff_summary.json` 把 current packet、response TSV、
   batch gate、apply-log status、下一步 commands 聚合成一個 safe handoff；
-  目前 handoff status 是 `reviewer_input_pending`。嚴格
+  目前 handoff status 是 `reviewer_input_pending`，且
+  `freshness_status=fresh`。這個 handoff 也記錄每個 source summary 的
+  SHA-256 digest；reviewer 開始前先跑
+  `build_human_audit_reviewer_handoff.py --check-existing`，要求回報
+  `handoff_fresh`，再打開 transcript-bearing local packet 或 response TSV。
+  嚴格
   `--require-complete` dry-run 目前會以 `ok=false` 和
   `incomplete_response=1` 退出，代表尚未填入 reviewer decisions；這是
   `--write` 前的完成性 gate。嚴格 dry-run 通過後，使用
@@ -740,7 +745,9 @@ Interpretation:
    review-time coverage 與 elapsed seconds，並讓 apply log 留下每次
    dry-run/write attempt 與 apply-log summary。先看
    `human_audit_reviewer_handoff_summary.json` 取得目前 packet、response TSV
-   與正確命令。需要連續產生下一批時加 `--prepare-next-after-write`。
+   與正確命令，並在 reviewer 開始前跑
+   `build_human_audit_reviewer_handoff.py --check-existing` 確認
+   `handoff_fresh`。需要連續產生下一批時加 `--prepare-next-after-write`。
    這會寫入 local sheet、重跑 batch status audit、並在 `batch_complete` 後刷新
    aggregate readiness / publishable completion。
 2. 跑

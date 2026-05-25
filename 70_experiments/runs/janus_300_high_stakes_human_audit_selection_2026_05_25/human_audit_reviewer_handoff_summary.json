@@ -12,6 +12,34 @@
     "apply_summary": "present",
     "apply_log_summary": "present"
   },
+  "source_digests": {
+    "batch_summary": {
+      "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json",
+      "status": "present",
+      "sha256": "b5cc8283dd116d42212c391fc47ad741252e7463d3cbf55b126e698185f68d32"
+    },
+    "batch_status": {
+      "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_current_review_batch_status_summary.json",
+      "status": "present",
+      "sha256": "f8cddaf3acc6c7dd068a61312329c3ee8766c2631c7d3fcd6679d4075bd42a70"
+    },
+    "template_summary": {
+      "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_template_summary.json",
+      "status": "present",
+      "sha256": "28627fbd503d24ec72dbe2a76297ed5cba6babd2448a9f0aea2ab6c5e21e2920"
+    },
+    "apply_summary": {
+      "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json",
+      "status": "present",
+      "sha256": "b765737bbedeac2ba78b96adc18f0f121dcc149dcb5eb8e01a83019dbe9f8045"
+    },
+    "apply_log_summary": {
+      "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_log_summary.json",
+      "status": "present",
+      "sha256": "14e368520209b5fb2aff3fa5b905a0520a63605d6cece4f4ad9e7f4f36105d95"
+    }
+  },
+  "freshness_status": "fresh",
   "missing_inputs": [],
   "current_packet": {
     "selection_stratum": "critical_or_high_risk_missed",
@@ -77,5 +105,5 @@
     "apply_log_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_log_summary.json",
     "batch_status": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_current_review_batch_status_summary.json"
   },
-  "runtime_seconds": 0.0007
+  "runtime_seconds": 0.001
 }

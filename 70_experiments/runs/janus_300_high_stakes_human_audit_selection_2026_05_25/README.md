@@ -141,7 +141,7 @@ Tracked readiness outputs:
 | `human_audit_batch_response_apply_summary.json` | Repo-safe strict dry-run/apply status for the local response TSV. Current `--require-complete` dry-run status is `response_pending`, `ok=false`, `incomplete_response=1`, with `0/6` rows, `0/18` model assessments, and `0/6` row review timings filled. |
 | `human_audit_batch_response_apply_log.tsv` | Append-only repo-safe response dry-run/write log. Current first entry records the blank strict dry-run as `response_pending` with aggregate counts only. |
 | `human_audit_batch_response_apply_log_summary.json` | Repo-safe audit of the response apply log. Current status: `apply_log_valid`, `2` entries, latest status `response_pending`, `0/6` rows and `0/18` model assessments filled. |
-| `human_audit_reviewer_handoff_summary.json` | Repo-safe current reviewer handoff. Current status: `reviewer_input_pending`, packet rows `1-6`, response template path, latest apply status, apply-log status, and exact next commands. |
+| `human_audit_reviewer_handoff_summary.json` | Repo-safe current reviewer handoff. Current status: `reviewer_input_pending`, `freshness_status=fresh`, packet rows `1-6`, response template path, latest apply status, apply-log status, source-summary SHA-256 digests, and exact next commands. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
@@ -159,7 +159,18 @@ For a one-file current-state handoff, run:
 The handoff summary does not read transcript-bearing row content. It combines
 the prepared packet summary, current batch status, response template summary,
 apply status, and apply-log summary into
-`human_audit_reviewer_handoff_summary.json`.
+`human_audit_reviewer_handoff_summary.json`. The summary records SHA-256
+digests for each source summary so stale handoffs can be detected without
+storing row content.
+
+Before opening the local packet or response TSV, check that the existing
+handoff still matches its source summaries:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/build_human_audit_reviewer_handoff.py --check-existing
+```
+
+Current freshness check: `handoff_fresh`.
 
 Prepare the next local transcript-bearing review packet before filling rows:
 
