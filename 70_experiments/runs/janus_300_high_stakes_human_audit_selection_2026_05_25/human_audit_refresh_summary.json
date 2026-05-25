@@ -69,9 +69,20 @@
     "model_field_action_items": 72,
     "timing_action_items": 6
   },
+  "post_review_sequence_status": "post_review_sequence_blocked",
+  "post_review_sequence_blocker_keys": [
+    "strict_dry_run",
+    "response_closeout",
+    "write_refresh_prepare_next",
+    "human_audit_refresh",
+    "strict_human_reviewed_recovery",
+    "post_review_checklist",
+    "objective_requirements_audit"
+  ],
+  "post_review_sequence_executed_step_count": 0,
   "consistency_audit_ok": true,
   "consistency_status_counts": {
-    "pass": 17
+    "pass": 18
   },
   "consistency_failed_checks": [],
   "objective_requirements_audit_ok": true,
@@ -109,12 +120,14 @@
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_checklist.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order_summary.json",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order.tsv",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements_summary.json",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements.tsv",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_summary.json",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"
   ],
-  "runtime_seconds": 0.0108,
+  "runtime_seconds": 0.0146,
   "next_action": "Complete selected-300 risk-atom, decision-change, expected-action, confidence, per-model assessment, and per-row timing fields, then rerun the session-gated strict dry-run with --require-complete --require-timing before aggregate refresh."
 }

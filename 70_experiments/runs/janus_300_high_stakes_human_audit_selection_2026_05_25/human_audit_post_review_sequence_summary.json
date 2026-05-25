@@ -1,0 +1,106 @@
+{
+  "ok": false,
+  "status": "post_review_sequence_blocked",
+  "mode": "plan_only",
+  "input_boundary": "tracked aggregate closeout, refresh, recovery, checklist, and objective summaries",
+  "output_boundary": "aggregate-only post-review sequence status; no row keys or transcript text",
+  "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
+  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
+  "closeout_ready": false,
+  "refresh_complete": false,
+  "human_recovery_ready": false,
+  "post_review_ready": false,
+  "objective_requirements_ready": false,
+  "blocker_keys": [
+    "strict_dry_run",
+    "response_closeout",
+    "write_refresh_prepare_next",
+    "human_audit_refresh",
+    "strict_human_reviewed_recovery",
+    "post_review_checklist",
+    "objective_requirements_audit"
+  ],
+  "executed_step_count": 0,
+  "stopped_step": "",
+  "sequence": [
+    {
+      "step_order": 1,
+      "step_type": "strict_dry_run",
+      "status": "blocked_until_response_fields_complete",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30",
+      "success_condition": "apply summary status is response_complete",
+      "observed_status": "response_closeout_blocked",
+      "next_action": "rerun strict dry-run after row/model/timing fields are filled",
+      "privacy_boundary": "aggregate-only apply summary/log are tracked"
+    },
+    {
+      "step_order": 2,
+      "step_type": "response_closeout",
+      "status": "blocked_until_strict_dry_run_complete",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/build_human_audit_response_closeout_checklist.py",
+      "success_condition": "closeout status is response_complete_ready_to_write",
+      "observed_status": "response_closeout_blocked",
+      "next_action": "rerun closeout after strict dry-run passes",
+      "privacy_boundary": "aggregate-only closeout summary/checklist are tracked"
+    },
+    {
+      "step_order": 3,
+      "step_type": "write_refresh_prepare_next",
+      "status": "blocked_until_response_closeout_ready",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --write --refresh-after-write --prepare-next-after-write --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30",
+      "success_condition": "local audit sheet written and aggregate refresh runs",
+      "observed_status": "review_pending",
+      "next_action": "write local response only after closeout is ready",
+      "privacy_boundary": "write touches ignored local sheet; tracked outputs remain aggregate-only"
+    },
+    {
+      "step_order": 4,
+      "step_type": "human_audit_refresh",
+      "status": "blocked_until_write_refresh_complete",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py",
+      "success_condition": "refresh status is review_complete and pending counts are zero",
+      "observed_status": "review_pending",
+      "next_action": "refresh after each write; continue batches while review_pending",
+      "privacy_boundary": "aggregate-only refresh outputs are tracked"
+    },
+    {
+      "step_order": 5,
+      "step_type": "strict_human_reviewed_recovery",
+      "status": "blocked_until_review_complete",
+      "command": ".venv/bin/python 80_semantic_risk_asr/recovery/evaluate_human_reviewed_recovery_policies.py",
+      "success_condition": "human recovery evidence_mode is human_reviewed with five policies",
+      "observed_status": "review_pending",
+      "next_action": "run only after all selected-300 row/model/timing review is complete",
+      "privacy_boundary": "aggregate-only recovery summary/comparison are tracked"
+    },
+    {
+      "step_order": 6,
+      "step_type": "post_review_checklist",
+      "status": "blocked_until_human_recovery_ready",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py",
+      "success_condition": "post-review evidence status is post_review_evidence_ready",
+      "observed_status": "post_review_evidence_blocked",
+      "next_action": "rerun checklist after strict human-reviewed recovery passes",
+      "privacy_boundary": "aggregate-only paper-claim gate is tracked"
+    },
+    {
+      "step_order": 7,
+      "step_type": "objective_requirements_audit",
+      "status": "blocked_until_post_review_ready",
+      "command": ".venv/bin/python 80_semantic_risk_asr/scoring/audit_postdoc_objective_requirements.py",
+      "success_condition": "objective_requirements_ready is true",
+      "observed_status": "False",
+      "next_action": "rerun objective audit before declaring goal complete",
+      "privacy_boundary": "aggregate-only objective audit is tracked"
+    }
+  ],
+  "tracked_outputs": {
+    "summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_summary.json",
+    "sequence_tsv": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence.tsv",
+    "sequence_log": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_log.tsv",
+    "readiness_dir": "70_experiments/runs/postdoc_evidence_chain_2026_05_25",
+    "human_recovery_dir": "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26"
+  },
+  "next_concrete_action": "Complete selected-300 response closeout first, then rerun this sequence with --execute.",
+  "runtime_seconds": 0.0004
+}

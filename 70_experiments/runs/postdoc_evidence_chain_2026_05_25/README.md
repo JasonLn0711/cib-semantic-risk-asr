@@ -121,6 +121,7 @@ ignored local paths.
 | 5.78 | Attached per-row timing commands to the response gap TSV and audited alignment. | `build_human_audit_response_closeout_checklist.py`; `audit_evidence_chain_consistency.py`; `human_audit_response_gap_checklist.tsv`; `evidence_chain_consistency_summary.json`; `tests/test_human_audit_response_closeout.py`; `tests/test_evidence_chain_consistency.py`. | Completed as reviewer closeout instrumentation, not as human review. The gap TSV now includes `timing_start_write_command` and `timing_finish_write_command` for rows `1-6`, sourced from the fresh reviewer handoff command map. New consistency check `C068` verifies the gap TSV row numbers and timing commands match closeout and handoff evidence. Live consistency is `ok=true` with `15/15` checks passing; selected-300 review remains pending with `0/30` rows and `0/90` model assessments reviewed. |
 | 5.79 | Added field-level response action-items TSV and audited closeout count alignment. | `build_human_audit_response_closeout_checklist.py`; `audit_evidence_chain_consistency.py`; `human_audit_response_action_items.tsv`; `evidence_chain_consistency_summary.json`; `tests/test_human_audit_response_closeout.py`; `tests/test_evidence_chain_consistency.py`. | Completed as reviewer closeout instrumentation, not as human review. The closeout command now writes `126` pending field-level action items for the current packet: `48` row-field items, `72` model-field items, and `6` timing items. New consistency check `C069` verifies unique pending action IDs, timing helper command coverage for timing items, and alignment with the closeout gap counts. Live consistency is `ok=true` with `16/16` checks passing; selected-300 review remains pending with `0/30` rows and `0/90` model assessments reviewed. |
 | 5.80 | Added aggregate row-by-row review work order and audited coverage. | `build_human_audit_review_work_order.py`; `refresh_human_audit_evidence.py`; `audit_evidence_chain_consistency.py`; `human_audit_review_work_order_summary.json`; `human_audit_review_work_order.tsv`; `tests/test_human_audit_review_work_order.py`; `tests/test_evidence_chain_consistency.py`; `tests/test_human_audit_refresh.py`. | Completed as reviewer routing and operation logging, not as human review. The new work order reads only tracked aggregate action-items, closeout, handoff, and session-start summaries, then writes `35` safe steps for the current `6` rows plus packet closeout. It covers timing start, local row open, row fields, model fields, timing finish, strict dry-run, response closeout, write/refresh, post-review checklist, and objective audit while keeping transcript-bearing content local-only. New consistency check `C071` verifies row coverage, action count alignment, required step types, status, and sensitive-token safety. Live refresh now regenerates the work order before consistency, and current consistency is `ok=true` with `17/17` checks passing. Selected-300 review remains pending with `0/30` rows, `0/90` model assessments, and `0/6` current-packet timing rows reviewed. |
+| 5.81 | Added strict post-review sequence gate and audited command order. | `run_post_review_evidence_sequence.py`; `refresh_human_audit_evidence.py`; `audit_evidence_chain_consistency.py`; `human_audit_post_review_sequence_summary.json`; `human_audit_post_review_sequence.tsv`; `human_audit_post_review_sequence_log.tsv`; `tests/test_post_review_evidence_sequence.py`; `tests/test_evidence_chain_consistency.py`; `tests/test_human_audit_refresh.py`. | Completed as post-review execution-order hardening, not as human review. The new sequence gate is plan-only by default and currently reports `post_review_sequence_blocked`, `0` executed steps, and blockers from strict dry-run through objective audit because response closeout is still not ready. After local row/model/timing review completes, the same runner can be called with `--execute`; it will stop at the first still-pending aggregate gate and keeps the human-reviewed recovery rerun strict, without `--allow-pending-summary`. New consistency check `C072` verifies the strict order and command safety. Live consistency is now `ok=true` with `18/18` checks passing. |
 
 ## Next Operations
 
@@ -218,8 +219,8 @@ ignored local paths.
    or candidate-gate change. It should stay `ok=true`; any failure means a
    tracked aggregate summary has drifted from the transcript policy,
    row/model/timing review scope, reviewer handoff freshness, timing closeout
-   command, response gap/action TSV alignment, post-review command order,
-   proxy/paper-ready boundary, or ASR/Gemma promotion gate.
+   command, response gap/action TSV alignment, post-review command/sequence
+   order, proxy/paper-ready boundary, or ASR/Gemma promotion gate.
 13. After local review edits, run `refresh_human_audit_evidence.py` without
    `--require-complete` to refresh aggregate records, then with
    `--require-complete` before treating the human audit as complete.
@@ -237,14 +238,18 @@ ignored local paths.
    selected-300 response closeout. It should name
    `complete_response_closeout` as the first action until row/model/timing
    fields are complete.
-18. Use `mark_human_audit_response_timing.py` during local review sessions when
+18. Use `run_post_review_evidence_sequence.py --allow-blocked-summary` to
+   record the current aggregate sequence state, and use `--execute` only after
+   response closeout is `response_complete_ready_to_write`. The strict
+   human-reviewed recovery step must not use `--allow-pending-summary`.
+19. Use `mark_human_audit_response_timing.py` during local review sessions when
    timing should be captured by command rather than manual TSV editing. The
    handoff, action checklist, and session-start summaries now expose
    `timing_start_write_by_row` and `timing_finish_write_by_row` for every row
    in the current packet. The helper must not be treated as human review
    completion; it only writes timing fields in the ignored response TSV when
    run with `--write`.
-19. Use `human_audit_response_action_items.tsv` as the tracked field-level
+20. Use `human_audit_response_action_items.tsv` as the tracked field-level
    closeout checklist before opening local transcript-bearing review files.
    Current packet scope is `126` pending items: `48` row fields, `72` model
    fields, and `6` timing items.
