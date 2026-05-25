@@ -496,6 +496,13 @@ def write_consistent_fixture(root: Path) -> None:
                 "objective_requirements_audit",
             ],
             executed_step_count=0,
+            execute_safety_policy=(
+                "In --execute mode, stop before any blocked strict_dry_run, "
+                "response_closeout, write_refresh_prepare_next, "
+                "strict_human_reviewed_recovery, post_review_checklist, or "
+                "objective_requirements_audit step; record executed_step_count "
+                "and stopped_step in the aggregate summary/log."
+            ),
         ),
     )
     write_summary(
@@ -608,7 +615,7 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True
-    assert payload["status_counts"] == {"pass": 22}
+    assert payload["status_counts"] == {"pass": 23}
     assert not payload["failed_checks"]
     assert_aggregate_safe(payload)
 
@@ -821,6 +828,21 @@ def test_consistency_audit_fails_post_review_sequence_unsafe_dry_run(
 
     assert payload["ok"] is False
     assert any(item["check_id"] == "C076" for item in payload["failed_checks"])
+
+
+def test_consistency_audit_fails_post_review_sequence_missing_execute_safety(
+    tmp_path: Path,
+) -> None:
+    write_consistent_fixture(tmp_path)
+    sequence_path = tmp_path / SUMMARY_SPECS["post_review_sequence"]
+    sequence = json.loads(sequence_path.read_text(encoding="utf-8"))
+    sequence["execute_safety_policy"] = ""
+    sequence_path.write_text(json.dumps(sequence, ensure_ascii=False), encoding="utf-8")
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C077" for item in payload["failed_checks"])
 
 
 def test_consistency_audit_fails_objective_missing_sequence_route(

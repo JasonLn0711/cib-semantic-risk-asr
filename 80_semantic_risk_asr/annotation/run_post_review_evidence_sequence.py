@@ -414,6 +414,12 @@ def build_sequence(
         "blocker_keys": blockers,
         "executed_step_count": len(executed_rows),
         "stopped_step": stopped_step,
+        "execute_safety_policy": (
+            "In --execute mode, stop before any blocked strict_dry_run, "
+            "response_closeout, write_refresh_prepare_next, strict_human_reviewed_recovery, "
+            "post_review_checklist, or objective_requirements_audit step; record "
+            "executed_step_count and stopped_step in the aggregate summary/log."
+        ),
         "sequence": rows,
         "tracked_outputs": {
             "summary": repo_relative(run_dir / SEQUENCE_SUMMARY_NAME, repo_root=repo_root),

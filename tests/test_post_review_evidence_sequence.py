@@ -132,6 +132,23 @@ def test_post_review_sequence_blocks_before_closeout(tmp_path: Path) -> None:
     assert "PRIVATE_" not in serialized
     assert "reference_text" not in serialized
     assert "hypothesis_text" not in serialized
+    assert "stop before any blocked" in payload["execute_safety_policy"]
+
+
+def test_post_review_sequence_execute_stops_before_blocked_closeout(
+    tmp_path: Path,
+) -> None:
+    paths = write_inputs(tmp_path, closeout_ready=False)
+
+    payload, rows = build_from_paths(paths, execute=True)
+
+    assert payload["ok"] is False
+    assert payload["mode"] == "execute"
+    assert payload["status"] == "post_review_sequence_blocked"
+    assert payload["executed_step_count"] == 0
+    assert payload["stopped_step"] == "strict_dry_run"
+    assert rows[0]["status"] == "blocked_until_response_fields_complete"
+    assert all("exit_code" not in row for row in rows)
 
 
 def test_post_review_sequence_reports_ready_to_execute_after_closeout(tmp_path: Path) -> None:

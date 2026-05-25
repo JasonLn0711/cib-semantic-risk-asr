@@ -1047,6 +1047,46 @@ def add_post_review_sequence_dry_run_gate_check(
     )
 
 
+def add_post_review_sequence_execute_safety_check(
+    payloads: dict[str, dict[str, Any]],
+    rows: list[dict[str, str]],
+) -> None:
+    sequence = payloads.get("post_review_sequence", {})
+    policy = str(sequence.get("execute_safety_policy", ""))
+    policy_lower = policy.lower()
+    policy_ok = (
+        "stop before any blocked" in policy_lower
+        and "executed_step_count" in policy
+        and "stopped_step" in policy
+        and "write_refresh_prepare_next" in policy
+        and "strict_human_reviewed_recovery" in policy
+    )
+    status_ok = (
+        sequence.get("mode") == "plan_only"
+        and sequence.get("status") == "post_review_sequence_blocked"
+        and sequence.get("executed_step_count") == 0
+        and "strict_dry_run" in sequence.get("blocker_keys", [])
+    )
+    passed = policy_ok and status_ok
+    rows.append(
+        check_row(
+            check_id="C077",
+            invariant="post-review sequence execute mode stops before blocked gates",
+            passed=passed,
+            evidence=SUMMARY_SPECS["post_review_sequence"],
+            result=(
+                "sequence summary records execute-mode stop-before-blocked policy and current zero-execution blocked state"
+                if passed
+                else f"policy_ok={policy_ok}; status_ok={status_ok}"
+            ),
+            next_action=(
+                "Regenerate post-review sequence summary so --execute safety policy "
+                "and stopped-step accounting are recorded before reviewer closeout."
+            ),
+        )
+    )
+
+
 def add_review_work_order_sequence_route_check(
     root: Path,
     payloads: dict[str, dict[str, Any]],
@@ -1285,6 +1325,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_review_work_order_sequence_route_check(root, payloads, rows)
         add_post_review_sequence_check(root, payloads, rows)
         add_post_review_sequence_dry_run_gate_check(root, payloads, rows)
+        add_post_review_sequence_execute_safety_check(payloads, rows)
         add_sequence_aware_objective_check(payloads, rows)
         add_candidate_check(payloads, rows)
         add_safety_check(payloads, rows)
