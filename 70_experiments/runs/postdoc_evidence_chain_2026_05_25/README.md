@@ -62,6 +62,7 @@ ignored local paths.
 | 5.19 | Added human audit validation gate. | `validate_human_risk_atom_audit.py`; `human_audit_validation_summary.json`; `human_audit_validation_counts.tsv`. | Review still pending, but the local sheet now has a strict schema/completion gate. Normal validation passes with `status=review_pending`, `30` audit rows, `90` model assessments, and `0` validation errors. `--require-complete` fails as expected with `30` incomplete row reviews and `90` incomplete model reviews. Outputs are aggregate-only and contain no audio IDs, transcripts, hypotheses, selected IDs, or reviewer notes. |
 | 5.20 | Revalidated WER after renewed concern about strange historical values. | `wer_metric_audit_2026_05_25/revalidation_log_2026_05_25.md`; `/tmp/cib_wer_recheck/`; focused code search. | Completed. Python compile and direct metric tests passed; `pytest` was unavailable in `.venv`, so test functions were imported directly. Legacy 15-row, six-model 258-row, and high-stakes 300-row WER audits all returned `ok=true`; revalidation TSV outputs matched the tracked TSVs byte-for-byte. Focused search found no current runner computing WER from raw `reference.split()` or `prediction.split()`; whitespace WER remains only the explicit legacy audit profile. |
 | 5.21 | Added local-only human audit review helper. | `review_human_risk_atom_audit.py`; `tests/test_human_audit_review_helper.py`; selected-300 audit README/protocol. | Review still pending. The helper lists pending row numbers safely, supports local transcript-bearing row inspection, dry-runs reviewer field updates, updates per-model assessment JSON by `asr_run_id`, and creates ignored backups before `--write`. Compile and direct helper tests passed. Live `--list-pending` over the local sheet reports `30` pending rows across six strata without printing transcripts. |
+| 5.22 | Added evidence-chain readiness gate. | `check_evidence_chain_readiness.py`; `evidence_chain_readiness_summary.json`; `evidence_chain_readiness.tsv`. | Completed as a guardrail, not as final paper readiness. The checker verifies the 0-6 evidence chain from tracked aggregate files and returns `ok=true`, `paper_ready=false`, status counts `completed=5`, `proxy_completed=4`, `review_pending=1`. The only blocking gate is selected-300 human risk-atom audit completion: `0/30` rows and `0/90` model assessments reviewed. Sensitive-field scan over the readiness outputs found no transcript or ID leakage. |
 
 ## Next Operations
 
@@ -83,10 +84,13 @@ ignored local paths.
    do not become overstated as formal CDS evidence. Use
    `review_human_risk_atom_audit.py --list-pending` and row-level dry-runs to
    fill the ignored sheet without leaking transcripts into tracked files.
-7. Run `validate_human_risk_atom_audit.py --require-complete --expected-rows 30`
+7. Use `check_evidence_chain_readiness.py` as the repo-safe status guardrail:
+   it should stay `paper_ready=false` until the selected-300 human audit is
+   complete and post-review predictors/recovery are rerun.
+8. Run `validate_human_risk_atom_audit.py --require-complete --expected-rows 30`
    before treating the human audit as complete.
-8. Record aggregate human annotation statistics without selected IDs or
+9. Record aggregate human annotation statistics without selected IDs or
    transcripts.
-9. After the selected-300 audit, rerun `analyze_metric_predictors.py` on the
+10. After the selected-300 audit, rerun `analyze_metric_predictors.py` on the
    reviewed metric inputs and replace proxy-only predictor language with
    reviewer-facing evidence.

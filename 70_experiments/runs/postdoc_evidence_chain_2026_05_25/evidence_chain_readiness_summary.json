@@ -1,0 +1,133 @@
+{
+  "ok": true,
+  "paper_ready": false,
+  "status_counts": {
+    "completed": 5,
+    "proxy_completed": 4,
+    "review_pending": 1
+  },
+  "readiness_rows": [
+    {
+      "phase": "0",
+      "requirement": "migration and best-model selection checkpoint",
+      "status": "completed",
+      "paper_claim_status": "provenance evidence",
+      "evidence": "70_experiments/registry.tsv and run records",
+      "result": "Legacy import, best-model selection, and evidence-chain record are registered",
+      "next_action": "Keep raw weights and predictions local; commit only aggregate records."
+    },
+    {
+      "phase": "1",
+      "requirement": "legacy-best load smoke tests",
+      "status": "completed",
+      "paper_claim_status": "engineering gate only",
+      "evidence": "legacy best smoke summary JSON files",
+      "result": "LoRA and partial encoder each loaded one row with runtime, dtype, and cuDNN policy recorded",
+      "next_action": "Use 15-row fixed gate only after both smoke summaries are ok."
+    },
+    {
+      "phase": "2",
+      "requirement": "legacy best models join the fixed 15-row hypothesis contract",
+      "status": "completed",
+      "paper_claim_status": "engineering gate only",
+      "evidence": "legacy best 15-row validation JSON files",
+      "result": "Both legacy best hypotheses validate at 15 rows",
+      "next_action": "Run or refresh 15-row CDS bridge after contract validation."
+    },
+    {
+      "phase": "3",
+      "requirement": "CDS-ASR bridge over 15-row legacy-best hypotheses",
+      "status": "completed",
+      "paper_claim_status": "pilot evidence",
+      "evidence": "janus_15_decision_stability_legacy_best/asr_cds_model_comparison.tsv",
+      "result": "15-row bridge includes base, LoRA, and partial encoder decision-stability metrics",
+      "next_action": "Use the bridge as pilot evidence only; main claims need split/high-stakes evidence."
+    },
+    {
+      "phase": "4",
+      "requirement": "canonical 258-row six-model comparison with decision-risk metrics",
+      "status": "proxy_completed",
+      "paper_claim_status": "proxy evidence; not human-reviewed risk-atom evidence",
+      "evidence": "janus_258_test_split_asr_cds_proxy summary and comparison TSV",
+      "result": "Six-model 258-row comparison includes CER/WER plus risk-atom and unsafe-decision metrics",
+      "next_action": "Do not convert proxy risk-atom counts into paper-grade human claims."
+    },
+    {
+      "phase": "metric_policy",
+      "requirement": "strict WER/CER policy and manifest audit",
+      "status": "completed",
+      "paper_claim_status": "metric-definition evidence ready",
+      "evidence": "wer_metric_audit_2026_05_25 summary JSON files",
+      "result": "15-row, 258-row, and 300-row WER audits are ok with zero zero-reference-unit rows",
+      "next_action": "Use cer_zh_micro as primary surface metric; keep wer_zh_jieba_micro supplemental."
+    },
+    {
+      "phase": "5",
+      "requirement": "selected-300 high-stakes CDS-ASR main experiment proxy",
+      "status": "proxy_completed",
+      "paper_claim_status": "proxy evidence until human audit passes",
+      "evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json",
+      "result": "Selected-300 proxy main experiment has 300 references, 900 model-samples, and CEIS instability",
+      "next_action": "Complete selected-300 human risk-atom audit before paper-grade main claims."
+    },
+    {
+      "phase": "5",
+      "requirement": "WER/CER/SRES/CEIS predictor comparison on selected-300",
+      "status": "proxy_completed",
+      "paper_claim_status": "proxy evidence until model-level human labels exist",
+      "evidence": "janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json",
+      "result": "Proxy predictor analysis ranks CEIS as best unsafe-downrouting predictor over 900 samples",
+      "next_action": "Rerun predictor gate after model-level human review is complete."
+    },
+    {
+      "phase": "6",
+      "requirement": "five-condition recovery experiment",
+      "status": "proxy_completed",
+      "paper_claim_status": "proxy engineering evidence until human audit confirms labels",
+      "evidence": "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+      "result": "Five-condition proxy recovery gate reduces high-risk missed and critical miss under CEIS action",
+      "next_action": "Re-evaluate recovery after human-reviewed labels replace proxy labels."
+    },
+    {
+      "phase": "5",
+      "requirement": "selected-300 human risk-atom audit completion",
+      "status": "review_pending",
+      "paper_claim_status": "not paper-ready",
+      "evidence": "human_audit_validation_summary.json",
+      "result": "0/30 rows and 0/90 model assessments reviewed",
+      "next_action": "Fill local audit sheet, then run validator with --require-complete."
+    }
+  ],
+  "blocking_gates": [
+    {
+      "phase": "5",
+      "requirement": "selected-300 human risk-atom audit completion",
+      "status": "review_pending",
+      "next_action": "Fill local audit sheet, then run validator with --require-complete."
+    }
+  ],
+  "proxy_only_gates": [
+    {
+      "phase": "4",
+      "requirement": "canonical 258-row six-model comparison with decision-risk metrics",
+      "next_action": "Do not convert proxy risk-atom counts into paper-grade human claims."
+    },
+    {
+      "phase": "5",
+      "requirement": "selected-300 high-stakes CDS-ASR main experiment proxy",
+      "next_action": "Complete selected-300 human risk-atom audit before paper-grade main claims."
+    },
+    {
+      "phase": "5",
+      "requirement": "WER/CER/SRES/CEIS predictor comparison on selected-300",
+      "next_action": "Rerun predictor gate after model-level human review is complete."
+    },
+    {
+      "phase": "6",
+      "requirement": "five-condition recovery experiment",
+      "next_action": "Re-evaluate recovery after human-reviewed labels replace proxy labels."
+    }
+  ],
+  "next_decision": "Complete the selected-300 local human risk-atom audit, then rerun the aggregate summarizer, human-reviewed predictor gate, and recovery analysis before making paper-grade CDS-ASR claims.",
+  "runtime_seconds": 0.0029
+}

@@ -124,6 +124,11 @@ subset predictor table 要由這支工具重算。
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS
   evidence。
+- Evidence-chain readiness gate 已建立：
+  `80_semantic_risk_asr/scoring/check_evidence_chain_readiness.py`。目前輸出
+  `ok=true` 但 `paper_ready=false`，因為 selected-300 human audit 仍是
+  `0/30` rows reviewed、`0/90` model assessments reviewed。這個 gate 是防
+  止 proxy-only 結果被誤寫成 paper-grade conclusion 的主要 guardrail。
 - 2026-05-25 WER audit 確認：舊推論欄位是 raw whitespace WER，
   公式形式正確但不適合作為未斷詞中文主指標；最新 audit 已用 canonical
   manifest 驗證 legacy 15-row、六個 258-row run、三個 high-stakes 300-row

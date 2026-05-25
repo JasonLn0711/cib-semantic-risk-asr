@@ -80,6 +80,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
   complete comparable 258-row baselines, add split-aware metric inputs, run the
   300-row high-stakes main experiment, then evaluate recovery policies.
+- The machine-checkable evidence-chain readiness gate is
+  `80_semantic_risk_asr/scoring/check_evidence_chain_readiness.py`, with the
+  current aggregate output under
+  `70_experiments/runs/postdoc_evidence_chain_2026_05_25/`. Current status:
+  `ok=true`, `paper_ready=false`, because the selected-300 human risk-atom
+  audit remains `0/30` rows and `0/90` model assessments reviewed.
 - Split-aware metric-input generation now lives at
   `80_semantic_risk_asr/scoring/build_janus_metric_inputs.py`, with validation
   recorded in
