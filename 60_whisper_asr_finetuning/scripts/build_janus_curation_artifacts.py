@@ -53,6 +53,17 @@ RISK_TERMS = (
     "外幣",
 )
 
+GOLD_REVIEW_FIELDS = (
+    "human_verified_transcript",
+    "semantic_risk_label",
+    "risk_atoms",
+    "asr_confusion_terms",
+    "would_asr_error_change_decision",
+    "reviewer",
+    "review_date",
+    "review_notes",
+)
+
 
 @dataclass
 class AudioStats:
@@ -242,6 +253,17 @@ def write_jsonl(path: Path, rows: Iterable[dict[str, object]]) -> None:
             handle.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
+def read_existing_gold_reviews(path: Path) -> dict[str, dict[str, str]]:
+    if not path.exists():
+        return {}
+    with path.open(newline="", encoding="utf-8") as handle:
+        return {
+            row.get("audio_id", ""): row
+            for row in csv.DictReader(handle, delimiter="\t")
+            if row.get("audio_id")
+        }
+
+
 def flag_row(
     row: dict[str, object],
     stats: AudioStats,
@@ -307,7 +329,7 @@ def select_gold_subset(rows: list[dict[str, object]], sample_size: int) -> list[
     return selected[:sample_size]
 
 
-def write_gold_subset(path: Path, selected: list[dict[str, object]]) -> None:
+def write_gold_subset(path: Path, selected: list[dict[str, object]]) -> list[dict[str, object]]:
     fields = [
         "audio_id",
         "split",
@@ -326,29 +348,115 @@ def write_gold_subset(path: Path, selected: list[dict[str, object]]) -> None:
         "review_date",
         "review_notes",
     ]
+    existing_reviews = read_existing_gold_reviews(path)
     out_rows = []
     for row in selected:
+        audio_id = str(row["audio_id"])
+        existing = existing_reviews.get(audio_id, {})
+        out_row = {
+            "audio_id": audio_id,
+            "split": row["split"],
+            "path": row["overlay_rel"],
+            "duration_sec": row["duration_sec"],
+            "alignment_score": row["alignment_score"],
+            "source_audio_relative": row["source_audio_relative"],
+            "candidate_reference_transcript": row["text"],
+            "risk_keyword_hits": "|".join(row.get("risk_terms", [])),
+        }
+        for field in GOLD_REVIEW_FIELDS:
+            out_row[field] = existing.get(field, "")
+        out_rows.append(out_row)
+    write_tsv(path, out_rows, fields)
+    return out_rows
+
+
+def completed_gold_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    required = GOLD_REVIEW_FIELDS[:5]
+    return [
+        row
+        for row in rows
+        if all(str(row.get(field, "")).strip() for field in required)
+    ]
+
+
+def write_gold_completion_summary(path: Path, rows: list[dict[str, object]]) -> None:
+    required = GOLD_REVIEW_FIELDS[:5]
+    completed = completed_gold_rows(rows)
+    missing_by_field = {
+        field: sum(1 for row in rows if not str(row.get(field, "")).strip())
+        for field in required
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        f"""# Gold Subset Completion Summary
+
+Generated: {datetime.now().isoformat(timespec="seconds")}
+
+## Gate Status
+
+- Gold rows: {len(rows)}
+- Completed rows: {len(completed)}
+- Gate ready for NeMo/Whisper/Breeze pilot metrics: {"yes" if len(completed) == len(rows) and rows else "no"}
+
+## Required Review Fields
+
+{chr(10).join(f"- `{field}` missing rows: {count}" for field, count in missing_by_field.items())}
+
+## Rule
+
+Do not treat this subset as gold until every row has the five required review
+fields filled. Candidate transcripts remain candidate references only.
+""",
+        encoding="utf-8",
+    )
+
+
+def write_long_silence_review(
+    path: Path,
+    rows: list[dict[str, object]],
+    stats_by_id: dict[str, AudioStats],
+) -> list[dict[str, object]]:
+    fields = [
+        "audio_id",
+        "split",
+        "path",
+        "duration_sec",
+        "max_silence_sec",
+        "rms_ratio",
+        "peak_ratio",
+        "candidate_reference_transcript",
+        "risk_keyword_hits",
+        "review_status",
+        "reviewer",
+        "review_date",
+        "review_notes",
+    ]
+    out_rows = []
+    for row in rows:
+        if "long_silence" not in str(row.get("health_flags", "")):
+            continue
+        stats = stats_by_id[str(row["audio_id"])]
         out_rows.append(
             {
                 "audio_id": row["audio_id"],
                 "split": row["split"],
                 "path": row["overlay_rel"],
                 "duration_sec": row["duration_sec"],
-                "alignment_score": row["alignment_score"],
-                "source_audio_relative": row["source_audio_relative"],
+                "max_silence_sec": round(stats.max_silence_sec, 3)
+                if stats.max_silence_sec is not None
+                else "",
+                "rms_ratio": round(stats.rms_ratio, 6) if stats.rms_ratio is not None else "",
+                "peak_ratio": round(stats.peak_ratio, 6) if stats.peak_ratio is not None else "",
                 "candidate_reference_transcript": row["text"],
                 "risk_keyword_hits": "|".join(row.get("risk_terms", [])),
-                "human_verified_transcript": "",
-                "semantic_risk_label": "",
-                "risk_atoms": "",
-                "asr_confusion_terms": "",
-                "would_asr_error_change_decision": "",
+                "review_status": "",
                 "reviewer": "",
                 "review_date": "",
                 "review_notes": "",
             }
         )
     write_tsv(path, out_rows, fields)
+    return out_rows
 
 
 def write_nemo_manifest(path: Path, selected: list[dict[str, object]]) -> None:
@@ -745,6 +853,8 @@ def main() -> int:
     health_path = reports_dir / "audio_health_check.csv"
     health_summary_path = reports_dir / "audio_health_check_summary.md"
     gold_path = reports_dir / "gold_subset_review.tsv"
+    gold_summary_path = reports_dir / "gold_subset_completion_summary.md"
+    long_silence_path = reports_dir / "long_silence_review.tsv"
     task_path = reports_dir / "asr_evaluation_task.md"
     nemo_manifest_path = manifests_dir / "nemo_pilot_input_manifest.jsonl"
     nemo_runbook_path = reports_dir / "nemo_curator_pilot_runbook.md"
@@ -800,7 +910,9 @@ def main() -> int:
     )
 
     selected = select_gold_subset(rows, args.sample_size)
-    write_gold_subset(gold_path, selected)
+    gold_rows = write_gold_subset(gold_path, selected)
+    write_gold_completion_summary(gold_summary_path, gold_rows)
+    long_silence_rows = write_long_silence_review(long_silence_path, rows, stats_by_id)
     write_nemo_manifest(nemo_manifest_path, selected)
     write_task_definition(task_path, args.sample_size)
     write_asr_comparison_plan(comparison_path)
@@ -818,6 +930,8 @@ def main() -> int:
             health_path,
             health_summary_path,
             gold_path,
+            gold_summary_path,
+            long_silence_path,
             task_path,
             nemo_manifest_path,
             nemo_runbook_path,
@@ -833,6 +947,8 @@ def main() -> int:
         "modal_sample_rate": modal_sample_rate,
         "modal_channels": modal_channels,
         "flag_counts": dict(flag_counter),
+        "gold_completed_rows": len(completed_gold_rows(gold_rows)),
+        "long_silence_review_rows": len(long_silence_rows),
         "generated": [
             relpath(path, repo_root)
             for path in [
@@ -840,6 +956,8 @@ def main() -> int:
                 health_path,
                 health_summary_path,
                 gold_path,
+                gold_summary_path,
+                long_silence_path,
                 task_path,
                 nemo_manifest_path,
                 nemo_runbook_path,

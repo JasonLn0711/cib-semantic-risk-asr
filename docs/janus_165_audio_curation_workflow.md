@@ -55,6 +55,8 @@ The script writes:
 | `40_breeze_asr25_finetune_dataset/reports/audio_health_check.csv` | Row-level basic audio health check. | ignored local |
 | `40_breeze_asr25_finetune_dataset/reports/audio_health_check_summary.md` | Aggregate health summary. | ignored local |
 | `40_breeze_asr25_finetune_dataset/reports/gold_subset_review.tsv` | 15-row human review sheet with candidate transcript and empty gold fields. | ignored local |
+| `40_breeze_asr25_finetune_dataset/reports/gold_subset_completion_summary.md` | Completion summary for required gold-review fields. | ignored local |
+| `40_breeze_asr25_finetune_dataset/reports/long_silence_review.tsv` | 6-row bounded review sheet for long-silence health flags. | ignored local |
 | `40_breeze_asr25_finetune_dataset/reports/asr_evaluation_task.md` | Task definition for ASR-to-CDS evaluation beyond WER/CER. | ignored local |
 | `40_breeze_asr25_finetune_dataset/manifests/nemo_pilot_input_manifest.jsonl` | Custom manifest for NeMo Curator pilot. | ignored local |
 | `40_breeze_asr25_finetune_dataset/reports/nemo_curator_pilot_runbook.md` | NeMo pilot gate and output contract. | ignored local |
@@ -81,7 +83,8 @@ The script writes:
    `gold_subset_review.tsv` has 15 rows. The existing transcript is only a
    candidate reference. A row becomes gold after `human_verified_transcript`,
    `semantic_risk_label`, `risk_atoms`, `asr_confusion_terms`, and
-   `would_asr_error_change_decision` are filled.
+   `would_asr_error_change_decision` are filled. The curation builder preserves
+   existing review fields when rerun.
 
 5. Task definition: complete for the first pass.
    `asr_evaluation_task.md` defines keyword miss rate, risk phrase
@@ -116,14 +119,17 @@ The script writes:
    `asr_confusion_terms`, and `would_asr_error_change_decision`.
 4. Inspect the 6 `long_silence` rows as a bounded quality check; do not reopen
    all 4,967 rows unless a pattern appears.
-5. Run the NeMo Curator pilot only on `nemo_pilot_input_manifest.jsonl`.
-6. Verify NeMo output joins back to the gold subset through `audio_id`.
-7. Run the same 15-row subset through Whisper small, Whisper large-v2 or LoRA,
+5. Run `python 60_whisper_asr_finetuning/scripts/validate_janus_pilot_gate.py`
+   and expect it to pass before NeMo/Whisper/Breeze pilot metrics are treated
+   as evaluation evidence.
+6. Run the NeMo Curator pilot only on `nemo_pilot_input_manifest.jsonl`.
+7. Verify NeMo output joins back to the gold subset through `audio_id`.
+8. Run the same 15-row subset through Whisper small, Whisper large-v2 or LoRA,
    Breeze-ASR-25, and optional faster-whisper/WhisperX if available.
-8. Produce WER/CER plus risk-atom error and downstream label-flip checks.
-9. Generate counterfactual variants and compute CEIS for the same reviewed
+9. Produce WER/CER plus risk-atom error and downstream label-flip checks.
+10. Generate counterfactual variants and compute CEIS for the same reviewed
    subset.
-10. Expand to 300-500 high-stakes segments only after the 15-row gate shows a
+11. Expand to 300-500 high-stakes segments only after the 15-row gate shows a
     usable decision-stability signal.
 
 ## NeMo Reference Points

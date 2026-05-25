@@ -36,18 +36,29 @@ to the organized extracted audio under `../10_extracted_parts/`.
    ```
 
    This creates the canonical audio inventory, health check, gold-subset review
-   sheet, NeMo pilot manifest, and ASR comparison plan under ignored local
-   `40_breeze_asr25_finetune_dataset/manifests/` and `reports/` paths.
+   sheet, gold completion summary, long-silence review sheet, NeMo pilot
+   manifest, and ASR comparison plan under ignored local
+   `40_breeze_asr25_finetune_dataset/manifests/` and `reports/` paths. Existing
+   gold-review columns are preserved when the script is rerun.
 
-4. Pick a config:
+4. Check whether the pilot gate is ready:
+
+   ```bash
+   python 60_whisper_asr_finetuning/scripts/validate_janus_pilot_gate.py
+   ```
+
+   This is expected to fail until the 15-row gold subset and 6-row long-silence
+   review are filled.
+
+5. Pick a config:
 
    - `configs/whisper-small-smoke-test.yaml` for a low-cost pipeline check.
    - `configs/whisper-large-v2-lora-baseline.yaml` for the first serious LoRA baseline.
 
-5. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
+6. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
    run template from `../70_experiments/templates/run_record.md`.
 
-6. Register the run in `../70_experiments/registry.tsv` before starting long
+7. Register the run in `../70_experiments/registry.tsv` before starting long
    training.
 
 ## Layout
