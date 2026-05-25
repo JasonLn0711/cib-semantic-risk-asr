@@ -138,6 +138,14 @@ def test_post_review_checklist_blocks_until_closeout_and_refresh_complete(tmp_pa
     assert "recovery_proxy_only" in payload["blocker_keys"]
     assert payload["closeout_require_timing"] is True
     assert payload["closeout_review_timing"]["rows_missing_timing"] == 1
+    command_plan = payload["post_review_command_plan"]
+    assert command_plan["current_first_action"] == "complete_response_closeout"
+    assert command_plan["post_write_order"][0]["command"].endswith(
+        "80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py"
+    )
+    assert command_plan["post_write_order"][1]["command"].endswith(
+        "80_semantic_risk_asr/recovery/evaluate_human_reviewed_recovery_policies.py"
+    )
     status_by_step = {row["step_id"]: row["status"] for row in rows}
     assert status_by_step["1"] == "blocked"
     assert status_by_step["7"] == "proxy_only"
@@ -171,6 +179,10 @@ def test_post_review_checklist_marks_all_gates_ready(tmp_path: Path) -> None:
     assert payload["status"] == "post_review_evidence_ready"
     assert payload["blocker_keys"] == []
     assert payload["closeout_review_timing"]["rows_missing_timing"] == 0
+    assert (
+        payload["post_review_command_plan"]["current_first_action"]
+        == "ready_for_paper_claim_review"
+    )
     status_by_step = {row["step_id"]: row["status"] for row in rows}
     assert status_by_step["1"] == "ready"
     assert status_by_step["6"] == "ready"
@@ -201,5 +213,9 @@ def test_post_review_checklist_blocks_proxy_recovery_even_when_other_gates_ready
     assert payload["recovery_proxy_available"] is True
     assert payload["recovery_human_ready"] is False
     assert payload["blocker_keys"] == ["recovery_proxy_only"]
+    assert (
+        payload["post_review_command_plan"]["current_first_action"]
+        == "run_strict_human_reviewed_recovery"
+    )
     status_by_step = {row["step_id"]: row["status"] for row in rows}
     assert status_by_step["7"] == "proxy_only"

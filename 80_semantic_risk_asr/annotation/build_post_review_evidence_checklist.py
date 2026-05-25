@@ -79,6 +79,111 @@ def bool_status(condition: bool, *, ready: str = "ready", blocked: str = "blocke
     return ready if condition else blocked
 
 
+def command(parts: list[str]) -> str:
+    return " ".join(parts)
+
+
+def checklist_next_action(summary: dict[str, Any], step_id: str) -> str:
+    checklist = summary.get("checklist")
+    if not isinstance(checklist, list):
+        return ""
+    for item in checklist:
+        if isinstance(item, dict) and str(item.get("step_id", "")) == step_id:
+            return str(item.get("next_action", ""))
+    return ""
+
+
+def build_command_plan(
+    *,
+    closeout: dict[str, Any],
+    closeout_ready: bool,
+    refresh_complete: bool,
+    recovery_ready: bool,
+    paper_ready: bool,
+    publishable_ready: bool,
+    consequence_ready: bool,
+) -> dict[str, Any]:
+    commands = {
+        "human_audit_refresh": command(
+            [
+                ".venv/bin/python",
+                "80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py",
+            ]
+        ),
+        "strict_human_reviewed_recovery": command(
+            [
+                ".venv/bin/python",
+                "80_semantic_risk_asr/recovery/evaluate_human_reviewed_recovery_policies.py",
+            ]
+        ),
+        "post_review_checklist": command(
+            [
+                ".venv/bin/python",
+                "80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py",
+            ]
+        ),
+        "objective_requirements_audit": command(
+            [
+                ".venv/bin/python",
+                "80_semantic_risk_asr/scoring/audit_postdoc_objective_requirements.py",
+            ]
+        ),
+    }
+    closeout_commands = {
+        "strict_dry_run": checklist_next_action(closeout, "2"),
+        "write_refresh_prepare_next": checklist_next_action(closeout, "7"),
+    }
+    if not closeout_ready:
+        first_action = "complete_response_closeout"
+    elif not refresh_complete:
+        first_action = "run_human_audit_refresh"
+    elif not recovery_ready:
+        first_action = "run_strict_human_reviewed_recovery"
+    elif not (paper_ready and publishable_ready and consequence_ready):
+        first_action = "rerun_paper_facing_audits"
+    else:
+        first_action = "ready_for_paper_claim_review"
+
+    return {
+        "purpose": (
+            "Exact post-review command order after the local selected-300 "
+            "response TSV has human row/model/timing fields filled."
+        ),
+        "current_first_action": first_action,
+        "closeout_commands": closeout_commands,
+        "post_write_order": [
+            {
+                "order": 1,
+                "gate": "human_audit_refresh",
+                "command_key": "human_audit_refresh",
+                "command": commands["human_audit_refresh"],
+                "success_condition": "human_audit_refresh_summary.status == review_complete",
+            },
+            {
+                "order": 2,
+                "gate": "strict_human_reviewed_recovery",
+                "command_key": "strict_human_reviewed_recovery",
+                "command": commands["strict_human_reviewed_recovery"],
+                "success_condition": "summary.evidence_mode == human_reviewed and five policies emitted",
+            },
+            {
+                "order": 3,
+                "gate": "post_review_checklist",
+                "command_key": "post_review_checklist",
+                "command": commands["post_review_checklist"],
+                "success_condition": "human_audit_post_review_evidence_summary.status == post_review_evidence_ready",
+            },
+            {
+                "order": 4,
+                "gate": "objective_requirements_audit",
+                "command_key": "objective_requirements_audit",
+                "command": commands["objective_requirements_audit"],
+                "success_condition": "postdoc_objective_requirements_summary.objective_requirements_ready == true",
+            },
+        ],
+    }
+
+
 def recovery_proxy_available(summary: dict[str, Any]) -> bool:
     policies = summary.get("policies")
     if not isinstance(policies, dict):
@@ -291,6 +396,15 @@ def build_post_review_checklist(
         "human_recovery_status": human_recovery.get("status", "missing"),
         "human_recovery_evidence_mode": human_recovery.get("evidence_mode", ""),
         "blocker_keys": blocker_keys,
+        "post_review_command_plan": build_command_plan(
+            closeout=closeout,
+            closeout_ready=closeout_ready,
+            refresh_complete=refresh_complete,
+            recovery_ready=recovery_ready,
+            paper_ready=paper_ready,
+            publishable_ready=publishable_ready,
+            consequence_ready=consequence_ready,
+        ),
         "checklist": rows,
         "paper_ready_impact": (
             "No paper-readiness change. This checklist records the gates that must pass "
