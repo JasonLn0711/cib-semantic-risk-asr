@@ -139,6 +139,7 @@ Tracked readiness outputs:
 | `human_audit_current_review_batch_status_rows.tsv` | Repo-safe row-level completion checklist for the current packet. No audio IDs, transcripts, hypotheses, or reviewer notes. |
 | `human_audit_batch_response_template_summary.json` | Repo-safe record for the local response TSV template. Current template has `18` response rows for rows `1-6` and optional review-timing columns. |
 | `human_audit_batch_response_apply_summary.json` | Repo-safe strict dry-run/apply status for the local response TSV. Current `--require-complete` dry-run status is `response_pending`, `ok=false`, `incomplete_response=1`, with `0/6` rows, `0/18` model assessments, and `0/6` row review timings filled. |
+| `human_audit_batch_response_apply_log.tsv` | Append-only repo-safe response dry-run/write log. Current first entry records the blank strict dry-run as `response_pending` with aggregate counts only. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
@@ -208,6 +209,9 @@ The response TSV includes optional timing columns:
 `review_started_at`, `review_finished_at`, and `review_elapsed_seconds`.
 These fields are not completion gates, but filled values are summarized as
 aggregate review-time counts and seconds in the tracked apply summary.
+Every dry-run or write through the workflow also appends one repo-safe row to
+`human_audit_batch_response_apply_log.tsv` so failed, partial, and completed
+attempts remain auditable without storing transcript-bearing row content.
 
 After a reviewer fills that ignored TSV, dry-run it first. Use
 `--require-complete` as the completion gate; it should fail until all required

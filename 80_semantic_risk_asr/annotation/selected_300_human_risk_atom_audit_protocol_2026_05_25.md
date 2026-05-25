@@ -185,6 +185,9 @@ The generated TSV may include optional timing columns:
 fields are not part of the review-completion gate, but they should be filled
 when available so the tracked apply summary can report aggregate review-time
 coverage and elapsed seconds without exposing transcript-bearing row content.
+Each dry-run or write appends one aggregate-only row to
+`human_audit_batch_response_apply_log.tsv`; use that file as the operation log
+for response attempts.
 
 After filling the ignored response TSV, dry-run it with the strict completion
 gate:

@@ -225,7 +225,8 @@ readiness、publishable completion outputs。
   response template 也已建立，涵蓋 `18` response rows；目前 blank dry-run 是
   `response_pending`。新的 response TSV 包含 optional review timing 欄位
   `review_started_at`、`review_finished_at`、`review_elapsed_seconds`；目前
-  tracked apply summary 記錄 `0/6` rows 有 timing。嚴格
+  tracked apply summary 記錄 `0/6` rows 有 timing，且每次 dry-run/write 都會
+  append 一列 aggregate-only `human_audit_batch_response_apply_log.tsv`。嚴格
   `--require-complete` dry-run 目前會以 `ok=false` 和
   `incomplete_response=1` 退出，代表尚未填入 reviewer decisions；這是
   `--write` 前的完成性 gate。嚴格 dry-run 通過後，使用
@@ -732,10 +733,10 @@ Interpretation:
    `apply_human_audit_batch_response.py --require-complete` dry-run 到
    `response_complete` 後再用 `--write --refresh-after-write`；若 reviewer
    可以記錄時間，填 optional timing 欄位，讓 tracked summary 保留 aggregate
-   review-time coverage 與 elapsed seconds。需要連續產生下一批時加
-   `--prepare-next-after-write`。這會寫入 local sheet、重跑 batch status
-   audit、並在 `batch_complete` 後刷新 aggregate readiness / publishable
-   completion。
+   review-time coverage 與 elapsed seconds，並讓 apply log 留下每次
+   dry-run/write attempt。需要連續產生下一批時加 `--prepare-next-after-write`。
+   這會寫入 local sheet、重跑 batch status audit、並在 `batch_complete` 後刷新
+   aggregate readiness / publishable completion。
 2. 跑
    `validate_human_risk_atom_audit.py --require-complete --expected-rows 30`；
    通過後才產出 aggregate human annotation stats，確認沒有 selected IDs 或 transcript
