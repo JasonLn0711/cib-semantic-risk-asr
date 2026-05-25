@@ -5,6 +5,17 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.54 - 2026-05-25T18:49:16+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `332ffce`
+- Branch: `main`
+- Summary: Add aggregate human audit review summarizer.
+- Changed files:
+  - `80_semantic_risk_asr/annotation/summarize_human_risk_atom_audit.py`
+  - `tests/test_human_audit_summary.py`
+
 ## v2.5.53 - 2026-05-25T18:42:43+08:00
 
 - Bump: `patch`
