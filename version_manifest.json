@@ -1,23 +1,23 @@
 {
-  "version": "v2.5.13",
+  "version": "v2.5.14",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 13
+    "patch": 14
   },
-  "updated_at": "2026-05-25T08:38:42+08:00",
+  "updated_at": "2026-05-25T08:44:48+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "8c17153",
+  "base_commit": "352612a",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
-  "summary": "Add local JANUS gold review packet generation.",
+  "summary": "Add interactive JANUS pilot review helper.",
   "changed_files": [
     "60_whisper_asr_finetuning/README.md",
-    "60_whisper_asr_finetuning/scripts/build_janus_curation_artifacts.py",
+    "60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py",
     "docs/janus_165_audio_curation_workflow.md"
   ]
 }

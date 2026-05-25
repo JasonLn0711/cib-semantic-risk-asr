@@ -121,18 +121,21 @@ The script writes:
 4. Inspect the 6 `long_silence` rows as a bounded quality check; do not reopen
    all 4,967 rows unless a pattern appears.
 5. Use `gold_review_packet.md` as the row-by-row listening guide if manually
-   filling the local review sheets.
-6. Run `python 60_whisper_asr_finetuning/scripts/validate_janus_pilot_gate.py`
+   filling the local review sheets, or use the interactive helper:
+   `python 60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py --mode gold --reviewer <name> --play`.
+6. Fill the 6 long-silence rows with:
+   `python 60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py --mode long-silence --reviewer <name> --play`.
+7. Run `python 60_whisper_asr_finetuning/scripts/validate_janus_pilot_gate.py`
    and expect it to pass before NeMo/Whisper/Breeze pilot metrics are treated
    as evaluation evidence.
-7. Run the NeMo Curator pilot only on `nemo_pilot_input_manifest.jsonl`.
-8. Verify NeMo output joins back to the gold subset through `audio_id`.
-9. Run the same 15-row subset through Whisper small, Whisper large-v2 or LoRA,
+8. Run the NeMo Curator pilot only on `nemo_pilot_input_manifest.jsonl`.
+9. Verify NeMo output joins back to the gold subset through `audio_id`.
+10. Run the same 15-row subset through Whisper small, Whisper large-v2 or LoRA,
    Breeze-ASR-25, and optional faster-whisper/WhisperX if available.
-10. Produce WER/CER plus risk-atom error and downstream label-flip checks.
-11. Generate counterfactual variants and compute CEIS for the same reviewed
+11. Produce WER/CER plus risk-atom error and downstream label-flip checks.
+12. Generate counterfactual variants and compute CEIS for the same reviewed
    subset.
-12. Expand to 300-500 high-stakes segments only after the 15-row gate shows a
+13. Expand to 300-500 high-stakes segments only after the 15-row gate shows a
     usable decision-stability signal.
 
 ## NeMo Reference Points

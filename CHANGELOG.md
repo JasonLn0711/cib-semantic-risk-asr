@@ -5,6 +5,18 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.14 - 2026-05-25T08:44:48+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `352612a`
+- Branch: `main`
+- Summary: Add interactive JANUS pilot review helper.
+- Changed files:
+  - `60_whisper_asr_finetuning/README.md`
+  - `60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py`
+  - `docs/janus_165_audio_curation_workflow.md`
+
 ## v2.5.13 - 2026-05-25T08:38:42+08:00
 
 - Bump: `patch`

@@ -50,15 +50,32 @@ to the organized extracted audio under `../10_extracted_parts/`.
    This is expected to fail until the 15-row gold subset and 6-row long-silence
    review are filled.
 
-5. Pick a config:
+5. Fill the local review sheets before treating pilot metrics as evidence:
+
+   ```bash
+   python 60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py --list-incomplete
+   python 60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py --mode gold --reviewer <name> --play
+   python 60_whisper_asr_finetuning/scripts/review_janus_pilot_gate.py --mode long-silence --reviewer <name> --play
+   ```
+
+   The helper writes only to ignored local TSV files. It does not commit
+   transcripts, review notes, or audio-derived manual judgments.
+
+6. Re-run the pilot gate:
+
+   ```bash
+   python 60_whisper_asr_finetuning/scripts/validate_janus_pilot_gate.py
+   ```
+
+7. Pick a config:
 
    - `configs/whisper-small-smoke-test.yaml` for a low-cost pipeline check.
    - `configs/whisper-large-v2-lora-baseline.yaml` for the first serious LoRA baseline.
 
-6. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
+8. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
    run template from `../70_experiments/templates/run_record.md`.
 
-7. Register the run in `../70_experiments/registry.tsv` before starting long
+9. Register the run in `../70_experiments/registry.tsv` before starting long
    training.
 
 ## Layout
