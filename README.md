@@ -78,6 +78,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
   complete comparable 258-row baselines, add split-aware metric inputs, run the
   300-row high-stakes main experiment, then evaluate recovery policies.
+- Split-aware metric-input generation now lives at
+  `80_semantic_risk_asr/scoring/build_janus_metric_inputs.py`, with validation
+  recorded in
+  `70_experiments/runs/janus_split_aware_metric_inputs_2026_05_25/`. Full
+  manifest transcripts are available for `4967` rows, but full human-reviewed
+  CDS ground truth currently covers the 15-row gold subset only.
 - Treat audio/call data and filenames as sensitive.
 - If storage cleanup is needed later, review `30_review_flags/REVIEW.md` and `20_inventory/largest_files.tsv` first.
 

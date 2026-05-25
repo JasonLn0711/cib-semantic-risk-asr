@@ -137,8 +137,10 @@ Current execution priority after the 258-row gate:
    contract before full split runs.
 3. Keep Gemma 4 E2B/E4B as a separate prompted multimodal ASR lane, not as a
    pure ASR baseline.
-4. Add a split-aware `build_janus_metric_inputs.py` so 15-row, 258-row, and
-   300-row experiments use the same metric-input contract.
+4. Use the split-aware `build_janus_metric_inputs.py` so 15-row, 258-row, and
+   300-row experiments share the same metric-input contract. Current local
+   validation: the script reproduces the 15-row human-reviewed legacy bridge
+   counts and can process the 258-row partial-vs-LoRA comparison in proxy mode.
 5. Run the selected 300-row high-stakes expansion as the main experiment only
    after the split-aware builder is validated.
 

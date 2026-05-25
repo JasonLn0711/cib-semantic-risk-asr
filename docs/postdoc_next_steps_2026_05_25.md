@@ -496,21 +496,24 @@ Ensemble arbitration 可以先用：
   raw predictions、model weights 放進 git。
 - 不要在沒有 recovery experiment 前，把 CDS-ASR 說成完整防護系統。
 
-## 下一個 commit 應該完成什麼
+## 下一個 code gate 狀態
 
-最合理的下一個 code commit 不是模型實驗，而是：
+第一個 code gate 已經從 roadmap 轉成實作：
 
 ```text
 feat: add split-aware JANUS metric input builder
 ```
 
-內容：
+完成內容：
 
 - 新增 `build_janus_metric_inputs.py`；
 - 保留舊 pilot builder 的相容性；
 - 支援 `pilot_15`、`test_258`、`high_stakes_300`；
 - 讓 output metadata 標記 `human_reviewed` 或 `proxy_only`；
-- 加上 validator / smoke test；
+- 加上 15-row human-reviewed compatibility validation；
+- 加上 258-row proxy-mode validation；
 - 更新 run log。
 
 這會把 repo 從「已經有幾個成功實驗」推進到「可以穩定產生主實驗」。
+下一個實驗 gate 是補齊 comparable 258-row baselines，然後用同一個
+split-aware builder 重建 expanded metric inputs。
