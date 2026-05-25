@@ -4,7 +4,7 @@
   "input_boundary": "tracked aggregate response/session summaries only",
   "output_boundary": "aggregate-only response closeout checklist; no row keys or transcript text",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
-  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
+  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
   "selection_stratum": "critical_or_high_risk_missed",
   "rows_in_batch": 6,
   "reviewed_rows_in_response": 0,

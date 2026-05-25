@@ -22,6 +22,9 @@
     "current_packet_rows_total": 6,
     "current_packet_model_assessments_pending": 18,
     "current_packet_model_assessments_total": 18,
+    "current_packet_timing_rows_with": 0,
+    "current_packet_timing_rows_missing": 6,
+    "current_packet_timing_required": true,
     "response_closeout_status": "response_closeout_blocked",
     "latest_apply_status": "response_pending"
   },
@@ -47,7 +50,7 @@
     ]
   },
   "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
-  "remaining_review_scope": "Remaining selected-300 review work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
+  "remaining_review_scope": "Remaining selected-300 review work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
   "roadmap_rows": [
     {
       "roadmap_step_id": "0_state_checkpoint",
@@ -106,8 +109,8 @@
       "paper_claim_status": "not paper-ready",
       "authoritative_evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json; janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json; human_audit_refresh_summary.json; human_audit_predictor_summary.json",
       "current_evidence_result": "Selected-300 proxy inputs, metric-predictor proxy, and refresh gate exist, but selected-300 risk-atom review is 0/30 rows and 0/90 model assessments; transcript ground truth is already accepted for WER/CER scoring. Current reviewer action gate is reviewer_action_ready: 6/6 packet rows and 18/18 model assessments pending.",
-      "blocking_dependency": "selected-300 risk-atom, decision-change, and per-model assessment completion",
-      "next_action": "Fill the selected-300 reviewer fields that are not transcript ground truth, rerun refresh with --require-complete, then use human-reviewed predictor outputs."
+      "blocking_dependency": "selected-300 risk-atom, decision-change, per-model assessment, and per-row timing completion",
+      "next_action": "Fill the selected-300 reviewer fields that are not transcript ground truth plus per-row review timing, rerun the strict response dry-run with --require-complete --require-timing, then use human-reviewed predictor outputs."
     },
     {
       "roadmap_step_id": "6_recovery_experiment",
@@ -125,7 +128,7 @@
       "status": "blocked",
       "paper_claim_status": "not paper-ready",
       "authoritative_evidence": "human_audit_response_closeout_summary.json; human_audit_refresh_summary.json; human_audit_predictor_summary.json; human_audit_post_review_evidence_summary.json; evidence_chain_readiness_summary.json; publishable_evidence_completion_summary.json; consequence_evidence_matrix_summary.json",
-      "current_evidence_result": "Post-review evidence remains blocked: closeout=False, refresh=False, predictor=False, publishable=False, consequence=False, human_recovery=False. Current selected-300 review is 0/30 rows and 0/90 model assessments; current packet pending 6/6 rows and 18/18 model assessments.",
+      "current_evidence_result": "Post-review evidence remains blocked: closeout=False, refresh=False, predictor=False, publishable=False, consequence=False, human_recovery=False. Current selected-300 review is 0/30 rows and 0/90 model assessments; current packet pending 6/6 rows and 18/18 model assessments, with 6 timing rows missing.",
       "blocking_dependency": "response_closeout_not_ready, human_refresh_not_complete, human_predictor_not_complete, paper_ready_false, publishable_ready_false, consequence_paper_claims_not_ready, recovery_proxy_only",
       "next_action": "Complete the response closeout gate first; then write/refresh and rerun this checklist."
     }
@@ -140,8 +143,8 @@
     {
       "roadmap_step_id": "5_high_stakes_300_main_experiment",
       "status": "review_pending",
-      "blocking_dependency": "selected-300 risk-atom, decision-change, and per-model assessment completion",
-      "next_action": "Fill the selected-300 reviewer fields that are not transcript ground truth, rerun refresh with --require-complete, then use human-reviewed predictor outputs."
+      "blocking_dependency": "selected-300 risk-atom, decision-change, per-model assessment, and per-row timing completion",
+      "next_action": "Fill the selected-300 reviewer fields that are not transcript ground truth plus per-row review timing, rerun the strict response dry-run with --require-complete --require-timing, then use human-reviewed predictor outputs."
     },
     {
       "roadmap_step_id": "6_recovery_experiment",
@@ -157,6 +160,6 @@
     }
   ],
   "first_principle_decision": "The repo should now optimize for a publishable consequence evidence chain, not a longer ASR leaderboard. New ASR candidates stop at the locale/runtime gate unless they change the CDS-ASR paper evidence.",
-  "next_decision": "Close the selected-300 response gate, write/refresh aggregate human review evidence, rerun predictor and recovery analyses, then rerun this roadmap audit before claiming the objective is complete.",
+  "next_decision": "Close the selected-300 row/model/timing response gate, write/refresh aggregate human review evidence, rerun predictor and recovery analyses, then rerun this roadmap audit before claiming the objective is complete.",
   "runtime_seconds": 0.0002
 }

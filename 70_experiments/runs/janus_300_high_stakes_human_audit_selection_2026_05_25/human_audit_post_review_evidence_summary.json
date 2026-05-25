@@ -4,8 +4,24 @@
   "input_boundary": "tracked aggregate summaries only",
   "output_boundary": "aggregate-only post-review evidence checklist; no row keys or transcript text",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
-  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
+  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
   "closeout_ready": false,
+  "closeout_require_timing": true,
+  "closeout_review_timing": {
+    "timing_scope": "per selected audio row; values come from local response TSV timing columns",
+    "timing_requirement": "required",
+    "timing_fields": [
+      "review_started_at",
+      "review_finished_at",
+      "review_elapsed_seconds"
+    ],
+    "rows_with_timing": 0,
+    "rows_missing_timing": 6,
+    "total_review_elapsed_seconds": 0,
+    "mean_review_elapsed_seconds": "",
+    "min_review_elapsed_seconds": "",
+    "max_review_elapsed_seconds": ""
+  },
   "refresh_complete": false,
   "predictor_complete": false,
   "paper_ready": false,
@@ -28,8 +44,8 @@
       "evidence_gate": "response closeout write readiness",
       "status": "blocked",
       "paper_claim_status": "not paper-ready",
-      "evidence": "closeout_status=response_closeout_blocked; pending_rows=6; pending_model_assessments=18",
-      "next_action": "fill the local response TSV, rerun session-gated strict dry-run, then closeout"
+      "evidence": "closeout_status=response_closeout_blocked; pending_rows=6; pending_model_assessments=18; require_timing=True; rows_missing_timing=6",
+      "next_action": "fill the local response TSV row/model fields plus per-row timing, rerun session-gated strict dry-run with --require-complete --require-timing, then closeout"
     },
     {
       "step_id": "2",
@@ -81,12 +97,12 @@
     }
   ],
   "paper_ready_impact": "No paper-readiness change. This checklist records the gates that must pass after reviewer response write/refresh before proxy claims can be promoted.",
-  "next_concrete_action": "Complete the response closeout gate first; then write/refresh and rerun this checklist.",
+  "next_concrete_action": "Complete the response closeout gate first: fill row/model/timing fields, rerun the session-gated strict dry-run with --require-complete --require-timing, then write/refresh and rerun this checklist.",
   "tracked_outputs": {
     "summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json",
     "checklist_tsv": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_checklist.tsv",
     "readiness_dir": "70_experiments/runs/postdoc_evidence_chain_2026_05_25",
     "recovery_summary": "70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json"
   },
-  "runtime_seconds": 0.0025
+  "runtime_seconds": 0.0004
 }

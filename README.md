@@ -114,7 +114,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   reviewer handoff and response closeout path now also require per-row review
   timing in the strict dry-run/write commands, so the current live closeout
   reports both `incomplete_response` and `missing_review_timing` until the
-  local response TSV records row/model decisions plus timing coverage.
+  local response TSV records row/model decisions plus timing coverage. The
+  high-level readiness, publishable, roadmap, post-review, consequence, and
+  refresh summaries now surface the same timing blocker so the paper-readiness
+  path cannot accidentally treat row/model fields as sufficient without review
+  elapsed-time evidence.
   The post-review evidence checklist
   `80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py`
   now records the aggregate gates that must pass after response closeout,
@@ -126,7 +130,8 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py`; its
   current output records `publishable_ready=false` with objective `5`
   `review_pending`, objectives `4`/`6` still proxy-only, and the same reviewer
-  action gate surfaced as the next execution state.
+  action gate surfaced as the next execution state, including `6/6` timing rows
+  still pending for the current packet.
 - Split-aware metric-input generation now lives at
   `80_semantic_risk_asr/scoring/build_janus_metric_inputs.py`, with validation
   recorded in

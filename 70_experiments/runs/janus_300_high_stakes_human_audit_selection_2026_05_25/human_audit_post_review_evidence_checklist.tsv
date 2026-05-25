@@ -1,5 +1,5 @@
 step_id	evidence_gate	status	paper_claim_status	evidence	next_action
-1	response closeout write readiness	blocked	not paper-ready	closeout_status=response_closeout_blocked; pending_rows=6; pending_model_assessments=18	fill the local response TSV, rerun session-gated strict dry-run, then closeout
+1	response closeout write readiness	blocked	not paper-ready	closeout_status=response_closeout_blocked; pending_rows=6; pending_model_assessments=18; require_timing=True; rows_missing_timing=6	fill the local response TSV row/model fields plus per-row timing, rerun session-gated strict dry-run with --require-complete --require-timing, then closeout
 2	post-write aggregate refresh	blocked	review-pending	refresh_status=review_pending; pending_rows=30; pending_model_assessments=90	run apply response with --write --refresh-after-write, then require refresh review_complete
 3	human-reviewed predictor refresh	blocked	proxy-only	predictor_status=review_pending; pending_model_assessments=90	refresh human-audit predictor outputs after selected rows are reviewed
 4	evidence-chain readiness	blocked	not paper-ready	paper_ready=False	run check_evidence_chain_readiness.py after human refresh

@@ -29,10 +29,11 @@
     "rows_in_batch": 6,
     "pending_model_assessments_in_batch": 18,
     "model_assessments_in_batch": 18,
+    "rows_missing_timing": 6,
     "latest_apply_status": "response_pending"
   },
   "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
-  "remaining_review_scope": "Remaining selected-300 review work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
+  "remaining_review_scope": "Remaining selected-300 review work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
   "completion_rows": [
     {
       "objective_id": "0",
@@ -91,8 +92,8 @@
       "paper_claim_status": "not paper-ready",
       "evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json; janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json; human_audit_refresh_summary.json; human_audit_predictor_summary.json",
       "result": "Selected-300 proxy inputs, metric-predictor proxy, and refresh gate exist, but selected-300 risk-atom review is 0/30 rows and 0/90 model assessments; transcript ground truth is already accepted for WER/CER scoring. Current reviewer action gate is reviewer_action_ready: 6/6 packet rows and 18/18 model assessments pending.",
-      "blocking_dependency": "selected-300 risk-atom, decision-change, and per-model assessment completion",
-      "next_action": "Fill the selected-300 reviewer fields that are not transcript ground truth, rerun refresh with --require-complete, then use human-reviewed predictor outputs."
+      "blocking_dependency": "selected-300 risk-atom, decision-change, per-model assessment, and per-row timing completion",
+      "next_action": "Fill the selected-300 reviewer fields that are not transcript ground truth plus per-row review timing, rerun the strict response dry-run with --require-complete --require-timing, then use human-reviewed predictor outputs."
     },
     {
       "objective_id": "6",
@@ -117,8 +118,8 @@
       "objective_id": "5",
       "objective": "selected-300 high-stakes main experiment",
       "status": "review_pending",
-      "blocking_dependency": "selected-300 risk-atom, decision-change, and per-model assessment completion",
-      "next_action": "Fill the selected-300 reviewer fields that are not transcript ground truth, rerun refresh with --require-complete, then use human-reviewed predictor outputs."
+      "blocking_dependency": "selected-300 risk-atom, decision-change, per-model assessment, and per-row timing completion",
+      "next_action": "Fill the selected-300 reviewer fields that are not transcript ground truth plus per-row review timing, rerun the strict response dry-run with --require-complete --require-timing, then use human-reviewed predictor outputs."
     },
     {
       "objective_id": "6",
@@ -129,6 +130,6 @@
     }
   ],
   "first_principle_decision": "Do not spend more GPU time to chase ASR fine-tuning until the selected-300 risk-atom and model-assessment audit converts proxy CDS-ASR evidence into paper-grade evidence; do not duplicate transcript review.",
-  "next_decision": "Complete selected-300 risk-atom, decision-change, and per-model assessment fields, run the refresh gate with --require-complete, then rerun human-reviewed predictor and recovery claims.",
+  "next_decision": "Complete selected-300 risk-atom, decision-change, per-model assessment, and per-row timing fields, run the strict response gate with --require-complete --require-timing, then rerun human-reviewed predictor and recovery claims.",
   "runtime_seconds": 0.0001
 }
