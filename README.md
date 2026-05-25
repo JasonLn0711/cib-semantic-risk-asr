@@ -88,8 +88,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   runtime exposes `AutoModelForMultimodalLM`. A 2026-05-26 query-time
   verification rechecked the registry, reran SenseVoice/Qwen 0.6B hypothesis
   validators, and confirmed the local Transformers runtime still lacks the
-  Gemma 4 multimodal model classes; no remaining requested candidate should
-  move to full-split runtime before locale/runtime policy changes.
+  Gemma 4 multimodal model classes. A later 2026-05-26 02:03 CST live
+  metadata check also confirmed all requested model pages remain public and
+  ungated; no remaining requested candidate should move to full-split runtime
+  before locale/runtime policy changes.
 - The postdoc-level roadmap after the 258-row gate is recorded in
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
   complete comparable 258-row baselines, add split-aware metric inputs, run the
@@ -110,7 +112,8 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   now records the aggregate gates that must pass after response closeout,
   write, and refresh; current status is `post_review_evidence_blocked`
   because human refresh/predictor outputs are incomplete and recovery evidence
-  is still proxy-only.
+  is still proxy-only. Normal `refresh_human_audit_evidence.py` now updates
+  this post-review evidence status in `human_audit_refresh_summary.json`.
   A stricter objective-by-objective publication audit is
   `80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py`; its
   current output records `publishable_ready=false` with objective `5`

@@ -43,11 +43,16 @@ step is not a 258-row run; it is a bounded locale-control decision:
 
 ## Follow-Up Verification
 
-2026-05-26 01:38 CST: after the user asked whether any remaining ASR/Gemma
-candidates should now be tested, the aggregate registry and candidate records
-were rechecked. No untested pure-ASR candidate from the requested expansion set
-remains runnable without first changing the gate decision:
+2026-05-26 02:03 CST: after the user asked whether any remaining ASR/Gemma
+candidates should now be tested, the aggregate registry, candidate records,
+local runtime, and live Hugging Face metadata were rechecked. No untested
+pure-ASR candidate from the requested expansion set remains runnable without
+first changing the gate decision:
 
+- All seven requested model pages remain public and ungated in live Hugging
+  Face metadata. The current SHA prefixes are:
+  `06f233fe06e7`, `41f01f3fe87f`, `716d31dbfd64`, `5eb144179a02`,
+  `7278e1e70fe2`, `ed37665cc131`, and `5bf6a20911f0`.
 - `validate_janus_asr_hypotheses.py --require-labels --require-quality-signal`
   still passes for the SenseVoiceSmall and Qwen3-ASR-0.6B 15-row hypothesis
   files.

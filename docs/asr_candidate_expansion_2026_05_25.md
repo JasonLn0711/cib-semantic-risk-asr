@@ -132,7 +132,8 @@ conversion/reporting policy before any promotion.
 
 After the user asked whether the remaining ASR and multimodal Gemma 4 models
 should now be tested, the current candidate matrix was rechecked against the
-tracked registry and local runtime at 2026-05-26 01:38 CST.
+tracked registry, local runtime, and live Hugging Face metadata at 2026-05-26
+02:03 CST.
 
 Verification commands:
 
@@ -141,10 +142,28 @@ awk -F '\t' 'NR==1 || $1 ~ /whisper_large_v3|sensevoice|qwen3|gemma4|asr_candida
 .venv/bin/python -c 'import transformers; print(transformers.__version__); print(hasattr(transformers, "AutoModelForMultimodalLM")); print(hasattr(transformers, "Gemma4ForConditionalGeneration"))'
 .venv/bin/python 80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py --hypotheses 70_experiments/runs/sensevoice_small_15_row_candidate/predictions/sensevoice_small_15_row_candidate_predictions.jsonl --require-labels --require-quality-signal --output-json /tmp/sensevoice_validate_current.json
 .venv/bin/python 80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py --hypotheses 70_experiments/runs/qwen3_asr_0_6b_15_row_candidate/predictions/qwen3_asr_0_6b_15_row_candidate_predictions.jsonl --require-labels --require-quality-signal --output-json /tmp/qwen3_0_6b_validate_current.json
+.venv/bin/python - <<'PY'
+from huggingface_hub import model_info
+for model_id in [
+    "openai/whisper-large-v3",
+    "openai/whisper-large-v3-turbo",
+    "FunAudioLLM/SenseVoiceSmall",
+    "Qwen/Qwen3-ASR-0.6B",
+    "Qwen/Qwen3-ASR-1.7B",
+    "unsloth/gemma-4-E2B",
+    "unsloth/gemma-4-E4B",
+]:
+    info = model_info(model_id)
+    print(model_id, (info.sha or "")[:12], info.private, info.gated, info.pipeline_tag)
+PY
 ```
 
 Result:
 
+- Live Hugging Face metadata at 2026-05-26 02:03 CST still reports all seven
+  requested model pages as public and ungated. Current SHA prefixes:
+  `06f233fe06e7`, `41f01f3fe87f`, `716d31dbfd64`, `5eb144179a02`,
+  `7278e1e70fe2`, `ed37665cc131`, and `5bf6a20911f0`.
 - Whisper large-v3 and large-v3-turbo already have fixed 15-row gates and both
   remain locale-not-clean.
 - SenseVoiceSmall and Qwen3-ASR-0.6B already have fixed 15-row contract-passed

@@ -130,16 +130,18 @@ subset predictor table 要由這支工具重算。
   `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json`。
 - Current state: normal refresh `ok=true` but `review_pending`；`0/30`
   risk/decision row reviews、`0/90` model assessments reviewed、evidence-chain
-  `paper_ready=false`、publishable completion `publishable_ready=false`。
+  `paper_ready=false`、publishable completion `publishable_ready=false`、
+  post-review evidence `post_review_evidence_blocked`。
 - Strict post-review mode:
   `--require-complete` 目前會因 `30` risk/decision row reviews 與 `90`
   model reviews 尚未完成而失敗，這是正確 guardrail。
 
 這支工具把 validator、progress audit、aggregate review summary、
 human-reviewed predictor gate、evidence-chain readiness、publishable
-completion audit、roadmap completion audit 串成同一個可重跑操作。人工審閱
-仍必須在 local ignored sheet 完成；refresh gate 只負責把完成後的 aggregate
-evidence 同步到 tracked outputs。
+completion audit、roadmap completion audit、post-review evidence checklist
+串成同一個可重跑操作。人工審閱仍必須在 local ignored sheet 完成；refresh
+gate 只負責把完成後的 aggregate evidence 同步到 tracked outputs，且不會因
+post-review paper-claim gate 尚未完成而讓一般 refresh 失敗。
 
 13. Publishable evidence completion audit 已建立：
 
@@ -233,8 +235,11 @@ review-pending、post-review blocked 分開，避免把目前已經很完整的 
   transcript 欄位與內容，否則不要重開 transcript 人審。剩餘人審 gate 應限
   縮在 selected-300 的 risk-atom、decision-change、per-model assessment。
 - Whisper large-v3、large-v3 turbo、SenseVoice、Qwen3-ASR、Gemma 4 audio
-  候選已加入矩陣，但尚未有完整 runner、smoke、15-row contract、或
-  258-row evidence。
+  候選已加入矩陣。Whisper large-v3 / turbo、SenseVoiceSmall、
+  Qwen3-ASR-0.6B 都已有固定小 gate evidence；Qwen3-ASR-1.7B 仍是
+  fetch/load timeout；Gemma 4 E2B/E4B 仍是 multimodal runtime-class gate
+  blocked。沒有任何新增候選應在 strict zh-TW locale 或 runtime policy
+  解決前升到 258-row。
 - 300 high-stakes ASR hypotheses、SRES/CEIS/downstream、metric-predictor、
   recovery 都已完成三個 Breeze-family comparator 的 proxy mode；human audit
   queue、aggregate summarizer、human-reviewed predictor gate 已建立，但目前
