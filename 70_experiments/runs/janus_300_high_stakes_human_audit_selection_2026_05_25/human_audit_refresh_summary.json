@@ -1,0 +1,45 @@
+{
+  "ok": true,
+  "status": "review_pending",
+  "require_complete": false,
+  "input_boundary": "local ignored audit sheet only; no private row content is emitted",
+  "output_boundary": "aggregate tracked outputs only",
+  "audit_rows": 30,
+  "reviewed_rows": 0,
+  "pending_rows": 30,
+  "model_assessments": 90,
+  "reviewed_model_assessments": 0,
+  "pending_model_assessments": 90,
+  "validation_ok": true,
+  "validation_error_counts": {},
+  "validation_warning_counts": {
+    "pending_model_review": 90,
+    "pending_row_review": 30
+  },
+  "review_summary_status": "review_pending",
+  "predictor_status": "review_pending",
+  "readiness_ok": true,
+  "readiness_paper_ready": false,
+  "readiness_status_counts": {
+    "completed": 5,
+    "proxy_completed": 4,
+    "review_pending": 1
+  },
+  "downstream_outputs_refreshed": true,
+  "outputs": [
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_validation_summary.json",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_validation_counts.tsv",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_summary.json",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_strata_review.tsv",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_risk_atom_review.tsv",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_model_review.tsv",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_summary.json",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_comparison.tsv",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_model_summary.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness.tsv",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"
+  ],
+  "runtime_seconds": 0.0079,
+  "next_action": "Complete all local row-level and model-level human review fields, then rerun with --require-complete."
+}

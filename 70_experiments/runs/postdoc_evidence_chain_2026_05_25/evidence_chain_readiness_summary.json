@@ -129,5 +129,5 @@
     }
   ],
   "next_decision": "Complete the selected-300 local human risk-atom audit, then rerun the aggregate summarizer, human-reviewed predictor gate, and recovery analysis before making paper-grade CDS-ASR claims.",
-  "runtime_seconds": 0.0029
+  "runtime_seconds": 0.0007
 }

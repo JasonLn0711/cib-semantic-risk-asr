@@ -228,6 +228,45 @@ After model-level review, run:
 Current predictor readiness: `0 / 90` model assessments reviewed. Predictor
 metrics are computed only over reviewed model-level assessments.
 
+## Aggregate Refresh Gate
+
+After local row/model edits, use the refresh gate instead of manually running
+each aggregate step:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 \
+  --expected-rows 30
+```
+
+This writes `human_audit_refresh_summary.json` and refreshes validation,
+review-summary, predictor, and evidence-chain readiness outputs. Current
+recorded result:
+
+| Item | Value |
+| --- | ---: |
+| Refresh status | `review_pending` |
+| Reviewed rows | `0 / 30` |
+| Reviewed model assessments | `0 / 90` |
+| Downstream aggregate outputs refreshed | `true` |
+| Evidence-chain paper ready | `false` |
+
+The strict post-review gate is:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 \
+  --expected-rows 30 \
+  --require-complete
+```
+
+It currently fails as expected because the local sheet is still unreviewed:
+`30` incomplete row reviews and `90` incomplete model reviews.
+
 ## Boundary
 
 This run does not complete the human audit. It creates the audit queue,

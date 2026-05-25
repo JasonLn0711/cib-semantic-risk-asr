@@ -122,7 +122,13 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `80_semantic_risk_asr/annotation/analyze_human_audit_predictors.py` after
   review. Local row-by-row review support lives in
   `80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py`; its
-  `--show-row` output is transcript-bearing and must stay local-only.
+  `--show-row` output is transcript-bearing and must stay local-only. After
+  review edits, use
+  `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py` to rerun
+  validation, aggregate review summaries, human-reviewed predictor outputs, and
+  the evidence-chain readiness gate in one recorded pass. Current refresh
+  status is still `review_pending`: `0/30` rows and `0/90` model assessments
+  reviewed.
 - The 2026-05-25 WER audit is recorded in
   `70_experiments/runs/wer_metric_audit_2026_05_25/`. The latest audit checks
   legacy 15-row, six 258-row, and high-stakes 300-row hypothesis files against
