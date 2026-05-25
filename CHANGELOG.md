@@ -5,6 +5,20 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.37 - 2026-05-25T16:06:18+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `a52704f`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/scripts/asr_text_metrics.py`
+  - `60_whisper_asr_finetuning/scripts/run_janus_whisper_family_pilot.py`
+  - `60_whisper_asr_finetuning/scripts/run_legacy_breeze_asr25_smoke.py`
+  - `80_semantic_risk_asr/scoring/audit_asr_text_metrics.py`
+  - `requirements-whisper.txt`
+
 ## v2.5.36 - 2026-05-25T15:43:37+08:00
 
 - Bump: `patch`

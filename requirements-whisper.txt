@@ -2,6 +2,7 @@
 accelerate
 datasets[audio]
 evaluate
+jieba
 jiwer
 librosa
 numpy

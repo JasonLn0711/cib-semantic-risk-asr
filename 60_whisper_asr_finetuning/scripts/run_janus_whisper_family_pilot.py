@@ -12,6 +12,8 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+from asr_text_metrics import WER_TOKENIZERS, compute_pair_metrics
+
 
 LABEL_ORDER = {
     "no_escalation": 0,
@@ -296,6 +298,18 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--label-mode", choices=("heuristic", "none"), default="heuristic")
     parser.add_argument(
+        "--metric-normalization",
+        choices=("none", "zh_asr"),
+        default="zh_asr",
+        help="Text normalization for reported CER/WER. zh_asr preserves traditional Chinese.",
+    )
+    parser.add_argument(
+        "--wer-tokenizer",
+        choices=WER_TOKENIZERS,
+        default="jieba",
+        help="Tokenization used for reported WER. Use whitespace only for legacy audits.",
+    )
+    parser.add_argument(
         "--disable-cudnn",
         action="store_true",
         help="Use CUDA while bypassing cuDNN kernels; useful for local cuDNN sublibrary mismatches.",
@@ -374,8 +388,14 @@ def main() -> int:
         with torch.no_grad():
             generated_ids = model.generate(input_features, **generate_kwargs)
         prediction = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
-        cer = levenshtein_rate(reference, prediction, "char")
-        wer = levenshtein_rate(reference, prediction, "word")
+        text_metrics = compute_pair_metrics(
+            reference,
+            prediction,
+            normalization=args.metric_normalization,
+            wer_tokenizer=args.wer_tokenizer,
+        )
+        cer = text_metrics["cer"]
+        wer = text_metrics["wer"]
         asr_label, asr_label_reason = (
             heuristic_asr_label(prediction)
             if args.label_mode == "heuristic"
@@ -393,6 +413,10 @@ def main() -> int:
             "pred_text": prediction,
             "wer": wer,
             "cer": cer,
+            "metric_normalization": args.metric_normalization,
+            "wer_tokenizer": args.wer_tokenizer,
+            "cer_raw": text_metrics["cer_raw"],
+            "wer_raw_whitespace": text_metrics["wer_raw_whitespace"],
             "asr_label": asr_label,
             "asr_label_method": f"{args.label_mode}_v0",
             "asr_label_reason": asr_label_reason,
@@ -440,6 +464,8 @@ def main() -> int:
         "split_name": split_name,
         "cer_mean": cer_mean,
         "wer_mean": wer_mean,
+        "metric_normalization": args.metric_normalization,
+        "wer_tokenizer": args.wer_tokenizer,
         "label_mode": args.label_mode,
         "disable_cudnn": args.disable_cudnn,
         "torch_dtype": model_dtype_name,
@@ -460,7 +486,7 @@ def main() -> int:
             "learning_rate": "",
             "wall_time_seconds": elapsed,
             "checkpoint": args.model_name,
-            "notes": f"pilot_inference;runtime={args.runtime};max_samples={len(prediction_rows)};label_mode={args.label_mode};disable_cudnn={args.disable_cudnn};torch_dtype={model_dtype_name}",
+            "notes": f"pilot_inference;runtime={args.runtime};max_samples={len(prediction_rows)};label_mode={args.label_mode};disable_cudnn={args.disable_cudnn};torch_dtype={model_dtype_name};metric_normalization={args.metric_normalization};wer_tokenizer={args.wer_tokenizer}",
         },
     )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
