@@ -213,6 +213,15 @@ def write_work_order_tsv_fixture(root: Path, row_numbers: list[int] = ROW_NUMBER
                 )
             )
     for step_order, step_type in packet_steps:
+        if step_type == "strict_dry_run":
+            command = (
+                "apply_human_audit_batch_response.py --require-complete "
+                "--require-timing --require-session-start-gate"
+            )
+        elif step_type == "post_review_sequence_execute":
+            command = "run_post_review_evidence_sequence.py --execute"
+        else:
+            command = "aggregate command"
         lines.append(
             "\t".join(
                 [
@@ -223,11 +232,7 @@ def write_work_order_tsv_fixture(root: Path, row_numbers: list[int] = ROW_NUMBER
                     "blocked_until_rows_complete",
                     "all",
                     "run packet closeout step",
-                    (
-                        "run_post_review_evidence_sequence.py --execute"
-                        if step_type == "post_review_sequence_execute"
-                        else "aggregate command"
-                    ),
+                    command,
                     "aggregate signal",
                     "aggregate-only",
                 ]
@@ -598,7 +603,7 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True
-    assert payload["status_counts"] == {"pass": 20}
+    assert payload["status_counts"] == {"pass": 21}
     assert not payload["failed_checks"]
     assert_aggregate_safe(payload)
 
@@ -735,6 +740,25 @@ def test_consistency_audit_fails_review_work_order_row_drift(tmp_path: Path) -> 
 
     assert payload["ok"] is False
     assert any(item["check_id"] == "C071" for item in payload["failed_checks"])
+
+
+def test_consistency_audit_fails_review_work_order_unsafe_dry_run(
+    tmp_path: Path,
+) -> None:
+    write_consistent_fixture(tmp_path)
+    work_order_path = tmp_path / REVIEW_WORK_ORDER_TSV_RELATIVE
+    work_order_path.write_text(
+        work_order_path.read_text(encoding="utf-8").replace(
+            "--require-session-start-gate",
+            "--write",
+        ),
+        encoding="utf-8",
+    )
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C075" for item in payload["failed_checks"])
 
 
 def test_consistency_audit_fails_review_work_order_missing_sequence_route(

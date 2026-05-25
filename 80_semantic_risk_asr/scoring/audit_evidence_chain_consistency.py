@@ -1035,6 +1035,57 @@ def add_review_work_order_sequence_route_check(
     )
 
 
+def add_review_work_order_dry_run_gate_check(
+    root: Path,
+    payloads: dict[str, dict[str, Any]],
+    rows: list[dict[str, str]],
+) -> None:
+    work_order_path = root / REVIEW_WORK_ORDER_TSV_RELATIVE
+    work_order_rows = read_tsv_rows(work_order_path) if work_order_path.exists() else []
+    work_order = payloads.get("work_order", {})
+    dry_run_rows = [
+        item
+        for item in work_order_rows
+        if item.get("step_type", "") == "strict_dry_run"
+    ]
+    dry_run_command = dry_run_rows[0].get("command", "") if dry_run_rows else ""
+    required_flags = {
+        "--require-complete",
+        "--require-timing",
+        "--require-session-start-gate",
+    }
+    command_flags_ok = (
+        bool(dry_run_rows)
+        and "apply_human_audit_batch_response.py" in dry_run_command
+        and all(flag in dry_run_command for flag in required_flags)
+        and "--write" not in dry_run_command
+        and "--refresh-after-write" not in dry_run_command
+        and "--prepare-next-after-write" not in dry_run_command
+    )
+    status_ok = work_order.get("status") == "review_work_order_ready"
+    passed = command_flags_ok and status_ok
+    rows.append(
+        check_row(
+            check_id="C075",
+            invariant="review work-order strict dry-run preserves session and timing gates",
+            passed=passed,
+            evidence=REVIEW_WORK_ORDER_TSV_RELATIVE,
+            result=(
+                "review work-order strict dry-run requires complete rows, timing, and session-start gate without write mode"
+                if passed
+                else (
+                    f"command_flags_ok={command_flags_ok}; "
+                    f"status={work_order.get('status', '')}"
+                )
+            ),
+            next_action=(
+                "Regenerate review work order so packet strict dry-run uses "
+                "--require-complete --require-timing --require-session-start-gate without write flags."
+            ),
+        )
+    )
+
+
 def add_sequence_aware_objective_check(
     payloads: dict[str, dict[str, Any]],
     rows: list[dict[str, str]],
@@ -1175,6 +1226,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_gap_tsv_command_check(root, payloads, rows)
         add_response_action_items_check(root, payloads, rows)
         add_review_work_order_check(root, payloads, rows)
+        add_review_work_order_dry_run_gate_check(root, payloads, rows)
         add_review_work_order_sequence_route_check(root, payloads, rows)
         add_post_review_sequence_check(root, payloads, rows)
         add_sequence_aware_objective_check(payloads, rows)
