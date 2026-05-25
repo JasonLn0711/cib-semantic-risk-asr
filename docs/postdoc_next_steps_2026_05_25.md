@@ -130,15 +130,16 @@ subset predictor table 要由這支工具重算。
   `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json`。
 - Current state: normal refresh `ok=true` but `review_pending`；`0/30`
   risk/decision row reviews、`0/90` model assessments reviewed、evidence-chain
-  `paper_ready=false`。
+  `paper_ready=false`、publishable completion `publishable_ready=false`。
 - Strict post-review mode:
   `--require-complete` 目前會因 `30` risk/decision row reviews 與 `90`
   model reviews 尚未完成而失敗，這是正確 guardrail。
 
-這支工具把 validator、aggregate review summary、human-reviewed predictor
-gate、evidence-chain readiness 串成同一個可重跑操作。人工審閱仍必須在
-local ignored sheet 完成；refresh gate 只負責把完成後的 aggregate evidence
-同步到 tracked outputs。
+這支工具把 validator、progress audit、aggregate review summary、
+human-reviewed predictor gate、evidence-chain readiness、publishable
+completion audit 串成同一個可重跑操作。人工審閱仍必須在 local ignored
+sheet 完成；refresh gate 只負責把完成後的 aggregate evidence 同步到
+tracked outputs。
 
 13. Publishable evidence completion audit 已建立：
 
@@ -175,8 +176,8 @@ local ignored sheet 完成；refresh gate 只負責把完成後的 aggregate evi
 
 這個 audit 把 reviewer time 視為目前最稀缺資源。實作上它已經接進
 `refresh_human_audit_evidence.py`，所以每次 local sheet 更新後，同一個
-refresh gate 會同步更新 validation、progress、summary、predictor、readiness
-outputs。
+refresh gate 會同步更新 validation、progress、summary、predictor、
+readiness、publishable completion outputs。
 
 目前最重要的限制：
 

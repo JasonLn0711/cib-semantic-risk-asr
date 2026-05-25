@@ -359,8 +359,8 @@ each aggregate step:
 ```
 
 This writes `human_audit_refresh_summary.json` and refreshes validation,
-review-progress, review-summary, predictor, and evidence-chain readiness
-outputs. Current recorded result:
+review-progress, review-summary, predictor, evidence-chain readiness, and
+objective-level publishable completion outputs. Current recorded result:
 
 | Item | Value |
 | --- | ---: |
@@ -370,6 +370,8 @@ outputs. Current recorded result:
 | Recommended review batches | `6` |
 | Downstream aggregate outputs refreshed | `true` |
 | Evidence-chain paper ready | `false` |
+| Publishable evidence ready | `false` |
+| Completion audit status counts | `completed=4`, `proxy_completed=2`, `review_pending=1` |
 
 The strict post-review gate is:
 

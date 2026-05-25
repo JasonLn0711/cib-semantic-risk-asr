@@ -72,6 +72,7 @@ ignored local paths.
 | 5.29 | Added current review-batch completion status audit. | `audit_human_review_batch_status.py`; `human_audit_current_review_batch_status_summary.json`; `human_audit_current_review_batch_status_rows.tsv`. | Completed as a batch guardrail, not as human review. Current first packet status is `batch_pending`: `0/6` risk/decision rows and `0/18` model assessments reviewed, `batch_ready_for_refresh=false`. Tracked outputs contain only row numbers, strata, completion counts, missing-field counts, and local packet path; sensitive-field scan found no audio IDs, transcripts, hypotheses, reviewer notes, or private text. |
 | 5.30 | Added local response-template and batch apply workflow. | `apply_human_audit_batch_response.py`; `human_audit_batch_response_template_summary.json`; `human_audit_batch_response_apply_summary.json`; ignored local response TSV under `artifacts/review_responses/`. | Completed as a review-entry workflow, not as human review. The response template covers the current `critical_or_high_risk_missed` packet with `18` response rows. Dry-run apply over the blank template returns `response_pending`: `0/6` row decisions and `0/18` model assessments filled. Tracked summaries contain only counts, row numbers, and local paths; sensitive-field scan found no audio IDs, transcripts, hypotheses, reviewer notes, or private text. |
 | 5.31 | Added strict response completion gate. | `apply_human_audit_batch_response.py --require-complete`; `human_audit_batch_response_apply_summary.json`; `tests/test_human_audit_batch_response.py`. | Completed as a guardrail, not as human review. Strict dry-run over the current blank response template exits `1` as expected with `status=response_pending`, `ok=false`, `incomplete_response=1`, `0/6` row decisions, and `0/18` model assessments filled. Non-strict dry-run remains useful for progress inspection; `--require-complete` is the gate before `--write`. Sensitive-field scan over response summaries found no audio IDs, transcripts, hypotheses, reviewer notes, private fixture text, or absolute local paths. |
+| 5.32 | Wired publishable completion audit into human-audit refresh. | `refresh_human_audit_evidence.py`; `audit_publishable_evidence_chain.py`; `human_audit_refresh_summary.json`; `publishable_evidence_completion_summary.json`; `tests/test_human_audit_refresh.py`. | Completed as an orchestration guardrail, not as human review. Normal refresh now updates validation, progress, review summary, predictor, readiness, and objective-level publishable completion in one pass. Current result remains `review_pending`: `0/30` risk/decision rows and `0/90` model assessments reviewed, `paper_ready=false`, `publishable_ready=false`, completion status counts `completed=4`, `proxy_completed=2`, `review_pending=1`. Compile and direct tests passed; `pytest` is unavailable in `.venv`. Sensitive-field scan over refreshed aggregate outputs found no audio IDs, transcripts, hypotheses, reviewer notes, private fixture text, or absolute local paths. |
 
 ## Next Operations
 
@@ -101,17 +102,22 @@ ignored local paths.
    `critical_or_high_risk_missed` packet, rerun
    `audit_human_review_batch_status.py` until it reports `batch_complete`, then
    move to `unsafe_downrouting` and `high_proxy_risk`.
-7. Use `check_evidence_chain_readiness.py` as the repo-safe status guardrail:
-   it should stay `paper_ready=false` until the selected-300 human audit is
-   complete and post-review predictors/recovery are rerun.
-8. Use `audit_publishable_evidence_chain.py` as the objective-level completion
-   audit. It should stay `publishable_ready=false` while any objective remains
+7. Use `refresh_human_audit_evidence.py` as the normal post-edit aggregate
+   refresh. It now updates validation, progress, review summary, predictor,
+   evidence-chain readiness, and objective-level publishable completion.
+8. Use `check_evidence_chain_readiness.py` as the repo-safe status guardrail
+   when a standalone readiness audit is needed; it should stay
+   `paper_ready=false` until the selected-300 human audit is complete and
+   post-review predictors/recovery are rerun.
+9. Use `audit_publishable_evidence_chain.py` as the standalone
+   objective-level completion audit when needed. The refresh gate also updates
+   it, and it should stay `publishable_ready=false` while any objective remains
    proxy-only or review-pending.
-9. After local review edits, run `refresh_human_audit_evidence.py` without
+10. After local review edits, run `refresh_human_audit_evidence.py` without
    `--require-complete` to refresh aggregate records, then with
    `--require-complete` before treating the human audit as complete.
-10. Record aggregate human annotation statistics without selected IDs or
+11. Record aggregate human annotation statistics without selected IDs or
    transcripts.
-11. After the selected-300 audit, use the refresh gate to rerun
+12. After the selected-300 audit, use the refresh gate to rerun
    `analyze_human_audit_predictors.py` outputs and replace proxy-only predictor
    language with reviewer-facing evidence.

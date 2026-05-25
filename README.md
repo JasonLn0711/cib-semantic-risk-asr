@@ -149,11 +149,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   review edits, use
   `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py` to rerun
   validation, aggregate review-progress counts, aggregate review summaries,
-  human-reviewed predictor outputs, and the evidence-chain readiness gate in
-  one recorded pass. Current refresh status is still `review_pending`: `0/30`
-  risk/decision row reviews and `0/90` model assessments reviewed. The progress
-  audit recommends six batches, starting with `critical_or_high_risk_missed` and
-  `unsafe_downrouting`.
+  human-reviewed predictor outputs, the evidence-chain readiness gate, and the
+  objective-level publishable completion audit in one recorded pass. Current
+  refresh status is still `review_pending`: `0/30` risk/decision row reviews
+  and `0/90` model assessments reviewed; `paper_ready=false` and
+  `publishable_ready=false`. The progress audit recommends six batches,
+  starting with `critical_or_high_risk_missed` and `unsafe_downrouting`.
 - The 2026-05-25 WER audit is recorded in
   `70_experiments/runs/wer_metric_audit_2026_05_25/`. The latest audit checks
   legacy 15-row, six 258-row, and high-stakes 300-row hypothesis files against
