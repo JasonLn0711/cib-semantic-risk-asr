@@ -55,6 +55,14 @@ SENSITIVE_TOKENS = (
     "reviewer_verified_transcript",
     "PRIVATE_",
 )
+REFERENCE_TRANSCRIPT_POLICY = (
+    "Reference transcripts are treated as already human-reviewed ground truth "
+    "for WER/CER scoring; do not route duplicate transcript review."
+)
+REMAINING_REVIEW_SCOPE = (
+    "Progress counts cover selected-300 risk-atom, decision-change, expected "
+    "safe action, confidence, and per-model assessment fields only."
+)
 
 
 def read_tsv(path: Path) -> tuple[list[str], list[dict[str, str]]]:
@@ -249,6 +257,8 @@ def build_progress(fieldnames: list[str], rows: list[dict[str, str]], expected_r
         ),
         "validation_error_counts": validation_payload["error_counts"],
         "validation_warning_counts": validation_payload["warning_counts"],
+        "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
+        "remaining_review_scope": REMAINING_REVIEW_SCOPE,
         "missing_row_review_field_counts": dict(sorted(row_missing.items())),
         "missing_model_review_field_counts": dict(sorted(model_missing.items())),
         "invalid_model_bundle_rows": invalid_model_bundle_rows,
@@ -264,12 +274,16 @@ def build_progress(fieldnames: list[str], rows: list[dict[str, str]], expected_r
         },
         "recommended_batch_count": len(batches),
         "first_principle_decision": (
-            "Reviewer time is the current scarce resource. Review high-safety-risk strata first, "
-            "then refresh aggregate evidence before making paper-grade CDS-ASR claims."
+            "Reviewer time is the current scarce resource for risk/decision "
+            "labels, not for duplicate transcript review. Review high-safety-risk "
+            "strata first, then refresh aggregate evidence before making "
+            "paper-grade CDS-ASR claims."
         ),
         "next_action": (
-            "Review critical/high-risk missed and unsafe-downrouting strata first, fill both row-level "
-            "and model-level fields, then run refresh_human_audit_evidence.py --require-complete."
+            "Review critical/high-risk missed and unsafe-downrouting strata first, "
+            "fill risk-atom, decision-change, expected-action, confidence, and "
+            "model-level fields, then run refresh_human_audit_evidence.py "
+            "--require-complete."
         ),
     }
     assert_progress_safe(payload, strata + models + batches)

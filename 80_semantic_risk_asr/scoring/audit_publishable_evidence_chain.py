@@ -26,6 +26,17 @@ if str(SCORING_DIR) not in sys.path:
 import check_evidence_chain_readiness as readiness  # noqa: E402
 
 
+REFERENCE_TRANSCRIPT_POLICY = (
+    "Reference transcripts are treated as already human-reviewed ground truth "
+    "for WER/CER scoring; do not route duplicate transcript review."
+)
+REMAINING_REVIEW_SCOPE = (
+    "Remaining selected-300 review work is limited to risk-atom labels, "
+    "decision-change labels, expected safe action, confidence, and per-model "
+    "assessment fields."
+)
+
+
 DEFAULT_OUTPUT_DIR = (
     REPO_ROOT / "70_experiments" / "runs" / "postdoc_evidence_chain_2026_05_25"
 )
@@ -172,10 +183,11 @@ def objective_rows_from_payloads(
     main_status = "review_pending"
     main_result = (
         "Selected-300 proxy inputs, metric-predictor proxy, and refresh gate exist, "
-        f"but human review is {human_refresh.get('reviewed_rows', 0)}/"
+        f"but selected-300 risk-atom review is {human_refresh.get('reviewed_rows', 0)}/"
         f"{human_refresh.get('audit_rows', 30)} rows and "
         f"{human_refresh.get('reviewed_model_assessments', 0)}/"
-        f"{human_refresh.get('model_assessments', 90)} model assessments."
+        f"{human_refresh.get('model_assessments', 90)} model assessments; "
+        "transcript ground truth is already accepted for WER/CER scoring."
     )
     main_paper_status = "not paper-ready"
     if (
@@ -247,7 +259,7 @@ def objective_rows_from_payloads(
             result="Six-model 258-row aggregate includes paper-facing zh metrics and decision-risk proxy fields."
             if split_258 == "proxy_completed"
             else "258-row six-model comparison is incomplete.",
-            blocking_dependency="human-reviewed risk-atom labels before paper-grade risk claims",
+            blocking_dependency="human-reviewed risk-atom and decision-change fields before paper-grade risk claims",
             next_action="Do not convert proxy risk-atom counts into formal human-reviewed conclusions.",
         ),
         objective_row(
@@ -261,8 +273,12 @@ def objective_rows_from_payloads(
                 "human_audit_refresh_summary.json; human_audit_predictor_summary.json"
             ),
             result=main_result,
-            blocking_dependency="selected-300 local human risk-atom audit completion",
-            next_action="Fill the local audit sheet, rerun refresh with --require-complete, then use human-reviewed predictor outputs.",
+            blocking_dependency="selected-300 risk-atom, decision-change, and per-model assessment completion",
+            next_action=(
+                "Fill the selected-300 reviewer fields that are not transcript "
+                "ground truth, rerun refresh with --require-complete, then use "
+                "human-reviewed predictor outputs."
+            ),
         ),
         objective_row(
             objective_id="6",
@@ -273,8 +289,11 @@ def objective_rows_from_payloads(
             result="Recovery proxy shows CEIS action reduces high-risk missed and critical miss."
             if recovery_proxy == "proxy_completed"
             else "Recovery comparison evidence is missing or incomplete.",
-            blocking_dependency="human-reviewed labels and post-review recovery re-evaluation",
-            next_action="After human review, rerun recovery using reviewed labels before paper-grade intervention claims.",
+            blocking_dependency="human-reviewed risk/decision labels and post-review recovery re-evaluation",
+            next_action=(
+                "After selected-300 risk/decision review, rerun recovery using "
+                "reviewed labels before paper-grade intervention claims."
+            ),
         ),
     ]
     return rows
@@ -309,15 +328,19 @@ def build_completion_audit(root: Path) -> dict[str, Any]:
         "publishable_ready": all(row["status"] == "completed" for row in rows)
         and all(not row["paper_claim_status"].startswith("proxy") for row in rows),
         "status_counts": dict(sorted(counts.items())),
+        "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
+        "remaining_review_scope": REMAINING_REVIEW_SCOPE,
         "completion_rows": rows,
         "blocking_or_proxy_items": blocking_rows,
         "first_principle_decision": (
             "Do not spend more GPU time to chase ASR fine-tuning until the selected-300 "
-            "human audit converts proxy CDS-ASR evidence into paper-grade evidence."
+            "risk-atom and model-assessment audit converts proxy CDS-ASR evidence "
+            "into paper-grade evidence; do not duplicate transcript review."
         ),
         "next_decision": (
-            "Complete selected-300 human row/model review, run the refresh gate with "
-            "--require-complete, then rerun human-reviewed predictor and recovery claims."
+            "Complete selected-300 risk-atom, decision-change, and per-model "
+            "assessment fields, run the refresh gate with --require-complete, "
+            "then rerun human-reviewed predictor and recovery claims."
         ),
     }
     assert_completion_safe(payload)

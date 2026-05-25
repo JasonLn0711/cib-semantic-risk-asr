@@ -5,6 +5,21 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.77 - 2026-05-25T20:58:06+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `3bedba1`
+- Branch: `main`
+- Summary: Clarify selected-300 review scope in evidence-chain guardrails.
+- Changed files:
+  - `80_semantic_risk_asr/annotation/audit_human_review_progress.py`
+  - `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py`
+  - `80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py`
+  - `80_semantic_risk_asr/scoring/check_evidence_chain_readiness.py`
+  - `tests/test_evidence_chain_readiness.py`
+  - `tests/test_publishable_evidence_audit.py`
+
 ## v2.5.76 - 2026-05-25T20:35:45+08:00
 
 - Bump: `patch`

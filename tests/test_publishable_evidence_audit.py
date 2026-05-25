@@ -73,7 +73,8 @@ def test_objective_audit_keeps_proxy_and_human_review_separate() -> None:
     assert by_id["4"]["status"] == "proxy_completed"
     assert by_id["5"]["status"] == "review_pending"
     assert by_id["6"]["status"] == "proxy_completed"
-    assert "selected-300 local human risk-atom audit" in by_id["5"]["blocking_dependency"]
+    assert "selected-300 risk-atom" in by_id["5"]["blocking_dependency"]
+    assert "not transcript ground truth" in by_id["5"]["next_action"]
     assert_completion_safe({"completion_rows": rows})
 
 

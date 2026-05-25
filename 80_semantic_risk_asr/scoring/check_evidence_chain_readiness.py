@@ -31,6 +31,15 @@ SENSITIVE_TOKENS = (
     "reviewer_verified_transcript",
     "PRIVATE_",
 )
+REFERENCE_TRANSCRIPT_POLICY = (
+    "Reference transcripts are treated as already human-reviewed ground truth "
+    "for WER/CER scoring; do not route duplicate transcript review."
+)
+REMAINING_REVIEW_SCOPE = (
+    "Remaining selected-300 review work is limited to risk-atom labels, "
+    "decision-change labels, expected safe action, confidence, and per-model "
+    "assessment fields."
+)
 
 
 def repo_root_from_script() -> Path:
@@ -314,10 +323,16 @@ def human_audit_gate(root: Path) -> dict[str, str]:
         status = "review_pending"
         paper_status = "not paper-ready"
         result = (
-            f"{payload.get('reviewed_rows', 0)}/30 rows and "
-            f"{payload.get('reviewed_model_assessments', 0)}/90 model assessments reviewed"
+            f"{payload.get('reviewed_rows', 0)}/30 selected rows have risk-atom "
+            "review fields complete and "
+            f"{payload.get('reviewed_model_assessments', 0)}/90 model assessments "
+            "are complete; transcript ground truth is not the pending item"
         )
-        next_action = "Fill local audit sheet, then run validator with --require-complete."
+        next_action = (
+            "Fill selected-300 risk-atom, decision-change, expected-action, "
+            "confidence, and per-model assessment fields; then run validator "
+            "with --require-complete."
+        )
     else:
         status = "missing"
         paper_status = "not paper-ready"
@@ -403,6 +418,8 @@ def build_readiness(root: Path) -> dict[str, Any]:
         "ok": status_at_least(rows, STATUS_ORDER["review_pending"]),
         "paper_ready": paper_ready,
         "status_counts": dict(sorted(counts.items())),
+        "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
+        "remaining_review_scope": REMAINING_REVIEW_SCOPE,
         "readiness_rows": rows,
         "blocking_gates": [
             {
@@ -422,9 +439,10 @@ def build_readiness(root: Path) -> dict[str, Any]:
             for item in proxy_only
         ],
         "next_decision": (
-            "Complete the selected-300 local human risk-atom audit, then rerun "
-            "the aggregate summarizer, human-reviewed predictor gate, and "
-            "recovery analysis before making paper-grade CDS-ASR claims."
+            "Complete the selected-300 risk-atom, decision-change, and "
+            "per-model assessment fields, then rerun the aggregate summarizer, "
+            "human-reviewed predictor gate, and recovery analysis before "
+            "making paper-grade CDS-ASR claims."
         ),
     }
     assert_aggregate_safe(payload)

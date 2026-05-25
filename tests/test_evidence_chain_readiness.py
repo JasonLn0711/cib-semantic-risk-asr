@@ -192,6 +192,14 @@ def test_readiness_marks_proxy_and_human_review_pending(tmp_path: Path) -> None:
     assert statuses["five-condition recovery experiment"] == "proxy_completed"
     assert payload["status_counts"]["review_pending"] == 1
     assert payload["status_counts"]["proxy_completed"] == 4
+    assert "already human-reviewed ground truth" in payload["reference_transcript_policy"]
+    assert "risk-atom labels" in payload["remaining_review_scope"]
+    audit_row = next(
+        row
+        for row in payload["readiness_rows"]
+        if row["requirement"] == "selected-300 human risk-atom audit completion"
+    )
+    assert "transcript ground truth is not the pending item" in audit_row["result"]
     assert_aggregate_safe(payload)
 
 

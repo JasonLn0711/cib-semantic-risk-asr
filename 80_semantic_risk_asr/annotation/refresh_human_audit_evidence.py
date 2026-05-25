@@ -55,6 +55,15 @@ SENSITIVE_TOKENS = (
     "reviewer_verified_transcript",
     "PRIVATE_",
 )
+REFERENCE_TRANSCRIPT_POLICY = (
+    "Reference transcripts are treated as already human-reviewed ground truth "
+    "for WER/CER scoring; do not route duplicate transcript review."
+)
+REMAINING_REVIEW_SCOPE = (
+    "Remaining selected-300 review work is limited to risk-atom labels, "
+    "decision-change labels, expected safe action, confidence, and per-model "
+    "assessment fields."
+)
 
 
 def repo_relative(path: Path, *, repo_root: Path = REPO_ROOT) -> str:
@@ -407,6 +416,8 @@ def refresh_human_audit_evidence(
         "require_complete": require_complete,
         "input_boundary": "local ignored audit sheet only; no private row content is emitted",
         "output_boundary": "aggregate tracked outputs only",
+        "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
+        "remaining_review_scope": REMAINING_REVIEW_SCOPE,
         "audit_rows": validation_payload["audit_rows"],
         "reviewed_rows": validation_payload["reviewed_rows"],
         "pending_rows": validation_payload["pending_rows"],
@@ -427,7 +438,9 @@ def refresh_human_audit_evidence(
         "outputs": [repo_relative(path, repo_root=repo_root) for path in output_paths],
         "runtime_seconds": round(time.time() - started, 4),
         "next_action": (
-            "Complete all local row-level and model-level human review fields, then rerun with --require-complete."
+            "Complete selected-300 risk-atom, decision-change, expected-action, "
+            "confidence, and per-model assessment fields, then rerun with "
+            "--require-complete."
             if not strict_complete
             else "Use refreshed aggregate summaries for paper-table drafting and human-reviewed predictor analysis."
         ),
