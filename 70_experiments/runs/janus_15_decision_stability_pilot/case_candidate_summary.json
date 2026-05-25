@@ -1,0 +1,20 @@
+{
+  "rows": 48,
+  "by_case_type": {
+    "high_ceis": 8,
+    "lower_cer_high_ceis": 10,
+    "recovery_candidate": 12,
+    "sres_high_ceis_low": 15,
+    "unsafe_downrouting": 3
+  },
+  "by_asr_run_id": {
+    "breeze_asr25_15_row_baseline": 13,
+    "whisper_large_v2_15_row_baseline": 18,
+    "whisper_small_15_row_baseline": 17
+  },
+  "by_risk_atom_type": {
+    "action": 23,
+    "actor": 9,
+    "negation": 16
+  }
+}

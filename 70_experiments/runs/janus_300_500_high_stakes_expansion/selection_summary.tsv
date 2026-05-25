@@ -1,0 +1,37 @@
+metric	value	notes
+selected_rows	300	target=300
+candidate_pool_rows	2704	rows with risk terms and scenario tags
+excluded_gold_rows	15	held out reviewed pilot rows
+duration_min_sec	15.838	selected rows
+duration_max_sec	29.736	selected rows
+duration_mean_sec	24.437	selected rows
+split_test	30	selected rows
+split_train	240	selected rows
+split_validation	30	selected rows
+health_ok	300	selected rows
+scenario_account_bank	174	non-exclusive scenario tag count
+scenario_card_or_cash	12	non-exclusive scenario tag count
+scenario_customer_service	26	non-exclusive scenario tag count
+scenario_identity_document	62	non-exclusive scenario tag count
+scenario_investment_crypto	43	non-exclusive scenario tag count
+scenario_line_social	72	non-exclusive scenario tag count
+scenario_money_transfer	157	non-exclusive scenario tag count
+scenario_police_government	187	non-exclusive scenario tag count
+risk_term_LINE	62	non-exclusive risk-term count
+risk_term_健保卡	4	non-exclusive risk-term count
+risk_term_匯款	95	non-exclusive risk-term count
+risk_term_報案	141	non-exclusive risk-term count
+risk_term_客服	19	non-exclusive risk-term count
+risk_term_帳戶	88	non-exclusive risk-term count
+risk_term_戶政	12	non-exclusive risk-term count
+risk_term_投資	34	non-exclusive risk-term count
+risk_term_提款卡	9	non-exclusive risk-term count
+risk_term_第三方支付	1	non-exclusive risk-term count
+risk_term_虛擬貨幣	12	non-exclusive risk-term count
+risk_term_詐騙	230	non-exclusive risk-term count
+risk_term_警察	60	non-exclusive risk-term count
+risk_term_身分證	57	non-exclusive risk-term count
+risk_term_轉出	28	non-exclusive risk-term count
+risk_term_轉帳	56	non-exclusive risk-term count
+risk_term_郵局	20	non-exclusive risk-term count
+risk_term_銀行	115	non-exclusive risk-term count

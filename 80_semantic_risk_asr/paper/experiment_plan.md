@@ -35,6 +35,9 @@ Do not start a long model run until this gate exists:
    `0.3778`, and high-risk missed by ASR `3`.
 9. Expand to `300-500` high-stakes call segments only if the 15-row pilot
    produces usable decision-stability signal.
+   Current local status: selected `300` expansion candidates from `2704`
+   eligible risk/scenario rows with train/validation/test split `240/30/30`.
+   Candidate IDs remain local under ignored artifacts.
 10. Store only reviewed aggregate outputs and small safe samples in git.
 
 Publication-safe output path:
@@ -73,8 +76,8 @@ metrics do not explain which models are stable on risk atoms.
 Sample:
 
 - first the reviewed 15-row gate;
-- then `300-500` high-stakes call segments from train/validation/test after
-  the pilot shows a usable signal.
+- then the selected `300` high-stakes call segments from train/validation/test
+  after the pilot shows a usable signal.
 
 Signals:
 

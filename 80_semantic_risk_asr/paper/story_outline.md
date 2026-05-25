@@ -105,11 +105,15 @@ three labeled model runs. Breeze-ASR-25 is currently the strongest CER candidate
 on this pilot, but the next decision is based on interpretable decision flips
 and CEIS cases, not CER alone. Breeze-ASR-26 remains an optional
 Taigi/Taiwanese Hokkien stress test, not a direct replacement for the Mandarin
-baseline.
+baseline. The safe case-candidate table now identifies high-CEIS, lower-CER
+high-CEIS, SRES-high/CEIS-low, recovery-candidate, and unsafe-downrouting
+examples without tracking transcripts.
 
-Only after that pilot shows a usable decision-stability signal should the study
-expand to `300-500` high-stakes segments selected for risk-term coverage, split
-balance, duration, health flags, and scam-scenario diversity.
+The next expansion set is selected locally: `300` high-stakes rows, split
+`240/30/30` across train/validation/test, all with `ok` health flags and
+coverage over money-transfer, account/bank, identity, police/government,
+LINE/social, investment/crypto, card/cash, and customer-service scenarios.
+IDs remain local under ignored artifacts.
 
 ### 5. Contributions
 

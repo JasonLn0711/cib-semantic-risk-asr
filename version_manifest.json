@@ -1,33 +1,31 @@
 {
-  "version": "v2.5.27",
+  "version": "v2.5.28",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 27
+    "patch": 28
   },
-  "updated_at": "2026-05-25T10:42:15+08:00",
+  "updated_at": "2026-05-25T11:34:15+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "3d96b03",
+  "base_commit": "9169e98",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "60_whisper_asr_finetuning/README.md",
+    "60_whisper_asr_finetuning/scripts/select_janus_high_stakes_expansion.py",
     "70_experiments/registry.tsv",
-    "70_experiments/runs/breeze_asr25_15_row_baseline/README.md",
-    "70_experiments/runs/breeze_asr25_15_row_baseline/metrics.csv",
     "70_experiments/runs/janus_15_decision_stability_pilot/README.md",
-    "70_experiments/runs/janus_15_decision_stability_pilot/asr_model_comparison.tsv",
-    "70_experiments/runs/whisper_large_v2_15_row_baseline/README.md",
-    "70_experiments/runs/whisper_large_v2_15_row_baseline/metrics.csv",
-    "70_experiments/runs/whisper_small_15_row_baseline/README.md",
-    "70_experiments/runs/whisper_small_15_row_baseline/metrics.csv",
+    "70_experiments/runs/janus_15_decision_stability_pilot/case_candidate_summary.json",
+    "70_experiments/runs/janus_15_decision_stability_pilot/case_candidates.tsv",
+    "70_experiments/runs/janus_300_500_high_stakes_expansion/README.md",
+    "70_experiments/runs/janus_300_500_high_stakes_expansion/selection_summary.tsv",
     "80_semantic_risk_asr/paper/experiment_plan.md",
     "80_semantic_risk_asr/paper/q1_paper_design.md",
-    "80_semantic_risk_asr/paper/story_outline.md"
+    "80_semantic_risk_asr/paper/story_outline.md",
+    "80_semantic_risk_asr/scoring/select_janus_pilot_cases.py"
   ]
 }

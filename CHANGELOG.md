@@ -5,6 +5,26 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.28 - 2026-05-25T11:34:15+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `9169e98`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/scripts/select_janus_high_stakes_expansion.py`
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/janus_15_decision_stability_pilot/README.md`
+  - `70_experiments/runs/janus_15_decision_stability_pilot/case_candidate_summary.json`
+  - `70_experiments/runs/janus_15_decision_stability_pilot/case_candidates.tsv`
+  - `70_experiments/runs/janus_300_500_high_stakes_expansion/README.md`
+  - `70_experiments/runs/janus_300_500_high_stakes_expansion/selection_summary.tsv`
+  - `80_semantic_risk_asr/paper/experiment_plan.md`
+  - `80_semantic_risk_asr/paper/q1_paper_design.md`
+  - `80_semantic_risk_asr/paper/story_outline.md`
+  - `80_semantic_risk_asr/scoring/select_janus_pilot_cases.py`
+
 ## v2.5.27 - 2026-05-25T10:42:15+08:00
 
 - Bump: `patch`

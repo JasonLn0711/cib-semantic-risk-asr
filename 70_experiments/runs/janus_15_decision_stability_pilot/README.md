@@ -2,9 +2,9 @@
 
 ## Summary
 
-- Status: planned
-- Date:
-- Owner:
+- Status: completed
+- Date: 2026-05-25
+- Owner: Jason Lin
 - Config: `80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py`
 - Dataset: `janus_165_v1`
 - Model: cross-ASR metric bridge
@@ -82,6 +82,7 @@ python 80_semantic_risk_asr/downstream/evaluate_downstream_impact.py \
 | SRES | first-pass complete | Three labeled model runs produced 156 rows, total SRES `4868.0`, mean SRES `31.205`. |
 | CEIS | first-pass complete | Three labeled model runs produced 156 variant rows across 45 model-samples; 17 were unstable, max CEIS `15.0`, mean CEIS `2.1778`. |
 | Downstream escalation impact | first-pass complete | 45 model-sample rows; ASR mismatch rate `0.3778`; high-risk missed by ASR `3`; recovery not yet applied. |
+| Case candidates | first-pass complete | `case_candidates.tsv` contains 48 transcript-free candidate rows: 8 high-CEIS, 10 lower-CER/high-CEIS, 15 SRES-high/CEIS-low contrast, 12 recovery candidates, and 3 unsafe downrouting rows. |
 
 ## Observations
 
@@ -101,6 +102,10 @@ python 80_semantic_risk_asr/downstream/evaluate_downstream_impact.py \
   cuDNN disabled. Breeze-ASR-25 had the best pilot CER (`36.13`), followed by
   Whisper large-v2 (`40.01`) and Whisper small (`53.08`). NeMo remains an
   output-contract comparison only (`83.66` mean CER).
+- 2026-05-25: `select_janus_pilot_cases.py` produced a transcript-free
+  candidate table for paper inspection and recovery design. Confidence-based
+  cases are still marked unavailable because these inference runs did not emit
+  token log probabilities or calibrated confidence.
 
 ## Failure Or Risk Notes
 
@@ -119,4 +124,5 @@ python 80_semantic_risk_asr/downstream/evaluate_downstream_impact.py \
 
 - Local metric inputs: `artifacts/metric_inputs/`
 - Aggregate metric outputs: `artifacts/metric_outputs/` (ignored local)
-- Publication-safe case examples: pending
+- Publication-safe case candidates: `case_candidates.tsv`
+- Case candidate summary: `case_candidate_summary.json`

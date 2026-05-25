@@ -413,6 +413,13 @@ constrained re-decoding implementation is mature.
 - Build SRES, CEIS, and downstream-impact metric inputs for the pilot. Local
   status on 2026-05-25: complete for the three labeled model runs, producing
   156 SRES rows, 156 CEIS variant rows, and 45 downstream decision rows.
+- Select transcript-free paper case candidates. Local status on 2026-05-25:
+  `case_candidates.tsv` contains 48 candidate rows spanning high CEIS,
+  lower-CER/high-CEIS, SRES-high/CEIS-low contrast, recovery-candidate, and
+  unsafe-downrouting cases.
+- Select the next high-stakes expansion set. Local status on 2026-05-25:
+  selected 300 rows from 2704 eligible risk/scenario rows, with split counts
+  train 240, validation 30, test 30.
 
 ### Week 2
 
