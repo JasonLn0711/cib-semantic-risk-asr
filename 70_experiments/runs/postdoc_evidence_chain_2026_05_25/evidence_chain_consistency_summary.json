@@ -1,7 +1,7 @@
 {
   "ok": true,
   "status_counts": {
-    "pass": 12
+    "pass": 13
   },
   "failed_checks": [],
   "reference_transcript_policy": "Reference transcripts are already human-reviewed for WER/CER; this audit does not reopen transcript review.",
@@ -86,6 +86,14 @@
       "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_handoff_summary.json",
       "result": "handoff is fresh and points to 6 pending rows, 18 model assessments, and 6 timing rows",
       "next_action": "Regenerate reviewer handoff and action checklist before opening the local review packet."
+    },
+    {
+      "check_id": "C066",
+      "invariant": "post-review command plan preserves strict recovery order",
+      "status": "pass",
+      "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json",
+      "result": "post-review command plan starts with response closeout and routes through refresh, strict recovery, checklist, and objective audit",
+      "next_action": "Refresh the post-review checklist before local response write/refresh and do not promote proxy recovery."
     },
     {
       "check_id": "C070",

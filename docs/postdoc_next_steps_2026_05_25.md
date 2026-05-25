@@ -270,6 +270,19 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   selected-300 local response 寫入後漏掉 human-reviewed recovery 與 objective
   audit。
 
+19. Post-review command plan 已納入 consistency audit：
+
+- Source:
+  `80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py`。
+- New check: `C066`。
+- Current state:
+  `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
+  現在是 `ok=true`、`13/13` checks passing、`failed_checks=[]`。
+- 檢查內容：post-review command plan 必須先完成 response closeout；post-write
+  order 必須是 refresh、strict human-reviewed recovery、post-review checklist、
+  objective audit；strict recovery command 不能帶
+  `--allow-pending-summary`。
+
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS
