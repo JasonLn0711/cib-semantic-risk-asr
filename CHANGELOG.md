@@ -5,6 +5,19 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.83 - 2026-05-25T21:23:07+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `01bcadb`
+- Branch: `main`
+- Summary: Add local selected-300 batch response template and apply workflow.
+- Changed files:
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_template_summary.json`
+  - `80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py`
+  - `tests/test_human_audit_batch_response.py`
+
 ## v2.5.82 - 2026-05-25T21:14:29+08:00
 
 - Bump: `patch`

@@ -1,0 +1,210 @@
+from __future__ import annotations
+
+import csv
+import json
+import sys
+from pathlib import Path
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "annotation"))
+
+from apply_human_audit_batch_response import (  # noqa: E402
+    TEMPLATE_FIELDS,
+    apply_response_sheet,
+    prepare_response_template,
+)
+from validate_human_risk_atom_audit import read_tsv, validate_rows  # noqa: E402
+
+
+AUDIT_FIELDS = [
+    "audio_id",
+    "split",
+    "selection_stratum",
+    "selection_reason",
+    "reference_label",
+    "reference_text",
+    "asr_hypotheses_json",
+    "risk_signal_json",
+    "reviewer_verified_transcript",
+    "reviewer_semantic_risk_label",
+    "reviewer_risk_atoms",
+    "reviewer_critical_atoms",
+    "reviewer_asr_confusion_terms",
+    "reviewer_would_asr_error_change_decision",
+    "reviewer_decision_change_reason",
+    "reviewer_expected_safe_action",
+    "reviewer_annotation_confidence",
+    "reviewer_model_assessments_json",
+    "reviewer_notes",
+]
+
+
+def audit_row() -> dict[str, str]:
+    return {
+        "audio_id": "private_audio",
+        "split": "test",
+        "selection_stratum": "critical_or_high_risk_missed",
+        "selection_reason": "private reason",
+        "reference_label": "priority_review",
+        "reference_text": "PRIVATE_REFERENCE",
+        "asr_hypotheses_json": json.dumps(
+            [{"asr_run_id": "run_a", "hypothesis_text": "PRIVATE_HYP"}],
+            ensure_ascii=False,
+        ),
+        "risk_signal_json": "{}",
+        "reviewer_verified_transcript": "",
+        "reviewer_semantic_risk_label": "",
+        "reviewer_risk_atoms": "",
+        "reviewer_critical_atoms": "",
+        "reviewer_asr_confusion_terms": "",
+        "reviewer_would_asr_error_change_decision": "",
+        "reviewer_decision_change_reason": "",
+        "reviewer_expected_safe_action": "",
+        "reviewer_annotation_confidence": "",
+        "reviewer_model_assessments_json": json.dumps(
+            [
+                {
+                    "asr_run_id": "run_a",
+                    "reviewer_would_asr_error_change_decision": "",
+                    "reviewer_critical_atoms": "",
+                    "reviewer_expected_safe_action": "",
+                    "reviewer_annotation_confidence": "",
+                }
+            ],
+            ensure_ascii=False,
+        ),
+        "reviewer_notes": "",
+    }
+
+
+def write_tsv(path: Path, rows: list[dict[str, str]], fieldnames: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t", lineterminator="\n")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({field: row.get(field, "") for field in fieldnames})
+
+
+def write_batch(path: Path) -> None:
+    path.write_text(
+        json.dumps(
+            {
+                "selection_stratum": "critical_or_high_risk_missed",
+                "row_numbers": [1],
+                "local_packet_path": "run/artifacts/review_batches/local.md",
+            },
+            ensure_ascii=False,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+
+def complete_response_row() -> dict[str, str]:
+    return {
+        "row_number": "1",
+        "selection_stratum": "critical_or_high_risk_missed",
+        "asr_run_id": "run_a",
+        "reviewer_semantic_risk_label": "priority_review",
+        "reviewer_risk_atoms": "negation",
+        "reviewer_critical_atoms": "negation",
+        "reviewer_asr_confusion_terms": "negation dropped",
+        "reviewer_would_asr_error_change_decision": "yes",
+        "reviewer_decision_change_reason": "routing changed",
+        "reviewer_expected_safe_action": "priority_review",
+        "reviewer_annotation_confidence": "high",
+        "reviewer_notes": "",
+        "model_reviewer_would_asr_error_change_decision": "yes",
+        "model_reviewer_critical_atoms": "negation",
+        "model_reviewer_expected_safe_action": "priority_review",
+        "model_reviewer_annotation_confidence": "high",
+    }
+
+
+def test_prepare_response_template_tracks_only_safe_summary(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "artifacts" / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_dir = tmp_path / "artifacts" / "responses"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+
+    payload = prepare_response_template(
+        audit_sheet=audit_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        response_dir=response_dir,
+        expected_rows=1,
+        repo_root=tmp_path,
+    )
+
+    assert payload["ok"] is True
+    assert payload["status"] == "response_template_prepared"
+    assert payload["response_rows"] == 1
+    tracked = (tmp_path / "human_audit_batch_response_template_summary.json").read_text(
+        encoding="utf-8"
+    )
+    assert "PRIVATE_" not in tracked
+    assert "reference_text" not in tracked
+    assert "reviewer_notes" not in tracked
+    assert (tmp_path / payload["local_response_template_path"]).exists()
+
+
+def test_blank_response_dry_run_is_pending_and_safe(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(
+        response_sheet,
+        [{"row_number": "1", "selection_stratum": "critical_or_high_risk_missed", "asr_run_id": "run_a"}],
+        TEMPLATE_FIELDS,
+    )
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=False,
+    )
+
+    assert payload["ok"] is True
+    assert payload["status"] == "response_pending"
+    assert payload["pending_rows_in_response"] == 1
+    tracked = (tmp_path / "human_audit_batch_response_apply_summary.json").read_text(
+        encoding="utf-8"
+    )
+    assert "PRIVATE_" not in tracked
+    assert "reference_text" not in tracked
+
+
+def test_complete_response_write_updates_audit_sheet(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(response_sheet, [complete_response_row()], TEMPLATE_FIELDS)
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=True,
+    )
+    fieldnames, rows = read_tsv(audit_sheet)
+    validation_payload = validate_rows(fieldnames, rows, require_complete=True, expected_rows=1)
+
+    assert payload["ok"] is True
+    assert payload["status"] == "response_complete"
+    assert payload["mode"] == "write"
+    assert validation_payload["ok"] is True
+    assert validation_payload["status"] == "review_complete"

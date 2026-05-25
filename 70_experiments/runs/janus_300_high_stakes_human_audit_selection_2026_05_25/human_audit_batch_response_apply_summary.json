@@ -1,0 +1,30 @@
+{
+  "ok": true,
+  "status": "response_pending",
+  "mode": "dry_run",
+  "input_boundary": "local ignored audit sheet plus local ignored response TSV",
+  "output_boundary": "aggregate-only apply status; no private row keys or transcript text",
+  "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review.",
+  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
+  "selection_stratum": "critical_or_high_risk_missed",
+  "row_numbers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "rows_in_batch": 6,
+  "reviewed_rows_in_response": 0,
+  "pending_rows_in_response": 6,
+  "model_assessments_in_response": 18,
+  "reviewed_model_assessments_in_response": 0,
+  "pending_model_assessments_in_response": 18,
+  "error_counts": {},
+  "backup_path": "",
+  "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv",
+  "source_batch_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json",
+  "next_action": "Fill all required row and model fields in the response TSV, rerun dry-run, then apply with --write once status is response_complete.",
+  "runtime_seconds": 0.0008
+}
