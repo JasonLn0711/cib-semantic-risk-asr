@@ -24,6 +24,7 @@ for import_path in (ANNOTATION_DIR, SCORING_DIR):
         sys.path.insert(0, str(import_path))
 
 import analyze_human_audit_predictors as predictors  # noqa: E402
+import audit_evidence_chain_consistency as consistency_audit  # noqa: E402
 import audit_postdoc_roadmap_completion as roadmap_audit  # noqa: E402
 import audit_publishable_evidence_chain as completion_audit  # noqa: E402
 import audit_human_review_progress as progress_audit  # noqa: E402
@@ -451,6 +452,21 @@ def run_post_review_evidence_gate(
     return payload, [output_json, output_tsv]
 
 
+def run_consistency_audit_gate(
+    *,
+    repo_root: Path,
+    output_dir: Path,
+) -> tuple[dict[str, Any], list[Path]]:
+    started = time.time()
+    payload = consistency_audit.build_consistency_audit(repo_root.resolve())
+    payload["runtime_seconds"] = round(time.time() - started, 4)
+    output_json = output_dir / consistency_audit.SUMMARY_NAME
+    output_tsv = output_dir / consistency_audit.TSV_NAME
+    consistency_audit.write_json(output_json, payload)
+    consistency_audit.write_tsv(output_tsv, payload["consistency_rows"])
+    return payload, [output_json, output_tsv]
+
+
 def refresh_human_audit_evidence(
     *,
     audit_sheet: Path,
@@ -486,6 +502,7 @@ def refresh_human_audit_evidence(
     completion_payload: dict[str, Any] | None = None
     roadmap_payload: dict[str, Any] | None = None
     post_review_payload: dict[str, Any] | None = None
+    consistency_payload: dict[str, Any] | None = None
     downstream_refreshed = False
 
     if validation_payload["ok"]:
@@ -550,6 +567,9 @@ def refresh_human_audit_evidence(
         "post_review_evidence_ok": "",
         "post_review_evidence_status": "",
         "post_review_blocker_keys": [],
+        "consistency_audit_ok": "",
+        "consistency_status_counts": {},
+        "consistency_failed_checks": [],
         "downstream_outputs_refreshed": downstream_refreshed,
         "outputs": [repo_relative(path, repo_root=repo_root) for path in output_paths],
         "runtime_seconds": round(time.time() - started, 4),
@@ -604,6 +624,17 @@ def refresh_human_audit_evidence(
         payload["post_review_evidence_ok"] = post_review_payload.get("ok")
         payload["post_review_evidence_status"] = post_review_payload.get("status")
         payload["post_review_blocker_keys"] = post_review_payload.get("blocker_keys", [])
+        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
+        payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
+        write_refresh_summary(output_dir, payload)
+        consistency_payload, consistency_outputs = run_consistency_audit_gate(
+            repo_root=repo_root,
+            output_dir=readiness_output_dir,
+        )
+        output_paths.extend(consistency_outputs)
+        payload["consistency_audit_ok"] = consistency_payload.get("ok")
+        payload["consistency_status_counts"] = consistency_payload.get("status_counts", {})
+        payload["consistency_failed_checks"] = consistency_payload.get("failed_checks", [])
         payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
         payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
         write_refresh_summary(output_dir, payload)

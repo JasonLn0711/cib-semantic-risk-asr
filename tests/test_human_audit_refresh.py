@@ -131,6 +131,15 @@ def load_readiness_fixture_writer():
     return module.write_minimal_tree
 
 
+def load_consistency_fixture_writer():
+    path = REPO_ROOT / "tests" / "test_evidence_chain_consistency.py"
+    spec = importlib.util.spec_from_file_location("test_evidence_chain_consistency", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module.write_consistent_fixture
+
+
 def test_refresh_allows_pending_review_without_strict_mode(tmp_path: Path) -> None:
     payload, output_dir = run_refresh(tmp_path, reviewed=False, model_reviewed=False)
 
@@ -293,3 +302,39 @@ def test_refresh_updates_post_review_evidence_checklist(tmp_path: Path) -> None:
     assert post_review_payload["status"] == "post_review_evidence_blocked"
     assert (output_dir / "human_audit_post_review_evidence_checklist.tsv").exists()
     assert "PRIVATE_" not in post_review_path.read_text(encoding="utf-8")
+
+
+def test_refresh_updates_evidence_chain_consistency_audit(tmp_path: Path) -> None:
+    load_readiness_fixture_writer()(tmp_path)
+    load_consistency_fixture_writer()(tmp_path)
+    sheet = tmp_path / "audit.tsv"
+    output_dir = (
+        tmp_path
+        / "70_experiments"
+        / "runs"
+        / "janus_300_high_stakes_human_audit_selection_2026_05_25"
+    )
+    readiness_dir = (
+        tmp_path / "70_experiments" / "runs" / "postdoc_evidence_chain_2026_05_25"
+    )
+    write_rows(sheet, [base_row(reviewed=False, model_reviewed=False)])
+
+    payload = refresh_human_audit_evidence(
+        audit_sheet=sheet,
+        output_dir=output_dir,
+        readiness_output_dir=readiness_dir,
+        repo_root=tmp_path,
+        expected_rows=1,
+        require_complete=False,
+        skip_readiness=False,
+    )
+    consistency_path = readiness_dir / "evidence_chain_consistency_summary.json"
+    consistency_payload = json.loads(consistency_path.read_text(encoding="utf-8"))
+
+    assert payload["ok"] is True
+    assert payload["consistency_audit_ok"] is True
+    assert payload["consistency_status_counts"] == {"pass": 11}
+    assert payload["consistency_failed_checks"] == []
+    assert consistency_payload["ok"] is True
+    assert (readiness_dir / "evidence_chain_consistency.tsv").exists()
+    assert "PRIVATE_" not in consistency_path.read_text(encoding="utf-8")
