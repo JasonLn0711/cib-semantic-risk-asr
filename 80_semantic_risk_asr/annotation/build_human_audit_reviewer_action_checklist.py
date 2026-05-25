@@ -92,6 +92,19 @@ def first_present(*values: Any) -> Any:
     return ""
 
 
+def timing_next_action(commands: dict[str, Any]) -> str:
+    start = str(commands.get("timing_start_write", "") or "")
+    finish = str(commands.get("timing_finish_write", "") or "")
+    if start and finish:
+        return (
+            "fill review_started_at/review_finished_at or review_elapsed_seconds before strict dry-run/write; "
+            f"helper_start={start}; helper_finish={finish}"
+        )
+    return (
+        "fill review_started_at/review_finished_at or review_elapsed_seconds before strict dry-run/write"
+    )
+
+
 def current_paths_exist(handoff: dict[str, Any], *, repo_root: Path) -> dict[str, bool]:
     packet = handoff.get("current_packet") if isinstance(handoff.get("current_packet"), dict) else {}
     response = (
@@ -261,9 +274,7 @@ def build_checklist(
             "action": "fill required per-row review-time fields",
             "status": "complete" if timing_complete and rows_in_batch else "pending",
             "evidence": f"rows_missing_timing={rows_missing_timing}; rows_in_batch={rows_in_batch}",
-            "next_action": (
-                "fill review_started_at/review_finished_at or review_elapsed_seconds before strict dry-run/write"
-            ),
+            "next_action": timing_next_action(commands),
         },
         {
             "step_id": "7",
@@ -324,13 +335,17 @@ def build_checklist(
             template_summary.get("template_column_count", ""),
         ),
         "required_timing_fields": response.get(
-            "optional_timing_fields",
-            template_summary.get("optional_timing_fields", []),
+            "required_timing_fields",
+            template_summary.get("required_timing_fields", []),
         ),
         "optional_timing_fields": response.get(
             "optional_timing_fields",
             template_summary.get("optional_timing_fields", []),
         ),
+        "timing_helper_commands": {
+            "timing_start_write": commands.get("timing_start_write", ""),
+            "timing_finish_write": commands.get("timing_finish_write", ""),
+        },
         "handoff_summary": repo_relative(handoff_summary_path, repo_root=repo_root),
         "preflight_summary": repo_relative(preflight_summary_path, repo_root=repo_root),
         "rubric_summary": repo_relative(rubric_summary_path, repo_root=repo_root),

@@ -56,11 +56,15 @@ def test_action_checklist_marks_ready_but_review_pending(tmp_path: Path) -> None
     assert payload["status"] == "reviewer_action_ready"
     assert payload["pending_rows_in_batch"] == 2
     assert payload["pending_model_assessments_in_batch"] == 6
+    assert "mark_human_audit_response_timing.py" in payload["timing_helper_commands"]["timing_start_write"]
     status_by_step = {row["step_id"]: row["status"] for row in rows}
     assert status_by_step["3b"] == "ready"
     assert status_by_step["4"] == "pending"
     assert status_by_step["5"] == "pending"
     assert status_by_step["8"] == "blocked_until_response_complete"
+    step_6 = next(row for row in rows if row["step_id"] == "6")
+    assert "helper_start=" in step_6["next_action"]
+    assert "helper_finish=" in step_6["next_action"]
     serialized = json.dumps(payload, ensure_ascii=False)
     assert "PRIVATE_" not in serialized
     assert "reference_text" not in serialized
