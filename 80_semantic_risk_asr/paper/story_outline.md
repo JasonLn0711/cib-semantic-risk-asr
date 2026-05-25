@@ -87,6 +87,18 @@ audio
 
 The key move is to shift from transcript accuracy to decision robustness.
 
+### 4.1 Execution Gate
+
+The first empirical unit is the reviewed 15-row JANUS decision-stability pilot,
+not the full 4,967-row corpus and not a long Whisper fine-tune. The gate must
+show that ASR hypotheses can join back to `audio_id`, expose decision-critical
+risk atoms, produce SRES/CEIS/downstream-impact outputs, and yield interpretable
+examples.
+
+Only after that pilot shows a usable decision-stability signal should the study
+expand to `300-500` high-stakes segments selected for risk-term coverage, split
+balance, duration, health flags, and scam-scenario diversity.
+
 ### 5. Contributions
 
 1. A risk atom schema for high-stakes call-center ASR decisions.

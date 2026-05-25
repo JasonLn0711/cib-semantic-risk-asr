@@ -1,23 +1,21 @@
 {
-  "version": "v2.5.17",
+  "version": "v2.5.18",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 17
+    "patch": 18
   },
-  "updated_at": "2026-05-25T09:08:19+08:00",
+  "updated_at": "2026-05-25T09:10:42+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "1d6590c",
+  "base_commit": "756b4cb",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
-  "summary": "Add fillable JANUS human review workbook import.",
+  "summary": "Align story outline with JANUS 15-row pilot gate.",
   "changed_files": [
-    "60_whisper_asr_finetuning/README.md",
-    "60_whisper_asr_finetuning/scripts/build_janus_human_review_packet.py",
-    "docs/janus_165_audio_curation_workflow.md"
+    "80_semantic_risk_asr/paper/story_outline.md"
   ]
 }
