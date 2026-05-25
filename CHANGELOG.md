@@ -5,6 +5,27 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.55 - 2026-05-25T18:49:27+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `0f64abc`
+- Branch: `main`
+- Summary: Record human audit review-pending aggregate readiness.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_model_review.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_risk_atom_review.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_strata_review.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `80_semantic_risk_asr/annotation/annotation_guideline.md`
+  - `80_semantic_risk_asr/annotation/selected_300_human_risk_atom_audit_protocol_2026_05_25.md`
+  - `80_semantic_risk_asr/paper/experiment_plan.md`
+  - `README.md`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
 ## v2.5.54 - 2026-05-25T18:49:16+08:00
 
 - Bump: `patch`

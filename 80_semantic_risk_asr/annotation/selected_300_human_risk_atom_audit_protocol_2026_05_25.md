@@ -110,7 +110,17 @@ Primary labels:
 
 ## Minimum Aggregate Outputs After Review
 
-After the local sheet is reviewed, produce tracked aggregate files with:
+Use:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/summarize_human_risk_atom_audit.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25
+```
+
+Before review, this command records `review_pending` and missing required
+reviewer fields. After the local sheet is reviewed, it must produce tracked
+aggregate files with:
 
 - reviewed row count;
 - human-confirmed decision-change count;

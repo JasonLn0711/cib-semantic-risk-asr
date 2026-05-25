@@ -9,6 +9,7 @@
 - Candidate audio rows: `300`
 - Selected human-audit audio rows: `30`
 - Selected model-samples: `90`
+- Human-reviewed rows: `0 / 30`
 - Local review sheet: ignored under `artifacts/human_risk_atom_audit_sheet.tsv`
 
 ## Purpose
@@ -88,9 +89,39 @@ The local ignored sheet contains:
 The tracked protocol is:
 `80_semantic_risk_asr/annotation/selected_300_human_risk_atom_audit_protocol_2026_05_25.md`.
 
+## Review Readiness Summary
+
+The current local sheet has been summarized with:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/summarize_human_risk_atom_audit.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25
+```
+
+Current aggregate status:
+
+| Item | Value |
+| --- | ---: |
+| Audit rows | 30 |
+| Reviewed rows | 0 |
+| Pending rows | 30 |
+| Missing `reviewer_semantic_risk_label` | 30 |
+| Missing `reviewer_would_asr_error_change_decision` | 30 |
+| Missing `reviewer_annotation_confidence` | 30 |
+
+Tracked readiness outputs:
+
+| File | Content |
+| --- | --- |
+| `human_audit_review_summary.json` | Review completion and missing-field counts. |
+| `human_audit_strata_review.tsv` | Reviewed row counts by selection stratum. |
+| `human_audit_risk_atom_review.tsv` | Human-confirmed risk-atom aggregate counts after review. Currently empty because review is pending. |
+| `human_audit_model_review.tsv` | Per-model reviewed-sample aggregate counts. Currently zero reviewed rows. |
+
 ## Boundary
 
-This run does not complete the human audit. It creates the audit queue and
-aggregate selection evidence. Paper-facing SRES/CEIS and recovery claims remain
-proxy-only until the local sheet is reviewed and aggregate human annotation
-statistics are recorded.
+This run does not complete the human audit. It creates the audit queue,
+aggregate selection evidence, and aggregate review-readiness record.
+Paper-facing SRES/CEIS and recovery claims remain proxy-only until the local
+sheet is reviewed and aggregate human annotation statistics are recorded.

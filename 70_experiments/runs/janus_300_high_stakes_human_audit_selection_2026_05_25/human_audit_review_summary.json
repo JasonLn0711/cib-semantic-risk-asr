@@ -1,0 +1,27 @@
+{
+  "ok": true,
+  "input_boundary": "local transcript-bearing audit sheet; do not commit input",
+  "output_boundary": "aggregate-only; no audio IDs, sample IDs, transcripts, hypotheses, or reviewer notes",
+  "status": "review_pending",
+  "audit_rows": 30,
+  "reviewed_rows": 0,
+  "pending_rows": 30,
+  "missing_required_field_counts": {
+    "reviewer_annotation_confidence": 30,
+    "reviewer_asr_confusion_terms": 30,
+    "reviewer_critical_atoms": 30,
+    "reviewer_decision_change_reason": 30,
+    "reviewer_expected_safe_action": 30,
+    "reviewer_risk_atoms": 30,
+    "reviewer_semantic_risk_label": 30,
+    "reviewer_would_asr_error_change_decision": 30
+  },
+  "malformed_field_counts": {},
+  "label_counts": {
+    "reviewer_semantic_risk_label": {},
+    "reviewer_expected_safe_action": {},
+    "reviewer_would_asr_error_change_decision": {},
+    "reviewer_annotation_confidence": {}
+  },
+  "wall_time_seconds": 0.0008
+}

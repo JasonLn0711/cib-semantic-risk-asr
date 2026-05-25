@@ -265,6 +265,9 @@ Current human-audit gate status on 2026-05-25:
   `artifacts/human_risk_atom_audit_sheet.tsv`.
 - Tracked boundary: aggregate selection strata, risk-atom coverage, and
   model-signal coverage only.
+- Aggregate readiness summary:
+  `human_audit_review_summary.json` currently records `0 / 30` reviewed rows
+  and `30` pending rows.
 
 This gate is not complete until the local sheet is reviewed and aggregate human
 annotation stats are produced.

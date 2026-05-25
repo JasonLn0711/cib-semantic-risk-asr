@@ -104,7 +104,8 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   The tracked protocol is
   `80_semantic_risk_asr/annotation/selected_300_human_risk_atom_audit_protocol_2026_05_25.md`.
   The transcript-bearing audit sheet remains local-only under ignored
-  `artifacts/`; review is still pending.
+  `artifacts/`; review is still pending. Aggregate review status is produced by
+  `80_semantic_risk_asr/annotation/summarize_human_risk_atom_audit.py`.
 - The 2026-05-25 WER audit is recorded in
   `70_experiments/runs/wer_metric_audit_2026_05_25/`. The latest audit checks
   six 258-row hypothesis files against the canonical manifest, records package

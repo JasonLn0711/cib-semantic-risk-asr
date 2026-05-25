@@ -1,0 +1,7 @@
+selection_stratum	audit_rows	reviewed_rows	decision_change_yes_count	decision_change_uncertain_count	confidence_low_count
+clean_control	4	0	0	0	0
+critical_or_high_risk_missed	6	0	0	0	0
+high_proxy_risk	6	0	0	0	0
+model_disagreement	4	0	0	0	0
+risk_score_fill	4	0	0	0	0
+unsafe_downrouting	6	0	0	0	0

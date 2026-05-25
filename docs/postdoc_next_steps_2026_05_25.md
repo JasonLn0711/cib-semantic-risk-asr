@@ -95,6 +95,17 @@ Status: active roadmap after the six-model 258-row gate and WER audit
 selection stats 與 protocol。這一步把「需要 human audit」從提醒變成可執
 行 gate，但尚不能宣稱 human-reviewed CDS evidence 已完成。
 
+10. Human audit aggregate summarizer 已建立：
+
+- Script:
+  `80_semantic_risk_asr/annotation/summarize_human_risk_atom_audit.py`。
+- Current tracked readiness status:
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_summary.json`。
+- Current state: `30` audit rows、`0` reviewed rows、`30` pending rows。
+
+這表示下一步很明確：不是再產生 proxy table，而是填完 local audit sheet，
+再用同一支 summarizer 產出 aggregate human annotation stats。
+
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS
@@ -109,7 +120,8 @@ selection stats 與 protocol。這一步把「需要 human audit」從提醒變�
   258-row evidence。
 - 300 high-stakes ASR hypotheses、SRES/CEIS/downstream、metric-predictor、
   recovery 都已完成三個 Breeze-family comparator 的 proxy mode；human audit
-  queue 已建立但尚未審完，所以還不能宣稱 paper-grade main experiment 完成。
+  queue 與 aggregate summarizer 已建立，但目前 `0/30` rows reviewed，所以還
+  不能宣稱 paper-grade main experiment 完成。
 - 258-row recovery proxy 與 300-row high-stakes recovery proxy 都已完成；下
   一個缺口是 selected-300 human risk-atom audit，而不是再調 WER 定義。
 

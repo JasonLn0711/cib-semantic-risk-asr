@@ -82,3 +82,8 @@ For the selected-300 high-stakes audit, use the protocol in
 `selected_300_human_risk_atom_audit_protocol_2026_05_25.md`. The working
 annotation sheet for that gate is local-only under the corresponding run
 folder's ignored `artifacts/` directory.
+
+After review, summarize the local sheet with
+`summarize_human_risk_atom_audit.py`. The summarizer writes only aggregate
+review counts and intentionally omits audio IDs, transcripts, hypotheses, and
+reviewer free-text notes from tracked files.
