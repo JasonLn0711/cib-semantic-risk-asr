@@ -5,6 +5,29 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.109 - 2026-05-26T00:01:24+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `f2e6309`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/asr_candidate_runtime_gate_2026_05_25/README.md`
+  - `70_experiments/runs/asr_candidate_runtime_gate_2026_05_25/candidate_runtime_gate_summary.tsv`
+  - `70_experiments/runs/asr_candidate_runtime_gate_2026_05_25/summary.json`
+  - `70_experiments/runs/candidate_runtime_install_2026_05_25/README.md`
+  - `70_experiments/runs/gemma4_audio_runner_gate_2026_05_25/README.md`
+  - `70_experiments/runs/qwen3_asr_0_6b_smoke_1_row/README.md`
+  - `70_experiments/runs/qwen3_asr_0_6b_smoke_1_row/metrics.csv`
+  - `70_experiments/runs/qwen3_asr_1_7b_smoke_1_row/README.md`
+  - `70_experiments/runs/sensevoice_small_smoke_1_row/README.md`
+  - `70_experiments/runs/sensevoice_small_smoke_1_row/metrics.csv`
+  - `70_experiments/runs/whisper_large_v3_15_row_baseline/README.md`
+  - `70_experiments/runs/whisper_large_v3_15_row_baseline/metrics.csv`
+  - `70_experiments/runs/whisper_large_v3_turbo_15_row_baseline/README.md`
+  - `70_experiments/runs/whisper_large_v3_turbo_15_row_baseline/metrics.csv`
+
 ## v2.5.108 - 2026-05-26T00:01:02+08:00
 
 - Bump: `patch`

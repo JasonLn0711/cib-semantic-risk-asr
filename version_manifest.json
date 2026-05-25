@@ -1,23 +1,34 @@
 {
-  "version": "v2.5.108",
+  "version": "v2.5.109",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 108
+    "patch": 109
   },
-  "updated_at": "2026-05-26T00:01:02+08:00",
+  "updated_at": "2026-05-26T00:01:24+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "e468ed6",
+  "base_commit": "f2e6309",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "60_whisper_asr_finetuning/scripts/run_janus_qwen3_asr_pilot.py",
-    "60_whisper_asr_finetuning/scripts/run_janus_sensevoice_pilot.py",
-    "requirements-asr-candidates.txt"
+    "70_experiments/runs/asr_candidate_runtime_gate_2026_05_25/README.md",
+    "70_experiments/runs/asr_candidate_runtime_gate_2026_05_25/candidate_runtime_gate_summary.tsv",
+    "70_experiments/runs/asr_candidate_runtime_gate_2026_05_25/summary.json",
+    "70_experiments/runs/candidate_runtime_install_2026_05_25/README.md",
+    "70_experiments/runs/gemma4_audio_runner_gate_2026_05_25/README.md",
+    "70_experiments/runs/qwen3_asr_0_6b_smoke_1_row/README.md",
+    "70_experiments/runs/qwen3_asr_0_6b_smoke_1_row/metrics.csv",
+    "70_experiments/runs/qwen3_asr_1_7b_smoke_1_row/README.md",
+    "70_experiments/runs/sensevoice_small_smoke_1_row/README.md",
+    "70_experiments/runs/sensevoice_small_smoke_1_row/metrics.csv",
+    "70_experiments/runs/whisper_large_v3_15_row_baseline/README.md",
+    "70_experiments/runs/whisper_large_v3_15_row_baseline/metrics.csv",
+    "70_experiments/runs/whisper_large_v3_turbo_15_row_baseline/README.md",
+    "70_experiments/runs/whisper_large_v3_turbo_15_row_baseline/metrics.csv"
   ]
 }

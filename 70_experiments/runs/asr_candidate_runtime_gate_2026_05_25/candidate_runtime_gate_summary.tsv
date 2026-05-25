@@ -1,0 +1,8 @@
+candidate	status	rows	model	metric_scope	cer_mean	wer_mean	cer_zh_micro	wer_zh_jieba_micro	wall_time_seconds	outer_wall_time_seconds	locale_violation_rows	simplified_char_count	runtime_gate_decision
+whisper_large_v3_15_row_baseline	completed_locale_not_clean	15	openai/whisper-large-v3	15-row	33.77	43.18	33.33	42.04	14.59	17.26	2	23	do_not_promote_to_258_until_locale_policy_is_audited
+whisper_large_v3_turbo_15_row_baseline	completed_locale_not_clean	15	openai/whisper-large-v3-turbo	15-row	41.33	52.52	40.36	50.87	7.68	10.33	4	48	keep_as_speed_quality_smoke_only
+sensevoice_small_smoke_1_row	completed_locale_failed	1	FunAudioLLM/SenseVoiceSmall	1-row	65.88	81.25	65.88	81.25	2.15	5.96	1	11	do_not_promote_to_15_until_traditional_chinese_policy_is_audited
+qwen3_asr_0_6b_smoke_1_row	completed_disable_cudnn_locale_failed	1	Qwen/Qwen3-ASR-0.6B	1-row	74.12	95.83	74.12	95.83	6.45	10.06	1	13	do_not_promote_to_15_until_traditional_chinese_policy_is_audited
+qwen3_asr_1_7b_smoke_1_row	stopped_before_inference	0	Qwen/Qwen3-ASR-1.7B	load-gate									retry_only_after_qwen_0_6b_locale_gate_passes
+gemma4_e2b_audio_runner_gate	blocked_before_inference	0	unsloth/gemma-4-E2B	runner-gate									requires_isolated_gemma4_multimodal_runtime
+gemma4_e4b_audio_runner_gate	blocked_before_inference	0	unsloth/gemma-4-E4B	runner-gate									requires_isolated_gemma4_multimodal_runtime

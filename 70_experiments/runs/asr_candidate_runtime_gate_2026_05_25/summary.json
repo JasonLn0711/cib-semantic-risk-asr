@@ -1,0 +1,30 @@
+{
+  "ok": true,
+  "date": "2026-05-25",
+  "scope": "ASR and multimodal candidate runtime gates after initial Whisper v3 smoke",
+  "strict_locale_policy": "Taiwan Traditional Chinese; no Simplified Chinese output accepted for promotion",
+  "results": {
+    "completed_contract_runs": [
+      "whisper_large_v3_15_row_baseline",
+      "whisper_large_v3_turbo_15_row_baseline",
+      "sensevoice_small_smoke_1_row",
+      "qwen3_asr_0_6b_smoke_1_row"
+    ],
+    "blocked_or_stopped": [
+      "qwen3_asr_1_7b_smoke_1_row",
+      "gemma4_e2b_audio_runner_gate",
+      "gemma4_e4b_audio_runner_gate"
+    ],
+    "promotion_decision": "No new candidate should be promoted to 258-row or selected-300 until the strict Traditional Chinese locale gate is clean or an audited conversion/reporting policy is approved.",
+    "best_new_candidate_for_possible_followup": "openai/whisper-large-v3, because it completed 15 rows and had the lowest new-candidate CER, but it still had 2 locale-violation rows."
+  },
+  "environment": {
+    "gpu": "NVIDIA GeForce RTX 5080",
+    "torch": "2.12.0+cu130",
+    "transformers_after_candidate_install": "4.57.6",
+    "funasr": "1.3.3",
+    "modelscope": "1.37.1",
+    "qwen_asr": "0.0.6",
+    "git_policy": "Raw predictions, artifacts, model downloads, logs, and .venv remain ignored."
+  }
+}
