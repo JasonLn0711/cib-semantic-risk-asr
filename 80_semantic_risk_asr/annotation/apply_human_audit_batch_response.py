@@ -25,10 +25,12 @@ import validate_human_risk_atom_audit as validation  # noqa: E402
 import audit_human_review_batch_status as batch_status_audit  # noqa: E402
 import refresh_human_audit_evidence as refresh_audit  # noqa: E402
 from prepare_human_audit_review_batch import (  # noqa: E402
+    DEFAULT_LOCAL_PACKET_DIR,
     REFERENCE_TRANSCRIPT_POLICY,
     REMAINING_REVIEW_SCOPE,
     assert_tracked_safe,
     iter_model_assessments,
+    prepare_batch,
     repo_relative,
 )
 
@@ -490,9 +492,12 @@ def post_write_refresh(
     batch_summary: Path,
     output_dir: Path,
     readiness_output_dir: Path,
+    local_packet_dir: Path,
+    response_dir: Path,
     expected_rows: int | None,
     repo_root: Path,
     skip_readiness: bool,
+    prepare_next_after_write: bool,
 ) -> dict[str, Any]:
     batch_payload = batch_status_audit.audit_batch_status(
         audit_sheet=audit_sheet,
@@ -512,6 +517,33 @@ def post_write_refresh(
             require_complete=False,
             skip_readiness=skip_readiness,
         )
+    next_batch_payload: dict[str, Any] | None = None
+    next_template_payload: dict[str, Any] | None = None
+    next_batch_error = ""
+    if (
+        prepare_next_after_write
+        and refresh_payload
+        and int(refresh_payload.get("pending_rows") or 0) > 0
+    ):
+        try:
+            next_batch_payload = prepare_batch(
+                audit_sheet=audit_sheet,
+                output_dir=output_dir,
+                local_packet_dir=local_packet_dir,
+                selection_stratum=None,
+                expected_rows=expected_rows,
+                repo_root=repo_root,
+            )
+            next_template_payload = prepare_response_template(
+                audit_sheet=audit_sheet,
+                batch_summary=output_dir / "human_audit_next_review_batch_summary.json",
+                output_dir=output_dir,
+                response_dir=response_dir,
+                expected_rows=expected_rows,
+                repo_root=repo_root,
+            )
+        except ValueError as exc:
+            next_batch_error = str(exc)
     payload = {
         "post_write_batch_status": batch_payload["status"],
         "post_write_batch_ready_for_refresh": batch_payload["batch_ready_for_refresh"],
@@ -521,9 +553,22 @@ def post_write_refresh(
         "post_write_refresh_ok": refresh_payload.get("ok") if refresh_payload else "",
         "post_write_paper_ready": refresh_payload.get("readiness_paper_ready") if refresh_payload else "",
         "post_write_publishable_ready": refresh_payload.get("publishable_ready") if refresh_payload else "",
+        "post_write_prepare_next_requested": prepare_next_after_write,
+        "post_write_next_batch_prepared": next_batch_payload is not None,
+        "post_write_next_batch_status": next_batch_payload.get("status") if next_batch_payload else "",
+        "post_write_next_selection_stratum": next_batch_payload.get("selection_stratum") if next_batch_payload else "",
+        "post_write_next_rows_in_batch": next_batch_payload.get("rows_in_batch") if next_batch_payload else "",
+        "post_write_next_response_template_path": (
+            next_template_payload.get("local_response_template_path") if next_template_payload else ""
+        ),
+        "post_write_next_batch_error": next_batch_error,
         "post_write_next_action": (
-            "Prepare or audit the next review batch; after all selected-300 rows are "
-            "reviewed, rerun refresh_human_audit_evidence.py --require-complete."
+            "Open the prepared next local packet and fill its response TSV."
+            if next_batch_payload
+            else (
+                "Prepare or audit the next review batch; after all selected-300 rows are "
+                "reviewed, rerun refresh_human_audit_evidence.py --require-complete."
+            )
             if refresh_payload
             else "Complete the current batch before refreshing aggregate evidence."
         ),
@@ -539,12 +584,15 @@ def apply_response_sheet_workflow(
     batch_summary: Path,
     output_dir: Path,
     readiness_output_dir: Path,
+    local_packet_dir: Path,
+    response_dir: Path,
     expected_rows: int | None,
     repo_root: Path,
     write: bool,
     require_complete: bool = False,
     refresh_after_write: bool = False,
     skip_readiness: bool = False,
+    prepare_next_after_write: bool = False,
 ) -> dict[str, Any]:
     payload = apply_response_sheet(
         audit_sheet=audit_sheet,
@@ -570,9 +618,12 @@ def apply_response_sheet_workflow(
                     batch_summary=batch_summary,
                     output_dir=output_dir,
                     readiness_output_dir=readiness_output_dir,
+                    local_packet_dir=local_packet_dir,
+                    response_dir=response_dir,
                     expected_rows=expected_rows,
                     repo_root=repo_root,
                     skip_readiness=skip_readiness,
+                    prepare_next_after_write=prepare_next_after_write,
                 )
             )
         else:
@@ -593,6 +644,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_RUN_DIR)
     parser.add_argument("--response-dir", type=Path, default=DEFAULT_RESPONSE_DIR)
     parser.add_argument("--readiness-output-dir", type=Path, default=DEFAULT_READINESS_DIR)
+    parser.add_argument("--local-packet-dir", type=Path, default=DEFAULT_LOCAL_PACKET_DIR)
     parser.add_argument("--response-sheet", type=Path)
     parser.add_argument("--write-template", action="store_true")
     parser.add_argument("--write", action="store_true")
@@ -606,6 +658,14 @@ def parse_args() -> argparse.Namespace:
         "--skip-readiness",
         action="store_true",
         help="When using --refresh-after-write, refresh local audit aggregates without readiness outputs.",
+    )
+    parser.add_argument(
+        "--prepare-next-after-write",
+        action="store_true",
+        help=(
+            "After a successful --write --refresh-after-write, prepare the next local "
+            "review packet and response TSV template when pending rows remain."
+        ),
     )
     parser.add_argument("--expected-rows", type=int, default=30)
     return parser.parse_args()
@@ -642,12 +702,15 @@ def main() -> int:
         batch_summary=args.batch_summary,
         output_dir=args.output_dir,
         readiness_output_dir=args.readiness_output_dir,
+        local_packet_dir=args.local_packet_dir,
+        response_dir=args.response_dir,
         expected_rows=args.expected_rows,
         repo_root=REPO_ROOT,
         write=args.write,
         require_complete=args.require_complete,
         refresh_after_write=args.refresh_after_write,
         skip_readiness=args.skip_readiness,
+        prepare_next_after_write=args.prepare_next_after_write,
     )
     print(
         json.dumps(
@@ -666,6 +729,14 @@ def main() -> int:
                 "post_write_refresh_ran": payload.get("post_write_refresh_ran", ""),
                 "post_write_batch_status": payload.get("post_write_batch_status", ""),
                 "post_write_publishable_ready": payload.get("post_write_publishable_ready", ""),
+                "post_write_next_batch_prepared": payload.get(
+                    "post_write_next_batch_prepared",
+                    "",
+                ),
+                "post_write_next_selection_stratum": payload.get(
+                    "post_write_next_selection_stratum",
+                    "",
+                ),
             },
             ensure_ascii=False,
         )

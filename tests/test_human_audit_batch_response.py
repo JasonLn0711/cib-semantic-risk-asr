@@ -326,11 +326,14 @@ def test_write_can_refresh_batch_status_and_aggregate_outputs(tmp_path: Path) ->
         batch_summary=batch_summary,
         output_dir=run_dir,
         readiness_output_dir=readiness_dir,
+        local_packet_dir=run_dir / "artifacts" / "review_batches",
+        response_dir=run_dir / "artifacts" / "review_responses",
         expected_rows=30,
         repo_root=tmp_path,
         write=True,
         require_complete=True,
         refresh_after_write=True,
+        prepare_next_after_write=True,
     )
 
     assert payload["ok"] is True
@@ -341,8 +344,14 @@ def test_write_can_refresh_batch_status_and_aggregate_outputs(tmp_path: Path) ->
     assert payload["post_write_refresh_ok"] is True
     assert payload["post_write_paper_ready"] is False
     assert payload["post_write_publishable_ready"] is False
+    assert payload["post_write_next_batch_prepared"] is True
+    assert payload["post_write_next_selection_stratum"] == "clean_control"
+    assert payload["post_write_next_rows_in_batch"] == 29
+    assert payload["post_write_next_response_template_path"]
     assert (run_dir / "human_audit_current_review_batch_status_summary.json").exists()
     assert (run_dir / "human_audit_refresh_summary.json").exists()
+    assert (run_dir / "human_audit_next_review_batch_summary.json").exists()
+    assert (run_dir / "human_audit_batch_response_template_summary.json").exists()
     assert (readiness_dir / "publishable_evidence_completion_summary.json").exists()
     tracked = (run_dir / "human_audit_batch_response_apply_summary.json").read_text(
         encoding="utf-8"
