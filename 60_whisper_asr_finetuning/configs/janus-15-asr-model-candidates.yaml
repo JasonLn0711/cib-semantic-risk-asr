@@ -110,82 +110,92 @@ candidate_models:
     family: Whisper
     role: newer Whisper large checkpoint for Taiwan Traditional Chinese
       comparison against large-v2 and Breeze candidates
-    current_status: planned_locale_guard_required
+    current_status: smoke_1_row_completed_contract_passed_locale_clean
     direct_quality_baseline: true
     language_control_ref: language_control.model_specific_controls.whisper
     source_url: https://huggingface.co/openai/whisper-large-v3
-    notes: Add as a direct ASR baseline after runner smoke. Use `language=zh`,
-      `task=transcribe`, and the Traditional Chinese locale gate.
+    notes: One-row CUDA smoke passed on 2026-05-25 with cuDNN disabled,
+      float16, `zh_asr`, `jieba`, and zero locale violations. Promote to the
+      fixed 15-row gate only if an additional Whisper-family comparator is
+      still needed.
 
   - run_id: whisper_large_v3_turbo_15_row_baseline
     model_name_or_path: openai/whisper-large-v3-turbo
     family: Whisper
     role: speed/quality tradeoff comparator against large-v3 and Breeze
-    current_status: planned_locale_guard_required
+    current_status: smoke_1_row_completed_contract_passed_locale_clean
     direct_quality_baseline: true
     language_control_ref: language_control.model_specific_controls.whisper
     source_url: https://huggingface.co/openai/whisper-large-v3-turbo
-    notes: Add as a direct ASR baseline after runner smoke. It is a faster
-      pruned large-v3 variant, so record wall time, seconds per row, and any
-      locale violations alongside CER/CDS metrics.
+    notes: One-row CUDA smoke passed on 2026-05-25 with cuDNN disabled,
+      float16, `zh_asr`, `jieba`, and zero locale violations. Keep it as a
+      speed/quality tradeoff candidate and do not rank from the single smoke
+      row.
 
   - run_id: sensevoice_small_15_row_candidate
     model_name_or_path: FunAudioLLM/SenseVoiceSmall
     family: FunASR SenseVoice
     role: non-autoregressive multilingual ASR comparator with speech
       understanding side signals
-    current_status: planned_new_runner_required
+    current_status: model_available_local_runner_missing
     direct_quality_baseline: true
     language_control_ref: language_control.model_specific_controls.sensevoice
     source_url: https://huggingface.co/FunAudioLLM/SenseVoiceSmall
-    notes: Requires a FunASR runner that emits the standard hypothesis contract.
-      Use `language=zh`, force Taiwan Traditional Chinese by post-decode locale
+    notes: Hugging Face model availability was checked on 2026-05-25, but the
+      local environment does not yet install `funasr` or `modelscope`. Requires
+      a FunASR runner that emits the standard hypothesis contract. Use
+      `language=zh`, force Taiwan Traditional Chinese by post-decode locale
       gate, and record VAD, ITN, batch size, wall time, and latency separately.
 
   - run_id: qwen3_asr_0_6b_15_row_candidate
     model_name_or_path: Qwen/Qwen3-ASR-0.6B
     family: Qwen3-ASR
     role: smaller Qwen3-ASR smoke and latency candidate before 1.7B
-    current_status: planned_new_runner_required
+    current_status: model_available_local_runner_missing
     direct_quality_baseline: true
     language_control_ref: language_control.model_specific_controls.qwen3_asr
     source_url: https://huggingface.co/Qwen/Qwen3-ASR-0.6B
-    notes: Use this before Qwen3-ASR-1.7B to check install/runtime feasibility.
-      Record toolkit version, offline vs streaming mode, wall time, throughput,
-      and Traditional Chinese locale violations.
+    notes: Hugging Face model availability was checked on 2026-05-25. The
+      local environment does not yet install the `qwen-asr` package, so this
+      remains the first Qwen runner target. Record toolkit version, offline vs
+      streaming mode, wall time, throughput, and Traditional Chinese locale
+      violations.
 
   - run_id: qwen3_asr_1_7b_15_row_candidate
     model_name_or_path: Qwen/Qwen3-ASR-1.7B
     family: Qwen3-ASR
     role: stronger Qwen3-ASR quality candidate after 0.6B smoke
-    current_status: planned_after_qwen3_0_6b_smoke
+    current_status: model_available_waiting_for_0_6b_runner_smoke
     direct_quality_baseline: true
     language_control_ref: language_control.model_specific_controls.qwen3_asr
     source_url: https://huggingface.co/Qwen/Qwen3-ASR-1.7B
-    notes: Do not run full test split until the 0.6B runner passes the 15-row
-      contract and locale gate.
+    notes: Hugging Face model availability was checked on 2026-05-25. Do not
+      run full test split until the 0.6B runner passes the 15-row contract and
+      locale gate.
 
   - run_id: gemma4_e4b_audio_15_row_candidate
     model_name_or_path: unsloth/gemma-4-E4B
     family: Gemma 4 multimodal audio
     role: prompted multimodal ASR and decision-text comparator, not a pure ASR
       model
-    current_status: planned_new_multimodal_runner_required
+    current_status: model_available_new_multimodal_runner_required
     direct_quality_baseline: false
     language_control_ref: language_control.model_specific_controls.gemma4_audio
     source_url: https://huggingface.co/unsloth/gemma-4-E4B
-    notes: Use only after a multimodal runner can emit the same hypothesis
-      contract. Record prompt, max_new_tokens, audio length limit, wall time,
-      output verbosity, hallucination markers, and locale violations.
+    notes: Hugging Face model availability was checked on 2026-05-25. Use only
+      after a multimodal runner can emit the same output contract. Record
+      prompt, max_new_tokens, audio length limit, wall time, output verbosity,
+      hallucination markers, and locale violations.
 
   - run_id: gemma4_e2b_audio_15_row_candidate
     model_name_or_path: unsloth/gemma-4-E2B
     family: Gemma 4 multimodal audio
     role: smaller prompted multimodal ASR and latency candidate
-    current_status: planned_new_multimodal_runner_required
+    current_status: model_available_new_multimodal_runner_required
     direct_quality_baseline: false
     language_control_ref: language_control.model_specific_controls.gemma4_audio
     source_url: https://huggingface.co/unsloth/gemma-4-E2B
-    notes: Use as the cheaper multimodal smoke before E4B if VRAM or latency
-      becomes the bottleneck. It must pass the same Traditional Chinese locale
-      gate before any CDS comparison.
+    notes: Hugging Face model availability was checked on 2026-05-25. Use as
+      the cheaper multimodal smoke before E4B if VRAM or latency becomes the
+      bottleneck. It must pass the same Traditional Chinese locale gate before
+      any CDS comparison.

@@ -364,11 +364,21 @@ decision-stability evidence」。
 - 可補齊 reviewer 會期待的 strong Whisper baseline；
 - large-v3 turbo 可以提供速度/品質 tradeoff。
 
-先做：
+2026-05-25 current status：
 
-1. 1-2 row smoke；
-2. 15-row contract；
-3. locale gate；
+- `openai/whisper-large-v3` 1-row CUDA smoke 已通過，`zh_asr` + `jieba`
+  metric、float16、cuDNN disabled、locale violation rows `0`，wall time
+  `271.91s`。
+- `openai/whisper-large-v3-turbo` 1-row CUDA smoke 已通過，locale
+  violation rows `0`，wall time `144.77s`。
+- 這兩個結果只證明 runner/contract/locale feasibility；不能拿來做模型
+  排名。
+
+下一步只在仍需要 Whisper-family comparator 時才做：
+
+1. fixed 15-row contract；
+2. locale gate；
+3. 15-row CDS/proxy comparison；
 4. 258-row run。
 
 ### SenseVoice
@@ -383,6 +393,7 @@ decision-stability evidence」。
 
 - 新增 SenseVoice runner；
 - 輸出同一個 hypothesis schema；
+- 先在隔離或明確記錄的環境安裝 `funasr` / `modelscope`；
 - 先跑 1-2 row smoke；
 - 再跑 15-row；
 - 通過 validation 後再決定是否進 258-row。
@@ -397,6 +408,7 @@ decision-stability evidence」。
 
 完成條件：
 
+- 先在隔離或明確記錄的環境安裝官方 `qwen-asr` package；
 - runner 能固定輸出繁中逐字稿；
 - 不輸出摘要或翻譯；
 - runtime、latency、locale violations 都被記錄；

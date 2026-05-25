@@ -47,6 +47,48 @@ Model-specific implementation:
 | Gemma 4 E2B audio | `unsloth/gemma-4-E2B` | cheaper prompted multimodal ASR candidate | new multimodal runner, prompt/locale gate |
 | Gemma 4 E4B audio | `unsloth/gemma-4-E4B` | stronger prompted multimodal ASR candidate | after E2B or direct if VRAM allows |
 
+## 2026-05-25 Smoke / Readiness Update
+
+Local hardware and runtime:
+
+- GPU: NVIDIA GeForce RTX 5080, 16303 MiB total memory.
+- Installed ASR stack: `torch 2.12.0`, `transformers 4.55.2`,
+  `torchaudio 2.11.0`, `librosa 0.11.0`, `soundfile 0.13.1`,
+  `jiwer 3.1.0`, `jieba 0.42.1`, `huggingface_hub 0.36.2`.
+- Missing local packages for new ASR families: `funasr`, `modelscope`, and
+  `qwen-asr`.
+
+Model availability was checked through Hugging Face metadata on 2026-05-25:
+
+| Model | Availability | SHA prefix | Local status |
+| --- | --- | --- | --- |
+| `openai/whisper-large-v3` | public, not gated | `06f233fe06e7` | 1-row CUDA smoke passed |
+| `openai/whisper-large-v3-turbo` | public, not gated | `41f01f3fe87f` | 1-row CUDA smoke passed |
+| `FunAudioLLM/SenseVoiceSmall` | public, not gated | `3eb3b4eeffc2` | runner missing; install/runtime gate needed |
+| `Qwen/Qwen3-ASR-0.6B` | public, not gated | `5eb144179a02` | runner missing; install/runtime gate needed |
+| `Qwen/Qwen3-ASR-1.7B` | public, not gated | `7278e1e70fe2` | wait for 0.6B runner smoke |
+| `unsloth/gemma-4-E2B` | public, not gated | `ed37665cc131` | separate multimodal runner needed |
+| `unsloth/gemma-4-E4B` | public, not gated | `5bf6a20911f0` | separate multimodal runner needed |
+
+Whisper smoke results:
+
+| Run | Rows | Runtime | CER mean | WER mean | Wall time seconds | Locale violation rows | Decision |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | --- |
+| `whisper_large_v3_smoke_1_row` | 1 | CUDA, float16, cuDNN disabled | 40.00 | 47.92 | 271.91 | 0 | promote only to 15-row gate, not ranking |
+| `whisper_large_v3_turbo_smoke_1_row` | 1 | CUDA, float16, cuDNN disabled | 77.65 | 85.42 | 144.77 | 0 | speed/quality comparator only |
+
+The two Whisper smoke runs passed one-row field-contract validation and local
+Traditional Chinese locale checks. Raw predictions and validation JSON stay in
+ignored local `predictions/` and `artifacts/` directories; tracked records keep
+only aggregate metrics and decisions.
+
+SenseVoice should use the official FunASR `AutoModel` path with explicit VAD,
+ITN, batch-size, and `language=zh` settings once `funasr` is installed.
+Qwen3-ASR should use the official `qwen-asr` package in a fresh or carefully
+isolated environment before any full split. Gemma 4 E2B/E4B must remain a
+separate prompted multimodal-ASR lane using `AutoModelForMultimodalLM` or
+Unsloth-supported local inference, not a pure ASR baseline row.
+
 ## Required Extra Metrics
 
 Record these for every future model, including failed runs:
