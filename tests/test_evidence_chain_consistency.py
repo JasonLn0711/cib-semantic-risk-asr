@@ -9,6 +9,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "scoring"))
 
 from audit_evidence_chain_consistency import (  # noqa: E402
+    RESPONSE_ACTION_ITEMS_TSV_RELATIVE,
     RESPONSE_GAP_TSV_RELATIVE,
     SUMMARY_SPECS,
     assert_aggregate_safe,
@@ -71,6 +72,90 @@ def write_gap_tsv_fixture(root: Path, row_numbers: list[int] = ROW_NUMBERS) -> N
                     "model_reviewer_critical_atoms",
                     "false",
                     "true",
+                    commands["timing_start_write_by_row"][str(row_number)],
+                    commands["timing_finish_write_by_row"][str(row_number)],
+                ]
+            )
+        )
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_action_items_tsv_fixture(root: Path, row_numbers: list[int] = ROW_NUMBERS) -> None:
+    path = root / RESPONSE_ACTION_ITEMS_TSV_RELATIVE
+    path.parent.mkdir(parents=True, exist_ok=True)
+    header = [
+        "action_id",
+        "row_number",
+        "action_scope",
+        "model_assessment_slot",
+        "field_name",
+        "status",
+        "reviewer_action",
+        "timing_start_write_command",
+        "timing_finish_write_command",
+    ]
+    row_fields = [
+        "reviewer_semantic_risk_label",
+        "reviewer_risk_atoms",
+        "reviewer_critical_atoms",
+        "reviewer_asr_confusion_terms",
+        "reviewer_would_asr_error_change_decision",
+        "reviewer_decision_change_reason",
+        "reviewer_expected_safe_action",
+        "reviewer_annotation_confidence",
+    ]
+    model_fields = [
+        "model_reviewer_annotation_confidence",
+        "model_reviewer_critical_atoms",
+        "model_reviewer_expected_safe_action",
+        "model_reviewer_would_asr_error_change_decision",
+    ]
+    commands = timing_commands(row_numbers)
+    lines = ["\t".join(header)]
+    for row_number in row_numbers:
+        for field_name in row_fields:
+            lines.append(
+                "\t".join(
+                    [
+                        f"row-{row_number}:row_field:{field_name}",
+                        str(row_number),
+                        "row_field",
+                        "",
+                        field_name,
+                        "pending",
+                        "fill row-level response field in local response TSV",
+                        "",
+                        "",
+                    ]
+                )
+            )
+        for slot in range(1, 4):
+            for field_name in model_fields:
+                lines.append(
+                    "\t".join(
+                        [
+                            f"row-{row_number}:model_slot-{slot}:{field_name}",
+                            str(row_number),
+                            "model_assessment_field",
+                            str(slot),
+                            field_name,
+                            "pending",
+                            "fill field for the corresponding model row in local response TSV",
+                            "",
+                            "",
+                        ]
+                    )
+                )
+        lines.append(
+            "\t".join(
+                [
+                    f"row-{row_number}:review_timing",
+                    str(row_number),
+                    "review_timing",
+                    "",
+                    "review_timing",
+                    "pending",
+                    "record review_started_at/review_finished_at or review_elapsed_seconds",
                     commands["timing_start_write_by_row"][str(row_number)],
                     commands["timing_finish_write_by_row"][str(row_number)],
                 ]
@@ -217,6 +302,12 @@ def write_consistent_fixture(root: Path) -> None:
             status="response_closeout_blocked",
             require_timing=True,
             review_timing={"rows_missing_timing": 6},
+            response_action_item_overview={
+                "total_action_items": 126,
+                "row_field_action_items": 48,
+                "model_field_action_items": 72,
+                "timing_action_items": 6,
+            },
             response_gap_summary_by_row=[
                 {"row_number": row_number}
                 for row_number in ROW_NUMBERS
@@ -303,6 +394,7 @@ def write_consistent_fixture(root: Path) -> None:
         },
     )
     write_gap_tsv_fixture(root)
+    write_action_items_tsv_fixture(root)
 
 
 def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Path) -> None:
@@ -310,7 +402,7 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True
-    assert payload["status_counts"] == {"pass": 15}
+    assert payload["status_counts"] == {"pass": 16}
     assert not payload["failed_checks"]
     assert_aggregate_safe(payload)
 
@@ -420,6 +512,18 @@ def test_consistency_audit_fails_gap_tsv_timing_command_drift(tmp_path: Path) ->
 
     assert payload["ok"] is False
     assert any(item["check_id"] == "C068" for item in payload["failed_checks"])
+
+
+def test_consistency_audit_fails_response_action_item_count_drift(tmp_path: Path) -> None:
+    write_consistent_fixture(tmp_path)
+    action_path = tmp_path / RESPONSE_ACTION_ITEMS_TSV_RELATIVE
+    lines = action_path.read_text(encoding="utf-8").splitlines()
+    action_path.write_text("\n".join(lines[:-1]) + "\n", encoding="utf-8")
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C069" for item in payload["failed_checks"])
 
 
 def test_consistency_safety_rejects_raw_field_tokens() -> None:

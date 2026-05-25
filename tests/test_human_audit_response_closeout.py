@@ -9,8 +9,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "annotation"))
 
 from build_human_audit_response_closeout_checklist import (  # noqa: E402
+    RESPONSE_ACTION_ITEMS_TSV_NAME,
     RESPONSE_GAP_TSV_NAME,
     build_closeout,
+    write_action_items_tsv,
     write_gap_tsv,
 )
 
@@ -167,7 +169,16 @@ def test_closeout_blocks_pending_response_without_private_content(tmp_path: Path
     assert payload["response_gap_summary_by_row"][0]["row_number"] == 1
     assert payload["response_gap_summary_by_row"][0]["has_gap"] is True
     assert "timing_start_write_by_row" in payload["response_gap_timing_commands"]
+    assert payload["response_action_item_overview"] == {
+        "total_action_items": 10,
+        "row_field_action_items": 2,
+        "model_field_action_items": 6,
+        "timing_action_items": 2,
+    }
     assert payload["tracked_outputs"]["response_gap_tsv"].endswith(RESPONSE_GAP_TSV_NAME)
+    assert payload["tracked_outputs"]["response_action_items_tsv"].endswith(
+        RESPONSE_ACTION_ITEMS_TSV_NAME
+    )
     assert "response_not_complete" in payload["blocker_keys"]
     assert "incomplete_response" in payload["blocker_keys"]
     status_by_step = {row["step_id"]: row["status"] for row in rows}
@@ -218,6 +229,49 @@ def test_write_gap_tsv_is_row_number_only_and_safe(tmp_path: Path) -> None:
         "model_reviewer_critical_atoms\tfalse\ttrue\t"
         "mark_human_audit_response_timing.py --row-number 2 --mark-start --write\t"
         "mark_human_audit_response_timing.py --row-number 2 --mark-finish --write"
+    ) in text
+    assert "PRIVATE_" not in text
+    assert "audio_id" not in text
+    assert "sample_id" not in text
+    assert "reference_text" not in text
+    assert "hypothesis_text" not in text
+    assert "asr_hypotheses_json" not in text
+    assert "reviewer_model_assessments_json" not in text
+    assert "reviewer_notes" not in text
+    assert "reviewer_verified_transcript" not in text
+
+
+def test_write_action_items_tsv_is_field_level_and_safe(tmp_path: Path) -> None:
+    run_dir = tmp_path / "run"
+    paths = write_closeout_inputs(run_dir, response_complete=False)
+
+    payload, _rows = build_closeout(
+        run_dir=run_dir,
+        apply_summary_path=paths["apply_summary"],
+        apply_log_summary_path=paths["apply_log_summary"],
+        session_start_summary_path=paths["session_start"],
+        action_checklist_summary_path=paths["action_checklist"],
+        handoff_summary_path=paths["handoff"],
+        repo_root=tmp_path,
+    )
+    output_tsv = run_dir / RESPONSE_ACTION_ITEMS_TSV_NAME
+    write_action_items_tsv(output_tsv, payload["response_action_items"])
+
+    text = output_tsv.read_text(encoding="utf-8")
+    lines = text.splitlines()
+    assert lines[0] == (
+        "action_id\trow_number\taction_scope\tmodel_assessment_slot\tfield_name\t"
+        "status\treviewer_action\ttiming_start_write_command\t"
+        "timing_finish_write_command"
+    )
+    assert len(lines) == 11
+    assert "row-1:row_field:reviewer_risk_atoms\t1\trow_field" in text
+    assert "row-1:model_slot-1:model_reviewer_critical_atoms\t1\tmodel_assessment_field\t1" in text
+    assert (
+        "row-1:review_timing\t1\treview_timing\t\treview_timing\tpending\t"
+        "record review_started_at/review_finished_at or review_elapsed_seconds\t"
+        "mark_human_audit_response_timing.py --row-number 1 --mark-start --write\t"
+        "mark_human_audit_response_timing.py --row-number 1 --mark-finish --write"
     ) in text
     assert "PRIVATE_" not in text
     assert "audio_id" not in text

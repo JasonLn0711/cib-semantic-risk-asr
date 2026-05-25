@@ -26,6 +26,10 @@ RESPONSE_GAP_TSV_RELATIVE = (
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
     "human_audit_response_gap_checklist.tsv"
 )
+RESPONSE_ACTION_ITEMS_TSV_RELATIVE = (
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+    "human_audit_response_action_items.tsv"
+)
 
 SENSITIVE_TOKENS = (
     "audio_id",
@@ -699,6 +703,96 @@ def add_gap_tsv_command_check(
     )
 
 
+def add_response_action_items_check(
+    root: Path,
+    payloads: dict[str, dict[str, Any]],
+    rows: list[dict[str, str]],
+) -> None:
+    action_items_path = root / RESPONSE_ACTION_ITEMS_TSV_RELATIVE
+    if not action_items_path.exists():
+        rows.append(
+            check_row(
+                check_id="C069",
+                invariant="response action-items TSV matches closeout gap counts",
+                passed=False,
+                evidence=RESPONSE_ACTION_ITEMS_TSV_RELATIVE,
+                result="response action-items TSV is missing",
+                next_action="Rerun build_human_audit_response_closeout_checklist.py before reviewer work.",
+            )
+        )
+        return
+
+    action_items = read_tsv_rows(action_items_path)
+    closeout = payloads.get("closeout", {})
+    overview = closeout.get("response_action_item_overview")
+    overview = overview if isinstance(overview, dict) else {}
+    counts = {
+        "total_action_items": len(action_items),
+        "row_field_action_items": sum(
+            1 for item in action_items if item.get("action_scope") == "row_field"
+        ),
+        "model_field_action_items": sum(
+            1
+            for item in action_items
+            if item.get("action_scope") == "model_assessment_field"
+        ),
+        "timing_action_items": sum(
+            1 for item in action_items if item.get("action_scope") == "review_timing"
+        ),
+    }
+    expected_counts = {
+        "total_action_items": int(overview.get("total_action_items") or 0),
+        "row_field_action_items": int(overview.get("row_field_action_items") or 0),
+        "model_field_action_items": int(overview.get("model_field_action_items") or 0),
+        "timing_action_items": int(overview.get("timing_action_items") or 0),
+    }
+    unique_action_ids = {
+        str(item.get("action_id", ""))
+        for item in action_items
+        if item.get("action_id")
+    }
+    all_items_pending = all(item.get("status") == "pending" for item in action_items)
+    timing_items_have_commands = all(
+        item.get("timing_start_write_command")
+        and item.get("timing_finish_write_command")
+        for item in action_items
+        if item.get("action_scope") == "review_timing"
+    )
+    sensitive = False
+    try:
+        assert_aggregate_safe(action_items)
+    except ValueError:
+        sensitive = True
+
+    passed = (
+        counts == expected_counts
+        and len(unique_action_ids) == len(action_items)
+        and all_items_pending
+        and timing_items_have_commands
+        and not sensitive
+    )
+    rows.append(
+        check_row(
+            check_id="C069",
+            invariant="response action-items TSV matches closeout gap counts",
+            passed=passed,
+            evidence=RESPONSE_ACTION_ITEMS_TSV_RELATIVE,
+            result=(
+                "action-items TSV has unique pending row/model/timing items and matches closeout counts"
+                if passed
+                else (
+                    f"counts={counts}; expected={expected_counts}; "
+                    f"unique_action_ids={len(unique_action_ids)}/{len(action_items)}; "
+                    f"all_items_pending={all_items_pending}; "
+                    f"timing_items_have_commands={timing_items_have_commands}; "
+                    f"sensitive={sensitive}"
+                )
+            ),
+            next_action="Regenerate response action-items TSV from closeout before local review.",
+        )
+    )
+
+
 def add_candidate_check(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
     candidate = payloads.get("candidate_recheck", {})
     bounded_statuses = {
@@ -762,6 +856,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_command_plan_check(payloads, rows)
         add_reviewer_timing_command_check(payloads, rows)
         add_gap_tsv_command_check(root, payloads, rows)
+        add_response_action_items_check(root, payloads, rows)
         add_candidate_check(payloads, rows)
         add_safety_check(payloads, rows)
 

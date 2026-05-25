@@ -43,6 +43,7 @@ from start_human_audit_review_session import (  # noqa: E402
 CLOSEOUT_SUMMARY_NAME = "human_audit_response_closeout_summary.json"
 CLOSEOUT_TSV_NAME = "human_audit_response_closeout_checklist.tsv"
 RESPONSE_GAP_TSV_NAME = "human_audit_response_gap_checklist.tsv"
+RESPONSE_ACTION_ITEMS_TSV_NAME = "human_audit_response_action_items.tsv"
 
 
 def read_json_if_exists(path: Path) -> dict[str, Any]:
@@ -124,6 +125,109 @@ def write_gap_tsv(
             writer.writerow(output)
 
 
+def build_action_items(
+    rows: list[dict[str, Any]],
+    *,
+    timing_commands: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    timing_commands = timing_commands or {}
+    action_items: list[dict[str, Any]] = []
+    for row in rows:
+        row_number = row.get("row_number", "")
+        for field_name in row.get("missing_row_fields", []):
+            action_items.append(
+                {
+                    "action_id": f"row-{row_number}:row_field:{field_name}",
+                    "row_number": row_number,
+                    "action_scope": "row_field",
+                    "model_assessment_slot": "",
+                    "field_name": field_name,
+                    "status": "pending",
+                    "reviewer_action": "fill row-level response field in local response TSV",
+                    "timing_start_write_command": "not_applicable",
+                    "timing_finish_write_command": "not_applicable",
+                }
+            )
+        missing_model_count = int(row.get("model_assessments_missing_count") or 0)
+        for slot in range(1, missing_model_count + 1):
+            for field_name in row.get("missing_model_fields", []):
+                action_items.append(
+                    {
+                        "action_id": f"row-{row_number}:model_slot-{slot}:{field_name}",
+                        "row_number": row_number,
+                        "action_scope": "model_assessment_field",
+                        "model_assessment_slot": slot,
+                        "field_name": field_name,
+                        "status": "pending",
+                        "reviewer_action": (
+                            "fill field for the corresponding model row in local response TSV"
+                        ),
+                        "timing_start_write_command": "not_applicable",
+                        "timing_finish_write_command": "not_applicable",
+                    }
+                )
+        if row.get("review_timing_missing"):
+            action_items.append(
+                {
+                    "action_id": f"row-{row_number}:review_timing",
+                    "row_number": row_number,
+                    "action_scope": "review_timing",
+                    "model_assessment_slot": "",
+                    "field_name": "review_timing",
+                    "status": "pending",
+                    "reviewer_action": (
+                        "record review_started_at/review_finished_at or review_elapsed_seconds"
+                    ),
+                    "timing_start_write_command": command_for_row(
+                        timing_commands,
+                        "timing_start_write_by_row",
+                        row_number,
+                    ),
+                    "timing_finish_write_command": command_for_row(
+                        timing_commands,
+                        "timing_finish_write_by_row",
+                        row_number,
+                    ),
+                }
+            )
+    return action_items
+
+
+def action_item_overview(action_items: list[dict[str, Any]]) -> dict[str, Any]:
+    return {
+        "total_action_items": len(action_items),
+        "row_field_action_items": sum(
+            1 for item in action_items if item.get("action_scope") == "row_field"
+        ),
+        "model_field_action_items": sum(
+            1 for item in action_items if item.get("action_scope") == "model_assessment_field"
+        ),
+        "timing_action_items": sum(
+            1 for item in action_items if item.get("action_scope") == "review_timing"
+        ),
+    }
+
+
+def write_action_items_tsv(path: Path, rows: list[dict[str, Any]]) -> None:
+    fieldnames = [
+        "action_id",
+        "row_number",
+        "action_scope",
+        "model_assessment_slot",
+        "field_name",
+        "status",
+        "reviewer_action",
+        "timing_start_write_command",
+        "timing_finish_write_command",
+    ]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t", lineterminator="\n")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({field: tsv_value(row.get(field, "")) for field in fieldnames})
+
+
 def bool_status(condition: bool) -> str:
     return "ready" if condition else "blocked"
 
@@ -183,6 +287,14 @@ def build_closeout(
         apply_summary.get("response_gap_summary_by_row")
         if isinstance(apply_summary.get("response_gap_summary_by_row"), list)
         else []
+    )
+    response_gap_timing_commands = {
+        "timing_start_write_by_row": commands.get("timing_start_write_by_row", {}),
+        "timing_finish_write_by_row": commands.get("timing_finish_write_by_row", {}),
+    }
+    response_action_items = build_action_items(
+        response_gap_rows,
+        timing_commands=response_gap_timing_commands,
     )
     rows_missing_timing = int(review_timing.get("rows_missing_timing") or 0)
     review_timing_complete = rows_missing_timing == 0
@@ -321,10 +433,9 @@ def build_closeout(
         "review_timing": review_timing,
         "response_gap_overview": response_gap_overview,
         "response_gap_summary_by_row": response_gap_rows,
-        "response_gap_timing_commands": {
-            "timing_start_write_by_row": commands.get("timing_start_write_by_row", {}),
-            "timing_finish_write_by_row": commands.get("timing_finish_write_by_row", {}),
-        },
+        "response_gap_timing_commands": response_gap_timing_commands,
+        "response_action_item_overview": action_item_overview(response_action_items),
+        "response_action_items": response_action_items,
         "session_start_gate": session_gate,
         "apply_error_keys": apply_errors,
         "blocker_keys": blocker_keys,
@@ -346,6 +457,10 @@ def build_closeout(
             "closeout_tsv": repo_relative(run_dir / CLOSEOUT_TSV_NAME, repo_root=repo_root),
             "response_gap_tsv": repo_relative(
                 run_dir / RESPONSE_GAP_TSV_NAME,
+                repo_root=repo_root,
+            ),
+            "response_action_items_tsv": repo_relative(
+                run_dir / RESPONSE_ACTION_ITEMS_TSV_NAME,
                 repo_root=repo_root,
             ),
             "apply_summary": repo_relative(apply_summary_path, repo_root=repo_root),
@@ -372,6 +487,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--summary-json", type=Path)
     parser.add_argument("--output-tsv", type=Path)
     parser.add_argument("--gap-output-tsv", type=Path)
+    parser.add_argument("--action-items-output-tsv", type=Path)
     return parser.parse_args()
 
 
@@ -387,6 +503,9 @@ def main() -> int:
     summary_json = args.summary_json or args.run_dir / CLOSEOUT_SUMMARY_NAME
     output_tsv = args.output_tsv or args.run_dir / CLOSEOUT_TSV_NAME
     gap_output_tsv = args.gap_output_tsv or args.run_dir / RESPONSE_GAP_TSV_NAME
+    action_items_output_tsv = (
+        args.action_items_output_tsv or args.run_dir / RESPONSE_ACTION_ITEMS_TSV_NAME
+    )
     payload, rows = build_closeout(
         run_dir=args.run_dir,
         apply_summary_path=apply_summary,
@@ -403,6 +522,7 @@ def main() -> int:
         payload["response_gap_summary_by_row"],
         timing_commands=payload["response_gap_timing_commands"],
     )
+    write_action_items_tsv(action_items_output_tsv, payload["response_action_items"])
     print(json.dumps(payload, ensure_ascii=False, indent=2))
     return 0 if payload["ok"] else 1
 
