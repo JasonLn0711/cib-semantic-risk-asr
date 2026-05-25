@@ -17,7 +17,8 @@ Do not start a long model run until this gate exists:
    ordinary WER/CER.
    NeMo Curator produced a 15-row CPU pilot output with joinable `audio_id`,
    WER, and CER fields on 2026-05-25; it is an output-contract check, not a
-   quality baseline.
+   quality baseline. Whisper small also passed a 1-row CPU smoke test for
+   loading, preprocessing, generation, and aggregate metric logging.
 3. Build metric inputs with
    `80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py`.
 4. Extract risk atoms from top-1 transcripts and reference transcripts.

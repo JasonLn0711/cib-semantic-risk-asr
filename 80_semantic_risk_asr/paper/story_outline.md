@@ -98,7 +98,8 @@ examples.
 Current local evidence: the reviewed 15-row gate is complete, and a NeMo Curator
 CPU pilot has produced a 15-row `audio_id`-joinable hypothesis file with WER/CER
 fields. Its high CER confirms that this pass is only a pipeline/output-contract
-check; the next evidence step is Whisper small smoke on the same fixed subset.
+check. Whisper small has passed a 1-row CPU smoke test; the next evidence step
+is full 15-row ASR comparison on the same fixed subset.
 
 Only after that pilot shows a usable decision-stability signal should the study
 expand to `300-500` high-stakes segments selected for risk-term coverage, split

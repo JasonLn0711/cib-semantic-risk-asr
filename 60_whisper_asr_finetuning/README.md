@@ -95,10 +95,21 @@ to the organized extracted audio under `../10_extracted_parts/`.
    - `configs/whisper-small-smoke-test.yaml` for a low-cost pipeline check.
    - `configs/whisper-large-v2-lora-baseline.yaml` for the first serious LoRA baseline.
 
-9. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
+9. Run the Whisper small smoke test before any long training:
+
+   ```bash
+   .venv/bin/python 60_whisper_asr_finetuning/scripts/run_whisper_small_smoke.py \
+     --runtime cpu
+   ```
+
+   The smoke runner defaults to one fixed pilot row. It proves model loading,
+   preprocessing, generation, and aggregate metric logging; it is not a model
+   comparison.
+
+10. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
    run template from `../70_experiments/templates/run_record.md`.
 
-10. Register the run in `../70_experiments/registry.tsv` before starting long
+11. Register the run in `../70_experiments/registry.tsv` before starting long
    training.
 
 ## Layout

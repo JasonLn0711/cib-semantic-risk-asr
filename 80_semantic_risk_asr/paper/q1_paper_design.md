@@ -406,7 +406,8 @@ constrained re-decoding implementation is mature.
 - Run or collect NeMo/Whisper/Breeze hypotheses on the same 15 rows. NeMo
   Curator produced a joinable CPU pilot output with WER/CER fields; it should
   be treated as an output-contract check because aggregate CER is still too
-  high for quality comparison.
+  high for quality comparison. Whisper small has passed a 1-row CPU smoke test;
+  the full 15-row Whisper comparison is the next gate.
 - Build SRES, CEIS, and downstream-impact metric inputs for the pilot.
 
 ### Week 2

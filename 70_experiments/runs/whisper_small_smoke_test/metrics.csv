@@ -1,1 +1,2 @@
 step,epoch,split,loss,cer,wer,learning_rate,wall_time_seconds,checkpoint,notes
+0,0,janus_15_pilot_smoke_1,,65.0,100.0,,80.99,openai/whisper-small,inference_stub_only;runtime=cpu;max_samples=1
