@@ -992,6 +992,61 @@ def add_post_review_sequence_check(
     )
 
 
+def add_post_review_sequence_dry_run_gate_check(
+    root: Path,
+    payloads: dict[str, dict[str, Any]],
+    rows: list[dict[str, str]],
+) -> None:
+    sequence_path = root / POST_REVIEW_SEQUENCE_TSV_RELATIVE
+    sequence_rows = read_tsv_rows(sequence_path) if sequence_path.exists() else []
+    sequence = payloads.get("post_review_sequence", {})
+    dry_run_rows = [
+        item
+        for item in sequence_rows
+        if item.get("step_type", "") == "strict_dry_run"
+    ]
+    dry_run_command = dry_run_rows[0].get("command", "") if dry_run_rows else ""
+    required_flags = {
+        "--require-complete",
+        "--require-timing",
+        "--require-session-start-gate",
+    }
+    command_flags_ok = (
+        bool(dry_run_rows)
+        and "apply_human_audit_batch_response.py" in dry_run_command
+        and all(flag in dry_run_command for flag in required_flags)
+        and "--write" not in dry_run_command
+        and "--refresh-after-write" not in dry_run_command
+        and "--prepare-next-after-write" not in dry_run_command
+    )
+    status_ok = sequence.get("mode") == "plan_only" and sequence.get("status") in {
+        "post_review_sequence_blocked",
+        "post_review_sequence_ready_to_execute",
+        "post_review_sequence_complete",
+    }
+    passed = command_flags_ok and status_ok
+    rows.append(
+        check_row(
+            check_id="C076",
+            invariant="post-review sequence strict dry-run preserves session and timing gates",
+            passed=passed,
+            evidence=POST_REVIEW_SEQUENCE_TSV_RELATIVE,
+            result=(
+                "post-review sequence strict dry-run requires complete rows, timing, and session-start gate without write mode"
+                if passed
+                else (
+                    f"command_flags_ok={command_flags_ok}; "
+                    f"sequence_status={sequence.get('status', '')}"
+                )
+            ),
+            next_action=(
+                "Regenerate post-review sequence so its strict dry-run uses "
+                "--require-complete --require-timing --require-session-start-gate without write flags."
+            ),
+        )
+    )
+
+
 def add_review_work_order_sequence_route_check(
     root: Path,
     payloads: dict[str, dict[str, Any]],
@@ -1229,6 +1284,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_review_work_order_dry_run_gate_check(root, payloads, rows)
         add_review_work_order_sequence_route_check(root, payloads, rows)
         add_post_review_sequence_check(root, payloads, rows)
+        add_post_review_sequence_dry_run_gate_check(root, payloads, rows)
         add_sequence_aware_objective_check(payloads, rows)
         add_candidate_check(payloads, rows)
         add_safety_check(payloads, rows)
