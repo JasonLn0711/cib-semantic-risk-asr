@@ -793,6 +793,13 @@ Interpretation:
    `--prepare-next-after-write`。
    這會寫入 local sheet、重跑 batch status audit、並在 `batch_complete` 後刷新
    aggregate readiness / publishable completion。
+   現在 `evidence_chain_readiness_summary.json` 與
+   `publishable_evidence_completion_summary.json` 都會把
+   `reviewer_action_gate.status=reviewer_action_ready` 顯示在最高層：
+   current stratum 是 `critical_or_high_risk_missed`，`6/6` rows 與
+   `18/18` model assessments 仍待填，latest apply status 是
+   `response_pending`。這代表 reviewer workflow ready，不代表 human audit
+   complete。
 2. 跑
    `validate_human_risk_atom_audit.py --require-complete --expected-rows 30`；
    通過後才產出 aggregate human annotation stats，確認沒有 selected IDs 或 transcript

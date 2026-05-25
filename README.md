@@ -94,11 +94,15 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `ok=true`, `paper_ready=false`, because the selected-300 human risk-atom
   audit remains `0/30` risk/decision row reviews and `0/90` model assessments
   reviewed. Transcript ground truth is already accepted for WER/CER scoring
-  and is not the pending gate.
+  and is not the pending gate. The readiness summary now also reports the
+  current reviewer action gate: `reviewer_action_ready` for
+  `critical_or_high_risk_missed`, with `6/6` packet rows and `18/18` model
+  assessments still pending in the ignored local response TSV.
   A stricter objective-by-objective publication audit is
   `80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py`; its
   current output records `publishable_ready=false` with objective `5`
-  `review_pending` and objectives `4`/`6` still proxy-only.
+  `review_pending`, objectives `4`/`6` still proxy-only, and the same reviewer
+  action gate surfaced as the next execution state.
 - Split-aware metric-input generation now lives at
   `80_semantic_risk_asr/scoring/build_janus_metric_inputs.py`, with validation
   recorded in
