@@ -255,3 +255,40 @@ def test_refresh_updates_roadmap_completion_audit(tmp_path: Path) -> None:
     assert roadmap_payload["blocking_gate"] == "selected_300_human_review_and_post_review_refresh"
     assert (readiness_dir / "postdoc_roadmap_completion.tsv").exists()
     assert "PRIVATE_" not in roadmap_path.read_text(encoding="utf-8")
+
+
+def test_refresh_updates_post_review_evidence_checklist(tmp_path: Path) -> None:
+    load_readiness_fixture_writer()(tmp_path)
+    sheet = tmp_path / "audit.tsv"
+    output_dir = (
+        tmp_path
+        / "70_experiments"
+        / "runs"
+        / "janus_300_high_stakes_human_audit_selection_2026_05_25"
+    )
+    readiness_dir = (
+        tmp_path / "70_experiments" / "runs" / "postdoc_evidence_chain_2026_05_25"
+    )
+    write_rows(sheet, [base_row(reviewed=False, model_reviewed=False)])
+
+    payload = refresh_human_audit_evidence(
+        audit_sheet=sheet,
+        output_dir=output_dir,
+        readiness_output_dir=readiness_dir,
+        repo_root=tmp_path,
+        expected_rows=1,
+        require_complete=False,
+        skip_readiness=False,
+    )
+    post_review_path = output_dir / "human_audit_post_review_evidence_summary.json"
+    post_review_payload = json.loads(post_review_path.read_text(encoding="utf-8"))
+
+    assert payload["ok"] is True
+    assert payload["post_review_evidence_ok"] is False
+    assert payload["post_review_evidence_status"] == "post_review_evidence_blocked"
+    assert "response_closeout_not_ready" in payload["post_review_blocker_keys"]
+    assert "human_refresh_not_complete" in payload["post_review_blocker_keys"]
+    assert post_review_payload["ok"] is False
+    assert post_review_payload["status"] == "post_review_evidence_blocked"
+    assert (output_dir / "human_audit_post_review_evidence_checklist.tsv").exists()
+    assert "PRIVATE_" not in post_review_path.read_text(encoding="utf-8")

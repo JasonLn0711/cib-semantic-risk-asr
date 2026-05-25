@@ -418,6 +418,39 @@ def run_roadmap_audit_gate(
     return payload, [output_json, output_tsv]
 
 
+def run_post_review_evidence_gate(
+    *,
+    output_dir: Path,
+    readiness_output_dir: Path,
+    repo_root: Path,
+) -> tuple[dict[str, Any], list[Path]]:
+    import build_post_review_evidence_checklist as post_review_checklist
+
+    payload, rows = post_review_checklist.build_post_review_checklist(
+        run_dir=output_dir,
+        readiness_dir=readiness_output_dir,
+        closeout_summary_path=output_dir / post_review_checklist.CLOSEOUT_SUMMARY_NAME,
+        refresh_summary_path=output_dir / post_review_checklist.REFRESH_SUMMARY_NAME,
+        predictor_summary_path=output_dir / post_review_checklist.PREDICTOR_SUMMARY_NAME,
+        readiness_summary_path=readiness_output_dir / post_review_checklist.READINESS_SUMMARY_NAME,
+        publishable_summary_path=readiness_output_dir / post_review_checklist.PUBLISHABLE_SUMMARY_NAME,
+        consequence_summary_path=readiness_output_dir / post_review_checklist.CONSEQUENCE_SUMMARY_NAME,
+        recovery_summary_path=(
+            repo_root
+            / "70_experiments"
+            / "runs"
+            / "janus_300_high_stakes_recovery_proxy_2026_05_25"
+            / "summary.json"
+        ),
+        repo_root=repo_root,
+    )
+    output_json = output_dir / post_review_checklist.POST_REVIEW_SUMMARY_NAME
+    output_tsv = output_dir / post_review_checklist.POST_REVIEW_TSV_NAME
+    post_review_checklist.write_json(output_json, payload)
+    post_review_checklist.write_tsv(output_tsv, rows)
+    return payload, [output_json, output_tsv]
+
+
 def refresh_human_audit_evidence(
     *,
     audit_sheet: Path,
@@ -452,6 +485,7 @@ def refresh_human_audit_evidence(
     readiness_payload: dict[str, Any] | None = None
     completion_payload: dict[str, Any] | None = None
     roadmap_payload: dict[str, Any] | None = None
+    post_review_payload: dict[str, Any] | None = None
     downstream_refreshed = False
 
     if validation_payload["ok"]:
@@ -513,6 +547,9 @@ def refresh_human_audit_evidence(
         "roadmap_audit_ok": "",
         "roadmap_complete": "",
         "roadmap_status_counts": {},
+        "post_review_evidence_ok": "",
+        "post_review_evidence_status": "",
+        "post_review_blocker_keys": [],
         "downstream_outputs_refreshed": downstream_refreshed,
         "outputs": [repo_relative(path, repo_root=repo_root) for path in output_paths],
         "runtime_seconds": round(time.time() - started, 4),
@@ -556,6 +593,19 @@ def refresh_human_audit_evidence(
     summary_path = output_dir / REFRESH_SUMMARY_NAME
     payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
     write_refresh_summary(output_dir, payload)
+    if readiness_payload is not None and predictor_payload is not None:
+        post_review_payload, post_review_outputs = run_post_review_evidence_gate(
+            output_dir=output_dir,
+            readiness_output_dir=readiness_output_dir,
+            repo_root=repo_root,
+        )
+        output_paths.extend(post_review_outputs)
+        payload["post_review_evidence_ok"] = post_review_payload.get("ok")
+        payload["post_review_evidence_status"] = post_review_payload.get("status")
+        payload["post_review_blocker_keys"] = post_review_payload.get("blocker_keys", [])
+        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
+        payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
+        write_refresh_summary(output_dir, payload)
     return payload
 
 
