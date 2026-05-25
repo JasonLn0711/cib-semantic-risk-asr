@@ -87,6 +87,11 @@ The local ignored sheet contains:
   atoms, critical atoms, decision-change reason, expected safe action,
   confidence, and notes.
 
+Transcript ground truth is already human-reviewed for WER/CER scoring. This
+gate should not reopen transcript review unless a future review task asks for
+fields or content that differ from those accepted ground-truth transcript
+fields; the pending work is risk/decision/model assessment review.
+
 The tracked protocol is:
 `80_semantic_risk_asr/annotation/selected_300_human_risk_atom_audit_protocol_2026_05_25.md`.
 
@@ -226,6 +231,7 @@ aggregate status in one pass:
   --require-complete \
   --write \
   --refresh-after-write \
+  --prepare-next-after-write \
   --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv \
   --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
   --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
@@ -237,7 +243,9 @@ aggregate status in one pass:
 This post-write path first updates the ignored local audit sheet, then writes
 the current batch status outputs, and only refreshes aggregate evidence after
 the batch reports `batch_complete`. Partial overall selected-300 review is
-treated as in-progress, not as missing evidence.
+treated as in-progress, not as missing evidence. With
+`--prepare-next-after-write`, the command also prepares the next local
+transcript-bearing packet and response TSV template when pending rows remain.
 
 The local helper for filling one row at a time is:
 

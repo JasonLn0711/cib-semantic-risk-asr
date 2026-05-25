@@ -313,7 +313,8 @@ def build_report(
         "reference_transcript_policy": (
             "Manifest/reference transcripts are treated as already human-reviewed "
             "ground truth for WER/CER scoring; this audit does not require a new "
-            "transcript review."
+            "transcript review unless future review fields or content differ from "
+            "the accepted ground-truth transcript fields."
         ),
         "verdict": {
             "wer_formula": "compliant edit-distance formula when token unit is declared",

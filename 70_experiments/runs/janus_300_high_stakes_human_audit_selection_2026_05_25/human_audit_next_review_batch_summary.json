@@ -4,7 +4,7 @@
   "created_at": "2026-05-25T21:05:05+08:00",
   "input_boundary": "local ignored audit sheet; transcript-bearing content is written only to ignored artifacts",
   "output_boundary": "tracked outputs contain row numbers, strata, completion counts, and local packet path only",
-  "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review.",
+  "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
   "selection_stratum": "critical_or_high_risk_missed",
   "batch_order": 1,

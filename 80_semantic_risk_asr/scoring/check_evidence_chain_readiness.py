@@ -34,7 +34,9 @@ SENSITIVE_TOKENS = (
 )
 REFERENCE_TRANSCRIPT_POLICY = (
     "Reference transcripts are treated as already human-reviewed ground truth "
-    "for WER/CER scoring; do not route duplicate transcript review."
+    "for WER/CER scoring; do not route duplicate transcript review unless "
+    "future review fields or content differ from the accepted ground-truth "
+    "transcript fields."
 )
 REMAINING_REVIEW_SCOPE = (
     "Remaining selected-300 review work is limited to risk-atom labels, "

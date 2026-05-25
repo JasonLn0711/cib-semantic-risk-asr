@@ -147,6 +147,8 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   the completion gate before any `--write`. After strict dry-run passes, use
   `--write --refresh-after-write` to update the ignored local sheet, audit the
   current batch, and refresh aggregate readiness/publishable status in one pass.
+  Add `--prepare-next-after-write` when the same command should also prepare
+  the next local review packet and response TSV template.
   After
   review edits, use
   `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py` to rerun

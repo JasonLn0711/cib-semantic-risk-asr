@@ -71,7 +71,9 @@ audit can only support row-level risk coverage, not model comparison.
 ## Transcript Policy
 
 The reference transcripts used for WER/CER scoring are already accepted as
-human-reviewed ground truth. Do not route duplicate transcript review.
+human-reviewed ground truth. Do not route duplicate transcript review unless a
+future review task asks for fields or content that differ from those accepted
+ground-truth transcript fields.
 `reviewer_verified_transcript` is optional and correction-only: use it only if
 the reviewer discovers an exception that should be explicitly recorded in the
 local ignored sheet.
@@ -201,7 +203,9 @@ When the strict dry-run passes, use `--write --refresh-after-write` so the local
 sheet write, current-batch status audit, aggregate refresh, readiness audit, and
 publishable completion audit are all recorded in one pass. The refresh is
 non-strict at this batch stage; `partial_review` is valid progress until all
-selected-300 rows and model assessments are complete.
+selected-300 rows and model assessments are complete. Add
+`--prepare-next-after-write` when the reviewer is ready for the command to also
+prepare the next local packet and response TSV template.
 
 Use the local helper to avoid hand-editing JSON in
 `reviewer_model_assessments_json`:

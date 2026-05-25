@@ -59,7 +59,9 @@ SENSITIVE_TOKENS = (
 )
 REFERENCE_TRANSCRIPT_POLICY = (
     "Reference transcripts are already human-reviewed ground truth for WER/CER "
-    "scoring; this packet does not ask for duplicate transcript review."
+    "scoring; this packet does not ask for duplicate transcript review unless "
+    "future review fields or content differ from the accepted ground-truth "
+    "transcript fields."
 )
 REMAINING_REVIEW_SCOPE = (
     "The packet asks reviewers to complete risk atoms, decision-change labels, "
@@ -286,7 +288,7 @@ def render_local_packet(rows: list[tuple[int, dict[str, str]]], stratum: str) ->
         f"Selection stratum: `{stratum}`",
         f"Rows in packet: `{len(rows)}`",
         "",
-        "Transcript policy: reference transcripts are already accepted as human-reviewed WER/CER ground truth. Use `reviewer_verified_transcript` only for explicit correction exceptions.",
+        "Transcript policy: reference transcripts are already accepted as human-reviewed WER/CER ground truth. Do not re-review them unless future review fields or content differ from the accepted ground-truth transcript fields. Use `reviewer_verified_transcript` only for explicit correction exceptions.",
         "",
     ]
     for row_number, row in rows:
