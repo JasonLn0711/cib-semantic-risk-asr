@@ -162,7 +162,11 @@ Current execution priority after the 258-row gate:
    validation: the script reproduces the 15-row human-reviewed legacy bridge
    counts and can process the six-model 258-row proxy comparison.
 5. Run the selected 300-row high-stakes expansion as the main experiment only
-   after the split-aware builder is validated.
+   after the split-aware builder is validated. Current selected-300 proxy
+   status: three Breeze-family hypotheses, SRES/CEIS/downstream inputs,
+   recovery policy comparison, and metric-predictor analysis have all run over
+   `900` model-samples. This is still proxy evidence until the human
+   risk-atom audit gate exists.
 
 ## Experiment 2: Counterfactual Generation Quality
 
@@ -226,6 +230,26 @@ Expected contribution:
 
 Show that CEIS is better aligned with decision instability than transcript
 similarity alone.
+
+Current selected-300 proxy result on 2026-05-25:
+
+- Script: `80_semantic_risk_asr/scoring/analyze_metric_predictors.py`.
+- Run record:
+  `70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/`.
+- Rows: `900` model-samples from partial encoder, Breeze-ASR-25 base, and
+  legacy LoRA.
+- Unsafe downrouting AUC: WER `0.7683`, CER `0.7739`, SRES total `0.9954`,
+  CEIS max `0.9971`.
+- High-risk-missed AUC: WER `0.6871`, CER `0.7138`, SRES total `0.9826`,
+  CEIS max `0.9973`.
+- Low-WER check: among row-level WER `<= 10.0` model-samples, there were still
+  `2` label flip / unsafe downrouting cases.
+
+Interpretation: the WER calculation is now explicitly defined and auditable,
+but WER/CER are still insufficient as safety predictors for this high-stakes
+decision task. Because SRES/CEIS rows are proxy-generated here, the next
+publishable gate is a human-reviewed selected-300 risk-atom audit rather than
+another WER definition change.
 
 ## Experiment 4: Automatic Recovery
 

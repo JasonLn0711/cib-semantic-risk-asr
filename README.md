@@ -92,6 +92,13 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `70_experiments/runs/janus_258_recovery_policy_proxy_2026_05_25/`. Treat it
   as engineering evidence only until the selected 300-row high-stakes and
   human risk-atom audit gates run.
+- The selected-300 metric-predictor proxy gate now lives at
+  `80_semantic_risk_asr/scoring/analyze_metric_predictors.py`, with aggregate
+  output recorded in
+  `70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/`.
+  It compares WER/CER/SRES/CEIS against downstream label flips, unsafe
+  downrouting, high-risk misses, and low-WER danger counts without tracking
+  transcript or sample-level rows.
 - The 2026-05-25 WER audit is recorded in
   `70_experiments/runs/wer_metric_audit_2026_05_25/`. The latest audit checks
   six 258-row hypothesis files against the canonical manifest, records package

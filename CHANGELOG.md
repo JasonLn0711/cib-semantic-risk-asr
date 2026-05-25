@@ -5,6 +5,27 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.51 - 2026-05-25T18:30:49+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `3cbe268`
+- Branch: `main`
+- Summary: Record selected-300 metric-predictor proxy evidence.
+- Changed files:
+  - `70_experiments/README.md`
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/low_wer_danger_summary.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_comparison.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/risk_atom_instability.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `80_semantic_risk_asr/paper/experiment_plan.md`
+  - `README.md`
+  - `docs/REPO_MAP.md`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
 ## v2.5.50 - 2026-05-25T18:30:38+08:00
 
 - Bump: `patch`

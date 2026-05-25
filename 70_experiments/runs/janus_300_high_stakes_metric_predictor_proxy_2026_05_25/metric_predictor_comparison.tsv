@@ -1,0 +1,121 @@
+scope	asr_run_id	target	metric	rows	positive_rows	positive_rate	auc	best_threshold	best_f1	precision	recall	true_positive	false_positive	false_negative
+overall	ALL	label_flip	wer	900	35	0.0389	0.7629	42.59	0.2697	0.2222	0.3429	12	42	23
+overall	ALL	label_flip	cer	900	35	0.0389	0.7676	37.5	0.2154	0.2333	0.2	7	23	28
+overall	ALL	label_flip	sres_total	900	35	0.0389	1.0	210.0	1.0	1.0	1.0	35	0	0
+overall	ALL	label_flip	sres_max	900	35	0.0389	1.0	75.0	1.0	1.0	1.0	35	0	0
+overall	ALL	label_flip	ceis_max	900	35	0.0389	1.0	5.0	1.0	1.0	1.0	35	0	0
+overall	ALL	unsafe_downrouting	wer	900	29	0.0322	0.7683	42.59	0.2892	0.2222	0.4138	12	42	17
+overall	ALL	unsafe_downrouting	cer	900	29	0.0322	0.7739	37.5	0.2373	0.2333	0.2414	7	23	22
+overall	ALL	unsafe_downrouting	sres_total	900	29	0.0322	0.9954	210.0	0.9062	0.8286	1.0	29	6	0
+overall	ALL	unsafe_downrouting	sres_max	900	29	0.0322	0.9966	75.0	0.9062	0.8286	1.0	29	6	0
+overall	ALL	unsafe_downrouting	ceis_max	900	29	0.0322	0.9971	5.0	0.9062	0.8286	1.0	29	6	0
+overall	ALL	high_risk_missed	wer	900	6	0.0067	0.6871	58.14	0.25	0.2	0.3333	2	8	4
+overall	ALL	high_risk_missed	cer	900	6	0.0067	0.7138	126.74	0.25	0.5	0.1667	1	1	5
+overall	ALL	high_risk_missed	sres_total	900	6	0.0067	0.9826	210.0	0.2927	0.1714	1.0	6	29	0
+overall	ALL	high_risk_missed	sres_max	900	6	0.0067	0.9838	75.0	0.2927	0.1714	1.0	6	29	0
+overall	ALL	high_risk_missed	ceis_max	900	6	0.0067	0.9973	10.0	0.9091	1.0	0.8333	5	0	1
+overall	ALL	critical_miss	wer	900	1	0.0011	0.5178	18.42	0.0046	0.0023	1.0	1	437	0
+overall	ALL	critical_miss	cer	900	1	0.0011	0.5918	15.69	0.0054	0.0027	1.0	1	367	0
+overall	ALL	critical_miss	sres_total	900	1	0.0011	0.9872	285.0	0.1176	0.0625	1.0	1	15	0
+overall	ALL	critical_miss	sres_max	900	1	0.0011	0.9811	75.0	0.0556	0.0286	1.0	1	34	0
+overall	ALL	critical_miss	ceis_max	900	1	0.0011	1.0	15.0	1.0	1.0	1.0	1	0	0
+overall	ALL	over_escalation	wer	900	6	0.0067	0.7204	23.19	0.0351	0.0179	1.0	6	330	0
+overall	ALL	over_escalation	cer	900	6	0.0067	0.7206	22.61	0.0319	0.0165	0.5	3	179	3
+overall	ALL	over_escalation	sres_total	900	6	0.0067	0.9894	285.0	0.4545	0.3125	0.8333	5	11	1
+overall	ALL	over_escalation	sres_max	900	6	0.0067	0.9838	75.0	0.2927	0.1714	1.0	6	29	0
+overall	ALL	over_escalation	ceis_max	900	6	0.0067	0.981	5.0	0.2927	0.1714	1.0	6	29	0
+overall	ALL	danger_event	wer	900	35	0.0389	0.7629	42.59	0.2697	0.2222	0.3429	12	42	23
+overall	ALL	danger_event	cer	900	35	0.0389	0.7676	37.5	0.2154	0.2333	0.2	7	23	28
+overall	ALL	danger_event	sres_total	900	35	0.0389	1.0	210.0	1.0	1.0	1.0	35	0	0
+overall	ALL	danger_event	sres_max	900	35	0.0389	1.0	75.0	1.0	1.0	1.0	35	0	0
+overall	ALL	danger_event	ceis_max	900	35	0.0389	1.0	5.0	1.0	1.0	1.0	35	0	0
+asr_run	breeze_asr25_base_high_stakes_300	label_flip	wer	300	22	0.0733	0.6172	42.59	0.2759	0.2222	0.3636	8	28	14
+asr_run	breeze_asr25_base_high_stakes_300	label_flip	cer	300	22	0.0733	0.6175	37.5	0.2273	0.2273	0.2273	5	17	17
+asr_run	breeze_asr25_base_high_stakes_300	label_flip	sres_total	300	22	0.0733	1.0	210.0	1.0	1.0	1.0	22	0	0
+asr_run	breeze_asr25_base_high_stakes_300	label_flip	sres_max	300	22	0.0733	1.0	75.0	1.0	1.0	1.0	22	0	0
+asr_run	breeze_asr25_base_high_stakes_300	label_flip	ceis_max	300	22	0.0733	1.0	5.0	1.0	1.0	1.0	22	0	0
+asr_run	breeze_asr25_base_high_stakes_300	unsafe_downrouting	wer	300	20	0.0667	0.6155	42.59	0.2857	0.2222	0.4	8	28	12
+asr_run	breeze_asr25_base_high_stakes_300	unsafe_downrouting	cer	300	20	0.0667	0.6147	37.5	0.2381	0.2273	0.25	5	17	15
+asr_run	breeze_asr25_base_high_stakes_300	unsafe_downrouting	sres_total	300	20	0.0667	0.9944	210.0	0.9524	0.9091	1.0	20	2	0
+asr_run	breeze_asr25_base_high_stakes_300	unsafe_downrouting	sres_max	300	20	0.0667	0.9964	75.0	0.9524	0.9091	1.0	20	2	0
+asr_run	breeze_asr25_base_high_stakes_300	unsafe_downrouting	ceis_max	300	20	0.0667	0.9971	5.0	0.9524	0.9091	1.0	20	2	0
+asr_run	breeze_asr25_base_high_stakes_300	high_risk_missed	wer	300	5	0.0167	0.4217	58.14	0.1818	0.1667	0.2	1	5	4
+asr_run	breeze_asr25_base_high_stakes_300	high_risk_missed	cer	300	5	0.0167	0.4569	41.43	0.125	0.0909	0.2	1	10	4
+asr_run	breeze_asr25_base_high_stakes_300	high_risk_missed	sres_total	300	5	0.0167	0.9702	285.0	0.375	0.2727	0.6	3	8	2
+asr_run	breeze_asr25_base_high_stakes_300	high_risk_missed	sres_max	300	5	0.0167	0.9712	75.0	0.3704	0.2273	1.0	5	17	0
+asr_run	breeze_asr25_base_high_stakes_300	high_risk_missed	ceis_max	300	5	0.0167	0.9942	10.0	0.8889	1.0	0.8	4	0	1
+asr_run	breeze_asr25_base_high_stakes_300	critical_miss	wer	300	1	0.0033	0.2274	18.46	0.0086	0.0043	1.0	1	231	0
+asr_run	breeze_asr25_base_high_stakes_300	critical_miss	cer	300	1	0.0033	0.3177	15.69	0.0097	0.0049	1.0	1	204	0
+asr_run	breeze_asr25_base_high_stakes_300	critical_miss	sres_total	300	1	0.0033	0.9749	285.0	0.1667	0.0909	1.0	1	10	0
+asr_run	breeze_asr25_base_high_stakes_300	critical_miss	sres_max	300	1	0.0033	0.9649	75.0	0.087	0.0455	1.0	1	21	0
+asr_run	breeze_asr25_base_high_stakes_300	critical_miss	ceis_max	300	1	0.0033	1.0	15.0	1.0	1.0	1.0	1	0	0
+asr_run	breeze_asr25_base_high_stakes_300	over_escalation	wer	300	2	0.0067	0.6174	30.59	0.0328	0.0167	1.0	2	118	0
+asr_run	breeze_asr25_base_high_stakes_300	over_escalation	cer	300	2	0.0067	0.6275	22.61	0.0348	0.0177	1.0	2	111	0
+asr_run	breeze_asr25_base_high_stakes_300	over_escalation	sres_total	300	2	0.0067	0.9857	285.0	0.3077	0.1818	1.0	2	9	0
+asr_run	breeze_asr25_base_high_stakes_300	over_escalation	sres_max	300	2	0.0067	0.9664	75.0	0.1667	0.0909	1.0	2	20	0
+asr_run	breeze_asr25_base_high_stakes_300	over_escalation	ceis_max	300	2	0.0067	0.9597	5.0	0.1667	0.0909	1.0	2	20	0
+asr_run	breeze_asr25_base_high_stakes_300	danger_event	wer	300	22	0.0733	0.6172	42.59	0.2759	0.2222	0.3636	8	28	14
+asr_run	breeze_asr25_base_high_stakes_300	danger_event	cer	300	22	0.0733	0.6175	37.5	0.2273	0.2273	0.2273	5	17	17
+asr_run	breeze_asr25_base_high_stakes_300	danger_event	sres_total	300	22	0.0733	1.0	210.0	1.0	1.0	1.0	22	0	0
+asr_run	breeze_asr25_base_high_stakes_300	danger_event	sres_max	300	22	0.0733	1.0	75.0	1.0	1.0	1.0	22	0	0
+asr_run	breeze_asr25_base_high_stakes_300	danger_event	ceis_max	300	22	0.0733	1.0	5.0	1.0	1.0	1.0	22	0	0
+asr_run	breeze_asr25_lora_high_stakes_300	label_flip	wer	300	9	0.03	0.7726	43.33	0.2727	0.2308	0.3333	3	10	6
+asr_run	breeze_asr25_lora_high_stakes_300	label_flip	cer	300	9	0.03	0.7883	32.63	0.2143	0.1579	0.3333	3	16	6
+asr_run	breeze_asr25_lora_high_stakes_300	label_flip	sres_total	300	9	0.03	1.0	210.0	1.0	1.0	1.0	9	0	0
+asr_run	breeze_asr25_lora_high_stakes_300	label_flip	sres_max	300	9	0.03	1.0	75.0	1.0	1.0	1.0	9	0	0
+asr_run	breeze_asr25_lora_high_stakes_300	label_flip	ceis_max	300	9	0.03	1.0	5.0	1.0	1.0	1.0	9	0	0
+asr_run	breeze_asr25_lora_high_stakes_300	unsafe_downrouting	wer	300	6	0.02	0.8379	49.38	0.3333	0.3333	0.3333	2	4	4
+asr_run	breeze_asr25_lora_high_stakes_300	unsafe_downrouting	cer	300	6	0.02	0.8441	32.63	0.24	0.1579	0.5	3	16	3
+asr_run	breeze_asr25_lora_high_stakes_300	unsafe_downrouting	sres_total	300	6	0.02	0.9946	210.0	0.8	0.6667	1.0	6	3	0
+asr_run	breeze_asr25_lora_high_stakes_300	unsafe_downrouting	sres_max	300	6	0.02	0.9949	75.0	0.8	0.6667	1.0	6	3	0
+asr_run	breeze_asr25_lora_high_stakes_300	unsafe_downrouting	ceis_max	300	6	0.02	0.9949	5.0	0.8	0.6667	1.0	6	3	0
+asr_run	breeze_asr25_lora_high_stakes_300	high_risk_missed	wer	300	0	0.0		2.5	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_lora_high_stakes_300	high_risk_missed	cer	300	0	0.0		1.18	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_lora_high_stakes_300	high_risk_missed	sres_total	300	0	0.0		0.0	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_lora_high_stakes_300	high_risk_missed	sres_max	300	0	0.0		0.0	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_lora_high_stakes_300	high_risk_missed	ceis_max	300	0	0.0		0.0	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_lora_high_stakes_300	critical_miss	wer	300	0	0.0		2.5	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_lora_high_stakes_300	critical_miss	cer	300	0	0.0		1.18	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_lora_high_stakes_300	critical_miss	sres_total	300	0	0.0		0.0	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_lora_high_stakes_300	critical_miss	sres_max	300	0	0.0		0.0	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_lora_high_stakes_300	critical_miss	ceis_max	300	0	0.0		0.0	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_lora_high_stakes_300	over_escalation	wer	300	3	0.01	0.6324	23.19	0.0458	0.0234	1.0	3	125	0
+asr_run	breeze_asr25_lora_high_stakes_300	over_escalation	cer	300	3	0.01	0.6661	25.55	0.0465	0.025	0.3333	1	39	2
+asr_run	breeze_asr25_lora_high_stakes_300	over_escalation	sres_total	300	3	0.01	0.9905	285.0	0.5714	0.5	0.6667	2	2	1
+asr_run	breeze_asr25_lora_high_stakes_300	over_escalation	sres_max	300	3	0.01	0.9899	75.0	0.5	0.3333	1.0	3	6	0
+asr_run	breeze_asr25_lora_high_stakes_300	over_escalation	ceis_max	300	3	0.01	0.9899	5.0	0.5	0.3333	1.0	3	6	0
+asr_run	breeze_asr25_lora_high_stakes_300	danger_event	wer	300	9	0.03	0.7726	43.33	0.2727	0.2308	0.3333	3	10	6
+asr_run	breeze_asr25_lora_high_stakes_300	danger_event	cer	300	9	0.03	0.7883	32.63	0.2143	0.1579	0.3333	3	16	6
+asr_run	breeze_asr25_lora_high_stakes_300	danger_event	sres_total	300	9	0.03	1.0	210.0	1.0	1.0	1.0	9	0	0
+asr_run	breeze_asr25_lora_high_stakes_300	danger_event	sres_max	300	9	0.03	1.0	75.0	1.0	1.0	1.0	9	0	0
+asr_run	breeze_asr25_lora_high_stakes_300	danger_event	ceis_max	300	9	0.03	1.0	5.0	1.0	1.0	1.0	9	0	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	label_flip	wer	300	4	0.0133	0.8074	34.57	0.4	0.3333	0.5	2	4	2
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	label_flip	cer	300	4	0.0133	0.8049	30.4	0.5	0.5	0.5	2	2	2
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	label_flip	sres_total	300	4	0.0133	1.0	270.0	1.0	1.0	1.0	4	0	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	label_flip	sres_max	300	4	0.0133	1.0	75.0	1.0	1.0	1.0	4	0	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	label_flip	ceis_max	300	4	0.0133	1.0	5.0	1.0	1.0	1.0	4	0	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	unsafe_downrouting	wer	300	3	0.01	0.7565	100.0	0.5	1.0	0.3333	1	0	2
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	unsafe_downrouting	cer	300	3	0.01	0.7553	30.4	0.5714	0.5	0.6667	2	2	1
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	unsafe_downrouting	sres_total	300	3	0.01	0.9966	270.0	0.8571	0.75	1.0	3	1	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	unsafe_downrouting	sres_max	300	3	0.01	0.9983	75.0	0.8571	0.75	1.0	3	1	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	unsafe_downrouting	ceis_max	300	3	0.01	0.9989	5.0	0.8571	0.75	1.0	3	1	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	high_risk_missed	wer	300	1	0.0033	1.0	100.0	1.0	1.0	1.0	1	0	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	high_risk_missed	cer	300	1	0.0033	1.0	126.74	1.0	1.0	1.0	1	0	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	high_risk_missed	sres_total	300	1	0.0033	0.9933	270.0	0.4	0.25	1.0	1	3	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	high_risk_missed	sres_max	300	1	0.0033	0.995	75.0	0.4	0.25	1.0	1	3	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	high_risk_missed	ceis_max	300	1	0.0033	1.0	10.0	1.0	1.0	1.0	1	0	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	critical_miss	wer	300	0	0.0		0.0	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	critical_miss	cer	300	0	0.0		0.0	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	critical_miss	sres_total	300	0	0.0		0.0	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	critical_miss	sres_max	300	0	0.0		0.0	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	critical_miss	ceis_max	300	0	0.0		0.0	0.0	0.0	0.0	0	300	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	over_escalation	wer	300	1	0.0033	0.9532	26.09	0.125	0.0667	1.0	1	14	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	over_escalation	cer	300	1	0.0033	0.9465	18.26	0.1111	0.0588	1.0	1	16	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	over_escalation	sres_total	300	1	0.0033	1.0	285.0	1.0	1.0	1.0	1	0	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	over_escalation	sres_max	300	1	0.0033	0.995	75.0	0.4	0.25	1.0	1	3	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	over_escalation	ceis_max	300	1	0.0033	0.9933	5.0	0.4	0.25	1.0	1	3	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	danger_event	wer	300	4	0.0133	0.8074	34.57	0.4	0.3333	0.5	2	4	2
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	danger_event	cer	300	4	0.0133	0.8049	30.4	0.5	0.5	0.5	2	2	2
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	danger_event	sres_total	300	4	0.0133	1.0	270.0	1.0	1.0	1.0	4	0	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	danger_event	sres_max	300	4	0.0133	1.0	75.0	1.0	1.0	1.0	4	0	0
+asr_run	breeze_asr25_partial_encoder_high_stakes_300	danger_event	ceis_max	300	4	0.0133	1.0	5.0	1.0	1.0	1.0	4	0	0

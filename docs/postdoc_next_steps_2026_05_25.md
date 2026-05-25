@@ -66,6 +66,18 @@ Status: active roadmap after the six-model 258-row gate and WER audit
 | Legacy LoRA | `15.97` | `21.91` | `22.15` | `101.30` | `481.25s` |
 | Breeze-ASR-25 base | `21.44` | `28.10` | `28.74` | `271.66` | `214.96s` |
 
+8. Selected-300 proxy metric predictor gate 已完成：
+
+| Target | WER AUC | CER AUC | SRES total AUC | CEIS max AUC |
+| --- | ---: | ---: | ---: | ---: |
+| Unsafe downrouting | `0.7683` | `0.7739` | `0.9954` | `0.9971` |
+| High-risk missed | `0.6871` | `0.7138` | `0.9826` | `0.9973` |
+| Danger event | `0.7629` | `0.7676` | `1.0000` | `1.0000` |
+
+同一個 gate 也確認：在 row-level WER `<= 10.0` 的 `237` 個 model-samples
+中，仍有 `2` 個 label flip / unsafe downrouting 風險訊號。這支持「WER
+計算要正確，但正確 WER 仍不足以判斷高風險下游安全」的主張。
+
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS
@@ -78,9 +90,9 @@ Status: active roadmap after the six-model 258-row gate and WER audit
 - Whisper large-v3、large-v3 turbo、SenseVoice、Qwen3-ASR、Gemma 4 audio
   候選已加入矩陣，但尚未有完整 runner、smoke、15-row contract、或
   258-row evidence。
-- 300 high-stakes ASR hypotheses 已完成三個 Breeze-family comparator，但
-  high-stakes SRES/CEIS/downstream/recovery 目前仍是 proxy mode，還不能宣稱
-  paper-grade main experiment 完成。
+- 300 high-stakes ASR hypotheses、SRES/CEIS/downstream、metric-predictor、
+  recovery 都已完成三個 Breeze-family comparator 的 proxy mode，但還不能
+  宣稱 paper-grade main experiment 完成。
 - 258-row recovery proxy 與 300-row high-stakes recovery proxy 都已完成；下
   一個缺口是 selected-300 human risk-atom audit，而不是再調 WER 定義。
 
@@ -368,9 +380,13 @@ risk-atom audit set。
    - Whisper large-v3 或 large-v3 turbo；
    - legacy LoRA；
    - 其他只有在 258-row 有價值才加入。
-5. 用 split-aware builder 產出 SRES/CEIS/downstream inputs。
-6. 跑 scoring。
-7. 產出 aggregate tables。
+5. 用 split-aware builder 產出 SRES/CEIS/downstream inputs。Done in proxy
+   mode on 2026-05-25.
+6. 跑 scoring。Done in proxy mode on 2026-05-25.
+7. 產出 aggregate tables。Done for ASR, SRES/CEIS/downstream, recovery, and
+   metric-predictor proxy gates.
+8. 建立 selected-300 human risk-atom audit subset。
+9. 用 human-reviewed subset 重跑 metric predictor analysis。
 
 ### 主實驗 metric
 
@@ -395,6 +411,40 @@ risk-atom audit set。
   1. ASR quality vs decision metrics；
   2. risk atom error breakdown；
   3. low-CER/high-CEIS failure cases aggregate。
+
+### 目前 proxy gate 狀態
+
+2026-05-25 已完成 selected-300 proxy metric predictor gate：
+
+- Script:
+  `80_semantic_risk_asr/scoring/analyze_metric_predictors.py`。
+- Run record:
+  `70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/`。
+- Input: partial encoder、Breeze-ASR-25 base、legacy LoRA 三個 selected-300
+  hypothesis families。
+- Rows: `900` model-samples。
+- Aggregate-only outputs:
+  `metric_predictor_comparison.tsv`、`risk_atom_instability.tsv`、
+  `low_wer_danger_summary.tsv`、`metric_predictor_summary.json`。
+
+Key result:
+
+| Comparison | WER | CER | SRES total | CEIS max |
+| --- | ---: | ---: | ---: | ---: |
+| AUC for unsafe downrouting | `0.7683` | `0.7739` | `0.9954` | `0.9971` |
+| AUC for high-risk missed | `0.6871` | `0.7138` | `0.9826` | `0.9973` |
+| AUC for danger event | `0.7629` | `0.7676` | `1.0000` | `1.0000` |
+
+Interpretation:
+
+- WER/CER 已經修正為可審核的中文 ASR 計算政策，但它們仍不是下游安全
+  的充分代理指標。
+- SRES/CEIS 在 proxy gate 的分辨力很高，表示 risk-aware scoring 是有研
+  究價值的路線。
+- 但是 SRES/CEIS 目前由 proxy risk rows 產生，不能直接把 AUC `1.0000`
+  包裝成 human-reviewed paper claim。
+- 下一個 gate 必須是 selected-300 human risk-atom audit，而不是再重複改
+  WER 定義。
 
 ## Phase 6: Recovery experiment
 
@@ -528,15 +578,17 @@ Interpretation:
 
 如果只能照順序做，建議如下：
 
-1. Whisper large-v3 / large-v3 turbo 做 smoke、15-row、258-row。
-2. 用新 builder 重現 expanded 258-row proxy bridge。
-3. 做 SenseVoice/Qwen3-ASR smoke 與 15-row runner gate。
-4. 做 30-row test-split human risk-atom audit。
-5. 跑 300-row partial encoder + base Breeze + best Whisper comparator。
-6. 跑 300-row SRES/CEIS/downstream。
-7. 實作 recovery policy baseline。
-8. 做 recovery experiment。
-9. 產出 paper tables / figures / limitation memo。
+1. 建立 selected-300 human risk-atom audit protocol 與 30-row stratified
+   audit subset。
+2. 用 human-reviewed subset 重跑 metric predictor analysis，檢查 proxy
+   AUC 是否仍成立。
+3. Whisper large-v3 / large-v3 turbo 做 smoke、15-row、258-row，補強
+   reviewer 會期待的 strong Whisper baseline。
+4. 用新 builder 重現 expanded 258-row proxy bridge。
+5. 做 SenseVoice/Qwen3-ASR smoke 與 15-row runner gate。
+6. 將 best Whisper comparator 加入 300-row ASR/CDS proxy lane。
+7. 重跑 300-row SRES/CEIS/downstream/recovery/predictor aggregate tables。
+8. 產出 paper tables / figures / limitation memo。
 
 ## 不建議現在做的事
 
@@ -547,7 +599,8 @@ Interpretation:
 - 不要用 CER/WER 宣稱模型安全性。
 - 不要把 raw audio、raw transcripts、selected candidate IDs、runtime logs、
   raw predictions、model weights 放進 git。
-- 不要在沒有 recovery experiment 前，把 CDS-ASR 說成完整防護系統。
+- 不要把 proxy SRES/CEIS AUC `1.0000` 寫成 formal human-reviewed evidence。
+- 不要在沒有 human risk-atom audit 前，把 CDS-ASR 說成完整防護系統。
 
 ## 下一個 code gate 狀態
 

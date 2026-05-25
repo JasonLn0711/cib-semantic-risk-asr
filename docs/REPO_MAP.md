@@ -82,3 +82,6 @@ organized extracted audio under `10_extracted_parts/`.
 - Use one automatic recovery mechanism first: high-CEIS span alignment,
   constrained re-decoding, ASR ensemble arbitration, decision interval
   estimation, and conservative machine action.
+- For reviewer-facing metric analysis, compare WER/CER/SRES/CEIS against
+  downstream label flips, unsafe downrouting, high-risk misses, low-WER danger
+  counts, and risk-atom instability. Keep predictor outputs aggregate-only.

@@ -1,22 +1,32 @@
 {
-  "version": "v2.5.50",
+  "version": "v2.5.51",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 50
+    "patch": 51
   },
-  "updated_at": "2026-05-25T18:30:38+08:00",
+  "updated_at": "2026-05-25T18:30:49+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "6debe76",
+  "base_commit": "3cbe268",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
-  "summary": "Add aggregate metric-predictor analysis tooling.",
+  "summary": "Record selected-300 metric-predictor proxy evidence.",
   "changed_files": [
-    "80_semantic_risk_asr/scoring/analyze_metric_predictors.py",
-    "tests/test_metric_predictor_analysis.py"
+    "70_experiments/README.md",
+    "70_experiments/registry.tsv",
+    "70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/README.md",
+    "70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/low_wer_danger_summary.tsv",
+    "70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_comparison.tsv",
+    "70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json",
+    "70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/risk_atom_instability.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
+    "80_semantic_risk_asr/paper/experiment_plan.md",
+    "README.md",
+    "docs/REPO_MAP.md",
+    "docs/postdoc_next_steps_2026_05_25.md"
   ]
 }

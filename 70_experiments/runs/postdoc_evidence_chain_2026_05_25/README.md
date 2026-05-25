@@ -54,6 +54,7 @@ ignored local paths.
 | 5.11 | Re-ran WER audit over the three high-stakes 300-row hypotheses. | `70_experiments/runs/wer_metric_audit_2026_05_25/high_stakes_300_metric_audit.tsv`; `high_stakes_300_summary.json`. | Completed. All three runs had `0` missing references, `0` missing hypotheses, `0` missing expected IDs, `0` extra IDs, `0` reference mismatches, and `0.0` zh-jieba `jiwer` delta. Raw whitespace WER remained audit-only: partial encoder `93.16`, LoRA `101.30`, base `271.66`. |
 | 5.12 | Built selected-300 three-model CDS-ASR proxy metric inputs. | `build_janus_metric_inputs.py --split high_stakes_300 --gold-review /dev/null`; `janus_300_high_stakes_cds_proxy_2026_05_25/`. | Completed. Initial build with default gold-review intentionally failed because the 15-row human gate was mixed into the custom split, producing `315` reference IDs. Corrected manifest-only build passed: `300` references, `900` model-samples, `3298` SRES rows, SRES total `9690.0`, `3298` CEIS rows, unstable samples `35`, mean CEIS `0.2278`, max CEIS `15.0`. |
 | 5.13 | Ran selected-300 proxy recovery policy comparison. | `evaluate_recovery_policies.py`; `janus_300_high_stakes_recovery_proxy_2026_05_25/`. | Completed. No recovery: unsafe downrouting `29`, high-risk missed `6`, critical miss `1`. CEIS conservative action: unsafe downrouting `24`, high-risk missed `0`, critical miss `0`, trigger budget `0.0389`. CEIS+ensemble: same safety counts with `47` triggers and `18` abstentions. |
+| 5.14 | Ran selected-300 metric-predictor analysis. | `analyze_metric_predictors.py`; `janus_300_high_stakes_metric_predictor_proxy_2026_05_25/`. | Completed. Aggregate-only outputs compare WER/CER/SRES/CEIS against downstream label flips, unsafe downrouting, high-risk misses, and danger events over `900` model-samples. WER/CER AUC for unsafe downrouting was `0.7683`/`0.7739`, while SRES/CEIS reached `0.9954`/`0.9971`. Low-WER rows still contained `2` unsafe downrouting cases. |
 
 ## Next Operations
 
@@ -73,3 +74,6 @@ ignored local paths.
    become overstated as formal CDS evidence.
 7. Promote a small selected-300 human risk-atom audit set from the proxy outputs
    before making paper-grade CDS/recovery claims.
+8. After the selected-300 audit, rerun `analyze_metric_predictors.py` on the
+   reviewed metric inputs and replace proxy-only predictor language with
+   reviewer-facing evidence.
