@@ -38,6 +38,7 @@ from prepare_human_audit_review_batch import (  # noqa: E402
 
 CHECKLIST_SUMMARY_NAME = "human_audit_reviewer_action_checklist_summary.json"
 CHECKLIST_TSV_NAME = "human_audit_reviewer_action_checklist.tsv"
+RUBRIC_SUMMARY_NAME = "human_audit_reviewer_rubric_summary.json"
 
 
 def read_json_if_exists(path: Path) -> dict[str, Any]:
@@ -117,6 +118,7 @@ def build_checklist(
     template_summary_path: Path,
     apply_summary_path: Path,
     apply_log_summary_path: Path,
+    rubric_summary_path: Path,
     repo_root: Path,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     started = time.time()
@@ -127,6 +129,7 @@ def build_checklist(
     template_summary = read_json_if_exists(template_summary_path)
     apply_summary = read_json_if_exists(apply_summary_path)
     apply_log_summary = read_json_if_exists(apply_log_summary_path)
+    rubric_summary = read_json_if_exists(rubric_summary_path)
 
     packet = handoff.get("current_packet") if isinstance(handoff.get("current_packet"), dict) else {}
     response = (
@@ -188,8 +191,9 @@ def build_checklist(
     response_complete = latest_apply_status == "response_complete"
     handoff_ready = bool(handoff.get("ok")) and handoff.get("freshness_status") == "fresh"
     preflight_ready = bool(preflight.get("ok")) and preflight.get("status") == "review_session_ready"
+    rubric_ready = bool(rubric_summary.get("ok")) and rubric_summary.get("status") == "rubric_ready"
     local_paths_ready = all(path_checks.values())
-    action_ready = handoff_ready and preflight_ready and local_paths_ready
+    action_ready = handoff_ready and preflight_ready and rubric_ready and local_paths_ready
 
     rows = [
         {
@@ -221,6 +225,16 @@ def build_checklist(
                 f"recorded_at={preflight.get('recorded_at', '')}"
             ),
             "next_action": "rerun preflight before opening local review files",
+        },
+        {
+            "step_id": "3b",
+            "action": "confirm reviewer value contract",
+            "status": status_for(rubric_ready),
+            "evidence": (
+                f"rubric_status={rubric_summary.get('status', '')}; "
+                f"constants_match={rubric_summary.get('validator_constants_match', '')}"
+            ),
+            "next_action": "rerun reviewer rubric builder before filling response TSV",
         },
         {
             "step_id": "4",
@@ -278,6 +292,8 @@ def build_checklist(
         blocker_keys.append("handoff_not_ready")
     if not preflight_ready:
         blocker_keys.append("preflight_not_ready")
+    if not rubric_ready:
+        blocker_keys.append("rubric_not_ready")
     if not local_paths_ready:
         blocker_keys.append("local_review_artifacts_missing")
     status = "reviewer_action_ready" if action_ready else "reviewer_action_blocked"
@@ -316,6 +332,8 @@ def build_checklist(
         ),
         "handoff_summary": repo_relative(handoff_summary_path, repo_root=repo_root),
         "preflight_summary": repo_relative(preflight_summary_path, repo_root=repo_root),
+        "rubric_summary": repo_relative(rubric_summary_path, repo_root=repo_root),
+        "rubric_status": rubric_summary.get("status", ""),
         "apply_log_status": apply_log_summary.get("status", ""),
         "apply_log_entries": apply_log_summary.get("apply_log_entries", ""),
         "blocker_keys": blocker_keys,
@@ -350,6 +368,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--template-summary", type=Path, default=DEFAULT_TEMPLATE_SUMMARY)
     parser.add_argument("--apply-summary", type=Path, default=DEFAULT_APPLY_SUMMARY)
     parser.add_argument("--apply-log-summary", type=Path, default=DEFAULT_APPLY_LOG_SUMMARY)
+    parser.add_argument("--rubric-summary", type=Path)
     parser.add_argument("--summary-json", type=Path)
     parser.add_argument("--output-tsv", type=Path)
     return parser.parse_args()
@@ -359,6 +378,7 @@ def main() -> int:
     args = parse_args()
     handoff_summary = args.handoff_summary or args.run_dir / HANDOFF_SUMMARY_NAME
     preflight_summary = args.preflight_summary or args.run_dir / PREFLIGHT_SUMMARY_NAME
+    rubric_summary = args.rubric_summary or args.run_dir / RUBRIC_SUMMARY_NAME
     summary_json = args.summary_json or args.run_dir / CHECKLIST_SUMMARY_NAME
     output_tsv = args.output_tsv or args.run_dir / CHECKLIST_TSV_NAME
     payload, rows = build_checklist(
@@ -370,6 +390,7 @@ def main() -> int:
         template_summary_path=args.template_summary,
         apply_summary_path=args.apply_summary,
         apply_log_summary_path=args.apply_log_summary,
+        rubric_summary_path=rubric_summary,
         repo_root=REPO_ROOT,
     )
     write_json(summary_json, payload)

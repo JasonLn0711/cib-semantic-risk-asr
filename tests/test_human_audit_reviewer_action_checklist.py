@@ -18,6 +18,17 @@ def write_json(path: Path, payload: dict) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def write_rubric(run_dir: Path) -> None:
+    write_json(
+        run_dir / "human_audit_reviewer_rubric_summary.json",
+        {
+            "ok": True,
+            "status": "rubric_ready",
+            "validator_constants_match": True,
+        },
+    )
+
+
 def test_action_checklist_marks_ready_but_review_pending(tmp_path: Path) -> None:
     run_dir, paths = write_current_handoff(tmp_path)
     preflight = {
@@ -26,6 +37,7 @@ def test_action_checklist_marks_ready_but_review_pending(tmp_path: Path) -> None
         "recorded_at": "2026-05-25T22:47:48+08:00",
     }
     write_json(run_dir / "human_audit_reviewer_preflight_summary.json", preflight)
+    write_rubric(run_dir)
 
     payload, rows = build_checklist(
         run_dir=run_dir,
@@ -36,6 +48,7 @@ def test_action_checklist_marks_ready_but_review_pending(tmp_path: Path) -> None
         template_summary_path=paths["template_summary"],
         apply_summary_path=paths["apply_summary"],
         apply_log_summary_path=paths["apply_log_summary"],
+        rubric_summary_path=run_dir / "human_audit_reviewer_rubric_summary.json",
         repo_root=tmp_path,
     )
 
@@ -44,6 +57,7 @@ def test_action_checklist_marks_ready_but_review_pending(tmp_path: Path) -> None
     assert payload["pending_rows_in_batch"] == 2
     assert payload["pending_model_assessments_in_batch"] == 6
     status_by_step = {row["step_id"]: row["status"] for row in rows}
+    assert status_by_step["3b"] == "ready"
     assert status_by_step["4"] == "pending"
     assert status_by_step["5"] == "pending"
     assert status_by_step["8"] == "blocked_until_response_complete"
@@ -55,6 +69,7 @@ def test_action_checklist_marks_ready_but_review_pending(tmp_path: Path) -> None
 
 def test_action_checklist_blocks_missing_preflight(tmp_path: Path) -> None:
     run_dir, paths = write_current_handoff(tmp_path)
+    write_rubric(run_dir)
 
     payload, rows = build_checklist(
         run_dir=run_dir,
@@ -65,6 +80,7 @@ def test_action_checklist_blocks_missing_preflight(tmp_path: Path) -> None:
         template_summary_path=paths["template_summary"],
         apply_summary_path=paths["apply_summary"],
         apply_log_summary_path=paths["apply_log_summary"],
+        rubric_summary_path=run_dir / "human_audit_reviewer_rubric_summary.json",
         repo_root=tmp_path,
     )
 
@@ -119,6 +135,7 @@ def test_action_checklist_marks_write_ready_after_response_complete(tmp_path: Pa
         run_dir / "human_audit_reviewer_preflight_summary.json",
         {"ok": True, "status": "review_session_ready"},
     )
+    write_rubric(run_dir)
 
     payload, rows = build_checklist(
         run_dir=run_dir,
@@ -129,6 +146,7 @@ def test_action_checklist_marks_write_ready_after_response_complete(tmp_path: Pa
         template_summary_path=paths["template_summary"],
         apply_summary_path=paths["apply_summary"],
         apply_log_summary_path=paths["apply_log_summary"],
+        rubric_summary_path=run_dir / "human_audit_reviewer_rubric_summary.json",
         repo_root=tmp_path,
     )
 
@@ -136,3 +154,30 @@ def test_action_checklist_marks_write_ready_after_response_complete(tmp_path: Pa
     status_by_step = {row["step_id"]: row["status"] for row in rows}
     assert status_by_step["7"] == "complete"
     assert status_by_step["8"] == "ready"
+
+
+def test_action_checklist_blocks_missing_rubric(tmp_path: Path) -> None:
+    run_dir, paths = write_current_handoff(tmp_path)
+    write_json(
+        run_dir / "human_audit_reviewer_preflight_summary.json",
+        {"ok": True, "status": "review_session_ready"},
+    )
+
+    payload, rows = build_checklist(
+        run_dir=run_dir,
+        handoff_summary_path=run_dir / "human_audit_reviewer_handoff_summary.json",
+        preflight_summary_path=run_dir / "human_audit_reviewer_preflight_summary.json",
+        batch_summary_path=paths["batch_summary"],
+        batch_status_path=paths["batch_status"],
+        template_summary_path=paths["template_summary"],
+        apply_summary_path=paths["apply_summary"],
+        apply_log_summary_path=paths["apply_log_summary"],
+        rubric_summary_path=run_dir / "human_audit_reviewer_rubric_summary.json",
+        repo_root=tmp_path,
+    )
+
+    assert payload["ok"] is False
+    assert payload["status"] == "reviewer_action_blocked"
+    assert payload["blocker_keys"] == ["rubric_not_ready"]
+    status_by_step = {row["step_id"]: row["status"] for row in rows}
+    assert status_by_step["3b"] == "blocked"
