@@ -12,5 +12,5 @@
     "Predictor metrics are computed only over reviewed model-level assessments.",
     "Uncertain decisions are excluded from the yes-only target and included in the yes-or-uncertain target."
   ],
-  "wall_time_seconds": 0.0014
+  "wall_time_seconds": 0.0005
 }

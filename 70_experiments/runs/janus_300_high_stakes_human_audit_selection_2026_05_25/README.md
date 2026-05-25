@@ -154,6 +154,8 @@ Tracked readiness outputs:
 | `human_audit_response_closeout_checklist.tsv` | Repo-safe closeout checklist rows for session start, session-gated strict dry-run, row/model completion, response status, and write/refresh readiness. |
 | `human_audit_response_gap_checklist.tsv` | Repo-safe row-number-only response gap checklist for the current packet. Current rows `1-6` all have gaps: `48` row fields missing, `18` model assessments missing, `72` model-assessment fields missing, and `6/6` timing gaps. It now embeds each row's timing start/finish helper commands from the fresh reviewer handoff. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
 | `human_audit_response_action_items.tsv` | Repo-safe field-level action list generated from the response closeout gaps. Current live packet has `126` pending items: `48` row-field items, `72` model-field items, and `6` timing items with timing helper commands. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
+| `human_audit_review_work_order_summary.json` | Repo-safe row-by-row reviewer work-order summary generated from action-items, closeout, handoff, and session-start summaries. Current status: `review_work_order_ready`, `6` rows, `35` total steps, `126` pending action items, and runtime recorded. |
+| `human_audit_review_work_order.tsv` | Repo-safe operational work order for the current packet. It routes each row through timing start, local row open, row-field fill, model-field fill, and timing finish, then routes packet-level strict dry-run, closeout, write/refresh, post-review checklist, and objective audit. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
 | `human_audit_post_review_evidence_summary.json` | Repo-safe post-review paper-evidence checklist. Current status: `post_review_evidence_blocked`; blockers are response closeout, human refresh, human predictor, readiness/publishable/consequence gates, and proxy-only recovery evidence. |
 | `human_audit_post_review_evidence_checklist.tsv` | Repo-safe checklist rows for the aggregate gates that must pass after response closeout/write/refresh before proxy claims can be promoted to paper-facing evidence. |
 
@@ -207,6 +209,22 @@ The command also writes `human_audit_response_action_items.tsv`, which expands
 the same safe row-number-only gaps into one pending action per missing
 row-level field, model-level field, and timing entry. Current live output is
 `126` pending items: `48` row fields, `72` model fields, and `6` timing items.
+
+For the aggregate-only row-by-row work order that reviewers should follow while
+opening local transcript-bearing files, run:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/build_human_audit_review_work_order.py
+```
+
+Current work-order status: `review_work_order_ready`. It expands the current
+`126` action items into `35` ordered steps for rows `1-6` plus packet closeout:
+mark timing start, inspect one local row, fill row fields, fill model fields,
+mark timing finish, run strict dry-run, rerun closeout, write/refresh, check
+post-review evidence, and rerun the objective audit. Normal
+`refresh_human_audit_evidence.py` now regenerates this summary and TSV before
+the evidence-chain consistency audit, so the work order stays aligned with the
+latest closeout gaps and handoff commands.
 
 For a one-file current-state handoff, run:
 

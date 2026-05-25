@@ -208,6 +208,26 @@ and timing entry. Current live scope is `126` pending action items: `48`
 row-field items, `72` model-field items, and `6` timing items. Consistency
 check `C069` verifies that this TSV has unique action IDs, timing helper
 commands for timing items, and counts that match the closeout gap summary.
+
+To turn those field-level gaps into an operational reviewer sequence, run:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/build_human_audit_review_work_order.py
+```
+
+This writes `human_audit_review_work_order_summary.json` and
+`human_audit_review_work_order.tsv`. The work order is aggregate-only: it reads
+the tracked action-items, closeout, handoff, and session-start summaries, then
+routes each row through timing start, local row open, row-field fill,
+model-field fill, timing finish, strict dry-run, response closeout,
+write/refresh, post-review checklist, and objective audit. It may include
+commands that open local transcript-bearing files, but the command output must
+remain local-only. No audio IDs, transcripts, hypotheses, selected sample IDs,
+local row content, reviewer values, or reviewer notes are tracked. Normal
+`refresh_human_audit_evidence.py` regenerates this work order before the
+evidence-chain consistency audit, and consistency check `C071` verifies row
+coverage, count alignment, required step types, status, and sensitive-field
+safety.
 Each dry-run or write appends one aggregate-only row to
 `human_audit_batch_response_apply_log.tsv`; use that file as the operation log
 for response attempts. The companion
