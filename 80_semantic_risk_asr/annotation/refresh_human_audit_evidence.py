@@ -25,6 +25,7 @@ for import_path in (ANNOTATION_DIR, SCORING_DIR):
 
 import analyze_human_audit_predictors as predictors  # noqa: E402
 import audit_evidence_chain_consistency as consistency_audit  # noqa: E402
+import audit_postdoc_objective_requirements as objective_audit  # noqa: E402
 import audit_postdoc_roadmap_completion as roadmap_audit  # noqa: E402
 import audit_publishable_evidence_chain as completion_audit  # noqa: E402
 import audit_human_review_progress as progress_audit  # noqa: E402
@@ -467,6 +468,19 @@ def run_consistency_audit_gate(
     return payload, [output_json, output_tsv]
 
 
+def run_objective_requirements_gate(
+    *,
+    repo_root: Path,
+    output_dir: Path,
+) -> tuple[dict[str, Any], list[Path]]:
+    payload = objective_audit.build_current_audit(repo_root.resolve())
+    output_json = output_dir / objective_audit.SUMMARY_NAME
+    output_tsv = output_dir / objective_audit.TSV_NAME
+    objective_audit.write_json(output_json, payload)
+    objective_audit.write_tsv(output_tsv, payload["requirement_rows"])
+    return payload, [output_json, output_tsv]
+
+
 def refresh_human_audit_evidence(
     *,
     audit_sheet: Path,
@@ -503,6 +517,7 @@ def refresh_human_audit_evidence(
     roadmap_payload: dict[str, Any] | None = None
     post_review_payload: dict[str, Any] | None = None
     consistency_payload: dict[str, Any] | None = None
+    objective_payload: dict[str, Any] | None = None
     downstream_refreshed = False
 
     if validation_payload["ok"]:
@@ -570,6 +585,11 @@ def refresh_human_audit_evidence(
         "consistency_audit_ok": "",
         "consistency_status_counts": {},
         "consistency_failed_checks": [],
+        "objective_requirements_audit_ok": "",
+        "objective_requirements_ready": "",
+        "objective_requirements_status_counts": {},
+        "objective_requirements_proxy_count": "",
+        "objective_requirements_blocking_count": "",
         "downstream_outputs_refreshed": downstream_refreshed,
         "outputs": [repo_relative(path, repo_root=repo_root) for path in output_paths],
         "runtime_seconds": round(time.time() - started, 4),
@@ -638,6 +658,32 @@ def refresh_human_audit_evidence(
         payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
         payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
         write_refresh_summary(output_dir, payload)
+        objective_payload, objective_outputs = run_objective_requirements_gate(
+            repo_root=repo_root,
+            output_dir=readiness_output_dir,
+        )
+        output_paths.extend(objective_outputs)
+        ok = ok and bool(objective_payload.get("ok"))
+        payload["ok"] = ok
+        payload["objective_requirements_audit_ok"] = objective_payload.get("ok")
+        payload["objective_requirements_ready"] = objective_payload.get(
+            "objective_requirements_ready"
+        )
+        payload["objective_requirements_status_counts"] = objective_payload.get(
+            "status_counts",
+            {},
+        )
+        payload["objective_requirements_proxy_count"] = objective_payload.get(
+            "proxy_requirement_count",
+            "",
+        )
+        payload["objective_requirements_blocking_count"] = objective_payload.get(
+            "blocking_requirement_count",
+            "",
+        )
+        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
+        payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
+        write_refresh_summary(output_dir, payload)
     return payload
 
 
@@ -678,6 +724,7 @@ def main() -> int:
                 "reviewed_model_assessments": payload["reviewed_model_assessments"],
                 "pending_model_assessments": payload["pending_model_assessments"],
                 "readiness_paper_ready": payload["readiness_paper_ready"],
+                "objective_requirements_ready": payload["objective_requirements_ready"],
                 "output_summary": str(args.output_dir / REFRESH_SUMMARY_NAME),
             },
             ensure_ascii=False,

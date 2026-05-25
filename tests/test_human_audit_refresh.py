@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import csv
 import json
 import sys
 from pathlib import Path
@@ -138,6 +139,231 @@ def load_consistency_fixture_writer():
     assert spec.loader is not None
     spec.loader.exec_module(module)
     return module.write_consistent_fixture
+
+
+def write_json(path: Path, payload: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def write_tsv(path: Path, rows: list[dict[str, str]], fieldnames: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t", lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def write_objective_requirements_fixture_tree(root: Path) -> None:
+    root.joinpath(".gitignore").write_text(
+        "\n".join(
+            [
+                "*.wav",
+                "*.safetensors",
+                "50_janus_data_library/",
+                "90_legacy_imports/",
+                "70_experiments/runs/*/artifacts/",
+                "70_experiments/runs/*/predictions/",
+                "70_experiments/runs/*/models/",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    registry_ids = [
+        "janus_old_train_legacy_import",
+        "breeze_asr25_lora_legacy_best",
+        "breeze_asr25_partial_encoder_legacy_best",
+        "postdoc_evidence_chain_2026_05_25",
+        "whisper_small_test_split",
+        "whisper_large_v2_test_split",
+        "breeze_asr25_base_test_split",
+        "breeze_asr25_lora_legacy_best_test_split",
+        "breeze_asr25_partial_encoder_legacy_best_test_split",
+        "breeze_asr26_test_split",
+    ]
+    write_tsv(
+        root / "70_experiments/registry.tsv",
+        [{"run_id": run_id} for run_id in registry_ids],
+        ["run_id"],
+    )
+    for run_id, model_kind in (
+        ("breeze_asr25_lora_legacy_best_smoke", "lora"),
+        ("breeze_asr25_partial_encoder_legacy_best_smoke", "partial_encoder"),
+    ):
+        write_json(
+            root / f"70_experiments/runs/{run_id}/artifacts/{run_id}_summary.json",
+            {
+                "ok": True,
+                "model_kind": model_kind,
+                "runtime": "cuda",
+                "torch_dtype": "float16",
+                "disable_cudnn": True,
+                "rows": 1,
+                "wall_time_seconds": 1.25,
+            },
+        )
+    validation_payload = {
+        "ok": True,
+        "files": [
+            {
+                "ok": True,
+                "checks": {
+                    "row_count_matches_expected_ids": True,
+                    "audio_ids_match_expected_set": True,
+                    "audio_ids_are_unique": True,
+                    "audio_id_field_present": True,
+                    "hypothesis_text_present": True,
+                    "asr_label_present": True,
+                    "quality_signal_present": True,
+                },
+                "counts": {"rows": 15, "expected_ids": 15},
+            }
+        ],
+    }
+    for run_id in (
+        "breeze_asr25_lora_legacy_best_15_row",
+        "breeze_asr25_partial_encoder_legacy_best_15_row",
+    ):
+        write_json(
+            root / f"70_experiments/runs/{run_id}/artifacts/{run_id}_validation.json",
+            validation_payload,
+        )
+    bridge_fields = [
+        "run_id",
+        "rows",
+        "cer_mean",
+        "wer_mean",
+        "mean_ceis",
+        "max_ceis",
+        "downstream_mismatch_rate",
+        "high_risk_missed_by_asr",
+    ]
+    bridge_row = {
+        "rows": "15",
+        "cer_mean": "10",
+        "wer_mean": "20",
+        "mean_ceis": "1",
+        "max_ceis": "5",
+        "downstream_mismatch_rate": "0.1",
+        "high_risk_missed_by_asr": "1",
+    }
+    write_tsv(
+        root / "70_experiments/runs/janus_15_decision_stability_legacy_best/asr_cds_model_comparison.tsv",
+        [
+            {"run_id": "breeze_asr25_15_row_baseline", **bridge_row},
+            {"run_id": "breeze_asr25_lora_legacy_best_15_row", **bridge_row},
+            {"run_id": "breeze_asr25_partial_encoder_legacy_best_15_row", **bridge_row},
+        ],
+        bridge_fields,
+    )
+    split_fields = [
+        "run_id",
+        "rows",
+        "expected_rows",
+        "cer_zh_micro",
+        "wer_zh_jieba_micro",
+        "risk_atom_error_rate",
+        "negation_flip_rate",
+        "amount_distortion_rate",
+        "action_confusion_rate",
+        "unsafe_downrouting_count",
+        "high_risk_missed_count",
+    ]
+    split_row = {
+        "rows": "258",
+        "expected_rows": "258",
+        "cer_zh_micro": "1",
+        "wer_zh_jieba_micro": "1",
+        "risk_atom_error_rate": "0.1",
+        "negation_flip_rate": "0.1",
+        "amount_distortion_rate": "0.1",
+        "action_confusion_rate": "0.1",
+        "unsafe_downrouting_count": "1",
+        "high_risk_missed_count": "1",
+    }
+    write_tsv(
+        root / "70_experiments/runs/janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv",
+        [
+            {"run_id": run_id, **split_row}
+            for run_id in [
+                "whisper_small_test_split",
+                "whisper_large_v2_test_split",
+                "breeze_asr25_base_test_split",
+                "breeze_asr25_lora_legacy_best_test_split",
+                "breeze_asr25_partial_encoder_legacy_best_test_split",
+                "breeze_asr26_test_split",
+            ]
+        ],
+        split_fields,
+    )
+    write_json(
+        root / "70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/summary.json",
+        {
+            "ok": True,
+            "split": "high_stakes_300",
+            "review_mode": "proxy",
+            "reference_rows": 300,
+            "model_samples": 900,
+            "ceis": {"unstable_samples": 35},
+        },
+    )
+    write_json(
+        root / "70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json",
+        {
+            "ok": True,
+            "model_sample_count": 900,
+            "best_overall_predictors_by_auc": {
+                "unsafe_downrouting": {"auc": 0.9, "metric": "ceis_max"}
+            },
+            "low_wer_summary": [{"rows": 900}],
+        },
+    )
+    policy = {
+        "critical_miss_count": 0,
+        "critical_miss_rate": 0.0,
+        "unsafe_downrouting_count": 0,
+        "unsafe_downrouting_rate": 0.0,
+        "over_escalation_count": 0,
+        "over_escalation_rate": 0.0,
+        "machine_abstention_count": 0,
+        "machine_abstention_rate": 0.0,
+        "recovery_budget_rate": 0.0,
+        "high_risk_missed_gain": 0.0,
+        "unsafe_downrouting_gain": 0.0,
+    }
+    write_json(
+        root / "70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+        {
+            "ok": True,
+            "policies": {
+                "no_recovery": {
+                    **policy,
+                    "critical_miss_count": 1,
+                    "unsafe_downrouting_count": 2,
+                    "high_risk_missed_count": 6,
+                },
+                "confidence_only_trigger": policy,
+                "sres_triggered_recovery": {
+                    **policy,
+                    "high_risk_missed_gain": 1.0,
+                    "unsafe_downrouting_gain": 0.5,
+                },
+                "ceis_triggered_conservative_action": {
+                    **policy,
+                    "critical_miss_count": 0,
+                    "high_risk_missed_count": 0,
+                    "high_risk_missed_gain": 1.0,
+                    "unsafe_downrouting_gain": 0.5,
+                },
+                "ceis_ensemble_arbitration": {
+                    **policy,
+                    "machine_abstention_count": 1,
+                    "machine_abstention_rate": 0.1,
+                },
+            },
+        },
+    )
 
 
 def test_refresh_allows_pending_review_without_strict_mode(tmp_path: Path) -> None:
@@ -338,3 +564,51 @@ def test_refresh_updates_evidence_chain_consistency_audit(tmp_path: Path) -> Non
     assert consistency_payload["ok"] is True
     assert (readiness_dir / "evidence_chain_consistency.tsv").exists()
     assert "PRIVATE_" not in consistency_path.read_text(encoding="utf-8")
+
+
+def test_refresh_updates_original_objective_requirements_audit(tmp_path: Path) -> None:
+    load_readiness_fixture_writer()(tmp_path)
+    load_consistency_fixture_writer()(tmp_path)
+    write_objective_requirements_fixture_tree(tmp_path)
+    sheet = tmp_path / "audit.tsv"
+    output_dir = (
+        tmp_path
+        / "70_experiments"
+        / "runs"
+        / "janus_300_high_stakes_human_audit_selection_2026_05_25"
+    )
+    readiness_dir = (
+        tmp_path / "70_experiments" / "runs" / "postdoc_evidence_chain_2026_05_25"
+    )
+    write_rows(sheet, [base_row(reviewed=False, model_reviewed=False)])
+
+    payload = refresh_human_audit_evidence(
+        audit_sheet=sheet,
+        output_dir=output_dir,
+        readiness_output_dir=readiness_dir,
+        repo_root=tmp_path,
+        expected_rows=1,
+        require_complete=False,
+        skip_readiness=False,
+    )
+    objective_path = readiness_dir / "postdoc_objective_requirements_summary.json"
+    objective_payload = json.loads(objective_path.read_text(encoding="utf-8"))
+
+    assert payload["ok"] is True
+    assert payload["objective_requirements_audit_ok"] is True
+    assert payload["objective_requirements_ready"] is False
+    assert payload["objective_requirements_status_counts"] == {
+        "satisfied": 8,
+        "proxy_satisfied": 5,
+        "review_pending": 2,
+    }
+    assert payload["objective_requirements_proxy_count"] == 5
+    assert payload["objective_requirements_blocking_count"] == 2
+    assert objective_payload["objective_requirements_ready"] is False
+    assert objective_payload["status_counts"]["review_pending"] == 2
+    assert (readiness_dir / "postdoc_objective_requirements.tsv").exists()
+    assert any(
+        item.endswith("postdoc_objective_requirements_summary.json")
+        for item in payload["outputs"]
+    )
+    assert "PRIVATE_" not in objective_path.read_text(encoding="utf-8")
