@@ -1,28 +1,22 @@
 {
-  "version": "v2.5.49",
+  "version": "v2.5.50",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 49
+    "patch": 50
   },
-  "updated_at": "2026-05-25T18:16:48+08:00",
+  "updated_at": "2026-05-25T18:30:38+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "4fefa97",
+  "base_commit": "6debe76",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
-  "summary": "Auto version bump for staged repo changes.",
+  "summary": "Add aggregate metric-predictor analysis tooling.",
   "changed_files": [
-    "70_experiments/registry.tsv",
-    "70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/README.md",
-    "70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/summary.json",
-    "70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/README.md",
-    "70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/policy_comparison.tsv",
-    "70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
-    "docs/postdoc_next_steps_2026_05_25.md"
+    "80_semantic_risk_asr/scoring/analyze_metric_predictors.py",
+    "tests/test_metric_predictor_analysis.py"
   ]
 }

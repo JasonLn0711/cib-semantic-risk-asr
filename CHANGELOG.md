@@ -5,6 +5,17 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.50 - 2026-05-25T18:30:38+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `6debe76`
+- Branch: `main`
+- Summary: Add aggregate metric-predictor analysis tooling.
+- Changed files:
+  - `80_semantic_risk_asr/scoring/analyze_metric_predictors.py`
+  - `tests/test_metric_predictor_analysis.py`
+
 ## v2.5.49 - 2026-05-25T18:16:48+08:00
 
 - Bump: `patch`
