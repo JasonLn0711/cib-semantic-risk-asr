@@ -73,15 +73,32 @@ to the organized extracted audio under `../10_extracted_parts/`.
    python 60_whisper_asr_finetuning/scripts/validate_janus_pilot_gate.py
    ```
 
-7. Pick a config:
+7. Run the NeMo Curator pilot on the fixed 15 rows only:
+
+   ```bash
+   .venv/bin/python 60_whisper_asr_finetuning/scripts/run_janus_nemo_curator_pilot.py \
+     --runtime cpu \
+     --asr-run-id nemo_curator_zh_citrinet_cpu_pilot \
+     --quiet
+   .venv/bin/python 80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py \
+     --hypotheses 40_breeze_asr25_finetune_dataset/manifests/asr_outputs_nemo.jsonl \
+     --require-quality-signal
+   ```
+
+   The script uses NeMo Curator's ASR stage and writes the ignored local output
+   `40_breeze_asr25_finetune_dataset/manifests/asr_outputs_nemo.jsonl`.
+   Use `--runtime cuda` only after the local CUDA/cuDNN wheel stack is known to
+   be compatible.
+
+8. Pick a config:
 
    - `configs/whisper-small-smoke-test.yaml` for a low-cost pipeline check.
    - `configs/whisper-large-v2-lora-baseline.yaml` for the first serious LoRA baseline.
 
-8. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
+9. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
    run template from `../70_experiments/templates/run_record.md`.
 
-9. Register the run in `../70_experiments/registry.tsv` before starting long
+10. Register the run in `../70_experiments/registry.tsv` before starting long
    training.
 
 ## Layout

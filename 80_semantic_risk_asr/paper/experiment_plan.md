@@ -12,9 +12,12 @@ alternatives change downstream escalation decisions.
 
 Do not start a long model run until this gate exists:
 
-1. Complete the reviewed 15-row JANUS pilot gate.
+1. Complete the reviewed 15-row JANUS pilot gate. Done locally on 2026-05-25.
 2. Generate baseline ASR hypotheses, confidence signals, timestamps, and
    ordinary WER/CER.
+   NeMo Curator produced a 15-row CPU pilot output with joinable `audio_id`,
+   WER, and CER fields on 2026-05-25; it is an output-contract check, not a
+   quality baseline.
 3. Build metric inputs with
    `80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py`.
 4. Extract risk atoms from top-1 transcripts and reference transcripts.

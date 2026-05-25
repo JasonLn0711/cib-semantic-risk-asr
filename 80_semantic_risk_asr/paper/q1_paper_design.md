@@ -401,8 +401,12 @@ constrained re-decoding implementation is mature.
 ### Week 1
 
 - Freeze risk atom schema.
-- Complete the reviewed 15-row JANUS pilot gate.
-- Run or collect NeMo/Whisper/Breeze hypotheses on the same 15 rows.
+- Complete the reviewed 15-row JANUS pilot gate. Local status on 2026-05-25:
+  complete.
+- Run or collect NeMo/Whisper/Breeze hypotheses on the same 15 rows. NeMo
+  Curator produced a joinable CPU pilot output with WER/CER fields; it should
+  be treated as an output-contract check because aggregate CER is still too
+  high for quality comparison.
 - Build SRES, CEIS, and downstream-impact metric inputs for the pilot.
 
 ### Week 2

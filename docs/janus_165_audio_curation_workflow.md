@@ -80,7 +80,7 @@ The script writes:
    long-silence review. It did not find empty files, ultra-short files, channel
    inconsistency, sample-rate inconsistency, or manifest duration mismatch.
 
-4. Gold subset: selected, pending human review.
+4. Gold subset: selected and locally reviewed.
    `gold_subset_review.tsv` has 15 rows. The existing transcript is only a
    candidate reference. A row becomes gold after `human_verified_transcript`,
    `semantic_risk_label`, `risk_atoms`, `asr_confusion_terms`, and
@@ -92,10 +92,12 @@ The script writes:
    mistranscription rate, escalation label flip rate, interpretation-impact
    rate, and CEIS readiness.
 
-6. NeMo Curator pilot: staged, not yet run.
-   `nemo_pilot_input_manifest.jsonl` contains the 15 selected rows. The pilot
-   should wait until the gold subset has been reviewed and a NeMo Curator audio
-   environment is installed.
+6. NeMo Curator pilot: locally run on the 15-row manifest.
+   `nemo_pilot_input_manifest.jsonl` contains the 15 selected rows. The CPU
+   Curator-stage pilot wrote `asr_outputs_nemo.jsonl`, joined back to the gold
+   subset by `audio_id`, and produced WER/CER quality fields. The zh Citrinet
+   pilot is a pipeline/output-contract check, not a quality baseline; observed
+   aggregate quality was WER `100.0` and mean CER `83.66`.
 
 7. ASR comparison plan: complete as a run plan.
    `asr_comparison_plan.tsv` compares NeMo ASR, Whisper small, Whisper
@@ -134,8 +136,10 @@ The script writes:
 9. Run `python 60_whisper_asr_finetuning/scripts/validate_janus_pilot_gate.py`
    and expect it to pass before NeMo/Whisper/Breeze pilot metrics are treated
    as evaluation evidence.
-10. Run the NeMo Curator pilot only on `nemo_pilot_input_manifest.jsonl`.
-11. Verify NeMo output joins back to the gold subset through `audio_id`.
+10. Run the NeMo Curator pilot only on `nemo_pilot_input_manifest.jsonl`:
+    `python 60_whisper_asr_finetuning/scripts/run_janus_nemo_curator_pilot.py --runtime cpu --asr-run-id nemo_curator_zh_citrinet_cpu_pilot --quiet`.
+11. Verify NeMo output joins back to the gold subset through `audio_id`:
+    `python 80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py --hypotheses 40_breeze_asr25_finetune_dataset/manifests/asr_outputs_nemo.jsonl --require-quality-signal`.
 12. Run the same 15-row subset through Whisper small, Whisper large-v2 or LoRA,
     Breeze-ASR-25, and optional faster-whisper/WhisperX if available.
 13. Build the local metric-input bridge for SRES, CEIS, and downstream checks:

@@ -95,6 +95,11 @@ show that ASR hypotheses can join back to `audio_id`, expose decision-critical
 risk atoms, produce SRES/CEIS/downstream-impact outputs, and yield interpretable
 examples.
 
+Current local evidence: the reviewed 15-row gate is complete, and a NeMo Curator
+CPU pilot has produced a 15-row `audio_id`-joinable hypothesis file with WER/CER
+fields. Its high CER confirms that this pass is only a pipeline/output-contract
+check; the next evidence step is Whisper small smoke on the same fixed subset.
+
 Only after that pilot shows a usable decision-stability signal should the study
 expand to `300-500` high-stakes segments selected for risk-term coverage, split
 balance, duration, health flags, and scam-scenario diversity.

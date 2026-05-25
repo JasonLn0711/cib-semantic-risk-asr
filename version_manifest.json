@@ -1,23 +1,27 @@
 {
-  "version": "v2.5.19",
+  "version": "v2.5.20",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 19
+    "patch": 20
   },
-  "updated_at": "2026-05-25T09:21:52+08:00",
+  "updated_at": "2026-05-25T09:45:50+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "e24e42f",
+  "base_commit": "6b082aa",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
+    "60_whisper_asr_finetuning/README.md",
+    "60_whisper_asr_finetuning/scripts/run_janus_nemo_curator_pilot.py",
     "70_experiments/runs/janus_15_decision_stability_pilot/README.md",
-    "80_semantic_risk_asr/README.md",
-    "80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py"
+    "80_semantic_risk_asr/paper/experiment_plan.md",
+    "80_semantic_risk_asr/paper/q1_paper_design.md",
+    "80_semantic_risk_asr/paper/story_outline.md",
+    "docs/janus_165_audio_curation_workflow.md"
   ]
 }
