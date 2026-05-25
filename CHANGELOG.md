@@ -5,6 +5,20 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.79 - 2026-05-25T21:08:02+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `37f85ab`
+- Branch: `main`
+- Summary: Add local-only selected-300 review batch packet preparation.
+- Changed files:
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_rows.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_batch_log.tsv`
+  - `80_semantic_risk_asr/annotation/prepare_human_audit_review_batch.py`
+  - `tests/test_human_audit_review_batch.py`
+
 ## v2.5.78 - 2026-05-25T20:58:26+08:00
 
 - Bump: `patch`
