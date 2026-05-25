@@ -129,6 +129,8 @@ def test_refresh_allows_pending_review_without_strict_mode(tmp_path: Path) -> No
     assert payload["pending_rows"] == 1
     assert payload["pending_model_assessments"] == 1
     assert (output_dir / "human_audit_validation_summary.json").exists()
+    assert (output_dir / "human_audit_progress_summary.json").exists()
+    assert (output_dir / "human_audit_review_batches.tsv").exists()
     assert (output_dir / "human_audit_review_summary.json").exists()
     assert (output_dir / "human_audit_predictor_summary.json").exists()
     assert "PRIVATE_" not in (output_dir / "human_audit_refresh_summary.json").read_text(
@@ -149,6 +151,7 @@ def test_refresh_require_complete_fails_pending_review(tmp_path: Path) -> None:
     assert payload["validation_error_counts"]["incomplete_row_review"] == 1
     assert payload["validation_error_counts"]["incomplete_model_review"] == 1
     assert (output_dir / "human_audit_validation_summary.json").exists()
+    assert (output_dir / "human_audit_progress_summary.json").exists()
     assert not (output_dir / "human_audit_predictor_summary.json").exists()
 
 

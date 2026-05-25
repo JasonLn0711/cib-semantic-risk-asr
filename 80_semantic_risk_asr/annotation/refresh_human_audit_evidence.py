@@ -24,6 +24,7 @@ for import_path in (ANNOTATION_DIR, SCORING_DIR):
         sys.path.insert(0, str(import_path))
 
 import analyze_human_audit_predictors as predictors  # noqa: E402
+import audit_human_review_progress as progress_audit  # noqa: E402
 import check_evidence_chain_readiness as readiness  # noqa: E402
 import summarize_human_risk_atom_audit as review_summary  # noqa: E402
 import validate_human_risk_atom_audit as validation  # noqa: E402
@@ -174,6 +175,68 @@ def run_review_summary_gate(
     return payload, [output_json, strata_tsv, atoms_tsv, model_tsv]
 
 
+def run_progress_gate(
+    *,
+    audit_sheet: Path,
+    output_dir: Path,
+    expected_rows: int | None,
+) -> tuple[dict[str, Any], list[Path]]:
+    started = time.time()
+    fieldnames, rows = progress_audit.read_tsv(audit_sheet)
+    progress = progress_audit.build_progress(fieldnames, rows, expected_rows)
+    summary = progress["summary"]
+    summary["runtime_seconds"] = round(time.time() - started, 4)
+    progress_audit.assert_progress_safe(
+        summary,
+        progress["strata"] + progress["models"] + progress["batches"],
+    )
+
+    output_json = output_dir / progress_audit.SUMMARY_NAME
+    strata_tsv = output_dir / progress_audit.STRATA_NAME
+    model_tsv = output_dir / progress_audit.MODEL_NAME
+    batches_tsv = output_dir / progress_audit.RECOMMENDED_BATCH_NAME
+    progress_audit.write_json(output_json, summary)
+    progress_audit.write_tsv(
+        strata_tsv,
+        progress["strata"],
+        [
+            "selection_stratum",
+            "audit_rows",
+            "reviewed_rows",
+            "pending_rows",
+            "row_completion_rate",
+            "model_assessments",
+            "reviewed_model_assessments",
+            "pending_model_assessments",
+            "model_completion_rate",
+        ],
+    )
+    progress_audit.write_tsv(
+        model_tsv,
+        progress["models"],
+        [
+            "asr_run_id",
+            "model_assessments",
+            "reviewed_model_assessments",
+            "pending_model_assessments",
+            "model_completion_rate",
+        ],
+    )
+    progress_audit.write_tsv(
+        batches_tsv,
+        progress["batches"],
+        [
+            "batch_order",
+            "selection_stratum",
+            "pending_rows",
+            "pending_model_assessments",
+            "primary_reason",
+            "completion_gate",
+        ],
+    )
+    return summary, [output_json, strata_tsv, model_tsv, batches_tsv]
+
+
 def run_predictor_gate(
     *,
     audit_sheet: Path,
@@ -297,6 +360,12 @@ def refresh_human_audit_evidence(
         require_complete=require_complete,
     )
     output_paths.extend(validation_outputs)
+    progress_payload, progress_outputs = run_progress_gate(
+        audit_sheet=audit_sheet,
+        output_dir=output_dir,
+        expected_rows=expected_rows,
+    )
+    output_paths.extend(progress_outputs)
 
     review_payload: dict[str, Any] | None = None
     predictor_payload: dict[str, Any] | None = None
@@ -348,6 +417,8 @@ def refresh_human_audit_evidence(
         "validation_error_counts": validation_payload["error_counts"],
         "validation_warning_counts": validation_payload["warning_counts"],
         "review_summary_status": review_payload.get("status") if review_payload else "",
+        "progress_status": progress_payload.get("status"),
+        "recommended_review_batch_count": progress_payload.get("recommended_batch_count"),
         "predictor_status": predictor_payload.get("status") if predictor_payload else "",
         "readiness_ok": readiness_payload.get("ok") if readiness_payload else "",
         "readiness_paper_ready": readiness_payload.get("paper_ready") if readiness_payload else "",
