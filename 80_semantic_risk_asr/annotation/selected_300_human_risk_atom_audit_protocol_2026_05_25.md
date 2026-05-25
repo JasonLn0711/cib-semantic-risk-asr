@@ -58,6 +58,16 @@ One row in the local sheet is one audio segment. Each row contains the reference
 transcript plus the three ASR hypotheses. The reviewer should evaluate whether
 any ASR hypothesis creates a decision-critical difference.
 
+There are two review levels:
+
+1. Row-level review: whether this audio row contains any decision-critical ASR
+   risk.
+2. Model-level review: which ASR hypothesis caused the decision-critical risk.
+
+The model-level field is required for reviewer-facing claims about whether
+partial encoder, LoRA, or base Breeze is safer. Without model-level review, the
+audit can only support row-level risk coverage, not model comparison.
+
 ## Required Reviewer Fields
 
 Fill these columns in the local sheet:
@@ -73,6 +83,7 @@ Fill these columns in the local sheet:
 | `reviewer_decision_change_reason` | Short reason tied to escalation, priority, or conservative action. |
 | `reviewer_expected_safe_action` | `none`, `manual_review`, `priority_review`, `critical_escalation`, `conservative_machine_action`, or `abstain`. |
 | `reviewer_annotation_confidence` | `high`, `medium`, or `low`. |
+| `reviewer_model_assessments_json` | Per-model reviewer fields for each ASR hypothesis. Fill decision-change, critical atoms, expected safe action, and confidence for every model entry. |
 | `reviewer_notes` | Minimal note for unresolved ambiguity. Keep raw personal/call details out of tracked summaries. |
 
 ## Risk Atom Labels
@@ -100,12 +111,14 @@ Primary labels:
 2. Identify only the span or phrase that can change the downstream decision.
 3. Assign risk atoms to the decision-relevant span.
 4. Decide whether the ASR error would change escalation or safety action.
-5. If the ASR output is wrong but the downstream label would stay safe, mark
+5. Fill `reviewer_model_assessments_json` for each model hypothesis so
+   model-level predictor analysis does not fall back to row-level labels.
+6. If the ASR output is wrong but the downstream label would stay safe, mark
    `reviewer_would_asr_error_change_decision=no`.
-6. If the reference itself is ambiguous or the audio would be needed to settle
+7. If the reference itself is ambiguous or the audio would be needed to settle
    the decision, mark `uncertain` and set confidence to `low`.
-7. Do not reward a model for being closer in CER if it loses a critical atom.
-8. Do not penalize harmless wording changes that do not affect routing,
+8. Do not reward a model for being closer in CER if it loses a critical atom.
+9. Do not penalize harmless wording changes that do not affect routing,
    priority, intervention, or conservative action.
 
 ## Minimum Aggregate Outputs After Review

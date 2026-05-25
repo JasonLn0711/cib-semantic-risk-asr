@@ -10,6 +10,7 @@
 - Selected human-audit audio rows: `30`
 - Selected model-samples: `90`
 - Human-reviewed rows: `0 / 30`
+- Human-reviewed model assessments: `0 / 90`
 - Local review sheet: ignored under `artifacts/human_risk_atom_audit_sheet.tsv`
 
 ## Purpose
@@ -30,7 +31,7 @@ hypotheses out of tracked files.
   --audit-size 30
 ```
 
-Runtime: `0.0393` seconds.
+Runtime: `0.0453` seconds.
 
 ## Aggregate Selection Results
 
@@ -106,6 +107,9 @@ Current aggregate status:
 | Audit rows | 30 |
 | Reviewed rows | 0 |
 | Pending rows | 30 |
+| Model assessments | 90 |
+| Reviewed model assessments | 0 |
+| Pending model assessments | 90 |
 | Missing `reviewer_semantic_risk_label` | 30 |
 | Missing `reviewer_would_asr_error_change_decision` | 30 |
 | Missing `reviewer_annotation_confidence` | 30 |
@@ -118,6 +122,11 @@ Tracked readiness outputs:
 | `human_audit_strata_review.tsv` | Reviewed row counts by selection stratum. |
 | `human_audit_risk_atom_review.tsv` | Human-confirmed risk-atom aggregate counts after review. Currently empty because review is pending. |
 | `human_audit_model_review.tsv` | Per-model reviewed-sample aggregate counts. Currently zero reviewed rows. |
+
+The local sheet now includes `reviewer_model_assessments_json`. This field is
+needed because row-level labels can show that an audio segment contains a
+dangerous ASR risk, but only model-level labels can support a reviewer-facing
+claim about which ASR model is safer.
 
 ## Boundary
 

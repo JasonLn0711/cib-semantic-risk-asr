@@ -267,7 +267,7 @@ Current human-audit gate status on 2026-05-25:
   model-signal coverage only.
 - Aggregate readiness summary:
   `human_audit_review_summary.json` currently records `0 / 30` reviewed rows
-  and `30` pending rows.
+  and `30` pending rows, plus `0 / 90` reviewed model-level assessments.
 
 This gate is not complete until the local sheet is reviewed and aggregate human
 annotation stats are produced.

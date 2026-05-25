@@ -62,5 +62,5 @@
     "risk_atom_coverage": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/risk_atom_coverage.tsv",
     "model_signal_coverage": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/model_signal_coverage.tsv"
   },
-  "wall_time_seconds": 0.0393
+  "wall_time_seconds": 0.0453
 }

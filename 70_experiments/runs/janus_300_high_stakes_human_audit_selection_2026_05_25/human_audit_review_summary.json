@@ -6,6 +6,10 @@
   "audit_rows": 30,
   "reviewed_rows": 0,
   "pending_rows": 30,
+  "model_assessments": 90,
+  "reviewed_model_assessments": 0,
+  "pending_model_assessments": 90,
+  "malformed_model_assessments": 0,
   "missing_required_field_counts": {
     "reviewer_annotation_confidence": 30,
     "reviewer_asr_confusion_terms": 30,
@@ -23,5 +27,5 @@
     "reviewer_would_asr_error_change_decision": {},
     "reviewer_annotation_confidence": {}
   },
-  "wall_time_seconds": 0.0008
+  "wall_time_seconds": 0.0011
 }
