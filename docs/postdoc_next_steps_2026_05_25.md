@@ -367,7 +367,12 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   `review_started_at`、`review_finished_at`、`review_elapsed_seconds`；目前
   tracked apply summary 記錄 `0/6` rows 有 timing，且每次 dry-run/write 都會
   append 一列 aggregate-only `human_audit_batch_response_apply_log.tsv` 並刷新
-  `human_audit_batch_response_apply_log_summary.json`。新增
+  `human_audit_batch_response_apply_log_summary.json`。Apply summary 與 closeout
+  summary 現在也會輸出 `response_gap_summary_by_row`：只用 row number 表示每列
+  缺哪些 row-level 欄位、缺幾個 model assessments、timing 是否缺失，不包含
+  audio IDs、transcripts、hypotheses 或 reviewer notes。Current packet 仍是
+  `6/6` rows 有 gap、`48` row fields missing、`18` model assessments missing、
+  `72` model-assessment fields missing。新增
   `human_audit_reviewer_handoff_summary.json` 把 current packet、response TSV、
   batch gate、apply-log status、下一步 commands 聚合成一個 safe handoff；
   目前 handoff status 是 `reviewer_input_pending`，且

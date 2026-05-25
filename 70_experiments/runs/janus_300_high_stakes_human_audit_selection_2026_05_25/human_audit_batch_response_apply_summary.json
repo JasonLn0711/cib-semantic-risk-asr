@@ -38,6 +38,186 @@
     "min_review_elapsed_seconds": "",
     "max_review_elapsed_seconds": ""
   },
+  "response_gap_overview": {
+    "rows_reported": 6,
+    "rows_with_any_gap": 6,
+    "rows_with_row_field_gaps": 6,
+    "rows_with_model_assessment_gaps": 6,
+    "rows_with_timing_gaps": 6,
+    "total_row_fields_missing": 48,
+    "total_model_assessments_missing": 18,
+    "total_model_fields_missing": 72
+  },
+  "response_gap_summary_by_row": [
+    {
+      "row_number": 1,
+      "has_gap": true,
+      "row_response_complete": false,
+      "row_fields_missing_count": 8,
+      "missing_row_fields": [
+        "reviewer_semantic_risk_label",
+        "reviewer_risk_atoms",
+        "reviewer_critical_atoms",
+        "reviewer_asr_confusion_terms",
+        "reviewer_would_asr_error_change_decision",
+        "reviewer_decision_change_reason",
+        "reviewer_expected_safe_action",
+        "reviewer_annotation_confidence"
+      ],
+      "model_assessments_expected_count": 3,
+      "model_assessments_complete_count": 0,
+      "model_assessments_missing_count": 3,
+      "model_fields_missing_count": 12,
+      "missing_model_fields": [
+        "model_reviewer_annotation_confidence",
+        "model_reviewer_critical_atoms",
+        "model_reviewer_expected_safe_action",
+        "model_reviewer_would_asr_error_change_decision"
+      ],
+      "review_timing_complete": false,
+      "review_timing_missing": true
+    },
+    {
+      "row_number": 2,
+      "has_gap": true,
+      "row_response_complete": false,
+      "row_fields_missing_count": 8,
+      "missing_row_fields": [
+        "reviewer_semantic_risk_label",
+        "reviewer_risk_atoms",
+        "reviewer_critical_atoms",
+        "reviewer_asr_confusion_terms",
+        "reviewer_would_asr_error_change_decision",
+        "reviewer_decision_change_reason",
+        "reviewer_expected_safe_action",
+        "reviewer_annotation_confidence"
+      ],
+      "model_assessments_expected_count": 3,
+      "model_assessments_complete_count": 0,
+      "model_assessments_missing_count": 3,
+      "model_fields_missing_count": 12,
+      "missing_model_fields": [
+        "model_reviewer_annotation_confidence",
+        "model_reviewer_critical_atoms",
+        "model_reviewer_expected_safe_action",
+        "model_reviewer_would_asr_error_change_decision"
+      ],
+      "review_timing_complete": false,
+      "review_timing_missing": true
+    },
+    {
+      "row_number": 3,
+      "has_gap": true,
+      "row_response_complete": false,
+      "row_fields_missing_count": 8,
+      "missing_row_fields": [
+        "reviewer_semantic_risk_label",
+        "reviewer_risk_atoms",
+        "reviewer_critical_atoms",
+        "reviewer_asr_confusion_terms",
+        "reviewer_would_asr_error_change_decision",
+        "reviewer_decision_change_reason",
+        "reviewer_expected_safe_action",
+        "reviewer_annotation_confidence"
+      ],
+      "model_assessments_expected_count": 3,
+      "model_assessments_complete_count": 0,
+      "model_assessments_missing_count": 3,
+      "model_fields_missing_count": 12,
+      "missing_model_fields": [
+        "model_reviewer_annotation_confidence",
+        "model_reviewer_critical_atoms",
+        "model_reviewer_expected_safe_action",
+        "model_reviewer_would_asr_error_change_decision"
+      ],
+      "review_timing_complete": false,
+      "review_timing_missing": true
+    },
+    {
+      "row_number": 4,
+      "has_gap": true,
+      "row_response_complete": false,
+      "row_fields_missing_count": 8,
+      "missing_row_fields": [
+        "reviewer_semantic_risk_label",
+        "reviewer_risk_atoms",
+        "reviewer_critical_atoms",
+        "reviewer_asr_confusion_terms",
+        "reviewer_would_asr_error_change_decision",
+        "reviewer_decision_change_reason",
+        "reviewer_expected_safe_action",
+        "reviewer_annotation_confidence"
+      ],
+      "model_assessments_expected_count": 3,
+      "model_assessments_complete_count": 0,
+      "model_assessments_missing_count": 3,
+      "model_fields_missing_count": 12,
+      "missing_model_fields": [
+        "model_reviewer_annotation_confidence",
+        "model_reviewer_critical_atoms",
+        "model_reviewer_expected_safe_action",
+        "model_reviewer_would_asr_error_change_decision"
+      ],
+      "review_timing_complete": false,
+      "review_timing_missing": true
+    },
+    {
+      "row_number": 5,
+      "has_gap": true,
+      "row_response_complete": false,
+      "row_fields_missing_count": 8,
+      "missing_row_fields": [
+        "reviewer_semantic_risk_label",
+        "reviewer_risk_atoms",
+        "reviewer_critical_atoms",
+        "reviewer_asr_confusion_terms",
+        "reviewer_would_asr_error_change_decision",
+        "reviewer_decision_change_reason",
+        "reviewer_expected_safe_action",
+        "reviewer_annotation_confidence"
+      ],
+      "model_assessments_expected_count": 3,
+      "model_assessments_complete_count": 0,
+      "model_assessments_missing_count": 3,
+      "model_fields_missing_count": 12,
+      "missing_model_fields": [
+        "model_reviewer_annotation_confidence",
+        "model_reviewer_critical_atoms",
+        "model_reviewer_expected_safe_action",
+        "model_reviewer_would_asr_error_change_decision"
+      ],
+      "review_timing_complete": false,
+      "review_timing_missing": true
+    },
+    {
+      "row_number": 6,
+      "has_gap": true,
+      "row_response_complete": false,
+      "row_fields_missing_count": 8,
+      "missing_row_fields": [
+        "reviewer_semantic_risk_label",
+        "reviewer_risk_atoms",
+        "reviewer_critical_atoms",
+        "reviewer_asr_confusion_terms",
+        "reviewer_would_asr_error_change_decision",
+        "reviewer_decision_change_reason",
+        "reviewer_expected_safe_action",
+        "reviewer_annotation_confidence"
+      ],
+      "model_assessments_expected_count": 3,
+      "model_assessments_complete_count": 0,
+      "model_assessments_missing_count": 3,
+      "model_fields_missing_count": 12,
+      "missing_model_fields": [
+        "model_reviewer_annotation_confidence",
+        "model_reviewer_critical_atoms",
+        "model_reviewer_expected_safe_action",
+        "model_reviewer_would_asr_error_change_decision"
+      ],
+      "review_timing_complete": false,
+      "review_timing_missing": true
+    }
+  ],
   "session_start_gate": {
     "required": true,
     "ok": true,
@@ -58,5 +238,5 @@
   "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv",
   "source_batch_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json",
   "next_action": "Fill all required row and model fields in the response TSV, rerun dry-run with --require-complete and --require-timing, then apply with --write once status is response_complete.",
-  "runtime_seconds": 0.0015
+  "runtime_seconds": 0.0008
 }

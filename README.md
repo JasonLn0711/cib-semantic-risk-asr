@@ -129,6 +129,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   timing in the strict dry-run/write commands, so the current live closeout
   reports both `incomplete_response` and `missing_review_timing` until the
   local response TSV records row/model decisions plus timing coverage. The
+  apply summary and response closeout now also expose
+  `response_gap_summary_by_row`, a row-number-only gap map that lists missing
+  row fields, model-assessment gaps, and timing gaps without audio IDs,
+  transcript text, hypotheses, or reviewer notes. The current packet reports
+  `6/6` rows with gaps, `48` row fields missing, `18` model assessments
+  missing, and `72` model-assessment fields missing. The
   high-level readiness, publishable, roadmap, post-review, consequence, and
   refresh summaries now surface the same timing blocker so the paper-readiness
   path cannot accidentally treat row/model fields as sufficient without review
@@ -268,7 +274,8 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   because reviewer response content is incomplete. Response closeout is tracked
   by `80_semantic_risk_asr/annotation/build_human_audit_response_closeout_checklist.py`;
   current closeout status is `response_closeout_blocked` because `0/6` row
-  decisions and `0/18` model assessments are filled.
+  decisions and `0/18` model assessments are filled; the closeout summary now
+  names the per-row aggregate gaps by row number only.
   The strict
   `--require-complete` dry-run currently
   exits nonzero as expected with `ok=false` and `incomplete_response=1`; this is

@@ -191,6 +191,10 @@ either valid start/finish timestamps or `review_elapsed_seconds` for every
 selected audio row before the response TSV can pass strict dry-run/write. The
 tracked apply summary reports only aggregate timing coverage and elapsed seconds
 without exposing transcript-bearing row content.
+It also reports `response_gap_summary_by_row`: a row-number-only checklist of
+missing row-level fields, model-assessment gaps, and review-timing gaps. This
+gap report is safe for Git because it does not include audio IDs, transcript
+text, ASR hypotheses, reviewer notes, or selected raw row content.
 Each dry-run or write appends one aggregate-only row to
 `human_audit_batch_response_apply_log.tsv`; use that file as the operation log
 for response attempts. The companion
@@ -244,7 +248,9 @@ gate:
 Use `--write` only after strict dry-run status is `response_complete`. The
 current strict template dry-run is `response_pending`, `ok=false`, with
 `incomplete_response=1` and `missing_review_timing=6`, as expected before
-reviewer decisions and timing are entered. A non-strict dry-run can be used to
+reviewer decisions and timing are entered. The current gap report shows `6/6`
+rows with gaps, `48` missing row-level fields, `18` missing model assessments,
+and `72` missing model-assessment fields. A non-strict dry-run can be used to
 inspect progress, but it is not the completion gate.
 
 When the strict dry-run passes, use `--write --refresh-after-write` so the local
