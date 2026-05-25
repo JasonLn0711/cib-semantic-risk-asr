@@ -9,6 +9,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "scoring"))
 
 from audit_evidence_chain_consistency import (  # noqa: E402
+    POST_REVIEW_SEQUENCE_TSV_RELATIVE,
     RESPONSE_ACTION_ITEMS_TSV_RELATIVE,
     RESPONSE_GAP_TSV_RELATIVE,
     REVIEW_WORK_ORDER_TSV_RELATIVE,
@@ -233,6 +234,49 @@ def write_work_order_tsv_fixture(root: Path, row_numbers: list[int] = ROW_NUMBER
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def write_post_review_sequence_tsv_fixture(root: Path) -> None:
+    path = root / POST_REVIEW_SEQUENCE_TSV_RELATIVE
+    path.parent.mkdir(parents=True, exist_ok=True)
+    header = [
+        "step_order",
+        "step_type",
+        "status",
+        "command",
+        "success_condition",
+        "observed_status",
+        "exit_code",
+        "next_action",
+        "privacy_boundary",
+    ]
+    steps = [
+        ("1", "strict_dry_run", "blocked_until_response_fields_complete", "apply_human_audit_batch_response.py --require-complete --require-timing"),
+        ("2", "response_closeout", "blocked_until_strict_dry_run_complete", "build_human_audit_response_closeout_checklist.py"),
+        ("3", "write_refresh_prepare_next", "blocked_until_response_closeout_ready", "apply_human_audit_batch_response.py --write --refresh-after-write --prepare-next-after-write --require-complete --require-timing"),
+        ("4", "human_audit_refresh", "blocked_until_write_refresh_complete", "refresh_human_audit_evidence.py"),
+        ("5", "strict_human_reviewed_recovery", "blocked_until_review_complete", "evaluate_human_reviewed_recovery_policies.py"),
+        ("6", "post_review_checklist", "blocked_until_human_recovery_ready", "build_post_review_evidence_checklist.py"),
+        ("7", "objective_requirements_audit", "blocked_until_post_review_ready", "audit_postdoc_objective_requirements.py"),
+    ]
+    lines = ["\t".join(header)]
+    for step_order, step_type, status, command in steps:
+        lines.append(
+            "\t".join(
+                [
+                    step_order,
+                    step_type,
+                    status,
+                    command,
+                    "aggregate success condition",
+                    "pending",
+                    "",
+                    "next aggregate action",
+                    "aggregate-only",
+                ]
+            )
+        )
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def base_summary(**extra: object) -> dict:
     payload = {
         "ok": True,
@@ -420,6 +464,30 @@ def write_consistent_fixture(root: Path) -> None:
     )
     write_summary(
         root,
+        "post_review_sequence",
+        base_summary(
+            ok=False,
+            status="post_review_sequence_blocked",
+            mode="plan_only",
+            closeout_ready=False,
+            refresh_complete=False,
+            human_recovery_ready=False,
+            post_review_ready=False,
+            objective_requirements_ready=False,
+            blocker_keys=[
+                "strict_dry_run",
+                "response_closeout",
+                "write_refresh_prepare_next",
+                "human_audit_refresh",
+                "strict_human_reviewed_recovery",
+                "post_review_checklist",
+                "objective_requirements_audit",
+            ],
+            executed_step_count=0,
+        ),
+    )
+    write_summary(
+        root,
         "apply",
         base_summary(
             ok=False,
@@ -482,6 +550,7 @@ def write_consistent_fixture(root: Path) -> None:
     write_gap_tsv_fixture(root)
     write_action_items_tsv_fixture(root)
     write_work_order_tsv_fixture(root)
+    write_post_review_sequence_tsv_fixture(root)
 
 
 def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Path) -> None:
@@ -489,7 +558,7 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True
-    assert payload["status_counts"] == {"pass": 17}
+    assert payload["status_counts"] == {"pass": 18}
     assert not payload["failed_checks"]
     assert_aggregate_safe(payload)
 
@@ -626,6 +695,25 @@ def test_consistency_audit_fails_review_work_order_row_drift(tmp_path: Path) -> 
 
     assert payload["ok"] is False
     assert any(item["check_id"] == "C071" for item in payload["failed_checks"])
+
+
+def test_consistency_audit_fails_post_review_sequence_allows_pending_recovery(
+    tmp_path: Path,
+) -> None:
+    write_consistent_fixture(tmp_path)
+    sequence_path = tmp_path / POST_REVIEW_SEQUENCE_TSV_RELATIVE
+    sequence_path.write_text(
+        sequence_path.read_text(encoding="utf-8").replace(
+            "evaluate_human_reviewed_recovery_policies.py",
+            "evaluate_human_reviewed_recovery_policies.py --allow-pending-summary",
+        ),
+        encoding="utf-8",
+    )
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C072" for item in payload["failed_checks"])
 
 
 def test_consistency_safety_rejects_raw_field_tokens() -> None:

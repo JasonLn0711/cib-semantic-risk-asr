@@ -34,6 +34,10 @@ REVIEW_WORK_ORDER_TSV_RELATIVE = (
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
     "human_audit_review_work_order.tsv"
 )
+POST_REVIEW_SEQUENCE_TSV_RELATIVE = (
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+    "human_audit_post_review_sequence.tsv"
+)
 
 SENSITIVE_TOKENS = (
     "audio_id",
@@ -104,6 +108,10 @@ SUMMARY_SPECS = {
     "work_order": (
         "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
         "human_audit_review_work_order_summary.json"
+    ),
+    "post_review_sequence": (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+        "human_audit_post_review_sequence_summary.json"
     ),
     "candidate_recheck": (
         "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/"
@@ -885,6 +893,103 @@ def add_review_work_order_check(
     )
 
 
+def add_post_review_sequence_check(
+    root: Path,
+    payloads: dict[str, dict[str, Any]],
+    rows: list[dict[str, str]],
+) -> None:
+    sequence_path = root / POST_REVIEW_SEQUENCE_TSV_RELATIVE
+    if not sequence_path.exists():
+        rows.append(
+            check_row(
+                check_id="C072",
+                invariant="post-review sequence preserves strict evidence order",
+                passed=False,
+                evidence=POST_REVIEW_SEQUENCE_TSV_RELATIVE,
+                result="post-review sequence TSV is missing",
+                next_action="Run run_post_review_evidence_sequence.py before final post-review claims.",
+            )
+        )
+        return
+
+    sequence = payloads.get("post_review_sequence", {})
+    sequence_rows = read_tsv_rows(sequence_path)
+    step_types = [item.get("step_type", "") for item in sequence_rows]
+    expected_order = [
+        "strict_dry_run",
+        "response_closeout",
+        "write_refresh_prepare_next",
+        "human_audit_refresh",
+        "strict_human_reviewed_recovery",
+        "post_review_checklist",
+        "objective_requirements_audit",
+    ]
+    strict_recovery_rows = [
+        item
+        for item in sequence_rows
+        if item.get("step_type") == "strict_human_reviewed_recovery"
+    ]
+    strict_recovery_command = strict_recovery_rows[0].get("command", "") if strict_recovery_rows else ""
+    closeout = payloads.get("closeout", {})
+    closeout_ready = (
+        closeout.get("ok") is True
+        and closeout.get("status") == "response_complete_ready_to_write"
+    )
+    blocked_state_ok = (
+        closeout_ready
+        or sequence.get("status") == "post_review_sequence_blocked"
+        and "strict_dry_run" in sequence.get("blocker_keys", [])
+    )
+    command_strict = (
+        "evaluate_human_reviewed_recovery_policies.py" in strict_recovery_command
+        and "--allow-pending-summary" not in strict_recovery_command
+    )
+    sequence_status = sequence.get("status", "")
+    status_ok = sequence.get("mode") == "plan_only" and (
+        (
+            sequence_status in {
+                "post_review_sequence_blocked",
+                "post_review_sequence_ready_to_execute",
+            }
+            and sequence.get("ok") is False
+        )
+        or (
+            sequence_status == "post_review_sequence_complete"
+            and sequence.get("ok") is True
+        )
+    )
+    order_ok = step_types == expected_order
+    sensitive = False
+    try:
+        assert_aggregate_safe({"summary": sequence, "rows": sequence_rows})
+    except ValueError:
+        sensitive = True
+    passed = order_ok and command_strict and status_ok and blocked_state_ok and not sensitive
+    rows.append(
+        check_row(
+            check_id="C072",
+            invariant="post-review sequence preserves strict evidence order",
+            passed=passed,
+            evidence=POST_REVIEW_SEQUENCE_TSV_RELATIVE,
+            result=(
+                "post-review sequence is plan-only, ordered, strict, and blocked before response closeout"
+                if passed
+                else (
+                    f"order_ok={order_ok}; "
+                    f"command_strict={command_strict}; "
+                    f"status_ok={status_ok}; "
+                    f"blocked_state_ok={blocked_state_ok}; "
+                    f"sensitive={sensitive}"
+                )
+            ),
+            next_action=(
+                "After local response closeout is ready, run the sequence with --execute; "
+                "do not skip strict human-reviewed recovery or objective audit."
+            ),
+        )
+    )
+
+
 def add_candidate_check(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
     candidate = payloads.get("candidate_recheck", {})
     bounded_statuses = {
@@ -950,6 +1055,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_gap_tsv_command_check(root, payloads, rows)
         add_response_action_items_check(root, payloads, rows)
         add_review_work_order_check(root, payloads, rows)
+        add_post_review_sequence_check(root, payloads, rows)
         add_candidate_check(payloads, rows)
         add_safety_check(payloads, rows)
 

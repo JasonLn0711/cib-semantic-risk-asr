@@ -33,6 +33,7 @@ import audit_human_review_progress as progress_audit  # noqa: E402
 import build_human_audit_review_work_order as review_work_order  # noqa: E402
 import check_evidence_chain_readiness as readiness  # noqa: E402
 import evaluate_human_reviewed_recovery_policies as human_recovery  # noqa: E402
+import run_post_review_evidence_sequence as post_review_sequence  # noqa: E402
 import summarize_human_risk_atom_audit as review_summary  # noqa: E402
 import validate_human_risk_atom_audit as validation  # noqa: E402
 
@@ -537,6 +538,34 @@ def run_consistency_audit_gate(
     return payload, [output_json, output_tsv]
 
 
+def run_post_review_sequence_gate(
+    *,
+    output_dir: Path,
+    readiness_output_dir: Path,
+    repo_root: Path,
+) -> tuple[dict[str, Any], list[Path]]:
+    payload, rows = post_review_sequence.build_sequence(
+        run_dir=output_dir,
+        readiness_dir=readiness_output_dir,
+        human_recovery_dir=post_review_sequence.DEFAULT_HUMAN_RECOVERY_DIR,
+        closeout_summary_path=output_dir / post_review_sequence.CLOSEOUT_SUMMARY_NAME,
+        refresh_summary_path=output_dir / post_review_sequence.REFRESH_SUMMARY_NAME,
+        human_recovery_summary_path=(
+            post_review_sequence.DEFAULT_HUMAN_RECOVERY_DIR
+            / post_review_sequence.HUMAN_RECOVERY_SUMMARY_NAME
+        ),
+        post_review_summary_path=output_dir / post_review_sequence.POST_REVIEW_SUMMARY_NAME,
+        objective_summary_path=readiness_output_dir / post_review_sequence.OBJECTIVE_SUMMARY_NAME,
+        repo_root=repo_root,
+        execute=False,
+    )
+    output_json = output_dir / post_review_sequence.SEQUENCE_SUMMARY_NAME
+    output_tsv = output_dir / post_review_sequence.SEQUENCE_TSV_NAME
+    post_review_sequence.write_json(output_json, payload)
+    post_review_sequence.write_tsv(output_tsv, rows, post_review_sequence.SEQUENCE_TSV_FIELDS)
+    return payload, [output_json, output_tsv]
+
+
 def run_objective_requirements_gate(
     *,
     repo_root: Path,
@@ -587,6 +616,7 @@ def refresh_human_audit_evidence(
     post_review_payload: dict[str, Any] | None = None
     human_recovery_payload: dict[str, Any] | None = None
     work_order_payload: dict[str, Any] | None = None
+    post_review_sequence_payload: dict[str, Any] | None = None
     consistency_payload: dict[str, Any] | None = None
     objective_payload: dict[str, Any] | None = None
     downstream_refreshed = False
@@ -658,6 +688,9 @@ def refresh_human_audit_evidence(
         "human_recovery_ready": "",
         "review_work_order_status": "",
         "review_work_order_overview": {},
+        "post_review_sequence_status": "",
+        "post_review_sequence_blocker_keys": [],
+        "post_review_sequence_executed_step_count": "",
         "consistency_audit_ok": "",
         "consistency_status_counts": {},
         "consistency_failed_checks": [],
@@ -752,17 +785,6 @@ def refresh_human_audit_evidence(
         payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
         payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
         write_refresh_summary(output_dir, payload)
-        consistency_payload, consistency_outputs = run_consistency_audit_gate(
-            repo_root=repo_root,
-            output_dir=readiness_output_dir,
-        )
-        output_paths.extend(consistency_outputs)
-        payload["consistency_audit_ok"] = consistency_payload.get("ok")
-        payload["consistency_status_counts"] = consistency_payload.get("status_counts", {})
-        payload["consistency_failed_checks"] = consistency_payload.get("failed_checks", [])
-        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
-        payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
-        write_refresh_summary(output_dir, payload)
         objective_payload, objective_outputs = run_objective_requirements_gate(
             repo_root=repo_root,
             output_dir=readiness_output_dir,
@@ -786,6 +808,35 @@ def refresh_human_audit_evidence(
             "blocking_requirement_count",
             "",
         )
+        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
+        payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
+        write_refresh_summary(output_dir, payload)
+        post_review_sequence_payload, sequence_outputs = run_post_review_sequence_gate(
+            output_dir=output_dir,
+            readiness_output_dir=readiness_output_dir,
+            repo_root=repo_root,
+        )
+        output_paths.extend(sequence_outputs)
+        payload["post_review_sequence_status"] = post_review_sequence_payload.get("status", "")
+        payload["post_review_sequence_blocker_keys"] = post_review_sequence_payload.get(
+            "blocker_keys",
+            [],
+        )
+        payload["post_review_sequence_executed_step_count"] = post_review_sequence_payload.get(
+            "executed_step_count",
+            "",
+        )
+        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
+        payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
+        write_refresh_summary(output_dir, payload)
+        consistency_payload, consistency_outputs = run_consistency_audit_gate(
+            repo_root=repo_root,
+            output_dir=readiness_output_dir,
+        )
+        output_paths.extend(consistency_outputs)
+        payload["consistency_audit_ok"] = consistency_payload.get("ok")
+        payload["consistency_status_counts"] = consistency_payload.get("status_counts", {})
+        payload["consistency_failed_checks"] = consistency_payload.get("failed_checks", [])
         payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
         payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
         write_refresh_summary(output_dir, payload)
