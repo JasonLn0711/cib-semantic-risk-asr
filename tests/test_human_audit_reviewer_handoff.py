@@ -8,7 +8,10 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "annotation"))
 
-from build_human_audit_reviewer_handoff import build_handoff  # noqa: E402
+from build_human_audit_reviewer_handoff import (  # noqa: E402
+    check_existing_handoff,
+    build_handoff,
+)
 
 
 def write_json(path: Path, payload: dict) -> None:
@@ -110,6 +113,9 @@ def test_handoff_collects_current_reviewer_gate_without_private_content(tmp_path
     assert payload["ok"] is True
     assert payload["status"] == "reviewer_input_pending"
     assert payload["current_packet"]["row_numbers"] == [1, 2]
+    assert payload["freshness_status"] == "fresh"
+    assert payload["source_digests"]["batch_summary"]["status"] == "present"
+    assert payload["source_digests"]["batch_summary"]["sha256"]
     assert payload["current_response"]["template_column_count"] == 19
     assert payload["current_gate"]["latest_apply_status"] == "response_pending"
     assert payload["current_gate"]["latest_error_keys"] == "incomplete_response"
@@ -117,6 +123,71 @@ def test_handoff_collects_current_reviewer_gate_without_private_content(tmp_path
     assert "--require-complete" in payload["commands"]["strict_dry_run"]
     assert "--write" in payload["commands"]["write_refresh_prepare_next"]
     serialized = json.dumps(payload, ensure_ascii=False)
+    assert "PRIVATE_" not in serialized
+    assert "reference_text" not in serialized
+    assert "hypothesis_text" not in serialized
+
+
+def test_handoff_records_source_digests_and_checks_freshness(tmp_path: Path) -> None:
+    run_dir = tmp_path / "run"
+    paths = write_handoff_inputs(run_dir)
+    handoff_path = run_dir / "human_audit_reviewer_handoff_summary.json"
+    payload = build_handoff(
+        run_dir=run_dir,
+        audit_sheet=run_dir / "artifacts" / "audit.tsv",
+        batch_summary_path=paths["batch_summary"],
+        batch_status_path=paths["batch_status"],
+        template_summary_path=paths["template_summary"],
+        apply_summary_path=paths["apply_summary"],
+        apply_log_summary_path=paths["apply_log_summary"],
+        readiness_output_dir=tmp_path / "readiness",
+        expected_rows=30,
+        repo_root=tmp_path,
+    )
+    write_json(handoff_path, payload)
+
+    fresh = check_existing_handoff(
+        handoff_summary_path=handoff_path,
+        batch_summary_path=paths["batch_summary"],
+        batch_status_path=paths["batch_status"],
+        template_summary_path=paths["template_summary"],
+        apply_summary_path=paths["apply_summary"],
+        apply_log_summary_path=paths["apply_log_summary"],
+        repo_root=tmp_path,
+    )
+
+    assert fresh["ok"] is True
+    assert fresh["status"] == "handoff_fresh"
+    assert fresh["stale_sources"] == []
+    assert fresh["missing_sources"] == []
+
+    write_json(
+        paths["batch_status"],
+        {
+            "ok": True,
+            "status": "batch_pending",
+            "batch_ready_for_refresh": False,
+            "reviewed_rows_in_batch": 1,
+            "pending_rows_in_batch": 1,
+            "model_assessments_in_batch": 6,
+            "reviewed_model_assessments_in_batch": 3,
+            "pending_model_assessments_in_batch": 3,
+        },
+    )
+    stale = check_existing_handoff(
+        handoff_summary_path=handoff_path,
+        batch_summary_path=paths["batch_summary"],
+        batch_status_path=paths["batch_status"],
+        template_summary_path=paths["template_summary"],
+        apply_summary_path=paths["apply_summary"],
+        apply_log_summary_path=paths["apply_log_summary"],
+        repo_root=tmp_path,
+    )
+
+    assert stale["ok"] is False
+    assert stale["status"] == "handoff_stale"
+    assert stale["stale_sources"] == ["batch_status"]
+    serialized = json.dumps(stale, ensure_ascii=False)
     assert "PRIVATE_" not in serialized
     assert "reference_text" not in serialized
     assert "hypothesis_text" not in serialized

@@ -5,6 +5,17 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.101 - 2026-05-25T22:39:28+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `cb6d764`
+- Branch: `main`
+- Summary: Add source SHA-256 freshness checks for selected-300 reviewer handoffs.
+- Changed files:
+  - `80_semantic_risk_asr/annotation/build_human_audit_reviewer_handoff.py`
+  - `tests/test_human_audit_reviewer_handoff.py`
+
 ## v2.5.100 - 2026-05-25T22:30:50+08:00
 
 - Bump: `patch`

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import time
@@ -38,12 +39,27 @@ DEFAULT_TEMPLATE_SUMMARY = DEFAULT_RUN_DIR / "human_audit_batch_response_templat
 DEFAULT_APPLY_SUMMARY = DEFAULT_RUN_DIR / "human_audit_batch_response_apply_summary.json"
 DEFAULT_APPLY_LOG_SUMMARY = DEFAULT_RUN_DIR / "human_audit_batch_response_apply_log_summary.json"
 HANDOFF_SUMMARY_NAME = "human_audit_reviewer_handoff_summary.json"
+SOURCE_FIELDS = (
+    "batch_summary",
+    "batch_status",
+    "template_summary",
+    "apply_summary",
+    "apply_log_summary",
+)
 
 
 def read_json_if_exists(path: Path) -> tuple[dict[str, Any], str]:
     if not path.exists():
         return {}, "missing"
     return json.loads(path.read_text(encoding="utf-8")), "present"
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -121,6 +137,113 @@ def reviewer_commands(
     }
 
 
+def source_paths(
+    *,
+    batch_summary_path: Path,
+    batch_status_path: Path,
+    template_summary_path: Path,
+    apply_summary_path: Path,
+    apply_log_summary_path: Path,
+) -> dict[str, Path]:
+    return {
+        "batch_summary": batch_summary_path,
+        "batch_status": batch_status_path,
+        "template_summary": template_summary_path,
+        "apply_summary": apply_summary_path,
+        "apply_log_summary": apply_log_summary_path,
+    }
+
+
+def source_digests(paths: dict[str, Path], *, repo_root: Path) -> dict[str, dict[str, str]]:
+    digests: dict[str, dict[str, str]] = {}
+    for name in SOURCE_FIELDS:
+        path = paths[name]
+        item = {
+            "path": repo_relative(path, repo_root=repo_root),
+            "status": "present" if path.exists() else "missing",
+            "sha256": sha256_file(path) if path.exists() else "",
+        }
+        digests[name] = item
+    return digests
+
+
+def compare_source_digests(
+    expected: dict[str, Any],
+    current: dict[str, dict[str, str]],
+) -> dict[str, list[str]]:
+    stale_sources: list[str] = []
+    missing_sources: list[str] = []
+    for name in SOURCE_FIELDS:
+        expected_item = expected.get(name, {}) if isinstance(expected, dict) else {}
+        current_item = current[name]
+        if current_item["status"] != "present":
+            missing_sources.append(name)
+            continue
+        if not isinstance(expected_item, dict) or expected_item.get("status") != "present":
+            stale_sources.append(name)
+            continue
+        if expected_item.get("sha256") != current_item["sha256"]:
+            stale_sources.append(name)
+    return {
+        "stale_sources": stale_sources,
+        "missing_sources": missing_sources,
+    }
+
+
+def check_existing_handoff(
+    *,
+    handoff_summary_path: Path,
+    batch_summary_path: Path,
+    batch_status_path: Path,
+    template_summary_path: Path,
+    apply_summary_path: Path,
+    apply_log_summary_path: Path,
+    repo_root: Path,
+) -> dict[str, Any]:
+    started = time.time()
+    paths = source_paths(
+        batch_summary_path=batch_summary_path,
+        batch_status_path=batch_status_path,
+        template_summary_path=template_summary_path,
+        apply_summary_path=apply_summary_path,
+        apply_log_summary_path=apply_log_summary_path,
+    )
+    current = source_digests(paths, repo_root=repo_root)
+    if not handoff_summary_path.exists():
+        payload = {
+            "ok": False,
+            "status": "handoff_missing",
+            "handoff_summary": repo_relative(handoff_summary_path, repo_root=repo_root),
+            "freshness_status": "missing",
+            "source_digests": current,
+            "stale_sources": [],
+            "missing_sources": [name for name, item in current.items() if item["status"] != "present"],
+            "runtime_seconds": round(time.time() - started, 4),
+        }
+        assert_tracked_safe(payload)
+        return payload
+
+    existing = json.loads(handoff_summary_path.read_text(encoding="utf-8"))
+    comparison = compare_source_digests(existing.get("source_digests", {}), current)
+    stale_sources = comparison["stale_sources"]
+    missing_sources = comparison["missing_sources"]
+    status = "handoff_fresh" if not stale_sources and not missing_sources else "handoff_stale"
+    payload = {
+        "ok": status == "handoff_fresh",
+        "status": status,
+        "handoff_summary": repo_relative(handoff_summary_path, repo_root=repo_root),
+        "freshness_status": "fresh" if status == "handoff_fresh" else "stale",
+        "source_digests": current,
+        "stale_sources": stale_sources,
+        "missing_sources": missing_sources,
+        "handoff_status": existing.get("status", ""),
+        "latest_apply_status": (existing.get("current_gate") or {}).get("latest_apply_status", ""),
+        "runtime_seconds": round(time.time() - started, 4),
+    }
+    assert_tracked_safe(payload)
+    return payload
+
+
 def build_handoff(
     *,
     run_dir: Path,
@@ -136,6 +259,14 @@ def build_handoff(
 ) -> dict[str, Any]:
     started = time.time()
     sources: dict[str, str] = {}
+    paths = source_paths(
+        batch_summary_path=batch_summary_path,
+        batch_status_path=batch_status_path,
+        template_summary_path=template_summary_path,
+        apply_summary_path=apply_summary_path,
+        apply_log_summary_path=apply_log_summary_path,
+    )
+    digests = source_digests(paths, repo_root=repo_root)
     batch_summary, sources["batch_summary"] = read_json_if_exists(batch_summary_path)
     batch_status, sources["batch_status"] = read_json_if_exists(batch_status_path)
     template_summary, sources["template_summary"] = read_json_if_exists(template_summary_path)
@@ -180,6 +311,8 @@ def build_handoff(
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
         "remaining_review_scope": REMAINING_REVIEW_SCOPE,
         "source_status": sources,
+        "source_digests": digests,
+        "freshness_status": "fresh" if not missing_inputs else "missing_inputs",
         "missing_inputs": missing_inputs,
         "current_packet": {
             "selection_stratum": batch_summary.get("selection_stratum", ""),
@@ -267,11 +400,30 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--output-json", type=Path)
     parser.add_argument("--expected-rows", type=int, default=30)
+    parser.add_argument(
+        "--check-existing",
+        action="store_true",
+        help="Check whether the current handoff summary still matches source-summary digests.",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+    output_json = args.output_json or args.run_dir / HANDOFF_SUMMARY_NAME
+    if args.check_existing:
+        payload = check_existing_handoff(
+            handoff_summary_path=output_json,
+            batch_summary_path=args.batch_summary,
+            batch_status_path=args.batch_status,
+            template_summary_path=args.template_summary,
+            apply_summary_path=args.apply_summary,
+            apply_log_summary_path=args.apply_log_summary,
+            repo_root=REPO_ROOT,
+        )
+        print(json.dumps(payload, ensure_ascii=False))
+        return 0 if payload["ok"] else 1
+
     payload = build_handoff(
         run_dir=args.run_dir,
         audit_sheet=args.audit_sheet,
@@ -284,7 +436,6 @@ def main() -> int:
         expected_rows=args.expected_rows,
         repo_root=REPO_ROOT,
     )
-    output_json = args.output_json or args.run_dir / HANDOFF_SUMMARY_NAME
     write_json(output_json, payload)
     print(
         json.dumps(
