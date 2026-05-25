@@ -570,11 +570,14 @@ def test_refresh_updates_evidence_chain_consistency_audit(tmp_path: Path) -> Non
     consistency_payload = json.loads(consistency_path.read_text(encoding="utf-8"))
 
     assert payload["ok"] is True
+    assert payload["review_work_order_status"] == "review_work_order_ready"
+    assert payload["review_work_order_overview"]["total_action_items"] == 126
     assert payload["consistency_audit_ok"] is True
-    assert payload["consistency_status_counts"] == {"pass": 14}
+    assert payload["consistency_status_counts"] == {"pass": 17}
     assert payload["consistency_failed_checks"] == []
     assert consistency_payload["ok"] is True
     assert (readiness_dir / "evidence_chain_consistency.tsv").exists()
+    assert (output_dir / "human_audit_review_work_order.tsv").exists()
     assert "PRIVATE_" not in consistency_path.read_text(encoding="utf-8")
 
 

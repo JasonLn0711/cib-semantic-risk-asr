@@ -11,6 +11,7 @@ sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "scoring"))
 from audit_evidence_chain_consistency import (  # noqa: E402
     RESPONSE_ACTION_ITEMS_TSV_RELATIVE,
     RESPONSE_GAP_TSV_RELATIVE,
+    REVIEW_WORK_ORDER_TSV_RELATIVE,
     SUMMARY_SPECS,
     assert_aggregate_safe,
     build_consistency_audit,
@@ -158,6 +159,74 @@ def write_action_items_tsv_fixture(root: Path, row_numbers: list[int] = ROW_NUMB
                     "record review_started_at/review_finished_at or review_elapsed_seconds",
                     commands["timing_start_write_by_row"][str(row_number)],
                     commands["timing_finish_write_by_row"][str(row_number)],
+                ]
+            )
+        )
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_work_order_tsv_fixture(root: Path, row_numbers: list[int] = ROW_NUMBERS) -> None:
+    path = root / REVIEW_WORK_ORDER_TSV_RELATIVE
+    path.parent.mkdir(parents=True, exist_ok=True)
+    header = [
+        "work_order_id",
+        "row_number",
+        "step_order",
+        "step_type",
+        "status",
+        "pending_action_items",
+        "reviewer_instruction",
+        "command",
+        "completion_signal",
+        "privacy_boundary",
+    ]
+    row_steps = [
+        ("01", "mark_timing_start"),
+        ("02", "open_local_row"),
+        ("03", "fill_row_fields"),
+        ("04", "fill_model_fields"),
+        ("05", "mark_timing_finish"),
+    ]
+    packet_steps = [
+        ("06", "strict_dry_run"),
+        ("07", "response_closeout"),
+        ("08", "write_refresh_prepare_next"),
+        ("09", "post_review_checklist"),
+        ("10", "objective_requirements_audit"),
+    ]
+    lines = ["\t".join(header)]
+    for row_number in row_numbers:
+        for step_order, step_type in row_steps:
+            lines.append(
+                "\t".join(
+                    [
+                        f"row-{row_number}:{step_order}-{step_type}",
+                        str(row_number),
+                        step_order,
+                        step_type,
+                        "pending",
+                        "1",
+                        "review local response fields",
+                        "local-only command",
+                        "aggregate signal",
+                        "aggregate-only",
+                    ]
+                )
+            )
+    for step_order, step_type in packet_steps:
+        lines.append(
+            "\t".join(
+                [
+                    f"packet:{step_order}-{step_type}",
+                    "packet",
+                    step_order,
+                    step_type,
+                    "blocked_until_rows_complete",
+                    "all",
+                    "run packet closeout step",
+                    "aggregate command",
+                    "aggregate signal",
+                    "aggregate-only",
                 ]
             )
         )
@@ -334,6 +403,23 @@ def write_consistent_fixture(root: Path) -> None:
     )
     write_summary(
         root,
+        "work_order",
+        base_summary(
+            status="review_work_order_ready",
+            review_work_order_overview={
+                "row_count": 6,
+                "row_work_order_steps": 30,
+                "packet_work_order_steps": 5,
+                "total_work_order_steps": 35,
+                "total_action_items": 126,
+                "row_field_action_items": 48,
+                "model_field_action_items": 72,
+                "timing_action_items": 6,
+            },
+        ),
+    )
+    write_summary(
+        root,
         "apply",
         base_summary(
             ok=False,
@@ -395,6 +481,7 @@ def write_consistent_fixture(root: Path) -> None:
     )
     write_gap_tsv_fixture(root)
     write_action_items_tsv_fixture(root)
+    write_work_order_tsv_fixture(root)
 
 
 def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Path) -> None:
@@ -402,7 +489,7 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True
-    assert payload["status_counts"] == {"pass": 16}
+    assert payload["status_counts"] == {"pass": 17}
     assert not payload["failed_checks"]
     assert_aggregate_safe(payload)
 
@@ -524,6 +611,21 @@ def test_consistency_audit_fails_response_action_item_count_drift(tmp_path: Path
 
     assert payload["ok"] is False
     assert any(item["check_id"] == "C069" for item in payload["failed_checks"])
+
+
+def test_consistency_audit_fails_review_work_order_row_drift(tmp_path: Path) -> None:
+    write_consistent_fixture(tmp_path)
+    work_order_path = tmp_path / REVIEW_WORK_ORDER_TSV_RELATIVE
+    lines = work_order_path.read_text(encoding="utf-8").splitlines()
+    work_order_path.write_text(
+        "\n".join([line for line in lines if not line.startswith("row-6:")]) + "\n",
+        encoding="utf-8",
+    )
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C071" for item in payload["failed_checks"])
 
 
 def test_consistency_safety_rejects_raw_field_tokens() -> None:

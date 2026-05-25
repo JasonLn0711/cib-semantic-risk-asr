@@ -30,6 +30,10 @@ RESPONSE_ACTION_ITEMS_TSV_RELATIVE = (
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
     "human_audit_response_action_items.tsv"
 )
+REVIEW_WORK_ORDER_TSV_RELATIVE = (
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+    "human_audit_review_work_order.tsv"
+)
 
 SENSITIVE_TOKENS = (
     "audio_id",
@@ -96,6 +100,10 @@ SUMMARY_SPECS = {
     "session_start": (
         "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
         "human_audit_reviewer_session_start_summary.json"
+    ),
+    "work_order": (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+        "human_audit_review_work_order_summary.json"
     ),
     "candidate_recheck": (
         "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/"
@@ -793,6 +801,90 @@ def add_response_action_items_check(
     )
 
 
+def add_review_work_order_check(
+    root: Path,
+    payloads: dict[str, dict[str, Any]],
+    rows: list[dict[str, str]],
+) -> None:
+    work_order_path = root / REVIEW_WORK_ORDER_TSV_RELATIVE
+    if not work_order_path.exists():
+        rows.append(
+            check_row(
+                check_id="C071",
+                invariant="review work-order TSV covers current packet actions",
+                passed=False,
+                evidence=REVIEW_WORK_ORDER_TSV_RELATIVE,
+                result="review work-order TSV is missing",
+                next_action="Run build_human_audit_review_work_order.py before reviewer work.",
+            )
+        )
+        return
+
+    work_order = payloads.get("work_order", {})
+    overview = work_order.get("review_work_order_overview")
+    overview = overview if isinstance(overview, dict) else {}
+    closeout = payloads.get("closeout", {})
+    closeout_overview = closeout.get("response_action_item_overview")
+    closeout_overview = closeout_overview if isinstance(closeout_overview, dict) else {}
+    closeout_rows = closeout.get("response_gap_summary_by_row")
+    closeout_row_numbers = {
+        str(item.get("row_number", ""))
+        for item in closeout_rows
+        if isinstance(item, dict) and item.get("row_number") is not None
+    } if isinstance(closeout_rows, list) else set()
+    rows_tsv = read_tsv_rows(work_order_path)
+    row_step_numbers = {
+        item.get("row_number", "")
+        for item in rows_tsv
+        if item.get("row_number") and item.get("row_number") != "packet"
+    }
+    step_types = {item.get("step_type", "") for item in rows_tsv}
+    required_step_types = {
+        "mark_timing_start",
+        "open_local_row",
+        "fill_row_fields",
+        "fill_model_fields",
+        "mark_timing_finish",
+        "strict_dry_run",
+        "response_closeout",
+        "write_refresh_prepare_next",
+        "post_review_checklist",
+        "objective_requirements_audit",
+    }
+    sensitive = False
+    try:
+        assert_aggregate_safe({"summary": work_order, "rows": rows_tsv})
+    except ValueError:
+        sensitive = True
+    counts_match = int(overview.get("total_action_items") or 0) == int(
+        closeout_overview.get("total_action_items") or 0
+    )
+    row_coverage_ok = row_step_numbers == closeout_row_numbers
+    steps_ok = required_step_types.issubset(step_types)
+    status_ok = work_order.get("status") == "review_work_order_ready"
+    passed = counts_match and row_coverage_ok and steps_ok and status_ok and not sensitive
+    rows.append(
+        check_row(
+            check_id="C071",
+            invariant="review work-order TSV covers current packet actions",
+            passed=passed,
+            evidence=REVIEW_WORK_ORDER_TSV_RELATIVE,
+            result=(
+                "review work-order TSV covers current row/model/timing actions and packet closeout order"
+                if passed
+                else (
+                    f"counts_match={counts_match}; "
+                    f"row_coverage_ok={row_coverage_ok}; "
+                    f"steps_ok={steps_ok}; "
+                    f"status={work_order.get('status', '')}; "
+                    f"sensitive={sensitive}"
+                )
+            ),
+            next_action="Regenerate review work order from action-items, closeout, and handoff summaries before local review.",
+        )
+    )
+
+
 def add_candidate_check(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
     candidate = payloads.get("candidate_recheck", {})
     bounded_statuses = {
@@ -857,6 +949,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_reviewer_timing_command_check(payloads, rows)
         add_gap_tsv_command_check(root, payloads, rows)
         add_response_action_items_check(root, payloads, rows)
+        add_review_work_order_check(root, payloads, rows)
         add_candidate_check(payloads, rows)
         add_safety_check(payloads, rows)
 

@@ -30,6 +30,7 @@ import audit_postdoc_objective_requirements as objective_audit  # noqa: E402
 import audit_postdoc_roadmap_completion as roadmap_audit  # noqa: E402
 import audit_publishable_evidence_chain as completion_audit  # noqa: E402
 import audit_human_review_progress as progress_audit  # noqa: E402
+import build_human_audit_review_work_order as review_work_order  # noqa: E402
 import check_evidence_chain_readiness as readiness  # noqa: E402
 import evaluate_human_reviewed_recovery_policies as human_recovery  # noqa: E402
 import summarize_human_risk_atom_audit as review_summary  # noqa: E402
@@ -497,6 +498,30 @@ def run_human_reviewed_recovery_gate(
     return payload, outputs
 
 
+def run_review_work_order_gate(
+    *,
+    audit_sheet: Path,
+    output_dir: Path,
+    repo_root: Path,
+) -> tuple[dict[str, Any], list[Path]]:
+    started = time.time()
+    payload, rows = review_work_order.build_work_order(
+        run_dir=output_dir,
+        action_items_tsv=output_dir / review_work_order.RESPONSE_ACTION_ITEMS_TSV_NAME,
+        closeout_summary_path=output_dir / review_work_order.CLOSEOUT_SUMMARY_NAME,
+        handoff_summary_path=output_dir / review_work_order.HANDOFF_SUMMARY_NAME,
+        session_start_summary_path=output_dir / review_work_order.SESSION_START_SUMMARY_NAME,
+        audit_sheet=audit_sheet,
+        repo_root=repo_root,
+    )
+    payload["runtime_seconds"] = round(time.time() - started, 4)
+    output_json = output_dir / review_work_order.WORK_ORDER_SUMMARY_NAME
+    output_tsv = output_dir / review_work_order.WORK_ORDER_TSV_NAME
+    review_work_order.write_json(output_json, payload)
+    review_work_order.write_tsv(output_tsv, rows)
+    return payload, [output_json, output_tsv]
+
+
 def run_consistency_audit_gate(
     *,
     repo_root: Path,
@@ -561,6 +586,7 @@ def refresh_human_audit_evidence(
     roadmap_payload: dict[str, Any] | None = None
     post_review_payload: dict[str, Any] | None = None
     human_recovery_payload: dict[str, Any] | None = None
+    work_order_payload: dict[str, Any] | None = None
     consistency_payload: dict[str, Any] | None = None
     objective_payload: dict[str, Any] | None = None
     downstream_refreshed = False
@@ -630,6 +656,8 @@ def refresh_human_audit_evidence(
         "human_recovery_status": "",
         "human_recovery_evidence_mode": "",
         "human_recovery_ready": "",
+        "review_work_order_status": "",
+        "review_work_order_overview": {},
         "consistency_audit_ok": "",
         "consistency_status_counts": {},
         "consistency_failed_checks": [],
@@ -707,6 +735,20 @@ def refresh_human_audit_evidence(
         payload["post_review_evidence_ok"] = post_review_payload.get("ok")
         payload["post_review_evidence_status"] = post_review_payload.get("status")
         payload["post_review_blocker_keys"] = post_review_payload.get("blocker_keys", [])
+        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
+        payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
+        write_refresh_summary(output_dir, payload)
+        work_order_payload, work_order_outputs = run_review_work_order_gate(
+            audit_sheet=audit_sheet,
+            output_dir=output_dir,
+            repo_root=repo_root,
+        )
+        output_paths.extend(work_order_outputs)
+        payload["review_work_order_status"] = work_order_payload.get("status", "")
+        payload["review_work_order_overview"] = work_order_payload.get(
+            "review_work_order_overview",
+            {},
+        )
         payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
         payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
         write_refresh_summary(output_dir, payload)
