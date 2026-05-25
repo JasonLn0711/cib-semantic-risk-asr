@@ -131,7 +131,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `80_semantic_risk_asr/annotation/analyze_human_audit_predictors.py` after
   review. Local row-by-row review support lives in
   `80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py`; its
-  `--show-row` output is transcript-bearing and must stay local-only. After
+  `--show-row` output is transcript-bearing and must stay local-only. The next
+  local review batch is prepared by
+  `80_semantic_risk_asr/annotation/prepare_human_audit_review_batch.py`; current
+  tracked batch records point to the ignored `critical_or_high_risk_missed`
+  packet for rows `1-6` and `18` model assessments. After
   review edits, use
   `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py` to rerun
   validation, aggregate review-progress counts, aggregate review summaries,

@@ -9,7 +9,7 @@
 - Candidate audio rows: `300`
 - Selected human-audit audio rows: `30`
 - Selected model-samples: `90`
-- Human-reviewed rows: `0 / 30`
+- Human-reviewed risk/decision rows: `0 / 30`
 - Human-reviewed model assessments: `0 / 90`
 - Local review sheet: ignored under `artifacts/human_risk_atom_audit_sheet.tsv`
 
@@ -127,6 +127,9 @@ Tracked readiness outputs:
 | `human_audit_predictor_summary.json` | Human-reviewed predictor gate readiness. Currently review pending. |
 | `human_audit_predictor_comparison.tsv` | WER/CER/SRES/CEIS vs human model-level decision-change targets after review. Currently zero reviewed samples. |
 | `human_audit_predictor_model_summary.tsv` | Per-model human-reviewed predictor target counts. Currently zero reviewed samples. |
+| `human_audit_next_review_batch_summary.json` | Repo-safe record for the next prepared local review packet. Current packet: `critical_or_high_risk_missed`, rows `1-6`, `6` rows / `18` model assessments. |
+| `human_audit_next_review_batch_rows.tsv` | Repo-safe row-number and missing-field checklist for the prepared packet. No audio IDs, transcripts, hypotheses, or reviewer notes. |
+| `human_audit_review_batch_log.tsv` | Append-only repo-safe preparation log for local transcript-bearing review packets. |
 
 The local sheet now includes `reviewer_model_assessments_json`. This field is
 needed because row-level labels can show that an audio segment contains a
@@ -134,6 +137,28 @@ dangerous ASR risk, but only model-level labels can support a reviewer-facing
 claim about which ASR model is safer.
 
 ## Local Review Helper
+
+Prepare the next local transcript-bearing review packet before filling rows:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/prepare_human_audit_review_batch.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --expected-rows 30
+```
+
+Current prepared packet:
+
+- selection stratum: `critical_or_high_risk_missed`;
+- row numbers: `1,2,3,4,5,6`;
+- rows in packet: `6`;
+- pending model assessments in packet: `18`;
+- local packet path:
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_batches/2026-05-25T210505_0800_critical_or_high_risk_missed.md`.
+
+The local packet contains transcripts and ASR hypotheses and remains ignored by
+Git. The tracked batch summary contains only row numbers, strata, counts,
+missing-field names, and the local packet path.
 
 The local helper for filling one row at a time is:
 

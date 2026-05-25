@@ -136,6 +136,21 @@ Primary labels:
 
 ## Local Review Workflow
 
+Prepare the next local transcript-bearing batch packet first. This creates an
+ignored packet under `artifacts/review_batches/` and tracked aggregate records
+with only row numbers, strata, missing-field counts, and the local packet path:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/prepare_human_audit_review_batch.py \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --expected-rows 30
+```
+
+The current first packet is `critical_or_high_risk_missed`, covering row
+numbers `1-6` and `18` model assessments. The packet itself is local-only and
+must not be committed.
+
 Use the local helper to avoid hand-editing JSON in
 `reviewer_model_assessments_json`:
 

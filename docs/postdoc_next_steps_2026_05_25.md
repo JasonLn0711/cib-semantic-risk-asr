@@ -215,7 +215,10 @@ outputs。
   scoring reference 接受。validator 已確認 local sheet schema 可用，正常模式
   `review_pending`、validation errors `0`，但 `--require-complete` 會因
   `30` risk/decision row reviews 與 `90` model reviews 尚未完成而失敗，
-  所以還不能宣稱 paper-grade main experiment 完成。
+  所以還不能宣稱 paper-grade main experiment 完成。第一批 local review
+  packet 已準備好：`critical_or_high_risk_missed` rows `1-6`、`6` rows /
+  `18` model assessments；packet 在 ignored `artifacts/review_batches/`，
+  tracked records 只保留 row numbers、strata、缺欄位與 local path。
 - 258-row recovery proxy 與 300-row high-stakes recovery proxy 都已完成；下
   一個缺口是 selected-300 human risk-atom audit，而不是再調 WER 定義。
 
@@ -708,6 +711,7 @@ Interpretation:
 1. 完成 selected-300 human risk-atom audit protocol 所產生的 30-row local
    sheet 中「不是 transcript ground truth」的欄位：risk atoms、
    decision-change、expected safe action、confidence、per-model assessment。
+   先從已準備好的 `critical_or_high_risk_missed` packet rows `1-6` 開始。
 2. 跑
    `validate_human_risk_atom_audit.py --require-complete --expected-rows 30`；
    通過後才產出 aggregate human annotation stats，確認沒有 selected IDs 或 transcript
