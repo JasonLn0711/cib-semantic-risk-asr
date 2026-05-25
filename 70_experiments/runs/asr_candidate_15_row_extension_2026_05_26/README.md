@@ -71,6 +71,15 @@ runnable non-Whisper candidates still validate at 15 rows but remain locale
 failures, Qwen3-ASR-1.7B remains a fetch/load gate, and Gemma 4 still needs an
 isolated multimodal runtime before any prompted-ASR test.
 
+2026-05-26 current bounded recheck: see
+`../asr_candidate_current_recheck_2026_05_26/`. The recheck validated the four
+available 15-row candidate hypothesis files together, rebuilt an aggregate
+locale/metric summary, reran Qwen3-ASR-1.7B as a 60-second load gate
+(`60.08s`, exit `124`), and repeated the local Gemma 4 class probe. The
+decision remains unchanged: do not spend 258-row or selected-300 runtime on
+these candidates until the zh-TW locale policy or Gemma multimodal runtime
+changes.
+
 ## Artifacts
 
 - Aggregate table: `candidate_15_row_summary.tsv`

@@ -185,6 +185,29 @@ Traditional Chinese locale policy, isolate an official Gemma 4 multimodal
 runtime, or continue the selected-300 human risk/decision/model assessment
 gate.
 
+## 2026-05-26 Current Bounded Recheck
+
+Aggregate records live under
+`70_experiments/runs/asr_candidate_current_recheck_2026_05_26/`.
+
+This recheck reran the machine-checkable gate that matters before spending
+more GPU time: field-contract validation, aggregate locale/metric summary,
+Qwen3-ASR-1.7B bounded load, and Gemma 4 local multimodal-class availability.
+
+| Candidate | Current result | Timing | Decision |
+| --- | --- | ---: | --- |
+| `whisper_large_v3_15_row_baseline` | 15/15 contract valid; locale not clean | included in 0.36s aggregate summary | do not promote until locale policy is audited |
+| `whisper_large_v3_turbo_15_row_baseline` | 15/15 contract valid; locale not clean | included in 0.36s aggregate summary | speed/quality evidence only |
+| `sensevoice_small_15_row_candidate` | 15/15 contract valid; locale failed | included in 0.36s aggregate summary | reject for full split until zh-TW policy is audited |
+| `qwen3_asr_0_6b_15_row_candidate` | 15/15 contract valid; locale failed | included in 0.36s aggregate summary | reject for full split until zh-TW policy is audited |
+| `Qwen/Qwen3-ASR-1.7B` | timeout before inference at fetch/load | 60.08s, exit 124 | retry only after 0.6B locale control or isolated cache/download plan |
+| `unsloth/gemma-4-E2B` / `unsloth/gemma-4-E4B` | blocked before inference: no local multimodal class | 1.30s class probe | create isolated Gemma 4 multimodal runtime before any prompted-ASR test |
+
+The current decision is unchanged but now backed by a fresh command record: do
+not run 258-row or selected-300 experiments for these candidates until either
+the Taiwan Traditional Chinese output policy is solved or the Gemma 4 audio
+runtime is isolated and can emit the same logged hypothesis contract.
+
 ## Required Extra Metrics
 
 Record these for every future model, including failed runs:

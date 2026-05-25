@@ -91,8 +91,14 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   Gemma 4 multimodal model classes. Later 2026-05-26 02:03 and 02:44 CST live
   checks also confirmed all requested model pages remain public and ungated,
   SenseVoice/Qwen3-ASR-0.6B 15-row validators still pass, and the local
-  Gemma 4 multimodal classes are still absent; no remaining requested candidate
-  should move to full-split runtime before locale/runtime policy changes.
+  Gemma 4 multimodal classes are still absent. The current 2026-05-26 bounded
+  recheck in
+  `70_experiments/runs/asr_candidate_current_recheck_2026_05_26/` validated
+  Whisper large-v3, Whisper large-v3-turbo, SenseVoiceSmall, and
+  Qwen3-ASR-0.6B against the fixed 15-row contract, reran a 60-second
+  Qwen3-ASR-1.7B load gate, and repeated the Gemma 4 class probe. Decision:
+  no remaining requested candidate should move to full-split runtime before
+  locale/runtime policy changes.
 - The postdoc-level roadmap after the 258-row gate is recorded in
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
   complete comparable 258-row baselines, add split-aware metric inputs, run the
