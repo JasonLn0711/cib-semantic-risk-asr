@@ -41,6 +41,24 @@ step is not a 258-row run; it is a bounded locale-control decision:
 - or find model-native decoding/prompt controls that produce clean Taiwan
   Traditional Chinese output.
 
+## Follow-Up Verification
+
+2026-05-26 01:38 CST: after the user asked whether any remaining ASR/Gemma
+candidates should now be tested, the aggregate registry and candidate records
+were rechecked. No untested pure-ASR candidate from the requested expansion set
+remains runnable without first changing the gate decision:
+
+- `validate_janus_asr_hypotheses.py --require-labels --require-quality-signal`
+  still passes for the SenseVoiceSmall and Qwen3-ASR-0.6B 15-row hypothesis
+  files.
+- Installed `transformers` is still `4.57.6`, with no
+  `AutoModelForMultimodalLM` or `Gemma4ForConditionalGeneration` exposed.
+- Gemma 4 E2B/E4B therefore remain blocked before inference in the separate
+  prompted multimodal lane.
+- The next research gate remains locale-policy resolution or selected-300
+  human risk/decision/model assessment, not a 258-row rerun for these
+  locale-failed candidates.
+
 ## Artifacts
 
 - Aggregate table: `candidate_15_row_summary.tsv`

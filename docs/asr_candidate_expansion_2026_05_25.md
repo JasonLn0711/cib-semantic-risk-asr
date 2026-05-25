@@ -128,6 +128,39 @@ spend 258-row or 300-row runtime on these candidates. Either reject them from
 the pure-ASR paper table, or explicitly approve an audited post-decode
 conversion/reporting policy before any promotion.
 
+## 2026-05-26 Query-Time Verification
+
+After the user asked whether the remaining ASR and multimodal Gemma 4 models
+should now be tested, the current candidate matrix was rechecked against the
+tracked registry and local runtime at 2026-05-26 01:38 CST.
+
+Verification commands:
+
+```bash
+awk -F '\t' 'NR==1 || $1 ~ /whisper_large_v3|sensevoice|qwen3|gemma4|asr_candidate_runtime_gate|asr_candidate_15_row_extension/ {print}' 70_experiments/registry.tsv
+.venv/bin/python -c 'import transformers; print(transformers.__version__); print(hasattr(transformers, "AutoModelForMultimodalLM")); print(hasattr(transformers, "Gemma4ForConditionalGeneration"))'
+.venv/bin/python 80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py --hypotheses 70_experiments/runs/sensevoice_small_15_row_candidate/predictions/sensevoice_small_15_row_candidate_predictions.jsonl --require-labels --require-quality-signal --output-json /tmp/sensevoice_validate_current.json
+.venv/bin/python 80_semantic_risk_asr/scoring/validate_janus_asr_hypotheses.py --hypotheses 70_experiments/runs/qwen3_asr_0_6b_15_row_candidate/predictions/qwen3_asr_0_6b_15_row_candidate_predictions.jsonl --require-labels --require-quality-signal --output-json /tmp/qwen3_0_6b_validate_current.json
+```
+
+Result:
+
+- Whisper large-v3 and large-v3-turbo already have fixed 15-row gates and both
+  remain locale-not-clean.
+- SenseVoiceSmall and Qwen3-ASR-0.6B already have fixed 15-row contract-passed
+  evidence, and both validations still pass, but both remain strict zh-TW
+  locale failures.
+- Qwen3-ASR-1.7B remains a fetch/load timeout before inference.
+- Gemma 4 E2B/E4B remain blocked before inference because the local runtime is
+  still `transformers 4.57.6` and exposes neither
+  `AutoModelForMultimodalLM` nor `Gemma4ForConditionalGeneration`.
+
+Decision: no additional full-split ASR run is justified from this candidate set
+right now. The next executable alternatives are to resolve/audit the
+Traditional Chinese locale policy, isolate an official Gemma 4 multimodal
+runtime, or continue the selected-300 human risk/decision/model assessment
+gate.
+
 ## Required Extra Metrics
 
 Record these for every future model, including failed runs:

@@ -85,7 +85,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   field contract but failed the strict zh-TW locale gate (`14/15` and `15/15`
   locale-violation rows). Qwen3-ASR-1.7B still times out before inference at
   fetch/load, and Gemma 4 E2B/E4B remain blocked until an isolated multimodal
-  runtime exposes `AutoModelForMultimodalLM`.
+  runtime exposes `AutoModelForMultimodalLM`. A 2026-05-26 query-time
+  verification rechecked the registry, reran SenseVoice/Qwen 0.6B hypothesis
+  validators, and confirmed the local Transformers runtime still lacks the
+  Gemma 4 multimodal model classes; no remaining requested candidate should
+  move to full-split runtime before locale/runtime policy changes.
 - The postdoc-level roadmap after the 258-row gate is recorded in
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
   complete comparable 258-row baselines, add split-aware metric inputs, run the
