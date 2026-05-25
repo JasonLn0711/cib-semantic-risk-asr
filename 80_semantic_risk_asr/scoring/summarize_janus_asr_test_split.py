@@ -217,18 +217,43 @@ def load_heuristic_labeler():
     return heuristic_asr_label
 
 
+def load_edit_stats():
+    root = repo_root_from_script()
+    sys.path.insert(0, str(root / "60_whisper_asr_finetuning" / "scripts"))
+    from asr_text_metrics import edit_stats
+
+    return edit_stats
+
+
 def summarize_file(
     path: Path,
     reference_by_id: dict[str, str],
     expected_ids: set[str],
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     heuristic_asr_label = load_heuristic_labeler()
+    edit_stats = load_edit_stats()
     prediction_rows = read_rows(path)
     run_id = infer_run_id(path, prediction_rows)
     observed_ids = {audio_id_for(row) for row in prediction_rows if audio_id_for(row)}
 
     cer_values: list[float] = []
     wer_values: list[float] = []
+    cer_raw_values: list[float] = []
+    wer_raw_values: list[float] = []
+    cer_zh_values: list[float] = []
+    wer_zh_values: list[float] = []
+    metric_edits = {
+        "cer_raw": 0,
+        "wer_raw": 0,
+        "cer_zh": 0,
+        "wer_zh": 0,
+    }
+    metric_ref_units = {
+        "cer_raw": 0,
+        "wer_raw": 0,
+        "cer_zh": 0,
+        "wer_zh": 0,
+    }
     unsafe_downrouting = 0
     high_risk_missed = 0
     over_escalation = 0
@@ -272,6 +297,40 @@ def summarize_file(
 
         cer_values.append(as_float(row.get("cer")))
         wer_values.append(as_float(row.get("wer")))
+        metric_specs = {
+            "cer_raw": {
+                "unit": "char",
+                "normalization": "none",
+                "wer_tokenizer": "whitespace",
+            },
+            "wer_raw": {
+                "unit": "word",
+                "normalization": "none",
+                "wer_tokenizer": "whitespace",
+            },
+            "cer_zh": {
+                "unit": "char",
+                "normalization": "zh_asr",
+                "wer_tokenizer": "jieba",
+            },
+            "wer_zh": {
+                "unit": "word",
+                "normalization": "zh_asr",
+                "wer_tokenizer": "jieba",
+            },
+        }
+        metric_values = {
+            name: edit_stats(reference, hypothesis, **spec)
+            for name, spec in metric_specs.items()
+        }
+        cer_raw_values.append(metric_values["cer_raw"].rate_percent)
+        wer_raw_values.append(metric_values["wer_raw"].rate_percent)
+        cer_zh_values.append(metric_values["cer_zh"].rate_percent)
+        wer_zh_values.append(metric_values["wer_zh"].rate_percent)
+        for name, stats in metric_values.items():
+            metric_edits[name] += stats.edits
+            metric_ref_units[name] += stats.reference_units
+
         ref_level = LABEL_ORDER.get(ref_label, 0)
         asr_level = LABEL_ORDER.get(asr_label, 0)
         if ref_label in HIGH_RISK:
@@ -312,12 +371,31 @@ def summarize_file(
                     scam_pattern_confusions += 1
 
     rows = len(prediction_rows)
+    def macro(values: list[float]) -> float:
+        return round(sum(values) / rows, 2) if rows else 0.0
+
+    def micro(name: str) -> float:
+        denominator = metric_ref_units[name]
+        return round(metric_edits[name] / denominator * 100.0, 2) if denominator else 0.0
+
     comparison_row = {
         "run_id": run_id,
         "rows": rows,
         "expected_rows": len(expected_ids),
-        "cer_mean": round(sum(cer_values) / rows, 2) if rows else 0.0,
-        "wer_mean": round(sum(wer_values) / rows, 2) if rows else 0.0,
+        "cer_mean": macro(cer_values),
+        "wer_mean": macro(wer_values),
+        "cer_raw_macro": macro(cer_raw_values),
+        "cer_raw_micro": micro("cer_raw"),
+        "wer_raw_whitespace_macro": macro(wer_raw_values),
+        "wer_raw_whitespace_micro": micro("wer_raw"),
+        "cer_zh_macro": macro(cer_zh_values),
+        "cer_zh_micro": micro("cer_zh"),
+        "wer_zh_jieba_macro": macro(wer_zh_values),
+        "wer_zh_jieba_micro": micro("wer_zh"),
+        "metric_profile": (
+            "paper_primary=cer_zh_micro; supplemental=wer_zh_jieba_micro; "
+            "cer_mean/wer_mean are stored legacy per-row fields"
+        ),
         "reference_high_risk_count": reference_high_risk,
         "asr_high_risk_count": asr_high_risk,
         "unsafe_downrouting_count": unsafe_downrouting,
@@ -355,6 +433,12 @@ def summarize_file(
         "missing_expected_ids": sorted(expected_ids - observed_ids),
         "extra_ids": sorted(observed_ids - expected_ids),
         "missing_reference": missing_reference,
+        "metric_profile": {
+            "paper_primary": "cer_zh_micro",
+            "supplemental": "wer_zh_jieba_micro",
+            "legacy_fields": ["cer_mean", "wer_mean"],
+            "normalization": "zh_asr preserves Traditional Chinese without conversion",
+        },
     }
     return comparison_row, detail
 
@@ -402,6 +486,15 @@ def main() -> int:
         "expected_rows",
         "cer_mean",
         "wer_mean",
+        "cer_raw_macro",
+        "cer_raw_micro",
+        "wer_raw_whitespace_macro",
+        "wer_raw_whitespace_micro",
+        "cer_zh_macro",
+        "cer_zh_micro",
+        "wer_zh_jieba_macro",
+        "wer_zh_jieba_micro",
+        "metric_profile",
         "reference_high_risk_count",
         "asr_high_risk_count",
         "unsafe_downrouting_count",
@@ -425,7 +518,7 @@ def main() -> int:
         "extra_ids",
         "notes",
     ]
-    comparison_rows.sort(key=lambda row: (float(row["cer_mean"]), row["run_id"]))
+    comparison_rows.sort(key=lambda row: (float(row["cer_zh_micro"]), row["run_id"]))
     write_tsv(args.output_tsv, comparison_rows, fieldnames)
 
     summary_path = args.summary_json or args.output_tsv.with_suffix(".json")

@@ -86,9 +86,9 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   CDS ground truth currently covers the 15-row gold subset only.
 - The 2026-05-25 WER audit is recorded in
   `70_experiments/runs/wer_metric_audit_2026_05_25/`. Pre-audit WER fields are
-  legacy raw whitespace-token values; paper-facing ASR tables should use
-  `cer_zh_normalized` corpus-level micro rate as the primary surface metric and
-  `wer_zh_jieba` only as a supplemental segmented word metric.
+  legacy raw whitespace-token values; paper-facing ASR tables should use the
+  `cer_zh_micro` aggregate column as the primary surface metric and
+  `wer_zh_jieba_micro` only as a supplemental segmented word metric.
 - Treat audio/call data and filenames as sensitive.
 - If storage cleanup is needed later, review `30_review_flags/REVIEW.md` and `20_inventory/largest_files.tsv` first.
 

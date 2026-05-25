@@ -38,30 +38,28 @@ ignored local paths.
 | 4.1 | Generalized ASR runner path handling for canonical test split manifests. | `run_janus_whisper_family_pilot.py`; `run_legacy_breeze_asr25_smoke.py`; `validate_janus_asr_hypotheses.py`. | Added support for `id`/`audio` manifest fields, relative audio paths, split names, and non-pilot expected-ID validation. Regression validation on existing 15-row partial predictions stayed `ok=true`. |
 | 4.2 | Ran canonical 258-row test split with the legacy partial encoder. | `run_legacy_breeze_asr25_smoke.py --model-kind partial_encoder --run-id breeze_asr25_partial_encoder_legacy_best_test_split --manifest .../test.jsonl --max-samples 258`; local summary/runtime/prediction artifacts. | Passed. Rows `258`, CER `18.24`, WER `100.0`, wall time `213.79` seconds, `0.829` sec/row, `1.207` rows/sec, CUDA, cuDNN disabled, `torch_dtype=float16`. Validator: `ok=true`, no missing/duplicate IDs, no missing text/label/quality signal. |
 | 4.3 | Ran canonical 258-row test split with the legacy LoRA. | `run_legacy_breeze_asr25_smoke.py --model-kind lora --run-id breeze_asr25_lora_legacy_best_test_split --manifest .../test.jsonl --max-samples 258`; local summary/runtime/prediction artifacts. | Passed. Rows `258`, CER `22.86`, WER `100.0`, wall time `403.37` seconds, `1.563` sec/row, `0.640` rows/sec, CUDA, cuDNN disabled, `torch_dtype=float16`. Validator: `ok=true`, no missing/duplicate IDs, no missing text/label/quality signal. |
-| 4.4 | Produced tracked aggregate ASR/CDS proxy comparison for the 258-row split. | `summarize_janus_asr_test_split.py`; `70_experiments/runs/janus_258_test_split_asr_cds_proxy/`. | Completed. Partial encoder beat LoRA on CER, runtime, unsafe downrouting, high-risk misses, risk-atom error rate, negation flips, amount distortion, and action confusion. Both candidates had `simplified_char_count=0` and `locale_violation_rows=0`. |
+| 4.4 | Produced tracked aggregate ASR/CDS proxy comparison for the 258-row split. | `summarize_janus_asr_test_split.py`; `70_experiments/runs/janus_258_test_split_asr_cds_proxy/`. | Completed. Partial encoder beat LoRA and Breeze-ASR-25 base on paper-facing zh CER micro, unsafe downrouting, high-risk misses, risk-atom error rate, and locale behavior. All three candidates had `simplified_char_count=0` and `locale_violation_rows=0`. |
 | 4.5 | Added expanded ASR candidate matrix and locale contract. | `60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml`; `docs/asr_candidate_expansion_2026_05_25.md`. | Added Whisper large-v3, Whisper large-v3 turbo, FunASR SenseVoice, Qwen3-ASR 0.6B/1.7B, and Gemma 4 E2B/E4B audio candidates. All new candidates are planned behind smoke, 15-row contract, runtime logging, and Taiwan Traditional Chinese locale gates. |
 | 4.6 | Wrote the postdoc-level next-step roadmap after the 258-row gate. | `docs/postdoc_next_steps_2026_05_25.md`. | Completed. The roadmap defines the next ordered gates: comparable 258-row baselines, new runner smoke/15-row contracts, split-aware metric input builder, human risk-atom audit, 300-row high-stakes main experiment, recovery experiment, and paper packaging. |
 | 5.1 | Added split-aware metric input builder. | `80_semantic_risk_asr/scoring/build_janus_metric_inputs.py`; `70_experiments/runs/janus_split_aware_metric_inputs_2026_05_25/README.md`. | Completed. Human-reviewed 15-row validation reproduced `260` SRES rows, `260` CEIS rows, `75` downstream rows, SRES total `8106.0`, CEIS mean `1.92`, downstream mismatch `0.3467`, and high-risk missed `4`. Proxy 258-row validation loaded `258/258` references and `516` hypotheses, producing `1057` SRES/CEIS rows and `516` downstream rows. |
 | 5.2 | Audited WER calculation for publication readiness. | `asr_text_metrics.py`; `audit_asr_text_metrics.py`; `wer_metric_audit_2026_05_25/text_metric_audit.tsv`. | Completed. Found two incompatible WER definitions: current inference used raw whitespace WER, while legacy training used normalized `jieba` WER. Future runners now default to `zh_asr` normalization plus `jieba` WER, preserve legacy raw whitespace WER as an audit field, and keep Traditional Chinese without simplified conversion. |
+| 5.3 | Promoted paper-facing zh ASR metrics into the 258-row aggregate summarizer. | `summarize_janus_asr_test_split.py`; `janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv`. | Completed. The aggregate table now carries `cer_zh_micro` as the primary surface metric, `wer_zh_jieba_micro` as supplemental, and legacy stored `cer_mean`/`wer_mean` only for reproducibility. |
 
 ## Next Operations
 
 1. Treat pre-audit `wer` values as legacy compatibility fields. For paper-facing
-   tables, use `cer_zh_normalized` corpus-level micro rate as the primary ASR
-   surface metric and `wer_zh_jieba` only as a supplemental metric.
-2. Complete comparable 258-row baselines for the already-gated ASR models:
-   Whisper small, Whisper large-v2, Breeze-ASR-25 base, optional Breeze-ASR-26,
-   legacy LoRA, and legacy partial encoder.
-3. Run Whisper large-v3 and Whisper large-v3 turbo through smoke, 15-row
+   tables, use `cer_zh_micro` as the primary ASR surface metric and
+   `wer_zh_jieba_micro` only as supplemental.
+2. Run Whisper large-v3 and Whisper large-v3 turbo through smoke, 15-row
    contract, locale gate, and then 258-row if they pass.
-4. Build smoke/15-row runners for FunASR SenseVoice and Qwen3-ASR, with strict
+3. Build smoke/15-row runners for FunASR SenseVoice and Qwen3-ASR, with strict
    Taiwan Traditional Chinese locale gates.
-5. Build a separate multimodal prompted-ASR runner for Gemma 4 E2B/E4B only
+4. Build a separate multimodal prompted-ASR runner for Gemma 4 E2B/E4B only
    after the prompt, audio-length, hallucination, runtime, and locale logging
    contract is explicit.
-6. Use `build_janus_metric_inputs.py` to regenerate metric inputs for the
+5. Use `build_janus_metric_inputs.py` to regenerate metric inputs for the
    expanded 258-row baseline set.
-7. Create a small human-reviewed risk-atom audit set so proxy metrics do not
+6. Create a small human-reviewed risk-atom audit set so proxy metrics do not
    become overstated as formal CDS evidence.
-8. Run the selected 300-row high-stakes experiment only after the expanded
+7. Run the selected 300-row high-stakes experiment only after the expanded
    258-row baseline set and audit boundary are clear.

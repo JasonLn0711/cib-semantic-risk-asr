@@ -116,25 +116,33 @@ The legacy LoRA improves CER over base Breeze-ASR-25 (`30.99` vs `36.13`) but
 is worse on CEIS and downstream safety counts. Treat this as early evidence
 that lower CER alone is not sufficient for the paper claim.
 
-Current 258-row test-split signal: partial encoder remains stronger than LoRA.
-Partial encoder produced CER `18.24` in `213.79` seconds (`0.829` sec/row),
-with unsafe downrouting `7`, high-risk misses `4`, risk-atom proxy error rate
-`0.0431`, and locale violations `0`. LoRA produced CER `22.86` in `403.37`
-seconds (`1.563` sec/row), with unsafe downrouting `10`, high-risk misses `7`,
-risk-atom proxy error rate `0.0613`, and locale violations `0`.
+Current 258-row test-split signal: partial encoder remains stronger than LoRA
+and Breeze-ASR-25 base. Partial encoder produced `cer_zh_micro=15.04` in
+`213.79` seconds (`0.829` sec/row), with unsafe downrouting `7`, high-risk
+misses `4`, risk-atom proxy error rate `0.0431`, and locale violations `0`.
+LoRA produced `cer_zh_micro=18.23` in `403.37` seconds (`1.563` sec/row), with
+unsafe downrouting `10`, high-risk misses `7`, risk-atom proxy error rate
+`0.0613`, and locale violations `0`. Breeze-ASR-25 base produced
+`cer_zh_micro=22.72`, unsafe downrouting `34`, high-risk misses `30`, and
+locale violations `0`.
+
+The three-model split-aware proxy bridge produced `1589` SRES rows, `1589`
+CEIS variant rows, and `774` downstream rows. Aggregate SRES total was
+`7020.0`; CEIS unstable samples were `55`; downstream ASR mismatch rate was
+`0.0736`; high-risk missed by ASR was `41`.
 
 Decision: promote the legacy partial encoder as the current ASR hypothesis
 generator for the next split-aware CDS metric builder. Keep LoRA as contrast
 evidence, not the next primary hypothesis generator. Treat pre-audit `wer`
-values as legacy raw whitespace fields. Paper-facing ASR tables should use
-`cer_zh_normalized` corpus-level micro rate as the primary surface metric and
-`wer_zh_jieba` only as a supplemental segmented word metric.
+values as legacy raw whitespace fields. Paper-facing ASR tables should use the
+aggregate `cer_zh_micro` column as the primary surface metric and
+`wer_zh_jieba_micro` only as a supplemental segmented word metric.
 
 Current execution priority after the 258-row gate:
 
-1. Complete comparable 258-row baselines for Breeze-ASR-25 base, Whisper small,
-   Whisper large-v2, optional Breeze-ASR-26, Whisper large-v3, and Whisper
-   large-v3 turbo.
+1. Complete remaining comparable 258-row baselines for Whisper small, Whisper
+   large-v2, optional Breeze-ASR-26, Whisper large-v3, and Whisper large-v3
+   turbo under the `zh_asr` metric profile.
 2. Build new SenseVoice and Qwen3-ASR runners only through smoke and 15-row
    contract before full split runs.
 3. Keep Gemma 4 E2B/E4B as a separate prompted multimodal ASR lane, not as a
@@ -142,7 +150,7 @@ Current execution priority after the 258-row gate:
 4. Use the split-aware `build_janus_metric_inputs.py` so 15-row, 258-row, and
    300-row experiments share the same metric-input contract. Current local
    validation: the script reproduces the 15-row human-reviewed legacy bridge
-   counts and can process the 258-row partial-vs-LoRA comparison in proxy mode.
+   counts and can process the three-model 258-row proxy comparison.
 5. Run the selected 300-row high-stakes expansion as the main experiment only
    after the split-aware builder is validated.
 
@@ -186,7 +194,7 @@ downstream label changed = yes/no
 Comparisons:
 
 - WER thresholding with declared tokenizer/normalization only;
-- CER thresholding, preferably `cer_zh_normalized` corpus-level micro rate;
+- CER thresholding, preferably the aggregate `cer_zh_micro` rate;
 - semantic distance or ASD if implemented;
 - ASR confidence;
 - SRES;

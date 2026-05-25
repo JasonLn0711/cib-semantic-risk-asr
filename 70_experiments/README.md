@@ -66,10 +66,10 @@ For semantic-risk ASR experiments, also report:
 - machine abstention rate;
 - conservative escalation cost.
 
-The 2026-05-25 WER audit defines the repo policy:
-`cer_zh_normalized` corpus-level micro rate is the primary paper-facing ASR
-surface metric; `wer_zh_jieba` is supplemental; raw whitespace WER is legacy
-audit-only for unsegmented Chinese transcripts.
+The 2026-05-25 WER audit defines the repo policy: the aggregate
+`cer_zh_micro` column is the primary paper-facing ASR surface metric;
+`wer_zh_jieba_micro` is supplemental; raw whitespace WER is legacy audit-only
+for unsegmented Chinese transcripts.
 
 ## JANUS 15-Row Decision-Stability Pilot
 

@@ -2,7 +2,7 @@
 
 Date: 2026-05-25
 
-Status: active roadmap after the 258-row partial-vs-LoRA gate
+Status: active roadmap after the 258-row partial-vs-LoRA-vs-base gate and WER audit
 
 ## 核心判斷
 
@@ -38,23 +38,27 @@ Status: active roadmap after the 258-row partial-vs-LoRA gate
    legacy LoRA、legacy partial encoder 都已接過同一個 15-row contract。
 3. 五模型 15-row CDS-ASR bridge 已完成，證明 LoRA 雖然改善 CER，卻讓
    CEIS/downstream behavior 變差。
-4. Legacy partial encoder 與 LoRA 已完成 canonical `258`-row test split。
-5. 258-row aggregate proxy 指標支持 partial encoder 優於 LoRA：
+4. Legacy partial encoder、LoRA、Breeze-ASR-25 base 已完成 canonical
+   `258`-row test split。
+5. 258-row aggregate proxy 指標支持 partial encoder 優於 LoRA 與 base：
 
-| Run | CER | Wall time | Sec/row | Unsafe downrouting | High-risk missed | Risk-atom proxy error | Locale violations |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Legacy partial encoder | `18.24` | `213.79s` | `0.829` | `7` | `4` | `0.0431` | `0` |
-| Legacy LoRA | `22.86` | `403.37s` | `1.563` | `10` | `7` | `0.0613` | `0` |
-| Breeze-ASR-25 base | `33.11` | `164.41s` | `0.637` | `34` | `30` | `0.1145` | `0` |
+| Run | zh CER micro | zh-jieba WER micro | Stored CER | Wall time | Sec/row | Unsafe downrouting | High-risk missed | Risk-atom proxy error | Locale violations |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Legacy partial encoder | `15.04` | `21.53` | `18.24` | `213.79s` | `0.829` | `7` | `4` | `0.0431` | `0` |
+| Legacy LoRA | `18.23` | `25.59` | `22.86` | `403.37s` | `1.563` | `10` | `7` | `0.0613` | `0` |
+| Breeze-ASR-25 base | `22.72` | `30.39` | `33.11` | `164.41s` | `0.637` | `34` | `30` | `0.1145` | `0` |
+
+6. 三模型 split-aware proxy bridge 已跑完：SRES rows `1589`、CEIS rows
+   `1589`、downstream rows `774`、SRES total `7020.0`、CEIS unstable samples
+   `55`、downstream ASR mismatch rate `0.0736`、high-risk missed by ASR `41`。
 
 目前最重要的限制：
 
 - 258-row 現在是 proxy risk-atom summary，還不是完整 human-reviewed CDS
   evidence。
 - 2026-05-25 WER audit 確認：舊推論欄位是 raw whitespace WER，
-  公式形式正確但不適合作為未斷詞中文主指標；投稿主表應用
-  `cer_zh_normalized` corpus-level micro rate，`wer_zh_jieba` 只能作為
-  補充指標。
+  公式形式正確但不適合作為未斷詞中文主指標；投稿主表應用 aggregate
+  `cer_zh_micro` 欄位，`wer_zh_jieba_micro` 只能作為補充指標。
 - 新模型候選已加入矩陣，但尚未有 runner、smoke、15-row contract、或
   258-row evidence。
 - 300 high-stakes rows 已選出，但尚未變成 main experiment。

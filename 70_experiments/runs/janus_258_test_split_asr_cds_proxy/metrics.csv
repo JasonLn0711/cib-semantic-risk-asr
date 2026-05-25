@@ -3,6 +3,8 @@ rows,258,test,Canonical janus_165_v1 test split rows.
 hypothesis_files,3,test,Legacy partial encoder, legacy LoRA, and Breeze-ASR-25 base.
 partial_encoder_cer_mean,18.24,test,breeze_asr25_partial_encoder_legacy_best_test_split.
 partial_encoder_wer_mean,100.0,test,Legacy raw whitespace-token WER; not a publication-grade primary metric for unsegmented Chinese.
+partial_encoder_cer_zh_micro,15.04,test,Paper-facing primary ASR surface metric from summarizer.
+partial_encoder_wer_zh_jieba_micro,21.53,test,Supplemental segmented Chinese WER from summarizer.
 partial_encoder_wall_time_seconds,213.79,test,CUDA with cuDNN disabled and torch_dtype float16.
 partial_encoder_seconds_per_row,0.829,test,Derived from wall_time_seconds / rows.
 partial_encoder_rows_per_second,1.207,test,Derived from rows / wall_time_seconds.
@@ -12,6 +14,8 @@ partial_encoder_risk_atom_error_rate,0.0431,test,Proxy atom-presence metric; not
 partial_encoder_simplified_char_count,0,test,Taiwan Traditional Chinese locale gate.
 lora_cer_mean,22.86,test,breeze_asr25_lora_legacy_best_test_split.
 lora_wer_mean,100.0,test,Legacy raw whitespace-token WER; not a publication-grade primary metric for unsegmented Chinese.
+lora_cer_zh_micro,18.23,test,Paper-facing primary ASR surface metric from summarizer.
+lora_wer_zh_jieba_micro,25.59,test,Supplemental segmented Chinese WER from summarizer.
 lora_wall_time_seconds,403.37,test,CUDA with cuDNN disabled and torch_dtype float16.
 lora_seconds_per_row,1.563,test,Derived from wall_time_seconds / rows.
 lora_rows_per_second,0.640,test,Derived from rows / wall_time_seconds.
@@ -21,6 +25,8 @@ lora_risk_atom_error_rate,0.0613,test,Proxy atom-presence metric; not a substitu
 lora_simplified_char_count,0,test,Taiwan Traditional Chinese locale gate.
 base_cer_mean,33.11,test,breeze_asr25_base_test_split.
 base_wer_mean,299.89,test,Legacy raw whitespace-token WER; not a publication-grade primary metric for unsegmented Chinese.
+base_cer_zh_micro,22.72,test,Paper-facing primary ASR surface metric from summarizer.
+base_wer_zh_jieba_micro,30.39,test,Supplemental segmented Chinese WER from summarizer.
 base_wall_time_seconds,164.41,test,CUDA with cuDNN disabled and torch_dtype float16.
 base_seconds_per_row,0.637,test,Derived from wall_time_seconds / rows.
 base_rows_per_second,1.569,test,Derived from rows / wall_time_seconds.
@@ -29,3 +35,15 @@ base_high_risk_missed_count,30,test,Proxy decision metric from summarizer.
 base_risk_atom_error_rate,0.1145,test,Proxy atom-presence metric; not a substitute for human annotation.
 base_simplified_char_count,0,test,Taiwan Traditional Chinese locale gate.
 wer_audit_run,wer_metric_audit_2026_05_25,test,Use text_metric_audit.tsv for zh-jieba WER and corpus-level micro rates.
+metric_bridge_reference_rows,258,test,Split-aware three-model proxy metric bridge.
+metric_bridge_hypothesis_rows,774,test,Three hypothesis files times 258 rows.
+metric_bridge_sres_rows,1589,test,Generated local metric input rows; raw rows remain ignored.
+metric_bridge_ceis_rows,1589,test,Generated local metric input rows; raw rows remain ignored.
+metric_bridge_downstream_rows,774,test,Generated local metric input rows; raw rows remain ignored.
+metric_bridge_sres_total,7020.0,test,Aggregate summary from semantic_risk_score.py.
+metric_bridge_sres_mean,4.418,test,Aggregate summary from semantic_risk_score.py.
+metric_bridge_ceis_unstable_samples,55,test,Aggregate summary from counterfactual_escalation_instability.py.
+metric_bridge_ceis_max,15.0,test,Aggregate summary from counterfactual_escalation_instability.py.
+metric_bridge_ceis_mean,0.6292,test,Aggregate summary from counterfactual_escalation_instability.py.
+metric_bridge_downstream_asr_mismatch_rate,0.0736,test,Aggregate summary from evaluate_downstream_impact.py.
+metric_bridge_high_risk_missed_by_asr,41,test,Aggregate summary from evaluate_downstream_impact.py.

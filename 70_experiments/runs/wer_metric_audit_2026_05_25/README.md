@@ -34,9 +34,10 @@ directly comparable.
 - For Chinese ASR, the token unit must be declared. Character error rate is
   normally safer as the primary surface metric; word-level Chinese WER is only
   defensible if the segmentation tool and normalization policy are fixed.
-- This repo will use `cer_zh_normalized` as the paper-facing primary ASR
-  surface metric, keep `wer_zh_jieba` as a supplemental segmented word metric,
-  and retain `wer_raw_whitespace` only as a legacy audit field.
+- This repo will use the aggregate `cer_zh_micro` column, produced from the
+  `cer_zh_normalized` profile, as the paper-facing primary ASR surface metric,
+  keep `wer_zh_jieba_micro` as a supplemental segmented word metric, and retain
+  `wer_raw_whitespace` only as a legacy audit field.
 - Main tables should prefer corpus-level micro rates. Macro per-row means may
   be reported only when explicitly labeled as macro.
 
