@@ -1,29 +1,26 @@
 {
-  "version": "v2.5.105",
+  "version": "v2.5.106",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 105
+    "patch": 106
   },
-  "updated_at": "2026-05-25T23:16:55+08:00",
+  "updated_at": "2026-05-25T23:17:24+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "191d3e1",
+  "base_commit": "56c5c67",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml",
     "70_experiments/registry.tsv",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
-    "70_experiments/runs/whisper_large_v3_smoke_1_row/README.md",
-    "70_experiments/runs/whisper_large_v3_smoke_1_row/metrics.csv",
-    "70_experiments/runs/whisper_large_v3_turbo_smoke_1_row/README.md",
-    "70_experiments/runs/whisper_large_v3_turbo_smoke_1_row/metrics.csv",
-    "docs/asr_candidate_expansion_2026_05_25.md",
-    "docs/postdoc_next_steps_2026_05_25.md"
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json",
+    "80_semantic_risk_asr/scoring/build_consequence_evidence_matrix.py",
+    "tests/test_consequence_evidence_matrix.py"
   ]
 }

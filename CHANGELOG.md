@@ -5,6 +5,21 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.106 - 2026-05-25T23:17:24+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `56c5c67`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json`
+  - `80_semantic_risk_asr/scoring/build_consequence_evidence_matrix.py`
+  - `tests/test_consequence_evidence_matrix.py`
+
 ## v2.5.105 - 2026-05-25T23:16:55+08:00
 
 - Bump: `patch`
