@@ -130,7 +130,7 @@
       "authoritative_evidence": "human_audit_response_closeout_summary.json; human_audit_refresh_summary.json; human_audit_predictor_summary.json; human_audit_post_review_evidence_summary.json; evidence_chain_readiness_summary.json; publishable_evidence_completion_summary.json; consequence_evidence_matrix_summary.json",
       "current_evidence_result": "Post-review evidence remains blocked: closeout=False, refresh=False, predictor=False, publishable=False, consequence=False, human_recovery=False. Current selected-300 review is 0/30 rows and 0/90 model assessments; current packet pending 6/6 rows and 18/18 model assessments, with 6 timing rows missing.",
       "blocking_dependency": "response_closeout_not_ready, human_refresh_not_complete, human_predictor_not_complete, paper_ready_false, publishable_ready_false, consequence_paper_claims_not_ready, recovery_proxy_only",
-      "next_action": "Complete the response closeout gate first; then write/refresh and rerun this checklist."
+      "next_action": "Complete the response closeout gate first: fill row/model/timing fields, rerun the session-gated strict dry-run with --require-complete --require-timing, then write/refresh and rerun this checklist."
     }
   ],
   "blocking_or_proxy_items": [
@@ -156,10 +156,10 @@
       "roadmap_step_id": "7_human_review_and_publishable_evidence_gate",
       "status": "blocked",
       "blocking_dependency": "response_closeout_not_ready, human_refresh_not_complete, human_predictor_not_complete, paper_ready_false, publishable_ready_false, consequence_paper_claims_not_ready, recovery_proxy_only",
-      "next_action": "Complete the response closeout gate first; then write/refresh and rerun this checklist."
+      "next_action": "Complete the response closeout gate first: fill row/model/timing fields, rerun the session-gated strict dry-run with --require-complete --require-timing, then write/refresh and rerun this checklist."
     }
   ],
   "first_principle_decision": "The repo should now optimize for a publishable consequence evidence chain, not a longer ASR leaderboard. New ASR candidates stop at the locale/runtime gate unless they change the CDS-ASR paper evidence.",
   "next_decision": "Close the selected-300 row/model/timing response gate, write/refresh aggregate human review evidence, rerun predictor and recovery analyses, then rerun this roadmap audit before claiming the objective is complete.",
-  "runtime_seconds": 0.0002
+  "runtime_seconds": 0.0026
 }
