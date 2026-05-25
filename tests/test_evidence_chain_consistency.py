@@ -129,6 +129,20 @@ def write_consistent_fixture(root: Path) -> None:
     )
     write_summary(
         root,
+        "handoff",
+        base_summary(
+            status="reviewer_input_pending",
+            freshness_status="fresh",
+            current_gate={
+                "latest_apply_status": "response_pending",
+                "pending_rows_in_batch": 6,
+                "pending_model_assessments_in_batch": 18,
+                "rows_missing_timing": 6,
+            },
+        ),
+    )
+    write_summary(
+        root,
         "candidate_recheck",
         {
             "ok": True,
@@ -146,7 +160,7 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True
-    assert payload["status_counts"] == {"pass": 11}
+    assert payload["status_counts"] == {"pass": 12}
     assert not payload["failed_checks"]
     assert_aggregate_safe(payload)
 
@@ -190,6 +204,29 @@ def test_consistency_audit_rejects_paper_ready_while_review_pending(tmp_path: Pa
     failed_ids = {item["check_id"] for item in payload["failed_checks"]}
     assert "C040" in failed_ids
     assert "C050" in failed_ids
+
+
+def test_consistency_audit_fails_stale_reviewer_handoff(tmp_path: Path) -> None:
+    write_consistent_fixture(tmp_path)
+    write_summary(
+        tmp_path,
+        "handoff",
+        base_summary(
+            status="reviewer_input_pending",
+            freshness_status="stale",
+            current_gate={
+                "latest_apply_status": "response_pending",
+                "pending_rows_in_batch": 6,
+                "pending_model_assessments_in_batch": 18,
+                "rows_missing_timing": 6,
+            },
+        ),
+    )
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C065" for item in payload["failed_checks"])
 
 
 def test_consistency_safety_rejects_raw_field_tokens() -> None:

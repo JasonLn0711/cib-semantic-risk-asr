@@ -77,6 +77,10 @@ SUMMARY_SPECS = {
         "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
         "human_audit_batch_response_apply_summary.json"
     ),
+    "handoff": (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+        "human_audit_reviewer_handoff_summary.json"
+    ),
     "candidate_recheck": (
         "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/"
         "summary.json"
@@ -185,6 +189,7 @@ def add_policy_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
         "post_review",
         "closeout",
         "apply",
+        "handoff",
     ]
     transcript_failures = [
         name
@@ -385,6 +390,36 @@ def add_readiness_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[st
                 else "reviewer action packet counts drifted from expected selected batch"
             ),
             next_action="Fill only local response fields and timing; do not reopen transcript review.",
+        )
+    )
+
+    handoff = payloads.get("handoff", {})
+    handoff_gate = (
+        handoff.get("current_gate")
+        if isinstance(handoff.get("current_gate"), dict)
+        else {}
+    )
+    handoff_passed = (
+        handoff.get("ok") is True
+        and handoff.get("freshness_status") == "fresh"
+        and handoff.get("status") == "reviewer_input_pending"
+        and handoff_gate.get("latest_apply_status") == "response_pending"
+        and handoff_gate.get("pending_rows_in_batch") == 6
+        and handoff_gate.get("pending_model_assessments_in_batch") == 18
+        and handoff_gate.get("rows_missing_timing") == 6
+    )
+    rows.append(
+        check_row(
+            check_id="C065",
+            invariant="current reviewer handoff is fresh and timing-aware",
+            passed=handoff_passed,
+            evidence=SUMMARY_SPECS["handoff"],
+            result=(
+                "handoff is fresh and points to 6 pending rows, 18 model assessments, and 6 timing rows"
+                if handoff_passed
+                else "reviewer handoff is stale or does not match the current row/model/timing gate"
+            ),
+            next_action="Regenerate reviewer handoff and action checklist before opening the local review packet.",
         )
     )
 
