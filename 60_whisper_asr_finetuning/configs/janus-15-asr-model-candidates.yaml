@@ -110,92 +110,103 @@ candidate_models:
     family: Whisper
     role: newer Whisper large checkpoint for Taiwan Traditional Chinese
       comparison against large-v2 and Breeze candidates
-    current_status: smoke_1_row_completed_contract_passed_locale_clean
+    current_status: completed_15_row_contract_passed_locale_not_clean
     direct_quality_baseline: true
     language_control_ref: language_control.model_specific_controls.whisper
     source_url: https://huggingface.co/openai/whisper-large-v3
     notes: One-row CUDA smoke passed on 2026-05-25 with cuDNN disabled,
-      float16, `zh_asr`, `jieba`, and zero locale violations. Promote to the
-      fixed 15-row gate only if an additional Whisper-family comparator is
-      still needed.
+      float16, `zh_asr`, `jieba`, and zero locale violations. The fixed 15-row
+      gate then passed the hypothesis contract with CER 33.77, WER 43.18,
+      wall time 14.59s, but had 2 locale-violation rows and 23 simplified
+      characters. Do not promote to 258-row until the strict Taiwan
+      Traditional Chinese reporting/conversion policy is audited.
 
   - run_id: whisper_large_v3_turbo_15_row_baseline
     model_name_or_path: openai/whisper-large-v3-turbo
     family: Whisper
     role: speed/quality tradeoff comparator against large-v3 and Breeze
-    current_status: smoke_1_row_completed_contract_passed_locale_clean
+    current_status: completed_15_row_contract_passed_locale_not_clean
     direct_quality_baseline: true
     language_control_ref: language_control.model_specific_controls.whisper
     source_url: https://huggingface.co/openai/whisper-large-v3-turbo
     notes: One-row CUDA smoke passed on 2026-05-25 with cuDNN disabled,
-      float16, `zh_asr`, `jieba`, and zero locale violations. Keep it as a
-      speed/quality tradeoff candidate and do not rank from the single smoke
-      row.
+      float16, `zh_asr`, `jieba`, and zero locale violations. The fixed 15-row
+      gate then passed the hypothesis contract with CER 41.33, WER 52.52,
+      wall time 7.68s, but had 4 locale-violation rows and 48 simplified
+      characters. Keep it as a speed/quality smoke comparator only.
 
   - run_id: sensevoice_small_15_row_candidate
     model_name_or_path: FunAudioLLM/SenseVoiceSmall
     family: FunASR SenseVoice
     role: non-autoregressive multilingual ASR comparator with speech
       understanding side signals
-    current_status: model_available_local_runner_missing
+    current_status: smoke_1_row_completed_contract_passed_locale_failed
     direct_quality_baseline: true
     language_control_ref: language_control.model_specific_controls.sensevoice
     source_url: https://huggingface.co/FunAudioLLM/SenseVoiceSmall
-    notes: Hugging Face model availability was checked on 2026-05-25, but the
-      local environment does not yet install `funasr` or `modelscope`. Requires
-      a FunASR runner that emits the standard hypothesis contract. Use
-      `language=zh`, force Taiwan Traditional Chinese by post-decode locale
-      gate, and record VAD, ITN, batch size, wall time, and latency separately.
+    notes: FunASR/modelscope were installed locally on 2026-05-25 and
+      `run_janus_sensevoice_pilot.py` now emits the standard hypothesis
+      contract. One-row CUDA smoke passed with CER 65.88, WER 81.25, cached
+      runner wall time 2.15s, but failed the strict locale gate with 1
+      locale-violation row and 11 simplified characters. Do not promote to
+      15-row until the Taiwan Traditional Chinese output policy is audited.
 
   - run_id: qwen3_asr_0_6b_15_row_candidate
     model_name_or_path: Qwen/Qwen3-ASR-0.6B
     family: Qwen3-ASR
     role: smaller Qwen3-ASR smoke and latency candidate before 1.7B
-    current_status: model_available_local_runner_missing
+    current_status: smoke_1_row_completed_contract_passed_locale_failed_disable_cudnn
     direct_quality_baseline: true
     language_control_ref: language_control.model_specific_controls.qwen3_asr
     source_url: https://huggingface.co/Qwen/Qwen3-ASR-0.6B
-    notes: Hugging Face model availability was checked on 2026-05-25. The
-      local environment does not yet install the `qwen-asr` package, so this
-      remains the first Qwen runner target. Record toolkit version, offline vs
-      streaming mode, wall time, throughput, and Traditional Chinese locale
-      violations.
+    notes: `qwen-asr` was installed locally on 2026-05-25 and
+      `run_janus_qwen3_asr_pilot.py` now emits the standard hypothesis
+      contract. The first CUDA attempt failed with a cuDNN sublibrary mismatch;
+      rerun with cuDNN disabled passed one row with CER 74.12, WER 95.83,
+      cached runner wall time 6.45s, but failed the strict locale gate with 1
+      locale-violation row and 13 simplified characters. Do not promote to
+      15-row until the Traditional Chinese gate is fixed.
 
   - run_id: qwen3_asr_1_7b_15_row_candidate
     model_name_or_path: Qwen/Qwen3-ASR-1.7B
     family: Qwen3-ASR
     role: stronger Qwen3-ASR quality candidate after 0.6B smoke
-    current_status: model_available_waiting_for_0_6b_runner_smoke
+    current_status: stopped_before_inference_after_0_6b_locale_failed
     direct_quality_baseline: true
     language_control_ref: language_control.model_specific_controls.qwen3_asr
     source_url: https://huggingface.co/Qwen/Qwen3-ASR-1.7B
-    notes: Hugging Face model availability was checked on 2026-05-25. Do not
-      run full test split until the 0.6B runner passes the 15-row contract and
-      locale gate.
+    notes: Hugging Face model availability was checked on 2026-05-25. A bounded
+      1-row load attempt was stopped before inference after stalling at model
+      file fetch/load with no GPU activity. Since Qwen3-ASR-0.6B already
+      failed the strict Traditional Chinese locale gate, retry 1.7B only after
+      the 0.6B lane passes locale control.
 
   - run_id: gemma4_e4b_audio_15_row_candidate
     model_name_or_path: unsloth/gemma-4-E4B
     family: Gemma 4 multimodal audio
     role: prompted multimodal ASR and decision-text comparator, not a pure ASR
       model
-    current_status: model_available_new_multimodal_runner_required
+    current_status: blocked_local_transformers_multimodal_class_missing
     direct_quality_baseline: false
     language_control_ref: language_control.model_specific_controls.gemma4_audio
     source_url: https://huggingface.co/unsloth/gemma-4-E4B
-    notes: Hugging Face model availability was checked on 2026-05-25. Use only
-      after a multimodal runner can emit the same output contract. Record
-      prompt, max_new_tokens, audio length limit, wall time, output verbosity,
-      hallucination markers, and locale violations.
+    notes: Hugging Face model availability was checked on 2026-05-25. Local
+      Transformers 4.57.6 does not expose `AutoModelForMultimodalLM`, while the
+      Gemma 4 config declares a 5.5.0.dev0-era runtime with audio config
+      present. Use only after an isolated multimodal runner can emit the same
+      output contract. Do not mix Gemma output into pure ASR baseline tables.
 
   - run_id: gemma4_e2b_audio_15_row_candidate
     model_name_or_path: unsloth/gemma-4-E2B
     family: Gemma 4 multimodal audio
     role: smaller prompted multimodal ASR and latency candidate
-    current_status: model_available_new_multimodal_runner_required
+    current_status: blocked_local_transformers_multimodal_class_missing
     direct_quality_baseline: false
     language_control_ref: language_control.model_specific_controls.gemma4_audio
     source_url: https://huggingface.co/unsloth/gemma-4-E2B
-    notes: Hugging Face model availability was checked on 2026-05-25. Use as
-      the cheaper multimodal smoke before E4B if VRAM or latency becomes the
-      bottleneck. It must pass the same Traditional Chinese locale gate before
-      any CDS comparison.
+    notes: Hugging Face model availability was checked on 2026-05-25. Local
+      Transformers 4.57.6 does not expose `AutoModelForMultimodalLM`, while the
+      Gemma 4 config declares a 5.5.0.dev0-era runtime with audio config
+      present. Use as the cheaper multimodal smoke only after an isolated Gemma
+      4 audio runtime exists and can pass the same Traditional Chinese locale
+      gate.

@@ -76,6 +76,13 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml`.
   New candidates must pass smoke, 15-row hypothesis contract, runtime logging,
   and Taiwan Traditional Chinese locale gates before any full split run.
+  The 2026-05-25 runtime gate is recorded in
+  `70_experiments/runs/asr_candidate_runtime_gate_2026_05_25/`: Whisper
+  large-v3 and large-v3-turbo completed the 15-row gate but had locale
+  violations, SenseVoiceSmall and Qwen3-ASR-0.6B completed one-row contract
+  smoke but failed the strict locale gate, Qwen3-ASR-1.7B was stopped before
+  inference, and Gemma 4 E2B/E4B remain blocked until an isolated multimodal
+  runtime exposes `AutoModelForMultimodalLM`.
 - The postdoc-level roadmap after the 258-row gate is recorded in
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
   complete comparable 258-row baselines, add split-aware metric inputs, run the

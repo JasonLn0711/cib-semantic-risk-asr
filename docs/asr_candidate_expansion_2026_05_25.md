@@ -52,23 +52,26 @@ Model-specific implementation:
 Local hardware and runtime:
 
 - GPU: NVIDIA GeForce RTX 5080, 16303 MiB total memory.
-- Installed ASR stack: `torch 2.12.0`, `transformers 4.55.2`,
+- Installed ASR stack before candidate-family install: `torch 2.12.0`,
+  `transformers 4.55.2`,
   `torchaudio 2.11.0`, `librosa 0.11.0`, `soundfile 0.13.1`,
   `jiwer 3.1.0`, `jieba 0.42.1`, `huggingface_hub 0.36.2`.
-- Missing local packages for new ASR families: `funasr`, `modelscope`, and
-  `qwen-asr`.
+- Candidate-family install completed locally on 2026-05-25:
+  `funasr 1.3.3`, `modelscope 1.37.1`, `qwen-asr 0.0.6`, and
+  `transformers 4.57.6`. The install log remains ignored under
+  `70_experiments/runs/candidate_runtime_install_2026_05_25/logs/`.
 
 Model availability was checked through Hugging Face metadata on 2026-05-25:
 
 | Model | Availability | SHA prefix | Local status |
 | --- | --- | --- | --- |
-| `openai/whisper-large-v3` | public, not gated | `06f233fe06e7` | 1-row CUDA smoke passed |
-| `openai/whisper-large-v3-turbo` | public, not gated | `41f01f3fe87f` | 1-row CUDA smoke passed |
-| `FunAudioLLM/SenseVoiceSmall` | public, not gated | `3eb3b4eeffc2` | runner missing; install/runtime gate needed |
-| `Qwen/Qwen3-ASR-0.6B` | public, not gated | `5eb144179a02` | runner missing; install/runtime gate needed |
-| `Qwen/Qwen3-ASR-1.7B` | public, not gated | `7278e1e70fe2` | wait for 0.6B runner smoke |
-| `unsloth/gemma-4-E2B` | public, not gated | `ed37665cc131` | separate multimodal runner needed |
-| `unsloth/gemma-4-E4B` | public, not gated | `5bf6a20911f0` | separate multimodal runner needed |
+| `openai/whisper-large-v3` | public, not gated | `06f233fe06e7` | 15-row gate completed; locale not clean |
+| `openai/whisper-large-v3-turbo` | public, not gated | `41f01f3fe87f` | 15-row gate completed; locale not clean |
+| `FunAudioLLM/SenseVoiceSmall` | public, not gated | `3eb3b4eeffc2` | 1-row runner completed; locale failed |
+| `Qwen/Qwen3-ASR-0.6B` | public, not gated | `5eb144179a02` | 1-row runner completed with cuDNN disabled; locale failed |
+| `Qwen/Qwen3-ASR-1.7B` | public, not gated | `7278e1e70fe2` | stopped before inference after 0.6B locale failed |
+| `unsloth/gemma-4-E2B` | public, not gated | `ed37665cc131` | blocked: local Transformers lacks multimodal class |
+| `unsloth/gemma-4-E4B` | public, not gated | `5bf6a20911f0` | blocked: local Transformers lacks multimodal class |
 
 Whisper smoke results:
 
@@ -82,12 +85,31 @@ Traditional Chinese locale checks. Raw predictions and validation JSON stay in
 ignored local `predictions/` and `artifacts/` directories; tracked records keep
 only aggregate metrics and decisions.
 
-SenseVoice should use the official FunASR `AutoModel` path with explicit VAD,
-ITN, batch-size, and `language=zh` settings once `funasr` is installed.
-Qwen3-ASR should use the official `qwen-asr` package in a fresh or carefully
-isolated environment before any full split. Gemma 4 E2B/E4B must remain a
-separate prompted multimodal-ASR lane using `AutoModelForMultimodalLM` or
-Unsloth-supported local inference, not a pure ASR baseline row.
+## 2026-05-25 Runtime Gate Update
+
+Aggregate records live under
+`70_experiments/runs/asr_candidate_runtime_gate_2026_05_25/`.
+
+| Run | Rows | Runtime | CER mean | WER mean | Wall time seconds | Locale violation rows | Decision |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | --- |
+| `whisper_large_v3_15_row_baseline` | 15 | CUDA, float16, cuDNN disabled | 33.77 | 43.18 | 14.59 | 2 | do not promote to 258-row until locale policy is audited |
+| `whisper_large_v3_turbo_15_row_baseline` | 15 | CUDA, float16, cuDNN disabled | 41.33 | 52.52 | 7.68 | 4 | keep as speed/quality smoke only |
+| `sensevoice_small_smoke_1_row` | 1 | CUDA, FunASR 1.3.3 | 65.88 | 81.25 | 2.15 | 1 | do not promote to 15-row |
+| `qwen3_asr_0_6b_smoke_1_row` | 1 | CUDA, bfloat16, cuDNN disabled | 74.12 | 95.83 | 6.45 | 1 | do not promote to 15-row |
+| `qwen3_asr_1_7b_smoke_1_row` | 0 | load gate | n/a | n/a | n/a | n/a | retry only after 0.6B locale gate passes |
+| `gemma4_e2b/e4b_audio_runner_gate` | 0 | class/config gate | n/a | n/a | 1.33 outer | n/a | isolate a Gemma 4 multimodal runtime first |
+
+SenseVoice now uses `run_janus_sensevoice_pilot.py` with official FunASR
+`AutoModel`, `language=zh`, ITN, and aggregate timing fields. Qwen3-ASR now uses
+`run_janus_qwen3_asr_pilot.py`; this local workstation requires cuDNN disabled
+for Qwen3-ASR as well as Whisper-family runs. Gemma 4 E2B/E4B remain a separate
+prompted multimodal-ASR lane: installed Transformers 4.57.6 does not expose
+`AutoModelForMultimodalLM`, while the Gemma 4 configs declare a 5.5.0.dev0-era
+runtime with audio config present.
+
+Strict interpretation: no newly added candidate should move to 258-row or
+selected-300 until the Taiwan Traditional Chinese locale gate is clean, or an
+audited post-decode conversion/reporting policy is explicitly approved.
 
 ## Required Extra Metrics
 

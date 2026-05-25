@@ -287,8 +287,9 @@ encoder 仍是下一個 hypothesis generator，但還不足以做正式 paper ta
 
 ### 操作順序
 
-1. Whisper large-v3 與 large-v3 turbo 先做 1-2 row smoke，再做 15-row
-   contract，通過後才跑 258-row。
+1. Whisper large-v3 與 large-v3 turbo 已完成 1-row smoke 與 15-row
+   contract；兩者 hypothesis contract 通過，但 locale gate 不是 clean，因此
+   暫時不升 258-row。
 2. 所有 run 都使用同一個 manifest：
    `40_breeze_asr25_finetune_dataset/manifests/test.jsonl`。
 3. 所有 run 都使用同一個 locale rule：
@@ -375,15 +376,15 @@ decision-stability evidence」。
   `271.91s`。
 - `openai/whisper-large-v3-turbo` 1-row CUDA smoke 已通過，locale
   violation rows `0`，wall time `144.77s`。
-- 這兩個結果只證明 runner/contract/locale feasibility；不能拿來做模型
-  排名。
+- `openai/whisper-large-v3` 15-row gate 已通過 hypothesis contract；CER
+  `33.77`、WER `43.18`、wall time `14.59s`，但 locale violation rows `2`。
+- `openai/whisper-large-v3-turbo` 15-row gate 已通過 hypothesis contract；CER
+  `41.33`、WER `52.52`、wall time `7.68s`，但 locale violation rows `4`。
+- 這些結果證明 runner/contract feasibility，但因為 strict Taiwan
+  Traditional Chinese gate 不 clean，暫不進 258-row 或論文主表。
 
-下一步只在仍需要 Whisper-family comparator 時才做：
-
-1. fixed 15-row contract；
-2. locale gate；
-3. 15-row CDS/proxy comparison；
-4. 258-row run。
+下一步只在我們明確接受 audited post-decode conversion/reporting policy，或
+找到能讓 locale gate clean 的解碼策略時才做 258-row。
 
 ### SenseVoice
 
@@ -395,12 +396,15 @@ decision-stability evidence」。
 
 完成條件：
 
-- 新增 SenseVoice runner；
-- 輸出同一個 hypothesis schema；
-- 先在隔離或明確記錄的環境安裝 `funasr` / `modelscope`；
-- 先跑 1-2 row smoke；
-- 再跑 15-row；
-- 通過 validation 後再決定是否進 258-row。
+- SenseVoice runner 已新增：
+  `60_whisper_asr_finetuning/scripts/run_janus_sensevoice_pilot.py`。
+- `funasr 1.3.3` / `modelscope 1.37.1` 已明確記錄安裝。
+- 1-row smoke 已通過 hypothesis contract；CER `65.88`、WER `81.25`、
+  cached runner wall time `2.15s`。
+- 但 strict locale gate failed：locale violation rows `1`、simplified
+  character count `11`。
+- 下一步不是 15-row；下一步是先設計並審核繁中輸出控制或 post-decode
+  reporting policy。
 
 ### Qwen3-ASR
 
@@ -412,11 +416,17 @@ decision-stability evidence」。
 
 完成條件：
 
-- 先在隔離或明確記錄的環境安裝官方 `qwen-asr` package；
-- runner 能固定輸出繁中逐字稿；
-- 不輸出摘要或翻譯；
-- runtime、latency、locale violations 都被記錄；
-- 15-row contract pass 之後才考慮 258-row。
+- 官方 `qwen-asr 0.0.6` 已明確記錄安裝。
+- Qwen3-ASR runner 已新增：
+  `60_whisper_asr_finetuning/scripts/run_janus_qwen3_asr_pilot.py`。
+- `Qwen/Qwen3-ASR-0.6B` 第一次 CUDA attempt 因
+  `CUDNN_STATUS_SUBLIBRARY_VERSION_MISMATCH` 失敗；停用 cuDNN 後 1-row
+  smoke 通過 hypothesis contract。
+- 0.6B 結果：CER `74.12`、WER `95.83`、cached runner wall time `6.45s`、
+  locale violation rows `1`、simplified character count `13`。
+- `Qwen/Qwen3-ASR-1.7B` bounded attempt 停在 model file fetch/load，且 0.6B
+  已經 locale failed，所以不繼續花時間。
+- 下一步不是 15-row；下一步是先解決繁中 locale gate。
 
 ### Gemma 4 E2B/E4B multimodal
 
@@ -438,6 +448,14 @@ ASR / decision-text comparator。
 - 不把 Gemma output 混入純 ASR baseline table；
 - 另開 multimodal prompted-ASR table；
 - 只在 prompt/locale/runtime contract 清楚後跑 15-row。
+
+2026-05-25 runner gate：
+
+- 本機 `transformers 4.57.6` 不提供 `AutoModelForMultimodalLM`；
+- `unsloth/gemma-4-E2B` 與 `unsloth/gemma-4-E4B` config 宣告
+  `transformers_version=5.5.0.dev0`，且有 audio config；
+- 因此 Gemma 4 是 runtime blocked，不是 evaluation completed；
+- 下一步是獨立建立 Gemma 4 multimodal runtime，不要污染純 ASR baseline。
 
 ## Phase 3: 把 15-row builder 泛化成 split-aware metric builder
 
@@ -778,13 +796,17 @@ Interpretation:
    進入 tracked files。
 3. 用 human-reviewed subset 重跑 metric predictor analysis，檢查 proxy
    AUC 是否仍成立。
-4. Whisper large-v3 / large-v3 turbo 做 smoke、15-row、258-row，補強
-   reviewer 會期待的 strong Whisper baseline。
+4. Whisper large-v3 / large-v3 turbo 已做 smoke 與 15-row；因 locale gate
+   不 clean，暫不做 258-row。
 5. 用新 builder 重現 expanded 258-row proxy bridge。
-6. 做 SenseVoice/Qwen3-ASR smoke 與 15-row runner gate。
-7. 將 best Whisper comparator 加入 300-row ASR/CDS proxy lane。
-8. 重跑 300-row SRES/CEIS/downstream/recovery/predictor aggregate tables。
-9. 產出 paper tables / figures / limitation memo。
+6. SenseVoice/Qwen3-ASR 已做 1-row smoke；下一步先處理繁中 locale gate，
+   通過後才做 15-row。
+7. 建立 Gemma 4 isolated multimodal runtime gate；只做 prompted multimodal
+   table，不混入 pure ASR table。
+8. locale gate clean 之後，才將 best additional comparator 加入 300-row
+   ASR/CDS proxy lane。
+9. 重跑 300-row SRES/CEIS/downstream/recovery/predictor aggregate tables。
+10. 產出 paper tables / figures / limitation memo。
 
 ## 不建議現在做的事
 
@@ -817,5 +839,8 @@ feat: add split-aware JANUS metric input builder
 - 更新 run log。
 
 這會把 repo 從「已經有幾個成功實驗」推進到「可以穩定產生主實驗」。
-下一個實驗 gate 是補齊 Whisper large-v3 / large-v3 turbo comparable
-baseline，然後用同一個 split-aware builder 重建 expanded metric inputs。
+下一個實驗 gate 已更新：不是直接跑更多 258-row，而是先完成
+selected-300 human risk/decision/model assessment review，同時把新增模型的
+strict Taiwan Traditional Chinese locale gate 解乾淨。新增 candidate 的
+runtime gate aggregate record 位於
+`70_experiments/runs/asr_candidate_runtime_gate_2026_05_25/`。

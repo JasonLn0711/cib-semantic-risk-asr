@@ -5,6 +5,20 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.110 - 2026-05-26T00:01:33+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `1d448c0`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml`
+  - `70_experiments/registry.tsv`
+  - `README.md`
+  - `docs/asr_candidate_expansion_2026_05_25.md`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
 ## v2.5.109 - 2026-05-26T00:01:24+08:00
 
 - Bump: `patch`
