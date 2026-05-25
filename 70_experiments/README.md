@@ -69,7 +69,8 @@ For semantic-risk ASR experiments, also report:
 The 2026-05-25 WER audit defines the repo policy: the aggregate
 `cer_zh_micro` column is the primary paper-facing ASR surface metric;
 `wer_zh_jieba_micro` is supplemental; raw whitespace WER is legacy audit-only
-for unsegmented Chinese transcripts.
+for unsegmented Chinese transcripts. The audit should be run with the canonical
+split manifest so missing/extra IDs and reference mismatches are recorded.
 
 ## JANUS 15-Row Decision-Stability Pilot
 
