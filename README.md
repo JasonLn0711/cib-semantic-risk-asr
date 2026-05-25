@@ -144,7 +144,9 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   current ignored response template has `18` rows and its blank dry-run status
   is `response_pending`. The strict `--require-complete` dry-run currently
   exits nonzero as expected with `ok=false` and `incomplete_response=1`; this is
-  the completion gate before any `--write`.
+  the completion gate before any `--write`. After strict dry-run passes, use
+  `--write --refresh-after-write` to update the ignored local sheet, audit the
+  current batch, and refresh aggregate readiness/publishable status in one pass.
   After
   review edits, use
   `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py` to rerun
@@ -155,6 +157,8 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   and `0/90` model assessments reviewed; `paper_ready=false` and
   `publishable_ready=false`. The progress audit recommends six batches,
   starting with `critical_or_high_risk_missed` and `unsafe_downrouting`.
+  Batch-by-batch `partial_review` is treated as in-progress evidence, not as
+  missing evidence.
 - The 2026-05-25 WER audit is recorded in
   `70_experiments/runs/wer_metric_audit_2026_05_25/`. The latest audit checks
   legacy 15-row, six 258-row, and high-stakes 300-row hypothesis files against

@@ -218,6 +218,27 @@ Current strict dry-run status is `response_pending`: `ok=false`,
 been filled. A non-strict dry-run may be used for progress inspection, but
 `--require-complete` must return `response_complete` before adding `--write`.
 
+After strict dry-run returns `response_complete`, apply and refresh the
+aggregate status in one pass:
+
+```bash
+.venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py \
+  --require-complete \
+  --write \
+  --refresh-after-write \
+  --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T212010_0800_critical_or_high_risk_missed_response_template.tsv \
+  --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
+  --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
+  --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
+  --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 \
+  --expected-rows 30
+```
+
+This post-write path first updates the ignored local audit sheet, then writes
+the current batch status outputs, and only refreshes aggregate evidence after
+the batch reports `batch_complete`. Partial overall selected-300 review is
+treated as in-progress, not as missing evidence.
+
 The local helper for filling one row at a time is:
 
 ```bash

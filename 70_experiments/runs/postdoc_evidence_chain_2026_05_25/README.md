@@ -73,6 +73,7 @@ ignored local paths.
 | 5.30 | Added local response-template and batch apply workflow. | `apply_human_audit_batch_response.py`; `human_audit_batch_response_template_summary.json`; `human_audit_batch_response_apply_summary.json`; ignored local response TSV under `artifacts/review_responses/`. | Completed as a review-entry workflow, not as human review. The response template covers the current `critical_or_high_risk_missed` packet with `18` response rows. Dry-run apply over the blank template returns `response_pending`: `0/6` row decisions and `0/18` model assessments filled. Tracked summaries contain only counts, row numbers, and local paths; sensitive-field scan found no audio IDs, transcripts, hypotheses, reviewer notes, or private text. |
 | 5.31 | Added strict response completion gate. | `apply_human_audit_batch_response.py --require-complete`; `human_audit_batch_response_apply_summary.json`; `tests/test_human_audit_batch_response.py`. | Completed as a guardrail, not as human review. Strict dry-run over the current blank response template exits `1` as expected with `status=response_pending`, `ok=false`, `incomplete_response=1`, `0/6` row decisions, and `0/18` model assessments filled. Non-strict dry-run remains useful for progress inspection; `--require-complete` is the gate before `--write`. Sensitive-field scan over response summaries found no audio IDs, transcripts, hypotheses, reviewer notes, private fixture text, or absolute local paths. |
 | 5.32 | Wired publishable completion audit into human-audit refresh. | `refresh_human_audit_evidence.py`; `audit_publishable_evidence_chain.py`; `human_audit_refresh_summary.json`; `publishable_evidence_completion_summary.json`; `tests/test_human_audit_refresh.py`. | Completed as an orchestration guardrail, not as human review. Normal refresh now updates validation, progress, review summary, predictor, readiness, and objective-level publishable completion in one pass. Current result remains `review_pending`: `0/30` risk/decision rows and `0/90` model assessments reviewed, `paper_ready=false`, `publishable_ready=false`, completion status counts `completed=4`, `proxy_completed=2`, `review_pending=1`. Compile and direct tests passed; `pytest` is unavailable in `.venv`. Sensitive-field scan over refreshed aggregate outputs found no audio IDs, transcripts, hypotheses, reviewer notes, private fixture text, or absolute local paths. |
+| 5.33 | Added post-write batch finalize orchestration. | `apply_human_audit_batch_response.py --write --refresh-after-write`; `check_evidence_chain_readiness.py`; `tests/test_human_audit_batch_response.py`; `tests/test_evidence_chain_readiness.py`. | Completed as a post-review workflow guardrail, not as human review. After a response TSV passes strict completion, the apply command can now write the ignored local sheet, audit current-batch status, and refresh aggregate evidence in one pass. The readiness checker now treats `partial_review` as in-progress evidence rather than missing evidence, which matches batch-by-batch human review. Current live blank-template strict dry-run still exits `1` with `response_pending`, `ok=false`, `incomplete_response=1`, so no local review content was fabricated or written. Compile and direct tests passed; `pytest` is unavailable in `.venv`. Sensitive-field scan found no audio IDs, transcripts, hypotheses, reviewer notes, private fixture text, or absolute local paths in tracked summaries. |
 
 ## Next Operations
 
@@ -96,12 +97,11 @@ ignored local paths.
    `prepare_human_audit_review_batch.py` to create local ignored review
    packets, then `apply_human_audit_batch_response.py --write-template` for
    TSV-based reviewer entry. Dry-run the filled response TSV with
-   `--require-complete` before using `--write`, and use
+   `--require-complete` before using `--write --refresh-after-write`, and use
    `review_human_risk_atom_audit.py --list-pending` for row-level checks
    without leaking transcripts into tracked files. Start with the prepared
-   `critical_or_high_risk_missed` packet, rerun
-   `audit_human_review_batch_status.py` until it reports `batch_complete`, then
-   move to `unsafe_downrouting` and `high_proxy_risk`.
+   `critical_or_high_risk_missed` packet; the post-write path will audit
+   `batch_complete` and refresh aggregate status before the next packet.
 7. Use `refresh_human_audit_evidence.py` as the normal post-edit aggregate
    refresh. It now updates validation, progress, review summary, predictor,
    evidence-chain readiness, and objective-level publishable completion.

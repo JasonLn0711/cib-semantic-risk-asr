@@ -197,6 +197,12 @@ current strict template dry-run is `response_pending`, `ok=false`, with
 non-strict dry-run can be used to inspect progress, but it is not the
 completion gate.
 
+When the strict dry-run passes, use `--write --refresh-after-write` so the local
+sheet write, current-batch status audit, aggregate refresh, readiness audit, and
+publishable completion audit are all recorded in one pass. The refresh is
+non-strict at this batch stage; `partial_review` is valid progress until all
+selected-300 rows and model assessments are complete.
+
 Use the local helper to avoid hand-editing JSON in
 `reviewer_model_assessments_json`:
 
