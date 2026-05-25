@@ -33,6 +33,9 @@ shows a usable decision-stability signal.
 - Other ASR hypotheses: local TSV/CSV/JSONL files passed with `--hypotheses`
 - First Whisper-family 15-row run:
   `70_experiments/runs/whisper_small_15_row_baseline/predictions/whisper_small_15_row_baseline_predictions.jsonl`
+- Additional 15-row model hypotheses:
+  `whisper_large_v2_15_row_baseline` and `breeze_asr25_15_row_baseline`
+  prediction files under ignored local `predictions/` directories.
 - Previous run: none
 
 ## Gate Prerequisites
@@ -75,9 +78,10 @@ python 80_semantic_risk_asr/downstream/evaluate_downstream_impact.py \
 
 | Metric Family | Status | Notes |
 | --- | --- | --- |
-| SRES | first-pass complete | Whisper-small 15-row pass produced 52 rows, total SRES `1630.0`, mean SRES `31.346`. |
-| CEIS | first-pass complete | Whisper-small 15-row pass produced 52 variant rows across 15 samples; 7 samples were unstable, max CEIS `8.0`, mean CEIS `2.4667`. |
-| Downstream escalation impact | first-pass complete | 15 rows; ASR mismatch rate `0.4667`; high-risk missed by ASR `1`; recovery not yet applied. |
+| ASR comparison | first-pass complete | NeMo output-contract check plus Whisper-small, Whisper-large-v2, and Breeze-ASR-25 on the same 15 rows. See `asr_model_comparison.tsv`. |
+| SRES | first-pass complete | Three labeled model runs produced 156 rows, total SRES `4868.0`, mean SRES `31.205`. |
+| CEIS | first-pass complete | Three labeled model runs produced 156 variant rows across 45 model-samples; 17 were unstable, max CEIS `15.0`, mean CEIS `2.1778`. |
+| Downstream escalation impact | first-pass complete | 45 model-sample rows; ASR mismatch rate `0.3778`; high-risk missed by ASR `3`; recovery not yet applied. |
 
 ## Observations
 
@@ -92,6 +96,11 @@ python 80_semantic_risk_asr/downstream/evaluate_downstream_impact.py \
   on local CUDA with cuDNN disabled. The output passed the hypothesis validator
   with labels and WER/CER quality fields, then built SRES, CEIS, and downstream
   metric inputs without unmatched IDs or missing hypothesis text.
+- 2026-05-25: `openai/whisper-large-v2` and
+  `MediaTek-Research/Breeze-ASR-25` completed the same 15-row pass on CUDA with
+  cuDNN disabled. Breeze-ASR-25 had the best pilot CER (`36.13`), followed by
+  Whisper large-v2 (`40.01`) and Whisper small (`53.08`). NeMo remains an
+  output-contract comparison only (`83.66` mean CER).
 
 ## Failure Or Risk Notes
 

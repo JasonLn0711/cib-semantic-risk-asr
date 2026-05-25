@@ -5,6 +5,28 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.27 - 2026-05-25T10:42:15+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `3d96b03`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `60_whisper_asr_finetuning/README.md`
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/breeze_asr25_15_row_baseline/README.md`
+  - `70_experiments/runs/breeze_asr25_15_row_baseline/metrics.csv`
+  - `70_experiments/runs/janus_15_decision_stability_pilot/README.md`
+  - `70_experiments/runs/janus_15_decision_stability_pilot/asr_model_comparison.tsv`
+  - `70_experiments/runs/whisper_large_v2_15_row_baseline/README.md`
+  - `70_experiments/runs/whisper_large_v2_15_row_baseline/metrics.csv`
+  - `70_experiments/runs/whisper_small_15_row_baseline/README.md`
+  - `70_experiments/runs/whisper_small_15_row_baseline/metrics.csv`
+  - `80_semantic_risk_asr/paper/experiment_plan.md`
+  - `80_semantic_risk_asr/paper/q1_paper_design.md`
+  - `80_semantic_risk_asr/paper/story_outline.md`
+
 ## v2.5.26 - 2026-05-25T10:41:53+08:00
 
 - Bump: `patch`

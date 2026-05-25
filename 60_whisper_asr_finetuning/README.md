@@ -140,6 +140,8 @@ to the organized extracted audio under `../10_extracted_parts/`.
 
    The runner writes raw predictions under ignored `predictions/`, a local
    summary under ignored `artifacts/`, and a repo-safe aggregate `metrics.csv`.
+   The same runner is used for `openai/whisper-large-v2` and
+   `MediaTek-Research/Breeze-ASR-25` in the 15-row model-comparison gate.
 
 11. Create a run folder under `../70_experiments/runs/<run_id>/` and copy the
    run template from `../70_experiments/templates/run_record.md`.

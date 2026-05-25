@@ -21,7 +21,8 @@ Do not start a long model run until this gate exists:
    loading, preprocessing, generation, and aggregate metric logging. The full
    15-row Whisper-small hypothesis pass also completed on 2026-05-25 using
    CUDA with cuDNN disabled; it passed the hypothesis validator with WER/CER and
-   heuristic ASR labels.
+   heuristic ASR labels. The first 15-row model comparison now includes NeMo
+   Curator, Whisper-small, Whisper-large-v2, and Breeze-ASR-25.
 3. Build metric inputs with
    `80_semantic_risk_asr/scoring/build_janus_pilot_metric_inputs.py`.
 4. Extract risk atoms from top-1 transcripts and reference transcripts.
@@ -29,9 +30,9 @@ Do not start a long model run until this gate exists:
 6. Compute SRES as the semantic-risk baseline.
 7. Compute CEIS as the proposed decision-stability metric.
 8. Run the downstream escalation impact check.
-   First pass for `whisper_small_15_row_baseline`: SRES rows `52`, total SRES
-   `1630.0`, CEIS unstable samples `7 / 15`, max CEIS `8.0`, downstream ASR
-   mismatch rate `0.4667`, and high-risk missed by ASR `1`.
+   First three-model pass: SRES rows `156`, total SRES `4868.0`, CEIS unstable
+   model-samples `17 / 45`, max CEIS `15.0`, downstream ASR mismatch rate
+   `0.3778`, and high-risk missed by ASR `3`.
 9. Expand to `300-500` high-stakes call segments only if the 15-row pilot
    produces usable decision-stability signal.
 10. Store only reviewed aggregate outputs and small safe samples in git.

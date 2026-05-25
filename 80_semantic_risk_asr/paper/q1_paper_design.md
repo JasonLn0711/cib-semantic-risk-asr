@@ -408,11 +408,11 @@ constrained re-decoding implementation is mature.
   Curator produced a joinable CPU pilot output with WER/CER fields; it should
   be treated as an output-contract check because aggregate CER is still too
   high for quality comparison. Whisper small has passed the 1-row smoke test
-  and the full 15-row hypothesis pass.
+  and the full 15-row hypothesis pass. Whisper large-v2 and Breeze-ASR-25 have
+  also completed the full 15-row pass with CUDA and cuDNN disabled.
 - Build SRES, CEIS, and downstream-impact metric inputs for the pilot. Local
-  status on 2026-05-25: complete for `whisper_small_15_row_baseline`; still
-  needs Whisper large-v2 and Breeze-ASR-25 before the model-comparison gate is
-  considered complete.
+  status on 2026-05-25: complete for the three labeled model runs, producing
+  156 SRES rows, 156 CEIS variant rows, and 45 downstream decision rows.
 
 ### Week 2
 

@@ -29,6 +29,7 @@ run and not a final quality claim.
 ## Inference Settings
 
 - Runtime: CUDA with `--disable-cudnn` on this workstation.
+- Torch dtype: `float16`
 - Language/task: `zh` / `transcribe`
 - Max samples: `15`
 - Max new tokens: `225`
