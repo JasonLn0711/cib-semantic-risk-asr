@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import shutil
 import sys
 import time
@@ -65,7 +66,20 @@ MODEL_RESPONSE_FIELDS = [
     "model_reviewer_expected_safe_action",
     "model_reviewer_annotation_confidence",
 ]
+REVIEW_TIMING_FIELDS = [
+    "review_started_at",
+    "review_finished_at",
+    "review_elapsed_seconds",
+]
 TEMPLATE_FIELDS = [
+    "row_number",
+    "selection_stratum",
+    "asr_run_id",
+    *REVIEW_TIMING_FIELDS,
+    *ROW_RESPONSE_FIELDS,
+    *MODEL_RESPONSE_FIELDS,
+]
+REQUIRED_TEMPLATE_FIELDS = [
     "row_number",
     "selection_stratum",
     "asr_run_id",
@@ -198,8 +212,9 @@ def prepare_response_template(
         "local_response_template_path": repo_relative(response_path, repo_root=repo_root),
         "source_batch_summary": repo_relative(batch_summary, repo_root=repo_root),
         "next_action": (
-            "Fill the local response TSV with reviewer decisions, then dry-run "
-            "apply_human_audit_batch_response.py --response-sheet before using --write."
+            "Fill the local response TSV with reviewer decisions and optional "
+            "timing fields, then dry-run apply_human_audit_batch_response.py "
+            "--response-sheet before using --write."
         ),
         "runtime_seconds": round(time.time() - started, 4),
     }
@@ -239,11 +254,109 @@ def row_consistency_errors(rows: list[dict[str, str]]) -> Counter[str]:
     errors: Counter[str] = Counter()
     if not rows:
         return errors
-    for field in ROW_RESPONSE_FIELDS:
+    for field in [*ROW_RESPONSE_FIELDS, *REVIEW_TIMING_FIELDS]:
         values = {(row.get(field) or "").strip() for row in rows}
         if len(values) > 1:
             errors[f"inconsistent_{field}"] += 1
     return errors
+
+
+def parse_optional_timestamp(value: str) -> datetime | None:
+    raw = value.strip()
+    if not raw:
+        return None
+    if raw.endswith("Z"):
+        raw = f"{raw[:-1]}+00:00"
+    return datetime.fromisoformat(raw)
+
+
+def parse_optional_elapsed(value: str) -> float | None:
+    raw = value.strip()
+    if not raw:
+        return None
+    return float(raw)
+
+
+def validate_review_timing_values(
+    grouped_response_rows: dict[int, list[dict[str, str]]],
+    row_numbers: list[int],
+) -> Counter[str]:
+    errors: Counter[str] = Counter()
+    for row_number in row_numbers:
+        responses = grouped_response_rows.get(row_number, [])
+        if not responses:
+            continue
+        row = responses[0]
+        started = None
+        finished = None
+        try:
+            started = parse_optional_timestamp(row.get("review_started_at", ""))
+        except ValueError:
+            errors["invalid_review_started_at"] += 1
+        try:
+            finished = parse_optional_timestamp(row.get("review_finished_at", ""))
+        except ValueError:
+            errors["invalid_review_finished_at"] += 1
+        try:
+            elapsed = parse_optional_elapsed(row.get("review_elapsed_seconds", ""))
+            if elapsed is not None and (elapsed < 0 or not math.isfinite(elapsed)):
+                errors["invalid_review_elapsed_seconds"] += 1
+        except ValueError:
+            errors["invalid_review_elapsed_seconds"] += 1
+        if started and finished:
+            try:
+                if finished < started:
+                    errors["review_finished_before_started"] += 1
+            except TypeError:
+                errors["invalid_review_timestamp_timezone_mix"] += 1
+    return Counter({key: value for key, value in errors.items() if value})
+
+
+def review_timing_elapsed_seconds(rows: list[dict[str, str]]) -> float | None:
+    if not rows:
+        return None
+    row = rows[0]
+    try:
+        elapsed = parse_optional_elapsed(row.get("review_elapsed_seconds", ""))
+    except ValueError:
+        return None
+    if elapsed is not None and elapsed >= 0 and math.isfinite(elapsed):
+        return elapsed
+    try:
+        started = parse_optional_timestamp(row.get("review_started_at", ""))
+        finished = parse_optional_timestamp(row.get("review_finished_at", ""))
+    except ValueError:
+        return None
+    if started and finished:
+        try:
+            if finished >= started:
+                return (finished - started).total_seconds()
+        except TypeError:
+            return None
+    return None
+
+
+def review_timing_summary(
+    grouped_response_rows: dict[int, list[dict[str, str]]],
+    row_numbers: list[int],
+) -> dict[str, Any]:
+    durations = [
+        duration
+        for row_number in row_numbers
+        if (duration := review_timing_elapsed_seconds(grouped_response_rows.get(row_number, [])))
+        is not None
+    ]
+    total = round(sum(durations), 4)
+    return {
+        "timing_scope": "per selected audio row; values come from optional local response TSV timing columns",
+        "timing_fields": REVIEW_TIMING_FIELDS,
+        "rows_with_timing": len(durations),
+        "rows_missing_timing": len(row_numbers) - len(durations),
+        "total_review_elapsed_seconds": total,
+        "mean_review_elapsed_seconds": round(total / len(durations), 4) if durations else "",
+        "min_review_elapsed_seconds": round(min(durations), 4) if durations else "",
+        "max_review_elapsed_seconds": round(max(durations), 4) if durations else "",
+    }
 
 
 def validate_response_values(rows: list[dict[str, str]]) -> Counter[str]:
@@ -357,7 +470,7 @@ def validate_response_shape(
     batch_payload: dict[str, Any],
 ) -> tuple[Counter[str], dict[int, list[dict[str, str]]], list[int]]:
     errors: Counter[str] = Counter()
-    for field in TEMPLATE_FIELDS:
+    for field in REQUIRED_TEMPLATE_FIELDS:
         if field not in response_fieldnames:
             errors["missing_response_column"] += 1
     grouped = group_response_rows(response_rows)
@@ -414,7 +527,8 @@ def apply_response_sheet(
         batch_payload=batch_payload,
     )
     value_errors = validate_response_values(response_rows)
-    errors = shape_errors + value_errors
+    timing_errors = validate_review_timing_values(grouped, row_numbers)
+    errors = shape_errors + value_errors + timing_errors
     reviewed_rows = sum(
         1
         for row_number in row_numbers
@@ -468,6 +582,7 @@ def apply_response_sheet(
         "model_assessments_in_response": model_assessments,
         "reviewed_model_assessments_in_response": reviewed_models,
         "pending_model_assessments_in_response": pending_models,
+        "review_timing": review_timing_summary(grouped, row_numbers),
         "error_counts": dict(sorted(errors.items())),
         "backup_path": backup_path,
         "response_sheet_path": repo_relative(response_sheet, repo_root=repo_root),

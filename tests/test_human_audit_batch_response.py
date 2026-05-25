@@ -11,6 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "annotation"))
 
 from apply_human_audit_batch_response import (  # noqa: E402
+    REVIEW_TIMING_FIELDS,
     TEMPLATE_FIELDS,
     apply_response_sheet,
     apply_response_sheet_workflow,
@@ -134,6 +135,18 @@ def complete_response_row() -> dict[str, str]:
     }
 
 
+def complete_response_row_with_timing() -> dict[str, str]:
+    row = complete_response_row()
+    row.update(
+        {
+            "review_started_at": "2026-05-25T21:30:00+08:00",
+            "review_finished_at": "2026-05-25T21:31:30+08:00",
+            "review_elapsed_seconds": "90",
+        }
+    )
+    return row
+
+
 def pending_audit_row(index: int) -> dict[str, str]:
     row = audit_row()
     row["audio_id"] = f"private_audio_{index:03d}"
@@ -160,6 +173,10 @@ def test_prepare_response_template_tracks_only_safe_summary(tmp_path: Path) -> N
     assert payload["ok"] is True
     assert payload["status"] == "response_template_prepared"
     assert payload["response_rows"] == 1
+    assert payload["template_column_count"] == len(TEMPLATE_FIELDS)
+    _fieldnames, template_rows = read_tsv(tmp_path / payload["local_response_template_path"])
+    assert all(field in _fieldnames for field in REVIEW_TIMING_FIELDS)
+    assert template_rows[0]["review_elapsed_seconds"] == ""
     tracked = (tmp_path / "human_audit_batch_response_template_summary.json").read_text(
         encoding="utf-8"
     )
@@ -273,7 +290,90 @@ def test_require_complete_passes_complete_dry_run(tmp_path: Path) -> None:
     assert payload["status"] == "response_complete"
     assert payload["mode"] == "dry_run"
     assert payload["require_complete"] is True
+    assert payload["review_timing"]["rows_with_timing"] == 0
+    assert payload["review_timing"]["rows_missing_timing"] == 1
     assert payload["error_counts"] == {}
+
+
+def test_legacy_response_without_timing_columns_still_passes(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    legacy_fields = [field for field in TEMPLATE_FIELDS if field not in REVIEW_TIMING_FIELDS]
+    write_tsv(response_sheet, [complete_response_row()], legacy_fields)
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=False,
+        require_complete=True,
+    )
+
+    assert payload["ok"] is True
+    assert payload["status"] == "response_complete"
+    assert payload["review_timing"]["rows_missing_timing"] == 1
+
+
+def test_review_timing_is_aggregated_without_becoming_required(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(response_sheet, [complete_response_row_with_timing()], TEMPLATE_FIELDS)
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=False,
+        require_complete=True,
+    )
+
+    assert payload["ok"] is True
+    assert payload["review_timing"]["rows_with_timing"] == 1
+    assert payload["review_timing"]["rows_missing_timing"] == 0
+    assert payload["review_timing"]["total_review_elapsed_seconds"] == 90.0
+    tracked = (tmp_path / "human_audit_batch_response_apply_summary.json").read_text(
+        encoding="utf-8"
+    )
+    assert "PRIVATE_" not in tracked
+    assert "reference_text" not in tracked
+
+
+def test_invalid_review_timing_fails_value_validation(tmp_path: Path) -> None:
+    audit_sheet = tmp_path / "audit.tsv"
+    batch_summary = tmp_path / "batch.json"
+    response_sheet = tmp_path / "response.tsv"
+    response_row = complete_response_row()
+    response_row["review_elapsed_seconds"] = "-1"
+    write_tsv(audit_sheet, [audit_row()], AUDIT_FIELDS)
+    write_batch(batch_summary)
+    write_tsv(response_sheet, [response_row], TEMPLATE_FIELDS)
+
+    payload = apply_response_sheet(
+        audit_sheet=audit_sheet,
+        response_sheet=response_sheet,
+        batch_summary=batch_summary,
+        output_dir=tmp_path,
+        expected_rows=1,
+        repo_root=tmp_path,
+        write=False,
+        require_complete=True,
+    )
+
+    assert payload["ok"] is False
+    assert payload["status"] == "response_invalid"
+    assert payload["error_counts"]["invalid_review_elapsed_seconds"] == 1
 
 
 def test_complete_response_write_updates_audit_sheet(tmp_path: Path) -> None:
