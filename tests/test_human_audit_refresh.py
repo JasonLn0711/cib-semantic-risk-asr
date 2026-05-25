@@ -219,3 +219,39 @@ def test_refresh_updates_publishable_completion_audit(tmp_path: Path) -> None:
     assert objective_5["status"] == "review_pending"
     assert "0/1 rows" in objective_5["result"]
     assert "PRIVATE_" not in completion_path.read_text(encoding="utf-8")
+
+
+def test_refresh_updates_roadmap_completion_audit(tmp_path: Path) -> None:
+    load_readiness_fixture_writer()(tmp_path)
+    sheet = tmp_path / "audit.tsv"
+    output_dir = (
+        tmp_path
+        / "70_experiments"
+        / "runs"
+        / "janus_300_high_stakes_human_audit_selection_2026_05_25"
+    )
+    readiness_dir = (
+        tmp_path / "70_experiments" / "runs" / "postdoc_evidence_chain_2026_05_25"
+    )
+    write_rows(sheet, [base_row(reviewed=False, model_reviewed=False)])
+
+    payload = refresh_human_audit_evidence(
+        audit_sheet=sheet,
+        output_dir=output_dir,
+        readiness_output_dir=readiness_dir,
+        repo_root=tmp_path,
+        expected_rows=1,
+        require_complete=False,
+        skip_readiness=False,
+    )
+    roadmap_path = readiness_dir / "postdoc_roadmap_completion_summary.json"
+    roadmap_payload = json.loads(roadmap_path.read_text(encoding="utf-8"))
+
+    assert payload["ok"] is True
+    assert payload["roadmap_audit_ok"] is True
+    assert payload["roadmap_complete"] is False
+    assert payload["roadmap_status_counts"]["blocked"] == 1
+    assert roadmap_payload["roadmap_complete"] is False
+    assert roadmap_payload["blocking_gate"] == "selected_300_human_review_and_post_review_refresh"
+    assert (readiness_dir / "postdoc_roadmap_completion.tsv").exists()
+    assert "PRIVATE_" not in roadmap_path.read_text(encoding="utf-8")

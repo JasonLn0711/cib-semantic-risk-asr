@@ -1,26 +1,22 @@
 {
-  "version": "v2.5.127",
+  "version": "v2.5.128",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 127
+    "patch": 128
   },
-  "updated_at": "2026-05-26T01:49:37+08:00",
+  "updated_at": "2026-05-26T01:54:54+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "289d870",
+  "base_commit": "40c2e10",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/registry.tsv",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion.tsv",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json",
-    "README.md",
-    "docs/postdoc_next_steps_2026_05_25.md"
+    "80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py",
+    "tests/test_human_audit_refresh.py"
   ]
 }
