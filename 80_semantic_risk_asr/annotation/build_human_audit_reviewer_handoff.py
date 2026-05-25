@@ -79,6 +79,7 @@ def reviewer_commands(
     output_dir: str,
     readiness_output_dir: str,
     expected_rows: int,
+    timing_row_number: int | None = None,
 ) -> dict[str, str]:
     session_start_summary = f"{output_dir}/human_audit_reviewer_session_start_summary.json"
     base = [
@@ -126,7 +127,7 @@ def reviewer_commands(
         "--expected-rows",
         str(expected_rows),
     ]
-    return {
+    commands = {
         "strict_dry_run": command(base),
         "write_refresh_prepare_next": command(write),
         "batch_status_audit": command(
@@ -144,6 +145,18 @@ def reviewer_commands(
             ]
         ),
     }
+    if timing_row_number is not None:
+        timing_base = [
+            ".venv/bin/python",
+            "80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py",
+            "--response-sheet",
+            response_sheet,
+            "--row-number",
+            str(timing_row_number),
+        ]
+        commands["timing_start_write"] = command([*timing_base, "--mark-start", "--write"])
+        commands["timing_finish_write"] = command([*timing_base, "--mark-finish", "--write"])
+    return commands
 
 
 def source_paths(
@@ -304,6 +317,8 @@ def build_handoff(
     batch_summary_rel = repo_relative(batch_summary_path, repo_root=repo_root)
     output_dir_rel = repo_relative(run_dir, repo_root=repo_root)
     readiness_rel = repo_relative(readiness_output_dir, repo_root=repo_root)
+    row_numbers = batch_summary.get("row_numbers", [])
+    timing_row_number = row_numbers[0] if row_numbers and isinstance(row_numbers[0], int) else None
     commands = reviewer_commands(
         response_sheet=str(response_sheet),
         audit_sheet=audit_sheet_rel,
@@ -311,6 +326,7 @@ def build_handoff(
         output_dir=output_dir_rel,
         readiness_output_dir=readiness_rel,
         expected_rows=expected_rows,
+        timing_row_number=timing_row_number,
     )
     payload = {
         "ok": not missing_inputs and bool(response_sheet),
@@ -383,6 +399,7 @@ def build_handoff(
         "reviewer_next_steps": [
             "Open the local packet path only in the local workspace; it is transcript-bearing.",
             "Fill the local response TSV row/model fields plus required per-row review timing.",
+            "Use timing_start_write and timing_finish_write if review timing should be written by helper command.",
             "Run strict_dry_run until latest_apply_status is response_complete.",
             "Run write_refresh_prepare_next only after strict_dry_run is response_complete.",
         ],

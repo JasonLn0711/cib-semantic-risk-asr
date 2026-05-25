@@ -124,6 +124,9 @@ def test_handoff_collects_current_reviewer_gate_without_private_content(tmp_path
     assert "--require-timing" in payload["commands"]["strict_dry_run"]
     assert "--require-timing" in payload["commands"]["write_refresh_prepare_next"]
     assert "--write" in payload["commands"]["write_refresh_prepare_next"]
+    assert "mark_human_audit_response_timing.py" in payload["commands"]["timing_start_write"]
+    assert "--row-number 1" in payload["commands"]["timing_start_write"]
+    assert "--mark-finish" in payload["commands"]["timing_finish_write"]
     serialized = json.dumps(payload, ensure_ascii=False)
     assert "PRIVATE_" not in serialized
     assert "reference_text" not in serialized
