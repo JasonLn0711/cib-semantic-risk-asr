@@ -256,5 +256,5 @@
     "CEIS-triggered policies use reviewed critical atoms when model CEIS atoms are absent.",
     "Per-sample detail remains ignored because it can contain row keys."
   ],
-  "runtime_seconds": 0.0018
+  "runtime_seconds": 0.0022
 }

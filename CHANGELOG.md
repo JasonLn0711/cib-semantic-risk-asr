@@ -5,6 +5,43 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.226 - 2026-05-26T12:07:25+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `efbbe60`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_operation_record_audit.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_operation_record_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_checklist.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_log.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_progress_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_validation_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements_summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json`
+
 ## v2.5.225 - 2026-05-26T12:06:57+08:00
 
 - Bump: `patch`

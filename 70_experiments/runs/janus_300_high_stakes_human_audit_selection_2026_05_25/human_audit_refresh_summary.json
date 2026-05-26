@@ -20,31 +20,23 @@
   "recommended_review_batch_count": 0,
   "predictor_status": "review_complete",
   "readiness_ok": true,
-  "readiness_paper_ready": false,
+  "readiness_paper_ready": true,
   "readiness_status_counts": {
-    "completed": 6,
-    "proxy_completed": 4
+    "completed": 10
   },
   "completion_audit_ok": true,
-  "publishable_ready": false,
+  "publishable_ready": true,
   "completion_status_counts": {
-    "completed": 5,
-    "proxy_completed": 2
+    "completed": 7
   },
   "roadmap_audit_ok": true,
-  "roadmap_complete": false,
+  "roadmap_complete": true,
   "roadmap_status_counts": {
-    "blocked": 1,
-    "completed": 5,
-    "proxy_completed": 2
+    "completed": 8
   },
-  "post_review_evidence_ok": false,
-  "post_review_evidence_status": "post_review_evidence_blocked",
-  "post_review_blocker_keys": [
-    "paper_ready_false",
-    "publishable_ready_false",
-    "consequence_paper_claims_not_ready"
-  ],
+  "post_review_evidence_ok": true,
+  "post_review_evidence_status": "post_review_evidence_ready",
+  "post_review_blocker_keys": [],
   "human_recovery_status": "human_reviewed_complete",
   "human_recovery_evidence_mode": "human_reviewed",
   "human_recovery_ready": true,
@@ -64,10 +56,8 @@
     "current_step": {},
     "next_local_row_step": {}
   },
-  "post_review_sequence_status": "post_review_sequence_ready_to_execute",
-  "post_review_sequence_blocker_keys": [
-    "objective_requirements_audit"
-  ],
+  "post_review_sequence_status": "post_review_sequence_complete",
+  "post_review_sequence_blocker_keys": [],
   "post_review_sequence_executed_step_count": 0,
   "operation_record_audit_ok": true,
   "operation_record_status": "operation_records_ready",
@@ -79,12 +69,11 @@
   },
   "consistency_failed_checks": [],
   "objective_requirements_audit_ok": true,
-  "objective_requirements_ready": false,
+  "objective_requirements_ready": true,
   "objective_requirements_status_counts": {
-    "satisfied": 10,
-    "proxy_satisfied": 5
+    "satisfied": 15
   },
-  "objective_requirements_proxy_count": 5,
+  "objective_requirements_proxy_count": 0,
   "objective_requirements_blocking_count": 0,
   "downstream_outputs_refreshed": true,
   "outputs": [
@@ -105,10 +94,16 @@
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness.tsv",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix.tsv",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion.tsv",
     "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json",
     "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_checklist.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order_summary.json",
@@ -117,12 +112,20 @@
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence.tsv",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements_summary.json",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements.tsv",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_summary.json",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_operation_record_summary.json",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_operation_record_audit.tsv",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"
   ],
-  "runtime_seconds": 0.0123,
-  "next_action": "Use refreshed aggregate summaries for paper-table drafting and human-reviewed predictor analysis."
+  "runtime_seconds": 0.0103,
+  "next_action": "Use refreshed aggregate summaries for paper-table drafting and human-reviewed predictor analysis.",
+  "consequence_paper_claims_ready": true,
+  "consequence_status_counts": {
+    "completed": 7
+  }
 }

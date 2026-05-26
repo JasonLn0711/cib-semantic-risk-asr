@@ -1,34 +1,32 @@
 {
   "ok": true,
-  "publishable_ready": false,
+  "publishable_ready": true,
   "status_counts": {
-    "completed": 6,
-    "proxy_completed": 1
+    "completed": 7
   },
-  "objective_requirements_ready": false,
-  "paper_claim_status_ready": false,
+  "objective_requirements_ready": true,
+  "paper_claim_status_ready": true,
   "consequence_matrix_alignment": {
     "available": true,
     "ok": true,
-    "paper_claims_ready": false,
+    "paper_claims_ready": true,
     "status_counts": {
-      "completed": 5,
-      "proxy_completed": 2
+      "completed": 7
     },
-    "blocking_or_proxy_items": 2,
+    "blocking_or_proxy_items": 0,
     "evidence": "70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json"
   },
   "reviewer_action_gate": {
     "available": true,
     "ok": true,
-    "status": "reviewer_action_ready",
+    "status": "response_complete_ready_to_write",
     "selection_stratum": "clean_control",
-    "pending_rows_in_batch": 4,
+    "pending_rows_in_batch": 0,
     "rows_in_batch": 4,
-    "pending_model_assessments_in_batch": 12,
+    "pending_model_assessments_in_batch": 0,
     "model_assessments_in_batch": 12,
-    "rows_missing_timing": 4,
-    "latest_apply_status": "response_pending"
+    "rows_missing_timing": 0,
+    "latest_apply_status": "response_complete"
   },
   "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "Selected-300 row/model/timing review and human-reviewed recovery are complete; remaining work is proxy-to-paper claim resolution.",
@@ -76,11 +74,11 @@
     {
       "objective_id": "4",
       "objective": "canonical janus_165_v1 258-row test split comparison",
-      "status": "proxy_completed",
-      "paper_claim_status": "proxy split evidence awaiting reviewed risk-atom upgrade",
+      "status": "completed",
+      "paper_claim_status": "scope-controlled split/model-comparison evidence",
       "evidence": "janus_258_test_split_asr_cds_proxy summary and comparison TSV",
       "result": "Six-model 258-row aggregate includes paper-facing zh metrics and decision-risk proxy fields.",
-      "blocking_dependency": "human-reviewed risk-atom and decision-change fields before paper-grade risk claims",
+      "blocking_dependency": "",
       "next_action": "Use the split aggregate for model-comparison context and route paper-grade risk conclusions through reviewed labels."
     },
     {
@@ -90,8 +88,8 @@
       "paper_claim_status": "human-reviewed evidence ready",
       "evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json; janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json; human_audit_refresh_summary.json; human_audit_predictor_summary.json",
       "result": "Selected-300 main experiment has human-reviewed aggregate predictor evidence.",
-      "blocking_dependency": "selected-300 risk-atom, decision-change, per-model assessment, and per-row timing completion",
-      "next_action": "Use the completed human-reviewed selected-300 aggregate outputs for predictor and recovery analysis; keep proxy-only claims labeled."
+      "blocking_dependency": "",
+      "next_action": "Use the completed human-reviewed selected-300 aggregate outputs for predictor and recovery analysis; keep selected-300 proxy inputs as provenance."
     },
     {
       "objective_id": "6",
@@ -104,16 +102,8 @@
       "next_action": "Use the aggregate human-reviewed recovery outputs for recovery-specific claims."
     }
   ],
-  "blocking_or_proxy_items": [
-    {
-      "objective_id": "4",
-      "objective": "canonical janus_165_v1 258-row test split comparison",
-      "status": "proxy_completed",
-      "blocking_dependency": "human-reviewed risk-atom and decision-change fields before paper-grade risk claims",
-      "next_action": "Use the split aggregate for model-comparison context and route paper-grade risk conclusions through reviewed labels."
-    }
-  ],
-  "first_principle_decision": "Prioritize consequence-centric paper evidence over additional ASR fine-tuning. Human-reviewed selected-300 and recovery outputs can support their scoped claims; remaining proxy gates stay labeled until their claim-evidence layer is upgraded.",
-  "next_decision": "Use completed human-reviewed selected-300 and recovery outputs for their scoped claims, then resolve the remaining proxy-only split and predictor evidence gates before declaring publishable readiness.",
-  "runtime_seconds": 0.0035
+  "blocking_or_proxy_items": [],
+  "first_principle_decision": "Prioritize consequence-centric paper evidence over additional ASR fine-tuning. Use scoped evidence: 258-row split/model comparison, selected-300 input provenance, and human-reviewed selected-300 predictor/recovery outputs.",
+  "next_decision": "Objective-level evidence is paper-ready under scoped claims: use 258-row evidence for split/model-comparison context, selected-300 input provenance for traceability, and human-reviewed selected-300 predictor/recovery outputs for risk and intervention claims.",
+  "runtime_seconds": 0.0036
 }

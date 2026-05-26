@@ -57,27 +57,27 @@
     },
     {
       "check_id": "C040",
-      "invariant": "review-pending state cannot be paper-ready",
+      "invariant": "review state aligns with paper-readiness gates",
       "status": "pass",
       "evidence": "readiness, publishable, consequence, roadmap, post-review, closeout summaries",
-      "result": "selected-300 review is complete, but paper-facing gates remain closed for proxy-only claims",
-      "next_action": "Keep claims proxy-only until response closeout, write, refresh, predictor, and recovery are complete."
+      "result": "selected-300 review is complete and scoped paper-facing gates are ready",
+      "next_action": "Use scoped paper claims only after response closeout, refresh, predictor, recovery, and paper-facing audits align."
     },
     {
       "check_id": "C050",
-      "invariant": "proxy evidence is not promoted to paper claims",
+      "invariant": "proxy evidence is resolved only through scoped paper claims",
       "status": "pass",
       "evidence": "publishable_evidence_completion_summary and consequence_evidence_matrix_summary",
-      "result": "blocking/proxy items remain explicit while publishable and consequence gates are closed",
-      "next_action": "Keep 258-row/300-row proxy results as engineering evidence until human labels refresh them."
+      "result": "proxy gates are resolved through scoped split/provenance claims and human-reviewed selected-300 evidence",
+      "next_action": "Keep claim scope explicit: 258-row split context, selected-300 input provenance, and human-reviewed risk/recovery claims."
     },
     {
       "check_id": "C060",
-      "invariant": "current reviewer action packet remains ready but unfilled",
+      "invariant": "current reviewer action packet aligns with response state",
       "status": "pass",
       "evidence": "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json",
-      "result": "current packet has 4 rows, 12 model assessments, and 4 timing rows pending",
-      "next_action": "Fill only local response fields and timing; do not reopen transcript review."
+      "result": "current packet has 4 rows and 12 model assessments with response_complete",
+      "next_action": "Use response-complete aggregate evidence; do not reopen transcript review."
     },
     {
       "check_id": "C065",

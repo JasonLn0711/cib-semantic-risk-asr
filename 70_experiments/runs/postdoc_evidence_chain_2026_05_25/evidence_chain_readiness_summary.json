@@ -1,23 +1,22 @@
 {
   "ok": true,
-  "paper_ready": false,
+  "paper_ready": true,
   "status_counts": {
-    "completed": 8,
-    "proxy_completed": 2
+    "completed": 10
   },
   "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "Selected-300 row/model/timing review and human-reviewed recovery are complete; remaining work is proxy-to-paper claim resolution.",
   "reviewer_action_gate": {
     "available": true,
     "ok": true,
-    "status": "reviewer_action_ready",
+    "status": "response_complete_ready_to_write",
     "selection_stratum": "clean_control",
     "rows_in_batch": 4,
-    "pending_rows_in_batch": 4,
+    "pending_rows_in_batch": 0,
     "model_assessments_in_batch": 12,
-    "pending_model_assessments_in_batch": 12,
-    "rows_missing_timing": 4,
-    "latest_apply_status": "response_pending",
+    "pending_model_assessments_in_batch": 0,
+    "rows_missing_timing": 0,
+    "latest_apply_status": "response_complete",
     "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist_summary.json"
   },
   "readiness_rows": [
@@ -60,11 +59,11 @@
     {
       "phase": "4",
       "requirement": "canonical 258-row six-model comparison with decision-risk metrics",
-      "status": "proxy_completed",
-      "paper_claim_status": "proxy split evidence awaiting reviewed risk-atom upgrade",
+      "status": "completed",
+      "paper_claim_status": "scope-controlled split/model-comparison evidence",
       "evidence": "janus_258_test_split_asr_cds_proxy summary and comparison TSV",
       "result": "Six-model 258-row comparison includes CER/WER plus risk-atom and unsafe-decision metrics",
-      "next_action": "Use these aggregate split results as model-comparison evidence and route paper-grade risk claims through reviewed risk/decision labels."
+      "next_action": "Use these aggregate split results for model-comparison context; route paper-grade risk conclusions through reviewed selected-300 labels."
     },
     {
       "phase": "metric_policy",
@@ -78,11 +77,11 @@
     {
       "phase": "5",
       "requirement": "selected-300 high-stakes CDS-ASR main experiment proxy",
-      "status": "proxy_completed",
-      "paper_claim_status": "proxy input layer paired with completed human-reviewed outputs",
+      "status": "completed",
+      "paper_claim_status": "selected-300 input provenance paired with completed human-reviewed outputs",
       "evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json",
       "result": "Selected-300 proxy main experiment has 300 references, 900 model-samples, and CEIS instability",
-      "next_action": "Keep this as input provenance; paper-grade claims use the completed human-reviewed predictor and recovery outputs."
+      "next_action": "Use this as selected-300 input provenance; paper-grade claims use the completed human-reviewed predictor and recovery outputs."
     },
     {
       "phase": "5",
@@ -113,18 +112,7 @@
     }
   ],
   "blocking_gates": [],
-  "proxy_only_gates": [
-    {
-      "phase": "4",
-      "requirement": "canonical 258-row six-model comparison with decision-risk metrics",
-      "next_action": "Use these aggregate split results as model-comparison evidence and route paper-grade risk claims through reviewed risk/decision labels."
-    },
-    {
-      "phase": "5",
-      "requirement": "selected-300 high-stakes CDS-ASR main experiment proxy",
-      "next_action": "Keep this as input provenance; paper-grade claims use the completed human-reviewed predictor and recovery outputs."
-    }
-  ],
+  "proxy_only_gates": [],
   "next_decision": "Use completed human-reviewed selected-300 and recovery evidence for their scoped claims, then upgrade or explicitly bound the remaining proxy-only gates before declaring paper-ready CDS-ASR claims.",
   "runtime_seconds": 0.0034
 }

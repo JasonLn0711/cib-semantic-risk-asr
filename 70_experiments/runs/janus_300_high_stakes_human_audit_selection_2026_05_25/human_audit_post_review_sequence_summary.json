@@ -1,6 +1,6 @@
 {
-  "ok": false,
-  "status": "post_review_sequence_ready_to_execute",
+  "ok": true,
+  "status": "post_review_sequence_complete",
   "mode": "plan_only",
   "input_boundary": "tracked aggregate closeout, refresh, recovery, checklist, and objective summaries",
   "output_boundary": "aggregate-only post-review sequence status; no row keys or transcript text",
@@ -9,11 +9,9 @@
   "closeout_ready": true,
   "refresh_complete": true,
   "human_recovery_ready": true,
-  "post_review_ready": false,
-  "objective_requirements_ready": false,
-  "blocker_keys": [
-    "objective_requirements_audit"
-  ],
+  "post_review_ready": true,
+  "objective_requirements_ready": true,
+  "blocker_keys": [],
   "executed_step_count": 0,
   "stopped_step": "",
   "execute_safety_policy": "In --execute mode, stop before any blocked strict_dry_run, response_closeout, write_refresh_prepare_next, strict_human_reviewed_recovery, post_review_checklist, or objective_requirements_audit step; record executed_step_count and stopped_step in the aggregate summary/log.",
@@ -74,17 +72,17 @@
       "status": "ready",
       "command": ".venv/bin/python 80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py",
       "success_condition": "post-review evidence status is post_review_evidence_ready",
-      "observed_status": "post_review_evidence_blocked",
+      "observed_status": "post_review_evidence_ready",
       "next_action": "rerun checklist after strict human-reviewed recovery passes",
       "privacy_boundary": "aggregate-only paper-claim gate is tracked"
     },
     {
       "step_order": 7,
       "step_type": "objective_requirements_audit",
-      "status": "blocked_until_post_review_ready",
+      "status": "ready",
       "command": ".venv/bin/python 80_semantic_risk_asr/scoring/audit_postdoc_objective_requirements.py",
       "success_condition": "objective_requirements_ready is true",
-      "observed_status": "False",
+      "observed_status": "True",
       "next_action": "rerun objective audit before declaring goal complete",
       "privacy_boundary": "aggregate-only objective audit is tracked"
     }
@@ -96,6 +94,6 @@
     "readiness_dir": "70_experiments/runs/postdoc_evidence_chain_2026_05_25",
     "human_recovery_dir": "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26"
   },
-  "next_concrete_action": "Run this sequence with --execute; it will stop at the first still-pending aggregate gate.",
+  "next_concrete_action": "All post-review sequence gates are complete; rerun objective audit before final claim review.",
   "runtime_seconds": 0.0004
 }
