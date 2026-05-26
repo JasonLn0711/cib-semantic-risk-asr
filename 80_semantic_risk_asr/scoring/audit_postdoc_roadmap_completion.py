@@ -383,7 +383,7 @@ def build_roadmap_audit_from_payloads(
         "post_review_evidence_ready": post_review_ready,
         "consequence_paper_claims_ready": consequence_ready,
         "human_review_complete": human_review_complete,
-        "blocking_gate": "none" if roadmap_complete else "selected_300_human_review_and_post_review_refresh",
+        "blocking_gate": "none" if roadmap_complete else "proxy_to_paper_claim_resolution",
         "status_counts": dict(sorted(counts.items())),
         "current_review_counts": review_counts(
             human_refresh=human_refresh,
@@ -391,7 +391,12 @@ def build_roadmap_audit_from_payloads(
         ),
         "candidate_gate": candidate_gate(candidate_summary),
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
-        "remaining_review_scope": REMAINING_REVIEW_SCOPE,
+        "remaining_review_scope": (
+            "Selected-300 row/model/timing review and human-reviewed recovery are complete; "
+            "remaining work is proxy-to-paper claim resolution."
+            if human_review_complete
+            else REMAINING_REVIEW_SCOPE
+        ),
         "roadmap_rows": rows,
         "blocking_or_proxy_items": blockers,
         "first_principle_decision": (
@@ -400,11 +405,17 @@ def build_roadmap_audit_from_payloads(
             "locale/runtime gate unless they change the CDS-ASR paper evidence."
         ),
         "next_decision": (
-            "Close the selected-300 row/model/timing response gate, "
-            "run the strict closeout path with --require-complete "
-            "--require-timing, write/refresh aggregate human review evidence, "
-            "rerun predictor and recovery analyses, then rerun this roadmap "
-            "audit before claiming the objective is complete."
+            "Use completed human-reviewed selected-300 predictor and recovery "
+            "outputs for their scoped claims, then resolve the remaining proxy "
+            "split/generalization evidence gate before declaring the roadmap complete."
+            if human_review_complete
+            else (
+                "Close the selected-300 row/model/timing response gate, "
+                "run the strict closeout path with --require-complete "
+                "--require-timing, write/refresh aggregate human review evidence, "
+                "rerun predictor and recovery analyses, then rerun this roadmap "
+                "audit before claiming the objective is complete."
+            )
         ),
     }
     assert_roadmap_safe(payload)

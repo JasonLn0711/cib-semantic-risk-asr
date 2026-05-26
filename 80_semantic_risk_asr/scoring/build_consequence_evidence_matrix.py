@@ -53,6 +53,13 @@ STATUS_ORDER = {
     "missing": 4,
     "failed": 5,
 }
+REQUIRED_RECOVERY_POLICIES = {
+    "no_recovery",
+    "confidence_only_trigger",
+    "sres_triggered_recovery",
+    "ceis_triggered_conservative_action",
+    "ceis_ensemble_arbitration",
+}
 TSV_FIELDS = [
     "consequence_id",
     "claim_class",
@@ -137,12 +144,54 @@ def row(
     }
 
 
+def human_recovery_ready(payload: dict[str, Any]) -> bool:
+    policies = payload.get("policies") if isinstance(payload.get("policies"), dict) else {}
+    no_recovery = policies.get("no_recovery", {})
+    ceis = policies.get("ceis_triggered_conservative_action", {})
+    no_recovery_critical = int(no_recovery.get("critical_miss_count", 0))
+    ceis_critical = int(ceis.get("critical_miss_count", 999))
+    no_recovery_high_risk = int(no_recovery.get("high_risk_missed_count", 0))
+    ceis_high_risk = int(ceis.get("high_risk_missed_count", 999))
+    return (
+        bool(payload.get("ok"))
+        and payload.get("human_reviewed") is True
+        and payload.get("review_status") == "human_reviewed_complete"
+        and REQUIRED_RECOVERY_POLICIES <= set(policies)
+        and no_recovery_critical > ceis_critical
+        and no_recovery_high_risk > ceis_high_risk
+    )
+
+
+def human_predictor_overall(
+    summary: dict[str, Any],
+    rows: list[dict[str, str]],
+) -> dict[str, dict[str, str]]:
+    if not (
+        summary.get("ok") is True
+        and summary.get("status") == "review_complete"
+        and int(summary.get("reviewed_model_assessments") or 0) == 90
+    ):
+        return {}
+    overall = {
+        row.get("metric"): row
+        for row in rows
+        if row.get("scope") == "overall"
+        and row.get("asr_run_id") == "ALL"
+        and row.get("target") == "human_decision_change_yes"
+    }
+    return overall if {"wer", "cer", "sres_total", "ceis_max"} <= set(overall) else {}
+
+
 def consequence_rows_from_payloads(
     *,
     journal_compliance: dict[str, Any],
     metric_predictor_summary: dict[str, Any],
     metric_predictor_rows: list[dict[str, str]],
+    human_predictor_summary: dict[str, Any] | None = None,
+    human_predictor_rows: list[dict[str, str]] | None = None,
+    human_predictor_model_rows: list[dict[str, str]] | None = None,
     recovery_summary: dict[str, Any],
+    human_recovery_summary: dict[str, Any] | None = None,
     split_rows: list[dict[str, str]],
     human_refresh: dict[str, Any],
     preflight: dict[str, Any],
@@ -189,26 +238,44 @@ def consequence_rows_from_payloads(
         "breeze_asr25_base_high_stakes_300",
         {},
     )
+    human_overall = human_predictor_overall(
+        human_predictor_summary or {},
+        human_predictor_rows or [],
+    )
+    human_model_rows = {
+        row.get("asr_run_id"): row
+        for row in (human_predictor_model_rows or [])
+        if row.get("asr_run_id")
+    }
     split_partial = first_row(
         split_rows,
         run_id="breeze_asr25_partial_encoder_legacy_best_test_split",
     )
     split_lora = first_row(split_rows, run_id="breeze_asr25_lora_legacy_best_test_split")
-    no_recovery = recovery_summary.get("policies", {}).get("no_recovery", {})
-    ceis_recovery = recovery_summary.get("policies", {}).get(
+    human_recovery_summary = human_recovery_summary or {}
+    recovery_is_human = human_recovery_ready(human_recovery_summary)
+    active_recovery = human_recovery_summary if recovery_is_human else recovery_summary
+    no_recovery = active_recovery.get("policies", {}).get("no_recovery", {})
+    ceis_recovery = active_recovery.get("policies", {}).get(
         "ceis_triggered_conservative_action",
         {},
     )
-    ensemble = recovery_summary.get("policies", {}).get("ceis_ensemble_arbitration", {})
+    ensemble = active_recovery.get("policies", {}).get("ceis_ensemble_arbitration", {})
 
     metric_policy_ok = bool(journal_compliance.get("paper_reporting_compliant"))
     low_wer_danger = int(low_wer_overall.get("low_wer_any_danger_count") or 0)
     ceis_beats_wer = float_value(unsafe_ceis.get("auc")) > float_value(unsafe_wer.get("auc"))
     ceis_beats_cer = float_value(unsafe_ceis.get("auc")) > float_value(unsafe_cer.get("auc"))
     predictor_ok = bool(metric_predictor_summary.get("ok")) and low_wer_danger > 0
+    human_predictor_ok = bool(human_overall)
+    human_model_comparison_ok = {
+        "breeze_asr25_base_high_stakes_300",
+        "breeze_asr25_lora_high_stakes_300",
+        "breeze_asr25_partial_encoder_high_stakes_300",
+    } <= set(human_model_rows)
     split_ok = bool(split_partial and split_lora)
     recovery_ok = (
-        bool(recovery_summary.get("ok"))
+        bool(active_recovery.get("ok"))
         and no_recovery.get("high_risk_missed_count", 0)
         > ceis_recovery.get("high_risk_missed_count", 999)
         and no_recovery.get("critical_miss_count", 0)
@@ -256,44 +323,97 @@ def consequence_rows_from_payloads(
             consequence_id="C1",
             claim_class="metric_insufficiency",
             consequence_claim="Correct WER/CER reporting is necessary but insufficient for high-stakes safety.",
-            status="proxy_completed" if predictor_ok and ceis_beats_wer and ceis_beats_cer else "missing",
-            paper_claim_status="proxy consequence evidence until human review confirms labels",
-            evidence_files="janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json; metric_predictor_comparison.tsv",
-            aggregate_result=(
-                f"Among {low_wer_overall.get('rows', '')} model-samples, "
-                f"{low_wer_overall.get('low_wer_rows', '')} are low-WER at threshold "
-                f"{low_wer_overall.get('low_wer_threshold', '')}, yet "
-                f"{low_wer_danger} danger events remain; unsafe-downrouting AUC is "
-                f"WER {unsafe_wer.get('auc', '')}, CER {unsafe_cer.get('auc', '')}, "
-                f"CEIS {unsafe_ceis.get('auc', '')}."
+            status=(
+                "completed"
+                if human_predictor_ok
+                else ("proxy_completed" if predictor_ok and ceis_beats_wer and ceis_beats_cer else "missing")
             ),
-            blocking_dependency="selected-300 human risk/decision/model/timing review",
-            next_action="After row/model/timing closeout, rerun predictor analysis and verify this relationship against reviewed decision-change labels.",
+            paper_claim_status=(
+                "human-reviewed predictor evidence"
+                if human_predictor_ok
+                else "proxy consequence evidence until human review confirms labels"
+            ),
+            evidence_files=(
+                "human_audit_predictor_summary.json; human_audit_predictor_comparison.tsv"
+                if human_predictor_ok
+                else "janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json; metric_predictor_comparison.tsv"
+            ),
+            aggregate_result=(
+                (
+                    "Human-reviewed decision-change predictor AUC over 90 model assessments: "
+                    f"WER {human_overall['wer'].get('auc')}, "
+                    f"CER {human_overall['cer'].get('auc')}, "
+                    f"SRES {human_overall['sres_total'].get('auc')}, "
+                    f"CEIS {human_overall['ceis_max'].get('auc')}."
+                )
+                if human_predictor_ok
+                else (
+                    f"Among {low_wer_overall.get('rows', '')} model-samples, "
+                    f"{low_wer_overall.get('low_wer_rows', '')} are low-WER at threshold "
+                    f"{low_wer_overall.get('low_wer_threshold', '')}, yet "
+                    f"{low_wer_danger} danger events remain; unsafe-downrouting AUC is "
+                    f"WER {unsafe_wer.get('auc', '')}, CER {unsafe_cer.get('auc', '')}, "
+                    f"CEIS {unsafe_ceis.get('auc', '')}."
+                )
+            ),
+            blocking_dependency="" if human_predictor_ok else "selected-300 human risk/decision/model/timing review",
+            next_action=(
+                "Use the aggregate human-reviewed predictor table for metric-insufficiency claims."
+                if human_predictor_ok
+                else "After row/model/timing closeout, rerun predictor analysis and verify this relationship against reviewed decision-change labels."
+            ),
         ),
         row(
             consequence_id="C2",
             claim_class="model_comparison",
             consequence_claim="Better ASR reduces dangerous decision events but does not remove them.",
-            status="proxy_completed" if partial_run and lora_run and base_run else "missing",
-            paper_claim_status="proxy model-comparison evidence until human model labels exist",
-            evidence_files="janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json",
-            aggregate_result=(
-                "High-stakes proxy danger events: base "
-                f"{base_run.get('danger_event_count', '')}, LoRA "
-                f"{lora_run.get('danger_event_count', '')}, partial encoder "
-                f"{partial_run.get('danger_event_count', '')}; partial encoder still has "
-                f"{partial_run.get('unsafe_downrouting_count', '')} unsafe downrouting and "
-                f"{partial_run.get('high_risk_missed_count', '')} high-risk miss."
+            status=(
+                "completed"
+                if human_model_comparison_ok
+                else ("proxy_completed" if partial_run and lora_run and base_run else "missing")
             ),
-            blocking_dependency="selected-300 per-model assessments and per-row timing closeout",
-            next_action="Use selected-300 per-model review fields after timing-complete closeout before writing model-safety superiority claims.",
+            paper_claim_status=(
+                "human-reviewed model-comparison evidence"
+                if human_model_comparison_ok
+                else "proxy model-comparison evidence until human model labels exist"
+            ),
+            evidence_files=(
+                "human_audit_predictor_model_summary.tsv"
+                if human_model_comparison_ok
+                else "janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json"
+            ),
+            aggregate_result=(
+                (
+                    "Human-reviewed decision-change counts: base "
+                    f"{human_model_rows['breeze_asr25_base_high_stakes_300'].get('human_decision_change_yes_count')}, "
+                    "LoRA "
+                    f"{human_model_rows['breeze_asr25_lora_high_stakes_300'].get('human_decision_change_yes_count')}, "
+                    "partial encoder "
+                    f"{human_model_rows['breeze_asr25_partial_encoder_high_stakes_300'].get('human_decision_change_yes_count')}."
+                )
+                if human_model_comparison_ok
+                else (
+                    "High-stakes proxy danger events: base "
+                    f"{base_run.get('danger_event_count', '')}, LoRA "
+                    f"{lora_run.get('danger_event_count', '')}, partial encoder "
+                    f"{partial_run.get('danger_event_count', '')}; partial encoder still has "
+                    f"{partial_run.get('unsafe_downrouting_count', '')} unsafe downrouting and "
+                    f"{partial_run.get('high_risk_missed_count', '')} high-risk miss."
+                )
+            ),
+            blocking_dependency="" if human_model_comparison_ok else "selected-300 per-model assessments and per-row timing closeout",
+            next_action=(
+                "Use the aggregate human-reviewed model summary for scoped model-comparison claims."
+                if human_model_comparison_ok
+                else "Use selected-300 per-model review fields after timing-complete closeout before writing model-safety superiority claims."
+            ),
         ),
         row(
             consequence_id="C3",
             claim_class="split_generalization",
             consequence_claim="The 258-row test split supports model comparison beyond CER/WER.",
             status="proxy_completed" if split_ok else "missing",
-            paper_claim_status="proxy split evidence; not human-reviewed risk evidence",
+            paper_claim_status="proxy split evidence awaiting reviewed risk upgrade",
             evidence_files="janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv",
             aggregate_result=(
                 "258-row proxy comparison: partial encoder unsafe downrouting "
@@ -308,10 +428,22 @@ def consequence_rows_from_payloads(
         row(
             consequence_id="C4",
             claim_class="recovery",
-            consequence_claim="CDS-ASR recovery can reduce dangerous decisions under proxy labels.",
-            status="proxy_completed" if recovery_ok else "missing",
-            paper_claim_status="proxy engineering evidence until human labels confirm outcomes",
-            evidence_files="janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+            consequence_claim=(
+                "CDS-ASR recovery reduces dangerous decisions under human-reviewed labels."
+                if recovery_is_human
+                else "CDS-ASR recovery can reduce dangerous decisions under proxy labels."
+            ),
+            status="completed" if recovery_is_human and recovery_ok else ("proxy_completed" if recovery_ok else "missing"),
+            paper_claim_status=(
+                "human-reviewed recovery evidence"
+                if recovery_is_human and recovery_ok
+                else "proxy engineering evidence until human labels confirm outcomes"
+            ),
+            evidence_files=(
+                "janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json"
+                if recovery_is_human and recovery_ok
+                else "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json"
+            ),
             aggregate_result=(
                 "No recovery has high-risk missed "
                 f"{no_recovery.get('high_risk_missed_count', '')} and critical miss "
@@ -321,13 +453,21 @@ def consequence_rows_from_payloads(
                 f"{ceis_recovery.get('recovery_budget_rate', '')}; ensemble abstains "
                 f"{ensemble.get('machine_abstention_count', '')} times."
             ),
-            blocking_dependency="post-review recovery re-evaluation",
-            next_action="Rerun recovery once selected-300 reviewed labels exist; report critical miss, unsafe downrouting, over-escalation, abstention, stability gain, and budget.",
+            blocking_dependency="" if recovery_is_human and recovery_ok else "post-review recovery re-evaluation",
+            next_action=(
+                "Use the aggregate human-reviewed recovery table for recovery-specific paper claims."
+                if recovery_is_human and recovery_ok
+                else "Rerun recovery once selected-300 reviewed labels exist; report critical miss, unsafe downrouting, over-escalation, abstention, stability gain, and budget."
+            ),
         ),
         row(
             consequence_id="C5",
             claim_class="human_evidence_gate",
-            consequence_claim="The human-reviewed evidence path is ready to execute but not complete.",
+            consequence_claim=(
+                "The human-reviewed evidence path is complete for selected-300 aggregate claims."
+                if human_complete
+                else "The human-reviewed evidence path is ready for selected-300 aggregate completion."
+            ),
             status="completed" if human_complete else "review_pending",
             paper_claim_status="human-reviewed evidence ready" if human_complete else "not paper-ready",
             evidence_files="human_audit_refresh_summary.json; human_audit_reviewer_preflight_summary.json",
@@ -348,7 +488,7 @@ def consequence_rows_from_payloads(
         row(
             consequence_id="C6",
             claim_class="publishability",
-            consequence_claim="The repo is not yet paper-ready despite strong proxy evidence.",
+            consequence_claim="The paper-ready path is narrowed to the remaining proxy split/generalization gate.",
             status=publishability_status,
             paper_claim_status="paper-ready" if completion_audit.get("publishable_ready") else "not paper-ready",
             evidence_files="postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json",
@@ -379,13 +519,28 @@ def build_matrix_from_payloads(
     recovery_dir = root / "70_experiments" / "runs" / "janus_300_high_stakes_recovery_proxy_2026_05_25"
     human_dir = root / "70_experiments" / "runs" / "janus_300_high_stakes_human_audit_selection_2026_05_25"
     postdoc_dir = root / "70_experiments" / "runs" / "postdoc_evidence_chain_2026_05_25"
+    effective_human_refresh = (
+        human_refresh
+        if human_refresh is not None
+        else read_json(human_dir / "human_audit_refresh_summary.json")
+    )
     rows = consequence_rows_from_payloads(
         journal_compliance=read_json(
             root / "70_experiments" / "runs" / "wer_metric_audit_2026_05_25" / "journal_compliance_summary.json"
         ),
         metric_predictor_summary=read_json(metric_dir / "metric_predictor_summary.json"),
         metric_predictor_rows=read_tsv(metric_dir / "metric_predictor_comparison.tsv"),
+        human_predictor_summary=read_json(human_dir / "human_audit_predictor_summary.json"),
+        human_predictor_rows=read_tsv(human_dir / "human_audit_predictor_comparison.tsv"),
+        human_predictor_model_rows=read_tsv(human_dir / "human_audit_predictor_model_summary.tsv"),
         recovery_summary=read_json(recovery_dir / "summary.json"),
+        human_recovery_summary=read_json(
+            root
+            / "70_experiments"
+            / "runs"
+            / "janus_300_high_stakes_recovery_human_reviewed_2026_05_26"
+            / "summary.json"
+        ),
         split_rows=read_tsv(
             root
             / "70_experiments"
@@ -393,9 +548,7 @@ def build_matrix_from_payloads(
             / "janus_258_test_split_asr_cds_proxy"
             / "asr_cds_proxy_comparison.tsv"
         ),
-        human_refresh=human_refresh
-        if human_refresh is not None
-        else read_json(human_dir / "human_audit_refresh_summary.json"),
+        human_refresh=effective_human_refresh,
         preflight=read_json(human_dir / "human_audit_reviewer_preflight_summary.json"),
         completion_audit=completion_audit
         if completion_audit is not None
@@ -423,7 +576,14 @@ def build_matrix_from_payloads(
         ),
         "status_counts": dict(sorted(counts.items())),
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
-        "remaining_review_scope": REMAINING_REVIEW_SCOPE,
+        "remaining_review_scope": (
+            "Selected-300 row/model/timing review and human-reviewed recovery are complete; "
+            "remaining work is proxy-to-paper claim resolution."
+            if effective_human_refresh.get("status") == "review_complete"
+            and effective_human_refresh.get("pending_rows") == 0
+            and effective_human_refresh.get("pending_model_assessments") == 0
+            else REMAINING_REVIEW_SCOPE
+        ),
         "consequence_rows": rows,
         "blocking_or_proxy_items": blocking_rows,
         "first_principle_decision": (
@@ -432,10 +592,9 @@ def build_matrix_from_payloads(
             "human-reviewed risk/decision/model labels."
         ),
         "next_decision": (
-            "Use the ready selected-300 packet to complete risk/decision/model/timing "
-            "review, run the session-gated strict dry-run with --require-complete "
-            "--require-timing, then rerun predictor and recovery analyses against "
-            "reviewed labels."
+            "Use completed human-reviewed selected-300 and recovery outputs for "
+            "their scoped claims, then resolve remaining proxy-only split and "
+            "predictor gates before declaring paper-ready consequence claims."
         ),
     }
     assert_matrix_safe(payload)

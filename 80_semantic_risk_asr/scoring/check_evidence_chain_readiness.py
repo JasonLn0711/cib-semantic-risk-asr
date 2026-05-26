@@ -250,10 +250,10 @@ def test_split_gate(root: Path) -> dict[str, str]:
         phase="4",
         requirement="canonical 258-row six-model comparison with decision-risk metrics",
         status="proxy_completed" if ok else "missing",
-        paper_claim_status="proxy evidence; not human-reviewed risk-atom evidence",
+        paper_claim_status="proxy split evidence awaiting reviewed risk-atom upgrade",
         evidence="janus_258_test_split_asr_cds_proxy summary and comparison TSV",
         result="Six-model 258-row comparison includes CER/WER plus risk-atom and unsafe-decision metrics" if ok else "258-row comparison incomplete",
-        next_action="Do not convert proxy risk-atom counts into paper-grade human claims.",
+        next_action="Use these aggregate split results as model-comparison evidence and route paper-grade risk claims through reviewed risk/decision labels.",
     )
 
 
@@ -275,14 +275,48 @@ def high_stakes_proxy_gate(root: Path) -> dict[str, str]:
         phase="5",
         requirement="selected-300 high-stakes CDS-ASR main experiment proxy",
         status="proxy_completed" if ok else "missing",
-        paper_claim_status="proxy evidence until human audit passes",
+        paper_claim_status="proxy input layer paired with completed human-reviewed outputs",
         evidence="janus_300_high_stakes_cds_proxy_2026_05_25/summary.json",
         result=result,
-        next_action="Complete selected-300 human risk-atom audit before paper-grade main claims.",
+        next_action="Keep this as input provenance; paper-grade claims use the completed human-reviewed predictor and recovery outputs.",
     )
 
 
 def metric_predictor_gate(root: Path) -> dict[str, str]:
+    human_dir = root / "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25"
+    human_summary = read_json(human_dir / "human_audit_predictor_summary.json")
+    human_rows = read_tsv(human_dir / "human_audit_predictor_comparison.tsv")
+    human_overall = {
+        row.get("metric"): row
+        for row in human_rows
+        if row.get("scope") == "overall"
+        and row.get("asr_run_id") == "ALL"
+        and row.get("target") == "human_decision_change_yes"
+    }
+    human_ready = (
+        human_summary.get("ok") is True
+        and human_summary.get("status") == "review_complete"
+        and int(human_summary.get("reviewed_model_assessments") or 0) == 90
+        and {"wer", "cer", "sres_total", "ceis_max"} <= set(human_overall)
+    )
+    if human_ready:
+        result = (
+            "Human-reviewed predictor comparison over 90 model assessments: "
+            f"WER AUC {human_overall['wer'].get('auc')}, "
+            f"CER AUC {human_overall['cer'].get('auc')}, "
+            f"SRES AUC {human_overall['sres_total'].get('auc')}, "
+            f"CEIS AUC {human_overall['ceis_max'].get('auc')}."
+        )
+        return row(
+            phase="5",
+            requirement="WER/CER/SRES/CEIS predictor comparison on selected-300",
+            status="completed",
+            paper_claim_status="human-reviewed predictor evidence",
+            evidence="human_audit_predictor_summary.json; human_audit_predictor_comparison.tsv",
+            result=result,
+            next_action="Use aggregate human-reviewed predictor outputs for predictor-specific claims.",
+        )
+
     path = root / "70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json"
     payload = read_json(path) if path.exists() else {}
     unsafe = payload.get("best_overall_predictors_by_auc", {}).get("unsafe_downrouting", {})
@@ -304,8 +338,11 @@ def metric_predictor_gate(root: Path) -> dict[str, str]:
 
 
 def recovery_gate(root: Path) -> dict[str, str]:
-    path = root / "70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json"
-    payload = read_json(path) if path.exists() else {}
+    human_path = root / "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json"
+    proxy_path = root / "70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json"
+    human_payload = read_json(human_path) if human_path.exists() else {}
+    proxy_payload = read_json(proxy_path) if proxy_path.exists() else {}
+    payload = human_payload if human_payload.get("human_reviewed") else proxy_payload
     policies = payload.get("policies", {})
     required = {
         "no_recovery",
@@ -322,19 +359,40 @@ def recovery_gate(root: Path) -> dict[str, str]:
         and no_recovery.get("critical_miss_count", 0) > ceis.get("critical_miss_count", 999)
         and no_recovery.get("high_risk_missed_count", 0) > ceis.get("high_risk_missed_count", 999)
     )
+    human_ready = (
+        ok
+        and payload.get("human_reviewed") is True
+        and payload.get("review_status") == "human_reviewed_complete"
+    )
     result = (
-        "Five-condition proxy recovery gate reduces high-risk missed and critical miss under CEIS action"
-        if ok
-        else "Recovery proxy gate missing required policies or safety reduction"
+        "Five-condition human-reviewed recovery gate reduces high-risk missed and critical miss under CEIS action"
+        if human_ready
+        else (
+            "Five-condition proxy recovery gate reduces high-risk missed and critical miss under CEIS action"
+            if ok
+            else "Recovery gate missing required policies or safety reduction"
+        )
     )
     return row(
         phase="6",
         requirement="five-condition recovery experiment",
-        status="proxy_completed" if ok else "missing",
-        paper_claim_status="proxy engineering evidence until human audit confirms labels",
-        evidence="janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+        status="completed" if human_ready else ("proxy_completed" if ok else "missing"),
+        paper_claim_status=(
+            "human-reviewed recovery evidence"
+            if human_ready
+            else "proxy engineering evidence until human audit confirms labels"
+        ),
+        evidence=(
+            "janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json"
+            if human_ready
+            else "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json"
+        ),
         result=result,
-        next_action="Re-evaluate recovery after human-reviewed labels replace proxy labels.",
+        next_action=(
+            "Use aggregate human-reviewed recovery outputs for recovery-specific claims."
+            if human_ready
+            else "Re-evaluate recovery after human-reviewed labels replace proxy labels."
+        ),
     )
 
 
@@ -473,7 +531,12 @@ def build_readiness(root: Path) -> dict[str, Any]:
         "paper_ready": paper_ready,
         "status_counts": dict(sorted(counts.items())),
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
-        "remaining_review_scope": REMAINING_REVIEW_SCOPE,
+        "remaining_review_scope": (
+            "Selected-300 row/model/timing review and human-reviewed recovery are complete; "
+            "remaining work is proxy-to-paper claim resolution."
+            if not pending
+            else REMAINING_REVIEW_SCOPE
+        ),
         "reviewer_action_gate": action_gate,
         "readiness_rows": rows,
         "blocking_gates": [
@@ -494,11 +557,17 @@ def build_readiness(root: Path) -> dict[str, Any]:
             for item in proxy_only
         ],
         "next_decision": (
-            "Complete the selected-300 risk-atom, decision-change, per-model "
-            "assessment, and per-row timing fields, then rerun the strict "
-            "response closeout with --require-complete --require-timing, "
-            "aggregate summarizer, human-reviewed predictor gate, and recovery "
-            "analysis before making paper-grade CDS-ASR claims."
+            "Use completed human-reviewed selected-300 and recovery evidence "
+            "for their scoped claims, then upgrade or explicitly bound the "
+            "remaining proxy-only gates before declaring paper-ready CDS-ASR claims."
+            if not pending
+            else (
+                "Complete the selected-300 risk-atom, decision-change, per-model "
+                "assessment, and per-row timing fields, then rerun the strict "
+                "response closeout with --require-complete --require-timing, "
+                "aggregate summarizer, human-reviewed predictor gate, and recovery "
+                "analysis before making paper-grade CDS-ASR claims."
+            )
         ),
     }
     assert_aggregate_safe(payload)

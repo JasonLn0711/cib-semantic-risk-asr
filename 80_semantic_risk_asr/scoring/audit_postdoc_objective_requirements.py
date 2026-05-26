@@ -277,6 +277,49 @@ def recovery_reduces_proxy_risk(summary: dict[str, Any]) -> tuple[bool, str]:
     return ok, result
 
 
+def human_recovery_complete(summary: dict[str, Any]) -> bool:
+    ok, _ = recovery_policy_complete(summary)
+    gain_ok, _ = recovery_reduces_proxy_risk(summary)
+    return (
+        ok
+        and gain_ok
+        and summary.get("human_reviewed") is True
+        and summary.get("review_status") == "human_reviewed_complete"
+        and int(summary.get("reviewed_rows") or 0) == int(summary.get("audit_rows") or -1)
+        and int(summary.get("reviewed_model_assessments") or 0)
+        == int(summary.get("model_assessments") or -1)
+    )
+
+
+def human_predictor_complete(
+    summary: dict[str, Any],
+    comparison_rows: list[dict[str, str]],
+) -> tuple[bool, str]:
+    overall = {
+        row.get("metric"): row
+        for row in comparison_rows
+        if row.get("scope") == "overall"
+        and row.get("asr_run_id") == "ALL"
+        and row.get("target") == "human_decision_change_yes"
+    }
+    ok = (
+        summary.get("ok") is True
+        and summary.get("status") == "review_complete"
+        and int(summary.get("reviewed_model_assessments") or 0) == 90
+        and {"wer", "cer", "sres_total", "ceis_max"} <= set(overall)
+    )
+    if not ok:
+        return False, "human-reviewed predictor comparison is missing required overall metrics"
+    result = (
+        "reviewed_model_assessments=90; "
+        f"WER_AUC={overall['wer'].get('auc')}; "
+        f"CER_AUC={overall['cer'].get('auc')}; "
+        f"SRES_AUC={overall['sres_total'].get('auc')}; "
+        f"CEIS_AUC={overall['ceis_max'].get('auc')}"
+    )
+    return True, result
+
+
 def build_objective_requirement_audit_from_payloads(
     *,
     registry: list[dict[str, str]],
@@ -290,8 +333,10 @@ def build_objective_requirement_audit_from_payloads(
     high_stakes_summary: dict[str, Any],
     predictor_summary: dict[str, Any],
     recovery_summary: dict[str, Any],
+    human_recovery_summary: dict[str, Any] | None = None,
     human_refresh: dict[str, Any],
     human_predictor: dict[str, Any],
+    human_predictor_rows: list[dict[str, str]],
     post_review: dict[str, Any],
     post_review_sequence: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
@@ -414,11 +459,11 @@ def build_objective_requirement_audit_from_payloads(
             objective_step="4",
             requirement="canonical 258-row comparison includes six required models and decision-risk columns",
             status="proxy_satisfied" if split_ok else "missing",
-            paper_claim_status="proxy evidence; not human-reviewed risk evidence",
+            paper_claim_status="proxy split evidence awaiting reviewed risk upgrade",
             evidence="janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv",
             result=split_result,
             blocking_dependency="human-reviewed risk and decision labels before paper-grade risk claims",
-            next_action="Keep 258-row risk fields marked proxy unless reviewed labels are added.",
+            next_action="Use 258-row risk fields as aggregate split context and upgrade paper-grade risk claims through reviewed labels.",
         ),
         requirement_row(
             requirement_id="4.2",
@@ -445,6 +490,10 @@ def build_objective_requirement_audit_from_payloads(
         and bool(predictor_summary.get("best_overall_predictors_by_auc"))
         and bool(predictor_summary.get("low_wer_summary"))
     )
+    human_predictor_ok, human_predictor_result = human_predictor_complete(
+        human_predictor,
+        human_predictor_rows,
+    )
     human_review_complete = (
         human_refresh.get("status") == "review_complete"
         and int(human_refresh.get("pending_rows") or 0) == 0
@@ -465,22 +514,38 @@ def build_objective_requirement_audit_from_payloads(
                 f"references={high_stakes_summary.get('reference_rows')}; model_samples={high_stakes_summary.get('model_samples')}"
             ),
             blocking_dependency="human-reviewed risk and decision fields before paper-grade claims",
-            next_action="Use proxy outputs to select review rows, not as final human-reviewed evidence.",
+            next_action="Keep this as selected-300 input provenance; paper claims use the completed human-reviewed predictor and recovery outputs.",
         ),
         requirement_row(
             requirement_id="5.2",
             objective_step="5",
             requirement="selected-300 predictor analysis compares WER/CER/SRES/CEIS and low-WER danger cases",
-            status="proxy_satisfied" if predictor_ok else "missing",
-            paper_claim_status="proxy evidence",
-            evidence="janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json",
-            result=(
-                f"model_samples={predictor_summary.get('model_sample_count')}; "
-                f"predictor_targets={sorted((predictor_summary.get('best_overall_predictors_by_auc') or {}).keys())}; "
-                f"low_wer_rows_recorded={len(predictor_summary.get('low_wer_summary') or [])}"
+            status="satisfied" if human_predictor_ok else ("proxy_satisfied" if predictor_ok else "missing"),
+            paper_claim_status=(
+                "human-reviewed predictor evidence"
+                if human_predictor_ok
+                else "proxy evidence"
             ),
-            blocking_dependency="human-reviewed labels before formal predictor claims",
-            next_action="Rerun predictor analysis after selected-300 review is written and refreshed.",
+            evidence=(
+                "human_audit_predictor_summary.json; human_audit_predictor_comparison.tsv"
+                if human_predictor_ok
+                else "janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json"
+            ),
+            result=(
+                human_predictor_result
+                if human_predictor_ok
+                else (
+                    f"model_samples={predictor_summary.get('model_sample_count')}; "
+                    f"predictor_targets={sorted((predictor_summary.get('best_overall_predictors_by_auc') or {}).keys())}; "
+                    f"low_wer_rows_recorded={len(predictor_summary.get('low_wer_summary') or [])}"
+                )
+            ),
+            blocking_dependency="" if human_predictor_ok else "human-reviewed labels before formal predictor claims",
+            next_action=(
+                "Use this aggregate human-reviewed predictor comparison for predictor-specific claims."
+                if human_predictor_ok
+                else "Rerun predictor analysis after selected-300 review is written and refreshed."
+            ),
         ),
         requirement_row(
             requirement_id="5.3",
@@ -499,8 +564,11 @@ def build_objective_requirement_audit_from_payloads(
         ),
     ])
 
-    recovery_ok, recovery_result = recovery_policy_complete(recovery_summary)
-    recovery_gain_ok, recovery_gain_result = recovery_reduces_proxy_risk(recovery_summary)
+    human_recovery_summary = human_recovery_summary or {}
+    recovery_human_complete = human_recovery_complete(human_recovery_summary)
+    recovery_evidence = human_recovery_summary if recovery_human_complete else recovery_summary
+    recovery_ok, recovery_result = recovery_policy_complete(recovery_evidence)
+    recovery_gain_ok, recovery_gain_result = recovery_reduces_proxy_risk(recovery_evidence)
     recovery_human_ready = bool(post_review.get("recovery_human_ready"))
     post_review_sequence_status = str(post_review_sequence.get("status", "missing"))
     post_review_sequence_ok = bool(post_review_sequence.get("ok"))
@@ -510,23 +578,47 @@ def build_objective_requirement_audit_from_payloads(
             requirement_id="6.1",
             objective_step="6",
             requirement="recovery experiment contains all five required policy conditions and safety metrics",
-            status="proxy_satisfied" if recovery_ok else "missing",
-            paper_claim_status="proxy engineering evidence",
-            evidence="janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+            status="satisfied" if recovery_human_complete else ("proxy_satisfied" if recovery_ok else "missing"),
+            paper_claim_status=(
+                "human-reviewed recovery evidence"
+                if recovery_human_complete
+                else "proxy engineering evidence"
+            ),
+            evidence=(
+                "janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json"
+                if recovery_human_complete
+                else "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json"
+            ),
             result=recovery_result,
-            blocking_dependency="human-reviewed labels before intervention claims",
-            next_action="Keep this as proxy until selected-300 reviewed labels are available.",
+            blocking_dependency="" if recovery_human_complete else "human-reviewed labels before intervention claims",
+            next_action=(
+                "Use this aggregate human-reviewed recovery evidence for recovery-specific claims."
+                if recovery_human_complete
+                else "Keep this as proxy until selected-300 reviewed labels are available."
+            ),
         ),
         requirement_row(
             requirement_id="6.2",
             objective_step="6",
-            requirement="proxy recovery result demonstrates reduced dangerous decisions",
-            status="proxy_satisfied" if recovery_gain_ok else "failed",
-            paper_claim_status="proxy engineering evidence",
-            evidence="janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+            requirement="recovery result demonstrates reduced dangerous decisions",
+            status="satisfied" if recovery_human_complete and recovery_gain_ok else ("proxy_satisfied" if recovery_gain_ok else "failed"),
+            paper_claim_status=(
+                "human-reviewed recovery evidence"
+                if recovery_human_complete
+                else "proxy engineering evidence"
+            ),
+            evidence=(
+                "janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json"
+                if recovery_human_complete
+                else "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json"
+            ),
             result=recovery_gain_result,
-            blocking_dependency="human-reviewed recovery rerun before paper-grade intervention claim",
-            next_action="Rerun recovery after human review and compare safety tradeoffs again.",
+            blocking_dependency="" if recovery_human_complete else "human-reviewed recovery rerun before paper-grade intervention claim",
+            next_action=(
+                "Use the human-reviewed recovery comparison for intervention-safety claims."
+                if recovery_human_complete
+                else "Rerun recovery after human review and compare safety tradeoffs again."
+            ),
         ),
         requirement_row(
             requirement_id="6.3",
@@ -622,8 +714,10 @@ def load_current_payloads(root: Path) -> dict[str, Any]:
         "high_stakes_summary": read_json(root / "70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/summary.json"),
         "predictor_summary": read_json(root / "70_experiments/runs/janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json"),
         "recovery_summary": read_json(root / "70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json"),
+        "human_recovery_summary": read_json(root / "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json"),
         "human_refresh": read_json(root / "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"),
         "human_predictor": read_json(root / "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_summary.json"),
+        "human_predictor_rows": read_tsv(root / "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_comparison.tsv"),
         "post_review": read_json(root / "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json"),
         "post_review_sequence": read_json(root / "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_summary.json"),
     }

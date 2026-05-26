@@ -306,26 +306,35 @@ def add_policy_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
         )
     )
 
-    scope_failures = [
-        name
-        for name in policy_names
-        if not text_has_all_terms(
-            str(payloads.get(name, {}).get("remaining_review_scope", "")),
-            REQUIRED_SCOPE_TERMS,
-        )
-    ]
+    complete = review_complete(payloads)
+    scope_failures = []
+    for name in policy_names:
+        scope_text = str(payloads.get(name, {}).get("remaining_review_scope", ""))
+        if complete:
+            scope_ok = text_has_all_terms(
+                scope_text,
+                ("complete", "proxy-to-paper claim resolution"),
+            ) or text_has_all_terms(scope_text, REQUIRED_SCOPE_TERMS)
+        else:
+            scope_ok = text_has_all_terms(scope_text, REQUIRED_SCOPE_TERMS)
+        if not scope_ok:
+            scope_failures.append(name)
     rows.append(
         check_row(
             check_id="C020",
-            invariant="remaining selected-300 review scope includes row/model/timing fields",
+            invariant="remaining selected-300 review scope matches review state",
             passed=not scope_failures,
             evidence="remaining_review_scope fields across aggregate summaries",
             result=(
-                "all summaries name risk, decision, expected action, confidence, per-model fields, and per-row timing"
+                (
+                    "all summaries record completed review scope and proxy-to-paper claim resolution"
+                    if complete
+                    else "all summaries name risk, decision, expected action, confidence, per-model fields, and per-row timing"
+                )
                 if not scope_failures
                 else f"scope drift in {','.join(scope_failures)}"
             ),
-            next_action="Rerun the stale aggregate generator and do not proceed to write/refresh while scope is inconsistent.",
+            next_action="Rerun stale aggregate generators until scope text matches the current review state.",
         )
     )
 

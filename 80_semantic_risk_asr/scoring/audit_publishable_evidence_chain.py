@@ -55,6 +55,13 @@ STATUS_ORDER = {
     "missing": 4,
     "failed": 5,
 }
+REQUIRED_RECOVERY_POLICIES = {
+    "no_recovery",
+    "confidence_only_trigger",
+    "sres_triggered_recovery",
+    "ceis_triggered_conservative_action",
+    "ceis_ensemble_arbitration",
+}
 SENSITIVE_TOKENS = (
     "audio_id",
     "sample_id",
@@ -139,13 +146,49 @@ def objective_row(
     }
 
 
+def recovery_summary_ready(payload: dict[str, Any]) -> bool:
+    policies = payload.get("policies") if isinstance(payload.get("policies"), dict) else {}
+    no_recovery = policies.get("no_recovery", {})
+    ceis = policies.get("ceis_triggered_conservative_action", {})
+    no_recovery_critical = int(no_recovery.get("critical_miss_count", 0))
+    ceis_critical = int(ceis.get("critical_miss_count", 999))
+    no_recovery_high_risk = int(no_recovery.get("high_risk_missed_count", 0))
+    ceis_high_risk = int(ceis.get("high_risk_missed_count", 999))
+    return (
+        bool(payload.get("ok"))
+        and payload.get("human_reviewed") is True
+        and payload.get("review_status") == "human_reviewed_complete"
+        and REQUIRED_RECOVERY_POLICIES <= set(policies)
+        and no_recovery_critical > ceis_critical
+        and no_recovery_high_risk > ceis_high_risk
+    )
+
+
+def recovery_result_text(payload: dict[str, Any]) -> str:
+    policies = payload.get("policies") if isinstance(payload.get("policies"), dict) else {}
+    no_recovery = policies.get("no_recovery", {})
+    ceis = policies.get("ceis_triggered_conservative_action", {})
+    ensemble = policies.get("ceis_ensemble_arbitration", {})
+    return (
+        "Human-reviewed recovery compares five policies over "
+        f"{payload.get('sample_count', '')} model samples: no recovery has "
+        f"{no_recovery.get('high_risk_missed_count', '')} high-risk missed and "
+        f"{no_recovery.get('critical_miss_count', '')} critical miss; CEIS action has "
+        f"{ceis.get('high_risk_missed_count', '')} high-risk missed and "
+        f"{ceis.get('critical_miss_count', '')} critical miss; ensemble abstains "
+        f"{ensemble.get('machine_abstention_count', '')} times."
+    )
+
+
 def objective_rows_from_payloads(
     *,
     readiness_payload: dict[str, Any],
     human_refresh: dict[str, Any],
     human_predictor: dict[str, Any],
+    human_recovery: dict[str, Any] | None = None,
     reviewer_action_gate: dict[str, Any] | None = None,
 ) -> list[dict[str, str]]:
+    human_recovery = human_recovery or {}
     reviewer_action_gate = reviewer_action_gate or readiness_payload.get("reviewer_action_gate", {})
     migration = gate_status(readiness_payload, "migration and best-model selection checkpoint")
     smoke = gate_status(readiness_payload, "legacy-best load smoke tests")
@@ -170,6 +213,7 @@ def objective_rows_from_payloads(
         "WER/CER/SRES/CEIS predictor comparison on selected-300",
     )
     recovery_proxy = gate_status(readiness_payload, "five-condition recovery experiment")
+    recovery_human_ready = recovery_summary_ready(human_recovery)
     human_audit = gate_status(
         readiness_payload,
         "selected-300 human risk-atom audit completion",
@@ -270,13 +314,13 @@ def objective_rows_from_payloads(
             objective_id="4",
             objective="canonical janus_165_v1 258-row test split comparison",
             status=split_258,
-            paper_claim_status="proxy evidence; not human-reviewed risk-atom evidence",
+            paper_claim_status="proxy split evidence awaiting reviewed risk-atom upgrade",
             evidence="janus_258_test_split_asr_cds_proxy summary and comparison TSV",
             result="Six-model 258-row aggregate includes paper-facing zh metrics and decision-risk proxy fields."
             if split_258 == "proxy_completed"
             else "258-row six-model comparison is incomplete.",
             blocking_dependency="human-reviewed risk-atom and decision-change fields before paper-grade risk claims",
-            next_action="Do not convert proxy risk-atom counts into formal human-reviewed conclusions.",
+            next_action="Use the split aggregate for model-comparison context and route paper-grade risk conclusions through reviewed labels.",
         ),
         objective_row(
             objective_id="5",
@@ -305,16 +349,38 @@ def objective_rows_from_payloads(
         objective_row(
             objective_id="6",
             objective="five-condition recovery experiment",
-            status=recovery_proxy,
-            paper_claim_status="proxy engineering evidence until human labels confirm outcomes",
-            evidence="janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
-            result="Recovery proxy shows CEIS action reduces high-risk missed and critical miss."
-            if recovery_proxy == "proxy_completed"
-            else "Recovery comparison evidence is missing or incomplete.",
-            blocking_dependency="human-reviewed risk/decision labels and post-review recovery re-evaluation",
+            status="completed" if recovery_human_ready else recovery_proxy,
+            paper_claim_status=(
+                "human-reviewed recovery evidence"
+                if recovery_human_ready
+                else "proxy engineering evidence until human labels confirm outcomes"
+            ),
+            evidence=(
+                "janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json"
+                if recovery_human_ready
+                else "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json"
+            ),
+            result=(
+                recovery_result_text(human_recovery)
+                if recovery_human_ready
+                else (
+                    "Recovery proxy shows CEIS action reduces high-risk missed and critical miss."
+                    if recovery_proxy == "proxy_completed"
+                    else "Recovery comparison evidence is missing or incomplete."
+                )
+            ),
+            blocking_dependency=(
+                ""
+                if recovery_human_ready
+                else "human-reviewed risk/decision labels and post-review recovery re-evaluation"
+            ),
             next_action=(
-                "After selected-300 risk/decision review, rerun recovery using "
-                "reviewed labels before paper-grade intervention claims."
+                "Use the aggregate human-reviewed recovery outputs for recovery-specific claims."
+                if recovery_human_ready
+                else (
+                    "After selected-300 risk/decision review, rerun recovery using "
+                    "reviewed labels before paper-grade intervention claims."
+                )
             ),
         ),
     ]
@@ -326,6 +392,7 @@ def build_completion_audit_from_payloads(
     readiness_payload: dict[str, Any],
     human_refresh: dict[str, Any],
     human_predictor: dict[str, Any],
+    human_recovery: dict[str, Any] | None = None,
     consequence_matrix: dict[str, Any] | None = None,
     reviewer_action_gate: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
@@ -334,6 +401,7 @@ def build_completion_audit_from_payloads(
         readiness_payload=readiness_payload,
         human_refresh=human_refresh,
         human_predictor=human_predictor,
+        human_recovery=human_recovery,
         reviewer_action_gate=reviewer_action_gate,
     )
     counts: dict[str, int] = {}
@@ -392,19 +460,26 @@ def build_completion_audit_from_payloads(
             "latest_apply_status": reviewer_action_gate.get("latest_apply_status", ""),
         },
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
-        "remaining_review_scope": REMAINING_REVIEW_SCOPE,
+        "remaining_review_scope": (
+            "Selected-300 row/model/timing review and human-reviewed recovery are complete; "
+            "remaining work is proxy-to-paper claim resolution."
+            if human_refresh.get("status") == "review_complete"
+            and human_refresh.get("pending_rows") == 0
+            and human_refresh.get("pending_model_assessments") == 0
+            else REMAINING_REVIEW_SCOPE
+        ),
         "completion_rows": rows,
         "blocking_or_proxy_items": blocking_rows,
         "first_principle_decision": (
-            "Do not spend more GPU time to chase ASR fine-tuning until the selected-300 "
-            "risk-atom and model-assessment audit converts proxy CDS-ASR evidence "
-            "into paper-grade evidence; do not duplicate transcript review."
+            "Prioritize consequence-centric paper evidence over additional ASR "
+            "fine-tuning. Human-reviewed selected-300 and recovery outputs can "
+            "support their scoped claims; remaining proxy gates stay labeled until "
+            "their claim-evidence layer is upgraded."
         ),
         "next_decision": (
-            "Complete selected-300 risk-atom, decision-change, per-model "
-            "assessment, and per-row timing fields, run the strict response "
-            "gate with --require-complete --require-timing, then rerun "
-            "human-reviewed predictor and recovery claims."
+            "Use completed human-reviewed selected-300 and recovery outputs for "
+            "their scoped claims, then resolve the remaining proxy-only split and "
+            "predictor evidence gates before declaring publishable readiness."
         ),
     }
     assert_completion_safe(payload)
@@ -416,6 +491,13 @@ def build_completion_audit(root: Path) -> dict[str, Any]:
     audit_dir = root / "70_experiments" / "runs" / "janus_300_high_stakes_human_audit_selection_2026_05_25"
     human_refresh = read_json(audit_dir / "human_audit_refresh_summary.json")
     human_predictor = read_json(audit_dir / "human_audit_predictor_summary.json")
+    human_recovery = read_json(
+        root
+        / "70_experiments"
+        / "runs"
+        / "janus_300_high_stakes_recovery_human_reviewed_2026_05_26"
+        / "summary.json"
+    )
     reviewer_action_gate = readiness_payload.get("reviewer_action_gate", {})
     consequence_matrix = read_json(
         root
@@ -428,6 +510,7 @@ def build_completion_audit(root: Path) -> dict[str, Any]:
         readiness_payload=readiness_payload,
         human_refresh=human_refresh,
         human_predictor=human_predictor,
+        human_recovery=human_recovery,
         consequence_matrix=consequence_matrix,
         reviewer_action_gate=reviewer_action_gate,
     )
