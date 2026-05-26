@@ -576,7 +576,7 @@ def test_refresh_updates_evidence_chain_consistency_audit(tmp_path: Path) -> Non
     assert "strict_dry_run" in payload["post_review_sequence_blocker_keys"]
     assert payload["post_review_sequence_executed_step_count"] == 0
     assert payload["consistency_audit_ok"] is True
-    assert payload["consistency_status_counts"] == {"pass": 18}
+    assert payload["consistency_status_counts"] == {"pass": 24}
     assert payload["consistency_failed_checks"] == []
     assert consistency_payload["ok"] is True
     assert (readiness_dir / "evidence_chain_consistency.tsv").exists()

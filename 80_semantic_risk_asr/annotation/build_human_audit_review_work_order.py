@@ -301,6 +301,57 @@ def build_packet_work_order(handoff: dict[str, Any]) -> list[dict[str, Any]]:
     ]
 
 
+def public_step_fields(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "work_order_id": row.get("work_order_id", ""),
+        "row_number": row.get("row_number", ""),
+        "step_order": row.get("step_order", ""),
+        "step_type": row.get("step_type", ""),
+        "status": row.get("status", ""),
+        "command": row.get("command", ""),
+        "completion_signal": row.get("completion_signal", ""),
+        "privacy_boundary": row.get("privacy_boundary", ""),
+    }
+
+
+def summarize_next_reviewer_operation(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    pending_statuses = {"pending", "local_only_required"}
+    row_steps = [
+        row
+        for row in rows
+        if row.get("row_number") != "packet"
+        and str(row.get("status", "")) in pending_statuses
+    ]
+    if not row_steps:
+        return {
+            "status": "no_pending_row_steps",
+            "current_step": {},
+            "next_local_row_step": {},
+        }
+
+    current = row_steps[0]
+    row_number = str(current.get("row_number", ""))
+    local_open = next(
+        (
+            row
+            for row in row_steps
+            if str(row.get("row_number", "")) == row_number
+            and row.get("step_type") == "open_local_row"
+        ),
+        {},
+    )
+    return {
+        "status": "reviewer_operation_ready",
+        "current_step": public_step_fields(current),
+        "next_local_row_step": public_step_fields(local_open) if local_open else {},
+        "note": (
+            "Run current_step first. If current_step is mark_timing_start, then open "
+            "next_local_row_step locally; command output is transcript-bearing and must "
+            "not be copied into tracked files."
+        ),
+    }
+
+
 def build_work_order(
     *,
     run_dir: Path,
@@ -358,6 +409,7 @@ def build_work_order(
         "session_start_status": session_start.get("status", ""),
         "handoff_status": handoff.get("status", ""),
         "handoff_freshness_status": handoff.get("freshness_status", ""),
+        "next_reviewer_operation": summarize_next_reviewer_operation(rows),
         "tracked_outputs": {
             "review_work_order_summary": repo_relative(
                 run_dir / WORK_ORDER_SUMMARY_NAME,

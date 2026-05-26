@@ -1181,6 +1181,61 @@ def add_review_work_order_dry_run_gate_check(
     )
 
 
+def add_review_work_order_next_operation_check(
+    payloads: dict[str, dict[str, Any]],
+    rows: list[dict[str, str]],
+) -> None:
+    work_order = payloads.get("work_order", {})
+    next_operation = work_order.get("next_reviewer_operation")
+    next_operation = next_operation if isinstance(next_operation, dict) else {}
+    current_step = next_operation.get("current_step")
+    current_step = current_step if isinstance(current_step, dict) else {}
+    local_step = next_operation.get("next_local_row_step")
+    local_step = local_step if isinstance(local_step, dict) else {}
+    row_numbers = work_order.get("row_numbers")
+    first_row = str(row_numbers[0]) if isinstance(row_numbers, list) and row_numbers else ""
+
+    current_ok = (
+        next_operation.get("status") == "reviewer_operation_ready"
+        and str(current_step.get("row_number", "")) == first_row
+        and current_step.get("step_type") == "mark_timing_start"
+        and current_step.get("status") == "pending"
+        and "mark_human_audit_response_timing.py" in str(current_step.get("command", ""))
+        and "--mark-start" in str(current_step.get("command", ""))
+        and "--write" in str(current_step.get("command", ""))
+    )
+    local_open_ok = (
+        str(local_step.get("row_number", "")) == first_row
+        and local_step.get("step_type") == "open_local_row"
+        and local_step.get("status") == "local_only_required"
+        and "review_human_risk_atom_audit.py" in str(local_step.get("command", ""))
+        and "--show-row" in str(local_step.get("command", ""))
+        and "local-only" in str(local_step.get("privacy_boundary", "")).lower()
+    )
+    status_ok = work_order.get("status") == "review_work_order_ready"
+    passed = current_ok and local_open_ok and status_ok
+    rows.append(
+        check_row(
+            check_id="C078",
+            invariant="review work-order summary exposes the next local operation",
+            passed=passed,
+            evidence=SUMMARY_SPECS["work_order"],
+            result=(
+                "review work-order summary points to the next timing-start and local-row-open operations"
+                if passed
+                else (
+                    f"current_ok={current_ok}; local_open_ok={local_open_ok}; "
+                    f"status={work_order.get('status', '')}"
+                )
+            ),
+            next_action=(
+                "Regenerate the review work-order summary so reviewer execution can "
+                "start from the tracked next operation without scanning the full TSV."
+            ),
+        )
+    )
+
+
 def add_sequence_aware_objective_check(
     payloads: dict[str, dict[str, Any]],
     rows: list[dict[str, str]],
@@ -1322,6 +1377,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_response_action_items_check(root, payloads, rows)
         add_review_work_order_check(root, payloads, rows)
         add_review_work_order_dry_run_gate_check(root, payloads, rows)
+        add_review_work_order_next_operation_check(payloads, rows)
         add_review_work_order_sequence_route_check(root, payloads, rows)
         add_post_review_sequence_check(root, payloads, rows)
         add_post_review_sequence_dry_run_gate_check(root, payloads, rows)

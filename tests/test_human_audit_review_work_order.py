@@ -116,6 +116,13 @@ def test_review_work_order_builds_safe_row_and_packet_steps(tmp_path: Path) -> N
         "model_field_action_items": 1,
         "timing_action_items": 1,
     }
+    next_operation = payload["next_reviewer_operation"]
+    assert next_operation["status"] == "reviewer_operation_ready"
+    assert next_operation["current_step"]["row_number"] == "1"
+    assert next_operation["current_step"]["step_type"] == "mark_timing_start"
+    assert "--mark-start" in next_operation["current_step"]["command"]
+    assert next_operation["next_local_row_step"]["step_type"] == "open_local_row"
+    assert "--show-row" in next_operation["next_local_row_step"]["command"]
     by_step = {row["step_type"]: row for row in rows}
     assert by_step["mark_timing_start"]["status"] == "pending"
     assert by_step["open_local_row"]["status"] == "local_only_required"

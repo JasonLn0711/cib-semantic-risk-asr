@@ -688,6 +688,7 @@ def refresh_human_audit_evidence(
         "human_recovery_ready": "",
         "review_work_order_status": "",
         "review_work_order_overview": {},
+        "next_reviewer_operation": {},
         "post_review_sequence_status": "",
         "post_review_sequence_blocker_keys": [],
         "post_review_sequence_executed_step_count": "",
@@ -780,6 +781,10 @@ def refresh_human_audit_evidence(
         payload["review_work_order_status"] = work_order_payload.get("status", "")
         payload["review_work_order_overview"] = work_order_payload.get(
             "review_work_order_overview",
+            {},
+        )
+        payload["next_reviewer_operation"] = work_order_payload.get(
+            "next_reviewer_operation",
             {},
         )
         payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
