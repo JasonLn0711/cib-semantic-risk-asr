@@ -34,6 +34,13 @@ language.
 
 ## Audience-Attractive Paper Shape
 
+Teacher-feedback rule: a paper can be technically steady and still fail to
+earn attention. For manuscript-facing writing, do not open with the method or a
+balanced internal status summary. Open with a cited real-world or credible
+near-future problem that a reader can recognize as consequential. Then show the
+current solution landscape fairly, name the remaining claim-evidence gap, and
+introduce this work as the new viewpoint that addresses that opening problem.
+
 When a document needs to hold attention, use this sequence:
 
 ```text

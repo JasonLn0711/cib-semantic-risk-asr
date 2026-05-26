@@ -5,6 +5,40 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.229 - 2026-05-26T22:54:26+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `9cf96c0`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/paper/manuscript_draft.md`
+
+## v2.5.228 - 2026-05-26T22:53:16+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `d1b1547`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/paper/attention_led_introduction_blueprint.md`
+  - `80_semantic_risk_asr/paper/citation_seed.md`
+  - `80_semantic_risk_asr/paper/figures/README.md`
+  - `80_semantic_risk_asr/paper/figures/f1_cds_asr_pipeline.svg`
+  - `80_semantic_risk_asr/paper/figures/f2_evidence_boundary.svg`
+  - `80_semantic_risk_asr/paper/figures/f3_predictor_auc.svg`
+  - `80_semantic_risk_asr/paper/figures/f4_recovery_outcomes.svg`
+  - `80_semantic_risk_asr/paper/figures/f5_model_lane_state.svg`
+  - `80_semantic_risk_asr/paper/generate_paper_figures.py`
+  - `80_semantic_risk_asr/paper/manuscript_draft.md`
+  - `80_semantic_risk_asr/paper/references.bib`
+  - `80_semantic_risk_asr/paper/second_reviewer_evidence_boundary_review_2026_05_26.md`
+  - `80_semantic_risk_asr/paper/story_outline.md`
+  - `80_semantic_risk_asr/paper/submission_readiness_package_zh.md`
+  - `docs/research_writing_style_policy.md`
+
 ## v2.5.227 - 2026-05-26T12:07:33+08:00
 
 - Bump: `patch`

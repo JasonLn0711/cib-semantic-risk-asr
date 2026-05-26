@@ -9,6 +9,13 @@ decision-stability view that complements transcript-centered ASR evaluation.
 
 ## Core Narrative
 
+Teacher feedback operational rule: the paper should not merely be
+`四平八穩`. It should first earn the reader's attention with a cited real-world
+or credible near-future problem, then move through the current solution
+landscape, the remaining gap, and the CDS-ASR viewpoint. The opening problem
+must be concrete enough that the reader understands why a decision-stability
+metric matters before seeing the method details.
+
 Use this sequence for the abstract, introduction, cover letter, and talk track:
 
 ```text

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="330" viewBox="0 0 1120 330" role="img">
+<rect width="1120" height="330" fill="white"/>
+<style>
+  text { font-family: Arial, Helvetica, sans-serif; fill: #1f2933; }
+  .title { font-size: 22px; font-weight: 700; }
+  .subtitle { font-size: 13px; fill: #52606d; }
+  .label { font-size: 13px; font-weight: 700; }
+  .small { font-size: 11px; fill: #52606d; }
+</style>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#9fb3c8"/></marker></defs>
+<text x="34" y="42" class="title" text-anchor="start">F1. CDS-ASR Pipeline</text>
+<text x="34" y="64" class="subtitle" text-anchor="start">Aggregate-only method diagram; no transcript or row content.</text>
+<rect x="34" y="120" width="145" height="88" rx="6" fill="#ffffff" stroke="#2f80ed" stroke-width="1.4"/>
+<rect x="34" y="120" width="145" height="10" fill="#2f80ed" rx="5"/>
+<text x="106" y="160" class="label" text-anchor="middle">Audio</text>
+<text x="106" y="182" class="small" text-anchor="middle">speech input</text>
+<line x1="183" y1="164" x2="207" y2="164" stroke="#9fb3c8" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="214" y="120" width="145" height="88" rx="6" fill="#ffffff" stroke="#0f9f9a" stroke-width="1.4"/>
+<rect x="214" y="120" width="145" height="10" fill="#0f9f9a" rx="5"/>
+<text x="286" y="160" class="label" text-anchor="middle">ASR</text>
+<text x="286" y="182" class="small" text-anchor="middle">hypothesis + signals</text>
+<line x1="363" y1="164" x2="387" y2="164" stroke="#9fb3c8" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="394" y="120" width="145" height="88" rx="6" fill="#ffffff" stroke="#f2994a" stroke-width="1.4"/>
+<rect x="394" y="120" width="145" height="10" fill="#f2994a" rx="5"/>
+<text x="466" y="160" class="label" text-anchor="middle">Risk atoms</text>
+<text x="466" y="182" class="small" text-anchor="middle">negation, amount, actor</text>
+<line x1="543" y1="164" x2="567" y2="164" stroke="#9fb3c8" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="574" y="120" width="145" height="88" rx="6" fill="#ffffff" stroke="#7b61ff" stroke-width="1.4"/>
+<rect x="574" y="120" width="145" height="10" fill="#7b61ff" rx="5"/>
+<text x="646" y="160" class="label" text-anchor="middle">Variants</text>
+<text x="646" y="182" class="small" text-anchor="middle">plausible alternatives</text>
+<line x1="723" y1="164" x2="747" y2="164" stroke="#9fb3c8" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="754" y="120" width="145" height="88" rx="6" fill="#ffffff" stroke="#219653" stroke-width="1.4"/>
+<rect x="754" y="120" width="145" height="10" fill="#219653" rx="5"/>
+<text x="826" y="160" class="label" text-anchor="middle">SRES / CEIS</text>
+<text x="826" y="182" class="small" text-anchor="middle">decision instability</text>
+<line x1="903" y1="164" x2="927" y2="164" stroke="#9fb3c8" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="934" y="120" width="145" height="88" rx="6" fill="#ffffff" stroke="#d64545" stroke-width="1.4"/>
+<rect x="934" y="120" width="145" height="10" fill="#d64545" rx="5"/>
+<text x="1006" y="160" class="label" text-anchor="middle">Recovery</text>
+<text x="1006" y="182" class="small" text-anchor="middle">conservative action</text>
+<text x="34" y="278" class="subtitle" text-anchor="start">Human review supplies evaluation labels only; recovery policies remain automatic and aggregate-evaluated.</text>
+</svg>

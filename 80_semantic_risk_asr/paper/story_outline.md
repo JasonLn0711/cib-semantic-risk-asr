@@ -36,6 +36,13 @@ speech-to-decision systems are already operational
 Every real-world or anticipated-risk claim needs a citation, source note,
 dataset, reviewed experiment record, or clearly marked evidence gap.
 
+Teacher-feedback interpretation:
+
+> A technically steady paper is not enough if the opening does not create a
+> reason to read. The manuscript should start from the cited real-world problem,
+> then show current solutions, identify the remaining decision-stability gap,
+> and introduce CDS-ASR as the new viewpoint that addresses the opening problem.
+
 ### 1. Real-World Problem
 
 Speech is becoming an operational input to contact-center analytics and
