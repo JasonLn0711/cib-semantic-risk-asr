@@ -1,2 +1,3 @@
 created_at	selection_stratum	batch_order	rows_in_batch	row_numbers	local_packet_path	status
 2026-05-25T21:05:05+08:00	critical_or_high_risk_missed	1	6	1,2,3,4,5,6	70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_batches/2026-05-25T210505_0800_critical_or_high_risk_missed.md	batch_prepared
+2026-05-26T09:25:02+08:00	unsafe_downrouting	2	6	7,8,9,10,11,12	70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_batches/2026-05-26T092502_0800_unsafe_downrouting.md	batch_prepared

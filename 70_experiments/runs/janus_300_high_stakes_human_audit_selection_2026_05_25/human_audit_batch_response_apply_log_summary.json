@@ -6,29 +6,32 @@
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
   "apply_log_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_log.tsv",
-  "apply_log_entries": 8,
+  "apply_log_entries": 12,
   "missing_log_columns": [],
   "status_counts": {
-    "response_pending": 8
+    "response_complete": 2,
+    "response_pending": 10
   },
   "mode_counts": {
-    "dry_run": 8
+    "dry_run": 11,
+    "write": 1
   },
   "ok_counts": {
-    "False": 8
+    "False": 10,
+    "True": 2
   },
   "error_key_counts": {
-    "incomplete_response": 8,
-    "missing_review_timing": 5
+    "incomplete_response": 10,
+    "missing_review_timing": 7
   },
   "latest": {
-    "recorded_at": "2026-05-26T05:28:47+08:00",
+    "recorded_at": "2026-05-26T09:27:03+08:00",
     "ok": "False",
     "status": "response_pending",
     "mode": "dry_run",
     "require_complete": "True",
     "require_timing": "True",
-    "selection_stratum": "critical_or_high_risk_missed",
+    "selection_stratum": "unsafe_downrouting",
     "rows_in_batch": 6,
     "reviewed_rows_in_response": 0,
     "pending_rows_in_response": 6,
@@ -41,7 +44,7 @@
     "mean_review_elapsed_seconds": "",
     "error_count_total": 7,
     "error_keys": "incomplete_response,missing_review_timing",
-    "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv",
+    "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T092502_0800_unsafe_downrouting_response_template.tsv",
     "source_batch_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json"
   },
   "next_action": "Fill all required row, model, and timing fields in the local response TSV, rerun strict dry-run until response_complete, then write and refresh."

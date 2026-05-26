@@ -29,7 +29,7 @@
   "consequence_ready": false,
   "recovery_proxy_available": true,
   "recovery_human_ready": false,
-  "human_recovery_status": "review_pending",
+  "human_recovery_status": "partial_review",
   "human_recovery_evidence_mode": "human_reviewed_pending",
   "blocker_keys": [
     "response_closeout_not_ready",
@@ -44,8 +44,8 @@
     "purpose": "Exact post-review command order after the local selected-300 response TSV has human row/model/timing fields filled.",
     "current_first_action": "complete_response_closeout",
     "closeout_commands": {
-      "strict_dry_run": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30",
-      "write_refresh_prepare_next": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --write --refresh-after-write --prepare-next-after-write --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30"
+      "strict_dry_run": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T092502_0800_unsafe_downrouting_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30",
+      "write_refresh_prepare_next": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --write --refresh-after-write --prepare-next-after-write --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T092502_0800_unsafe_downrouting_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30"
     },
     "post_write_order": [
       {
@@ -92,7 +92,7 @@
       "evidence_gate": "post-write aggregate refresh",
       "status": "blocked",
       "paper_claim_status": "review-pending",
-      "evidence": "refresh_status=review_pending; pending_rows=30; pending_model_assessments=90",
+      "evidence": "refresh_status=partial_review; pending_rows=24; pending_model_assessments=72",
       "next_action": "run apply response with --write --refresh-after-write, then require refresh review_complete"
     },
     {
@@ -100,7 +100,7 @@
       "evidence_gate": "human-reviewed predictor refresh",
       "status": "blocked",
       "paper_claim_status": "proxy-only",
-      "evidence": "predictor_status=review_pending; pending_model_assessments=90",
+      "evidence": "predictor_status=partial_review; pending_model_assessments=72",
       "next_action": "refresh human-audit predictor outputs after selected rows are reviewed"
     },
     {
@@ -132,7 +132,7 @@
       "evidence_gate": "recovery policy evidence",
       "status": "proxy_only",
       "paper_claim_status": "proxy-only until human review",
-      "evidence": "recovery_ok=True; proxy_policy_count=5; human_recovery_status=review_pending; human_evidence_mode=human_reviewed_pending; human_policy_count=0",
+      "evidence": "recovery_ok=True; proxy_policy_count=5; human_recovery_status=partial_review; human_evidence_mode=human_reviewed_pending; human_policy_count=0",
       "next_action": "rerun recovery policy evaluation after human-reviewed labels are available"
     }
   ],

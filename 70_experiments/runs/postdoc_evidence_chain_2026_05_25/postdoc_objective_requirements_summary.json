@@ -141,7 +141,7 @@
       "status": "review_pending",
       "paper_claim_status": "not paper-ready",
       "evidence": "human_audit_refresh_summary.json; human_audit_predictor_summary.json",
-      "result": "reviewed_rows=0/30; reviewed_model_assessments=0/90; human_predictor_status=review_pending",
+      "result": "reviewed_rows=6/30; reviewed_model_assessments=18/90; human_predictor_status=partial_review",
       "blocking_dependency": "selected-300 risk labels, decision-change labels, safe action, confidence, per-model fields, and timing",
       "next_action": "Complete only the non-transcript reviewer fields plus timing, then rerun strict closeout and refresh."
     },
@@ -242,7 +242,7 @@
       "status": "review_pending",
       "paper_claim_status": "not paper-ready",
       "evidence": "human_audit_refresh_summary.json; human_audit_predictor_summary.json",
-      "result": "reviewed_rows=0/30; reviewed_model_assessments=0/90; human_predictor_status=review_pending",
+      "result": "reviewed_rows=6/30; reviewed_model_assessments=18/90; human_predictor_status=partial_review",
       "blocking_dependency": "selected-300 risk labels, decision-change labels, safe action, confidence, per-model fields, and timing",
       "next_action": "Complete only the non-transcript reviewer fields plus timing, then rerun strict closeout and refresh."
     },
@@ -259,5 +259,5 @@
     }
   ],
   "next_decision": "Do not declare the postdoc objective complete. Complete selected-300 row/model/timing review, run strict closeout, then execute run_post_review_evidence_sequence.py --execute so write/refresh, human predictor refresh, strict human-reviewed recovery, post-review checklist, and objective audit happen in order.",
-  "runtime_seconds": 0.0006
+  "runtime_seconds": 0.0007
 }

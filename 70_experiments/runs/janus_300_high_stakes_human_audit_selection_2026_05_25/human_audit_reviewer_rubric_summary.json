@@ -22,7 +22,7 @@
     "available": true,
     "ok": true,
     "status": "reviewer_action_ready",
-    "selection_stratum": "critical_or_high_risk_missed",
+    "selection_stratum": "unsafe_downrouting",
     "pending_rows_in_batch": 6,
     "rows_in_batch": 6,
     "pending_model_assessments_in_batch": 18,

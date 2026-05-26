@@ -8,14 +8,14 @@
   "output_boundary": "aggregate-only apply status; no private row keys or transcript text",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
-  "selection_stratum": "critical_or_high_risk_missed",
+  "selection_stratum": "unsafe_downrouting",
   "row_numbers": [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
   ],
   "rows_in_batch": 6,
   "reviewed_rows_in_response": 0,
@@ -50,7 +50,7 @@
   },
   "response_gap_summary_by_row": [
     {
-      "row_number": 1,
+      "row_number": 7,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -78,7 +78,7 @@
       "review_timing_missing": true
     },
     {
-      "row_number": 2,
+      "row_number": 8,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -106,7 +106,7 @@
       "review_timing_missing": true
     },
     {
-      "row_number": 3,
+      "row_number": 9,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -134,7 +134,7 @@
       "review_timing_missing": true
     },
     {
-      "row_number": 4,
+      "row_number": 10,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -162,7 +162,7 @@
       "review_timing_missing": true
     },
     {
-      "row_number": 5,
+      "row_number": 11,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -190,7 +190,7 @@
       "review_timing_missing": true
     },
     {
-      "row_number": 6,
+      "row_number": 12,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -235,8 +235,8 @@
     "missing_review_timing": 6
   },
   "backup_path": "",
-  "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv",
+  "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T092502_0800_unsafe_downrouting_response_template.tsv",
   "source_batch_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json",
   "next_action": "Fill all required row and model fields in the response TSV, rerun dry-run with --require-complete and --require-timing, then apply with --write once status is response_complete.",
-  "runtime_seconds": 0.0008
+  "runtime_seconds": 0.0012
 }

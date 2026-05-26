@@ -5,14 +5,14 @@
   "output_boundary": "aggregate-only work order; no audio IDs, transcripts, hypotheses, or reviewer notes",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
-  "selection_stratum": "critical_or_high_risk_missed",
+  "selection_stratum": "unsafe_downrouting",
   "row_numbers": [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
   ],
   "review_work_order_overview": {
     "row_count": 6,
@@ -36,22 +36,22 @@
   "next_reviewer_operation": {
     "status": "reviewer_operation_ready",
     "current_step": {
-      "work_order_id": "row-1:01-mark-timing-start",
-      "row_number": "1",
+      "work_order_id": "row-7:01-mark-timing-start",
+      "row_number": "7",
       "step_order": "01",
       "step_type": "mark_timing_start",
       "status": "pending",
-      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 1 --mark-start --write",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T092502_0800_unsafe_downrouting_response_template.tsv --row-number 7 --mark-start --write",
       "completion_signal": "review_started_at is present for every model row in this selected row",
       "privacy_boundary": "tracked command only; local response TSV remains ignored"
     },
     "next_local_row_step": {
-      "work_order_id": "row-1:02-open-local-row",
-      "row_number": "1",
+      "work_order_id": "row-7:02-open-local-row",
+      "row_number": "7",
       "step_order": "02",
       "step_type": "open_local_row",
       "status": "local_only_required",
-      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --row-number 1 --show-row --access-log 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_local_row_access_log.tsv",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --row-number 7 --show-row --access-log 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_local_row_access_log.tsv",
       "completion_signal": "reviewer has inspected the local row without copying content into git",
       "privacy_boundary": "command output is transcript-bearing and must stay local-only"
     },
@@ -64,5 +64,5 @@
     "closeout_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json"
   },
   "next_concrete_action": "Use the work-order TSV during local review: start timing, inspect one local row, fill row/model fields, finish timing, then run strict dry-run, closeout, and the post-review sequence runner.",
-  "runtime_seconds": 0.0013
+  "runtime_seconds": 0.0014
 }

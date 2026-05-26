@@ -3,8 +3,8 @@
   "paper_ready": false,
   "status_counts": {
     "completed": 5,
-    "proxy_completed": 4,
-    "review_pending": 1
+    "partial_review": 1,
+    "proxy_completed": 4
   },
   "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "Remaining selected-300 review work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
@@ -12,7 +12,7 @@
     "available": true,
     "ok": true,
     "status": "reviewer_action_ready",
-    "selection_stratum": "critical_or_high_risk_missed",
+    "selection_stratum": "unsafe_downrouting",
     "rows_in_batch": 6,
     "pending_rows_in_batch": 6,
     "model_assessments_in_batch": 18,
@@ -106,21 +106,14 @@
     {
       "phase": "5",
       "requirement": "selected-300 human risk-atom audit completion",
-      "status": "review_pending",
+      "status": "partial_review",
       "paper_claim_status": "not paper-ready",
       "evidence": "human_audit_validation_summary.json; human_audit_reviewer_action_checklist_summary.json",
-      "result": "0/30 selected rows have risk-atom review fields complete and 0/90 model assessments are complete; transcript ground truth is not the pending item; current reviewer action gate is reviewer_action_ready with 6/6 packet rows and 18/18 model assessments pending, and 6/6 timing rows pending",
+      "result": "6/30 selected rows have risk-atom review fields complete and 18/90 model assessments are complete; transcript ground truth is not the pending item; current reviewer action gate is reviewer_action_ready with 6/6 packet rows and 18/18 model assessments pending, and 6/6 timing rows pending",
       "next_action": "Run the reviewer action checklist, fill selected-300 risk-atom, decision-change, expected-action, confidence, and per-model assessment fields plus per-row review timing; then run the session-gated strict response dry-run with --require-complete --require-timing before the aggregate refresh."
     }
   ],
-  "blocking_gates": [
-    {
-      "phase": "5",
-      "requirement": "selected-300 human risk-atom audit completion",
-      "status": "review_pending",
-      "next_action": "Run the reviewer action checklist, fill selected-300 risk-atom, decision-change, expected-action, confidence, and per-model assessment fields plus per-row review timing; then run the session-gated strict response dry-run with --require-complete --require-timing before the aggregate refresh."
-    }
-  ],
+  "blocking_gates": [],
   "proxy_only_gates": [
     {
       "phase": "4",

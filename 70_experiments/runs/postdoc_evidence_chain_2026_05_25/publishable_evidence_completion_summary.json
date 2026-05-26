@@ -24,7 +24,7 @@
     "available": true,
     "ok": true,
     "status": "reviewer_action_ready",
-    "selection_stratum": "critical_or_high_risk_missed",
+    "selection_stratum": "unsafe_downrouting",
     "pending_rows_in_batch": 6,
     "rows_in_batch": 6,
     "pending_model_assessments_in_batch": 18,
@@ -91,7 +91,7 @@
       "status": "review_pending",
       "paper_claim_status": "not paper-ready",
       "evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json; janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json; human_audit_refresh_summary.json; human_audit_predictor_summary.json",
-      "result": "Selected-300 proxy inputs, metric-predictor proxy, and refresh gate exist, but selected-300 risk-atom review is 0/30 rows and 0/90 model assessments; transcript ground truth is already accepted for WER/CER scoring. Current reviewer action gate is reviewer_action_ready: 6/6 packet rows and 18/18 model assessments pending.",
+      "result": "Selected-300 proxy inputs, metric-predictor proxy, and refresh gate exist, but selected-300 risk-atom review is 6/30 rows and 18/90 model assessments; transcript ground truth is already accepted for WER/CER scoring. Current reviewer action gate is reviewer_action_ready: 6/6 packet rows and 18/18 model assessments pending.",
       "blocking_dependency": "selected-300 risk-atom, decision-change, per-model assessment, and per-row timing completion",
       "next_action": "Fill the selected-300 reviewer fields that are not transcript ground truth plus per-row review timing, rerun the strict response dry-run with --require-complete --require-timing, then use human-reviewed predictor outputs."
     },

@@ -1,16 +1,16 @@
 {
   "ok": true,
-  "status": "review_pending",
+  "status": "partial_review",
   "input_boundary": "local transcript-bearing audit sheet; do not commit input",
   "output_boundary": "aggregate-only; no audio IDs, sample IDs, transcripts, hypotheses, or reviewer notes",
   "audit_rows": 30,
   "model_assessments": 90,
-  "reviewed_model_assessments": 0,
-  "pending_model_assessments": 90,
+  "reviewed_model_assessments": 18,
+  "pending_model_assessments": 72,
   "warning_counts": {},
   "notes": [
     "Predictor metrics are computed only over reviewed model-level assessments.",
     "Uncertain decisions are excluded from the yes-only target and included in the yes-or-uncertain target."
   ],
-  "wall_time_seconds": 0.0007
+  "wall_time_seconds": 0.0008
 }

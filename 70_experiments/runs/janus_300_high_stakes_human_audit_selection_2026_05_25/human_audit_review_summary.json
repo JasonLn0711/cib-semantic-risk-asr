@@ -2,30 +2,40 @@
   "ok": true,
   "input_boundary": "local transcript-bearing audit sheet; do not commit input",
   "output_boundary": "aggregate-only; no audio IDs, sample IDs, transcripts, hypotheses, or reviewer notes",
-  "status": "review_pending",
+  "status": "partial_review",
   "audit_rows": 30,
-  "reviewed_rows": 0,
-  "pending_rows": 30,
+  "reviewed_rows": 6,
+  "pending_rows": 24,
   "model_assessments": 90,
-  "reviewed_model_assessments": 0,
-  "pending_model_assessments": 90,
+  "reviewed_model_assessments": 18,
+  "pending_model_assessments": 72,
   "malformed_model_assessments": 0,
   "missing_required_field_counts": {
-    "reviewer_annotation_confidence": 30,
-    "reviewer_asr_confusion_terms": 30,
-    "reviewer_critical_atoms": 30,
-    "reviewer_decision_change_reason": 30,
-    "reviewer_expected_safe_action": 30,
-    "reviewer_risk_atoms": 30,
-    "reviewer_semantic_risk_label": 30,
-    "reviewer_would_asr_error_change_decision": 30
+    "reviewer_annotation_confidence": 24,
+    "reviewer_asr_confusion_terms": 24,
+    "reviewer_critical_atoms": 24,
+    "reviewer_decision_change_reason": 24,
+    "reviewer_expected_safe_action": 24,
+    "reviewer_risk_atoms": 24,
+    "reviewer_semantic_risk_label": 24,
+    "reviewer_would_asr_error_change_decision": 24
   },
   "malformed_field_counts": {},
   "label_counts": {
-    "reviewer_semantic_risk_label": {},
-    "reviewer_expected_safe_action": {},
-    "reviewer_would_asr_error_change_decision": {},
-    "reviewer_annotation_confidence": {}
+    "reviewer_semantic_risk_label": {
+      "critical_escalation": 1,
+      "priority_review": 5
+    },
+    "reviewer_expected_safe_action": {
+      "critical_escalation": 1,
+      "priority_review": 5
+    },
+    "reviewer_would_asr_error_change_decision": {
+      "yes": 6
+    },
+    "reviewer_annotation_confidence": {
+      "high": 6
+    }
   },
-  "wall_time_seconds": 0.0011
+  "wall_time_seconds": 0.0008
 }

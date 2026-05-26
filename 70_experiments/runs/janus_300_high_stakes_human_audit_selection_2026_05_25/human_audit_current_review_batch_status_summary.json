@@ -5,15 +5,15 @@
   "input_boundary": "local ignored audit sheet plus tracked batch summary",
   "output_boundary": "aggregate-only batch completion status; no private row keys or transcript text",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
-  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, and per-model assessment fields.",
-  "selection_stratum": "critical_or_high_risk_missed",
+  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
+  "selection_stratum": "unsafe_downrouting",
   "row_numbers": [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
   ],
   "rows_in_batch": 6,
   "reviewed_rows_in_batch": 0,
@@ -40,8 +40,8 @@
     "reviewer_would_asr_error_change_decision": 18
   },
   "source_batch_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json",
-  "local_packet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_batches/2026-05-25T210505_0800_critical_or_high_risk_missed.md",
+  "local_packet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_batches/2026-05-26T092502_0800_unsafe_downrouting.md",
   "tracked_rows_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_current_review_batch_status_rows.tsv",
   "next_action": "Complete all row fields and per-model assessments for this batch, then rerun this status audit before refreshing aggregate evidence.",
-  "runtime_seconds": 0.0008
+  "runtime_seconds": 0.0012
 }

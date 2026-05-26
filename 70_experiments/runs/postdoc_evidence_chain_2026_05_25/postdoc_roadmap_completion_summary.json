@@ -14,9 +14,9 @@
     "review_pending": 1
   },
   "current_review_counts": {
-    "selected_300_rows_reviewed": 0,
+    "selected_300_rows_reviewed": 6,
     "selected_300_rows_total": 30,
-    "selected_300_model_assessments_reviewed": 0,
+    "selected_300_model_assessments_reviewed": 18,
     "selected_300_model_assessments_total": 90,
     "current_packet_rows_pending": 6,
     "current_packet_rows_total": 6,
@@ -32,29 +32,27 @@
     "available": true,
     "ok": true,
     "strict_locale_policy": "Taiwan Traditional Chinese; no Simplified Chinese output accepted for promotion",
-    "promotion_decision": "No requested ASR/Gemma candidate should be promoted to 258-row or selected-300 runtime until the strict Taiwan Traditional Chinese locale policy is clean or the Gemma 4 multimodal runtime is isolated.",
-    "latest_checked_at": "2026-05-26 08:25 CST",
+    "promotion_decision": "No 2026-05-26 candidate should be promoted to 258-row or selected-300 because SenseVoiceSmall and Qwen3-ASR-0.6B both failed the strict locale gate, while Qwen3-ASR-1.7B timed out before inference.",
+    "latest_checked_at": "",
     "evaluated_15_row_contract_runs": [
-      "whisper_large_v3_15_row_baseline",
-      "whisper_large_v3_turbo_15_row_baseline",
       "sensevoice_small_15_row_candidate",
       "qwen3_asr_0_6b_15_row_candidate"
     ],
-    "evaluated_15_row_contract_run_count": 4,
+    "evaluated_15_row_contract_run_count": 2,
     "evaluated_15_row_contract_rows_ok": true,
     "blocked_or_stopped_count": 2,
     "blocked_or_stopped_runs": [
       {
-        "run_id": "qwen3_asr_1_7b_current_recheck_1_row",
+        "run_id": "qwen3_asr_1_7b_smoke_1_row",
         "model": "Qwen/Qwen3-ASR-1.7B",
         "status": "timeout_before_inference",
-        "decision": "Retry only after Qwen3-ASR-0.6B passes strict zh-TW locale control or after an isolated cache/download plan exists."
+        "decision": "Retry only after the 0.6B lane passes the strict Traditional Chinese locale gate or after an isolated cache/download plan exists."
       },
       {
-        "run_id": "gemma4_audio_class_probe_current_recheck",
+        "run_id": "gemma4_audio_runner_gate_2026_05_25",
         "model": "unsloth/gemma-4-E2B_and_E4B",
         "status": "blocked_local_transformers_multimodal_class_missing",
-        "decision": "Create an isolated Gemma 4 multimodal/audio runtime before any prompted-ASR test."
+        "decision": "Keep Gemma 4 in a separate prompted multimodal-ASR lane; do not mix it into pure-ASR tables."
       }
     ]
   },
@@ -117,7 +115,7 @@
       "status": "review_pending",
       "paper_claim_status": "not paper-ready",
       "authoritative_evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json; janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json; human_audit_refresh_summary.json; human_audit_predictor_summary.json",
-      "current_evidence_result": "Selected-300 proxy inputs, metric-predictor proxy, and refresh gate exist, but selected-300 risk-atom review is 0/30 rows and 0/90 model assessments; transcript ground truth is already accepted for WER/CER scoring. Current reviewer action gate is reviewer_action_ready: 6/6 packet rows and 18/18 model assessments pending.",
+      "current_evidence_result": "Selected-300 proxy inputs, metric-predictor proxy, and refresh gate exist, but selected-300 risk-atom review is 6/30 rows and 18/90 model assessments; transcript ground truth is already accepted for WER/CER scoring. Current reviewer action gate is reviewer_action_ready: 6/6 packet rows and 18/18 model assessments pending.",
       "blocking_dependency": "selected-300 risk-atom, decision-change, per-model assessment, and per-row timing completion",
       "next_action": "Fill the selected-300 reviewer fields that are not transcript ground truth plus per-row review timing, rerun the strict response dry-run with --require-complete --require-timing, then use human-reviewed predictor outputs."
     },
@@ -137,7 +135,7 @@
       "status": "blocked",
       "paper_claim_status": "not paper-ready",
       "authoritative_evidence": "human_audit_response_closeout_summary.json; human_audit_refresh_summary.json; human_audit_predictor_summary.json; human_audit_post_review_evidence_summary.json; evidence_chain_readiness_summary.json; publishable_evidence_completion_summary.json; consequence_evidence_matrix_summary.json",
-      "current_evidence_result": "Post-review evidence remains blocked: closeout=False, refresh=False, predictor=False, publishable=False, consequence=False, human_recovery=False. Current selected-300 review is 0/30 rows and 0/90 model assessments; current packet pending 6/6 rows and 18/18 model assessments, with 6 timing rows missing.",
+      "current_evidence_result": "Post-review evidence remains blocked: closeout=False, refresh=False, predictor=False, publishable=False, consequence=False, human_recovery=False. Current selected-300 review is 6/30 rows and 18/90 model assessments; current packet pending 6/6 rows and 18/18 model assessments, with 6 timing rows missing.",
       "blocking_dependency": "response_closeout_not_ready, human_refresh_not_complete, human_predictor_not_complete, paper_ready_false, publishable_ready_false, consequence_paper_claims_not_ready, recovery_proxy_only",
       "next_action": "Complete the response closeout gate first: fill row/model/timing fields, rerun the session-gated strict dry-run with --require-complete --require-timing, then write/refresh and rerun this checklist."
     }
@@ -170,5 +168,5 @@
   ],
   "first_principle_decision": "The repo should now optimize for a publishable consequence evidence chain, not a longer ASR leaderboard. New ASR candidates stop at the locale/runtime gate unless they change the CDS-ASR paper evidence.",
   "next_decision": "Close the selected-300 row/model/timing response gate, run the strict closeout path with --require-complete --require-timing, write/refresh aggregate human review evidence, rerun predictor and recovery analyses, then rerun this roadmap audit before claiming the objective is complete.",
-  "runtime_seconds": 0.0031
+  "runtime_seconds": 0.0004
 }
