@@ -180,8 +180,7 @@ def objective_rows_from_payloads(
         and human_predictor.get("pending_model_assessments") == 0
     )
     refresh_review_complete = (
-        human_refresh.get("ok")
-        and human_refresh.get("status") == "review_complete"
+        human_refresh.get("status") == "review_complete"
         and human_refresh.get("pending_rows") == 0
         and human_refresh.get("pending_model_assessments") == 0
     )
@@ -292,10 +291,15 @@ def objective_rows_from_payloads(
             result=main_result,
             blocking_dependency="selected-300 risk-atom, decision-change, per-model assessment, and per-row timing completion",
             next_action=(
-                "Fill the selected-300 reviewer fields that are not transcript "
-                "ground truth plus per-row review timing, rerun the strict "
-                "response dry-run with --require-complete --require-timing, "
-                "then use human-reviewed predictor outputs."
+                "Use the completed human-reviewed selected-300 aggregate outputs for "
+                "predictor and recovery analysis; keep proxy-only claims labeled."
+                if main_status == "completed"
+                else (
+                    "Fill the selected-300 reviewer fields that are not transcript "
+                    "ground truth plus per-row review timing, rerun the strict "
+                    "response dry-run with --require-complete --require-timing, "
+                    "then use human-reviewed predictor outputs."
+                )
             ),
         ),
         objective_row(

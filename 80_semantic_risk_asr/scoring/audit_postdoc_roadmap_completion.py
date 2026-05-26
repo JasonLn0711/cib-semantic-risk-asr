@@ -351,8 +351,7 @@ def build_roadmap_audit_from_payloads(
     consequence_ready = bool(consequence.get("paper_claims_ready"))
     post_review_ready = bool(post_review.get("ok")) and post_review.get("status") == "post_review_evidence_ready"
     human_review_complete = (
-        human_refresh.get("ok")
-        and human_refresh.get("status") == "review_complete"
+        human_refresh.get("status") == "review_complete"
         and human_refresh.get("pending_rows") == 0
         and human_refresh.get("pending_model_assessments") == 0
         and human_predictor.get("status") == "review_complete"

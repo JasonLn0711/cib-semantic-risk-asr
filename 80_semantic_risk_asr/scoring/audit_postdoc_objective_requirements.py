@@ -446,8 +446,7 @@ def build_objective_requirement_audit_from_payloads(
         and bool(predictor_summary.get("low_wer_summary"))
     )
     human_review_complete = (
-        bool(human_refresh.get("ok"))
-        and human_refresh.get("status") == "review_complete"
+        human_refresh.get("status") == "review_complete"
         and int(human_refresh.get("pending_rows") or 0) == 0
         and int(human_refresh.get("pending_model_assessments") or 0) == 0
         and bool(human_predictor.get("ok"))

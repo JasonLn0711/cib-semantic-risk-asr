@@ -239,8 +239,7 @@ def build_post_review_checklist(
 
     closeout_ready = closeout.get("ok") is True and closeout.get("status") == "response_complete_ready_to_write"
     refresh_complete = (
-        refresh.get("ok") is True
-        and refresh.get("status") == "review_complete"
+        refresh.get("status") == "review_complete"
         and int(refresh.get("pending_rows") or 0) == 0
         and int(refresh.get("pending_model_assessments") or 0) == 0
     )

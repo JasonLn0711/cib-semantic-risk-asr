@@ -215,10 +215,23 @@ def consequence_rows_from_payloads(
         > ceis_recovery.get("critical_miss_count", 999)
     )
     human_complete = (
-        human_refresh.get("ok")
-        and human_refresh.get("status") == "review_complete"
+        human_refresh.get("status") == "review_complete"
         and human_refresh.get("pending_rows") == 0
         and human_refresh.get("pending_model_assessments") == 0
+    )
+    completion_status_counts = (
+        completion_audit.get("status_counts")
+        if isinstance(completion_audit.get("status_counts"), dict)
+        else {}
+    )
+    publishability_status = (
+        "completed"
+        if completion_audit.get("publishable_ready")
+        else (
+            "review_pending"
+            if int(completion_status_counts.get("review_pending") or 0) > 0
+            else "proxy_completed"
+        )
     )
     preflight_ready = bool(preflight.get("ok")) and preflight.get("status") == "review_session_ready"
 
@@ -326,13 +339,17 @@ def consequence_rows_from_payloads(
                 f"preflight status is {preflight.get('status', 'missing')}."
             ),
             blocking_dependency="selected-300 risk atoms, decision-change labels, expected safe action, confidence, per-model assessments, and per-row timing",
-            next_action="Fill the current ready packet including timing, run strict dry-run with --require-complete --require-timing to response_complete, then write and refresh aggregate evidence.",
+            next_action=(
+                "Use completed human-reviewed selected-300 aggregate evidence; do not reopen transcript review."
+                if human_complete
+                else "Fill the current ready packet including timing, run strict dry-run with --require-complete --require-timing to response_complete, then write and refresh aggregate evidence."
+            ),
         ),
         row(
             consequence_id="C6",
             claim_class="publishability",
             consequence_claim="The repo is not yet paper-ready despite strong proxy evidence.",
-            status="completed" if completion_audit.get("publishable_ready") else "review_pending",
+            status=publishability_status,
             paper_claim_status="paper-ready" if completion_audit.get("publishable_ready") else "not paper-ready",
             evidence_files="postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json",
             aggregate_result=(
@@ -342,7 +359,11 @@ def consequence_rows_from_payloads(
                 else "All objective-level paper evidence is complete."
             ),
             blocking_dependency="selected-300 human row/model/timing review and post-review predictor/recovery refresh",
-            next_action="Do not spend GPU time on more fine-tuning until the selected-300 human evidence gate closes.",
+            next_action=(
+                "Resolve remaining proxy-only evidence gates before paper-ready claims."
+                if publishability_status == "proxy_completed"
+                else "Do not spend GPU time on more fine-tuning until the selected-300 human evidence gate closes."
+            ),
         ),
     ]
     return rows

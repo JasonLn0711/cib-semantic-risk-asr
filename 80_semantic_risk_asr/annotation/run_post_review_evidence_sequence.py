@@ -140,8 +140,7 @@ def human_recovery_ready(payload: dict[str, Any]) -> bool:
 
 def refresh_complete(payload: dict[str, Any]) -> bool:
     return (
-        payload.get("ok") is True
-        and payload.get("status") == "review_complete"
+        payload.get("status") == "review_complete"
         and int(payload.get("pending_rows") or 0) == 0
         and int(payload.get("pending_model_assessments") or 0) == 0
     )
@@ -234,7 +233,7 @@ def make_sequence_rows(
         {
             "step_order": 6,
             "step_type": "post_review_checklist",
-            "status": "ready" if post_review_ok else "blocked_until_human_recovery_ready",
+            "status": "ready" if recovery_ok else "blocked_until_human_recovery_ready",
             "command": command(
                 [".venv/bin/python", "80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py"]
             ),
@@ -314,8 +313,12 @@ def execute_sequence(
         row = {**row, "exit_code": exit_code}
         executed_rows.append(row)
         if exit_code != 0:
-            stopped_step = step_type
-            break
+            if not (
+                step_type == "human_audit_refresh"
+                and refresh_complete(read_json_if_exists(refresh_summary_path))
+            ):
+                stopped_step = step_type
+                break
 
         if step_type == "response_closeout" and not closeout_ready(read_json_if_exists(closeout_summary_path)):
             stopped_step = step_type

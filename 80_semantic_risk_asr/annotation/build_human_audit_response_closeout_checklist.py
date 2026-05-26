@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import shlex
 import sys
 import time
 from pathlib import Path
@@ -80,6 +81,23 @@ def command_for_row(commands: dict[str, Any], key: str, row_number: Any) -> str:
     if not isinstance(command_map, dict):
         return ""
     return str(command_map.get(str(row_number), "") or "")
+
+
+def command_with_response_sheet(command_text: str, response_sheet_path: str) -> str:
+    """Keep generated closeout commands aligned with the latest strict apply summary."""
+    if not command_text or not response_sheet_path:
+        return command_text
+    parts = shlex.split(command_text)
+    try:
+        index = parts.index("--response-sheet")
+    except ValueError:
+        parts.extend(["--response-sheet", response_sheet_path])
+    else:
+        if index + 1 < len(parts):
+            parts[index + 1] = response_sheet_path
+        else:
+            parts.append(response_sheet_path)
+    return " ".join(shlex.quote(part) for part in parts)
 
 
 def write_gap_tsv(
@@ -261,6 +279,15 @@ def build_closeout(
     action_checklist = read_json_if_exists(action_checklist_summary_path)
     handoff = read_json_if_exists(handoff_summary_path)
     commands = handoff.get("commands") if isinstance(handoff.get("commands"), dict) else {}
+    latest_response_sheet = str(apply_summary.get("response_sheet_path", "") or "")
+    strict_dry_run_command = command_with_response_sheet(
+        str(commands.get("strict_dry_run", "") or ""),
+        latest_response_sheet,
+    )
+    write_refresh_command = command_with_response_sheet(
+        str(commands.get("write_refresh_prepare_next", "") or ""),
+        latest_response_sheet,
+    )
     apply_errors = error_keys(apply_summary)
     session_gate = session_gate_from_apply(apply_summary)
 
@@ -332,7 +359,7 @@ def build_closeout(
                 f"rows_match={session_gate.get('row_numbers_match', '')}; "
                 f"stratum_match={session_gate.get('selection_stratum_match', '')}"
             ),
-            "next_action": commands.get("strict_dry_run", ""),
+            "next_action": strict_dry_run_command,
         },
         {
             "step_id": "3",
@@ -387,7 +414,7 @@ def build_closeout(
             "action": "write, refresh, and prepare next batch",
             "status": "ready" if closeout_ready else "blocked_until_response_complete",
             "evidence": f"closeout_ready={closeout_ready}",
-            "next_action": commands.get("write_refresh_prepare_next", ""),
+            "next_action": write_refresh_command,
         },
     ]
 
@@ -429,6 +456,7 @@ def build_closeout(
             "",
         ),
         "latest_apply_status": apply_summary.get("status", ""),
+        "latest_response_sheet_path": latest_response_sheet,
         "require_timing": apply_summary.get("require_timing", ""),
         "review_timing": review_timing,
         "response_gap_overview": response_gap_overview,
