@@ -58,9 +58,9 @@ provenance outputs, and a 30-row/90-model-assessment human-reviewed audit,
 CDS-ASR provides a consequence-centered evidence layer beyond transcript
 similarity. In the scoped selected-300 human-reviewed audit, CEIS achieves the
 highest decision-change AUC and a zero-false-negative operating point. In
-recovery-policy evaluation, risk-triggered policies, including CEIS-triggered
-conservative action, reduce high-risk missed and critical miss counts to zero
-under the aggregate-only claim boundary. These results support
+aggregate policy replay, risk-triggered policies, including CEIS-triggered
+conservative action, eliminate high-risk missed and critical miss counts under
+the aggregate-only claim boundary. These results support
 decision-stability evaluation as a scoped companion to transcript accuracy,
 semantic metrics, and confidence-aware correction.
 
@@ -87,6 +87,11 @@ caller already transferred money, whether the amount was 30,000 or 300,000,
 who initiated contact, when the event happened, and whether the caller is
 certain. These are decision atoms. When ASR changes a decision atom, the
 downstream action can change even if most words remain similar.
+
+In this paper, "dangerous" is operationalized as ASR-induced decision change
+that can produce unsafe downrouting, high-risk missed escalation, or critical
+miss under the declared anti-fraud triage policy. This definition makes the
+title a measurable evidence claim rather than a general safety label.
 
 Current ASR evaluation and repair methods provide strong foundations for this
 setting. WER and CER give reproducible transcript-centered baselines. Semantic
@@ -233,14 +238,52 @@ CEIS(x) = max over v in V(x) [
 `Plausibility(v | x)` denotes a bounded proxy plausibility score derived from
 model disagreement, Mandarin phonetic ambiguity, domain-slot alternatives, and
 available ASR/runtime signals. `RiskAtomWeight(v)` is a risk-atom class weight
-that can be kept uniform for an ablation or assigned from the decision-critical
-atom schema when the paper tests policy-weighted variants. `DecisionDistance`
-maps the downstream label space into an ordinal safety distance over
-`no_escalation`, `review`, `priority_review`, and `critical_escalation`, with
-critical misses treated as the highest-risk direction for conservative action.
-Thresholds reported in the current predictor table are best operating points on
-the scoped reviewed audit and should be interpreted as diagnostic evidence
-unless later frozen on a separate development set.
+defined by the decision-critical atom schema. `DecisionDistance` maps the
+downstream label space into an ordinal safety distance over `no_escalation`,
+`review`, `priority_review`, `critical_escalation`, conservative machine
+action, and abstention, with critical misses treated as the highest-risk
+direction for conservative action.
+
+### Downstream Decision Function
+
+The downstream decision function `f` is fixed before CEIS scoring. It maps each
+transcript or plausible variant into a declared triage action:
+
+```text
+f(transcript) in {
+    no_escalation,
+    manual_review,
+    priority_review,
+    critical_escalation,
+    conservative_machine_action,
+    abstain
+}
+```
+
+The distance function is policy-aligned rather than language-model-generated:
+same-action pairs have distance 0, neighboring review/escalation states have
+distance 1, and movement from no escalation or routine handling to critical
+escalation receives the largest distance. Unsafe downrouting of a critical
+event receives the maximum penalty used by the policy replay. The submission
+version should freeze this matrix in an appendix so CEIS rankings can be
+reconstructed from aggregate artifacts.
+
+### CEIS Scale Discipline
+
+All CEIS components are treated as bounded comparison terms, not calibrated
+probabilities. `Plausibility(v | x)` is a proxy plausibility score; the paper
+does not claim an acoustic posterior unless a later implementation supplies
+one. `RiskAtomWeight(v)` and `DecisionDistance(f(x), f(v))` must be normalized
+or tabulated before final submission. The next method-hardening analyses are:
+uniform-weight ablation, no-plausibility ablation, binary-decision-flip
+ablation, max versus top-k mean aggregation, and CEIS behavior by atom class.
+Those analyses can be added only from aggregate-safe recomputation or reported
+as planned validation if the current artifact package cannot reconstruct them.
+
+Thresholds reported in the current predictor table are diagnostic operating
+points selected on the scoped reviewed audit. They are useful for aggregate
+comparison and reviewer inspection, but they are not frozen deployment
+thresholds unless later selected on a separate development set.
 
 Recovery remains automatic and machine-bounded. Human review is used as an
 evaluation and governance layer, not as the proposed recovery method. The
@@ -318,6 +361,56 @@ All paper-facing claims point to aggregate artifacts. The manuscript does not
 require raw audio, raw transcripts, selected row IDs, hypotheses, reviewer
 notes, or model weights.
 
+### Evaluation Units And N-Ladder
+
+The manuscript separates evidence units explicitly so that model assessments
+are not mistaken for independent audio rows.
+
+| Layer | Unit | N | Role |
+| --- | ---: | ---: | --- |
+| Test split | audio rows | 258 | ASR model comparison |
+| Selected high-stakes provenance | selected candidate rows / outputs | 300 | row-selection and provenance |
+| Human-reviewed audit rows | audio rows | 30 | decision-critical review unit |
+| Human-reviewed model assessments | model-row assessments | 90 | predictor and recovery evaluation |
+
+Because the 90 model assessments are clustered within 30 audio rows,
+inferential uncertainty should be estimated with row-clustered bootstrap
+resampling or leave-one-row-out sensitivity analysis. Point estimates are
+reported as scoped descriptive evidence; deployment claims do not treat the 90
+assessments as independent calls.
+
+### Selection Provenance And Enrichment
+
+The selected-300 audit surface is an enriched high-stakes sample, not a
+prevalence-preserving sample of all anti-fraud calls. The selection summary
+uses aggregate-safe provenance signals from SRES scoring, CEIS scoring, and
+downstream escalation decisions, including high-risk missed, critical miss,
+unsafe downrouting, model disagreement, high proxy risk, risk-score fill, and
+clean-control strata. The aggregate selection thresholds recorded for the
+current package are `low_wer_threshold=10.0`, `sres_threshold=20.0`, and
+`ceis_threshold=5.0`.
+
+Predictor results therefore support metric behavior on an enriched high-stakes
+audit surface rather than population-level risk prevalence. If a submission
+emphasizes CEIS/SRES separation, a sensitivity check should exclude rows
+directly selected by CEIS or SRES family signals and confirm whether the same
+directional pattern remains.
+
+### Variant Coverage And Human Review Reliability
+
+Counterfactual variant generation needs an aggregate-only coverage audit before
+final submission. The current selected audit covers risk atoms in aggregate:
+action 25/25, actor 15/15, amount 23/23, negation 14/14, and scam pattern
+23/23 selected rows. A stronger supplement should report variants per
+assessment, source mix, atom mix, rejected variants, no-risk controls, and CEIS
+trigger rate on non-critical atom variants without exposing transcript text.
+
+Human labels come from a completed expert audit rather than multi-annotator
+adjudication. Inter-annotator agreement is not claimed. A lightweight blinded
+spot-check by a second reviewer can strengthen the submission without reopening
+the selected-300 review: sample 5-10 rows, hide model id and metric scores, and
+review only aggregate-safe decision-change fields.
+
 ## Experiments
 
 Experiment 1 evaluates comparable ASR model evidence on the canonical 258-row
@@ -325,18 +418,21 @@ test split. This table supports model-comparison and split evidence, not the
 paper-grade selected-300 risk/recovery claims.
 
 Experiment 2 uses selected-300 high-stakes proxy outputs as input provenance.
-The selected-300 proxy outputs identify the high-stakes evidence surface and
-the review sample, but their raw rows and transcript-bearing metric inputs
-remain local or ignored.
+The selected-300 proxy outputs identify an enriched high-stakes evidence
+surface and the review sample, but their raw rows and transcript-bearing metric
+inputs remain local or ignored. This experiment supports selection provenance,
+not population prevalence.
 
 Experiment 3 evaluates WER, CER, SRES, and CEIS against human-reviewed
 decision-change labels over 90 model assessments from the selected-300 audit.
-This is the paper-grade predictor evidence for metric-insufficiency and
-decision-stability claims.
+These assessments are clustered within 30 reviewed audio rows. This is the
+paper-grade predictor evidence for metric-insufficiency and decision-stability
+claims, reported as scoped descriptive evidence until row-clustered uncertainty
+is added.
 
 Experiment 4 evaluates five recovery policies against the same human-reviewed
-evidence layer. This is the paper-grade recovery evidence for intervention
-claims.
+evidence layer. This is aggregate policy replay evidence, not a live causal
+deployment trial.
 
 Candidate ASR and multimodal models are kept in a separate exploratory lane.
 They must not enter the main ASR table until they pass field-contract,
@@ -421,9 +517,11 @@ are transcript-surface baselines; SRES is the semantic-risk baseline; CEIS is
 the proposed decision-stability metric.
 
 Target: `human_decision_change_yes`, 90 reviewed model assessments, 16 positive
-model assessments.
+model assessments, clustered within 30 reviewed audio rows. Diagnostic
+thresholds are selected on the scoped audit set for aggregate comparison and
+are not frozen deployment thresholds.
 
-| Predictor | AUC | Best threshold | Best F1 | Precision | Recall | True positive | False positive | False negative | Paper use |
+| Predictor | AUC | Diagnostic threshold | Best F1 | Precision | Recall | True positive | False positive | False negative | Paper use |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | WER | 0.6964 | 42.59 | 0.4615 | 0.3913 | 0.5625 | 9 | 14 | 7 | Surface baseline |
 | CER | 0.7276 | 16.42 | 0.4516 | 0.3043 | 0.8750 | 14 | 32 | 2 | Surface baseline |
@@ -434,27 +532,29 @@ Evidence source:
 `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_comparison.tsv`.
 
 CEIS has the strongest human-reviewed decision-change AUC and reaches recall
-1.0 at the selected threshold, while SRES achieves the highest best-threshold
-F1 and fewer false positives. This supports CEIS as a conservative
-decision-stability signal rather than a replacement for all semantic-risk
-metrics.
+1.0 at the diagnostic threshold, while SRES achieves the highest
+best-threshold F1 and fewer false positives. The CEIS/SRES AUC difference is
+small and should be interpreted with row-clustered uncertainty rather than as a
+definitive ranking. This supports CEIS as a conservative decision-stability
+signal while preserving SRES as a strong semantic-risk recovery baseline.
 
 ### Table 4. Human-Reviewed Recovery Policy Table
 
-Table 4 reports five recovery policies evaluated under human-reviewed
-selected-300 labels. The recovery evidence is aggregate-only and uses the same
-30 reviewed rows and 90 reviewed model assessments as the predictor table.
+Table 4 reports five recovery policies evaluated as aggregate replay under
+human-reviewed selected-300 labels. The recovery evidence is aggregate-only and
+uses the same 30 reviewed rows and 90 reviewed model assessments as the
+predictor table.
 
 Evidence mode: human-reviewed selected-300, 30 reviewed rows and 90 reviewed
 model assessments.
 
-| Policy | Rows | Unsafe downrouting | High-risk missed | Critical miss | Triggered count | Recovery budget | Machine abstention | Scoped interpretation |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| No recovery | 90 | 29 | 6 | 1 | 0 | 0.0000 | 0 | Baseline decision risk |
-| Confidence-only trigger | 90 | 29 | 6 | 1 | 0 | 0.0000 | 0 | No calibrated confidence trigger available |
-| SRES-triggered recovery | 90 | 24 | 0 | 0 | 35 | 0.3889 | 0 | Semantic-risk recovery baseline |
-| CEIS-triggered conservative action | 90 | 24 | 0 | 0 | 35 | 0.3889 | 0 | CEIS conservative action reaches 0 high-risk missed and 0 critical miss |
-| CEIS ensemble arbitration | 90 | 24 | 0 | 0 | 47 | 0.5222 | 18 | Adds abstention/interval behavior at higher budget |
+| Policy | Model assessments | Unsafe downrouting | High-risk missed | Critical miss | Triggered count | Recovery budget | Severe misses eliminated | Triggers per severe miss eliminated | Machine abstention | Scoped interpretation |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| No recovery | 90 | 29 | 6 | 1 | 0 | 0.0000 | 0 | n/a | 0 | Baseline decision risk |
+| Calibrated-confidence unavailable | 90 | 29 | 6 | 1 | 0 | 0.0000 | 0 | n/a | 0 | No calibrated confidence trigger available |
+| SRES-triggered recovery | 90 | 24 | 0 | 0 | 35 | 0.3889 | 7 | 5.0 | 0 | Semantic-risk recovery baseline |
+| CEIS-triggered conservative action | 90 | 24 | 0 | 0 | 35 | 0.3889 | 7 | 5.0 | 0 | CEIS conservative action reaches 0 high-risk missed and 0 critical miss in replay |
+| CEIS ensemble arbitration | 90 | 24 | 0 | 0 | 47 | 0.5222 | 7 | 6.7 | 18 | Adds abstention/interval behavior at higher budget |
 
 Evidence sources:
 `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison.tsv`
@@ -462,23 +562,32 @@ and `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_2
 
 Without recovery, the reviewed evidence contains 6 high-risk misses and 1
 critical miss. SRES-triggered recovery and CEIS-triggered conservative action
-both reduce high-risk missed and critical miss counts to zero at the same
-0.3889 budget. CEIS ensemble arbitration preserves this 0/0 result while
-introducing abstention behavior at a higher 0.5222 budget.
+both eliminate high-risk missed and critical miss counts in aggregate policy
+replay at the same 0.3889 trigger budget, corresponding to 35 triggers for 7
+severe missed outcomes eliminated. CEIS ensemble arbitration preserves this
+0/0 result while introducing abstention behavior at a higher 0.5222 budget. The
+policy replay eliminates the most severe missed-risk outcomes under the scoped
+labels, while residual unsafe downrouting remains at 24 and requires separate
+governance.
 
 ## Figure Package
 
 The figure package is generated from aggregate-only inputs by
 `80_semantic_risk_asr/paper/generate_paper_figures.py`. The generated SVGs and
 their privacy boundary are listed in `80_semantic_risk_asr/paper/figures/`.
+The aggregate artifact manifest is generated by
+`80_semantic_risk_asr/paper/build_artifact_manifest.py` and written to
+`80_semantic_risk_asr/paper/artifact_manifest.tsv`.
 
 | Figure | File | Caption | Source | Privacy boundary |
 | --- | --- | --- | --- | --- |
 | F1. CDS-ASR pipeline | `figures/f1_cds_asr_pipeline.svg` | CDS-ASR converts audio into ASR hypotheses and runtime signals, extracts risk atoms, generates plausible variants, scores SRES/CEIS, and applies constrained recovery or conservative action. | Method section | No transcript text or row content |
 | F2. Evidence boundary | `figures/f2_evidence_boundary.svg` | The manuscript separates 258-row split/model-comparison evidence, selected-300 provenance evidence, and selected-300 human-reviewed predictor/recovery evidence. | publishable evidence summary | Aggregate status only |
-| F3. Predictor AUC | `figures/f3_predictor_auc.svg` | CEIS has the highest human-reviewed decision-change AUC in the scoped selected-300 audit, while SRES remains strongest on best-threshold F1. | `human_audit_predictor_comparison.tsv` | Aggregate predictor metrics |
-| F4. Recovery outcomes | `figures/f4_recovery_outcomes.svg` | SRES-triggered recovery and CEIS-triggered conservative action both reduce high-risk missed and critical miss counts to zero at the same 0.3889 budget. | `policy_comparison.tsv` | Aggregate policy counts |
+| F3. Predictor AUC | `figures/f3_predictor_auc.svg` | CEIS has the highest human-reviewed decision-change AUC in the scoped selected-300 audit, while SRES remains strongest on best-threshold F1; bars are point estimates pending row-clustered uncertainty. | `human_audit_predictor_comparison.tsv` | Aggregate predictor metrics |
+| F4. Recovery outcomes | `figures/f4_recovery_outcomes.svg` | SRES-triggered recovery and CEIS-triggered conservative action both eliminate high-risk missed and critical miss counts in aggregate replay at the same 0.3889 budget. | `policy_comparison.tsv` | Aggregate policy counts |
 | F5. Model lane state | `figures/f5_model_lane_state.svg` | Main comparable split evidence, locale-gated candidates, and runtime-blocked probes remain separate until promotion gates are satisfied. | main/candidate aggregate summaries | Aggregate lane state |
+| F6. N-ladder | `figures/f6_n_ladder.svg` | The evidence chain separates 258 rows, selected-300 provenance, 30 reviewed rows, and 90 clustered model assessments. | method evidence units | Aggregate counts only |
+| F7. Budget-risk frontier | `figures/f7_budget_risk_frontier.svg` | Policy replay shows the trigger-budget tradeoff needed to eliminate severe missed outcomes under scoped labels. | `policy_comparison.tsv` | Aggregate policy counts |
 
 ## Discussion
 
@@ -494,13 +603,27 @@ generator on the comparable split, and the selected-300 human-reviewed evidence
 shows how downstream decision evidence refines transcript-centered model
 comparison.
 
-The recovery result supports a scoped intervention claim. Under human-reviewed
+The recovery result supports a scoped replay claim. Under human-reviewed
 selected-300 labels, risk-triggered conservative policies, including
-CEIS-triggered conservative action, reduce high-risk missed and critical miss
-counts to zero. SRES-triggered recovery and CEIS-triggered conservative action
-reach this result at the same 0.3889 recovery budget, while ensemble
-arbitration adds interval/abstention behavior as a higher-budget governance
-option.
+CEIS-triggered conservative action, eliminate high-risk missed and critical
+miss counts in aggregate replay. SRES-triggered recovery and CEIS-triggered
+conservative action reach this result at the same 0.3889 trigger budget, while
+ensemble arbitration adds interval/abstention behavior as a higher-budget
+governance option. CEIS is therefore best presented as the more conservative
+decision-instability signal at the predictor layer, while SRES remains a
+strong semantic-risk recovery baseline.
+
+Improving ASR remains necessary, but stronger transcript models do not replace
+decision-stability analysis. The paper studies residual instability after
+transcript scoring: whether plausible ASR alternatives around decision atoms
+would change escalation, routing, or conservative action. This makes CDS-ASR a
+safety layer for the remaining decision interval, not a substitute for ASR
+model improvement.
+
+The aggregate-only artifact boundary is also a contribution to reproducible
+governance. The paper does not claim full public row-level reproducibility.
+Instead, it provides aggregate reproducibility, operation records, validation
+gates, and consistency checks under a privacy-preserving audit boundary.
 
 The candidate lane is already bounded by evidence. Whisper large-v3,
 Whisper large-v3-turbo, SenseVoiceSmall, and Qwen3-ASR-0.6B have small-gate
@@ -509,19 +632,73 @@ Qwen3-ASR-1.7B is stopped by fetch/load timeout, and Gemma 4 E2B/E4B require an
 isolated multimodal runtime. The next validation step is locale/runtime
 validation, not a broader full-split ASR run.
 
+## Claim Registry
+
+| Claim | Scope | Evidence artifact | Statistic | Limitation / defense |
+| --- | --- | --- | --- | --- |
+| CEIS has the strongest AUC among reported predictors | 90 clustered model assessments from 30 reviewed rows | `human_audit_predictor_comparison.tsv` | AUC 0.9117 | Row-clustered CI needed; selected high-stakes audit surface |
+| CEIS reaches a zero-FN operating point | scoped selected-300 diagnostic threshold | `human_audit_predictor_comparison.tsv` | FN 0, recall 1.0000 | Retrospective diagnostic threshold, not frozen deployment threshold |
+| SRES and CEIS conservative policies eliminate severe misses in replay | aggregate policy replay over reviewed assessments | `policy_comparison.tsv` | high-risk missed 0, critical miss 0 | Replay evidence, not live causal deployment; policies tie at 0.3889 budget |
+| Partial encoder is the strongest current ASR hypothesis generator | 258-row split/model-comparison layer | `asr_cds_proxy_comparison.tsv` | `cer_zh_micro` 15.04, unsafe downrouting 7, high-risk missed 4 | Split-level model-comparison context only |
+| Selected-300 is a high-stakes audit surface | enriched selection provenance | `human_audit_selection_summary.json`, `selection_strata.tsv` | 300 candidates, 30 reviewed rows, 90 assessments | Not prevalence-preserving; selection enrichment disclosed |
+| Aggregate-only release supports reviewer-visible auditability | release and operation-record layer | validation summaries, evidence matrices, operation records, figure scripts | gate state: roadmap complete, publishable ready, consistency 26/26 | No public row-level transcript reproducibility |
+
+## Ethics, Privacy, And Intended Use
+
+This study treats transcript-bearing speech data as sensitive operational
+content. NIH human-subjects guidance treats the use, study, analysis, or
+generation of identifiable private information as a human-subjects trigger
+under the cited federal definition [@nih_human_subjects_research_2024]. This
+paper therefore keeps raw audio, transcript-bearing hypotheses, reviewer
+notes, row identifiers, local response sheets, and runtime logs outside the
+release boundary. Before any external data release or deployment claim, the
+institutional review, exemption, data-use, retention, encryption, and access
+control status must be documented.
+
+CDS-ASR is intended for ASR safety audit, risk-aware routing, manual-review
+prioritization, conservative escalation, and machine abstention. It is not
+intended for automatic guilt or fraud determination, automatic account
+freezing, service denial, punitive action, or direct law-enforcement reporting
+without human review. "Conservative machine action" means preserving
+uncertainty, raising review priority, abstaining, or requiring human
+confirmation.
+
+This intended-use boundary aligns the paper with risk-management governance
+rather than autonomous adverse decision-making. NIST describes the AI RMF as a
+voluntary framework for managing AI risks to individuals, organizations, and
+society and for incorporating trustworthiness considerations into AI design,
+development, use, and evaluation [@nist_ai_rmf_2026]. For cross-border or
+future deployment contexts, the EU AI Act illustrates the broader regulatory
+direction toward risk-based obligations and high-risk AI governance
+[@eu_ai_act_2026]. This manuscript does not provide legal compliance analysis;
+it provides a scoped consequence-centered audit method and a privacy-preserving
+release boundary.
+
 ## Limitations And Threats To Validity
 
 The human-reviewed evidence is scoped to 30 rows and 90 model assessments. It
 supports a focused high-stakes audit claim, not a population-level deployment
 claim.
 
+The 90 model assessments are clustered within 30 audio rows and should not be
+treated as 90 independent calls. Row-clustered bootstrap confidence intervals
+or leave-one-row-out sensitivity analysis should be added before making
+inferential claims about AUC, F1, recall, precision, or recovery budget.
+
 The number of positive decision-change cases is limited. Table 3 has 16
 positive model assessments, so AUC and threshold behavior should be interpreted
 with uncertainty.
 
+The selected-300 audit surface is deliberately enriched for high-stakes
+signals. It supports decision-stability behavior within the selected audit
+boundary, not population prevalence of ASR-induced harm across all calls.
+
 The reported best thresholds are diagnostic operating points on the scoped
 reviewed audit. They can overstate deployment performance unless threshold
 selection is later frozen on a separate development set.
+
+Human labels come from a completed expert audit rather than multi-annotator
+adjudication. Inter-annotator agreement is not claimed.
 
 Recovery evidence is aggregate-only. This protects transcript-bearing call and
 review content, but limits external row-level reproducibility.
@@ -533,10 +710,15 @@ The Taiwan Traditional Chinese locale policy is strict by design. Candidate
 model rejection may reflect deployment-locale mismatch, not universal ASR
 inferiority.
 
-Recovery policies reduce high-risk missed and critical miss counts, but Table 4
-still leaves unsafe downrouting count at 24 after SRES/CEIS conservative
-recovery. The evidence supports scoped risk reduction, not elimination of all
-safety risk.
+Recovery policies eliminate high-risk missed and critical miss counts in
+aggregate replay, but Table 4 still leaves unsafe downrouting count at 24 after
+SRES/CEIS conservative recovery. The evidence supports scoped severe-miss
+reduction, not elimination of all safety risk.
+
+The study does not include a deployment trial and does not estimate population
+prevalence of ASR-induced harm across all calls. It evaluates whether
+decision-critical ASR risk can be detected and mitigated within a deliberately
+enriched high-stakes audit surface.
 
 ## Appendix / Artifact Availability
 
@@ -557,8 +739,19 @@ metric policy, selected-300 human-review status, predictor analysis,
 recovery-policy evaluation, candidate-lane boundaries, and consistency checks
 while preserving the local-only boundary for sensitive materials.
 
+The reviewer package should include an aggregate manifest with artifact path,
+role, privacy class, generator, source inputs, SHA256, source git commit,
+timestamp, Python version, metric-library versions, tokenizer policy, locale
+normalization policy, decoding parameters where available, random seeds where
+used, and hardware summary. The manifest records auditability metadata without
+adding transcript-bearing row content.
+
 ### Reviewer-Reproducible Aggregate Artifacts
 
+- Artifact manifest:
+  `80_semantic_risk_asr/paper/artifact_manifest.tsv`
+- Artifact manifest generator:
+  `80_semantic_risk_asr/paper/build_artifact_manifest.py`
 - Experiment registry: `70_experiments/registry.tsv`
 - Main 258-row comparison:
   `70_experiments/runs/janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv`

@@ -19,3 +19,5 @@ python 80_semantic_risk_asr/paper/generate_paper_figures.py
 | F3. Predictor AUC | `f3_predictor_auc.svg` | `human_audit_predictor_comparison.tsv` | aggregate predictor metrics |
 | F4. Recovery outcomes | `f4_recovery_outcomes.svg` | `policy_comparison.tsv` | aggregate policy counts |
 | F5. Model lane state | `f5_model_lane_state.svg` | main/candidate aggregate summaries | aggregate lane state |
+| F6. Evidence N-ladder | `f6_n_ladder.svg` | method evidence units | aggregate counts only |
+| F7. Budget-risk frontier | `f7_budget_risk_frontier.svg` | `policy_comparison.tsv` | aggregate policy counts |

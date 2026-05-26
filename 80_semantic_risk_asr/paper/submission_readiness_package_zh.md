@@ -81,8 +81,9 @@ Current role:
 - State CDS-ASR as the contribution.
 - State the scoped evidence chain.
 - State the headline result: CEIS aligns better with human-reviewed decision
-  change than WER/CER, and CEIS-triggered action reduces high-risk missed and
-  critical miss counts to zero under the selected-300 boundary.
+  change than WER/CER by AUC/conservative recall, and risk-triggered policies
+  eliminate high-risk missed and critical miss counts in aggregate replay under
+  the selected-300 boundary.
 
 Next edit:
 
@@ -180,7 +181,7 @@ results pass should add one paragraph per table:
 | Main ASR benchmark | Partial encoder has the strongest 258-row `cer_zh_micro` and lowest dangerous-decision proxy counts among the six comparable runs. | `asr_cds_proxy_comparison.tsv` |
 | Candidate lane | New ASR/Gemma candidates have bounded gate evidence but no promotion path until locale/runtime gates change. | `candidate_current_recheck_summary.tsv`, `summary.json` |
 | Predictor table | CEIS has the strongest reviewed decision-change AUC among WER/CER/SRES/CEIS in the selected-300 audit. | `human_audit_predictor_comparison.tsv` |
-| Recovery table | CEIS-triggered conservative action reduces high-risk missed and critical miss counts to zero under human-reviewed labels. | `policy_comparison.tsv`, `summary.json` |
+| Recovery table | SRES-triggered recovery and CEIS-triggered conservative action both eliminate high-risk missed and critical miss counts in aggregate replay under human-reviewed labels. | `policy_comparison.tsv`, `summary.json` |
 
 ### 3.7 Discussion
 
@@ -217,7 +218,7 @@ Use:
 | T1 | Main ASR Benchmark on 258-row Split | `asr_cds_proxy_comparison.tsv` | drafted | Add caption and one result paragraph |
 | T2 | Candidate / Exploratory Lane Boundary | `candidate_current_recheck_summary.tsv` | drafted | Add caption explaining no-promotion decision |
 | T3 | Human-Reviewed Predictor Comparison | `human_audit_predictor_comparison.tsv` | drafted | Add caption: CEIS AUC 0.9117, recall 1.0 |
-| T4 | Human-Reviewed Recovery Policies | `policy_comparison.tsv` | drafted | Add caption: CEIS action reduces high-risk missed and critical miss to 0 |
+| T4 | Human-Reviewed Recovery Policies | `policy_comparison.tsv` | drafted | Add caption: SRES/CEIS replay policies tie at 0 high-risk missed and 0 critical miss |
 
 Second-reviewer table nuance:
 
@@ -239,6 +240,8 @@ Recommended figures:
 | F3 | Predictor AUC bar chart | `human_audit_predictor_comparison.tsv` | Visualize WER/CER/SRES/CEIS contrast |
 | F4 | Recovery policy outcome chart | `policy_comparison.tsv` | Show high-risk missed / critical miss reduction |
 | F5 | Model lane state diagram | `docs/model_evaluation_state.md` and candidate summary | Show main table vs candidate vs runtime-blocked lanes |
+| F6 | Evidence N-ladder | method evidence units | Show 258 split, selected-300, 30 rows, and 90 clustered assessments |
+| F7 | Budget-risk frontier | `policy_comparison.tsv` | Show trigger budget versus severe missed outcomes in replay |
 
 No figure should expose transcript text, sample IDs, audio IDs, reviewer notes,
 or row-level predictions.
@@ -252,19 +255,50 @@ Generated figure package:
 - `80_semantic_risk_asr/paper/figures/f3_predictor_auc.svg`
 - `80_semantic_risk_asr/paper/figures/f4_recovery_outcomes.svg`
 - `80_semantic_risk_asr/paper/figures/f5_model_lane_state.svg`
+- `80_semantic_risk_asr/paper/figures/f6_n_ladder.svg`
+- `80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.svg`
 
 ## 5. Claim-To-Evidence Matrix
 
 | Manuscript claim | Supported wording | Evidence | Boundary |
 | --- | --- | --- | --- |
 | WER/CER are necessary but not enough for high-stakes decision safety | "Correct WER/CER reporting is necessary but transcript similarity alone does not capture decision instability." | `consequence_evidence_matrix.tsv`, `human_audit_predictor_comparison.tsv` | Human-reviewed selected-300 predictor evidence |
-| CEIS better aligns with decision change than WER/CER in this audit | "CEIS reaches AUC 0.9117 against human-reviewed decision-change labels, compared with WER 0.6964 and CER 0.7276." | `human_audit_predictor_comparison.tsv` | 90 reviewed model assessments |
-| Recovery can reduce dangerous decisions under reviewed labels | "CEIS-triggered conservative action reduces high-risk missed and critical miss counts to zero." | `policy_comparison.tsv` | selected-300 reviewed labels |
+| CEIS better aligns with decision change than WER/CER in this audit | "CEIS reaches AUC 0.9117 against human-reviewed decision-change labels, compared with WER 0.6964 and CER 0.7276." | `human_audit_predictor_comparison.tsv` | 90 reviewed model assessments clustered within 30 reviewed rows |
+| Recovery can eliminate severe missed outcomes in replay | "SRES-triggered recovery and CEIS-triggered conservative action both eliminate high-risk missed and critical miss counts in aggregate policy replay." | `policy_comparison.tsv` | selected-300 reviewed labels; replay not live deployment |
 | Stronger ASR helps but does not replace decision-stability evaluation | "The partial encoder is strongest on split metrics, while risk and recovery claims use reviewed downstream labels." | `asr_cds_proxy_comparison.tsv`, `human_audit_predictor_model_summary.tsv` | split evidence plus human-reviewed evidence |
 | Candidate models are not ready for main table | "Candidate models remain bounded by strict zh-TW locale or runtime gates." | `candidate_current_recheck_summary.tsv`, `docs/model_evaluation_state.md` | exploratory lane only |
 | Artifact sharing is aggregate-safe | "The repo tracks aggregate evidence while transcript-bearing inputs remain local or ignored." | `human_audit_refresh_summary.json`, operation-record summaries | privacy-preserving reproducibility |
 
-## 6. Citation Completion Checklist
+## 6. Hostile-Reviewer Hardening Gate
+
+目前最重要的 reviewer 攻防不是再補 selected-300 人工審查，而是把四條防線寫進稿件與 appendix：
+
+| Defense line | Manuscript action | Current state | Remaining analysis |
+| --- | --- | --- | --- |
+| Clustered statistics | 明講 90 model assessments clustered within 30 rows，不當成 90 independent calls | 已加入 N-ladder、Table 3 說明、Limitations | 補 row-clustered bootstrap CI 或 leave-one-row-out sensitivity |
+| Selection enrichment | 明講 selected-300 是 enriched high-stakes audit surface，不是 prevalence sample | 已加入 Selection Provenance | 若要更強，排除 CEIS/SRES-selected rows 做 sensitivity |
+| Threshold policy | 把 best threshold 改成 diagnostic threshold，不當 deployment threshold | 已改 Table 3 與 Limitations | 補 threshold-budget frontier 與 fixed-budget FN 表 |
+| Governance boundary | 新增 Ethics, Privacy, Intended Use，限制 allowed/disallowed uses | 已加入 manuscript，補 NIH/NIST/EU citations | 投稿前補 IRB/exemption/DUA、retention、encryption、access-control 狀態 |
+
+新增 manuscript 防守面：
+
+- N-ladder table：258 split、selected-300 provenance、30 reviewed rows、90 clustered assessments。
+- Claim registry：每個核心 claim 對應 scope、artifact、statistic、limitation。
+- Table 4 replay language：使用 aggregate policy replay，不寫成 live causal intervention。
+- Recovery workload：35 triggers / 7 severe missed outcomes = 5.0 triggers per severe miss eliminated；CEIS ensemble 47 / 7 = 6.7。
+- Residual risk：SRES/CEIS conservative replay 之後 unsafe downrouting 仍為 24，另需 governance。
+- Intended-use boundary：只支援 audit、risk-aware routing、manual review prioritization、abstention、conservative escalation；不支援自動定罪、凍結、拒絕服務或無人工覆核的執法通報。
+
+Analysis backlog for submission polish:
+
+1. Row-clustered bootstrap or leave-one-row-out sensitivity for AUC/F1/recall/precision/recovery budget。
+2. Threshold-budget frontier table：固定 10%、20%、30%、40% budget 下的 FN / severe misses。
+3. Aggregate-only variant coverage audit：variant counts by source and atom, rejected variants, no-risk controls。
+4. CEIS ablations：no plausibility、uniform atom weights、binary flip only、max vs top-k mean、by-atom class。
+5. Artifact manifest：path、role、privacy class、generated_by、source inputs、sha256、source git commit、timestamp、environment。第一版已由 `build_artifact_manifest.py` 產生。
+6. Optional 5-10 row blinded second-reviewer spot-check，不重開 selected-300 review。
+
+## 7. Citation Completion Checklist
 
 Citation seed file:
 
@@ -283,6 +317,7 @@ Required citation groups before submission:
 | LLM ASR correction | Naderi et al. 2024 | BibTeX added; contribution sentence present |
 | High-stakes speech decision systems | Miner et al. 2020 | BibTeX added; use as scoped clinical ASR safety-monitoring neighbor |
 | Safety / abstention / conservative decision | Chow 1970; Geifman and El-Yaniv 2017/2019; Angelopoulos and Bates 2021 | BibTeX added; use for reject option, selective prediction, and uncertainty-set framing |
+| Ethics / privacy / AI governance | NIH human-subjects definition; NIST AI RMF; EU AI Act | BibTeX added; use for sensitive transcript-bearing data, intended-use boundary, and risk-based governance framing |
 
 Second-reviewer citation note:
 
@@ -296,7 +331,7 @@ Submission rule:
 
 > Do not finalize the introduction until every real-world claim has a citation and every empirical claim points to a tracked aggregate artifact.
 
-## 7. Artifact Availability Statement
+## 8. Artifact Availability Statement
 
 Current manuscript text:
 
@@ -312,6 +347,8 @@ they may contain sensitive call or review content.
 Reviewer-reproducible tracked artifacts:
 
 - `70_experiments/registry.tsv`
+- `80_semantic_risk_asr/paper/artifact_manifest.tsv`
+- `80_semantic_risk_asr/paper/build_artifact_manifest.py`
 - `70_experiments/runs/janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv`
 - `70_experiments/runs/wer_metric_audit_2026_05_25/journal_compliance_summary.json`
 - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json`
@@ -322,7 +359,7 @@ Reviewer-reproducible tracked artifacts:
 - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
 - `70_experiments/runs/asr_candidate_current_recheck_2026_05_26/summary.json`
 
-## 8. Immediate Execution Checklist
+## 9. Immediate Execution Checklist
 
 Execute in this order:
 
@@ -332,15 +369,15 @@ Execute in this order:
 4. Add Method subsections and preserve the automatic-recovery / human-review
    boundary.
 5. Add one explanatory paragraph under each Results table.
-6. Generate the aggregate-only figure package F1-F5.
+6. Generate the aggregate-only figure package F1-F7.
 7. Replace citation placeholders with citation keys backed by
    `references.bib`.
 8. Copy the Artifact Availability statement into the manuscript appendix.
 9. Run validation gates to confirm evidence state is unchanged.
-10. Inspect `git status --short` and confirm only paper-facing markdown files
-    changed.
+10. Inspect `git status --short` and confirm only paper-facing markdown,
+    aggregate figure, and aggregate manifest files changed.
 
-## 9. Validation Commands
+## 10. Validation Commands
 
 Run after every manuscript packaging pass:
 
@@ -359,7 +396,7 @@ Expected results:
 - `status_counts.pass=26`
 - `failed_checks=[]`
 
-## 10. Stop Rules
+## 11. Stop Rules
 
 Stop manuscript expansion and repair evidence first if any of these occur:
 
@@ -374,7 +411,7 @@ Stop manuscript expansion and repair evidence first if any of these occur:
    strict Taiwan Traditional Chinese locale gate or isolated Gemma 4
    multimodal runtime.
 
-## 11. Definition Of Done For The Next Manuscript Pass
+## 12. Definition Of Done For The Next Manuscript Pass
 
 The next pass is complete when:
 
@@ -392,4 +429,5 @@ The next pass is complete when:
 - Limitations / Threats to Validity is present.
 - Candidate-lane models remain explicitly out of the main benchmark table.
 - The three validation commands pass.
-- `git status --short` shows only intended paper-facing markdown changes.
+- `git status --short` shows only intended paper-facing markdown, aggregate
+  figure, and aggregate manifest changes.

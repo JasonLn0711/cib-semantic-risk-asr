@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="390" viewBox="0 0 1180 390" role="img">
+<rect width="1180" height="390" fill="white"/>
+<style>
+  text { font-family: Arial, Helvetica, sans-serif; fill: #1f2933; }
+  .title { font-size: 22px; font-weight: 700; }
+  .subtitle { font-size: 13px; fill: #52606d; }
+  .label { font-size: 13px; font-weight: 700; }
+  .small { font-size: 11px; fill: #52606d; }
+</style>
+<text x="36" y="42" class="title" text-anchor="start">F6. Evidence N-Ladder</text>
+<text x="36" y="64" class="subtitle" text-anchor="start">Evaluation units are separated to avoid treating clustered model assessments as independent calls.</text>
+<rect x="70" y="112" width="240" height="118" rx="6" fill="#ffffff" stroke="#2f80ed" stroke-width="1.4"/>
+<text x="86" y="144" class="label" text-anchor="start">Test split</text>
+<text x="86" y="170" class="small" text-anchor="start">Unit: audio rows</text>
+<text x="86" y="194" class="label" text-anchor="start">N = 258</text>
+<text x="86" y="216" class="small" text-anchor="start">ASR model comparison</text>
+<rect x="340" y="112" width="240" height="118" rx="6" fill="#ffffff" stroke="#f2994a" stroke-width="1.4"/>
+<text x="356" y="144" class="label" text-anchor="start">Selected provenance</text>
+<text x="356" y="170" class="small" text-anchor="start">Unit: candidate rows / outputs</text>
+<text x="356" y="194" class="label" text-anchor="start">N = 300</text>
+<text x="356" y="216" class="small" text-anchor="start">selection and provenance</text>
+<rect x="610" y="112" width="240" height="118" rx="6" fill="#ffffff" stroke="#219653" stroke-width="1.4"/>
+<text x="626" y="144" class="label" text-anchor="start">Human-reviewed audit</text>
+<text x="626" y="170" class="small" text-anchor="start">Unit: audio rows</text>
+<text x="626" y="194" class="label" text-anchor="start">N = 30</text>
+<text x="626" y="216" class="small" text-anchor="start">decision-critical review unit</text>
+<rect x="880" y="112" width="240" height="118" rx="6" fill="#ffffff" stroke="#7b61ff" stroke-width="1.4"/>
+<text x="896" y="144" class="label" text-anchor="start">Reviewed assessments</text>
+<text x="896" y="170" class="small" text-anchor="start">Unit: model-row assessments</text>
+<text x="896" y="194" class="label" text-anchor="start">N = 90</text>
+<text x="896" y="216" class="small" text-anchor="start">predictor and recovery replay</text>
+<rect x="70" y="278" width="1050" height="74" rx="6" fill="#f5f7fa" stroke="#bcccdc" stroke-width="1.4"/>
+<text x="92" y="310" class="label" text-anchor="start">Cluster rule</text>
+<text x="92" y="336" class="small" text-anchor="start">The 90 reviewed assessments are clustered within 30 audio rows; uncertainty should use row-clustered bootstrap or leave-one-row-out sensitivity.</text>
+</svg>

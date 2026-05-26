@@ -284,6 +284,83 @@ def figure_5_model_lanes() -> None:
     (OUT_DIR / "f5_model_lane_state.svg").write_text(svg_wrap(1160, 410, "\n".join(parts)), encoding="utf-8")
 
 
+def figure_6_n_ladder() -> None:
+    parts = [text(36, 42, "F6. Evidence N-Ladder", "title")]
+    parts.append(text(36, 64, "Evaluation units are separated to avoid treating clustered model assessments as independent calls.", "subtitle"))
+    layers = [
+        ("Test split", "audio rows", "258", "ASR model comparison", COLORS["blue"]),
+        ("Selected provenance", "candidate rows / outputs", "300", "selection and provenance", COLORS["orange"]),
+        ("Human-reviewed audit", "audio rows", "30", "decision-critical review unit", COLORS["green"]),
+        ("Reviewed assessments", "model-row assessments", "90", "predictor and recovery replay", COLORS["purple"]),
+    ]
+    x, y, w, h, gap = 70, 112, 240, 118, 30
+    for i, (head, unit, n_value, role, color) in enumerate(layers):
+        bx = x + i * (w + gap)
+        parts.append(rect(bx, y, w, h, "#ffffff", color))
+        parts.append(text(bx + 16, y + 32, head, "label"))
+        parts.append(text(bx + 16, y + 58, f"Unit: {unit}", "small"))
+        parts.append(text(bx + 16, y + 82, f"N = {n_value}", "label"))
+        parts.append(text(bx + 16, y + 104, role, "small"))
+    parts.append(rect(70, 278, 1050, 74, COLORS["gray"], "#bcccdc"))
+    parts.append(text(92, 310, "Cluster rule", "label"))
+    parts.append(text(92, 336, "The 90 reviewed assessments are clustered within 30 audio rows; uncertainty should use row-clustered bootstrap or leave-one-row-out sensitivity.", "small"))
+    (OUT_DIR / "f6_n_ladder.svg").write_text(svg_wrap(1180, 390, "\n".join(parts)), encoding="utf-8")
+
+
+def figure_7_budget_risk_frontier() -> None:
+    rows = read_tsv(RECOVERY_COMPARISON)
+    label_map = {
+        "no_recovery": "None",
+        "confidence_only_trigger": "Conf. unavailable",
+        "sres_triggered_recovery": "SRES",
+        "ceis_triggered_conservative_action": "CEIS",
+        "ceis_ensemble_arbitration": "CEIS ensemble",
+    }
+    data = []
+    for row in rows:
+        severe = int(row["high_risk_missed_count"]) + int(row["critical_miss_count"])
+        data.append(
+            (
+                label_map[row["policy"]],
+                float(row["recovery_budget_rate"]),
+                severe,
+                int(row["triggered_count"]),
+                int(row["machine_abstention_count"]),
+            )
+        )
+
+    parts = [text(36, 42, "F7. Budget-Risk Frontier In Aggregate Replay", "title")]
+    parts.append(text(36, 64, "X axis: trigger budget. Y axis: high-risk missed + critical miss.", "subtitle"))
+    chart_x, chart_y, chart_w, chart_h = 110, 110, 720, 270
+    max_x, max_y = 0.6, 7
+    parts.append(f'<line x1="{chart_x}" y1="{chart_y + chart_h}" x2="{chart_x + chart_w}" y2="{chart_y + chart_h}" stroke="{COLORS["ink"]}" stroke-width="1.5"/>')
+    parts.append(f'<line x1="{chart_x}" y1="{chart_y}" x2="{chart_x}" y2="{chart_y + chart_h}" stroke="{COLORS["ink"]}" stroke-width="1.5"/>')
+    for tick in [0.0, 0.2, 0.4, 0.6]:
+        tx = chart_x + tick / max_x * chart_w
+        parts.append(f'<line x1="{tx:.1f}" y1="{chart_y}" x2="{tx:.1f}" y2="{chart_y + chart_h}" stroke="{COLORS["grid"]}" stroke-width="1"/>')
+        parts.append(text(int(tx), chart_y + chart_h + 24, f"{tick:.1f}", "small", "middle"))
+    for tick in range(0, max_y + 1):
+        ty = chart_y + chart_h - tick / max_y * chart_h
+        parts.append(f'<line x1="{chart_x}" y1="{ty:.1f}" x2="{chart_x + chart_w}" y2="{ty:.1f}" stroke="{COLORS["grid"]}" stroke-width="1"/>')
+        parts.append(text(chart_x - 12, int(ty + 4), str(tick), "small", "end"))
+    colors = [COLORS["red"], COLORS["orange"], COLORS["green"], COLORS["blue"], COLORS["purple"]]
+    for i, (label, budget, severe, triggered, abstain) in enumerate(data):
+        px = chart_x + budget / max_x * chart_w
+        py = chart_y + chart_h - severe / max_y * chart_h
+        parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="8" fill="{colors[i]}" stroke="white" stroke-width="2"/>')
+        parts.append(text(int(px + 12), int(py - 8), label, "label"))
+        parts.append(text(int(px + 12), int(py + 10), f"trig {triggered}, abstain {abstain}", "small"))
+    parts.append(text(110, 418, "Recovery budget", "label"))
+    parts.append(text(870, 150, "Replay interpretation", "label"))
+    parts.append(text(870, 176, "No recovery and confidence-unavailable", "small"))
+    parts.append(text(870, 196, "remain at 7 severe misses.", "small"))
+    parts.append(text(870, 226, "SRES and CEIS reach 0 severe misses", "small"))
+    parts.append(text(870, 246, "at budget 0.3889.", "small"))
+    parts.append(text(870, 276, "CEIS ensemble also reaches 0", "small"))
+    parts.append(text(870, 296, "with abstention at budget 0.5222.", "small"))
+    (OUT_DIR / "f7_budget_risk_frontier.svg").write_text(svg_wrap(1180, 450, "\n".join(parts)), encoding="utf-8")
+
+
 def write_index() -> None:
     content = """# CDS-ASR Figure Package
 
@@ -306,6 +383,8 @@ python 80_semantic_risk_asr/paper/generate_paper_figures.py
 | F3. Predictor AUC | `f3_predictor_auc.svg` | `human_audit_predictor_comparison.tsv` | aggregate predictor metrics |
 | F4. Recovery outcomes | `f4_recovery_outcomes.svg` | `policy_comparison.tsv` | aggregate policy counts |
 | F5. Model lane state | `f5_model_lane_state.svg` | main/candidate aggregate summaries | aggregate lane state |
+| F6. Evidence N-ladder | `f6_n_ladder.svg` | method evidence units | aggregate counts only |
+| F7. Budget-risk frontier | `f7_budget_risk_frontier.svg` | `policy_comparison.tsv` | aggregate policy counts |
 """
     (OUT_DIR / "README.md").write_text(content, encoding="utf-8")
 
@@ -317,6 +396,8 @@ def main() -> None:
     figure_3_predictor_auc()
     figure_4_recovery()
     figure_5_model_lanes()
+    figure_6_n_ladder()
+    figure_7_budget_risk_frontier()
     write_index()
     print(f"Wrote figures to {OUT_DIR}")
 
