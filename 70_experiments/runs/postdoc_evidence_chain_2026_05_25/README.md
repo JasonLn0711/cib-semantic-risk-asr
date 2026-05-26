@@ -143,7 +143,34 @@ ignored local paths.
 | 5.100 | Applied the authoritative completed fourth packet and prepared the fifth review package. | Authoritative source `/home/jnln3799/Downloads/cib_asr_human_review_completed_package_batch4_2026-05-26.zip`; `apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --write --refresh-after-write --prepare-next-after-write`; `/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch5_risk_score_fill`; matching `.zip`; variable packet-size operation-record refresh. | Completed as partial human review plus local-only reviewer handoff. Batch 4 rows `19-22` from `model_disagreement` were applied from the requested zip, giving `22/30` risk/decision rows and `66/90` model assessments reviewed. The selected-300 audit remains `partial_review`, not paper-ready; `8/30` rows and `24/90` model assessments remain pending. The current packet is batch 5, `risk_score_fill`, rows `27-30`, with `4` rows, `12` model assessments, and `4` timing rows pending. Operation records are `operation_records_ready` (`6/6` aligned), and evidence-chain consistency is `ok=true` with `26/26` checks passing. |
 | 5.101 | Applied the authoritative completed fifth packet and prepared the sixth review package. | Authoritative source `/home/jnln3799/Downloads/cib_asr_human_review_completed_package_batch5_2026-05-26.zip`; `apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --write --refresh-after-write --prepare-next-after-write`; `/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch6_clean_control`; matching `.zip`; refreshed current-batch status before reviewer handoff. | Completed as partial human review plus local-only reviewer handoff. Batch 5 rows `27-30` from `risk_score_fill` were applied from the requested zip, giving `26/30` risk/decision rows and `78/90` model assessments reviewed. The selected-300 audit remains `partial_review`, not paper-ready; `4/30` rows and `12/90` model assessments remain pending. The current packet is batch 6, `clean_control`, rows `23-26`, with `4` rows, `12` model assessments, and `4` timing rows pending. Operation records are `operation_records_ready` (`6/6` aligned), and evidence-chain consistency is `ok=true` with `26/26` checks passing. |
 
-## Next Operations
+| 5.102 | Promoted human-reviewed predictor and recovery evidence into the paper-facing audits. | `check_evidence_chain_readiness.py`; `audit_publishable_evidence_chain.py`; `build_consequence_evidence_matrix.py`; `audit_postdoc_objective_requirements.py`; `audit_evidence_chain_consistency.py`; human-reviewed predictor/recovery aggregate outputs. | Completed as proxy-to-paper evidence-chain progress. The selected-300 predictor gate now uses `90` human-reviewed model assessments: WER AUC `0.6964`, CER AUC `0.7276`, SRES AUC `0.8995`, CEIS AUC `0.9117` for human decision-change prediction. The five-policy recovery gate now uses human-reviewed labels: no recovery has `6` high-risk missed and `1` critical miss; CEIS action has `0` and `0`; CEIS ensemble abstains `18` times. |
+| 5.103 | Rebuilt paper-facing evidence-chain summaries after human-reviewed predictor/recovery promotion. | `evidence_chain_readiness_summary.json`; `publishable_evidence_completion_summary.json`; `consequence_evidence_matrix_summary.json`; `postdoc_objective_requirements_summary.json`; `postdoc_roadmap_completion_summary.json`; `evidence_chain_consistency_summary.json`. | Completed. Current status is `readiness: completed=8, proxy_completed=2`; `publishable: completed=6, proxy_completed=1`; `consequence: completed=5, proxy_completed=2`; `objective requirements: satisfied=13, proxy_satisfied=2`; consistency is `ok=true`, `26/26` checks passing. The remaining research work is proxy-to-paper claim resolution, centered on the 258-row split/generalization risk-evidence gate and the selected-300 proxy input provenance row. |
+
+## Current Next Operations
+
+1. Use the human-reviewed selected-300 predictor outputs for scoped predictor
+   claims. The aggregate comparison now supports the paper argument that CEIS
+   is stronger than WER/CER for human decision-change prediction in the reviewed
+   sample.
+2. Use the human-reviewed recovery outputs for scoped intervention claims. The
+   five required policies are present, and CEIS-triggered conservative action
+   reduces high-risk missed and critical miss counts to zero under reviewed
+   labels.
+3. Keep the 258-row split risk fields as aggregate proxy split evidence until a
+   reviewed-label upgrade or explicit paper-scope boundary is written. This is
+   the main remaining proxy-to-paper claim-resolution item.
+4. Keep selected-300 proxy metric inputs as provenance for the reviewed main
+   experiment. Paper claims should cite the completed human-reviewed predictor,
+   model-summary, and recovery outputs.
+5. Run the evidence-chain audit set after each future paper-claim change:
+   `check_evidence_chain_readiness.py`,
+   `audit_publishable_evidence_chain.py`,
+   `build_consequence_evidence_matrix.py`,
+   `audit_postdoc_objective_requirements.py`,
+   `audit_postdoc_roadmap_completion.py`, and
+   `audit_evidence_chain_consistency.py`.
+
+## Historical Review Workflow Notes
 
 1. Treat pre-audit `wer` values as legacy compatibility fields. For paper-facing
    tables, use `cer_zh_micro` as the primary ASR surface metric and
