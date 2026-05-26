@@ -595,6 +595,12 @@ def write_consistent_fixture(
     selection_stratum: str = "critical_or_high_risk_missed",
 ) -> None:
     first_row = row_numbers[0]
+    row_count = len(row_numbers)
+    model_assessment_count = row_count * 3
+    row_field_action_count = row_count * 8
+    model_field_action_count = row_count * 3 * 4
+    timing_action_count = row_count
+    total_action_count = row_field_action_count + model_field_action_count + timing_action_count
     next_operation = next_reviewer_operation_fixture(first_row)
     write_summary(
         root,
@@ -604,11 +610,11 @@ def write_consistent_fixture(
             next_decision="Complete per-row timing and run --require-timing.",
             reviewer_action_gate={
                 "status": "reviewer_action_ready",
-                "rows_in_batch": 6,
-                "pending_rows_in_batch": 6,
-                "model_assessments_in_batch": 18,
-                "pending_model_assessments_in_batch": 18,
-                "rows_missing_timing": 6,
+                "rows_in_batch": row_count,
+                "pending_rows_in_batch": row_count,
+                "model_assessments_in_batch": model_assessment_count,
+                "pending_model_assessments_in_batch": model_assessment_count,
+                "rows_missing_timing": row_count,
             },
         ),
     )
@@ -699,13 +705,14 @@ def write_consistent_fixture(
         base_summary(
             ok=False,
             status="response_closeout_blocked",
+            rows_in_batch=row_count,
             require_timing=True,
-            review_timing={"rows_missing_timing": 6},
+            review_timing={"rows_missing_timing": row_count},
             response_action_item_overview={
-                "total_action_items": 126,
-                "row_field_action_items": 48,
-                "model_field_action_items": 72,
-                "timing_action_items": 6,
+                "total_action_items": total_action_count,
+                "row_field_action_items": row_field_action_count,
+                "model_field_action_items": model_field_action_count,
+                "timing_action_items": timing_action_count,
             },
             response_gap_summary_by_row=[
                 {"row_number": row_number}
@@ -738,14 +745,14 @@ def write_consistent_fixture(
             status="review_work_order_ready",
             row_numbers=row_numbers,
             review_work_order_overview={
-                "row_count": 6,
-                "row_work_order_steps": 30,
+                "row_count": row_count,
+                "row_work_order_steps": row_count * 5,
                 "packet_work_order_steps": 3,
-                "total_work_order_steps": 33,
-                "total_action_items": 126,
-                "row_field_action_items": 48,
-                "model_field_action_items": 72,
-                "timing_action_items": 6,
+                "total_work_order_steps": row_count * 5 + 3,
+                "total_action_items": total_action_count,
+                "row_field_action_items": row_field_action_count,
+                "model_field_action_items": model_field_action_count,
+                "timing_action_items": timing_action_count,
             },
             next_reviewer_operation=next_operation,
         ),
@@ -761,11 +768,11 @@ def write_consistent_fixture(
             current_packet={
                 "selection_stratum": selection_stratum,
                 "row_numbers": [str(row_number) for row_number in row_numbers],
-                "rows_in_batch": 6,
-                "model_assessments_in_batch": 18,
-                "pending_rows_in_batch": 6,
-                "pending_model_assessments_in_batch": 18,
-                "rows_missing_timing": 6,
+                "rows_in_batch": row_count,
+                "model_assessments_in_batch": model_assessment_count,
+                "pending_rows_in_batch": row_count,
+                "pending_model_assessments_in_batch": model_assessment_count,
+                "rows_missing_timing": row_count,
             },
             next_reviewer_operation=next_operation,
             next_local_row_access_log={
@@ -875,8 +882,9 @@ def write_consistent_fixture(
         base_summary(
             ok=False,
             status="response_pending",
+            rows_in_batch=row_count,
             require_timing=True,
-            review_timing={"rows_missing_timing": 6},
+            review_timing={"rows_missing_timing": row_count},
             next_action="Rerun dry-run with --require-timing.",
         ),
     )
@@ -886,12 +894,16 @@ def write_consistent_fixture(
         base_summary(
             status="reviewer_input_pending",
             freshness_status="fresh",
-            current_packet={"row_numbers": row_numbers},
+            current_packet={
+                "row_numbers": row_numbers,
+                "rows_in_batch": row_count,
+                "model_assessments_in_batch": model_assessment_count,
+            },
             current_gate={
                 "latest_apply_status": "response_pending",
-                "pending_rows_in_batch": 6,
-                "pending_model_assessments_in_batch": 18,
-                "rows_missing_timing": 6,
+                "pending_rows_in_batch": row_count,
+                "pending_model_assessments_in_batch": model_assessment_count,
+                "rows_missing_timing": row_count,
             },
             commands=timing_commands(row_numbers),
         ),
@@ -901,11 +913,11 @@ def write_consistent_fixture(
         "action_checklist",
         base_summary(
             status="reviewer_action_ready",
-            rows_in_batch=6,
-            pending_rows_in_batch=6,
-            model_assessments_in_batch=18,
-            pending_model_assessments_in_batch=18,
-            rows_missing_timing=6,
+            rows_in_batch=row_count,
+            pending_rows_in_batch=row_count,
+            model_assessments_in_batch=model_assessment_count,
+            pending_model_assessments_in_batch=model_assessment_count,
+            rows_missing_timing=row_count,
             row_numbers=row_numbers,
             timing_helper_commands=timing_commands(row_numbers),
         ),
@@ -951,9 +963,9 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
 def test_consistency_audit_accepts_partial_review_later_batch_rows(tmp_path: Path) -> None:
     write_consistent_fixture(
         tmp_path,
-        row_numbers=[7, 8, 9, 10, 11, 12],
+        row_numbers=[19, 20, 21, 22],
         refresh_status="partial_review",
-        selection_stratum="unsafe_downrouting",
+        selection_stratum="model_disagreement",
     )
 
     payload = build_consistency_audit(tmp_path)

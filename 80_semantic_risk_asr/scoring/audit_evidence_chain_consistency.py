@@ -185,6 +185,11 @@ def parse_row_numbers(values: Any) -> list[int]:
     ]
 
 
+def positive_int(value: Any) -> int | None:
+    parsed = safe_int(value)
+    return parsed if parsed > 0 else None
+
+
 def check_row(
     *,
     check_id: str,
@@ -311,9 +316,11 @@ def add_policy_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
 def add_timing_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, str]]) -> None:
     apply = payloads.get("apply", {})
     apply_timing = apply.get("review_timing", {})
+    expected_apply_timing_rows = positive_int(apply.get("rows_in_batch"))
     apply_passed = (
         apply.get("require_timing") is True
-        and apply_timing.get("rows_missing_timing", -1) == 6
+        and expected_apply_timing_rows is not None
+        and safe_int(apply_timing.get("rows_missing_timing", -1)) == expected_apply_timing_rows
         and "--require-timing" in str(apply.get("next_action", ""))
     )
     rows.append(
@@ -323,7 +330,7 @@ def add_timing_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
             passed=apply_passed,
             evidence=SUMMARY_SPECS["apply"],
             result=(
-                "apply dry-run records require_timing=true and 6 timing rows pending"
+                f"apply dry-run records require_timing=true and {expected_apply_timing_rows} timing rows pending"
                 if apply_passed
                 else "apply dry-run timing requirement is stale or incomplete"
             ),
@@ -333,10 +340,12 @@ def add_timing_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
 
     closeout = payloads.get("closeout", {})
     closeout_timing = closeout.get("review_timing", {})
+    expected_closeout_timing_rows = positive_int(closeout.get("rows_in_batch"))
     closeout_passed = (
         closeout.get("require_timing") is True
         and closeout.get("status") == "response_closeout_blocked"
-        and closeout_timing.get("rows_missing_timing", -1) == 6
+        and expected_closeout_timing_rows is not None
+        and safe_int(closeout_timing.get("rows_missing_timing", -1)) == expected_closeout_timing_rows
     )
     rows.append(
         check_row(
@@ -345,7 +354,7 @@ def add_timing_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
             passed=closeout_passed,
             evidence=SUMMARY_SPECS["closeout"],
             result=(
-                "closeout blocks write/refresh while 6 timing rows are missing"
+                f"closeout blocks write/refresh while {expected_closeout_timing_rows} timing rows are missing"
                 if closeout_passed
                 else "closeout timing blocker is not aligned with current packet state"
             ),
@@ -436,13 +445,15 @@ def add_readiness_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[st
     )
 
     action_gate = readiness.get("reviewer_action_gate", {})
+    action_rows = positive_int(action_gate.get("rows_in_batch"))
+    action_models = positive_int(action_gate.get("model_assessments_in_batch"))
     action_passed = (
         action_gate.get("status") == "reviewer_action_ready"
-        and action_gate.get("rows_in_batch") == 6
-        and action_gate.get("pending_rows_in_batch") == 6
-        and action_gate.get("model_assessments_in_batch") == 18
-        and action_gate.get("pending_model_assessments_in_batch") == 18
-        and action_gate.get("rows_missing_timing") == 6
+        and action_rows is not None
+        and action_models is not None
+        and safe_int(action_gate.get("pending_rows_in_batch")) == action_rows
+        and safe_int(action_gate.get("pending_model_assessments_in_batch")) == action_models
+        and safe_int(action_gate.get("rows_missing_timing")) == action_rows
     )
     rows.append(
         check_row(
@@ -451,7 +462,7 @@ def add_readiness_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[st
             passed=action_passed,
             evidence=SUMMARY_SPECS["readiness"],
             result=(
-                "current packet has 6 rows, 18 model assessments, and 6 timing rows pending"
+                f"current packet has {action_rows} rows, {action_models} model assessments, and {action_rows} timing rows pending"
                 if action_passed
                 else "reviewer action packet counts drifted from expected selected batch"
             ),
@@ -465,14 +476,27 @@ def add_readiness_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[st
         if isinstance(handoff.get("current_gate"), dict)
         else {}
     )
+    handoff_packet = (
+        handoff.get("current_packet")
+        if isinstance(handoff.get("current_packet"), dict)
+        else {}
+    )
+    handoff_rows = positive_int(handoff_packet.get("rows_in_batch")) or positive_int(
+        handoff_gate.get("pending_rows_in_batch")
+    )
+    handoff_models = positive_int(
+        handoff_packet.get("model_assessments_in_batch")
+    ) or positive_int(handoff_gate.get("pending_model_assessments_in_batch"))
     handoff_passed = (
         handoff.get("ok") is True
         and handoff.get("freshness_status") == "fresh"
         and handoff.get("status") == "reviewer_input_pending"
         and handoff_gate.get("latest_apply_status") == "response_pending"
-        and handoff_gate.get("pending_rows_in_batch") == 6
-        and handoff_gate.get("pending_model_assessments_in_batch") == 18
-        and handoff_gate.get("rows_missing_timing") == 6
+        and handoff_rows is not None
+        and handoff_models is not None
+        and safe_int(handoff_gate.get("pending_rows_in_batch")) == handoff_rows
+        and safe_int(handoff_gate.get("pending_model_assessments_in_batch")) == handoff_models
+        and safe_int(handoff_gate.get("rows_missing_timing")) == handoff_rows
     )
     rows.append(
         check_row(
@@ -481,7 +505,7 @@ def add_readiness_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[st
             passed=handoff_passed,
             evidence=SUMMARY_SPECS["handoff"],
             result=(
-                "handoff is fresh and points to 6 pending rows, 18 model assessments, and 6 timing rows"
+                f"handoff is fresh and points to {handoff_rows} pending rows, {handoff_models} model assessments, and {handoff_rows} timing rows"
                 if handoff_passed
                 else "reviewer handoff is stale or does not match the current row/model/timing gate"
             ),
@@ -1396,12 +1420,14 @@ def add_operation_record_check(
     )
     packet = records.get("current_packet")
     packet = packet if isinstance(packet, dict) else {}
+    packet_rows = positive_int(packet.get("rows_in_batch"))
+    packet_models = positive_int(packet.get("model_assessments_in_batch"))
     packet_ok = (
-        packet.get("rows_in_batch") == 6
-        and packet.get("model_assessments_in_batch") == 18
-        and packet.get("pending_rows_in_batch") == 6
-        and packet.get("pending_model_assessments_in_batch") == 18
-        and packet.get("rows_missing_timing") == 6
+        packet_rows is not None
+        and packet_models is not None
+        and safe_int(packet.get("pending_rows_in_batch")) == packet_rows
+        and safe_int(packet.get("pending_model_assessments_in_batch")) == packet_models
+        and safe_int(packet.get("rows_missing_timing")) == packet_rows
     )
     passed = status_ok and counts_ok and packet_ok and next_operation_aligned
     rows.append(

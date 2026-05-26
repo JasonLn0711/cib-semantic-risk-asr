@@ -155,6 +155,7 @@ def expected_context(run_dir: Path) -> dict[str, Any]:
     refresh = read_json(run_dir / "human_audit_refresh_summary.json")
     work_order = read_json(run_dir / "human_audit_review_work_order_summary.json")
     packet = session.get("current_packet") if isinstance(session.get("current_packet"), dict) else {}
+    gate = session.get("current_gate") if isinstance(session.get("current_gate"), dict) else {}
     response = session.get("current_response") if isinstance(session.get("current_response"), dict) else {}
     next_operation = work_order.get("next_reviewer_operation")
     next_operation = next_operation if isinstance(next_operation, dict) else {}
@@ -166,13 +167,21 @@ def expected_context(run_dir: Path) -> dict[str, Any]:
         "row_numbers": [str(row) for row in row_numbers],
         "rows_in_batch": text_int(packet.get("rows_in_batch")) or 6,
         "model_assessments_in_batch": text_int(packet.get("model_assessments_in_batch")) or 18,
-        "pending_rows_in_batch": text_int(session.get("pending_rows_in_batch")) or 6,
+        "pending_rows_in_batch": text_int(gate.get("pending_rows_in_batch"))
+        or text_int(session.get("pending_rows_in_batch"))
+        or 6,
         "pending_model_assessments_in_batch": text_int(
-            session.get("pending_model_assessments_in_batch")
+            gate.get("pending_model_assessments_in_batch")
         )
+        or text_int(session.get("pending_model_assessments_in_batch"))
         or 18,
-        "rows_missing_timing": text_int(session.get("rows_missing_timing")) or 6,
-        "latest_apply_status": session.get("latest_apply_status", "response_pending"),
+        "rows_missing_timing": text_int(gate.get("rows_missing_timing"))
+        or text_int(session.get("rows_missing_timing"))
+        or 6,
+        "latest_apply_status": gate.get(
+            "latest_apply_status",
+            session.get("latest_apply_status", "response_pending"),
+        ),
         "response_sheet_rows": text_int(response.get("response_sheet_rows")) or 18,
         "selected_300_pending_rows": text_int(refresh.get("pending_rows")) or 30,
         "selected_300_pending_model_assessments": text_int(
