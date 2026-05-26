@@ -97,5 +97,5 @@
     "human_recovery_dir": "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26"
   },
   "next_concrete_action": "Run this sequence with --execute; it will stop at the first still-pending aggregate gate.",
-  "runtime_seconds": 0.0008
+  "runtime_seconds": 0.0004
 }

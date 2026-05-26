@@ -4,7 +4,7 @@
   "input_boundary": "tracked aggregate summaries only",
   "output_boundary": "aggregate-only post-review evidence checklist; no row keys or transcript text",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
-  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
+  "remaining_review_scope": "Selected-300 risk, decision, expected safe action, confidence, per-model fields, and per-row review timing are complete; remaining work is proxy-to-paper claim resolution.",
   "closeout_ready": true,
   "closeout_require_timing": true,
   "closeout_review_timing": {
@@ -141,5 +141,5 @@
     "recovery_proxy_summary": "70_experiments/runs/janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
     "recovery_human_summary": "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json"
   },
-  "runtime_seconds": 0.0008
+  "runtime_seconds": 0.0005
 }

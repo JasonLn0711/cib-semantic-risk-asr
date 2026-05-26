@@ -31,29 +31,27 @@
     "available": true,
     "ok": true,
     "strict_locale_policy": "Taiwan Traditional Chinese; no Simplified Chinese output accepted for promotion",
-    "promotion_decision": "No requested ASR/Gemma candidate should be promoted to 258-row or selected-300 runtime until the strict Taiwan Traditional Chinese locale policy is clean or the Gemma 4 multimodal runtime is isolated.",
-    "latest_checked_at": "2026-05-26 08:25 CST",
+    "promotion_decision": "No 2026-05-26 candidate should be promoted to 258-row or selected-300 because SenseVoiceSmall and Qwen3-ASR-0.6B both failed the strict locale gate, while Qwen3-ASR-1.7B timed out before inference.",
+    "latest_checked_at": "",
     "evaluated_15_row_contract_runs": [
-      "whisper_large_v3_15_row_baseline",
-      "whisper_large_v3_turbo_15_row_baseline",
       "sensevoice_small_15_row_candidate",
       "qwen3_asr_0_6b_15_row_candidate"
     ],
-    "evaluated_15_row_contract_run_count": 4,
+    "evaluated_15_row_contract_run_count": 2,
     "evaluated_15_row_contract_rows_ok": true,
     "blocked_or_stopped_count": 2,
     "blocked_or_stopped_runs": [
       {
-        "run_id": "qwen3_asr_1_7b_current_recheck_1_row",
+        "run_id": "qwen3_asr_1_7b_smoke_1_row",
         "model": "Qwen/Qwen3-ASR-1.7B",
         "status": "timeout_before_inference",
-        "decision": "Retry only after Qwen3-ASR-0.6B passes strict zh-TW locale control or after an isolated cache/download plan exists."
+        "decision": "Retry only after the 0.6B lane passes the strict Traditional Chinese locale gate or after an isolated cache/download plan exists."
       },
       {
-        "run_id": "gemma4_audio_class_probe_current_recheck",
+        "run_id": "gemma4_audio_runner_gate_2026_05_25",
         "model": "unsloth/gemma-4-E2B_and_E4B",
         "status": "blocked_local_transformers_multimodal_class_missing",
-        "decision": "Create an isolated Gemma 4 multimodal/audio runtime before any prompted-ASR test."
+        "decision": "Keep Gemma 4 in a separate prompted multimodal-ASR lane; do not mix it into pure-ASR tables."
       }
     ]
   },
@@ -163,5 +161,5 @@
   ],
   "first_principle_decision": "The repo should now optimize for a publishable consequence evidence chain, not a longer ASR leaderboard. New ASR candidates stop at the locale/runtime gate unless they change the CDS-ASR paper evidence.",
   "next_decision": "Close the selected-300 row/model/timing response gate, run the strict closeout path with --require-complete --require-timing, write/refresh aggregate human review evidence, rerun predictor and recovery analyses, then rerun this roadmap audit before claiming the objective is complete.",
-  "runtime_seconds": 0.0028
+  "runtime_seconds": 0.0002
 }

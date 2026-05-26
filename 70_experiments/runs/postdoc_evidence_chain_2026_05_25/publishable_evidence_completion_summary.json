@@ -122,5 +122,5 @@
   ],
   "first_principle_decision": "Do not spend more GPU time to chase ASR fine-tuning until the selected-300 risk-atom and model-assessment audit converts proxy CDS-ASR evidence into paper-grade evidence; do not duplicate transcript review.",
   "next_decision": "Complete selected-300 risk-atom, decision-change, per-model assessment, and per-row timing fields, run the strict response gate with --require-complete --require-timing, then rerun human-reviewed predictor and recovery claims.",
-  "runtime_seconds": 0.0035
+  "runtime_seconds": 0.0001
 }

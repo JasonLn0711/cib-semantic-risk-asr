@@ -1,11 +1,11 @@
 {
-  "ok": false,
+  "ok": true,
   "status": "review_complete",
   "require_complete": true,
   "input_boundary": "local ignored audit sheet only; no private row content is emitted",
   "output_boundary": "aggregate tracked outputs only",
   "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
-  "remaining_review_scope": "Remaining selected-300 review work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
+  "remaining_review_scope": "Selected-300 risk-atom labels, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing are complete; remaining work is proxy-to-paper claim resolution.",
   "audit_rows": 30,
   "reviewed_rows": 30,
   "pending_rows": 0,
@@ -69,108 +69,15 @@
     "objective_requirements_audit"
   ],
   "post_review_sequence_executed_step_count": 0,
-  "operation_record_audit_ok": false,
-  "operation_record_status": "operation_records_drift",
-  "operation_record_failed_count": 3,
-  "operation_record_failed_records": [
-    {
-      "operation_log_id": "strict_apply",
-      "alignment_note": "strict-apply log drift"
-    },
-    {
-      "operation_log_id": "timing_helper",
-      "alignment_note": "timing log drift"
-    },
-    {
-      "operation_log_id": "post_review_sequence",
-      "alignment_note": "sequence log drift"
-    }
-  ],
-  "consistency_audit_ok": false,
+  "operation_record_audit_ok": true,
+  "operation_record_status": "operation_records_ready",
+  "operation_record_failed_count": 0,
+  "operation_record_failed_records": [],
+  "consistency_audit_ok": true,
   "consistency_status_counts": {
-    "fail": 13,
-    "pass": 13
+    "pass": 26
   },
-  "consistency_failed_checks": [
-    {
-      "check_id": "C030",
-      "invariant": "strict response apply gate requires timing",
-      "result": "apply dry-run timing requirement is stale or incomplete",
-      "next_action": "Run the session-gated strict response dry-run with --require-complete --require-timing."
-    },
-    {
-      "check_id": "C031",
-      "invariant": "response closeout blocks on missing timing",
-      "result": "closeout timing blocker is not aligned with current packet state",
-      "next_action": "Keep write/refresh blocked until timing coverage is complete."
-    },
-    {
-      "check_id": "C032",
-      "invariant": "top-level next actions route through the timing gate",
-      "result": "timing next-action drift in refresh",
-      "next_action": "Refresh top-level summaries so reviewers cannot bypass timing closeout."
-    },
-    {
-      "check_id": "C040",
-      "invariant": "review-pending state cannot be paper-ready",
-      "result": "at least one paper-facing gate conflicts with pending selected-300 review",
-      "next_action": "Keep claims proxy-only until response closeout, write, refresh, predictor, and recovery are complete."
-    },
-    {
-      "check_id": "C066",
-      "invariant": "post-review command plan preserves strict recovery order",
-      "result": "post-review command plan is missing, stale, out of order, or allows pending recovery evidence",
-      "next_action": "Refresh the post-review checklist before local response write/refresh and do not promote proxy recovery."
-    },
-    {
-      "check_id": "C071",
-      "invariant": "review work-order TSV covers current packet actions",
-      "result": "counts_match=True; row_coverage_ok=False; steps_ok=False; status=review_work_order_blocked; sensitive=False",
-      "next_action": "Regenerate review work order from action-items, closeout, and handoff summaries before local review."
-    },
-    {
-      "check_id": "C075",
-      "invariant": "review work-order strict dry-run preserves session and timing gates",
-      "result": "command_flags_ok=True; status=review_work_order_blocked",
-      "next_action": "Regenerate review work order so packet strict dry-run uses --require-complete --require-timing --require-session-start-gate without write flags."
-    },
-    {
-      "check_id": "C078",
-      "invariant": "review work-order summary exposes the next local operation",
-      "result": "current_ok=False; local_open_ok=False; status=review_work_order_blocked",
-      "next_action": "Regenerate the review work-order summary so reviewer execution can start from the tracked next operation without scanning the full TSV."
-    },
-    {
-      "check_id": "C079",
-      "invariant": "selected-300 reviewer operations have aggregate log coverage",
-      "result": "status_ok=False; counts_ok=False; packet_ok=True; next_operation_aligned=False",
-      "next_action": "Regenerate the operation-record audit after reviewer-session operations so every tracked operation has an aggregate log record before claims."
-    },
-    {
-      "check_id": "C081",
-      "invariant": "local row-open command has a repo-safe access-log route",
-      "result": "route_ok=False; status_ok=True; path_ok=True; row_ok=False; record_status=operation_records_drift; access_log_status=planned_not_yet_recorded; work_order_status=review_work_order_blocked",
-      "next_action": "Regenerate the review work-order and operation-record audit so the --show-row command includes --access-log before local review."
-    },
-    {
-      "check_id": "C074",
-      "invariant": "review work-order routes post-closeout through sequence runner",
-      "result": "sequence_route_ok=True; status=review_work_order_blocked",
-      "next_action": "Regenerate review work order so packet-level execution uses run_post_review_evidence_sequence.py --execute after response closeout."
-    },
-    {
-      "check_id": "C077",
-      "invariant": "post-review sequence execute mode stops before blocked gates",
-      "result": "policy_ok=True; status_ok=False",
-      "next_action": "Regenerate post-review sequence summary so --execute safety policy and stopped-step accounting are recorded before reviewer closeout."
-    },
-    {
-      "check_id": "C073",
-      "invariant": "objective audit records post-review sequence gate status",
-      "result": "status_ok=False; sequence_status_recorded=True; sequence_route_recorded=True; sensitive=False",
-      "next_action": "Regenerate the post-review sequence summary before the objective audit, and keep objective completion routed through run_post_review_evidence_sequence.py --execute."
-    }
-  ],
+  "consistency_failed_checks": [],
   "objective_requirements_audit_ok": true,
   "objective_requirements_ready": false,
   "objective_requirements_status_counts": {
@@ -216,6 +123,6 @@
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"
   ],
-  "runtime_seconds": 0.0097,
+  "runtime_seconds": 0.0123,
   "next_action": "Use refreshed aggregate summaries for paper-table drafting and human-reviewed predictor analysis."
 }

@@ -1,27 +1,14 @@
 {
-  "ok": false,
-  "status": "operation_records_drift",
+  "ok": true,
+  "status": "operation_records_ready",
   "input_boundary": "tracked aggregate summaries and append-only operation logs only",
   "output_boundary": "aggregate-only operation-record audit; no transcripts, hypotheses, or reviewer notes",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
   "required_operation_log_count": 6,
-  "passed_operation_record_count": 3,
-  "failed_operation_record_count": 3,
-  "failed_operation_records": [
-    {
-      "operation_log_id": "strict_apply",
-      "alignment_note": "strict-apply log drift"
-    },
-    {
-      "operation_log_id": "timing_helper",
-      "alignment_note": "timing log drift"
-    },
-    {
-      "operation_log_id": "post_review_sequence",
-      "alignment_note": "sequence log drift"
-    }
-  ],
+  "passed_operation_record_count": 6,
+  "failed_operation_record_count": 0,
+  "failed_operation_records": [],
   "current_packet": {
     "selection_stratum": "clean_control",
     "row_numbers": [
@@ -98,8 +85,8 @@
       "latest_recorded_at": "2026-05-26T10:48:40+08:00",
       "latest_status": "response_complete",
       "latest_mode": "write",
-      "alignment_status": "fail",
-      "alignment_note": "strict-apply log drift"
+      "alignment_status": "pass",
+      "alignment_note": "strict apply records completed response rows, model assessments, and timing"
     },
     {
       "operation_log_id": "timing_helper",
@@ -109,19 +96,19 @@
       "latest_recorded_at": "2026-05-26T10:34:44+08:00",
       "latest_status": "timing_dry_run_ready",
       "latest_mode": "dry_run",
-      "alignment_status": "fail",
-      "alignment_note": "timing log drift"
+      "alignment_status": "pass",
+      "alignment_note": "timing helper log exists for the completed timing-gated packet"
     },
     {
       "operation_log_id": "post_review_sequence",
       "log_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_log.tsv",
       "exists": true,
-      "row_count": 18,
-      "latest_recorded_at": "2026-05-26T10:51:50+08:00",
+      "row_count": 19,
+      "latest_recorded_at": "2026-05-26T10:54:59+08:00",
       "latest_status": "post_review_sequence_ready_to_execute",
       "latest_mode": "plan_only",
-      "alignment_status": "fail",
-      "alignment_note": "sequence log drift"
+      "alignment_status": "pass",
+      "alignment_note": "sequence log records post-review completion or remaining paper-claim gate state"
     }
   ],
   "runtime_seconds": 0.0009,

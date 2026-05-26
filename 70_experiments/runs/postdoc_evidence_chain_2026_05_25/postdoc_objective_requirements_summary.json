@@ -7,7 +7,7 @@
     "proxy_satisfied": 5
   },
   "reference_transcript_policy": "Reference transcripts are already human-reviewed for WER/CER scoring; this audit does not reopen transcript review.",
-  "remaining_review_scope": "Selected-300 completion still requires risk, decision, expected safe action, confidence, per-model fields, and per-row review timing.",
+  "remaining_review_scope": "Selected-300 row/model/timing review and human-reviewed recovery are complete; remaining work is proxy-to-paper claim resolution.",
   "requirements_total": 15,
   "proxy_requirement_count": 5,
   "blocking_requirement_count": 0,
@@ -175,7 +175,7 @@
       "evidence": "human_audit_post_review_evidence_summary.json; human_audit_post_review_sequence_summary.json",
       "result": "recovery_human_ready=True; post_review_sequence_status=post_review_sequence_ready_to_execute; post_review_sequence_ok=False; post_review_sequence_executed_step_count=0",
       "blocking_dependency": "post-review recovery evidence is still proxy-only and strict post-review sequence is not complete",
-      "next_action": "After selected-300 response closeout is ready, run run_post_review_evidence_sequence.py --execute so write/refresh, strict human-reviewed recovery, post-review checklist, and objective audit execute in order."
+      "next_action": "Use the human-reviewed recovery outputs for recovery-specific claims; keep remaining proxy-only paper claims labeled until the proxy gates are resolved."
     }
   ],
   "proxy_or_blocking_requirements": [
@@ -235,6 +235,6 @@
       "next_action": "Rerun recovery after human review and compare safety tradeoffs again."
     }
   ],
-  "next_decision": "Do not declare the postdoc objective complete. Complete selected-300 row/model/timing review, run strict closeout, then execute run_post_review_evidence_sequence.py --execute so write/refresh, human predictor refresh, strict human-reviewed recovery, post-review checklist, and objective audit happen in order.",
-  "runtime_seconds": 0.0011
+  "next_decision": "Do not declare the postdoc objective complete. Selected-300 human review and human-reviewed recovery are complete; resolve the remaining proxy-only evidence gates before paper-ready claims.",
+  "runtime_seconds": 0.0007
 }
