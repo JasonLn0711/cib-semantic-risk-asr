@@ -190,6 +190,23 @@ def positive_int(value: Any) -> int | None:
     return parsed if parsed > 0 else None
 
 
+def review_complete(payloads: dict[str, dict[str, Any]]) -> bool:
+    refresh = payloads.get("refresh", {})
+    return (
+        refresh.get("status") == "review_complete"
+        and safe_int(refresh.get("pending_rows")) == 0
+        and safe_int(refresh.get("pending_model_assessments")) == 0
+    )
+
+
+def closeout_ready(payloads: dict[str, dict[str, Any]]) -> bool:
+    closeout = payloads.get("closeout", {})
+    return (
+        closeout.get("ok") is True
+        and closeout.get("status") == "response_complete_ready_to_write"
+    )
+
+
 def check_row(
     *,
     check_id: str,
@@ -317,12 +334,20 @@ def add_timing_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
     apply = payloads.get("apply", {})
     apply_timing = apply.get("review_timing", {})
     expected_apply_timing_rows = positive_int(apply.get("rows_in_batch"))
-    apply_passed = (
+    complete = review_complete(payloads)
+    apply_pending_passed = (
         apply.get("require_timing") is True
         and expected_apply_timing_rows is not None
         and safe_int(apply_timing.get("rows_missing_timing", -1)) == expected_apply_timing_rows
         and "--require-timing" in str(apply.get("next_action", ""))
     )
+    apply_complete_passed = (
+        complete
+        and apply.get("require_timing") is True
+        and apply.get("status") == "response_complete"
+        and safe_int(apply_timing.get("rows_missing_timing", -1)) == 0
+    )
+    apply_passed = apply_pending_passed or apply_complete_passed
     rows.append(
         check_row(
             check_id="C030",
@@ -330,9 +355,13 @@ def add_timing_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
             passed=apply_passed,
             evidence=SUMMARY_SPECS["apply"],
             result=(
+                "apply gate records response_complete with required timing complete"
+                if apply_complete_passed
+                else (
                 f"apply dry-run records require_timing=true and {expected_apply_timing_rows} timing rows pending"
                 if apply_passed
                 else "apply dry-run timing requirement is stale or incomplete"
+                )
             ),
             next_action="Run the session-gated strict response dry-run with --require-complete --require-timing.",
         )
@@ -341,12 +370,19 @@ def add_timing_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
     closeout = payloads.get("closeout", {})
     closeout_timing = closeout.get("review_timing", {})
     expected_closeout_timing_rows = positive_int(closeout.get("rows_in_batch"))
-    closeout_passed = (
+    closeout_pending_passed = (
         closeout.get("require_timing") is True
         and closeout.get("status") == "response_closeout_blocked"
         and expected_closeout_timing_rows is not None
         and safe_int(closeout_timing.get("rows_missing_timing", -1)) == expected_closeout_timing_rows
     )
+    closeout_complete_passed = (
+        complete
+        and closeout.get("require_timing") is True
+        and closeout.get("status") == "response_complete_ready_to_write"
+        and safe_int(closeout_timing.get("rows_missing_timing", -1)) == 0
+    )
+    closeout_passed = closeout_pending_passed or closeout_complete_passed
     rows.append(
         check_row(
             check_id="C031",
@@ -354,9 +390,13 @@ def add_timing_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
             passed=closeout_passed,
             evidence=SUMMARY_SPECS["closeout"],
             result=(
+                "closeout records response_complete_ready_to_write with required timing complete"
+                if closeout_complete_passed
+                else (
                 f"closeout blocks write/refresh while {expected_closeout_timing_rows} timing rows are missing"
                 if closeout_passed
                 else "closeout timing blocker is not aligned with current packet state"
+                )
             ),
             next_action="Keep write/refresh blocked until timing coverage is complete.",
         )
@@ -369,11 +409,14 @@ def add_timing_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
         "roadmap": str(payloads.get("roadmap", {}).get("next_decision", "")),
         "refresh": str(payloads.get("refresh", {}).get("next_action", "")),
     }
-    next_action_failures = [
-        name
-        for name, text in high_level.items()
-        if "timing" not in text.lower() or "--require-timing" not in text
-    ]
+    if complete and closeout_ready(payloads):
+        next_action_failures = []
+    else:
+        next_action_failures = [
+            name
+            for name, text in high_level.items()
+            if "timing" not in text.lower() or "--require-timing" not in text
+        ]
     rows.append(
         check_row(
             check_id="C032",
@@ -381,9 +424,13 @@ def add_timing_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
             passed=not next_action_failures,
             evidence="readiness/publishable/consequence/roadmap/refresh next action fields",
             result=(
+                "top-level actions have moved past timing closeout after review_complete"
+                if complete and closeout_ready(payloads)
+                else (
                 "all top-level next actions mention timing and --require-timing"
                 if not next_action_failures
                 else f"timing next-action drift in {','.join(next_action_failures)}"
+                )
             ),
             next_action="Refresh top-level summaries so reviewers cannot bypass timing closeout.",
         )
@@ -400,24 +447,33 @@ def add_readiness_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[st
     closeout = payloads.get("closeout", {})
 
     review_open = refresh.get("status") in OPEN_REVIEW_STATUSES
+    complete = review_complete(payloads)
     not_ready = (
         readiness.get("paper_ready") is False
         and publishable.get("publishable_ready") is False
         and consequence.get("paper_claims_ready") is False
         and roadmap.get("roadmap_complete") is False
         and post_review.get("status") == "post_review_evidence_blocked"
-        and closeout.get("status") == "response_closeout_blocked"
+        and closeout.get("status") in {
+            "response_closeout_blocked",
+            "response_complete_ready_to_write",
+        }
     )
+    review_state_valid = (review_open or complete) and not_ready
     rows.append(
         check_row(
             check_id="C040",
             invariant="review-pending state cannot be paper-ready",
-            passed=bool(review_open and not_ready),
+            passed=bool(review_state_valid),
             evidence="readiness, publishable, consequence, roadmap, post-review, closeout summaries",
             result=(
+                "selected-300 review is complete, but paper-facing gates remain closed for proxy-only claims"
+                if complete and not_ready
+                else (
                 "selected-300 review is not complete and every paper-facing gate remains closed"
                 if review_open and not_ready
                 else "at least one paper-facing gate conflicts with pending selected-300 review"
+                )
             ),
             next_action="Keep claims proxy-only until response closeout, write, refresh, predictor, and recovery are complete.",
         )
@@ -542,9 +598,16 @@ def add_command_plan_check(payloads: dict[str, dict[str, Any]], rows: list[dict[
     strict_dry_run = str(closeout_commands.get("strict_dry_run", ""))
     write_refresh = str(closeout_commands.get("write_refresh_prepare_next", ""))
     strict_recovery = commands_by_gate.get("strict_human_reviewed_recovery", "")
-    plan_passed = (
+    closeout_is_ready = closeout_ready(payloads)
+    current_first_action_ok = (
         plan.get("current_first_action") == "complete_response_closeout"
         and closeout.get("status") == "response_closeout_blocked"
+    ) or (
+        plan.get("current_first_action") == "rerun_paper_facing_audits"
+        and closeout_is_ready
+    )
+    plan_passed = (
+        current_first_action_ok
         and all(flag in strict_dry_run for flag in (
             "--require-complete",
             "--require-timing",
@@ -572,7 +635,7 @@ def add_command_plan_check(payloads: dict[str, dict[str, Any]], rows: list[dict[
             passed=plan_passed,
             evidence=SUMMARY_SPECS["post_review"],
             result=(
-                "post-review command plan starts with response closeout and routes through refresh, strict recovery, checklist, and objective audit"
+                "post-review command plan preserves closeout/refresh, strict recovery, checklist, and objective audit order"
                 if plan_passed
                 else "post-review command plan is missing, stale, out of order, or allows pending recovery evidence"
             ),
@@ -927,7 +990,18 @@ def add_review_work_order_check(
     row_coverage_ok = row_step_numbers == closeout_row_numbers
     steps_ok = required_step_types.issubset(step_types)
     status_ok = work_order.get("status") == "review_work_order_ready"
-    passed = counts_match and row_coverage_ok and steps_ok and status_ok and not sensitive
+    complete_no_pending_ok = (
+        review_complete(payloads)
+        and closeout_ready(payloads)
+        and int(overview.get("total_action_items") or 0) == 0
+        and int(overview.get("row_work_order_steps") or 0) == 0
+        and int(overview.get("packet_work_order_steps") or 0) >= 3
+        and work_order.get("status") == "review_work_order_blocked"
+    )
+    passed = (
+        (counts_match and row_coverage_ok and steps_ok and status_ok)
+        or complete_no_pending_ok
+    ) and not sensitive
     rows.append(
         check_row(
             check_id="C071",
@@ -936,7 +1010,9 @@ def add_review_work_order_check(
             evidence=REVIEW_WORK_ORDER_TSV_RELATIVE,
             result=(
                 "review work-order TSV covers current row/model/timing actions and packet closeout order"
-                if passed
+                if passed and not complete_no_pending_ok
+                else "review work-order records no pending row/model/timing actions after review_complete"
+                if complete_no_pending_ok
                 else (
                     f"counts_match={counts_match}; "
                     f"row_coverage_ok={row_coverage_ok}; "
@@ -1122,6 +1198,17 @@ def add_post_review_sequence_execute_safety_check(
         and sequence.get("executed_step_count") == 0
         and "strict_dry_run" in sequence.get("blocker_keys", [])
     )
+    if review_complete(payloads) and closeout_ready(payloads):
+        status_ok = (
+            sequence.get("mode") == "plan_only"
+            and sequence.get("status")
+            in {
+                "post_review_sequence_ready_to_execute",
+                "post_review_sequence_blocked",
+                "post_review_sequence_complete",
+            }
+            and sequence.get("executed_step_count") == 0
+        )
     passed = policy_ok and status_ok
     rows.append(
         check_row(
@@ -1162,7 +1249,13 @@ def add_review_work_order_sequence_route_check(
         and "--allow-pending-summary" not in route_command
     )
     status_ok = work_order.get("status") == "review_work_order_ready"
-    passed = sequence_route_ok and status_ok
+    complete_no_pending_ok = (
+        review_complete(payloads)
+        and closeout_ready(payloads)
+        and work_order.get("status") == "review_work_order_blocked"
+        and int((work_order.get("review_work_order_overview") or {}).get("total_action_items") or 0) == 0
+    )
+    passed = sequence_route_ok and (status_ok or complete_no_pending_ok)
     rows.append(
         check_row(
             check_id="C074",
@@ -1213,7 +1306,13 @@ def add_review_work_order_dry_run_gate_check(
         and "--prepare-next-after-write" not in dry_run_command
     )
     status_ok = work_order.get("status") == "review_work_order_ready"
-    passed = command_flags_ok and status_ok
+    complete_no_pending_ok = (
+        review_complete(payloads)
+        and closeout_ready(payloads)
+        and work_order.get("status") == "review_work_order_blocked"
+        and int((work_order.get("review_work_order_overview") or {}).get("total_action_items") or 0) == 0
+    )
+    passed = command_flags_ok and (status_ok or complete_no_pending_ok)
     rows.append(
         check_row(
             check_id="C075",
@@ -1269,7 +1368,15 @@ def add_review_work_order_next_operation_check(
         and "local-only" in str(local_step.get("privacy_boundary", "")).lower()
     )
     status_ok = work_order.get("status") == "review_work_order_ready"
-    passed = current_ok and local_open_ok and status_ok
+    complete_no_pending_ok = (
+        review_complete(payloads)
+        and closeout_ready(payloads)
+        and next_operation.get("status") == "no_pending_row_steps"
+        and not current_step
+        and not local_step
+        and work_order.get("status") == "review_work_order_blocked"
+    )
+    passed = (current_ok and local_open_ok and status_ok) or complete_no_pending_ok
     rows.append(
         check_row(
             check_id="C078",
@@ -1278,7 +1385,9 @@ def add_review_work_order_next_operation_check(
             evidence=SUMMARY_SPECS["work_order"],
             result=(
                 "review work-order summary points to the next timing-start and local-row-open operations"
-                if passed
+                if passed and not complete_no_pending_ok
+                else "review work-order summary records no pending local row operations after review_complete"
+                if complete_no_pending_ok
                 else (
                     f"current_ok={current_ok}; local_open_ok={local_open_ok}; "
                     f"status={work_order.get('status', '')}"
@@ -1344,6 +1453,17 @@ def add_local_row_access_log_route_check(
         and path_ok
         and row_ok
     )
+    complete_no_pending_ok = (
+        review_complete(payloads)
+        and closeout_ready(payloads)
+        and records.get("status") in {"operation_records_ready", "operation_records_drift"}
+        and work_order.get("status") == "review_work_order_blocked"
+        and next_work.get("status") == "no_pending_row_steps"
+        and route_status == "planned_not_yet_recorded"
+        and path_ok
+        and not str(local_step.get("row_number", ""))
+    )
+    passed = passed or complete_no_pending_ok
     rows.append(
         check_row(
             check_id="C081",
@@ -1352,7 +1472,9 @@ def add_local_row_access_log_route_check(
             evidence=f"{SUMMARY_SPECS['work_order']}; {SUMMARY_SPECS['operation_records']}",
             result=(
                 "next local row-open command records a safe access-log path before transcript-bearing output"
-                if passed
+                if passed and not complete_no_pending_ok
+                else "no local row-open access-log route is required after review_complete"
+                if complete_no_pending_ok
                 else (
                     f"route_ok={route_ok}; status_ok={status_ok}; path_ok={path_ok}; "
                     f"row_ok={row_ok}; record_status={records.get('status', '')}; "
@@ -1429,7 +1551,20 @@ def add_operation_record_check(
         and safe_int(packet.get("pending_model_assessments_in_batch")) == packet_models
         and safe_int(packet.get("rows_missing_timing")) == packet_rows
     )
-    passed = status_ok and counts_ok and packet_ok and next_operation_aligned
+    complete_no_pending_ok = (
+        review_complete(payloads)
+        and closeout_ready(payloads)
+        and status_ok
+        and counts_ok
+        and next_record.get("status") == "no_pending_row_steps"
+        and next_work.get("status") == "no_pending_row_steps"
+        and next_refresh.get("status") == "no_pending_row_steps"
+    )
+    passed = (
+        status_ok
+        and counts_ok
+        and (packet_ok and next_operation_aligned or complete_no_pending_ok)
+    )
     rows.append(
         check_row(
             check_id="C079",
@@ -1438,7 +1573,9 @@ def add_operation_record_check(
             evidence=SUMMARY_SPECS["operation_records"],
             result=(
                 "operation-record audit covers batch, preflight, session, strict apply, timing, and sequence logs"
-                if passed
+                if passed and not complete_no_pending_ok
+                else "operation-record audit covers logs and records no pending row operation after review_complete"
+                if complete_no_pending_ok
                 else (
                     f"status_ok={status_ok}; counts_ok={counts_ok}; "
                     f"packet_ok={packet_ok}; next_operation_aligned={next_operation_aligned}"
@@ -1478,8 +1615,17 @@ def add_sequence_aware_objective_check(
     status_ok = (
         objective.get("ok") is True
         and objective.get("objective_requirements_ready") is False
-        and requirement_63.get("status") == "review_pending"
-        and requirement_63.get("paper_claim_status") == "not paper-ready"
+        and (
+            (
+                requirement_63.get("status") == "review_pending"
+                and requirement_63.get("paper_claim_status") == "not paper-ready"
+            )
+            or (
+                review_complete(payloads)
+                and requirement_63.get("status") == "satisfied"
+                and requirement_63.get("paper_claim_status") == "paper-ready"
+            )
+        )
     )
     sequence_status_recorded = (
         "human_audit_post_review_sequence_summary.json" in evidence
@@ -1488,9 +1634,16 @@ def add_sequence_aware_objective_check(
         and f"post_review_sequence_executed_step_count={executed_count_text}" in result
     )
     sequence_route_recorded = (
-        "run_post_review_evidence_sequence.py --execute" in next_action
-        and "run_post_review_evidence_sequence.py --execute" in next_decision
-        and "strict human-reviewed recovery" in next_decision
+        (
+            "run_post_review_evidence_sequence.py --execute" in next_action
+            and "run_post_review_evidence_sequence.py --execute" in next_decision
+            and "strict human-reviewed recovery" in next_decision
+        )
+        or (
+            review_complete(payloads)
+            and "human-reviewed recovery outputs" in next_action
+            and "proxy-only evidence gates" in next_decision
+        )
     )
     sensitive = False
     try:
@@ -1608,6 +1761,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
     for row in rows:
         counts[row["status"]] = counts.get(row["status"], 0) + 1
     failed = [row for row in rows if row["status"] != "pass"]
+    complete = review_complete(payloads)
     payload = {
         "ok": not failed,
         "status_counts": dict(sorted(counts.items())),
@@ -1621,12 +1775,27 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
             for row in failed
         ],
         "reference_transcript_policy": "Reference transcripts are already human-reviewed for WER/CER; this audit does not reopen transcript review.",
-        "remaining_review_scope": "Selected-300 completion still requires risk, decision, expected safe action, confidence, per-model fields, and per-row review timing.",
+        "remaining_review_scope": (
+            "Selected-300 risk, decision, expected safe action, confidence, "
+            "per-model fields, and per-row review timing are complete; remaining "
+            "work is proxy-to-paper claim resolution."
+            if complete
+            else (
+                "Selected-300 completion still requires risk, decision, expected "
+                "safe action, confidence, per-model fields, and per-row review timing."
+            )
+        ),
         "consistency_rows": rows,
         "next_decision": (
-            "If this audit is pass, continue with the local selected-300 "
-            "row/model/timing response closeout; if it fails, refresh the stale "
-            "aggregate generator before paper-facing claims."
+            "If this audit is pass, selected-300 human-review records are "
+            "internally consistent; resolve remaining proxy-only paper-claim "
+            "gates before declaring publishable readiness."
+            if complete
+            else (
+                "If this audit is pass, continue with the local selected-300 "
+                "row/model/timing response closeout; if it fails, refresh the stale "
+                "aggregate generator before paper-facing claims."
+            )
         ),
     }
     assert_aggregate_safe(payload)

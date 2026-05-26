@@ -1,21 +1,25 @@
 {
-  "version": "v2.5.217",
+  "version": "v2.5.218",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 217
+    "patch": 218
   },
-  "updated_at": "2026-05-26T10:56:20+08:00",
+  "updated_at": "2026-05-26T11:08:30+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "83a4d1c",
+  "base_commit": "46959b0",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/README.md"
+    "80_semantic_risk_asr/annotation/audit_human_audit_operation_records.py",
+    "80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py",
+    "80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py",
+    "80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py",
+    "80_semantic_risk_asr/scoring/audit_postdoc_objective_requirements.py"
   ]
 }

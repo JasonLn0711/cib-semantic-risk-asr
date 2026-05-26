@@ -546,10 +546,16 @@ def build_objective_requirement_audit_from_payloads(
                 "post-review sequence is not complete"
             ),
             next_action=(
-                "After selected-300 response closeout is ready, run "
-                "run_post_review_evidence_sequence.py --execute so write/refresh, "
-                "strict human-reviewed recovery, post-review checklist, and "
-                "objective audit execute in order."
+                "Use the human-reviewed recovery outputs for recovery-specific claims; "
+                "keep remaining proxy-only paper claims labeled until the proxy gates "
+                "are resolved."
+                if recovery_human_ready
+                else (
+                    "After selected-300 response closeout is ready, run "
+                    "run_post_review_evidence_sequence.py --execute so write/refresh, "
+                    "strict human-reviewed recovery, post-review checklist, and "
+                    "objective audit execute in order."
+                )
             ),
         ),
     ])
@@ -560,26 +566,41 @@ def build_objective_requirement_audit_from_payloads(
     ]
     proxy_rows = [row for row in rows if row["status"] == "proxy_satisfied"]
     publishable_ready = not blocking_rows and not proxy_rows
+    selected_review_done = not any(row["status"] == "review_pending" for row in rows)
+    review_scope = (
+        "Selected-300 row/model/timing review and human-reviewed recovery are "
+        "complete; remaining work is proxy-to-paper claim resolution."
+        if selected_review_done
+        else REMAINING_REVIEW_SCOPE
+    )
     payload = {
         "ok": True,
         "objective_requirements_ready": publishable_ready,
         "publishable_ready": publishable_ready,
         "status_counts": dict(sorted(counts.items(), key=lambda item: STATUS_ORDER.get(item[0], 99))),
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
-        "remaining_review_scope": REMAINING_REVIEW_SCOPE,
+        "remaining_review_scope": review_scope,
         "requirements_total": len(rows),
         "proxy_requirement_count": len(proxy_rows),
         "blocking_requirement_count": len(blocking_rows),
         "requirement_rows": rows,
         "proxy_or_blocking_requirements": proxy_rows + blocking_rows,
         "next_decision": (
-            "Do not declare the postdoc objective complete. Complete selected-300 "
-            "row/model/timing review, run strict closeout, then execute "
-            "run_post_review_evidence_sequence.py --execute so write/refresh, "
-            "human predictor refresh, strict human-reviewed recovery, post-review "
-            "checklist, and objective audit happen in order."
-            if not publishable_ready
-            else "All objective requirements have paper-ready evidence."
+            "All objective requirements have paper-ready evidence."
+            if publishable_ready
+            else (
+                "Do not declare the postdoc objective complete. Selected-300 "
+                "human review and human-reviewed recovery are complete; resolve "
+                "the remaining proxy-only evidence gates before paper-ready claims."
+                if proxy_rows and not blocking_rows
+                else (
+                    "Do not declare the postdoc objective complete. Complete selected-300 "
+                    "row/model/timing review, run strict closeout, then execute "
+                    "run_post_review_evidence_sequence.py --execute so write/refresh, "
+                    "human predictor refresh, strict human-reviewed recovery, post-review "
+                    "checklist, and objective audit happen in order."
+                )
+            )
         ),
     }
     assert_requirement_audit_safe(payload)

@@ -664,6 +664,13 @@ def refresh_human_audit_evidence(
         and validation_payload["pending_rows"] == 0
         and validation_payload["pending_model_assessments"] == 0
     )
+    review_scope = (
+        "Selected-300 risk-atom labels, decision-change labels, expected safe "
+        "action, confidence, per-model assessment fields, and per-row review "
+        "timing are complete; remaining work is proxy-to-paper claim resolution."
+        if strict_complete
+        else REMAINING_REVIEW_SCOPE
+    )
     ok = bool(validation_payload["ok"]) and (not require_complete or strict_complete)
     if readiness_payload is not None:
         ok = ok and bool(readiness_payload.get("ok"))
@@ -675,7 +682,7 @@ def refresh_human_audit_evidence(
         "input_boundary": "local ignored audit sheet only; no private row content is emitted",
         "output_boundary": "aggregate tracked outputs only",
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
-        "remaining_review_scope": REMAINING_REVIEW_SCOPE,
+        "remaining_review_scope": review_scope,
         "audit_rows": validation_payload["audit_rows"],
         "reviewed_rows": validation_payload["reviewed_rows"],
         "pending_rows": validation_payload["pending_rows"],

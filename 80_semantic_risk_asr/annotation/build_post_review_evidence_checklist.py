@@ -375,13 +375,20 @@ def build_post_review_checklist(
         blocker_keys.append("recovery_proxy_missing")
 
     status = "post_review_evidence_ready" if all_ready else "post_review_evidence_blocked"
+    review_scope = (
+        "Selected-300 risk, decision, expected safe action, confidence, "
+        "per-model fields, and per-row review timing are complete; remaining "
+        "work is proxy-to-paper claim resolution."
+        if refresh_complete
+        else REMAINING_REVIEW_SCOPE
+    )
     payload = {
         "ok": all_ready,
         "status": status,
         "input_boundary": "tracked aggregate summaries only",
         "output_boundary": "aggregate-only post-review evidence checklist; no row keys or transcript text",
         "reference_transcript_policy": REFERENCE_TRANSCRIPT_POLICY,
-        "remaining_review_scope": REMAINING_REVIEW_SCOPE,
+        "remaining_review_scope": review_scope,
         "closeout_ready": closeout_ready,
         "closeout_require_timing": closeout.get("require_timing", ""),
         "closeout_review_timing": closeout_timing,

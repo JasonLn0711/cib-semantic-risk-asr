@@ -163,6 +163,11 @@ def expected_context(run_dir: Path) -> dict[str, Any]:
     current_step = current_step if isinstance(current_step, dict) else {}
     row_numbers = packet.get("row_numbers") if isinstance(packet.get("row_numbers"), list) else []
     return {
+        "review_complete": (
+            refresh.get("status") == "review_complete"
+            and text_int(refresh.get("pending_rows")) == 0
+            and text_int(refresh.get("pending_model_assessments")) == 0
+        ),
         "selection_stratum": packet.get("selection_stratum", "critical_or_high_risk_missed"),
         "row_numbers": [str(row) for row in row_numbers],
         "rows_in_batch": text_int(packet.get("rows_in_batch")) or 6,
@@ -287,6 +292,7 @@ def align_log(log_id: str, latest: dict[str, str], ctx: dict[str, Any]) -> tuple
     stratum = ctx["selection_stratum"]
     row_numbers = ctx["row_numbers"]
     next_row = ctx["next_row_number"]
+    review_complete = bool(ctx.get("review_complete"))
 
     if log_id == "review_batch":
         ok = (
@@ -325,6 +331,22 @@ def align_log(log_id: str, latest: dict[str, str], ctx: dict[str, Any]) -> tuple
         return ok, "session start records current pending packet" if ok else "session-start log drift"
     if log_id == "strict_apply":
         error_keys = set(csv_values(latest.get("error_keys")))
+        if review_complete:
+            ok = (
+                latest.get("status") == "response_complete"
+                and latest.get("mode") in {"dry_run", "write"}
+                and truthy(latest.get("require_complete"))
+                and truthy(latest.get("require_timing"))
+                and text_int(latest.get("rows_in_batch")) == rows
+                and text_int(latest.get("pending_rows_in_response")) == 0
+                and text_int(latest.get("pending_model_assessments_in_response")) == 0
+                and text_int(latest.get("rows_missing_timing")) == 0
+            )
+            return ok, (
+                "strict apply records completed response rows, model assessments, and timing"
+                if ok
+                else "strict-apply completion log drift"
+            )
         ok = (
             latest.get("status") == "response_pending"
             and latest.get("mode") == "dry_run"
@@ -338,6 +360,18 @@ def align_log(log_id: str, latest: dict[str, str], ctx: dict[str, Any]) -> tuple
         )
         return ok, "strict apply dry-run records current blockers" if ok else "strict-apply log drift"
     if log_id == "timing_helper":
+        if review_complete:
+            ok = (
+                latest.get("status") in {"timing_dry_run_ready", "timing_written"}
+                and latest.get("mode") in {"dry_run", "write"}
+                and latest.get("action") != ""
+                and text_int(latest.get("rows_in_response")) == ctx["response_sheet_rows"]
+            )
+            return ok, (
+                "timing helper log exists for the completed timing-gated packet"
+                if ok
+                else "timing completion log drift"
+            )
         ok = (
             latest.get("status") in {"timing_dry_run_ready", "timing_written"}
             and latest.get("mode") in {"dry_run", "write"}
@@ -348,6 +382,21 @@ def align_log(log_id: str, latest: dict[str, str], ctx: dict[str, Any]) -> tuple
         return ok, "timing helper log records the next row timing operation" if ok else "timing log drift"
     if log_id == "post_review_sequence":
         blocker_keys = set(csv_values(latest.get("blocker_keys")))
+        if review_complete:
+            ok = (
+                latest.get("mode") in {"plan_only", "execute"}
+                and latest.get("status")
+                in {
+                    "post_review_sequence_ready_to_execute",
+                    "post_review_sequence_complete",
+                    "post_review_sequence_blocked",
+                }
+            )
+            return ok, (
+                "sequence log records post-review completion or remaining paper-claim gate state"
+                if ok
+                else "sequence completion log drift"
+            )
         ok = (
             latest.get("mode") == "plan_only"
             and latest.get("status") == "post_review_sequence_blocked"
