@@ -151,24 +151,30 @@ ASR tables should use the aggregate `cer_zh_micro` column as the primary
 surface metric and `wer_zh_jieba_micro` only as a supplemental segmented word
 metric.
 
-Current execution priority after the 258-row gate:
+Current execution priority after the 2026-05-26 candidate rechecks:
 
-1. Complete remaining comparable 258-row baselines for Whisper large-v3 and
-   Whisper large-v3 turbo under the `zh_asr` metric profile.
-2. Build new SenseVoice and Qwen3-ASR runners only through smoke and 15-row
-   contract before full split runs.
-3. Keep Gemma 4 E2B/E4B as a separate prompted multimodal ASR lane, not as a
-   pure ASR baseline.
-4. Use the split-aware `build_janus_metric_inputs.py` so 15-row, 258-row, and
-   300-row experiments share the same metric-input contract. Current local
-   validation: the script reproduces the 15-row human-reviewed legacy bridge
-   counts and can process the six-model 258-row proxy comparison.
-5. Run the selected 300-row high-stakes expansion as the main experiment only
-   after the split-aware builder is validated. Current selected-300 proxy
-   status: three Breeze-family hypotheses, SRES/CEIS/downstream inputs,
-   recovery policy comparison, and metric-predictor analysis have all run over
-   `900` model-samples. This is still proxy evidence until the human
-   risk-atom audit gate exists.
+1. Do not promote Whisper large-v3, Whisper large-v3 turbo, SenseVoiceSmall, or
+   Qwen3-ASR-0.6B to 258-row or selected-300 runs while the strict Taiwan
+   Traditional Chinese locale gate is not clean. Their current value is
+   bounded 15-row comparator evidence, not a new full-split experiment.
+2. Do not rerun Qwen3-ASR-1.7B without a separate cache/download plan; repeated
+   bounded gates timed out before inference. Do not run Gemma 4 E2B/E4B as a
+   pure ASR baseline; keep them in a separate prompted multimodal-ASR lane until
+   an isolated runtime supports the required Gemma 4 multimodal/audio classes.
+3. Treat the selected-300 high-stakes review as the main publishability gate.
+   The remaining review scope is risk atoms, decision-change, expected safe
+   action, confidence, per-model assessment fields, and per-row review timing.
+   The accepted reference transcripts are already the WER/CER scoring ground
+   truth and should not be sent through duplicate transcript review.
+4. After the current packet response is complete, run the strict closeout path
+   with `--require-complete --require-timing`, then execute
+   `run_post_review_evidence_sequence.py --execute` so write/refresh,
+   human-reviewed predictor analysis, strict recovery rerun, post-review
+   checklist, and objective audit happen in order.
+5. Keep the existing selected-300 Breeze-family proxy outputs as row-selection
+   and engineering evidence only. Paper-grade CDS-ASR claims require the
+   post-review refresh; the repo should now optimize for consequence evidence,
+   not a longer ASR leaderboard.
 
 ## Experiment 2: Counterfactual Generation Quality
 
