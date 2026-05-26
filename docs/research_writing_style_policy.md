@@ -24,6 +24,14 @@ positive claim
 For Traditional Chinese writing, use Taiwan Traditional Chinese and a tone that
 is `正向、主動、可信任、邊界清楚`.
 
+Human-facing documents should use confident positive framing instead of
+defensive or denial-led phrasing. Present limitations as scope controls,
+evidence levels, validation gates, or planned extensions. Prefer "this evidence
+supports X under Y scope" over language that centers on what the work does not
+claim. Machine-readable enum values can keep exact terms required by scripts;
+surrounding prose should translate them into constructive, reviewer-facing
+language.
+
 ## Audience-Attractive Paper Shape
 
 When a document needs to hold attention, use this sequence:

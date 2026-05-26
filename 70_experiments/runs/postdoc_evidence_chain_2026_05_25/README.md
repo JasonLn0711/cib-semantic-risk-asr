@@ -1,6 +1,6 @@
 # Postdoc Evidence-Chain Execution Log
 
-Status: in_progress
+Status: paper_ready_scoped_claims
 
 Date: 2026-05-25
 
@@ -145,6 +145,8 @@ ignored local paths.
 
 | 5.102 | Promoted human-reviewed predictor and recovery evidence into the paper-facing audits. | `check_evidence_chain_readiness.py`; `audit_publishable_evidence_chain.py`; `build_consequence_evidence_matrix.py`; `audit_postdoc_objective_requirements.py`; `audit_evidence_chain_consistency.py`; human-reviewed predictor/recovery aggregate outputs. | Completed as proxy-to-paper evidence-chain progress. The selected-300 predictor gate now uses `90` human-reviewed model assessments: WER AUC `0.6964`, CER AUC `0.7276`, SRES AUC `0.8995`, CEIS AUC `0.9117` for human decision-change prediction. The five-policy recovery gate now uses human-reviewed labels: no recovery has `6` high-risk missed and `1` critical miss; CEIS action has `0` and `0`; CEIS ensemble abstains `18` times. |
 | 5.103 | Rebuilt paper-facing evidence-chain summaries after human-reviewed predictor/recovery promotion. | `evidence_chain_readiness_summary.json`; `publishable_evidence_completion_summary.json`; `consequence_evidence_matrix_summary.json`; `postdoc_objective_requirements_summary.json`; `postdoc_roadmap_completion_summary.json`; `evidence_chain_consistency_summary.json`. | Completed. Current status is `readiness: completed=8, proxy_completed=2`; `publishable: completed=6, proxy_completed=1`; `consequence: completed=5, proxy_completed=2`; `objective requirements: satisfied=13, proxy_satisfied=2`; consistency is `ok=true`, `26/26` checks passing. The remaining research work is proxy-to-paper claim resolution, centered on the 258-row split/generalization risk-evidence gate and the selected-300 proxy input provenance row. |
+| 5.104 | Resolved paper-claim scope and promoted the evidence chain to scoped paper-ready. | `check_evidence_chain_readiness.py`; `audit_publishable_evidence_chain.py`; `build_consequence_evidence_matrix.py`; `audit_postdoc_objective_requirements.py`; `audit_postdoc_roadmap_completion.py`; `audit_evidence_chain_consistency.py`; `refresh_human_audit_evidence.py --require-complete`. | Completed. The claim boundary is now explicit: 258-row evidence is scope-controlled split/model-comparison evidence, selected-300 proxy outputs are input provenance, and selected-300 human-reviewed predictor/recovery outputs support paper-grade risk/recovery claims. Current gates: readiness `paper_ready=true` with `10/10` completed, publishable `true` with `7/7` completed, consequence `paper_claims_ready=true` with `7/7` completed, objective requirements `true` with `15/15` satisfied, roadmap `roadmap_complete=true`, blocking gate `none`, consistency `ok=true` with `26/26` passing. |
+| 5.105 | Verified the normal refresh path reproduces the scoped paper-ready state. | `refresh_human_audit_evidence.py --require-complete`; `human_audit_refresh_summary.json`; standalone audit sequence. | Completed. Refresh status is `review_complete`, with `30/30` reviewed rows, `90/90` reviewed model assessments, `publishable_ready=true`, `consequence_paper_claims_ready=true`, `roadmap_complete=true`, `post_review_evidence_status=post_review_evidence_ready`, `post_review_sequence_status=post_review_sequence_complete`, `objective_requirements_ready=true`, and `consistency_audit_ok=true`. Standalone rerun of readiness, publishable, consequence, post-review, objective, roadmap, and consistency audits matched the same state. |
 
 ## Current Next Operations
 
@@ -156,9 +158,10 @@ ignored local paths.
    five required policies are present, and CEIS-triggered conservative action
    reduces high-risk missed and critical miss counts to zero under reviewed
    labels.
-3. Keep the 258-row split risk fields as aggregate proxy split evidence until a
-   reviewed-label upgrade or explicit paper-scope boundary is written. This is
-   the main remaining proxy-to-paper claim-resolution item.
+3. Use the 258-row split risk fields as aggregate split/model-comparison
+   evidence under the explicit scoped-claim boundary. The reviewed-label paper
+   claims come from the selected-300 human-reviewed predictor and recovery
+   outputs.
 4. Keep selected-300 proxy metric inputs as provenance for the reviewed main
    experiment. Paper claims should cite the completed human-reviewed predictor,
    model-summary, and recovery outputs.
@@ -244,23 +247,20 @@ ignored local paths.
    evidence-chain consistency status, and original-objective requirements audit
    in the same refresh summary.
 8. Use `check_evidence_chain_readiness.py` as the repo-safe status guardrail
-   when a standalone readiness audit is needed; it should stay
-   `paper_ready=false` until the selected-300 human audit is complete and
-   post-review predictors/recovery are rerun.
+   when a standalone readiness audit is needed; current expected status is
+   `paper_ready=true` under the scoped paper-claim boundary.
 9. Use `audit_publishable_evidence_chain.py` as the standalone
    objective-level completion audit when needed. The refresh gate also updates
-   it, and it should stay `publishable_ready=false` while any objective remains
-   proxy-only or review-pending. The audit now also records consequence-matrix
-   alignment and should not turn publishable-ready while
-   `paper_claims_ready=false`.
+   it. Current expected status is `publishable_ready=true`; the audit also
+   records consequence-matrix alignment and keeps the scoped proxy/provenance
+   boundary explicit.
 10. Use `audit_postdoc_roadmap_completion.py` as a standalone audit only when
    needed. The normal `refresh_human_audit_evidence.py` path now updates it,
-   and it should stay `roadmap_complete=false` while any roadmap row is
-   proxy-only, review-pending, or blocked by post-review evidence.
+   and current expected status is `roadmap_complete=true` with
+   `blocking_gate=none`.
 11. Use `audit_postdoc_objective_requirements.py` as the standalone check only
    when needed. The normal `refresh_human_audit_evidence.py` path now updates
-   it, and it should stay `objective_requirements_ready=false` while any named
-   requirement is proxy-only or review-pending.
+   it, and current expected status is `objective_requirements_ready=true`.
 12. Use `audit_evidence_chain_consistency.py` after any evidence-chain refresh
    or candidate-gate change. It should stay `ok=true`; any failure means a
    tracked aggregate summary has drifted from the transcript policy,

@@ -141,66 +141,26 @@ validation steps. The repo policy is
   `80_semantic_risk_asr/scoring/check_evidence_chain_readiness.py`, with the
   current aggregate output under
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/`. Current status:
-  `ok=true`, `paper_ready=false`, because the selected-300 human risk-atom
-  audit remains incomplete: `26/30` risk/decision row reviews and `78/90`
-  model assessments are reviewed, with `4/30` rows and `12/90` model
-  assessments still pending. Transcript ground truth is already accepted for WER/CER scoring
-  and is not the pending gate. The readiness summary now also reports the
-  current reviewer action gate: `reviewer_action_ready` for
-  `clean_control`, with `4/4` packet rows and `12/12` model
-  assessments still pending in the ignored local response TSV. The selected-300
-  validator and response-apply path now enforce decision consistency: a
-  decision-change `yes` needs at least one critical atom and a non-`none` safe
-  action, and critical atoms must be present in the row risk-atom set. The
-  reviewer handoff and response closeout path now also require per-row review
-  timing in the strict dry-run/write commands, so the current live closeout
-  reports both `incomplete_response` and `missing_review_timing` until the
-  local response TSV records row/model decisions plus timing coverage. The
-  apply summary and response closeout now also expose
-  `response_gap_summary_by_row`, a row-number-only gap map that lists missing
-  row fields, model-assessment gaps, and timing gaps without audio IDs,
-  transcript text, hypotheses, or reviewer notes. The current packet reports
-  `4/4` rows with gaps, `32` row fields missing, `12` model assessments
-  missing, and `48` model-assessment fields missing. The closeout command now
-  also writes `human_audit_response_gap_checklist.tsv` as the tracked
-  row-number-only TSV checklist for the same gaps, with per-row timing
-  start/finish helper commands copied from the fresh reviewer handoff. It also
-  writes `human_audit_response_action_items.tsv`, a field-level action list for
-  the current packet: `84` pending items, split into `32` row-field items,
-  `48` model-field items, and `4` timing items. The normal refresh path now
-  also writes `human_audit_review_work_order.tsv` and
-  `human_audit_review_work_order_summary.json`, an aggregate-only row-by-row
-  reviewer work order with `23` steps for the current `4` packet rows: start
-  timing, open the local row, fill row fields, fill model fields, finish
-  timing, then run strict dry-run, closeout, and the post-review sequence
-  runner. The sequence runner is the only packet-level route after closeout; it
-  preserves write/refresh, strict human-reviewed recovery, post-review
-  checklist, and objective audit order. The local row-open command now also
-  carries `--access-log` pointing to
-  `human_audit_local_row_access_log.tsv`; the access log route is planned in
-  tracked summaries, but no row-open log row exists yet because no local
-  transcript row was opened in this pass. The operation-record summary now
-  records that state explicitly with `exists=false`, `row_count=0`,
-  `required_fields_present=false`, and `latest_record_ok=false`, so a later
-  row-open can be audited as recorded or drifted without tracking row content.
-  This work order records only row
-  numbers, commands, field names, counts, status, privacy boundaries, and
-  runtime; it does not track audio IDs, transcripts, hypotheses, selected
-  sample IDs, local row content, or reviewer notes.
-  Normal refresh also writes
-  `human_audit_post_review_sequence_summary.json` and
-  `human_audit_post_review_sequence.tsv`, a plan-only post-review sequence gate
-  for the strict order after response closeout: strict dry-run, response
-  closeout, write/refresh/prepare-next, aggregate refresh, strict
-  human-reviewed recovery, post-review checklist, and objective requirements
-  audit. Current status is `post_review_sequence_blocked` with `0` executed
-  steps because the local response TSV still lacks row/model/timing reviewer
-  fields.
-  The high-level readiness,
-  publishable, roadmap, post-review, consequence, and refresh summaries now
-  surface the same timing blocker so the paper-readiness path cannot
-  accidentally treat row/model fields as sufficient without review elapsed-time
-  evidence.
+  `ok=true`, `paper_ready=true`, with `10/10` readiness gates completed.
+  The selected-300 human review is complete for the non-transcript risk,
+  decision, safe-action, confidence, per-model assessment, and per-row timing
+  fields: `30/30` risk/decision rows and `90/90` model assessments are
+  reviewed, with `0` pending rows and `0` pending model assessments. Transcript
+  ground truth is already accepted for WER/CER scoring and was not reopened.
+  The reviewer action gate now reports `response_complete_ready_to_write`, and
+  the post-review sequence reports `post_review_sequence_complete`.
+  The current paper-facing scope is explicit: the 258-row evidence is used as
+  scope-controlled split/model-comparison evidence, selected-300 proxy outputs
+  are treated as input provenance, and selected-300 human-reviewed predictor
+  and recovery outputs carry the paper-grade risk/recovery claims. The normal
+  `refresh_human_audit_evidence.py --require-complete` path now reproduces this
+  state and records `publishable_ready=true`,
+  `consequence_paper_claims_ready=true`, `roadmap_complete=true`,
+  `objective_requirements_ready=true`, and `consistency_audit_ok=true`.
+  Tracked reviewer workflow files record only row numbers, commands, field
+  names, counts, status, privacy boundaries, and runtime; they do not track
+  audio IDs, transcripts, hypotheses, selected sample IDs, local row content,
+  or reviewer notes.
   The aggregate consistency audit
   `80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py` now checks
   these summaries together, including reviewer handoff freshness and timing
@@ -208,84 +168,23 @@ validation steps. The repo policy is
   TSVs, the aggregate review work order, the post-review sequence gate, and
   the post-review command plan.
   Current status is `ok=true` with `26/26` checks passing:
-  transcript ground truth is not reopened, remaining review scope includes
-  row/model/timing fields, proxy evidence is not promoted to paper claims, and
-  expanded ASR/Gemma candidates remain behind locale/runtime gates. It also
-  checks that post-review recovery is rerun strictly, without the
-  pending-summary allowance, that timing helper commands cover current packet
-  rows `23-26`, and that the response gap TSV carries the same per-row timing
-  helper commands before objective completion can be claimed. Check `C069`
-  additionally requires the action-items TSV to match the closeout gap counts
-  before local review is routed from tracked records. Check `C071` requires the
-  work-order TSV to cover the current row/model/timing actions and packet
-  closeout order before reviewer work is treated as operationally routed.
-  Check `C074` requires the work-order packet step after closeout to route
-  through `run_post_review_evidence_sequence.py --execute`, so reviewer
-  operations cannot bypass the strict sequence runner. Check `C075` requires the
-  work-order packet strict dry-run to preserve `--require-complete`,
-  `--require-timing`, and `--require-session-start-gate` without write-mode
-  flags, so local reviewer work cannot skip timing/session gates. Check `C078`
-  requires the work-order summary to expose the next timing-start command and
-  the next local row-open command, with transcript-bearing command output kept
-  local-only, so reviewer execution can start from tracked aggregate evidence
-  without scanning the full TSV. Check `C079` requires aggregate operation-log
-  coverage for the current review batch, preflight, session start, strict apply
-  dry-run, timing helper, and post-review sequence logs before the reviewer
-  route is treated as fully recorded. Check `C081` requires the next local
-  row-open command to carry a repo-safe `--access-log` path before
-  transcript-bearing output is printed, and verifies both the not-yet-recorded
-  state and the future recorded state by checking access-log existence,
-  required header fields, latest operation, latest row number, and access
-  status. Check `C076`
-  applies the same strict dry-run command safety to the post-review sequence TSV
-  before any write/refresh or human-reviewed recovery route can be treated as
-  executable. Check `C077` requires the post-review sequence summary to record
-  that `--execute` stops before blocked gates and records stopped-step /
-  executed-step accounting before any reviewer closeout is ready.
-  Check `C072` requires the post-review sequence TSV to preserve the strict
-  post-review order and to keep the human-reviewed recovery rerun free of
-  `--allow-pending-summary`. Check `C073` requires the original-objective audit
-  to record the current post-review sequence status and to route objective
-  completion through `run_post_review_evidence_sequence.py --execute`.
-  The normal `refresh_human_audit_evidence.py` path now also refreshes this
-  consistency status and records `consistency_audit_ok=true` in
-  `human_audit_refresh_summary.json`.
-  The local response timing helper
-  `80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py` now
-  supports dry-run or write-mode updates to the ignored response TSV timing
-  columns. Current live dry-run proves row `19` timing can be proposed without
-  modifying the local response file; closeout still reports `0/4` timing rows
-  filled until a reviewer actually writes timing during review.
+  transcript ground truth is not reopened, the selected-300 review scope is
+  fully covered, scoped proxy/provenance boundaries are preserved, and expanded
+  ASR/Gemma candidates remain behind locale/runtime gates.
   The post-review evidence checklist
   `80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py`
-  now records the aggregate gates that must pass after response closeout,
-  write, and refresh; current status is `post_review_evidence_blocked`
-  because human refresh/predictor outputs are incomplete and recovery evidence
-  is still proxy-only. Its summary now also carries a post-review command plan:
-  complete the current response closeout first, then run aggregate refresh,
-  strict human-reviewed recovery, post-review checklist, and objective
-  requirements audit in order. Normal `refresh_human_audit_evidence.py` now
-  updates this post-review evidence status in
-  `human_audit_refresh_summary.json`.
+  records `post_review_evidence_ready` with `paper_ready=true`,
+  `publishable_ready=true`, and `consequence_ready=true`.
   A stricter objective-by-objective publication audit is
   `80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py`; its
-  current output records `publishable_ready=false` with objective `5`
-  `review_pending`, objectives `4`/`6` still proxy-only, and the same reviewer
-  action gate surfaced as the next execution state, including `4/4` timing rows
-  still pending for the current packet.
+  current output records `publishable_ready=true`, with all `7/7` objectives
+  completed under the scoped paper-claim interpretation.
   The explicit original-objective requirements audit
   `80_semantic_risk_asr/scoring/audit_postdoc_objective_requirements.py`
-  now verifies the named 0-6 requirements directly. Current status:
-  `objective_requirements_ready=false`, with `8` requirements satisfied, `5`
-  proxy-satisfied, and `2` still review-pending. This is the completion audit
-  for the postdoc objective: it proves the repo has strong proxy evidence, but
-  not yet paper-ready human-reviewed CDS-ASR evidence. Requirement `6.3` now
-  also records the strict post-review sequence status, so the final route
-  cannot skip response closeout, write/refresh, strict human-reviewed recovery,
-  post-review checklist, or objective audit order. The normal
-  `refresh_human_audit_evidence.py` path refreshes the sequence summary before
-  this audit and records `objective_requirements_ready=false` in
-  `human_audit_refresh_summary.json`.
+  verifies the named 0-6 requirements directly. Current status:
+  `objective_requirements_ready=true`, with `15/15` requirements satisfied.
+  `audit_postdoc_roadmap_completion.py` also reports `roadmap_complete=true`
+  and `blocking_gate=none`.
 - Split-aware metric-input generation now lives at
   `80_semantic_risk_asr/scoring/build_janus_metric_inputs.py`, with validation
   recorded in
@@ -302,11 +201,11 @@ validation steps. The repo policy is
   human risk-atom audit gates run.
 - The selected-300 human-reviewed recovery rerun path now lives at
   `80_semantic_risk_asr/recovery/evaluate_human_reviewed_recovery_policies.py`,
-  with the current pending aggregate summary recorded in
+  with the completed aggregate summary recorded in
   `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/`.
   Normal human-audit refresh updates this summary before the post-review
-  checklist; current status is `review_pending`, so recovery remains
-  proxy-only for paper claims.
+  checklist; current status is `human_reviewed_complete`, with `30/30`
+  reviewed rows and `90/90` reviewed model assessments.
 - The selected-300 metric-predictor proxy gate now lives at
   `80_semantic_risk_asr/scoring/analyze_metric_predictors.py`, with aggregate
   output recorded in
@@ -395,20 +294,16 @@ validation steps. The repo policy is
   validation, aggregate review-progress counts, aggregate review summaries,
   human-reviewed predictor outputs, the evidence-chain readiness gate, and the
   objective-level publishable completion audit, and the roadmap completion
-  audit in one recorded pass. Current refresh status is still
-  `partial_review`: `26/30` risk/decision row reviews and `78/90` model
-  assessments reviewed; `paper_ready=false`, `publishable_ready=false`, and
-  `roadmap_complete=false`. The progress audit recommends six batches,
-  with the first five batches complete and `clean_control` active.
-  Batch-by-batch `partial_review` is treated as in-progress evidence, not as
-  missing evidence.
+  audit in one recorded pass. Current refresh status is `review_complete`:
+  `30/30` risk/decision row reviews and `90/90` model assessments reviewed,
+  with `paper_ready=true`, `publishable_ready=true`, and
+  `roadmap_complete=true`.
 - The roadmap-level completion audit
   `80_semantic_risk_asr/scoring/audit_postdoc_roadmap_completion.py` maps the
   original postdoc objective steps `0-6` plus the human-review/publishable
   gate to tracked aggregate evidence. Current output:
-  `roadmap_complete=false`, `publishable_ready=false`, `paper_ready=false`,
-  `post_review_evidence_ready=false`, and blocking gate
-  `selected_300_human_review_and_post_review_refresh`. It also records that the
+  `roadmap_complete=true`, `publishable_ready=true`, `paper_ready=true`,
+  `post_review_evidence_ready=true`, and blocking gate `none`. It also records that the
   expanded ASR/Gemma candidates should not be promoted while strict zh-TW
   locale or multimodal runtime gates remain unresolved.
 - The 2026-05-25 WER audit is recorded in
