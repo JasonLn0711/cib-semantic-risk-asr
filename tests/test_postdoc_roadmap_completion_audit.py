@@ -105,6 +105,83 @@ def test_roadmap_audit_blocks_current_proxy_and_review_pending_state() -> None:
     assert_roadmap_safe(payload)
 
 
+def test_roadmap_candidate_gate_reads_current_recheck_payload_shape() -> None:
+    payload = build_roadmap_audit_from_payloads(
+        readiness={"paper_ready": False},
+        completion=base_completion(),
+        consequence={"paper_claims_ready": False},
+        post_review={
+            "ok": False,
+            "status": "post_review_evidence_blocked",
+            "blocker_keys": ["response_closeout_not_ready"],
+            "next_concrete_action": "complete response closeout",
+        },
+        human_refresh={
+            "ok": True,
+            "status": "review_pending",
+            "audit_rows": 30,
+            "reviewed_rows": 0,
+            "model_assessments": 90,
+            "reviewed_model_assessments": 0,
+            "pending_rows": 30,
+            "pending_model_assessments": 90,
+        },
+        human_predictor={"status": "review_pending"},
+        response_closeout={
+            "status": "response_closeout_blocked",
+            "rows_in_batch": 6,
+            "pending_rows_in_response": 6,
+            "reviewed_model_assessments_in_response": 0,
+            "pending_model_assessments_in_response": 18,
+            "require_timing": True,
+            "review_timing": {
+                "rows_with_timing": 0,
+                "rows_missing_timing": 6,
+            },
+        },
+        candidate_summary={
+            "ok": True,
+            "strict_locale_policy": "Taiwan Traditional Chinese",
+            "promotion_decision": "No promotion.",
+            "latest_follow_up": {"checked_at": "2026-05-26 08:25 CST"},
+            "details": [
+                {
+                    "run_id": "whisper_large_v3_15_row_baseline",
+                    "rows": 15,
+                    "expected_rows": 15,
+                },
+                {
+                    "run_id": "qwen3_asr_0_6b_15_row_candidate",
+                    "rows": 15,
+                    "expected_rows": 15,
+                },
+            ],
+            "bounded_probes": [
+                {
+                    "run_id": "qwen3_asr_1_7b_current_recheck_1_row",
+                    "model": "Qwen/Qwen3-ASR-1.7B",
+                    "status": "timeout_before_inference",
+                    "decision": "Retry only with an isolated cache plan.",
+                },
+                {
+                    "run_id": "gemma4_audio_class_probe_current_recheck",
+                    "model": "unsloth/gemma-4-E2B_and_E4B",
+                    "status": "blocked_local_transformers_multimodal_class_missing",
+                    "decision": "Create isolated multimodal runtime first.",
+                },
+            ],
+        },
+    )
+
+    gate = payload["candidate_gate"]
+    assert gate["latest_checked_at"] == "2026-05-26 08:25 CST"
+    assert gate["evaluated_15_row_contract_run_count"] == 2
+    assert gate["evaluated_15_row_contract_rows_ok"] is True
+    assert gate["blocked_or_stopped_count"] == 2
+    assert gate["blocked_or_stopped_runs"][1]["model"] == "unsloth/gemma-4-E2B_and_E4B"
+    assert_roadmap_safe(payload)
+
+
 def test_roadmap_audit_can_mark_all_requirements_complete() -> None:
     completion = {
         "publishable_ready": True,

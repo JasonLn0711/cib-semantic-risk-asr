@@ -236,13 +236,37 @@ def post_review_gate_row(
 
 
 def candidate_gate(candidate_summary: dict[str, Any]) -> dict[str, Any]:
-    stopped = candidate_summary.get("blocked_or_stopped", [])
+    stopped = (
+        candidate_summary.get("blocked_or_stopped")
+        or candidate_summary.get("bounded_probes")
+        or []
+    )
     stopped_rows = [item for item in stopped if isinstance(item, dict)]
+    details = [
+        item for item in candidate_summary.get("details", [])
+        if isinstance(item, dict)
+    ]
+    row_counts_ok = all(
+        int(item.get("rows") or 0) == int(item.get("expected_rows") or -1)
+        for item in details
+    )
+    latest_follow_up = candidate_summary.get("latest_follow_up", {})
+    latest_checked_at = (
+        latest_follow_up.get("checked_at", "")
+        if isinstance(latest_follow_up, dict)
+        else ""
+    )
     return {
         "available": bool(candidate_summary),
         "ok": bool(candidate_summary.get("ok")),
         "strict_locale_policy": candidate_summary.get("strict_locale_policy", ""),
         "promotion_decision": candidate_summary.get("promotion_decision", ""),
+        "latest_checked_at": latest_checked_at,
+        "evaluated_15_row_contract_runs": [
+            item.get("run_id", "") for item in details
+        ],
+        "evaluated_15_row_contract_run_count": len(details),
+        "evaluated_15_row_contract_rows_ok": bool(details) and row_counts_ok,
         "blocked_or_stopped_count": len(stopped_rows),
         "blocked_or_stopped_runs": [
             {
@@ -408,7 +432,7 @@ def build_roadmap_audit(root: Path) -> dict[str, Any]:
             root
             / "70_experiments"
             / "runs"
-            / "asr_candidate_15_row_extension_2026_05_26"
+            / "asr_candidate_current_recheck_2026_05_26"
             / "summary.json"
         ),
     )
