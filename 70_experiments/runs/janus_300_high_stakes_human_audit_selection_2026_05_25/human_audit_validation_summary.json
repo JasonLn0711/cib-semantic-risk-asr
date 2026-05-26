@@ -4,17 +4,17 @@
   "require_complete": false,
   "expected_rows": 30,
   "audit_rows": 30,
-  "reviewed_rows": 6,
-  "pending_rows": 24,
+  "reviewed_rows": 12,
+  "pending_rows": 18,
   "model_assessments": 90,
-  "reviewed_model_assessments": 18,
-  "pending_model_assessments": 72,
+  "reviewed_model_assessments": 36,
+  "pending_model_assessments": 54,
   "error_counts": {},
   "warning_counts": {
-    "pending_model_review": 72,
-    "pending_row_review": 24
+    "pending_model_review": 54,
+    "pending_row_review": 18
   },
   "input_boundary": "local transcript-bearing audit sheet; do not commit input",
   "output_boundary": "aggregate-only validation counts",
-  "runtime_seconds": 0.0007
+  "runtime_seconds": 0.0008
 }

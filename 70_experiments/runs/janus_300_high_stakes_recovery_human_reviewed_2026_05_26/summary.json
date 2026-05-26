@@ -7,11 +7,11 @@
   "input_boundary": "local transcript-bearing audit sheet; do not commit input",
   "output_boundary": "aggregate-only human-reviewed recovery readiness summary",
   "audit_rows": 30,
-  "reviewed_rows": 6,
-  "pending_rows": 24,
+  "reviewed_rows": 12,
+  "pending_rows": 18,
   "model_assessments": 90,
-  "reviewed_model_assessments": 18,
-  "pending_model_assessments": 72,
+  "reviewed_model_assessments": 36,
+  "pending_model_assessments": 54,
   "policies": {},
   "blocker_keys": [
     "human_review_incomplete"

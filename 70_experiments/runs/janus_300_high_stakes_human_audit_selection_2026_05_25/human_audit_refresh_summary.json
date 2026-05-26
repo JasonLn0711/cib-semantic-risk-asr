@@ -7,20 +7,20 @@
   "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "Remaining selected-300 review work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
   "audit_rows": 30,
-  "reviewed_rows": 6,
-  "pending_rows": 24,
+  "reviewed_rows": 12,
+  "pending_rows": 18,
   "model_assessments": 90,
-  "reviewed_model_assessments": 18,
-  "pending_model_assessments": 72,
+  "reviewed_model_assessments": 36,
+  "pending_model_assessments": 54,
   "validation_ok": true,
   "validation_error_counts": {},
   "validation_warning_counts": {
-    "pending_model_review": 72,
-    "pending_row_review": 24
+    "pending_model_review": 54,
+    "pending_row_review": 18
   },
   "review_summary_status": "partial_review",
   "progress_status": "partial_review",
-  "recommended_review_batch_count": 5,
+  "recommended_review_batch_count": 4,
   "predictor_status": "partial_review",
   "readiness_ok": true,
   "readiness_paper_ready": false,
@@ -72,22 +72,22 @@
   "next_reviewer_operation": {
     "status": "reviewer_operation_ready",
     "current_step": {
-      "work_order_id": "row-7:01-mark-timing-start",
-      "row_number": "7",
+      "work_order_id": "row-13:01-mark-timing-start",
+      "row_number": "13",
       "step_order": "01",
       "step_type": "mark_timing_start",
       "status": "pending",
-      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T092502_0800_unsafe_downrouting_response_template.tsv --row-number 7 --mark-start --write",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 13 --mark-start --write",
       "completion_signal": "review_started_at is present for every model row in this selected row",
       "privacy_boundary": "tracked command only; local response TSV remains ignored"
     },
     "next_local_row_step": {
-      "work_order_id": "row-7:02-open-local-row",
-      "row_number": "7",
+      "work_order_id": "row-13:02-open-local-row",
+      "row_number": "13",
       "step_order": "02",
       "step_type": "open_local_row",
       "status": "local_only_required",
-      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --row-number 7 --show-row --access-log 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_local_row_access_log.tsv",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --row-number 13 --show-row --access-log 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_local_row_access_log.tsv",
       "completion_signal": "reviewer has inspected the local row without copying content into git",
       "privacy_boundary": "command output is transcript-bearing and must stay local-only"
     },
@@ -158,6 +158,6 @@
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"
   ],
-  "runtime_seconds": 0.0059,
+  "runtime_seconds": 0.0061,
   "next_action": "Complete selected-300 risk-atom, decision-change, expected-action, confidence, per-model assessment, and per-row timing fields, then rerun the session-gated strict dry-run with --require-complete --require-timing before aggregate refresh."
 }

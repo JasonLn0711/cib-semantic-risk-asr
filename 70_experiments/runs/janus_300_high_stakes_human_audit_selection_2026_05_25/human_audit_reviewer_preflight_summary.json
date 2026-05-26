@@ -1,7 +1,7 @@
 {
   "ok": true,
   "status": "review_session_ready",
-  "recorded_at": "2026-05-26T09:28:38+08:00",
+  "recorded_at": "2026-05-26T09:57:16+08:00",
   "input_boundary": "tracked aggregate handoff plus local path existence checks only",
   "output_boundary": "aggregate-only review-session preflight; no row keys or transcript text",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
@@ -16,22 +16,22 @@
     "latest_apply_status": "response_pending"
   },
   "current_packet": {
-    "selection_stratum": "unsafe_downrouting",
+    "selection_stratum": "high_proxy_risk",
     "row_numbers": [
-      7,
-      8,
-      9,
-      10,
-      11,
-      12
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
     ],
     "rows_in_batch": 6,
     "model_assessments_in_batch": 18,
-    "local_packet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_batches/2026-05-26T092502_0800_unsafe_downrouting.md",
+    "local_packet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_batches/2026-05-26T095716_0800_high_proxy_risk.md",
     "local_packet_exists": true
   },
   "current_response": {
-    "local_response_template_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T092502_0800_unsafe_downrouting_response_template.tsv",
+    "local_response_template_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv",
     "local_response_template_exists": true,
     "response_rows": 18,
     "template_column_count": 19,

@@ -2,13 +2,13 @@
   "ok": true,
   "status": "timing_dry_run_ready",
   "mode": "dry_run",
-  "recorded_at": "2026-05-26T09:27:56+08:00",
+  "recorded_at": "2026-05-26T09:57:16+08:00",
   "action": "start",
   "input_boundary": "local ignored response TSV only",
   "output_boundary": "aggregate-only timing summary/log; no transcript text, hypotheses, or reviewer notes",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
-  "row_number": 7,
+  "row_number": 13,
   "force": false,
   "rows_in_response": 18,
   "model_response_rows_for_row": 3,
@@ -18,7 +18,7 @@
     "review_elapsed_seconds": ""
   },
   "proposed_timing": {
-    "review_started_at": "2026-05-26T09:27:56+08:00",
+    "review_started_at": "2026-05-26T09:57:16+08:00",
     "review_finished_at": "",
     "review_elapsed_seconds": ""
   },
@@ -40,8 +40,8 @@
     "max_review_elapsed_seconds": ""
   },
   "error_counts": {},
-  "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T092502_0800_unsafe_downrouting_response_template.tsv",
+  "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095000_0800_high_proxy_risk_response_template.tsv",
   "backup_path": "",
   "next_action": "Continue filling reviewer row/model fields, then run the session-gated strict dry-run with --require-complete --require-timing.",
-  "runtime_seconds": 0.0004
+  "runtime_seconds": 0.0002
 }

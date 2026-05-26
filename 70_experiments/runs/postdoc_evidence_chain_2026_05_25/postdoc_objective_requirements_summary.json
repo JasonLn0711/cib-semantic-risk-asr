@@ -141,7 +141,7 @@
       "status": "review_pending",
       "paper_claim_status": "not paper-ready",
       "evidence": "human_audit_refresh_summary.json; human_audit_predictor_summary.json",
-      "result": "reviewed_rows=6/30; reviewed_model_assessments=18/90; human_predictor_status=partial_review",
+      "result": "reviewed_rows=12/30; reviewed_model_assessments=36/90; human_predictor_status=partial_review",
       "blocking_dependency": "selected-300 risk labels, decision-change labels, safe action, confidence, per-model fields, and timing",
       "next_action": "Complete only the non-transcript reviewer fields plus timing, then rerun strict closeout and refresh."
     },
@@ -242,7 +242,7 @@
       "status": "review_pending",
       "paper_claim_status": "not paper-ready",
       "evidence": "human_audit_refresh_summary.json; human_audit_predictor_summary.json",
-      "result": "reviewed_rows=6/30; reviewed_model_assessments=18/90; human_predictor_status=partial_review",
+      "result": "reviewed_rows=12/30; reviewed_model_assessments=36/90; human_predictor_status=partial_review",
       "blocking_dependency": "selected-300 risk labels, decision-change labels, safe action, confidence, per-model fields, and timing",
       "next_action": "Complete only the non-transcript reviewer fields plus timing, then rerun strict closeout and refresh."
     },

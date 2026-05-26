@@ -12,7 +12,7 @@
     "available": true,
     "ok": true,
     "status": "reviewer_action_ready",
-    "selection_stratum": "unsafe_downrouting",
+    "selection_stratum": "high_proxy_risk",
     "rows_in_batch": 6,
     "pending_rows_in_batch": 6,
     "model_assessments_in_batch": 18,
@@ -109,7 +109,7 @@
       "status": "partial_review",
       "paper_claim_status": "not paper-ready",
       "evidence": "human_audit_validation_summary.json; human_audit_reviewer_action_checklist_summary.json",
-      "result": "6/30 selected rows have risk-atom review fields complete and 18/90 model assessments are complete; transcript ground truth is not the pending item; current reviewer action gate is reviewer_action_ready with 6/6 packet rows and 18/18 model assessments pending, and 6/6 timing rows pending",
+      "result": "12/30 selected rows have risk-atom review fields complete and 36/90 model assessments are complete; transcript ground truth is not the pending item; current reviewer action gate is reviewer_action_ready with 6/6 packet rows and 18/18 model assessments pending, and 6/6 timing rows pending",
       "next_action": "Run the reviewer action checklist, fill selected-300 risk-atom, decision-change, expected-action, confidence, and per-model assessment fields plus per-row review timing; then run the session-gated strict response dry-run with --require-complete --require-timing before the aggregate refresh."
     }
   ],
