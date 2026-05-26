@@ -165,7 +165,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   timing, then run strict dry-run, closeout, and the post-review sequence
   runner. The sequence runner is the only packet-level route after closeout; it
   preserves write/refresh, strict human-reviewed recovery, post-review
-  checklist, and objective audit order. This work order records only row
+  checklist, and objective audit order. The local row-open command now also
+  carries `--access-log` pointing to
+  `human_audit_local_row_access_log.tsv`; the access log route is planned in
+  tracked summaries, but no row-open log row exists yet because no local
+  transcript row was opened in this pass. This work order records only row
   numbers, commands, field names, counts, status, privacy boundaries, and
   runtime; it does not track audio IDs, transcripts, hypotheses, selected
   sample IDs, local row content, or reviewer notes.
@@ -189,7 +193,7 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   awareness, per-row timing-helper command coverage, the response gap/action
   TSVs, the aggregate review work order, the post-review sequence gate, and
   the post-review command plan.
-  Current status is `ok=true` with `25/25` checks passing:
+  Current status is `ok=true` with `26/26` checks passing:
   transcript ground truth is not reopened, remaining review scope includes
   row/model/timing fields, proxy evidence is not promoted to paper claims, and
   expanded ASR/Gemma candidates remain behind locale/runtime gates. It also
@@ -213,7 +217,9 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   without scanning the full TSV. Check `C079` requires aggregate operation-log
   coverage for the current review batch, preflight, session start, strict apply
   dry-run, timing helper, and post-review sequence logs before the reviewer
-  route is treated as fully recorded. Check `C076`
+  route is treated as fully recorded. Check `C081` requires the next local
+  row-open command to carry a repo-safe `--access-log` path before
+  transcript-bearing output is printed. Check `C076`
   applies the same strict dry-run command safety to the post-review sequence TSV
   before any write/refresh or human-reviewed recovery route can be treated as
   executable. Check `C077` requires the post-review sequence summary to record

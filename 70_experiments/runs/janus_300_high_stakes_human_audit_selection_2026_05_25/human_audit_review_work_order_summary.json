@@ -51,7 +51,7 @@
       "step_order": "02",
       "step_type": "open_local_row",
       "status": "local_only_required",
-      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --row-number 1 --show-row",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --row-number 1 --show-row --access-log 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_local_row_access_log.tsv",
       "completion_signal": "reviewer has inspected the local row without copying content into git",
       "privacy_boundary": "command output is transcript-bearing and must stay local-only"
     },
@@ -64,5 +64,5 @@
     "closeout_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json"
   },
   "next_concrete_action": "Use the work-order TSV during local review: start timing, inspect one local row, fill row/model fields, finish timing, then run strict dry-run, closeout, and the post-review sequence runner.",
-  "runtime_seconds": 0.0011
+  "runtime_seconds": 0.0013
 }

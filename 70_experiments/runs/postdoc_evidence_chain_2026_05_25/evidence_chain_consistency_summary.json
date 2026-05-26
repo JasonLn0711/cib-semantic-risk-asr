@@ -1,7 +1,7 @@
 {
   "ok": true,
   "status_counts": {
-    "pass": 25
+    "pass": 26
   },
   "failed_checks": [],
   "reference_transcript_policy": "Reference transcripts are already human-reviewed for WER/CER; this audit does not reopen transcript review.",
@@ -152,6 +152,14 @@
       "next_action": "Regenerate the operation-record audit after reviewer-session operations so every tracked operation has an aggregate log record before claims."
     },
     {
+      "check_id": "C081",
+      "invariant": "local row-open command has a repo-safe access-log route",
+      "status": "pass",
+      "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_operation_record_summary.json",
+      "result": "next local row-open command records a safe access-log path before transcript-bearing output",
+      "next_action": "Regenerate the review work-order and operation-record audit so the --show-row command includes --access-log before local review."
+    },
+    {
       "check_id": "C074",
       "invariant": "review work-order routes post-closeout through sequence runner",
       "status": "pass",
@@ -209,5 +217,5 @@
     }
   ],
   "next_decision": "If this audit is pass, continue with the local selected-300 row/model/timing response closeout; if it fails, refresh the stale aggregate generator before paper-facing claims.",
-  "runtime_seconds": 0.0028
+  "runtime_seconds": 0.0123
 }

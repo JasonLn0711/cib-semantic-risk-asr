@@ -43,11 +43,22 @@
       "step_order": "02",
       "step_type": "open_local_row",
       "status": "local_only_required",
-      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --row-number 1 --show-row",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --row-number 1 --show-row --access-log 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_local_row_access_log.tsv",
       "completion_signal": "reviewer has inspected the local row without copying content into git",
       "privacy_boundary": "command output is transcript-bearing and must stay local-only"
     },
     "note": "Run current_step first. If current_step is mark_timing_start, then open next_local_row_step locally; command output is transcript-bearing and must not be copied into tracked files."
+  },
+  "next_local_row_access_log": {
+    "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_local_row_access_log.tsv",
+    "route_ok": true,
+    "status": "planned_not_yet_recorded",
+    "next_row_number": "1",
+    "latest_row_number": "",
+    "latest_operation": "",
+    "latest_access_status": "",
+    "latest_recorded_at": "",
+    "row_matches_next_operation": false
   },
   "operation_records": [
     {
@@ -117,6 +128,6 @@
       "alignment_note": "sequence log records blocked plan-only state"
     }
   ],
-  "runtime_seconds": 0.0006,
+  "runtime_seconds": 0.0008,
   "next_action": "Continue from next_reviewer_operation; keep row-open output local-only and rerun this audit after each reviewer-session operation."
 }

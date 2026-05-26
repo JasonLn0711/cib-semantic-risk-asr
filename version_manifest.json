@@ -1,29 +1,31 @@
 {
-  "version": "v2.5.200",
+  "version": "v2.5.201",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 200
+    "patch": 201
   },
-  "updated_at": "2026-05-26T08:49:31+08:00",
+  "updated_at": "2026-05-26T08:49:57+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "2c9c429",
+  "base_commit": "ea658d4",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "80_semantic_risk_asr/annotation/audit_human_audit_operation_records.py",
-    "80_semantic_risk_asr/annotation/build_human_audit_review_work_order.py",
-    "80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py",
-    "80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py",
-    "tests/test_evidence_chain_consistency.py",
-    "tests/test_human_audit_operation_records.py",
-    "tests/test_human_audit_refresh.py",
-    "tests/test_human_audit_review_helper.py",
-    "tests/test_human_audit_review_work_order.py"
+    "70_experiments/registry.tsv",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/README.md",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_operation_record_summary.json",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order.tsv",
+    "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json",
+    "README.md",
+    "docs/postdoc_next_steps_2026_05_25.md"
   ]
 }
