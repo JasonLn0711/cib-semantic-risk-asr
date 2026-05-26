@@ -248,6 +248,20 @@ seven requested model pages as public and ungated, and local `transformers
 4.57.6` still exposes neither Gemma 4 multimodal class. This is a no-promotion
 decision record, not a new full-split model experiment.
 
+2026-05-26 08:25 CST bounded verification: the gate was rerun after the user
+again asked whether to test the remaining ASR and multimodal Gemma 4 models.
+The four existing 15-row hypothesis files still pass field-contract validation
+in `0.02s`; the aggregate summary rebuilt in `0.39s` with unchanged locale
+blockers: Whisper large-v3 `2/15`, Whisper large-v3 turbo `4/15`,
+SenseVoiceSmall `14/15`, and Qwen3-ASR-0.6B `15/15` locale-violation rows.
+Live Hugging Face metadata still reports all seven requested model pages as
+public and ungated. Qwen3-ASR-1.7B was rerun as a bounded 60-second load gate
+and still timed out before inference after `60.07s`, exit status `124`, while
+still at `Fetching 2 files: 0/2`. Gemma 4 E2B/E4B remain blocked because local
+`transformers 4.57.6` exposes no Gemma 4 multimodal class and cannot recognize
+`model_type=gemma4`. This is still rejection/blocked evidence, not a reason to
+spend 258-row or selected-300 runtime.
+
 ## Required Extra Metrics
 
 Record these for every future model, including failed runs:

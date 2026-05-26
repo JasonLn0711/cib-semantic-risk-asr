@@ -118,7 +118,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   gate: four 15-row files still pass contract validation, locale blockers remain
   unchanged, all seven model pages are still public/ungated, and the local Gemma
   4 multimodal classes are still absent. This is a no-promotion decision record,
-  not a new full-split model experiment.
+  not a new full-split model experiment. A 2026-05-26 08:25 CST bounded
+  verification reran the safe gate, including a 60-second Qwen3-ASR-1.7B load
+  attempt; the four 15-row files still pass, locale blockers are unchanged,
+  Qwen3-ASR-1.7B still timed out before inference at `60.07s`, and Gemma 4
+  E2B/E4B remain blocked because local Transformers cannot recognize
+  `model_type=gemma4`.
 - The postdoc-level roadmap after the 258-row gate is recorded in
   `docs/postdoc_next_steps_2026_05_25.md`. It defines the next sequence:
   complete comparable 258-row baselines, add split-aware metric inputs, run the

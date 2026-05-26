@@ -185,7 +185,8 @@ candidate_models:
       at `Fetching 2 files: 0/2`. Since Qwen3-ASR-0.6B already failed the
       strict Traditional Chinese locale gate, retry 1.7B only after the 0.6B
       lane passes locale control or after an isolated cache/download plan is in
-      place.
+      place. A 2026-05-26 08:25 CST bounded recheck still timed out before
+      inference after 60.07s at `Fetching 2 files: 0/2`.
 
   - run_id: gemma4_e4b_audio_15_row_candidate
     model_name_or_path: unsloth/gemma-4-E4B
@@ -201,6 +202,8 @@ candidate_models:
       Gemma 4 config declares a 5.5.0.dev0-era runtime with audio config
       present. Use only after an isolated multimodal runner can emit the same
       output contract. Do not mix Gemma output into pure ASR baseline tables.
+      A 2026-05-26 08:25 CST recheck still found no Gemma 4 multimodal class
+      and local `AutoConfig` still could not recognize `model_type=gemma4`.
 
   - run_id: gemma4_e2b_audio_15_row_candidate
     model_name_or_path: unsloth/gemma-4-E2B
@@ -215,4 +218,6 @@ candidate_models:
       Gemma 4 config declares a 5.5.0.dev0-era runtime with audio config
       present. Use as the cheaper multimodal smoke only after an isolated Gemma
       4 audio runtime exists and can pass the same Traditional Chinese locale
-      gate.
+      gate. A 2026-05-26 08:25 CST recheck still found no Gemma 4 multimodal
+      class and local `AutoConfig` still could not recognize
+      `model_type=gemma4`.

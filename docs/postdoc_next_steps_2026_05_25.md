@@ -759,6 +759,9 @@ decision-stability evidence」。
   character count `260`。
 - `Qwen/Qwen3-ASR-1.7B` 2026-05-26 bounded retry 仍停在 model file
   fetch/load；60 秒 timed gate 的 exit status 是 `124`，未進 inference。
+- 2026-05-26 08:25 CST 再跑 bounded 60 秒 load gate，結果仍是
+  `Fetching 2 files: 0/2` 後 timeout；elapsed `60.07s`、exit status `124`、
+  未進 inference、沒有新增 prediction 檔。
 - 下一步不是 258-row；下一步是先解決繁中 locale gate，或建立 isolated
   cache/download plan 後才重試 1.7B。
 
@@ -789,6 +792,10 @@ ASR / decision-text comparator。
 - `unsloth/gemma-4-E2B` 與 `unsloth/gemma-4-E4B` config 宣告
   `transformers_version=5.5.0.dev0`，且有 audio config；
 - 因此 Gemma 4 是 runtime blocked，不是 evaluation completed；
+- 2026-05-26 08:25 CST recheck：本機 `transformers 4.57.6` 仍沒有
+  `AutoModelForMultimodalLM` / `Gemma4ForConditionalGeneration`，而且
+  `AutoConfig.from_pretrained(..., trust_remote_code=True)` 仍無法辨識
+  `model_type=gemma4`；
 - 下一步是獨立建立 Gemma 4 multimodal runtime，不要污染純 ASR baseline。
 
 ## Phase 3: 把 15-row builder 泛化成 split-aware metric builder

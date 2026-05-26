@@ -218,6 +218,35 @@ This validation used `/tmp` output paths for transient artifacts:
 `/tmp/cib_asr_candidate_recheck_summary_latest.tsv`, and
 `/tmp/cib_asr_candidate_recheck_summary_latest.json`.
 
+## 2026-05-26 08:25 CST Bounded Verification
+
+After the user again asked whether the remaining ASR and multimodal Gemma 4
+models should be tested now, the safe gate was rerun before any full-split
+promotion.
+
+Additional bounded checks:
+
+- The four existing 15-row hypothesis files still pass the fixed field-contract
+  validator in `0.02s`.
+- The aggregate summary rebuilt to `/tmp` in `0.39s` and still shows the same
+  locale blockers: Whisper large-v3 has `2/15` locale-violation rows, Whisper
+  large-v3 turbo has `4/15`, SenseVoiceSmall has `14/15`, and Qwen3-ASR-0.6B
+  has `15/15`.
+- Hugging Face metadata still reports all seven requested model pages as public
+  and ungated. SHA prefixes remain `06f233fe06e7`, `41f01f3fe87f`,
+  `716d31dbfd64`, `5eb144179a02`, `7278e1e70fe2`, `ed37665cc131`, and
+  `5bf6a20911f0`.
+- Qwen3-ASR-1.7B was rerun as a bounded 60-second load gate and still timed out
+  before inference at `60.07s`, exit status `124`, while still at
+  `Fetching 2 files: 0/2`.
+- Local `transformers 4.57.6` still exposes no `AutoModelForMultimodalLM` and
+  no `Gemma4ForConditionalGeneration`; both Gemma 4 config probes still fail
+  because this runtime does not recognize `model_type=gemma4`.
+
+This validation used `/tmp` output paths for transient aggregate artifacts and
+ignored local logs under this run directory. No new prediction file was created
+for Qwen3-ASR-1.7B, and no transcript-bearing artifact is tracked.
+
 ## Decision
 
 Do not run these candidates on the 258-row test split or selected-300 main
