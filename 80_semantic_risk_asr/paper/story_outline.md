@@ -3,6 +3,7 @@
 Canonical detailed design:
 
 - `q1_paper_design.md`
+- `attention_led_introduction_blueprint.md`
 
 ## Proposed Title
 
@@ -73,6 +74,10 @@ with confidence-based filtering.
 These directions are valuable because they improve transcript evaluation,
 semantic alignment, or post-hoc correction. CDS-ASR extends this line by asking
 the downstream decision-stability question directly.
+
+Use the teacher-feedback introduction design here: start with the cited
+real-world problem, present current solution families with fair citations, then
+state the positive remaining gap that motivates CDS-ASR.
 
 ### 3. Gap
 

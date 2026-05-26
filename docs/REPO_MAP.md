@@ -91,3 +91,7 @@ organized extracted audio under `10_extracted_parts/`.
   `docs/research_writing_style_policy.md`: real-world problem with citation,
   current solution landscape with citation, evidence-backed gap, CDS-ASR
   viewpoint, scope controls, and next validation path.
+- Use `80_semantic_risk_asr/paper/attention_led_introduction_blueprint.md`
+  when drafting the abstract, introduction, cover letter, talk track, or
+  reviewer-facing story. It maps each introduction move to a citation or
+  reviewed aggregate evidence source.

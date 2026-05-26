@@ -6,15 +6,15 @@
 **CDS-ASR: Counterfactual Decision-Stability ASR**。
 
 SRA-ASR 的價值是指出低 WER / CER 的逐字稿仍可能含有高風險語意錯誤。
-CDS-ASR 再往前推一步：
+CDS-ASR 把這個研究方向再推進到 downstream decision：
 
-> 不只問逐字稿錯了多少，也不只問錯在哪裡；直接問在合理的 ASR
-> 替代版本下，最終決策會不會翻盤。
+> 先理解逐字稿錯了多少、錯在哪裡，再直接檢查在合理的 ASR 替代版本下，
+> 最終決策是否保持穩定。
 
 一句話：
 
-> CDS-ASR 不是判斷逐字稿是否漂亮，而是檢查在合理的語音辨識替代版本下，
-> 決策會不會翻盤。
+> CDS-ASR 把逐字稿品質連到 downstream decision，檢查在合理的語音辨識替代
+> 版本下，決策是否保持穩定。
 
 投稿 hook：
 
@@ -32,8 +32,7 @@ cyber-enabled fraud 統計則支撐詐騙規模正在擴大的問題背景。
 
 論文入口：
 
-> 高風險語音系統的真正危險，不是逐字稿看起來有幾個字錯，而是錯字剛好
-> 落在「決策支點」上。
+> 高風險語音系統的關鍵風險，是小幅 ASR 差異剛好落在「決策支點」上。
 
 例子：
 
@@ -53,34 +52,36 @@ cyber-enabled fraud 統計則支撐詐騙規模正在擴大的問題背景。
 
 WER / CER 可能很低，但是決策狀態已經變了。
 
-## 現有方法的不足
+## 現有方法與延伸缺口
 
 ### WER / CER
 
-傳統 ASR 評估把 substitution、insertion、deletion 幾乎當成同質錯誤。
-Kim et al. 已指出，WER 只看 literal correctness，不能充分反映 downstream
-semantic correctness。
+傳統 ASR 評估提供穩定、可比較的 transcript accuracy baseline。Kim et al.
+進一步指出，WER 主要衡量 literal correctness，而下游任務常常需要 semantic
+correctness。
 
 ### Semantic Metrics
 
-Semantic Distance、Aligned Semantic Distance 等方法比 WER 更接近語意與
+Semantic Distance、Aligned Semantic Distance 等方法把 ASR 評估推向語意與
 下游任務表現。Kim et al. 與 Rugayan et al. 都是本論文的重要鄰近工作。
 
 ### LLM Correction
 
-LLM post-hoc correction 可以把逐字稿修得更通順。Naderi et al. 用
-confidence-based filtering 降低 LLM 對原本正確逐字稿引入新錯誤的風險。
+LLM post-hoc correction 提供 transcript repair baseline。Naderi et al. 用
+confidence-based filtering 讓修正流程更有選擇性，適合拿來作為本文的比較
+方向。
 
-### 仍然沒有打到核心
+### CDS-ASR 補上的核心問題
 
-上述方法都有價值，但主要仍是在修 transcript 或評估 transcript。高風險
-場景真正需要的是 decision safety。
+上述方法讓 transcript evaluation 與 transcript repair 更成熟。高風險場景
+再加入一個 decision-safety 目標：合理的 ASR 替代版本是否會改變 downstream
+decision。
 
 缺口句：
 
-> Existing semantic ASR metrics improve over WER by measuring meaning
-> preservation, yet they do not explicitly test whether plausible transcription
-> alternatives would change a downstream high-stakes decision.
+> Existing semantic ASR metrics improve ASR evaluation by measuring meaning
+> preservation. CDS-ASR adds an explicit test of whether plausible
+> transcription alternatives would change a downstream high-stakes decision.
 
 ## 方法核心
 
@@ -112,7 +113,7 @@ Audio
 
 ### Counterfactual Variant
 
-不要只看 ASR top-1 transcript。系統要產生「合理可能聽錯」的版本。
+除了 ASR top-1 transcript，系統也產生「合理可能聽錯」的版本。
 
 ```text
 原始 ASR：
@@ -153,7 +154,7 @@ CEIS 可以和 WER / CER、SemDist、ASD、SRES、confidence baseline 比較。
 
 ## Recovery 原則
 
-不要把 human review 當方法。Recovery 必須是機器化流程：
+Recovery 的方法主體是機器化流程，human review 作為評估與治理層：
 
 ```text
 High CEIS span
@@ -168,18 +169,19 @@ High CEIS span
 
 - 金額：在 `三千 / 三萬 / 三十萬 / 三百萬` 等 grammar 內重解碼。
 - 否定：在 `有 / 沒有 / 還沒 / 已經` 等候選內重解碼。
-- 決策區間：當合理 variants 落在 `review ~ critical_escalation`，就不能輸出
-  `no_escalation`。
+- 決策區間：當合理 variants 落在 `review ~ critical_escalation`，系統採用
+  conservative automatic action。
 
-這仍是自動流程。系統本身承認某個 slot 無法安全決定，並避免把高風險案件
-降級。
+這仍是自動流程。系統把 slot uncertainty 轉成 decision interval，並用保守
+機器動作維持高風險案件的安全處置。
 
 ## 實驗主軸
 
 ### Experiment 1: ASR Baseline
 
 比較 Whisper-small、Whisper-large-v2 / LoRA、Breeze-ASR-25。Breeze-ASR-26
-只作為台語/閩南語 robustness stress test，不當作主要台灣華語 baseline。
+作為台語/閩南語 robustness stress test；主要台灣華語 baseline 由台灣華語
+ASR 設定承擔。
 
 指標：
 

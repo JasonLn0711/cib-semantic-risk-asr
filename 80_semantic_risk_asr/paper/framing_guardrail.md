@@ -85,6 +85,19 @@ The critique of prior work should be constructive: first name what each method
 enables, then identify the remaining decision-stability question this paper
 answers.
 
+The detailed introduction blueprint is:
+
+- `attention_led_introduction_blueprint.md`
+
+It operationalizes the teacher-feedback pattern:
+
+```text
+cited real-world problem
+-> cited current solutions
+-> positive remaining gap
+-> CDS-ASR as the new decision-stability viewpoint
+```
+
 ## What Reviewers Should Remember
 
 The one memorable line:

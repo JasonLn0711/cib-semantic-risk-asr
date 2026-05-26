@@ -1,22 +1,28 @@
 {
-  "version": "v2.5.223",
+  "version": "v2.5.224",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 223
+    "patch": 224
   },
-  "updated_at": "2026-05-26T11:35:07+08:00",
+  "updated_at": "2026-05-26T11:43:33+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "5ae7419",
+  "base_commit": "ad0b32c",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/README.md",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md"
+    "80_semantic_risk_asr/paper/attention_led_introduction_blueprint.md",
+    "80_semantic_risk_asr/paper/cds_asr_positioning_memo_zh.md",
+    "80_semantic_risk_asr/paper/citation_seed.md",
+    "80_semantic_risk_asr/paper/framing_guardrail.md",
+    "80_semantic_risk_asr/paper/q1_paper_design.md",
+    "80_semantic_risk_asr/paper/story_outline.md",
+    "docs/REPO_MAP.md",
+    "docs/research_writing_style_policy.md"
   ]
 }

@@ -4,6 +4,21 @@ These are starting citations for the CDS-ASR paper framing. Expand them with
 domain-specific high-stakes ASR, contact-center, medical, financial, and
 anti-fraud sources before submission.
 
+Use this file together with:
+
+- `attention_led_introduction_blueprint.md`
+- `framing_guardrail.md`
+- `story_outline.md`
+
+The introduction should follow this citation-backed sequence:
+
+```text
+real-world speech-to-decision problem
+-> current solution landscape
+-> remaining decision-stability gap
+-> CDS-ASR contribution
+```
+
 ## Real-World Contact-Center Analytics Are Speech-To-Decision Systems
 
 AWS documentation for Amazon Connect Customer Contact Lens says conversational
@@ -75,3 +90,9 @@ CDS-ASR narrows the gap further:
 
 This is different from transcript similarity, general semantic similarity, and
 post-hoc transcript correction.
+
+Human-facing drafts should present this as a positive extension:
+
+> Semantic ASR metrics and transcript correction make the evidence chain more
+> informative. CDS-ASR adds the high-stakes decision test: whether plausible ASR
+> alternatives change escalation, routing, or conservative machine action.

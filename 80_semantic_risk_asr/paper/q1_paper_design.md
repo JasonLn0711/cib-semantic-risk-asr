@@ -87,10 +87,11 @@ Existing work already supports the premise that WER is insufficient.
 - Naderi et al. investigate LLM-based post-hoc ASR correction with
   confidence-based filtering.
 
-These are the right neighbors, but their remaining limitation is important:
+These are the right neighbors, and their remaining decision-stability target is
+important:
 
-> They still primarily evaluate or repair the transcript. They do not directly
-> test whether plausible transcript alternatives change the downstream
+> They strengthen transcript evaluation and repair. CDS-ASR adds a direct test
+> of whether plausible transcript alternatives change the downstream
 > high-stakes decision.
 
 ## Research Question
@@ -382,6 +383,22 @@ Desired result:
 7. Discussion
 8. Limitations
 9. Conclusion
+
+## Introduction Design Rule
+
+Use `attention_led_introduction_blueprint.md` as the writing contract for the
+first two pages:
+
+```text
+real-world speech-to-decision workflow
+-> cited evidence that this workflow is operational
+-> cited current ASR evaluation and correction landscape
+-> decision-stability gap
+-> CDS-ASR viewpoint and evidence chain
+```
+
+The related-work contrast should be generous and precise: name what each prior
+method enables, then show the decision-stability question this paper adds.
 
 ## Target Journals
 

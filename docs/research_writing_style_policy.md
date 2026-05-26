@@ -42,6 +42,13 @@ The gap should be written as a claim-evidence fit statement. First state what
 the existing method enables; then state the remaining problem that motivates
 CDS-ASR.
 
+For manuscript introductions, use the concrete blueprint in:
+
+- `80_semantic_risk_asr/paper/attention_led_introduction_blueprint.md`
+
+The introduction should feel problem-led and citation-backed, while the tone
+stays confident and generous toward related work.
+
 ## CIB/CDS-ASR Application
 
 For this repo, the opening story should make three claims in order:

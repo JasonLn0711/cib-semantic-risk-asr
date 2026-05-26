@@ -5,6 +5,23 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.224 - 2026-05-26T11:43:33+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `ad0b32c`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/paper/attention_led_introduction_blueprint.md`
+  - `80_semantic_risk_asr/paper/cds_asr_positioning_memo_zh.md`
+  - `80_semantic_risk_asr/paper/citation_seed.md`
+  - `80_semantic_risk_asr/paper/framing_guardrail.md`
+  - `80_semantic_risk_asr/paper/q1_paper_design.md`
+  - `80_semantic_risk_asr/paper/story_outline.md`
+  - `docs/REPO_MAP.md`
+  - `docs/research_writing_style_policy.md`
+
 ## v2.5.223 - 2026-05-26T11:35:07+08:00
 
 - Bump: `patch`
