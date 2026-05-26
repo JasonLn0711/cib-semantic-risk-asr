@@ -1,56 +1,40 @@
-# Framing Guardrail
+# Framing Guide
 
-## Do Not Write A Plain ASR Paper
+## Preferred Paper Identity
 
-This paper must not be framed as:
-
-- Whisper fine-tuning;
-- LoRA on a domain corpus;
-- CER/WER improvement by a small margin;
-- Taiwan Mandarin benchmark construction;
-- post-processing for better transcript quality;
-- SRES-only risk scoring without a decision-stability test;
-- human review as the proposed recovery method.
-
-That framing makes the work look like an ordinary ASR or quality-control paper.
-Generic ASR is already strong, benchmark fatigue is real, and reviewers are
-unlikely to care about another small transcription-accuracy improvement unless
-the work changes the decision problem.
-
-## Correct Frame
-
-The paper is about:
+This paper is best framed as:
 
 > Decision stability under plausible ASR alternatives in high-stakes
 > speech-driven decision systems.
 
-The hook is:
+Whisper fine-tuning, LoRA, WER/CER, Taiwan Mandarin data handling, SRES, and
+human review are supporting evidence layers. They help establish the quality and
+scope of the study while the main claim stays focused on downstream decision
+stability.
+
+## Core Frame
+
+The memorable hook is:
 
 > A transcript is unsafe when a plausible ASR alternative changes the decision.
 
 ASR is a subsystem. The protagonist is not the model and not the transcript. The
-protagonist is the downstream decision that becomes unstable when a small,
+protagonist is the downstream decision that changes when a small,
 acoustically plausible transcript difference lands on a decision-critical atom.
 
-## Bad Version
+## Supporting-Evidence Version
 
 ```text
-We use Whisper-large-v2 with LoRA on the 165 corpus and improve CER by 2.3%.
+Whisper-large-v2, Breeze-ASR, and fine-tuned variants provide comparable ASR
+hypotheses for testing whether transcript alternatives change downstream
+escalation decisions.
 ```
 
-This is not enough. It sounds like ordinary transcription optimization.
+This version uses model performance as an input to the CDS-ASR argument.
 
-## Also Not Enough
+## Decision-Stability Version
 
-```text
-We compute a semantic-risk score and send high-risk cases to human review.
-```
-
-This is closer, but it still frames the paper as risk triage plus manual
-inspection. The upgraded paper must show an automatic decision-stability test
-and automatic recovery path.
-
-## Good Version
+Use this as the preferred article voice:
 
 ```text
 Existing ASR evaluation assumes that transcription quality can be judged by
@@ -67,16 +51,39 @@ through constrained re-decoding and decision interval estimation.
 
 The first two pages should prioritize:
 
-- real-world growth of speech-to-decision contact-center analytics;
+- citation-backed real-world growth of speech-to-decision contact-center
+  analytics;
 - anti-fraud call handling as a high-stakes domain;
 - why transcript similarity is weaker than decision stability;
-- existing WER/CER, semantic metric, and LLM correction work;
-- the gap: prior methods improve transcript evaluation or correction, but do
-  not test whether plausible transcript alternatives flip the decision;
+- existing WER/CER, semantic metric, and LLM correction work with fair
+  citations;
+- the gap: prior methods improve transcript evaluation or correction, while
+  CDS-ASR directly tests whether plausible transcript alternatives flip the
+  decision;
 - CDS-ASR as a decision-stability framework.
 
 ASR should enter as the upstream subsystem where this problem becomes concrete.
-Do not start the paper with Whisper, LoRA, or model architecture.
+Start the paper with the real-world decision problem, then introduce Whisper,
+LoRA, Breeze-ASR, or model architecture as evidence-producing components.
+
+## Attention-Led Story Rule
+
+Use this sequence when drafting the introduction, abstract, talk track, or
+reviewer handoff:
+
+```text
+real-world or credible near-future problem
+-> citation-backed evidence
+-> current solution landscape with citations
+-> evidence-backed remaining gap
+-> CDS-ASR as the new viewpoint
+-> how CDS-ASR addresses the opening problem
+-> scope controls and next validation path
+```
+
+The critique of prior work should be constructive: first name what each method
+enables, then identify the remaining decision-stability question this paper
+answers.
 
 ## What Reviewers Should Remember
 
@@ -91,7 +98,7 @@ The one contribution frame:
 
 ## Investment Rule
 
-Do not invest the first paper in making transcription slightly more accurate.
-Invest it in proving that plausible transcript alternatives can change
-downstream escalation, and that automatic constrained recovery reduces unsafe
-down-routing without making human review the method.
+Invest the first paper in proving that plausible transcript alternatives can
+change downstream escalation, and that automatic constrained recovery reduces
+unsafe down-routing while human review remains the evaluation and governance
+layer.

@@ -72,8 +72,10 @@ organized extracted audio under `10_extracted_parts/`.
 
 ## Research-Framing Rules
 
-- Do not frame the paper as only Whisper, LoRA, or CER/WER optimization.
-- Treat WER/CER and SRES as baseline metrics, not the main contribution.
+- Frame the paper around decision stability under plausible ASR alternatives in
+  high-stakes speech-driven decision systems.
+- Treat Whisper, LoRA, Breeze-ASR, WER/CER, and SRES as evidence layers that
+  support the CDS-ASR claim.
 - Evaluate ASR by whether downstream decisions remain stable under plausible
   transcript alternatives.
 - Use risk atoms first: negation, amount, action, actor, intent, time,
@@ -85,3 +87,7 @@ organized extracted audio under `10_extracted_parts/`.
 - For reviewer-facing metric analysis, compare WER/CER/SRES/CEIS against
   downstream label flips, unsafe downrouting, high-risk misses, low-WER danger
   counts, and risk-atom instability. Keep predictor outputs aggregate-only.
+- Use the positive, evidence-led writing policy in
+  `docs/research_writing_style_policy.md`: real-world problem with citation,
+  current solution landscape with citation, evidence-backed gap, CDS-ASR
+  viewpoint, scope controls, and next validation path.

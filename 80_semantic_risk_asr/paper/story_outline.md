@@ -12,10 +12,28 @@ Speech-Driven Decision Systems
 ## One-Sentence Claim
 
 High-stakes ASR should be evaluated by whether downstream decisions remain
-stable under plausible transcript alternatives, not by transcript similarity
-alone.
+stable under plausible transcript alternatives, with transcript similarity used
+as one supporting evidence layer.
 
 ## Story Line
+
+### 0. Attention-Led Introduction Contract
+
+The opening should earn attention with an evidence-backed real-world problem,
+then lead the reader toward CDS-ASR:
+
+```text
+speech-to-decision systems are already operational
+-> fraud and anti-fraud call triage make transcript errors consequential
+-> existing ASR metrics, semantic metrics, and correction methods improve parts
+   of the pipeline
+-> high-stakes use also needs a direct decision-stability test
+-> CDS-ASR evaluates whether plausible ASR alternatives change the downstream
+   decision
+```
+
+Every real-world or anticipated-risk claim needs a citation, source note,
+dataset, reviewed experiment record, or clearly marked evidence gap.
 
 ### 1. Real-World Problem
 
@@ -25,8 +43,8 @@ analysis, issue detection, categorization, summaries, compliance monitoring,
 and real-time alerts. Anti-fraud hotlines also depend on callers describing
 events, money movement, identity cues, and urgency.
 
-The risk is not that every word is wrong. The risk is that a small ASR
-difference lands on a decision atom:
+The operational risk appears when a small ASR difference lands on a decision
+atom:
 
 ```text
 I did not transfer money.
@@ -40,7 +58,7 @@ or:
 -> 300,000
 ```
 
-The WER/CER can be low while the downstream escalation state is no longer safe.
+WER/CER can remain low while the downstream escalation state changes.
 
 ### 2. Existing Work
 
@@ -52,24 +70,21 @@ that Aligned Semantic Distance can better align with human perception and
 downstream NLP tasks. Naderi et al. explore LLM-based ASR post-hoc correction
 with confidence-based filtering.
 
-These directions are valuable, but they still mostly evaluate or repair the
-transcript.
+These directions are valuable because they improve transcript evaluation,
+semantic alignment, or post-hoc correction. CDS-ASR extends this line by asking
+the downstream decision-stability question directly.
 
 ### 3. Gap
 
-For high-stakes calls, the central question is not only:
-
-> Is the hypothesis close to the reference?
-
-It is:
+For high-stakes calls, the central question becomes:
 
 > Would a plausible ASR alternative change the downstream decision?
 
 Existing semantic metrics can say that two transcripts are meaningfully close or
 far. LLM correction can make a transcript more fluent. Confidence filtering can
-avoid some harmful corrections. None of these directly asks whether the
-decision remains stable under acoustically and semantically plausible
-alternatives.
+avoid some harmful corrections. CDS-ASR adds the decision-stability target:
+whether the decision remains stable under acoustically and semantically
+plausible alternatives.
 
 ### 4. Proposed View
 
@@ -89,11 +104,11 @@ The key move is to shift from transcript accuracy to decision robustness.
 
 ### 4.1 Execution Gate
 
-The first empirical unit is the reviewed 15-row JANUS decision-stability pilot,
-not the full 4,967-row corpus and not a long Whisper fine-tune. The gate must
-show that ASR hypotheses can join back to `audio_id`, expose decision-critical
-risk atoms, produce SRES/CEIS/downstream-impact outputs, and yield interpretable
-examples.
+The first empirical unit is the reviewed 15-row JANUS decision-stability pilot.
+The 4,967-row corpus and fine-tuning runs support this target as evidence
+layers. The gate must show that ASR hypotheses can join back to `audio_id`,
+expose decision-critical risk atoms, produce SRES/CEIS/downstream-impact
+outputs, and yield interpretable examples.
 
 Current local evidence: the reviewed 15-row gate is complete, and a NeMo Curator
 CPU pilot has produced a 15-row `audio_id`-joinable hypothesis file with WER/CER
@@ -102,10 +117,10 @@ check. Whisper small, Whisper large-v2, Breeze-ASR-25, and optional
 Breeze-ASR-26 have now completed the same fixed 15-row hypothesis pass with
 CUDA and cuDNN disabled. The first metric bridge pass produced SRES, CEIS, and
 downstream-impact outputs for the three primary labeled model runs.
-Breeze-ASR-25 is currently the strongest CER candidate on this pilot, but the
-next decision is based on interpretable decision flips and CEIS cases, not CER
-alone. Breeze-ASR-26 is kept as a Taigi/Taiwanese Hokkien stress test, not a
-direct replacement for the Mandarin baseline. The safe case-candidate table now
+Breeze-ASR-25 is currently the strongest CER candidate on this pilot. The next
+decision is based on interpretable decision flips and CEIS cases, with CER used
+as a supporting signal. Breeze-ASR-26 is kept as a Taigi/Taiwanese Hokkien
+stress test alongside the Mandarin baseline. The safe case-candidate table now
 identifies high-CEIS, lower-CER
 high-CEIS, SRES-high/CEIS-low, recovery-candidate, and unsafe-downrouting
 examples without tracking transcripts.

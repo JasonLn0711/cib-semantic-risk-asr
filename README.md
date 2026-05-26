@@ -8,15 +8,16 @@ ASR data.
 The single short-term paper axis is **Counterfactual Decision-Stability ASR
 (CDS-ASR)**.
 
-The paper is not about fine-tuning Whisper as the main contribution. Whisper and
-Breeze-ASR baselines provide ASR hypotheses. The main contribution is a way to
-test whether downstream decisions remain stable under plausible ASR
+Whisper and Breeze-ASR baselines provide ASR hypotheses. The main contribution
+is a way to test whether downstream decisions remain stable under plausible ASR
 alternatives.
 
-The guardrail is explicit: do not sell this as another ASR benchmark, small CER
-improvement, or human-review workflow. Sell it as decision stability under
-plausible transcript alternatives in high-stakes conversational decision
-systems.
+The paper-facing frame is decision stability under plausible transcript
+alternatives in high-stakes conversational decision systems. Repo documents use
+the confident, evidence-led voice defined in
+`docs/research_writing_style_policy.md`: start from a citation-backed
+real-world problem, summarize current solutions fairly, identify the remaining
+decision-stability gap, and present CDS-ASR as the new viewpoint.
 
 ```text
 audio
@@ -45,6 +46,14 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
 | `80_semantic_risk_asr/` | Main paper axis: CDS-ASR, risk atoms, counterfactual variants, CEIS scoring, downstream scam escalation, and automatic recovery policy. |
 | `90_legacy_imports/` | Local-only legacy import area for old JANUS training exports, including pruned manifests and provenance records. |
 | `docs/` | Repo-level data map and handling rules. |
+
+## Writing Style
+
+Use Taiwan Traditional Chinese for Chinese-language project notes. Human-facing
+docs should use confident, generous, positive-scope phrasing: lead with the
+contribution and evidence, then state boundaries as scope controls and next
+validation steps. The repo policy is
+`docs/research_writing_style_policy.md`.
 
 ## Inventory files
 
