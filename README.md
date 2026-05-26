@@ -133,12 +133,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   current aggregate output under
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/`. Current status:
   `ok=true`, `paper_ready=false`, because the selected-300 human risk-atom
-  audit remains incomplete: `6/30` risk/decision row reviews and `18/90`
-  model assessments are reviewed, with `24/30` rows and `72/90` model
+  audit remains incomplete: `12/30` risk/decision row reviews and `36/90`
+  model assessments are reviewed, with `18/30` rows and `54/90` model
   assessments still pending. Transcript ground truth is already accepted for WER/CER scoring
   and is not the pending gate. The readiness summary now also reports the
   current reviewer action gate: `reviewer_action_ready` for
-  `unsafe_downrouting`, with `6/6` packet rows and `18/18` model
+  `high_proxy_risk`, with `6/6` packet rows and `18/18` model
   assessments still pending in the ignored local response TSV. The selected-300
   validator and response-apply path now enforce decision consistency: a
   decision-change `yes` needs at least one critical atom and a non-`none` safe
@@ -326,14 +326,14 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `--show-row` output is transcript-bearing and must stay local-only. The next
   local review batch is prepared by
   `80_semantic_risk_asr/annotation/prepare_human_audit_review_batch.py`; current
-  tracked batch records point to the ignored `unsafe_downrouting`
-  packet for rows `7-12` and `18` model assessments. Current batch completion is
+  tracked batch records point to the ignored `high_proxy_risk`
+  packet for rows `13-18` and `18` model assessments. Current batch completion is
   audited by
   `80_semantic_risk_asr/annotation/audit_human_review_batch_status.py` and
   remains `batch_pending`: `0/6` rows and `0/18` model assessments reviewed
   for the current packet.
   A local-only reviewer handoff package for this packet was prepared at
-  `/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch2_unsafe_downrouting`
+  `/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch3_high_proxy_risk`
   and zipped beside it; the package includes transcript-bearing material and
   must not be committed.
   Local TSV response entry is handled by
@@ -387,10 +387,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   human-reviewed predictor outputs, the evidence-chain readiness gate, and the
   objective-level publishable completion audit, and the roadmap completion
   audit in one recorded pass. Current refresh status is still
-  `partial_review`: `6/30` risk/decision row reviews and `18/90` model
+  `partial_review`: `12/30` risk/decision row reviews and `36/90` model
   assessments reviewed; `paper_ready=false`, `publishable_ready=false`, and
   `roadmap_complete=false`. The progress audit recommends six batches,
-  starting with `critical_or_high_risk_missed` and `unsafe_downrouting`.
+  starting with `critical_or_high_risk_missed`, `unsafe_downrouting`, and
+  `high_proxy_risk`.
   Batch-by-batch `partial_review` is treated as in-progress evidence, not as
   missing evidence.
 - The roadmap-level completion audit

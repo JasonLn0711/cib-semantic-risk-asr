@@ -31,19 +31,19 @@ Status: active roadmap; selected-300 human audit is in `partial_review`
 
 ## 2026-05-26 Current Review Update
 
-第一個人工審查 packet (`critical_or_high_risk_missed`, rows `1-6`) 已經
-完成、通過 strict dry-run，並寫回 ignored local audit sheet。現在
-selected-300 狀態是 `partial_review`：`6/30` risk/decision rows 與
-`18/90` model assessments 已 reviewed；`24/30` rows 與 `72/90` model
-assessments 仍 pending。
+第一、二個人工審查 packet 已經完成並寫回 ignored local audit sheet。第二包
+以 `/home/jnln3799/Downloads/cib_asr_human_review_completed_package_batch2_2026-05-26(1).zip`
+作為權威來源重新套用。現在 selected-300 狀態是 `partial_review`：
+`12/30` risk/decision rows 與 `36/90` model assessments 已 reviewed；
+`18/30` rows 與 `54/90` model assessments 仍 pending。
 
-目前要交給人工審查的是第二包 `unsafe_downrouting`，rows
-`7,8,9,10,11,12`，共 `6` rows / `18` model assessments。完整 local-only
+目前要交給人工審查的是第三包 `high_proxy_risk`，rows
+`13,14,15,16,17,18`，共 `6` rows / `18` model assessments。完整 local-only
 審查資料包已整理在：
 
 ```text
-/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch2_unsafe_downrouting
-/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch2_unsafe_downrouting.zip
+/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch3_high_proxy_risk
+/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch3_high_proxy_risk.zip
 ```
 
 Evidence-chain consistency 已修正為支援 later-batch row numbers 與
@@ -150,8 +150,8 @@ subset predictor table 要由這支工具重算。
   `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py`。
 - Current tracked refresh status:
   `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json`。
-- Current state: normal refresh `ok=true` with `partial_review`；`6/30`
-  risk/decision row reviews、`18/90` model assessments reviewed、evidence-chain
+- Current state: normal refresh `ok=true` with `partial_review`；`12/30`
+  risk/decision row reviews、`36/90` model assessments reviewed、evidence-chain
   `paper_ready=false`、publishable completion `publishable_ready=false`、
   post-review evidence `post_review_evidence_blocked`。
 - Strict post-review mode:
@@ -192,7 +192,7 @@ post-review paper-claim gate 尚未完成而讓一般 refresh 失敗。
   `80_semantic_risk_asr/annotation/audit_human_review_progress.py`。
 - Current tracked status:
   `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_progress_summary.json`。
-- Current state: `partial_review`；`6/30` risk/decision row reviews、`18/90`
+- Current state: `partial_review`；`12/30` risk/decision row reviews、`36/90`
   model assessments reviewed。
 - Recommended batch order:
   1. `critical_or_high_risk_missed`：6 rows / 18 model assessments；
@@ -219,9 +219,9 @@ readiness、publishable completion outputs。
   `proxy_completed=2`、`review_pending=1`、`blocked=1`。
 - Blocking gate:
   `selected_300_human_review_and_post_review_refresh`。
-- Current selected-300 review count is `6/30` risk/decision row reviews and
-  `18/90` model assessments reviewed；current packet is `unsafe_downrouting`
-  rows `7-12`, with `6/6` rows and `18/18` model assessments pending.
+- Current selected-300 review count is `12/30` risk/decision row reviews and
+  `36/90` model assessments reviewed；current packet is `high_proxy_risk`
+  rows `13-18`, with `6/6` rows and `18/18` model assessments pending.
 
 這個 audit 的用途是回答「原始 0-6 roadmap 是否真的完成」，而不是只回答
 某個子 gate 是否已經存在。它明確把 completed、proxy-only、
@@ -512,7 +512,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - Evidence-chain readiness gate 已建立：
   `80_semantic_risk_asr/scoring/check_evidence_chain_readiness.py`。目前輸出
   `ok=true` 但 `paper_ready=false`，因為 selected-300 human audit 仍是
-  `6/30` risk/decision row reviews、`18/90` model assessments reviewed；
+  `12/30` risk/decision row reviews、`36/90` model assessments reviewed；
   transcript ground truth 不是 pending item。這個 gate 是防止 proxy-only
   結果被誤寫成 paper-grade conclusion 的主要 guardrail。
 - 2026-05-25 WER audit 確認：舊推論欄位是 raw whitespace WER，
@@ -540,19 +540,20 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - 300 high-stakes ASR hypotheses、SRES/CEIS/downstream、metric-predictor、
   recovery 都已完成三個 Breeze-family comparator 的 proxy mode；human audit
   queue、aggregate summarizer、human-reviewed predictor gate 已建立，但目前
-  只有 `6/30` risk/decision row-review fields reviewed、`18/90` model
+  只有 `12/30` risk/decision row-review fields reviewed、`36/90` model
   assessments reviewed。這不是 transcript ground truth 待審；transcript 已作為 WER/CER
   scoring reference 接受。validator 已確認 local sheet schema 可用，正常模式
   `partial_review`、validation errors `0`，但 `--require-complete` 會因
-  `24` risk/decision row reviews 與 `72` model reviews 尚未完成而失敗，
+  `18` risk/decision row reviews 與 `54` model reviews 尚未完成而失敗，
   且現在會額外拒絕不一致的 response semantics：decision-change `yes`
   必須有 critical atom 與非 `none` safe action，row/model critical atoms
   必須包含在 row risk-atom set 中。Reviewer handoff 產生的 strict dry-run /
   write command 現在也會帶 `--require-timing`，所以 response closeout 會在
   每列 review timing 缺失時以 `missing_review_timing` 阻擋 write/refresh。
-  所以還不能宣稱 paper-grade main experiment 完成。第一批 local review
-  packet (`critical_or_high_risk_missed` rows `1-6`) 已完成並套用；目前第二
-  批 local review packet 已準備好：`unsafe_downrouting` rows `7-12`、`6`
+  所以還不能宣稱 paper-grade main experiment 完成。第一、二批 local review
+  packet (`critical_or_high_risk_missed` rows `1-6` 與 `unsafe_downrouting`
+  rows `7-12`) 已完成並套用；目前第三批 local review packet 已準備好：
+  `high_proxy_risk` rows `13-18`、`6`
   rows / `18` model assessments；packet 在 ignored `artifacts/review_batches/`，
   tracked records 只保留 row numbers、strata、缺欄位與 local path。Current
   batch status audit 目前是 `batch_pending`：`0/6` risk/decision rows、
@@ -1169,7 +1170,7 @@ Interpretation:
 1. 完成 selected-300 human risk-atom audit protocol 所產生的 30-row local
    sheet 中「不是 transcript ground truth」的欄位：risk atoms、
    decision-change、expected safe action、confidence、per-model assessment。
-   下一步從已準備好的 `unsafe_downrouting` packet rows `7-12` 開始，
+   下一步從已準備好的 `high_proxy_risk` packet rows `13-18` 開始，
    填寫 ignored local response TSV，用
    `apply_human_audit_batch_response.py --require-complete --require-timing`
    dry-run 到
