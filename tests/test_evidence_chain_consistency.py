@@ -331,30 +331,30 @@ def timing_commands(row_numbers: list[int] = ROW_NUMBERS) -> dict:
     }
 
 
-def next_reviewer_operation_fixture() -> dict:
+def next_reviewer_operation_fixture(row_number: int = 1) -> dict:
     return {
         "status": "reviewer_operation_ready",
         "current_step": {
-            "work_order_id": "row-1:01-mark-timing-start",
-            "row_number": "1",
+            "work_order_id": f"row-{row_number}:01-mark-timing-start",
+            "row_number": str(row_number),
             "step_order": "01",
             "step_type": "mark_timing_start",
             "status": "pending",
             "command": (
-                "mark_human_audit_response_timing.py --row-number 1 "
+                f"mark_human_audit_response_timing.py --row-number {row_number} "
                 "--mark-start --write"
             ),
             "completion_signal": "review_started_at is present",
             "privacy_boundary": "tracked command only; local response TSV remains ignored",
         },
         "next_local_row_step": {
-            "work_order_id": "row-1:02-open-local-row",
-            "row_number": "1",
+            "work_order_id": f"row-{row_number}:02-open-local-row",
+            "row_number": str(row_number),
             "step_order": "02",
             "step_type": "open_local_row",
             "status": "local_only_required",
             "command": (
-                "review_human_risk_atom_audit.py --row-number 1 --show-row "
+                f"review_human_risk_atom_audit.py --row-number {row_number} --show-row "
                 "--access-log 70_experiments/runs/"
                 "janus_300_high_stakes_human_audit_selection_2026_05_25/"
                 "human_audit_local_row_access_log.tsv"
@@ -588,7 +588,14 @@ def write_operation_logs_fixture(root: Path) -> None:
     )
 
 
-def write_consistent_fixture(root: Path) -> None:
+def write_consistent_fixture(
+    root: Path,
+    row_numbers: list[int] = ROW_NUMBERS,
+    refresh_status: str = "review_pending",
+    selection_stratum: str = "critical_or_high_risk_missed",
+) -> None:
+    first_row = row_numbers[0]
+    next_operation = next_reviewer_operation_fixture(first_row)
     write_summary(
         root,
         "readiness",
@@ -637,10 +644,10 @@ def write_consistent_fixture(root: Path) -> None:
         root,
         "refresh",
         base_summary(
-            status="review_pending",
+            status=refresh_status,
             publishable_ready=False,
             next_action="Complete per-row timing with --require-timing.",
-            next_reviewer_operation=next_reviewer_operation_fixture(),
+            next_reviewer_operation=next_operation,
         ),
     )
     write_summary(
@@ -702,7 +709,7 @@ def write_consistent_fixture(root: Path) -> None:
             },
             response_gap_summary_by_row=[
                 {"row_number": row_number}
-                for row_number in ROW_NUMBERS
+                for row_number in row_numbers
             ],
             checklist=[
                 {
@@ -729,7 +736,7 @@ def write_consistent_fixture(root: Path) -> None:
         "work_order",
         base_summary(
             status="review_work_order_ready",
-            row_numbers=ROW_NUMBERS,
+            row_numbers=row_numbers,
             review_work_order_overview={
                 "row_count": 6,
                 "row_work_order_steps": 30,
@@ -740,7 +747,7 @@ def write_consistent_fixture(root: Path) -> None:
                 "model_field_action_items": 72,
                 "timing_action_items": 6,
             },
-            next_reviewer_operation=next_reviewer_operation_fixture(),
+            next_reviewer_operation=next_operation,
         ),
     )
     write_summary(
@@ -752,15 +759,15 @@ def write_consistent_fixture(root: Path) -> None:
             passed_operation_record_count=6,
             failed_operation_record_count=0,
             current_packet={
-                "selection_stratum": "critical_or_high_risk_missed",
-                "row_numbers": ["1", "2", "3", "4", "5", "6"],
+                "selection_stratum": selection_stratum,
+                "row_numbers": [str(row_number) for row_number in row_numbers],
                 "rows_in_batch": 6,
                 "model_assessments_in_batch": 18,
                 "pending_rows_in_batch": 6,
                 "pending_model_assessments_in_batch": 18,
                 "rows_missing_timing": 6,
             },
-            next_reviewer_operation=next_reviewer_operation_fixture(),
+            next_reviewer_operation=next_operation,
             next_local_row_access_log={
                 "path": (
                     "70_experiments/runs/"
@@ -772,7 +779,7 @@ def write_consistent_fixture(root: Path) -> None:
                 "exists": False,
                 "row_count": 0,
                 "required_fields_present": False,
-                "next_row_number": "1",
+                "next_row_number": str(first_row),
                 "latest_row_number": "",
                 "latest_operation": "",
                 "latest_access_status": "",
@@ -879,14 +886,14 @@ def write_consistent_fixture(root: Path) -> None:
         base_summary(
             status="reviewer_input_pending",
             freshness_status="fresh",
-            current_packet={"row_numbers": ROW_NUMBERS},
+            current_packet={"row_numbers": row_numbers},
             current_gate={
                 "latest_apply_status": "response_pending",
                 "pending_rows_in_batch": 6,
                 "pending_model_assessments_in_batch": 18,
                 "rows_missing_timing": 6,
             },
-            commands=timing_commands(),
+            commands=timing_commands(row_numbers),
         ),
     )
     write_summary(
@@ -899,7 +906,8 @@ def write_consistent_fixture(root: Path) -> None:
             model_assessments_in_batch=18,
             pending_model_assessments_in_batch=18,
             rows_missing_timing=6,
-            timing_helper_commands=timing_commands(),
+            row_numbers=row_numbers,
+            timing_helper_commands=timing_commands(row_numbers),
         ),
     )
     write_summary(
@@ -907,8 +915,8 @@ def write_consistent_fixture(root: Path) -> None:
         "session_start",
         base_summary(
             status="reviewer_session_started",
-            current_packet={"row_numbers": ROW_NUMBERS},
-            commands=timing_commands(),
+            current_packet={"row_numbers": row_numbers},
+            commands=timing_commands(row_numbers),
         ),
     )
     write_summary(
@@ -923,15 +931,31 @@ def write_consistent_fixture(root: Path) -> None:
             ],
         },
     )
-    write_gap_tsv_fixture(root)
-    write_action_items_tsv_fixture(root)
-    write_work_order_tsv_fixture(root)
+    write_gap_tsv_fixture(root, row_numbers)
+    write_action_items_tsv_fixture(root, row_numbers)
+    write_work_order_tsv_fixture(root, row_numbers)
     write_post_review_sequence_tsv_fixture(root)
     write_operation_logs_fixture(root)
 
 
 def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Path) -> None:
     write_consistent_fixture(tmp_path)
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is True
+    assert payload["status_counts"] == {"pass": 26}
+    assert not payload["failed_checks"]
+    assert_aggregate_safe(payload)
+
+
+def test_consistency_audit_accepts_partial_review_later_batch_rows(tmp_path: Path) -> None:
+    write_consistent_fixture(
+        tmp_path,
+        row_numbers=[7, 8, 9, 10, 11, 12],
+        refresh_status="partial_review",
+        selection_stratum="unsafe_downrouting",
+    )
+
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True

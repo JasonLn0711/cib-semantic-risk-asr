@@ -59,6 +59,7 @@ REQUIRED_SCOPE_TERMS = (
     "per-model",
     "per-row review timing",
 )
+OPEN_REVIEW_STATUSES = {"review_pending", "partial_review"}
 
 SUMMARY_SPECS = {
     "readiness": (
@@ -172,6 +173,16 @@ def safe_int(value: Any) -> int:
         return int(str(value).strip())
     except (TypeError, ValueError):
         return 0
+
+
+def parse_row_numbers(values: Any) -> list[int]:
+    if not isinstance(values, list):
+        return []
+    return [
+        int(item)
+        for item in values
+        if isinstance(item, int) or (isinstance(item, str) and item.isdigit())
+    ]
 
 
 def check_row(
@@ -379,7 +390,7 @@ def add_readiness_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[st
     post_review = payloads.get("post_review", {})
     closeout = payloads.get("closeout", {})
 
-    review_pending = refresh.get("status") == "review_pending"
+    review_open = refresh.get("status") in OPEN_REVIEW_STATUSES
     not_ready = (
         readiness.get("paper_ready") is False
         and publishable.get("publishable_ready") is False
@@ -392,11 +403,11 @@ def add_readiness_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[st
         check_row(
             check_id="C040",
             invariant="review-pending state cannot be paper-ready",
-            passed=bool(review_pending and not_ready),
+            passed=bool(review_open and not_ready),
             evidence="readiness, publishable, consequence, roadmap, post-review, closeout summaries",
             result=(
-                "selected-300 review is pending and every paper-facing gate remains closed"
-                if review_pending and not_ready
+                "selected-300 review is not complete and every paper-facing gate remains closed"
+                if review_open and not_ready
                 else "at least one paper-facing gate conflicts with pending selected-300 review"
             ),
             next_action="Keep claims proxy-only until response closeout, write, refresh, predictor, and recovery are complete.",
@@ -589,7 +600,7 @@ def timing_command_coverage(
             and commands.get("timing_finish_write") == finish_by_row.get(first)
         )
         if not alias_ok:
-            missing_or_invalid.append("row_1_alias")
+            missing_or_invalid.append("first_row_alias")
     return not missing_or_invalid, missing_or_invalid
 
 
@@ -601,28 +612,36 @@ def add_reviewer_timing_command_check(
     action = payloads.get("action_checklist", {})
     session = payloads.get("session_start", {})
     packet = handoff.get("current_packet") if isinstance(handoff.get("current_packet"), dict) else {}
-    row_numbers = [
-        int(item)
-        for item in packet.get("row_numbers", [])
-        if isinstance(item, int) or (isinstance(item, str) and item.isdigit())
-    ]
-    expected_rows = [1, 2, 3, 4, 5, 6]
+    expected_rows = parse_row_numbers(packet.get("row_numbers", []))
+    action_rows = parse_row_numbers(action.get("row_numbers", []))
+    session_packet = (
+        session.get("current_packet") if isinstance(session.get("current_packet"), dict) else {}
+    )
+    session_rows = parse_row_numbers(session_packet.get("row_numbers", []))
     handoff_ok, handoff_errors = timing_command_coverage(
         handoff.get("commands", {}) if isinstance(handoff.get("commands"), dict) else {},
-        row_numbers,
+        expected_rows,
     )
     action_ok, action_errors = timing_command_coverage(
         action.get("timing_helper_commands", {})
         if isinstance(action.get("timing_helper_commands"), dict)
         else {},
-        row_numbers,
+        expected_rows,
     )
     session_ok, session_errors = timing_command_coverage(
         session.get("commands", {}) if isinstance(session.get("commands"), dict) else {},
-        row_numbers,
+        expected_rows,
     )
+    row_number_errors = []
+    if not expected_rows:
+        row_number_errors.append("missing_handoff_current_packet_rows")
+    if action_rows and action_rows != expected_rows:
+        row_number_errors.append(f"action_rows={action_rows}")
+    if session_rows and session_rows != expected_rows:
+        row_number_errors.append(f"session_rows={session_rows}")
     passed = (
-        row_numbers == expected_rows
+        bool(expected_rows)
+        and not row_number_errors
         and handoff_ok
         and action_ok
         and session_ok
@@ -630,7 +649,7 @@ def add_reviewer_timing_command_check(
     error_text = "; ".join(
         part
         for part in (
-            f"row_numbers={row_numbers}" if row_numbers != expected_rows else "",
+            ",".join(row_number_errors) if row_number_errors else "",
             f"handoff={','.join(handoff_errors)}" if handoff_errors else "",
             f"action={','.join(action_errors)}" if action_errors else "",
             f"session={','.join(session_errors)}" if session_errors else "",
@@ -648,7 +667,7 @@ def add_reviewer_timing_command_check(
                 f"{SUMMARY_SPECS['session_start']}"
             ),
             result=(
-                "timing helper commands cover rows 1-6 across handoff, action checklist, and session start"
+                f"timing helper commands cover rows {expected_rows} across handoff, action checklist, and session start"
                 if passed
                 else f"per-row timing command coverage drifted: {error_text or 'unknown'}"
             ),
@@ -710,7 +729,7 @@ def add_gap_tsv_command_check(
 
     passed = (
         gap_row_numbers == expected_row_numbers
-        and expected_row_numbers == ["1", "2", "3", "4", "5", "6"]
+        and bool(expected_row_numbers)
         and not command_errors
         and not sensitive
     )
@@ -721,7 +740,7 @@ def add_gap_tsv_command_check(
             passed=passed,
             evidence=RESPONSE_GAP_TSV_RELATIVE,
             result=(
-                "gap TSV rows 1-6 match closeout gaps and handoff timing commands"
+                f"gap TSV rows {expected_row_numbers} match closeout gaps and handoff timing commands"
                 if passed
                 else (
                     f"gap_row_numbers={gap_row_numbers}; "
