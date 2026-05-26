@@ -5,6 +5,19 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.208 - 2026-05-26T09:45:55+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `4ce846b`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/README.md`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md`
+  - `README.md`
+  - `docs/postdoc_next_steps_2026_05_25.md`
+
 ## v2.5.207 - 2026-05-26T09:45:40+08:00
 
 - Bump: `patch`

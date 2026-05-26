@@ -2,7 +2,7 @@
 
 Date: 2026-05-25
 
-Status: active roadmap after the six-model 258-row gate and WER audit
+Status: active roadmap; selected-300 human audit is in `partial_review`
 
 ## 核心判斷
 
@@ -28,6 +28,28 @@ Status: active roadmap after the six-model 258-row gate and WER audit
 這個方向比單純 fine-tuning 更像一篇可投稿的資工研究：它有問題定義、
 新指標、系統 pipeline、實驗對照、失敗案例、recovery intervention，
 也能解釋為什麼一般 ASR benchmark 不夠。
+
+## 2026-05-26 Current Review Update
+
+第一個人工審查 packet (`critical_or_high_risk_missed`, rows `1-6`) 已經
+完成、通過 strict dry-run，並寫回 ignored local audit sheet。現在
+selected-300 狀態是 `partial_review`：`6/30` risk/decision rows 與
+`18/90` model assessments 已 reviewed；`24/30` rows 與 `72/90` model
+assessments 仍 pending。
+
+目前要交給人工審查的是第二包 `unsafe_downrouting`，rows
+`7,8,9,10,11,12`，共 `6` rows / `18` model assessments。完整 local-only
+審查資料包已整理在：
+
+```text
+/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch2_unsafe_downrouting
+/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch2_unsafe_downrouting.zip
+```
+
+Evidence-chain consistency 已修正為支援 later-batch row numbers 與
+`partial_review` 狀態；目前為 `ok=true`、`26/26` checks passing。這不是
+paper-ready 狀態，因為 selected-300 尚未全部完成，也尚未 rerun
+human-reviewed predictor / recovery evidence。
 
 ## 目前證據狀態
 
@@ -128,8 +150,8 @@ subset predictor table 要由這支工具重算。
   `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py`。
 - Current tracked refresh status:
   `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json`。
-- Current state: normal refresh `ok=true` but `review_pending`；`0/30`
-  risk/decision row reviews、`0/90` model assessments reviewed、evidence-chain
+- Current state: normal refresh `ok=true` with `partial_review`；`6/30`
+  risk/decision row reviews、`18/90` model assessments reviewed、evidence-chain
   `paper_ready=false`、publishable completion `publishable_ready=false`、
   post-review evidence `post_review_evidence_blocked`。
 - Strict post-review mode:
@@ -170,7 +192,7 @@ post-review paper-claim gate 尚未完成而讓一般 refresh 失敗。
   `80_semantic_risk_asr/annotation/audit_human_review_progress.py`。
 - Current tracked status:
   `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_progress_summary.json`。
-- Current state: `review_pending`；`0/30` risk/decision row reviews、`0/90`
+- Current state: `partial_review`；`6/30` risk/decision row reviews、`18/90`
   model assessments reviewed。
 - Recommended batch order:
   1. `critical_or_high_risk_missed`：6 rows / 18 model assessments；
@@ -197,9 +219,9 @@ readiness、publishable completion outputs。
   `proxy_completed=2`、`review_pending=1`、`blocked=1`。
 - Blocking gate:
   `selected_300_human_review_and_post_review_refresh`。
-- Current selected-300 review count remains `0/30` risk/decision row reviews
-  and `0/90` model assessments reviewed；current packet remains `6/6` rows and
-  `18/18` model assessments pending.
+- Current selected-300 review count is `6/30` risk/decision row reviews and
+  `18/90` model assessments reviewed；current packet is `unsafe_downrouting`
+  rows `7-12`, with `6/6` rows and `18/18` model assessments pending.
 
 這個 audit 的用途是回答「原始 0-6 roadmap 是否真的完成」，而不是只回答
 某個子 gate 是否已經存在。它明確把 completed、proxy-only、
@@ -289,12 +311,12 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   `80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py`。
 - Current tracked dry-run:
   `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_timing_summary.json`。
-- Current state: dry-run only；row `1` 的 timing proposal 可讓 coverage 變成
+- Current state: dry-run only；row `7` 的 timing proposal 可讓 coverage 變成
   `1/6`，但 local response TSV 沒有被寫入，closeout 仍是 actual `0/6`
   timing rows filled。
 - Reviewer handoff、action checklist、session-start summary 現在提供
   `timing_start_write_by_row` 和 `timing_finish_write_by_row`，涵蓋目前
-  packet rows `1-6`；row `1` 的 `timing_start_write` /
+  packet rows `7-12`；row `7` 的 `timing_start_write` /
   `timing_finish_write` 仍保留作為 compatibility alias。這是 timing
   capture support，不是 human review completion。
 
@@ -308,7 +330,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   現在是 `ok=true`、`26/26` checks passing、`failed_checks=[]`。
 - 檢查內容：reviewer handoff、action checklist、session-start summary 都必須
   提供 `timing_start_write_by_row` 和 `timing_finish_write_by_row`，且涵蓋
-  目前 packet rows `1-6`；row `1` compatibility alias 也必須和 by-row map
+  目前 packet rows `7-12`；first-row compatibility alias 也必須和 by-row map
   對齊。
 
 22. Response gap TSV timing-command alignment 已納入 consistency audit：
@@ -320,7 +342,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
   現在是 `ok=true`、`26/26` checks passing、`failed_checks=[]`。
 - 檢查內容：`human_audit_response_gap_checklist.tsv` 必須和 closeout JSON 的
-  rows `1-6` 對齊，且每列的 `timing_start_write_command` /
+  current packet rows 對齊，且每列的 `timing_start_write_command` /
   `timing_finish_write_command` 必須和 fresh reviewer handoff 的 by-row
   timing helper commands 一致。這讓 reviewer 可以從 tracked gap TSV 直接
   取得 row/model/timing 缺口與 timing helper command，同時不追蹤 audio IDs、
@@ -358,8 +380,8 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   `33` ordered steps、`126` pending action items；consistency 現在是
   `ok=true`、`26/26` checks passing、`failed_checks=[]`。
   Summary field `next_reviewer_operation` 現在指出下一個安全操作：
-  `row-1:01-mark-timing-start`，以及下一個 local-only row-open 操作：
-  `row-1:02-open-local-row`。
+  `row-7:01-mark-timing-start`，以及下一個 local-only row-open 操作：
+  `row-7:02-open-local-row`。
 - 檢查內容：`C071` 要求 work-order TSV 的 row coverage 和 closeout row gaps
   對齊，action item count 和 closeout count 對齊，必須包含 row-level timing
   start/open/fill/finish steps 以及 packet-level strict dry-run、closeout、
@@ -397,7 +419,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   reviewer-session start、strict apply dry-run、timing helper、post-review
   sequence 這六個 append-only aggregate logs 都存在，且 latest log row 和
   目前 `6` packet rows、`18` model assessments、`6` pending timing rows、
-  `row-1:01-mark-timing-start` 下一步一致。這是 operation provenance
+  `row-7:01-mark-timing-start` 下一步一致。這是 operation provenance
   guardrail，不是 human review completion。
 
 26. Strict post-review sequence gate 已納入 normal refresh 與 consistency audit：
@@ -490,7 +512,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - Evidence-chain readiness gate 已建立：
   `80_semantic_risk_asr/scoring/check_evidence_chain_readiness.py`。目前輸出
   `ok=true` 但 `paper_ready=false`，因為 selected-300 human audit 仍是
-  `0/30` risk/decision row reviews、`0/90` model assessments reviewed；
+  `6/30` risk/decision row reviews、`18/90` model assessments reviewed；
   transcript ground truth 不是 pending item。這個 gate 是防止 proxy-only
   結果被誤寫成 paper-grade conclusion 的主要 guardrail。
 - 2026-05-25 WER audit 確認：舊推論欄位是 raw whitespace WER，
@@ -518,19 +540,20 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - 300 high-stakes ASR hypotheses、SRES/CEIS/downstream、metric-predictor、
   recovery 都已完成三個 Breeze-family comparator 的 proxy mode；human audit
   queue、aggregate summarizer、human-reviewed predictor gate 已建立，但目前
-  `0/30` risk/decision row-review fields reviewed、`0/90` model assessments
-  reviewed。這不是 transcript ground truth 待審；transcript 已作為 WER/CER
+  只有 `6/30` risk/decision row-review fields reviewed、`18/90` model
+  assessments reviewed。這不是 transcript ground truth 待審；transcript 已作為 WER/CER
   scoring reference 接受。validator 已確認 local sheet schema 可用，正常模式
-  `review_pending`、validation errors `0`，但 `--require-complete` 會因
-  `30` risk/decision row reviews 與 `90` model reviews 尚未完成而失敗，
+  `partial_review`、validation errors `0`，但 `--require-complete` 會因
+  `24` risk/decision row reviews 與 `72` model reviews 尚未完成而失敗，
   且現在會額外拒絕不一致的 response semantics：decision-change `yes`
   必須有 critical atom 與非 `none` safe action，row/model critical atoms
   必須包含在 row risk-atom set 中。Reviewer handoff 產生的 strict dry-run /
   write command 現在也會帶 `--require-timing`，所以 response closeout 會在
   每列 review timing 缺失時以 `missing_review_timing` 阻擋 write/refresh。
   所以還不能宣稱 paper-grade main experiment 完成。第一批 local review
-  packet 已準備好：`critical_or_high_risk_missed` rows `1-6`、`6` rows /
-  `18` model assessments；packet 在 ignored `artifacts/review_batches/`，
+  packet (`critical_or_high_risk_missed` rows `1-6`) 已完成並套用；目前第二
+  批 local review packet 已準備好：`unsafe_downrouting` rows `7-12`、`6`
+  rows / `18` model assessments；packet 在 ignored `artifacts/review_batches/`，
   tracked records 只保留 row numbers、strata、缺欄位與 local path。Current
   batch status audit 目前是 `batch_pending`：`0/6` risk/decision rows、
   `0/18` model assessments，`batch_ready_for_refresh=false`。Local TSV
@@ -1146,7 +1169,7 @@ Interpretation:
 1. 完成 selected-300 human risk-atom audit protocol 所產生的 30-row local
    sheet 中「不是 transcript ground truth」的欄位：risk atoms、
    decision-change、expected safe action、confidence、per-model assessment。
-   先從已準備好的 `critical_or_high_risk_missed` packet rows `1-6` 開始，
+   下一步從已準備好的 `unsafe_downrouting` packet rows `7-12` 開始，
    填寫 ignored local response TSV，用
    `apply_human_audit_batch_response.py --require-complete --require-timing`
    dry-run 到

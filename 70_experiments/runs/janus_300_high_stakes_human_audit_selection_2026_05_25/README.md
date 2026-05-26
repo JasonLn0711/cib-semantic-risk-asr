@@ -2,16 +2,38 @@
 
 ## Summary
 
-- Status: audit selection created, human review pending
+- Status: partial human review; batch 2 reviewer packet prepared
 - Date: 2026-05-25
 - Dataset: JANUS selected 300 high-stakes expansion
 - Input: three-model selected-300 SRES/CEIS/downstream proxy outputs
 - Candidate audio rows: `300`
 - Selected human-audit audio rows: `30`
 - Selected model-samples: `90`
-- Human-reviewed risk/decision rows: `0 / 30`
-- Human-reviewed model assessments: `0 / 90`
+- Human-reviewed risk/decision rows: `6 / 30`
+- Human-reviewed model assessments: `18 / 90`
 - Local review sheet: ignored under `artifacts/human_risk_atom_audit_sheet.tsv`
+
+## Current State: 2026-05-26 Batch 2 Handoff
+
+The first reviewer packet, `critical_or_high_risk_missed` rows `1-6`, has
+been applied from the completed local response TSV. The selected-300 audit is
+now `partial_review`, not complete: `6/30` rows and `18/90` model assessments
+are reviewed; `24/30` rows and `72/90` model assessments remain pending.
+
+The current reviewer packet is batch 2, `unsafe_downrouting`, rows
+`7,8,9,10,11,12`, with `6` rows and `18` model assessments pending. The
+transcript-bearing packet and response template remain ignored under
+`artifacts/`; a local handoff package was prepared in Downloads at:
+
+```text
+/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch2_unsafe_downrouting
+/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch2_unsafe_downrouting.zip
+```
+
+This package is local-only reviewer material. Tracked records keep only row
+numbers, counts, commands, statuses, checksums, timing requirements, and
+aggregate outcomes; they do not include audio IDs, transcript text, ASR
+hypotheses, local row content, or reviewer notes.
 
 ## Purpose
 
@@ -110,14 +132,14 @@ Current aggregate status:
 | Item | Value |
 | --- | ---: |
 | Audit rows | 30 |
-| Reviewed rows | 0 |
-| Pending rows | 30 |
+| Reviewed rows | 6 |
+| Pending rows | 24 |
 | Model assessments | 90 |
-| Reviewed model assessments | 0 |
-| Pending model assessments | 90 |
-| Missing `reviewer_semantic_risk_label` | 30 |
-| Missing `reviewer_would_asr_error_change_decision` | 30 |
-| Missing `reviewer_annotation_confidence` | 30 |
+| Reviewed model assessments | 18 |
+| Pending model assessments | 72 |
+| Missing `reviewer_semantic_risk_label` | 24 |
+| Missing `reviewer_would_asr_error_change_decision` | 24 |
+| Missing `reviewer_annotation_confidence` | 24 |
 
 Tracked readiness outputs:
 
@@ -132,18 +154,18 @@ Tracked readiness outputs:
 | `human_audit_predictor_summary.json` | Human-reviewed predictor gate readiness. Currently review pending. |
 | `human_audit_predictor_comparison.tsv` | WER/CER/SRES/CEIS vs human model-level decision-change targets after review. Currently zero reviewed samples. |
 | `human_audit_predictor_model_summary.tsv` | Per-model human-reviewed predictor target counts. Currently zero reviewed samples. |
-| `human_audit_next_review_batch_summary.json` | Repo-safe record for the next prepared local review packet. Current packet: `critical_or_high_risk_missed`, rows `1-6`, `6` rows / `18` model assessments. |
+| `human_audit_next_review_batch_summary.json` | Repo-safe record for the next prepared local review packet. Current packet: `unsafe_downrouting`, rows `7-12`, `6` rows / `18` model assessments. |
 | `human_audit_next_review_batch_rows.tsv` | Repo-safe row-number and missing-field checklist for the prepared packet. No audio IDs, transcripts, hypotheses, or reviewer notes. |
 | `human_audit_review_batch_log.tsv` | Append-only repo-safe preparation log for local transcript-bearing review packets. |
-| `human_audit_current_review_batch_status_summary.json` | Repo-safe completion status for the current packet. Current status: `batch_pending`, `0/6` risk/decision rows and `0/18` model assessments reviewed. |
+| `human_audit_current_review_batch_status_summary.json` | Repo-safe completion status for the current packet. Current status: `batch_pending`, `0/6` risk/decision rows and `0/18` model assessments reviewed for batch 2. |
 | `human_audit_current_review_batch_status_rows.tsv` | Repo-safe row-level completion checklist for the current packet. No audio IDs, transcripts, hypotheses, or reviewer notes. |
-| `human_audit_batch_response_template_summary.json` | Repo-safe record for the local response TSV template. Current template has `18` response rows for rows `1-6` and review-timing columns. |
+| `human_audit_batch_response_template_summary.json` | Repo-safe record for the local response TSV template. Current template has `18` response rows for rows `7-12` and review-timing columns. |
 | `human_audit_batch_response_apply_summary.json` | Repo-safe strict dry-run/apply status for the local response TSV. Current `--require-complete --require-timing --require-session-start-gate` dry-run status is `response_pending`, `ok=false`, `incomplete_response=1`, `missing_review_timing=6`, with `session_start_gate.ok=true`, `0/6` rows, `0/18` model assessments, and `0/6` row review timings filled. It now also includes row-number-only response gaps: `6/6` rows with gaps, `48` row fields missing, `18` model assessments missing, and `72` model-assessment fields missing. |
 | `human_audit_batch_response_apply_log.tsv` | Append-only repo-safe response dry-run/write log. Current entries record blank strict dry-runs as `response_pending` with aggregate counts only. |
-| `human_audit_batch_response_apply_log_summary.json` | Repo-safe audit of the response apply log. Current status: `apply_log_valid`, `8` entries, latest status `response_pending`, `require_timing=True`, `0/6` rows, `0/18` model assessments, and `0/6` timing rows filled. |
-| `human_audit_reviewer_handoff_summary.json` | Repo-safe current reviewer handoff. Current status: `reviewer_input_pending`, `freshness_status=fresh`, packet rows `1-6`, response template path, latest apply status, apply-log status, source-summary SHA-256 digests, and exact next commands. |
+| `human_audit_batch_response_apply_log_summary.json` | Repo-safe audit of the response apply log. Current status: `apply_log_valid`; latest batch-2 status is `response_pending`, `require_timing=True`, `0/6` rows, `0/18` model assessments, and `0/6` timing rows filled. |
+| `human_audit_reviewer_handoff_summary.json` | Repo-safe current reviewer handoff. Current status: `reviewer_input_pending`, `freshness_status=fresh`, packet rows `7-12`, response template path, latest apply status, apply-log status, source-summary SHA-256 digests, and exact next commands. |
 | `human_audit_reviewer_preflight_summary.json` | Repo-safe pre-review session preflight. Current status: `review_session_ready`, `handoff_fresh`, local packet exists, local response TSV exists, and no reviewer labels have been fabricated. |
-| `human_audit_reviewer_preflight_log.tsv` | Append-only repo-safe preflight log. Current entries record the ready state for `critical_or_high_risk_missed` rows `1-6` / `18` model assessments. |
+| `human_audit_reviewer_preflight_log.tsv` | Append-only repo-safe preflight log. Current entries record the ready state for `unsafe_downrouting` rows `7-12` / `18` model assessments. |
 | `human_audit_reviewer_rubric_summary.json` | Repo-safe reviewer value-contract readiness. Current status: `rubric_ready`, validator constants match the strict audit validator, and the remaining scope excludes duplicate transcript review. |
 | `human_audit_reviewer_value_contract.tsv` | Repo-safe allowed-value contract for row risk labels, decision-change labels, safe actions, confidence labels, and risk atoms. No audio IDs, transcripts, hypotheses, or reviewer notes. |
 | `human_audit_reviewer_action_checklist_summary.json` | Repo-safe action checklist for the current reviewer batch. Current status: `reviewer_action_ready`, with `rubric_status=rubric_ready`, `6/6` packet rows, `18/18` model assessments, and `6/6` required timing rows still pending. |
@@ -152,9 +174,9 @@ Tracked readiness outputs:
 | `human_audit_reviewer_session_start_log.tsv` | Append-only repo-safe session-start log with aggregate gate statuses, pending counts, and latest apply status only. |
 | `human_audit_response_closeout_summary.json` | Repo-safe response closeout checklist. Current status: `response_closeout_blocked`, with `session_start_gate.ok=true` but `0/6` row decisions, `0/18` model assessments, and `0/6` timing rows filled. It mirrors the row-number-only response gap report from the apply summary. |
 | `human_audit_response_closeout_checklist.tsv` | Repo-safe closeout checklist rows for session start, session-gated strict dry-run, row/model completion, response status, and write/refresh readiness. |
-| `human_audit_response_gap_checklist.tsv` | Repo-safe row-number-only response gap checklist for the current packet. Current rows `1-6` all have gaps: `48` row fields missing, `18` model assessments missing, `72` model-assessment fields missing, and `6/6` timing gaps. It now embeds each row's timing start/finish helper commands from the fresh reviewer handoff. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
+| `human_audit_response_gap_checklist.tsv` | Repo-safe row-number-only response gap checklist for the current packet. Current rows `7-12` all have gaps: `48` row fields missing, `18` model assessments missing, `72` model-assessment fields missing, and `6/6` timing gaps. It embeds each row's timing start/finish helper commands from the fresh reviewer handoff. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
 | `human_audit_response_action_items.tsv` | Repo-safe field-level action list generated from the response closeout gaps. Current live packet has `126` pending items: `48` row-field items, `72` model-field items, and `6` timing items with timing helper commands. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
-| `human_audit_review_work_order_summary.json` | Repo-safe row-by-row reviewer work-order summary generated from action-items, closeout, handoff, and session-start summaries. Current status: `review_work_order_ready`, `6` rows, `33` total steps, `126` pending action items, runtime recorded, and `next_reviewer_operation` pointing to `row-1:01-mark-timing-start` plus local-only `row-1:02-open-local-row` with a planned `--access-log` route. |
+| `human_audit_review_work_order_summary.json` | Repo-safe row-by-row reviewer work-order summary generated from action-items, closeout, handoff, and session-start summaries. Current status: `review_work_order_ready`, `6` rows, `33` total steps, `126` pending action items, runtime recorded, and `next_reviewer_operation` pointing to `row-7:01-mark-timing-start` plus local-only `row-7:02-open-local-row` with a planned `--access-log` route. |
 | `human_audit_review_work_order.tsv` | Repo-safe operational work order for the current packet. It routes each row through timing start, local row open, row-field fill, model-field fill, and timing finish, then routes packet-level strict dry-run, closeout, and `run_post_review_evidence_sequence.py --execute`. The consistency audit now verifies the strict dry-run keeps `--require-complete`, `--require-timing`, and `--require-session-start-gate` without write-mode flags, that the summary exposes the next timing-start/local-row-open operation without tracking row content, and that local row-open commands carry a repo-safe `--access-log` path. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
 | `human_audit_operation_record_summary.json` | Repo-safe operation-record audit generated from append-only aggregate logs. Current status: `operation_records_ready`, with `6/6` required logs aligned: review batch, preflight, session start, strict apply dry-run, timing helper, and post-review sequence. It also records `next_local_row_access_log.status=planned_not_yet_recorded`, `exists=false`, `row_count=0`, and `latest_record_ok=false` because no local row has been opened yet. If a later local row-open creates the access log, the same audit verifies required header fields, latest operation, row number, and access status. |
 | `human_audit_operation_record_audit.tsv` | Repo-safe operation-log coverage table. It records each required log path, row count, latest status/mode, and alignment note. No audio IDs, transcripts, hypotheses, selected sample IDs, reviewer notes, or local row content are tracked. |
@@ -223,7 +245,7 @@ opening local transcript-bearing files, run:
 ```
 
 Current work-order status: `review_work_order_ready`. It expands the current
-`126` action items into `33` ordered steps for rows `1-6` plus packet closeout:
+`126` action items into `33` ordered steps for rows `7-12` plus packet closeout:
 mark timing start, inspect one local row, fill row fields, fill model fields,
 mark timing finish, run strict dry-run, rerun closeout, then execute the
 post-review sequence runner. The sequence runner preserves write/refresh,
@@ -233,7 +255,7 @@ order. Normal
 the evidence-chain consistency audit, so the work order stays aligned with the
 latest closeout gaps and handoff commands. The summary's
 `next_reviewer_operation` is the aggregate-safe current handoff: run
-`row-1:01-mark-timing-start` first, then open `row-1:02-open-local-row`
+`row-7:01-mark-timing-start` first, then open `row-7:02-open-local-row`
 locally; the row-open command output is transcript-bearing and must remain out
 of tracked files. The row-open command includes `--access-log
 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_local_row_access_log.tsv`;
@@ -312,7 +334,8 @@ pending for `6/6` rows. This checklist does not read transcript text or
 reviewer notes. The current strict dry-run already validates the session-start
 gate and then fails only because reviewer content is still incomplete.
 
-Prepare the next local transcript-bearing review packet before filling rows:
+Prepare or refresh the next local transcript-bearing review packet before
+filling rows:
 
 ```bash
 .venv/bin/python 80_semantic_risk_asr/annotation/prepare_human_audit_review_batch.py \
@@ -323,12 +346,12 @@ Prepare the next local transcript-bearing review packet before filling rows:
 
 Current prepared packet:
 
-- selection stratum: `critical_or_high_risk_missed`;
-- row numbers: `1,2,3,4,5,6`;
+- selection stratum: `unsafe_downrouting`;
+- row numbers: `7,8,9,10,11,12`;
 - rows in packet: `6`;
 - pending model assessments in packet: `18`;
 - local packet path:
-  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_batches/2026-05-25T210505_0800_critical_or_high_risk_missed.md`.
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_batches/2026-05-26T092502_0800_unsafe_downrouting.md`.
 
 The local packet contains transcripts and ASR hypotheses and remains ignored by
 Git. The tracked batch summary contains only row numbers, strata, counts,
@@ -366,7 +389,7 @@ For batch entry, use the local response TSV workflow instead of hand-editing
 Current local response template:
 
 ```text
-70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv
+70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T092502_0800_unsafe_downrouting_response_template.tsv
 ```
 
 The response TSV includes timing columns:
@@ -387,7 +410,9 @@ row-level and model-level reviewer fields are filled:
 ```bash
 .venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py \
   --require-complete \
-  --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv \
+  --require-timing \
+  --require-session-start-gate \
+  --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T092502_0800_unsafe_downrouting_response_template.tsv \
   --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv \
   --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json \
   --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 \
@@ -395,10 +420,12 @@ row-level and model-level reviewer fields are filled:
 ```
 
 Current strict dry-run status is `response_pending`: `ok=false`,
-`incomplete_response=1`, `0/6` row decisions and `0/18` model assessments have
-been filled. The timing summary currently records `0/6` rows with review-time
-values. A non-strict dry-run may be used for progress inspection, but
-`--require-complete` must return `response_complete` before adding `--write`.
+`incomplete_response=1`, `missing_review_timing=6`, `0/6` row decisions and
+`0/18` model assessments have been filled for batch 2. The timing summary
+currently records `0/6` rows with review-time values. A non-strict dry-run may
+be used for progress inspection, but `--require-complete --require-timing
+--require-session-start-gate` must return `response_complete` before adding
+`--write`.
 
 After strict dry-run returns `response_complete`, apply and refresh the
 aggregate status in one pass:
@@ -483,16 +510,16 @@ Current validation status:
 
 | Item | Value |
 | --- | ---: |
-| Status | `review_pending` |
+| Status | `partial_review` |
 | Audit rows | 30 |
-| Reviewed rows | 0 |
-| Pending rows | 30 |
+| Reviewed rows | 6 |
+| Pending rows | 24 |
 | Model assessments | 90 |
-| Reviewed model assessments | 0 |
-| Pending model assessments | 90 |
+| Reviewed model assessments | 18 |
+| Pending model assessments | 72 |
 | Validation errors | 0 |
-| Pending-row warnings | 30 |
-| Pending-model warnings | 90 |
+| Pending-row warnings | 24 |
+| Pending-model warnings | 72 |
 
 The strict completion gate is:
 
@@ -504,7 +531,7 @@ The strict completion gate is:
 ```
 
 This currently fails as expected because review is not complete:
-`incomplete_row_review=30`, `incomplete_model_review=90`.
+`incomplete_row_review=24`, `incomplete_model_review=72`.
 
 After model-level review, run:
 
@@ -514,7 +541,7 @@ After model-level review, run:
   --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25
 ```
 
-Current predictor readiness: `0 / 90` model assessments reviewed. Predictor
+Current predictor readiness: `18 / 90` model assessments reviewed. Predictor
 metrics are computed only over reviewed model-level assessments.
 
 ## Review Progress Batches
@@ -532,24 +559,24 @@ Current tracked progress:
 
 | Item | Value |
 | --- | ---: |
-| Review status | `review_pending` |
-| Row completion | `0 / 30` |
-| Model-assessment completion | `0 / 90` |
+| Review status | `partial_review` |
+| Row completion | `6 / 30` |
+| Model-assessment completion | `18 / 90` |
 | Recommended review batches | `6` |
 
 Batch order:
 
 | Order | Stratum | Pending rows | Pending model assessments |
 | ---: | --- | ---: | ---: |
-| 1 | `critical_or_high_risk_missed` | 6 | 18 |
+| 1 | `critical_or_high_risk_missed` | 0 | 0 |
 | 2 | `unsafe_downrouting` | 6 | 18 |
 | 3 | `high_proxy_risk` | 6 | 18 |
 | 4 | `model_disagreement` | 4 | 12 |
 | 5 | `risk_score_fill` | 4 | 12 |
 | 6 | `clean_control` | 4 | 12 |
 
-The model-level pending work is balanced across the three high-stakes ASR
-runs: base, LoRA, and partial encoder each have `30` pending assessments.
+The remaining model-level pending work is balanced across the three high-stakes
+ASR runs: base, LoRA, and partial encoder each have `24` pending assessments.
 
 ## Aggregate Refresh Gate
 
@@ -570,9 +597,9 @@ objective-level publishable completion outputs. Current recorded result:
 
 | Item | Value |
 | --- | ---: |
-| Refresh status | `review_pending` |
-| Reviewed rows | `0 / 30` |
-| Reviewed model assessments | `0 / 90` |
+| Refresh status | `partial_review` |
+| Reviewed rows | `6 / 30` |
+| Reviewed model assessments | `18 / 90` |
 | Recommended review batches | `6` |
 | Downstream aggregate outputs refreshed | `true` |
 | Evidence-chain paper ready | `false` |
