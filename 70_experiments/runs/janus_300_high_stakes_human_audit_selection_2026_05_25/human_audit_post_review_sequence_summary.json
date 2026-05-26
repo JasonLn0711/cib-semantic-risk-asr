@@ -103,5 +103,5 @@
     "human_recovery_dir": "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26"
   },
   "next_concrete_action": "Complete selected-300 response closeout first, then rerun this sequence with --execute.",
-  "runtime_seconds": 0.0005
+  "runtime_seconds": 0.0004
 }

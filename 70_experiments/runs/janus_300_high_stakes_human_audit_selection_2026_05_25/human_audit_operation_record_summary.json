@@ -1,0 +1,122 @@
+{
+  "ok": true,
+  "status": "operation_records_ready",
+  "input_boundary": "tracked aggregate summaries and append-only operation logs only",
+  "output_boundary": "aggregate-only operation-record audit; no transcripts, hypotheses, or reviewer notes",
+  "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
+  "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
+  "required_operation_log_count": 6,
+  "passed_operation_record_count": 6,
+  "failed_operation_record_count": 0,
+  "failed_operation_records": [],
+  "current_packet": {
+    "selection_stratum": "critical_or_high_risk_missed",
+    "row_numbers": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "rows_in_batch": 6,
+    "model_assessments_in_batch": 18,
+    "pending_rows_in_batch": 6,
+    "pending_model_assessments_in_batch": 18,
+    "rows_missing_timing": 6
+  },
+  "next_reviewer_operation": {
+    "status": "reviewer_operation_ready",
+    "current_step": {
+      "work_order_id": "row-1:01-mark-timing-start",
+      "row_number": "1",
+      "step_order": "01",
+      "step_type": "mark_timing_start",
+      "status": "pending",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 1 --mark-start --write",
+      "completion_signal": "review_started_at is present for every model row in this selected row",
+      "privacy_boundary": "tracked command only; local response TSV remains ignored"
+    },
+    "next_local_row_step": {
+      "work_order_id": "row-1:02-open-local-row",
+      "row_number": "1",
+      "step_order": "02",
+      "step_type": "open_local_row",
+      "status": "local_only_required",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --row-number 1 --show-row",
+      "completion_signal": "reviewer has inspected the local row without copying content into git",
+      "privacy_boundary": "command output is transcript-bearing and must stay local-only"
+    },
+    "note": "Run current_step first. If current_step is mark_timing_start, then open next_local_row_step locally; command output is transcript-bearing and must not be copied into tracked files."
+  },
+  "operation_records": [
+    {
+      "operation_log_id": "review_batch",
+      "log_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_batch_log.tsv",
+      "exists": true,
+      "row_count": 1,
+      "latest_recorded_at": "2026-05-25T21:05:05+08:00",
+      "latest_status": "batch_prepared",
+      "latest_mode": "",
+      "alignment_status": "pass",
+      "alignment_note": "batch prepared for current packet rows"
+    },
+    {
+      "operation_log_id": "preflight",
+      "log_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_preflight_log.tsv",
+      "exists": true,
+      "row_count": 13,
+      "latest_recorded_at": "2026-05-26T05:08:03+08:00",
+      "latest_status": "review_session_ready",
+      "latest_mode": "",
+      "alignment_status": "pass",
+      "alignment_note": "preflight records ready local packet/template"
+    },
+    {
+      "operation_log_id": "session_start",
+      "log_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_log.tsv",
+      "exists": true,
+      "row_count": 11,
+      "latest_recorded_at": "2026-05-26T05:08:03+08:00",
+      "latest_status": "reviewer_session_started",
+      "latest_mode": "",
+      "alignment_status": "pass",
+      "alignment_note": "session start records current pending packet"
+    },
+    {
+      "operation_log_id": "strict_apply",
+      "log_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_log.tsv",
+      "exists": true,
+      "row_count": 8,
+      "latest_recorded_at": "2026-05-26T05:28:47+08:00",
+      "latest_status": "response_pending",
+      "latest_mode": "dry_run",
+      "alignment_status": "pass",
+      "alignment_note": "strict apply dry-run records current blockers"
+    },
+    {
+      "operation_log_id": "timing_helper",
+      "log_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_timing_log.tsv",
+      "exists": true,
+      "row_count": 1,
+      "latest_recorded_at": "2026-05-26T04:42:55+08:00",
+      "latest_status": "timing_dry_run_ready",
+      "latest_mode": "dry_run",
+      "alignment_status": "pass",
+      "alignment_note": "timing helper log records the next row timing operation"
+    },
+    {
+      "operation_log_id": "post_review_sequence",
+      "log_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_log.tsv",
+      "exists": true,
+      "row_count": 3,
+      "latest_recorded_at": "2026-05-26T06:53:12+08:00",
+      "latest_status": "post_review_sequence_blocked",
+      "latest_mode": "plan_only",
+      "alignment_status": "pass",
+      "alignment_note": "sequence log records blocked plan-only state"
+    }
+  ],
+  "runtime_seconds": 0.0006,
+  "next_action": "Continue from next_reviewer_operation; keep row-open output local-only and rerun this audit after each reviewer-session operation."
+}

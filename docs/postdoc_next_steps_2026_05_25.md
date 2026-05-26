@@ -277,7 +277,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - New check: `C066`。
 - Current state:
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
-  現在是 `ok=true`、`24/24` checks passing、`failed_checks=[]`。
+  現在是 `ok=true`、`25/25` checks passing、`failed_checks=[]`。
 - 檢查內容：post-review command plan 必須先完成 response closeout；post-write
   order 必須是 refresh、strict human-reviewed recovery、post-review checklist、
   objective audit；strict recovery command 不能帶
@@ -305,7 +305,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - New check: `C067`。
 - Current state:
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
-  現在是 `ok=true`、`24/24` checks passing、`failed_checks=[]`。
+  現在是 `ok=true`、`25/25` checks passing、`failed_checks=[]`。
 - 檢查內容：reviewer handoff、action checklist、session-start summary 都必須
   提供 `timing_start_write_by_row` 和 `timing_finish_write_by_row`，且涵蓋
   目前 packet rows `1-6`；row `1` compatibility alias 也必須和 by-row map
@@ -318,7 +318,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - New check: `C068`。
 - Current state:
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
-  現在是 `ok=true`、`24/24` checks passing、`failed_checks=[]`。
+  現在是 `ok=true`、`25/25` checks passing、`failed_checks=[]`。
 - 檢查內容：`human_audit_response_gap_checklist.tsv` 必須和 closeout JSON 的
   rows `1-6` 對齊，且每列的 `timing_start_write_command` /
   `timing_finish_write_command` 必須和 fresh reviewer handoff 的 by-row
@@ -333,7 +333,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - New check: `C069`。
 - Current state:
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
-  現在是 `ok=true`、`24/24` checks passing、`failed_checks=[]`。
+  現在是 `ok=true`、`25/25` checks passing、`failed_checks=[]`。
 - 檢查內容：`human_audit_response_action_items.tsv` 必須和 closeout JSON 的
   gap counts 對齊，action IDs 必須唯一，且 timing action items 必須含有
   對應的 start/finish timing helper commands。Current live packet 有 `126`
@@ -356,7 +356,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - Current state:
   work order 是 `review_work_order_ready`，current packet 有 `6` rows、
   `33` ordered steps、`126` pending action items；consistency 現在是
-  `ok=true`、`24/24` checks passing、`failed_checks=[]`。
+  `ok=true`、`25/25` checks passing、`failed_checks=[]`。
   Summary field `next_reviewer_operation` 現在指出下一個安全操作：
   `row-1:01-mark-timing-start`，以及下一個 local-only row-open 操作：
   `row-1:02-open-local-row`。
@@ -378,7 +378,29 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   操作路線與 timing/session record 的
   guardrail，不是 human review completion。
 
-25. Strict post-review sequence gate 已納入 normal refresh 與 consistency audit：
+25. Aggregate operation-record audit 已納入 normal refresh 與 consistency audit：
+
+- Source:
+  `80_semantic_risk_asr/annotation/audit_human_audit_operation_records.py`。
+- Refresh integration:
+  `80_semantic_risk_asr/annotation/refresh_human_audit_evidence.py` 會在
+  consistency audit 前重建 operation-record summary / TSV。
+- New check: `C079`。
+- Current tracked outputs:
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_operation_record_summary.json`
+  和
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_operation_record_audit.tsv`。
+- Current state:
+  operation records 是 `operation_records_ready`，`6/6` required logs aligned；
+  consistency 現在是 `ok=true`、`25/25` checks passing、`failed_checks=[]`。
+- 檢查內容：`C079` 要求 current review batch、preflight、
+  reviewer-session start、strict apply dry-run、timing helper、post-review
+  sequence 這六個 append-only aggregate logs 都存在，且 latest log row 和
+  目前 `6` packet rows、`18` model assessments、`6` pending timing rows、
+  `row-1:01-mark-timing-start` 下一步一致。這是 operation provenance
+  guardrail，不是 human review completion。
+
+26. Strict post-review sequence gate 已納入 normal refresh 與 consistency audit：
 
 - Source:
   `80_semantic_risk_asr/annotation/run_post_review_evidence_sequence.py`。
@@ -396,7 +418,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
 - Current state:
   sequence 是 `post_review_sequence_blocked`、`mode=plan_only`、
   `executed_step_count=0`，因為 current response closeout 還不是
-  `response_complete_ready_to_write`；consistency 現在是 `ok=true`、`24/24`
+  `response_complete_ready_to_write`；consistency 現在是 `ok=true`、`25/25`
   checks passing、`failed_checks=[]`。
 - 檢查內容：`C072` 要求 sequence TSV 保持嚴格順序：
   strict dry-run、response closeout、write/refresh/prepare-next、aggregate
@@ -410,7 +432,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   尚未完成時誤把 sequence runner 視為可寫入。這是 post-review
   execution-order guardrail，不是 human review completion。
 
-26. Objective sequence-routing evidence 已納入 consistency audit：
+27. Objective sequence-routing evidence 已納入 consistency audit：
 
 - Source:
   `80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py`。
@@ -420,7 +442,7 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   和
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv`。
 - Current state:
-  consistency 現在是 `ok=true`、`24/24` checks passing、`failed_checks=[]`。
+  consistency 現在是 `ok=true`、`25/25` checks passing、`failed_checks=[]`。
 - 檢查內容：`C073` 要求 original-objective requirement `6.3` 同時記錄
   `human_audit_post_review_sequence_summary.json`、目前的
   `post_review_sequence_status`、`post_review_sequence_ok`、

@@ -1,0 +1,7 @@
+operation_log_id	log_path	exists	row_count	latest_recorded_at	latest_status	latest_mode	alignment_status	alignment_note
+review_batch	70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_batch_log.tsv	True	1	2026-05-25T21:05:05+08:00	batch_prepared		pass	batch prepared for current packet rows
+preflight	70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_preflight_log.tsv	True	13	2026-05-26T05:08:03+08:00	review_session_ready		pass	preflight records ready local packet/template
+session_start	70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_log.tsv	True	11	2026-05-26T05:08:03+08:00	reviewer_session_started		pass	session start records current pending packet
+strict_apply	70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_log.tsv	True	8	2026-05-26T05:28:47+08:00	response_pending	dry_run	pass	strict apply dry-run records current blockers
+timing_helper	70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_timing_log.tsv	True	1	2026-05-26T04:42:55+08:00	timing_dry_run_ready	dry_run	pass	timing helper log records the next row timing operation
+post_review_sequence	70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_log.tsv	True	3	2026-05-26T06:53:12+08:00	post_review_sequence_blocked	plan_only	pass	sequence log records blocked plan-only state

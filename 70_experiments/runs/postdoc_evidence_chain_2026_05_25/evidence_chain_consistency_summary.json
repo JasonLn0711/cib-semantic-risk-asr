@@ -1,7 +1,7 @@
 {
   "ok": true,
   "status_counts": {
-    "pass": 24
+    "pass": 25
   },
   "failed_checks": [],
   "reference_transcript_policy": "Reference transcripts are already human-reviewed for WER/CER; this audit does not reopen transcript review.",
@@ -11,7 +11,7 @@
       "check_id": "C001",
       "invariant": "required aggregate summaries exist and are parseable",
       "status": "pass",
-      "evidence": "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_handoff_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements_summary.json; 70_experiments/runs/asr_candidate_current_recheck_2026_05_26/summary.json",
+      "evidence": "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_handoff_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_operation_record_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_sequence_summary.json; 70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements_summary.json; 70_experiments/runs/asr_candidate_current_recheck_2026_05_26/summary.json",
       "result": "all required summaries loaded",
       "next_action": "Regenerate missing or invalid aggregate summaries before publishing evidence-chain claims."
     },
@@ -142,6 +142,14 @@
       "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order_summary.json",
       "result": "review work-order summary points to the next timing-start and local-row-open operations",
       "next_action": "Regenerate the review work-order summary so reviewer execution can start from the tracked next operation without scanning the full TSV."
+    },
+    {
+      "check_id": "C079",
+      "invariant": "selected-300 reviewer operations have aggregate log coverage",
+      "status": "pass",
+      "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_operation_record_summary.json",
+      "result": "operation-record audit covers batch, preflight, session, strict apply, timing, and sequence logs",
+      "next_action": "Regenerate the operation-record audit after reviewer-session operations so every tracked operation has an aggregate log record before claims."
     },
     {
       "check_id": "C074",
