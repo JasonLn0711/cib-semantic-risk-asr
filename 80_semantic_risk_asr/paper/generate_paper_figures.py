@@ -6,6 +6,8 @@ from __future__ import annotations
 import csv
 import html
 import json
+import shutil
+import subprocess
 from pathlib import Path
 
 
@@ -376,17 +378,27 @@ Generate with:
 python 80_semantic_risk_asr/paper/generate_paper_figures.py
 ```
 
-| Figure | File | Source | Privacy boundary |
-| --- | --- | --- | --- |
-| F1. CDS-ASR pipeline | `f1_cds_asr_pipeline.svg` | method text | no row content |
-| F2. Evidence boundary | `f2_evidence_boundary.svg` | publishable evidence summary | aggregate status only |
-| F3. Predictor AUC | `f3_predictor_auc.svg` | `human_audit_predictor_comparison.tsv` | aggregate predictor metrics |
-| F4. Recovery outcomes | `f4_recovery_outcomes.svg` | `policy_comparison.tsv` | aggregate policy counts |
-| F5. Model lane state | `f5_model_lane_state.svg` | main/candidate aggregate summaries | aggregate lane state |
-| F6. Evidence N-ladder | `f6_n_ladder.svg` | method evidence units | aggregate counts only |
-| F7. Budget-risk frontier | `f7_budget_risk_frontier.svg` | `policy_comparison.tsv` | aggregate policy counts |
+| Figure | SVG | PDF | Source | Privacy boundary |
+| --- | --- | --- | --- | --- |
+| F1. CDS-ASR pipeline | `f1_cds_asr_pipeline.svg` | `f1_cds_asr_pipeline.pdf` | method text | no row content |
+| F2. Evidence boundary | `f2_evidence_boundary.svg` | `f2_evidence_boundary.pdf` | publishable evidence summary | aggregate status only |
+| F3. Predictor AUC | `f3_predictor_auc.svg` | `f3_predictor_auc.pdf` | `human_audit_predictor_comparison.tsv` | aggregate predictor metrics |
+| F4. Recovery outcomes | `f4_recovery_outcomes.svg` | `f4_recovery_outcomes.pdf` | `policy_comparison.tsv` | aggregate policy counts |
+| F5. Model lane state | `f5_model_lane_state.svg` | `f5_model_lane_state.pdf` | main/candidate aggregate summaries | aggregate lane state |
+| F6. Evidence N-ladder | `f6_n_ladder.svg` | `f6_n_ladder.pdf` | method evidence units | aggregate counts only |
+| F7. Budget-risk frontier | `f7_budget_risk_frontier.svg` | `f7_budget_risk_frontier.pdf` | `policy_comparison.tsv` | aggregate policy counts |
 """
     (OUT_DIR / "README.md").write_text(content, encoding="utf-8")
+
+
+def export_pdfs() -> None:
+    converter = shutil.which("convert")
+    if not converter:
+        print("ImageMagick convert not found; skipped PDF export")
+        return
+    for svg_path in sorted(OUT_DIR.glob("*.svg")):
+        pdf_path = svg_path.with_suffix(".pdf")
+        subprocess.run([converter, str(svg_path), str(pdf_path)], check=True)
 
 
 def main() -> None:
@@ -398,6 +410,7 @@ def main() -> None:
     figure_5_model_lanes()
     figure_6_n_ladder()
     figure_7_budget_risk_frontier()
+    export_pdfs()
     write_index()
     print(f"Wrote figures to {OUT_DIR}")
 

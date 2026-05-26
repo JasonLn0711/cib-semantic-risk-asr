@@ -5,6 +5,40 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.232 - 2026-05-26T23:41:06+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `553c327`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_clustered_ci.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_clustered_ci.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/artifact_manifest.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/claim_registry.tsv`
+  - `80_semantic_risk_asr/paper/artifact_manifest.tsv`
+  - `80_semantic_risk_asr/paper/build_artifact_manifest.py`
+  - `80_semantic_risk_asr/paper/figures/README.md`
+  - `80_semantic_risk_asr/paper/figures/f1_cds_asr_pipeline.pdf`
+  - `80_semantic_risk_asr/paper/figures/f2_evidence_boundary.pdf`
+  - `80_semantic_risk_asr/paper/figures/f3_predictor_auc.pdf`
+  - `80_semantic_risk_asr/paper/figures/f4_recovery_outcomes.pdf`
+  - `80_semantic_risk_asr/paper/figures/f5_model_lane_state.pdf`
+  - `80_semantic_risk_asr/paper/figures/f6_n_ladder.pdf`
+  - `80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.pdf`
+  - `80_semantic_risk_asr/paper/generate_paper_figures.py`
+  - `80_semantic_risk_asr/paper/manuscript_draft.md`
+  - `80_semantic_risk_asr/paper/submission_readiness_package_zh.md`
+  - `docs/REPO_MAP.md`
+  - `docs/artifact_privacy_classes.tsv`
+  - `docs/ceis_method_spec.md`
+  - `docs/downstream_decision_contract.md`
+  - `docs/hostile_reviewer_checklist.md`
+  - `docs/risk_atom_weights.tsv`
+  - `docs/submission_readiness_plan.md`
+  - `scripts/check_transcript_bearing_leaks.sh`
+
 ## v2.5.231 - 2026-05-26T23:32:39+08:00
 
 - Bump: `patch`

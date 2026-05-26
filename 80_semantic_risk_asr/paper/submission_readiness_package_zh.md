@@ -251,12 +251,19 @@ Generated figure package:
 - `80_semantic_risk_asr/paper/generate_paper_figures.py`
 - `80_semantic_risk_asr/paper/figures/README.md`
 - `80_semantic_risk_asr/paper/figures/f1_cds_asr_pipeline.svg`
+- `80_semantic_risk_asr/paper/figures/f1_cds_asr_pipeline.pdf`
 - `80_semantic_risk_asr/paper/figures/f2_evidence_boundary.svg`
+- `80_semantic_risk_asr/paper/figures/f2_evidence_boundary.pdf`
 - `80_semantic_risk_asr/paper/figures/f3_predictor_auc.svg`
+- `80_semantic_risk_asr/paper/figures/f3_predictor_auc.pdf`
 - `80_semantic_risk_asr/paper/figures/f4_recovery_outcomes.svg`
+- `80_semantic_risk_asr/paper/figures/f4_recovery_outcomes.pdf`
 - `80_semantic_risk_asr/paper/figures/f5_model_lane_state.svg`
+- `80_semantic_risk_asr/paper/figures/f5_model_lane_state.pdf`
 - `80_semantic_risk_asr/paper/figures/f6_n_ladder.svg`
+- `80_semantic_risk_asr/paper/figures/f6_n_ladder.pdf`
 - `80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.svg`
+- `80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.pdf`
 
 ## 5. Claim-To-Evidence Matrix
 
@@ -351,6 +358,14 @@ Reviewer-reproducible tracked artifacts:
 - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/artifact_manifest.tsv`
 - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/claim_registry.tsv`
 - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/ceis_method_summary.tsv`
+- `docs/ceis_method_spec.md`
+- `docs/risk_atom_weights.tsv`
+- `docs/downstream_decision_contract.md`
+- `docs/privacy_boundary.md`
+- `docs/intended_use_statement.md`
+- `docs/artifact_privacy_classes.tsv`
+- `docs/hostile_reviewer_checklist.md`
+- `scripts/check_transcript_bearing_leaks.sh`
 - `70_experiments/runs/janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv`
 - `70_experiments/runs/wer_metric_audit_2026_05_25/journal_compliance_summary.json`
 - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json`

@@ -99,4 +99,7 @@ organized extracted audio under `10_extracted_parts/`.
   `docs/intended_use_statement.md`, `docs/artifact_privacy_classes.tsv`, and
   `docs/ceis_method_spec.md` as the submission-prep control layer for scope
   control, aggregate-only release, intended-use boundaries, artifact privacy
-  classes, and CEIS method reconstruction.
+  classes, and CEIS method reconstruction. Use `docs/risk_atom_weights.tsv`,
+  `docs/downstream_decision_contract.md`, and
+  `docs/hostile_reviewer_checklist.md` for the CEIS weight contract,
+  downstream decision-distance contract, and final hostile-reviewer pass.

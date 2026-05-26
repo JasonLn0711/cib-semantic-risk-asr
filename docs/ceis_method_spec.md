@@ -24,7 +24,41 @@ CEIS(x) = max over v in V(x) [
 to be a calibrated acoustic posterior unless a future implementation supplies
 and validates such a posterior.
 
-## Plausibility Sources
+## Inputs
+
+Inputs to CEIS are:
+
+- the ASR hypothesis or transcript candidate `x`;
+- plausible transcript variants `V(x)`;
+- risk atom class for each variant;
+- proxy plausibility score;
+- downstream decision labels from fixed function `f`;
+- decision-distance policy.
+
+## Risk Atoms
+
+The submission-prep risk atom set is:
+
+- negation;
+- amount;
+- action;
+- actor;
+- intent;
+- scam_pattern;
+- time;
+- uncertainty.
+
+Risk atom weights are versioned in `docs/risk_atom_weights.tsv` and mirrored in
+`80_semantic_risk_asr/scoring/ceis_config.json`.
+
+## Variant Generation
+
+Counterfactual variants are plausible ASR alternatives concentrated around
+decision-critical atoms. They are not generic paraphrases. The aggregate
+submission package may report variant counts by atom and source, but it must
+not release variant text.
+
+## Plausibility Score
 
 Allowed aggregate-safe sources:
 
@@ -36,6 +70,17 @@ Allowed aggregate-safe sources:
 
 The submission draft should describe these as evidence sources for plausible
 ASR alternatives, not as proof that all possible variants are enumerated.
+
+## Decision Function
+
+The downstream decision function is fixed before CEIS scoring. It is specified
+in `docs/downstream_decision_contract.md`.
+
+## Decision Distance
+
+Decision distance is a policy-aligned ordinal distance over the anti-fraud
+triage label space. The exact contract is versioned in
+`docs/downstream_decision_contract.md`.
 
 ## RiskAtomWeight
 
@@ -57,7 +102,26 @@ These weights should be reported as a policy choice and stress-tested with
 uniform-weight and by-atom ablations before making stronger generalization
 claims.
 
-## Downstream Decision Function
+## Aggregation
+
+CEIS uses max aggregation over plausible variants:
+
+```text
+max over v in V(x)
+```
+
+The max operator is intentionally conservative because the target is
+decision-instability detection in high-stakes triage. A top-k mean aggregation
+is listed as a required ablation before stronger generalization claims.
+
+## Recovery Trigger
+
+The current CEIS recovery trigger is the diagnostic scoped-audit threshold
+recorded in `80_semantic_risk_asr/scoring/ceis_config.json` and Table 3. It is
+not a deployment threshold. Recovery policies are evaluated as aggregate replay
+over human-reviewed labels.
+
+## Label Space
 
 The decision function `f` maps a transcript or transcript variant into the
 declared anti-fraud triage label space:

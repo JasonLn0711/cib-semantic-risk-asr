@@ -32,17 +32,19 @@ notes, runtime logs, local response sheets, or model weights.
 ## Immediate Priority Order
 
 1. Keep validation gates clean.
-2. Maintain `claim_registry.tsv`.
-3. Keep Table 3/Table 4 language aligned with diagnostic threshold and policy
+2. Run `scripts/check_transcript_bearing_leaks.sh` before packaging.
+3. Maintain `claim_registry.tsv`.
+4. Keep Table 3/Table 4 language aligned with diagnostic threshold and policy
    replay wording.
-4. Maintain row-clustered bootstrap / leave-one-row-out sensitivity outputs.
-5. Freeze CEIS method spec and config.
-6. Maintain selected-300 selection provenance.
-7. Complete aggregate-only counterfactual variant coverage audit; current
+5. Maintain row-clustered bootstrap / leave-one-row-out sensitivity outputs.
+6. Freeze CEIS method spec, risk atom weights, downstream decision contract,
+   and config.
+7. Maintain selected-300 selection provenance.
+8. Complete aggregate-only counterfactual variant coverage audit; current
    status table records pending variant-count recomputation.
-8. Keep Limitations and Ethics/Privacy/Intended Use visible in the manuscript.
-9. Maintain checksum manifests and artifact privacy classes.
-10. Run hostile-reviewer checklist before submission packaging.
+9. Keep Limitations and Ethics/Privacy/Intended Use visible in the manuscript.
+10. Maintain checksum manifests and artifact privacy classes.
+11. Run hostile-reviewer checklist before submission packaging.
 
 ## Submission Package Boundary
 

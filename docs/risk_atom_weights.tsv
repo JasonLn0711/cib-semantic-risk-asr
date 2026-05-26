@@ -1,0 +1,10 @@
+atom	weight	weight_source	submission_note
+negation	5.0	policy_defined	Highest-weight decision atom because negation can reverse event state.
+amount	5.0	policy_defined	Highest-weight decision atom because amount can change escalation severity.
+action	5.0	policy_defined	Highest-weight decision atom because action can change case stage.
+actor	4.0	policy_defined	High-weight decision atom because actor can change scam interpretation.
+intent	4.0	policy_defined	High-weight decision atom because intent can change routing.
+scam_pattern	4.0	policy_defined	High-weight decision atom because scam-pattern class can change case type.
+time	3.0	policy_defined	Moderate-weight decision atom because time can change urgency.
+uncertainty	3.0	policy_defined	Moderate-weight decision atom because uncertainty can change safe action.
+default	1.0	policy_defined	Fallback for unrecognized or future atom classes.

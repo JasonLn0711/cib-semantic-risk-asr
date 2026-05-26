@@ -102,6 +102,34 @@ ARTIFACTS = [
         "CEIS config and manuscript method text",
     ),
     (
+        "docs/risk_atom_weights.tsv",
+        "risk atom weight table",
+        "aggregate method configuration",
+        "manual method-spec pass",
+        "CEIS method spec and config",
+    ),
+    (
+        "docs/downstream_decision_contract.md",
+        "downstream decision contract",
+        "paper-facing method documentation",
+        "manual method-spec pass",
+        "CEIS method spec and config",
+    ),
+    (
+        "docs/hostile_reviewer_checklist.md",
+        "hostile reviewer checklist",
+        "paper-facing submission checklist",
+        "manual reviewer-risk pass",
+        "manuscript and aggregate evidence artifacts",
+    ),
+    (
+        "scripts/check_transcript_bearing_leaks.sh",
+        "transcript-bearing leak scan",
+        "release-control script",
+        "manual script maintenance",
+        "tracked aggregate TSV/JSON files",
+    ),
+    (
         "80_semantic_risk_asr/scoring/ceis_config.json",
         "CEIS method configuration",
         "aggregate method configuration",
@@ -266,12 +294,19 @@ ARTIFACTS = [
 
 FIGURES = [
     "f1_cds_asr_pipeline.svg",
+    "f1_cds_asr_pipeline.pdf",
     "f2_evidence_boundary.svg",
+    "f2_evidence_boundary.pdf",
     "f3_predictor_auc.svg",
+    "f3_predictor_auc.pdf",
     "f4_recovery_outcomes.svg",
+    "f4_recovery_outcomes.pdf",
     "f5_model_lane_state.svg",
+    "f5_model_lane_state.pdf",
     "f6_n_ladder.svg",
+    "f6_n_ladder.pdf",
     "f7_budget_risk_frontier.svg",
+    "f7_budget_risk_frontier.pdf",
     "README.md",
 ]
 

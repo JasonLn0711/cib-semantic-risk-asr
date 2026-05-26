@@ -4,6 +4,10 @@ artifact_path	privacy_class	release_status	contains_transcript	contains_audio_id
 80_semantic_risk_asr/paper/artifact_manifest.tsv	aggregate_public	tracked	no	no	no	no	yes	SHA256 and environment metadata for aggregate artifacts.
 70_experiments/runs/postdoc_evidence_chain_2026_05_25/claim_registry.tsv	aggregate_public	tracked	no	no	no	no	yes	Claim-to-evidence mapping with aggregate statistics and limitations.
 70_experiments/runs/postdoc_evidence_chain_2026_05_25/artifact_manifest.tsv	aggregate_public	tracked	no	no	no	no	yes	SHA256 manifest for aggregate artifacts only.
+docs/risk_atom_weights.tsv	aggregate_public	tracked	no	no	no	no	yes	Policy-defined CEIS atom weights only.
+docs/downstream_decision_contract.md	aggregate_public	tracked	no	no	no	no	yes	Downstream decision label and distance contract only.
+docs/hostile_reviewer_checklist.md	aggregate_public	tracked	no	no	no	no	yes	Reviewer-risk checklist with aggregate claim boundaries only.
+scripts/check_transcript_bearing_leaks.sh	aggregate_public	tracked	no	no	no	no	yes	Leak-scan script; does not contain transcript-bearing data.
 70_experiments/runs/janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv	aggregate_public	tracked	no	no	no	no	yes	Aggregate ASR comparison metrics.
 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_comparison.tsv	aggregate_public	tracked	no	no	no	no	yes	Aggregate predictor metrics only.
 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_clustered_ci.tsv	aggregate_public	tracked	no	no	no	no	yes	Row-clustered bootstrap predictor uncertainty with aggregate metrics only.
@@ -13,6 +17,8 @@ artifact_path	privacy_class	release_status	contains_transcript	contains_audio_id
 70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison.tsv	aggregate_public	tracked	no	no	no	no	yes	Aggregate policy replay metrics only.
 70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_clustered_ci.tsv	aggregate_public	tracked	no	no	no	no	yes	Row-clustered bootstrap recovery uncertainty with aggregate metrics only.
 70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_leave_one_row_out.tsv	aggregate_public	tracked	no	no	no	no	yes	Leave-one-row-out recovery sensitivity with review-row index only.
+80_semantic_risk_asr/paper/figures/*.svg	aggregate_public	tracked	no	no	no	no	yes	Aggregate-only generated manuscript figures.
+80_semantic_risk_asr/paper/figures/*.pdf	aggregate_public	tracked	no	no	no	no	yes	Aggregate-only generated manuscript figure PDF exports.
 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv	local_sensitive	ignored	yes	yes	yes	possible	no	Local transcript-bearing human audit sheet.
 raw_audio	local_sensitive	ignored	possible	possible	no	no	no	May contain identifiable speech content.
 reference_transcripts	local_sensitive	ignored	yes	possible	no	no	no	Transcript-bearing scoring ground truth remains local.
