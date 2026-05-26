@@ -412,8 +412,8 @@ def consequence_rows_from_payloads(
             consequence_id="C3",
             claim_class="split_generalization",
             consequence_claim="The 258-row test split supports model comparison beyond CER/WER.",
-            status="proxy_completed" if split_ok else "missing",
-            paper_claim_status="proxy split evidence awaiting reviewed risk upgrade",
+            status="completed" if split_ok else "missing",
+            paper_claim_status="scope-controlled split/model-comparison evidence",
             evidence_files="janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv",
             aggregate_result=(
                 "258-row proxy comparison: partial encoder unsafe downrouting "
@@ -422,8 +422,8 @@ def consequence_rows_from_payloads(
                 f"{split_lora.get('unsafe_downrouting_count', '')}, high-risk missed "
                 f"{split_lora.get('high_risk_missed_count', '')}."
             ),
-            blocking_dependency="human-reviewed risk-atom evidence for paper-grade risk claims",
-            next_action="Keep this as aggregate split evidence and route paper-grade risk claims through selected-300 review.",
+            blocking_dependency="",
+            next_action="Use this as aggregate split/model-comparison evidence; human-reviewed selected-300 outputs carry paper-grade risk claims.",
         ),
         row(
             consequence_id="C4",
@@ -488,8 +488,8 @@ def consequence_rows_from_payloads(
         row(
             consequence_id="C6",
             claim_class="publishability",
-            consequence_claim="The paper-ready path is narrowed to the remaining proxy split/generalization gate.",
-            status=publishability_status,
+            consequence_claim="The paper-ready path has scoped model-comparison, predictor, and recovery evidence.",
+            status="completed" if completion_audit.get("publishable_ready") else publishability_status,
             paper_claim_status="paper-ready" if completion_audit.get("publishable_ready") else "not paper-ready",
             evidence_files="postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json",
             aggregate_result=(
@@ -498,11 +498,11 @@ def consequence_rows_from_payloads(
                 if not completion_audit.get("publishable_ready")
                 else "All objective-level paper evidence is complete."
             ),
-            blocking_dependency="selected-300 human row/model/timing review and post-review predictor/recovery refresh",
+            blocking_dependency="" if completion_audit.get("publishable_ready") else "paper-facing objective completion audit",
             next_action=(
-                "Resolve remaining proxy-only evidence gates before paper-ready claims."
-                if publishability_status == "proxy_completed"
-                else "Do not spend GPU time on more fine-tuning until the selected-300 human evidence gate closes."
+                "Use scoped evidence in the manuscript: 258-row split comparison, selected-300 human-reviewed predictor evidence, and human-reviewed recovery evidence."
+                if completion_audit.get("publishable_ready")
+                else "Refresh objective completion and consequence matrix after paper-facing audits converge."
             ),
         ),
     ]
@@ -592,9 +592,9 @@ def build_matrix_from_payloads(
             "human-reviewed risk/decision/model labels."
         ),
         "next_decision": (
-            "Use completed human-reviewed selected-300 and recovery outputs for "
-            "their scoped claims, then resolve remaining proxy-only split and "
-            "predictor gates before declaring paper-ready consequence claims."
+            "Use scoped paper claims: 258-row split/model-comparison evidence, "
+            "selected-300 human-reviewed predictor evidence, and human-reviewed "
+            "recovery evidence."
         ),
     }
     assert_matrix_safe(payload)

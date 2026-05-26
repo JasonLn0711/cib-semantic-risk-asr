@@ -370,15 +370,23 @@ def build_checklist(
         "blocker_keys": blocker_keys,
         "checklist": rows,
         "paper_ready_impact": (
-            "No paper-readiness change. The selected-300 human review remains pending "
-            "until required row-level fields, per-model assessments, and per-row timing "
-            "are completed."
+            "Reviewer action gate is response-complete and ready for paper-facing scoped claims."
+            if response_complete
+            else (
+                "No paper-readiness change. The selected-300 human review remains pending "
+                "until required row-level fields, per-model assessments, and per-row timing "
+                "are completed."
+            )
         ),
         "next_concrete_action": (
             "Fill the local response TSV for the current packet, including required "
             "row-level, per-model, and timing fields, then rerun the strict dry-run."
             if action_ready and not response_complete
-            else "Resolve blocker keys before reviewer work."
+            else (
+                "Use response-complete aggregate evidence in the post-review paper-facing audits."
+                if response_complete
+                else "Resolve blocker keys before reviewer work."
+            )
         ),
         "tracked_outputs": {
             "checklist_summary": repo_relative(run_dir / CHECKLIST_SUMMARY_NAME, repo_root=repo_root),

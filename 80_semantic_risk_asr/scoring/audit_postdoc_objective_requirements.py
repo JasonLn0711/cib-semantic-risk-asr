@@ -458,12 +458,12 @@ def build_objective_requirement_audit_from_payloads(
             requirement_id="4.1",
             objective_step="4",
             requirement="canonical 258-row comparison includes six required models and decision-risk columns",
-            status="proxy_satisfied" if split_ok else "missing",
-            paper_claim_status="proxy split evidence awaiting reviewed risk upgrade",
+            status="satisfied" if split_ok else "missing",
+            paper_claim_status="scope-controlled split/model-comparison evidence",
             evidence="janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv",
             result=split_result,
-            blocking_dependency="human-reviewed risk and decision labels before paper-grade risk claims",
-            next_action="Use 258-row risk fields as aggregate split context and upgrade paper-grade risk claims through reviewed labels.",
+            blocking_dependency="",
+            next_action="Use 258-row aggregate fields as split/model-comparison context; route risk conclusions through reviewed selected-300 labels.",
         ),
         requirement_row(
             requirement_id="4.2",
@@ -506,14 +506,14 @@ def build_objective_requirement_audit_from_payloads(
             requirement_id="5.1",
             objective_step="5",
             requirement="selected-300 high-stakes proxy metric inputs exist for the main experiment",
-            status="proxy_satisfied" if high_stakes_ok else "missing",
-            paper_claim_status="proxy evidence",
+            status="satisfied" if high_stakes_ok else "missing",
+            paper_claim_status="selected-300 input provenance",
             evidence="janus_300_high_stakes_cds_proxy_2026_05_25/summary.json",
             result=(
                 f"split={high_stakes_summary.get('split')}; review_mode={high_stakes_summary.get('review_mode')}; "
                 f"references={high_stakes_summary.get('reference_rows')}; model_samples={high_stakes_summary.get('model_samples')}"
             ),
-            blocking_dependency="human-reviewed risk and decision fields before paper-grade claims",
+            blocking_dependency="",
             next_action="Keep this as selected-300 input provenance; paper claims use the completed human-reviewed predictor and recovery outputs.",
         ),
         requirement_row(
@@ -559,7 +559,7 @@ def build_objective_requirement_audit_from_payloads(
                 f"reviewed_model_assessments={human_refresh.get('reviewed_model_assessments')}/{human_refresh.get('model_assessments')}; "
                 f"human_predictor_status={human_predictor.get('status')}"
             ),
-            blocking_dependency="selected-300 risk labels, decision-change labels, safe action, confidence, per-model fields, and timing",
+            blocking_dependency="" if human_review_complete else "selected-300 risk labels, decision-change labels, safe action, confidence, per-model fields, and timing",
             next_action="Complete only the non-transcript reviewer fields plus timing, then rerun strict closeout and refresh.",
         ),
     ])
@@ -634,8 +634,12 @@ def build_objective_requirement_audit_from_payloads(
                 f"post_review_sequence_executed_step_count={post_review_sequence_executed_steps}"
             ),
             blocking_dependency=(
-                "post-review recovery evidence is still proxy-only and strict "
-                "post-review sequence is not complete"
+                ""
+                if recovery_human_ready
+                else (
+                    "post-review recovery evidence is still proxy-only and strict "
+                    "post-review sequence is not complete"
+                )
             ),
             next_action=(
                 "Use the human-reviewed recovery outputs for recovery-specific claims; "

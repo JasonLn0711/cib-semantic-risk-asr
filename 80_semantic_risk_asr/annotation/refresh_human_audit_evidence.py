@@ -31,6 +31,7 @@ import audit_postdoc_roadmap_completion as roadmap_audit  # noqa: E402
 import audit_publishable_evidence_chain as completion_audit  # noqa: E402
 import audit_human_review_progress as progress_audit  # noqa: E402
 import audit_human_audit_operation_records as operation_records  # noqa: E402
+import build_consequence_evidence_matrix as consequence_matrix  # noqa: E402
 import build_human_audit_review_work_order as review_work_order  # noqa: E402
 import check_evidence_chain_readiness as readiness  # noqa: E402
 import evaluate_human_reviewed_recovery_policies as human_recovery  # noqa: E402
@@ -364,6 +365,7 @@ def run_completion_audit_gate(
     human_refresh_payload: dict[str, Any],
     predictor_payload: dict[str, Any],
     output_dir: Path,
+    human_recovery_payload: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], list[Path]]:
     started = time.time()
     consequence_matrix = completion_audit.read_json(
@@ -373,6 +375,7 @@ def run_completion_audit_gate(
         readiness_payload=readiness_payload,
         human_refresh=human_refresh_payload,
         human_predictor=predictor_payload,
+        human_recovery=human_recovery_payload,
         consequence_matrix=consequence_matrix,
         reviewer_action_gate=readiness_payload.get("reviewer_action_gate", {}),
     )
@@ -381,6 +384,27 @@ def run_completion_audit_gate(
     output_tsv = output_dir / completion_audit.TSV_NAME
     completion_audit.write_json(output_json, payload)
     completion_audit.write_tsv(output_tsv, payload["completion_rows"])
+    return payload, [output_json, output_tsv]
+
+
+def run_consequence_matrix_gate(
+    *,
+    repo_root: Path,
+    output_dir: Path,
+    human_refresh_payload: dict[str, Any],
+    completion_payload: dict[str, Any],
+) -> tuple[dict[str, Any], list[Path]]:
+    started = time.time()
+    payload = consequence_matrix.build_matrix_from_payloads(
+        repo_root.resolve(),
+        human_refresh=human_refresh_payload,
+        completion_audit=completion_payload,
+    )
+    payload["runtime_seconds"] = round(time.time() - started, 4)
+    output_json = output_dir / consequence_matrix.SUMMARY_NAME
+    output_tsv = output_dir / consequence_matrix.TSV_NAME
+    consequence_matrix.write_json(output_json, payload)
+    consequence_matrix.write_tsv(output_tsv, payload["consequence_rows"])
     return payload, [output_json, output_tsv]
 
 
@@ -754,6 +778,20 @@ def refresh_human_audit_evidence(
         payload["completion_audit_ok"] = completion_payload.get("ok")
         payload["publishable_ready"] = completion_payload.get("publishable_ready")
         payload["completion_status_counts"] = completion_payload.get("status_counts", {})
+        consequence_payload, consequence_outputs = run_consequence_matrix_gate(
+            repo_root=repo_root,
+            output_dir=readiness_output_dir,
+            human_refresh_payload=payload,
+            completion_payload=completion_payload,
+        )
+        output_paths.extend(consequence_outputs)
+        payload["consequence_paper_claims_ready"] = consequence_payload.get(
+            "paper_claims_ready",
+        )
+        payload["consequence_status_counts"] = consequence_payload.get(
+            "status_counts",
+            {},
+        )
         roadmap_payload, roadmap_outputs = run_roadmap_audit_gate(
             repo_root=repo_root,
             output_dir=readiness_output_dir,
@@ -786,6 +824,36 @@ def refresh_human_audit_evidence(
             "",
         )
         payload["human_recovery_ready"] = bool(human_recovery_payload.get("human_reviewed"))
+        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
+        payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
+        write_refresh_summary(output_dir, payload)
+        completion_payload, completion_outputs = run_completion_audit_gate(
+            readiness_payload=readiness_payload,
+            human_refresh_payload=payload,
+            predictor_payload=predictor_payload,
+            output_dir=readiness_output_dir,
+            human_recovery_payload=human_recovery_payload,
+        )
+        output_paths.extend(completion_outputs)
+        ok = ok and bool(completion_payload.get("ok"))
+        payload["ok"] = ok
+        payload["completion_audit_ok"] = completion_payload.get("ok")
+        payload["publishable_ready"] = completion_payload.get("publishable_ready")
+        payload["completion_status_counts"] = completion_payload.get("status_counts", {})
+        consequence_payload, consequence_outputs = run_consequence_matrix_gate(
+            repo_root=repo_root,
+            output_dir=readiness_output_dir,
+            human_refresh_payload=payload,
+            completion_payload=completion_payload,
+        )
+        output_paths.extend(consequence_outputs)
+        payload["consequence_paper_claims_ready"] = consequence_payload.get(
+            "paper_claims_ready",
+        )
+        payload["consequence_status_counts"] = consequence_payload.get(
+            "status_counts",
+            {},
+        )
         payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
         payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
         write_refresh_summary(output_dir, payload)
@@ -860,6 +928,39 @@ def refresh_human_audit_evidence(
             "blocking_requirement_count",
             "",
         )
+        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
+        payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
+        write_refresh_summary(output_dir, payload)
+        post_review_sequence_payload, sequence_outputs = run_post_review_sequence_gate(
+            output_dir=output_dir,
+            readiness_output_dir=readiness_output_dir,
+            repo_root=repo_root,
+        )
+        output_paths.extend(sequence_outputs)
+        payload["post_review_sequence_status"] = post_review_sequence_payload.get("status", "")
+        payload["post_review_sequence_blocker_keys"] = post_review_sequence_payload.get(
+            "blocker_keys",
+            [],
+        )
+        payload["post_review_sequence_executed_step_count"] = post_review_sequence_payload.get(
+            "executed_step_count",
+            "",
+        )
+        roadmap_payload, roadmap_outputs = run_roadmap_audit_gate(
+            repo_root=repo_root,
+            output_dir=readiness_output_dir,
+            audit_output_dir=output_dir,
+            readiness_payload=readiness_payload,
+            completion_payload=completion_payload,
+            human_refresh_payload=payload,
+            predictor_payload=predictor_payload,
+        )
+        output_paths.extend(roadmap_outputs)
+        ok = ok and bool(roadmap_payload.get("ok"))
+        payload["ok"] = ok
+        payload["roadmap_audit_ok"] = roadmap_payload.get("ok")
+        payload["roadmap_complete"] = roadmap_payload.get("roadmap_complete")
+        payload["roadmap_status_counts"] = roadmap_payload.get("status_counts", {})
         payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
         payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
         write_refresh_summary(output_dir, payload)

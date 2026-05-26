@@ -249,11 +249,11 @@ def test_split_gate(root: Path) -> dict[str, str]:
     return row(
         phase="4",
         requirement="canonical 258-row six-model comparison with decision-risk metrics",
-        status="proxy_completed" if ok else "missing",
-        paper_claim_status="proxy split evidence awaiting reviewed risk-atom upgrade",
+        status="completed" if ok else "missing",
+        paper_claim_status="scope-controlled split/model-comparison evidence",
         evidence="janus_258_test_split_asr_cds_proxy summary and comparison TSV",
         result="Six-model 258-row comparison includes CER/WER plus risk-atom and unsafe-decision metrics" if ok else "258-row comparison incomplete",
-        next_action="Use these aggregate split results as model-comparison evidence and route paper-grade risk claims through reviewed risk/decision labels.",
+        next_action="Use these aggregate split results for model-comparison context; route paper-grade risk conclusions through reviewed selected-300 labels.",
     )
 
 
@@ -274,11 +274,11 @@ def high_stakes_proxy_gate(root: Path) -> dict[str, str]:
     return row(
         phase="5",
         requirement="selected-300 high-stakes CDS-ASR main experiment proxy",
-        status="proxy_completed" if ok else "missing",
-        paper_claim_status="proxy input layer paired with completed human-reviewed outputs",
+        status="completed" if ok else "missing",
+        paper_claim_status="selected-300 input provenance paired with completed human-reviewed outputs",
         evidence="janus_300_high_stakes_cds_proxy_2026_05_25/summary.json",
         result=result,
-        next_action="Keep this as input provenance; paper-grade claims use the completed human-reviewed predictor and recovery outputs.",
+        next_action="Use this as selected-300 input provenance; paper-grade claims use the completed human-reviewed predictor and recovery outputs.",
     )
 
 

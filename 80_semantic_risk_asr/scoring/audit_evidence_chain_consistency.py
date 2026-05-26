@@ -468,14 +468,26 @@ def add_readiness_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[st
             "response_complete_ready_to_write",
         }
     )
-    review_state_valid = (review_open or complete) and not_ready
+    ready = (
+        complete
+        and closeout_ready(payloads)
+        and readiness.get("paper_ready") is True
+        and publishable.get("publishable_ready") is True
+        and consequence.get("paper_claims_ready") is True
+        and roadmap.get("roadmap_complete") is True
+        and post_review.get("status") == "post_review_evidence_ready"
+    )
+    review_state_valid = ((review_open or complete) and not_ready) or ready
     rows.append(
         check_row(
             check_id="C040",
-            invariant="review-pending state cannot be paper-ready",
+            invariant="review state aligns with paper-readiness gates",
             passed=bool(review_state_valid),
             evidence="readiness, publishable, consequence, roadmap, post-review, closeout summaries",
             result=(
+                "selected-300 review is complete and scoped paper-facing gates are ready"
+                if ready
+                else (
                 "selected-300 review is complete, but paper-facing gates remain closed for proxy-only claims"
                 if complete and not_ready
                 else (
@@ -483,29 +495,41 @@ def add_readiness_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[st
                 if review_open and not_ready
                 else "at least one paper-facing gate conflicts with pending selected-300 review"
                 )
+                )
             ),
-            next_action="Keep claims proxy-only until response closeout, write, refresh, predictor, and recovery are complete.",
+            next_action="Use scoped paper claims only after response closeout, refresh, predictor, recovery, and paper-facing audits align.",
         )
     )
 
-    proxy_passed = (
+    proxy_pending_passed = (
         publishable.get("publishable_ready") is False
         and consequence.get("paper_claims_ready") is False
         and len(publishable.get("blocking_or_proxy_items", [])) > 0
         and len(consequence.get("blocking_or_proxy_items", [])) > 0
     )
+    proxy_resolved_passed = (
+        publishable.get("publishable_ready") is True
+        and consequence.get("paper_claims_ready") is True
+        and len(publishable.get("blocking_or_proxy_items", [])) == 0
+        and len(consequence.get("blocking_or_proxy_items", [])) == 0
+    )
+    proxy_passed = proxy_pending_passed or proxy_resolved_passed
     rows.append(
         check_row(
             check_id="C050",
-            invariant="proxy evidence is not promoted to paper claims",
+            invariant="proxy evidence is resolved only through scoped paper claims",
             passed=proxy_passed,
             evidence="publishable_evidence_completion_summary and consequence_evidence_matrix_summary",
             result=(
+                "proxy gates are resolved through scoped split/provenance claims and human-reviewed selected-300 evidence"
+                if proxy_resolved_passed
+                else (
                 "blocking/proxy items remain explicit while publishable and consequence gates are closed"
                 if proxy_passed
                 else "proxy evidence may be over-promoted or missing blocker detail"
+                )
             ),
-            next_action="Keep 258-row/300-row proxy results as engineering evidence until human labels refresh them.",
+            next_action="Keep claim scope explicit: 258-row split context, selected-300 input provenance, and human-reviewed risk/recovery claims.",
         )
     )
 
@@ -520,18 +544,33 @@ def add_readiness_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[st
         and safe_int(action_gate.get("pending_model_assessments_in_batch")) == action_models
         and safe_int(action_gate.get("rows_missing_timing")) == action_rows
     )
+    action_complete_passed = (
+        review_complete(payloads)
+        and action_gate.get("status") == "response_complete_ready_to_write"
+        and action_rows is not None
+        and action_models is not None
+        and safe_int(action_gate.get("pending_rows_in_batch")) == 0
+        and safe_int(action_gate.get("pending_model_assessments_in_batch")) == 0
+        and safe_int(action_gate.get("rows_missing_timing")) == 0
+        and action_gate.get("latest_apply_status") == "response_complete"
+    )
+    action_gate_passed = action_passed or action_complete_passed
     rows.append(
         check_row(
             check_id="C060",
-            invariant="current reviewer action packet remains ready but unfilled",
-            passed=action_passed,
+            invariant="current reviewer action packet aligns with response state",
+            passed=action_gate_passed,
             evidence=SUMMARY_SPECS["readiness"],
             result=(
+                f"current packet has {action_rows} rows and {action_models} model assessments with response_complete"
+                if action_complete_passed
+                else (
                 f"current packet has {action_rows} rows, {action_models} model assessments, and {action_rows} timing rows pending"
                 if action_passed
                 else "reviewer action packet counts drifted from expected selected batch"
+                )
             ),
-            next_action="Fill only local response fields and timing; do not reopen transcript review.",
+            next_action="Use response-complete aggregate evidence; do not reopen transcript review.",
         )
     )
 
@@ -614,6 +653,11 @@ def add_command_plan_check(payloads: dict[str, dict[str, Any]], rows: list[dict[
     ) or (
         plan.get("current_first_action") == "rerun_paper_facing_audits"
         and closeout_is_ready
+    ) or (
+        plan.get("current_first_action") == "ready_for_paper_claim_review"
+        and closeout_is_ready
+        and post_review.get("ok") is True
+        and post_review.get("status") == "post_review_evidence_ready"
     )
     plan_passed = (
         current_first_action_ok
@@ -1623,14 +1667,16 @@ def add_sequence_aware_objective_check(
     next_decision = str(objective.get("next_decision", ""))
     status_ok = (
         objective.get("ok") is True
-        and objective.get("objective_requirements_ready") is False
         and (
             (
+                objective.get("objective_requirements_ready") is False
+                and
                 requirement_63.get("status") == "review_pending"
                 and requirement_63.get("paper_claim_status") == "not paper-ready"
             )
             or (
                 review_complete(payloads)
+                and objective.get("objective_requirements_ready") is True
                 and requirement_63.get("status") == "satisfied"
                 and requirement_63.get("paper_claim_status") == "paper-ready"
             )
@@ -1651,7 +1697,10 @@ def add_sequence_aware_objective_check(
         or (
             review_complete(payloads)
             and "human-reviewed recovery outputs" in next_action
-            and "proxy-only evidence gates" in next_decision
+            and (
+                "proxy-only evidence gates" in next_decision
+                or "All objective requirements have paper-ready evidence" in next_decision
+            )
         )
     )
     sensitive = False

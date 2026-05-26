@@ -413,8 +413,12 @@ def build_post_review_checklist(
         ),
         "checklist": rows,
         "paper_ready_impact": (
-            "No paper-readiness change. This checklist records the gates that must pass "
-            "after reviewer response write/refresh before proxy claims can be promoted."
+            "Post-review evidence is paper-ready under scoped claims."
+            if all_ready
+            else (
+                "No paper-readiness change. This checklist records the gates that must pass "
+                "after reviewer response write/refresh before proxy claims can be promoted."
+            )
         ),
         "next_concrete_action": (
             "Complete the response closeout gate first: fill row/model/timing "
@@ -422,7 +426,11 @@ def build_post_review_checklist(
             "--require-complete --require-timing, then write/refresh and "
             "rerun this checklist."
             if not closeout_ready
-            else "Run post-write refresh and paper-facing audits until every gate is ready."
+            else (
+                "Use scoped paper claims backed by reviewed selected-300 predictor/recovery evidence."
+                if all_ready
+                else "Run post-write refresh and paper-facing audits until every gate is ready."
+            )
         ),
         "tracked_outputs": {
             "summary": repo_relative(run_dir / POST_REVIEW_SUMMARY_NAME, repo_root=repo_root),
