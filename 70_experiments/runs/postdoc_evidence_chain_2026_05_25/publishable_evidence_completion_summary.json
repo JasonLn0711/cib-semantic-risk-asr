@@ -2,8 +2,8 @@
   "ok": true,
   "publishable_ready": false,
   "status_counts": {
-    "completed": 5,
-    "proxy_completed": 2
+    "completed": 6,
+    "proxy_completed": 1
   },
   "objective_requirements_ready": false,
   "paper_claim_status_ready": false,
@@ -12,10 +12,10 @@
     "ok": true,
     "paper_claims_ready": false,
     "status_counts": {
-      "completed": 2,
-      "proxy_completed": 5
+      "completed": 5,
+      "proxy_completed": 2
     },
-    "blocking_or_proxy_items": 5,
+    "blocking_or_proxy_items": 2,
     "evidence": "70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json"
   },
   "reviewer_action_gate": {
@@ -31,7 +31,7 @@
     "latest_apply_status": "response_pending"
   },
   "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
-  "remaining_review_scope": "Remaining selected-300 review work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
+  "remaining_review_scope": "Selected-300 row/model/timing review and human-reviewed recovery are complete; remaining work is proxy-to-paper claim resolution.",
   "completion_rows": [
     {
       "objective_id": "0",
@@ -77,11 +77,11 @@
       "objective_id": "4",
       "objective": "canonical janus_165_v1 258-row test split comparison",
       "status": "proxy_completed",
-      "paper_claim_status": "proxy evidence; not human-reviewed risk-atom evidence",
+      "paper_claim_status": "proxy split evidence awaiting reviewed risk-atom upgrade",
       "evidence": "janus_258_test_split_asr_cds_proxy summary and comparison TSV",
       "result": "Six-model 258-row aggregate includes paper-facing zh metrics and decision-risk proxy fields.",
       "blocking_dependency": "human-reviewed risk-atom and decision-change fields before paper-grade risk claims",
-      "next_action": "Do not convert proxy risk-atom counts into formal human-reviewed conclusions."
+      "next_action": "Use the split aggregate for model-comparison context and route paper-grade risk conclusions through reviewed labels."
     },
     {
       "objective_id": "5",
@@ -96,12 +96,12 @@
     {
       "objective_id": "6",
       "objective": "five-condition recovery experiment",
-      "status": "proxy_completed",
-      "paper_claim_status": "proxy engineering evidence until human labels confirm outcomes",
-      "evidence": "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
-      "result": "Recovery proxy shows CEIS action reduces high-risk missed and critical miss.",
-      "blocking_dependency": "human-reviewed risk/decision labels and post-review recovery re-evaluation",
-      "next_action": "After selected-300 risk/decision review, rerun recovery using reviewed labels before paper-grade intervention claims."
+      "status": "completed",
+      "paper_claim_status": "human-reviewed recovery evidence",
+      "evidence": "janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json",
+      "result": "Human-reviewed recovery compares five policies over 90 model samples: no recovery has 6 high-risk missed and 1 critical miss; CEIS action has 0 high-risk missed and 0 critical miss; ensemble abstains 18 times.",
+      "blocking_dependency": "",
+      "next_action": "Use the aggregate human-reviewed recovery outputs for recovery-specific claims."
     }
   ],
   "blocking_or_proxy_items": [
@@ -110,17 +110,10 @@
       "objective": "canonical janus_165_v1 258-row test split comparison",
       "status": "proxy_completed",
       "blocking_dependency": "human-reviewed risk-atom and decision-change fields before paper-grade risk claims",
-      "next_action": "Do not convert proxy risk-atom counts into formal human-reviewed conclusions."
-    },
-    {
-      "objective_id": "6",
-      "objective": "five-condition recovery experiment",
-      "status": "proxy_completed",
-      "blocking_dependency": "human-reviewed risk/decision labels and post-review recovery re-evaluation",
-      "next_action": "After selected-300 risk/decision review, rerun recovery using reviewed labels before paper-grade intervention claims."
+      "next_action": "Use the split aggregate for model-comparison context and route paper-grade risk conclusions through reviewed labels."
     }
   ],
-  "first_principle_decision": "Do not spend more GPU time to chase ASR fine-tuning until the selected-300 risk-atom and model-assessment audit converts proxy CDS-ASR evidence into paper-grade evidence; do not duplicate transcript review.",
-  "next_decision": "Complete selected-300 risk-atom, decision-change, per-model assessment, and per-row timing fields, run the strict response gate with --require-complete --require-timing, then rerun human-reviewed predictor and recovery claims.",
-  "runtime_seconds": 0.0001
+  "first_principle_decision": "Prioritize consequence-centric paper evidence over additional ASR fine-tuning. Human-reviewed selected-300 and recovery outputs can support their scoped claims; remaining proxy gates stay labeled until their claim-evidence layer is upgraded.",
+  "next_decision": "Use completed human-reviewed selected-300 and recovery outputs for their scoped claims, then resolve the remaining proxy-only split and predictor evidence gates before declaring publishable readiness.",
+  "runtime_seconds": 0.0035
 }

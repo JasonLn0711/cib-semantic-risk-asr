@@ -25,11 +25,11 @@
     },
     {
       "check_id": "C020",
-      "invariant": "remaining selected-300 review scope includes row/model/timing fields",
+      "invariant": "remaining selected-300 review scope matches review state",
       "status": "pass",
       "evidence": "remaining_review_scope fields across aggregate summaries",
-      "result": "all summaries name risk, decision, expected action, confidence, per-model fields, and per-row timing",
-      "next_action": "Rerun the stale aggregate generator and do not proceed to write/refresh while scope is inconsistent."
+      "result": "all summaries record completed review scope and proxy-to-paper claim resolution",
+      "next_action": "Rerun stale aggregate generators until scope text matches the current review state."
     },
     {
       "check_id": "C030",
@@ -217,5 +217,5 @@
     }
   ],
   "next_decision": "If this audit is pass, selected-300 human-review records are internally consistent; resolve remaining proxy-only paper-claim gates before declaring publishable readiness.",
-  "runtime_seconds": 0.0018
+  "runtime_seconds": 0.0046
 }

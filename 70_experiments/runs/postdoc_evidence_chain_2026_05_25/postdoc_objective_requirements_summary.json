@@ -3,13 +3,13 @@
   "objective_requirements_ready": false,
   "publishable_ready": false,
   "status_counts": {
-    "satisfied": 10,
-    "proxy_satisfied": 5
+    "satisfied": 13,
+    "proxy_satisfied": 2
   },
   "reference_transcript_policy": "Reference transcripts are already human-reviewed for WER/CER scoring; this audit does not reopen transcript review.",
   "remaining_review_scope": "Selected-300 row/model/timing review and human-reviewed recovery are complete; remaining work is proxy-to-paper claim resolution.",
   "requirements_total": 15,
-  "proxy_requirement_count": 5,
+  "proxy_requirement_count": 2,
   "blocking_requirement_count": 0,
   "requirement_rows": [
     {
@@ -94,11 +94,11 @@
       "objective_step": "4",
       "requirement": "canonical 258-row comparison includes six required models and decision-risk columns",
       "status": "proxy_satisfied",
-      "paper_claim_status": "proxy evidence; not human-reviewed risk evidence",
+      "paper_claim_status": "proxy split evidence awaiting reviewed risk upgrade",
       "evidence": "janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv",
       "result": "6/6 required runs present; missing_runs=[]; missing_columns=[]; row_counts_ok=True",
       "blocking_dependency": "human-reviewed risk and decision labels before paper-grade risk claims",
-      "next_action": "Keep 258-row risk fields marked proxy unless reviewed labels are added."
+      "next_action": "Use 258-row risk fields as aggregate split context and upgrade paper-grade risk claims through reviewed labels."
     },
     {
       "requirement_id": "4.2",
@@ -120,18 +120,18 @@
       "evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json",
       "result": "split=high_stakes_300; review_mode=proxy; references=300; model_samples=900",
       "blocking_dependency": "human-reviewed risk and decision fields before paper-grade claims",
-      "next_action": "Use proxy outputs to select review rows, not as final human-reviewed evidence."
+      "next_action": "Keep this as selected-300 input provenance; paper claims use the completed human-reviewed predictor and recovery outputs."
     },
     {
       "requirement_id": "5.2",
       "objective_step": "5",
       "requirement": "selected-300 predictor analysis compares WER/CER/SRES/CEIS and low-WER danger cases",
-      "status": "proxy_satisfied",
-      "paper_claim_status": "proxy evidence",
-      "evidence": "janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json",
-      "result": "model_samples=900; predictor_targets=['critical_miss', 'danger_event', 'high_risk_missed', 'label_flip', 'over_escalation', 'unsafe_downrouting']; low_wer_rows_recorded=4",
-      "blocking_dependency": "human-reviewed labels before formal predictor claims",
-      "next_action": "Rerun predictor analysis after selected-300 review is written and refreshed."
+      "status": "satisfied",
+      "paper_claim_status": "human-reviewed predictor evidence",
+      "evidence": "human_audit_predictor_summary.json; human_audit_predictor_comparison.tsv",
+      "result": "reviewed_model_assessments=90; WER_AUC=0.6964; CER_AUC=0.7276; SRES_AUC=0.8995; CEIS_AUC=0.9117",
+      "blocking_dependency": "",
+      "next_action": "Use this aggregate human-reviewed predictor comparison for predictor-specific claims."
     },
     {
       "requirement_id": "5.3",
@@ -148,23 +148,23 @@
       "requirement_id": "6.1",
       "objective_step": "6",
       "requirement": "recovery experiment contains all five required policy conditions and safety metrics",
-      "status": "proxy_satisfied",
-      "paper_claim_status": "proxy engineering evidence",
-      "evidence": "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+      "status": "satisfied",
+      "paper_claim_status": "human-reviewed recovery evidence",
+      "evidence": "janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json",
       "result": "5/5 policies present; missing_policies=[]; missing_metrics={}",
-      "blocking_dependency": "human-reviewed labels before intervention claims",
-      "next_action": "Keep this as proxy until selected-300 reviewed labels are available."
+      "blocking_dependency": "",
+      "next_action": "Use this aggregate human-reviewed recovery evidence for recovery-specific claims."
     },
     {
       "requirement_id": "6.2",
       "objective_step": "6",
-      "requirement": "proxy recovery result demonstrates reduced dangerous decisions",
-      "status": "proxy_satisfied",
-      "paper_claim_status": "proxy engineering evidence",
-      "evidence": "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
+      "requirement": "recovery result demonstrates reduced dangerous decisions",
+      "status": "satisfied",
+      "paper_claim_status": "human-reviewed recovery evidence",
+      "evidence": "janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json",
       "result": "unsafe_gain=0.1724; high_risk_gain=1.0; critical_miss=1->0",
-      "blocking_dependency": "human-reviewed recovery rerun before paper-grade intervention claim",
-      "next_action": "Rerun recovery after human review and compare safety tradeoffs again."
+      "blocking_dependency": "",
+      "next_action": "Use the human-reviewed recovery comparison for intervention-safety claims."
     },
     {
       "requirement_id": "6.3",
@@ -184,11 +184,11 @@
       "objective_step": "4",
       "requirement": "canonical 258-row comparison includes six required models and decision-risk columns",
       "status": "proxy_satisfied",
-      "paper_claim_status": "proxy evidence; not human-reviewed risk evidence",
+      "paper_claim_status": "proxy split evidence awaiting reviewed risk upgrade",
       "evidence": "janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv",
       "result": "6/6 required runs present; missing_runs=[]; missing_columns=[]; row_counts_ok=True",
       "blocking_dependency": "human-reviewed risk and decision labels before paper-grade risk claims",
-      "next_action": "Keep 258-row risk fields marked proxy unless reviewed labels are added."
+      "next_action": "Use 258-row risk fields as aggregate split context and upgrade paper-grade risk claims through reviewed labels."
     },
     {
       "requirement_id": "5.1",
@@ -199,42 +199,9 @@
       "evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json",
       "result": "split=high_stakes_300; review_mode=proxy; references=300; model_samples=900",
       "blocking_dependency": "human-reviewed risk and decision fields before paper-grade claims",
-      "next_action": "Use proxy outputs to select review rows, not as final human-reviewed evidence."
-    },
-    {
-      "requirement_id": "5.2",
-      "objective_step": "5",
-      "requirement": "selected-300 predictor analysis compares WER/CER/SRES/CEIS and low-WER danger cases",
-      "status": "proxy_satisfied",
-      "paper_claim_status": "proxy evidence",
-      "evidence": "janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json",
-      "result": "model_samples=900; predictor_targets=['critical_miss', 'danger_event', 'high_risk_missed', 'label_flip', 'over_escalation', 'unsafe_downrouting']; low_wer_rows_recorded=4",
-      "blocking_dependency": "human-reviewed labels before formal predictor claims",
-      "next_action": "Rerun predictor analysis after selected-300 review is written and refreshed."
-    },
-    {
-      "requirement_id": "6.1",
-      "objective_step": "6",
-      "requirement": "recovery experiment contains all five required policy conditions and safety metrics",
-      "status": "proxy_satisfied",
-      "paper_claim_status": "proxy engineering evidence",
-      "evidence": "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
-      "result": "5/5 policies present; missing_policies=[]; missing_metrics={}",
-      "blocking_dependency": "human-reviewed labels before intervention claims",
-      "next_action": "Keep this as proxy until selected-300 reviewed labels are available."
-    },
-    {
-      "requirement_id": "6.2",
-      "objective_step": "6",
-      "requirement": "proxy recovery result demonstrates reduced dangerous decisions",
-      "status": "proxy_satisfied",
-      "paper_claim_status": "proxy engineering evidence",
-      "evidence": "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
-      "result": "unsafe_gain=0.1724; high_risk_gain=1.0; critical_miss=1->0",
-      "blocking_dependency": "human-reviewed recovery rerun before paper-grade intervention claim",
-      "next_action": "Rerun recovery after human review and compare safety tradeoffs again."
+      "next_action": "Keep this as selected-300 input provenance; paper claims use the completed human-reviewed predictor and recovery outputs."
     }
   ],
   "next_decision": "Do not declare the postdoc objective complete. Selected-300 human review and human-reviewed recovery are complete; resolve the remaining proxy-only evidence gates before paper-ready claims.",
-  "runtime_seconds": 0.0007
+  "runtime_seconds": 0.0012
 }

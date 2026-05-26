@@ -1,26 +1,32 @@
 {
-  "version": "v2.5.221",
+  "version": "v2.5.222",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 221
+    "patch": 222
   },
-  "updated_at": "2026-05-26T11:34:32+08:00",
+  "updated_at": "2026-05-26T11:34:57+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "17fe114",
+  "base_commit": "bb7c96d",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py",
-    "80_semantic_risk_asr/scoring/audit_postdoc_objective_requirements.py",
-    "80_semantic_risk_asr/scoring/audit_postdoc_roadmap_completion.py",
-    "80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py",
-    "80_semantic_risk_asr/scoring/build_consequence_evidence_matrix.py",
-    "80_semantic_risk_asr/scoring/check_evidence_chain_readiness.py"
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion.tsv",
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json"
   ]
 }

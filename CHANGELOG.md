@@ -5,6 +5,27 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.222 - 2026-05-26T11:34:57+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `bb7c96d`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix_summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_objective_requirements_summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json`
+
 ## v2.5.221 - 2026-05-26T11:34:32+08:00
 
 - Bump: `patch`

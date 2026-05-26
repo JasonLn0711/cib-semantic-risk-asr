@@ -2,11 +2,11 @@
   "ok": true,
   "paper_ready": false,
   "status_counts": {
-    "completed": 6,
-    "proxy_completed": 4
+    "completed": 8,
+    "proxy_completed": 2
   },
   "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
-  "remaining_review_scope": "Remaining selected-300 review work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
+  "remaining_review_scope": "Selected-300 row/model/timing review and human-reviewed recovery are complete; remaining work is proxy-to-paper claim resolution.",
   "reviewer_action_gate": {
     "available": true,
     "ok": true,
@@ -61,10 +61,10 @@
       "phase": "4",
       "requirement": "canonical 258-row six-model comparison with decision-risk metrics",
       "status": "proxy_completed",
-      "paper_claim_status": "proxy evidence; not human-reviewed risk-atom evidence",
+      "paper_claim_status": "proxy split evidence awaiting reviewed risk-atom upgrade",
       "evidence": "janus_258_test_split_asr_cds_proxy summary and comparison TSV",
       "result": "Six-model 258-row comparison includes CER/WER plus risk-atom and unsafe-decision metrics",
-      "next_action": "Do not convert proxy risk-atom counts into paper-grade human claims."
+      "next_action": "Use these aggregate split results as model-comparison evidence and route paper-grade risk claims through reviewed risk/decision labels."
     },
     {
       "phase": "metric_policy",
@@ -79,28 +79,28 @@
       "phase": "5",
       "requirement": "selected-300 high-stakes CDS-ASR main experiment proxy",
       "status": "proxy_completed",
-      "paper_claim_status": "proxy evidence until human audit passes",
+      "paper_claim_status": "proxy input layer paired with completed human-reviewed outputs",
       "evidence": "janus_300_high_stakes_cds_proxy_2026_05_25/summary.json",
       "result": "Selected-300 proxy main experiment has 300 references, 900 model-samples, and CEIS instability",
-      "next_action": "Complete selected-300 human risk-atom audit before paper-grade main claims."
+      "next_action": "Keep this as input provenance; paper-grade claims use the completed human-reviewed predictor and recovery outputs."
     },
     {
       "phase": "5",
       "requirement": "WER/CER/SRES/CEIS predictor comparison on selected-300",
-      "status": "proxy_completed",
-      "paper_claim_status": "proxy evidence until model-level human labels exist",
-      "evidence": "janus_300_high_stakes_metric_predictor_proxy_2026_05_25/metric_predictor_summary.json",
-      "result": "Proxy predictor analysis ranks CEIS as best unsafe-downrouting predictor over 900 samples",
-      "next_action": "Rerun predictor gate after model-level human review is complete."
+      "status": "completed",
+      "paper_claim_status": "human-reviewed predictor evidence",
+      "evidence": "human_audit_predictor_summary.json; human_audit_predictor_comparison.tsv",
+      "result": "Human-reviewed predictor comparison over 90 model assessments: WER AUC 0.6964, CER AUC 0.7276, SRES AUC 0.8995, CEIS AUC 0.9117.",
+      "next_action": "Use aggregate human-reviewed predictor outputs for predictor-specific claims."
     },
     {
       "phase": "6",
       "requirement": "five-condition recovery experiment",
-      "status": "proxy_completed",
-      "paper_claim_status": "proxy engineering evidence until human audit confirms labels",
-      "evidence": "janus_300_high_stakes_recovery_proxy_2026_05_25/summary.json",
-      "result": "Five-condition proxy recovery gate reduces high-risk missed and critical miss under CEIS action",
-      "next_action": "Re-evaluate recovery after human-reviewed labels replace proxy labels."
+      "status": "completed",
+      "paper_claim_status": "human-reviewed recovery evidence",
+      "evidence": "janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json",
+      "result": "Five-condition human-reviewed recovery gate reduces high-risk missed and critical miss under CEIS action",
+      "next_action": "Use aggregate human-reviewed recovery outputs for recovery-specific claims."
     },
     {
       "phase": "5",
@@ -117,24 +117,14 @@
     {
       "phase": "4",
       "requirement": "canonical 258-row six-model comparison with decision-risk metrics",
-      "next_action": "Do not convert proxy risk-atom counts into paper-grade human claims."
+      "next_action": "Use these aggregate split results as model-comparison evidence and route paper-grade risk claims through reviewed risk/decision labels."
     },
     {
       "phase": "5",
       "requirement": "selected-300 high-stakes CDS-ASR main experiment proxy",
-      "next_action": "Complete selected-300 human risk-atom audit before paper-grade main claims."
-    },
-    {
-      "phase": "5",
-      "requirement": "WER/CER/SRES/CEIS predictor comparison on selected-300",
-      "next_action": "Rerun predictor gate after model-level human review is complete."
-    },
-    {
-      "phase": "6",
-      "requirement": "five-condition recovery experiment",
-      "next_action": "Re-evaluate recovery after human-reviewed labels replace proxy labels."
+      "next_action": "Keep this as input provenance; paper-grade claims use the completed human-reviewed predictor and recovery outputs."
     }
   ],
-  "next_decision": "Complete the selected-300 risk-atom, decision-change, per-model assessment, and per-row timing fields, then rerun the strict response closeout with --require-complete --require-timing, aggregate summarizer, human-reviewed predictor gate, and recovery analysis before making paper-grade CDS-ASR claims.",
-  "runtime_seconds": 0.0007
+  "next_decision": "Use completed human-reviewed selected-300 and recovery evidence for their scoped claims, then upgrade or explicitly bound the remaining proxy-only gates before declaring paper-ready CDS-ASR claims.",
+  "runtime_seconds": 0.0034
 }
