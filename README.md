@@ -133,12 +133,12 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   current aggregate output under
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/`. Current status:
   `ok=true`, `paper_ready=false`, because the selected-300 human risk-atom
-  audit remains incomplete: `12/30` risk/decision row reviews and `36/90`
-  model assessments are reviewed, with `18/30` rows and `54/90` model
+  audit remains incomplete: `26/30` risk/decision row reviews and `78/90`
+  model assessments are reviewed, with `4/30` rows and `12/90` model
   assessments still pending. Transcript ground truth is already accepted for WER/CER scoring
   and is not the pending gate. The readiness summary now also reports the
   current reviewer action gate: `reviewer_action_ready` for
-  `high_proxy_risk`, with `6/6` packet rows and `18/18` model
+  `clean_control`, with `4/4` packet rows and `12/12` model
   assessments still pending in the ignored local response TSV. The selected-300
   validator and response-apply path now enforce decision consistency: a
   decision-change `yes` needs at least one critical atom and a non-`none` safe
@@ -151,17 +151,17 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `response_gap_summary_by_row`, a row-number-only gap map that lists missing
   row fields, model-assessment gaps, and timing gaps without audio IDs,
   transcript text, hypotheses, or reviewer notes. The current packet reports
-  `6/6` rows with gaps, `48` row fields missing, `18` model assessments
-  missing, and `72` model-assessment fields missing. The closeout command now
+  `4/4` rows with gaps, `32` row fields missing, `12` model assessments
+  missing, and `48` model-assessment fields missing. The closeout command now
   also writes `human_audit_response_gap_checklist.tsv` as the tracked
   row-number-only TSV checklist for the same gaps, with per-row timing
   start/finish helper commands copied from the fresh reviewer handoff. It also
   writes `human_audit_response_action_items.tsv`, a field-level action list for
-  the current packet: `126` pending items, split into `48` row-field items,
-  `72` model-field items, and `6` timing items. The normal refresh path now
+  the current packet: `84` pending items, split into `32` row-field items,
+  `48` model-field items, and `4` timing items. The normal refresh path now
   also writes `human_audit_review_work_order.tsv` and
   `human_audit_review_work_order_summary.json`, an aggregate-only row-by-row
-  reviewer work order with `33` steps for the current `6` packet rows: start
+  reviewer work order with `23` steps for the current `4` packet rows: start
   timing, open the local row, fill row fields, fill model fields, finish
   timing, then run strict dry-run, closeout, and the post-review sequence
   runner. The sequence runner is the only packet-level route after closeout; it
@@ -204,7 +204,7 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   expanded ASR/Gemma candidates remain behind locale/runtime gates. It also
   checks that post-review recovery is rerun strictly, without the
   pending-summary allowance, that timing helper commands cover current packet
-  rows `7-12`, and that the response gap TSV carries the same per-row timing
+  rows `23-26`, and that the response gap TSV carries the same per-row timing
   helper commands before objective completion can be claimed. Check `C069`
   additionally requires the action-items TSV to match the closeout gap counts
   before local review is routed from tracked records. Check `C071` requires the
@@ -244,8 +244,8 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   The local response timing helper
   `80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py` now
   supports dry-run or write-mode updates to the ignored response TSV timing
-  columns. Current live dry-run proves row `7` timing can be proposed without
-  modifying the local response file; closeout still reports `0/6` timing rows
+  columns. Current live dry-run proves row `19` timing can be proposed without
+  modifying the local response file; closeout still reports `0/4` timing rows
   filled until a reviewer actually writes timing during review.
   The post-review evidence checklist
   `80_semantic_risk_asr/annotation/build_post_review_evidence_checklist.py`
@@ -262,7 +262,7 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `80_semantic_risk_asr/scoring/audit_publishable_evidence_chain.py`; its
   current output records `publishable_ready=false` with objective `5`
   `review_pending`, objectives `4`/`6` still proxy-only, and the same reviewer
-  action gate surfaced as the next execution state, including `6/6` timing rows
+  action gate surfaced as the next execution state, including `4/4` timing rows
   still pending for the current packet.
   The explicit original-objective requirements audit
   `80_semantic_risk_asr/scoring/audit_postdoc_objective_requirements.py`
@@ -326,19 +326,19 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   `--show-row` output is transcript-bearing and must stay local-only. The next
   local review batch is prepared by
   `80_semantic_risk_asr/annotation/prepare_human_audit_review_batch.py`; current
-  tracked batch records point to the ignored `high_proxy_risk`
-  packet for rows `13-18` and `18` model assessments. Current batch completion is
+  tracked batch records point to the ignored `clean_control`
+  packet for rows `23-26` and `12` model assessments. Current batch completion is
   audited by
   `80_semantic_risk_asr/annotation/audit_human_review_batch_status.py` and
-  remains `batch_pending`: `0/6` rows and `0/18` model assessments reviewed
+  remains `batch_pending`: `0/4` rows and `0/12` model assessments reviewed
   for the current packet.
   A local-only reviewer handoff package for this packet was prepared at
-  `/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch3_high_proxy_risk`
+  `/home/jnln3799/Downloads/cib_asr_human_review_packet_2026-05-26_batch6_clean_control`
   and zipped beside it; the package includes transcript-bearing material and
   must not be committed.
   Local TSV response entry is handled by
   `80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py`; the
-  current ignored response template has `18` rows and its blank dry-run status
+  current ignored response template has `12` rows and its blank dry-run status
   is `response_pending`. The template now has optional review-timing columns,
   and the tracked apply summary records aggregate timing coverage without
   exposing row content. The response workflow also appends a repo-safe apply
@@ -358,7 +358,7 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   re-reviewed for WER/CER. The aggregate reviewer action checklist is generated by
   `80_semantic_risk_asr/annotation/build_human_audit_reviewer_action_checklist.py`;
   current checklist status is `reviewer_action_ready` with
-  `rubric_status=rubric_ready`, `6/6` packet rows, and `18/18` model
+  `rubric_status=rubric_ready`, `4/4` packet rows, and `12/12` model
   assessments still pending in the ignored local response TSV. The normal
   reviewer-session start command is
   `80_semantic_risk_asr/annotation/start_human_audit_review_session.py`; current
@@ -369,8 +369,8 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   strict dry-run records `session_start_gate.ok=true` and still fails only
   because reviewer response content is incomplete. Response closeout is tracked
   by `80_semantic_risk_asr/annotation/build_human_audit_response_closeout_checklist.py`;
-  current closeout status is `response_closeout_blocked` because `0/6` row
-  decisions and `0/18` model assessments are filled; the closeout summary now
+  current closeout status is `response_closeout_blocked` because `0/4` row
+  decisions and `0/12` model assessments are filled; the closeout summary now
   names the per-row aggregate gaps by row number only.
   The strict
   `--require-complete` dry-run currently
@@ -387,11 +387,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   human-reviewed predictor outputs, the evidence-chain readiness gate, and the
   objective-level publishable completion audit, and the roadmap completion
   audit in one recorded pass. Current refresh status is still
-  `partial_review`: `12/30` risk/decision row reviews and `36/90` model
+  `partial_review`: `26/30` risk/decision row reviews and `78/90` model
   assessments reviewed; `paper_ready=false`, `publishable_ready=false`, and
   `roadmap_complete=false`. The progress audit recommends six batches,
-  starting with `critical_or_high_risk_missed`, `unsafe_downrouting`, and
-  `high_proxy_risk`.
+  with the first five batches complete and `clean_control` active.
   Batch-by-batch `partial_review` is treated as in-progress evidence, not as
   missing evidence.
 - The roadmap-level completion audit
