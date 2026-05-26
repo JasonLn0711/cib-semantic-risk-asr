@@ -1,5 +1,2 @@
 batch_order	selection_stratum	pending_rows	pending_model_assessments	primary_reason	completion_gate
-3	high_proxy_risk	6	18	checks whether proxy SRES/CEIS risk is human-confirmed	row fields plus all model-level assessments for rows in this stratum
-4	model_disagreement	4	12	supports model-comparison claims without relying on row-level labels alone	row fields plus all model-level assessments for rows in this stratum
-5	risk_score_fill	4	12	fills residual high-score evidence coverage	row fields plus all model-level assessments for rows in this stratum
 6	clean_control	4	12	provides negative/control rows for reviewer calibration	row fields plus all model-level assessments for rows in this stratum

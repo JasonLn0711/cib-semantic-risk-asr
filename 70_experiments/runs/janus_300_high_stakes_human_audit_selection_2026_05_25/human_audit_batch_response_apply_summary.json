@@ -8,21 +8,19 @@
   "output_boundary": "aggregate-only apply status; no private row keys or transcript text",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
-  "selection_stratum": "high_proxy_risk",
+  "selection_stratum": "clean_control",
   "row_numbers": [
-    13,
-    14,
-    15,
-    16,
-    17,
-    18
+    23,
+    24,
+    25,
+    26
   ],
-  "rows_in_batch": 6,
+  "rows_in_batch": 4,
   "reviewed_rows_in_response": 0,
-  "pending_rows_in_response": 6,
-  "model_assessments_in_response": 18,
+  "pending_rows_in_response": 4,
+  "model_assessments_in_response": 12,
   "reviewed_model_assessments_in_response": 0,
-  "pending_model_assessments_in_response": 18,
+  "pending_model_assessments_in_response": 12,
   "review_timing": {
     "timing_scope": "per selected audio row; values come from local response TSV timing columns",
     "timing_requirement": "required",
@@ -32,25 +30,25 @@
       "review_elapsed_seconds"
     ],
     "rows_with_timing": 0,
-    "rows_missing_timing": 6,
+    "rows_missing_timing": 4,
     "total_review_elapsed_seconds": 0,
     "mean_review_elapsed_seconds": "",
     "min_review_elapsed_seconds": "",
     "max_review_elapsed_seconds": ""
   },
   "response_gap_overview": {
-    "rows_reported": 6,
-    "rows_with_any_gap": 6,
-    "rows_with_row_field_gaps": 6,
-    "rows_with_model_assessment_gaps": 6,
-    "rows_with_timing_gaps": 6,
-    "total_row_fields_missing": 48,
-    "total_model_assessments_missing": 18,
-    "total_model_fields_missing": 72
+    "rows_reported": 4,
+    "rows_with_any_gap": 4,
+    "rows_with_row_field_gaps": 4,
+    "rows_with_model_assessment_gaps": 4,
+    "rows_with_timing_gaps": 4,
+    "total_row_fields_missing": 32,
+    "total_model_assessments_missing": 12,
+    "total_model_fields_missing": 48
   },
   "response_gap_summary_by_row": [
     {
-      "row_number": 13,
+      "row_number": 23,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -78,7 +76,7 @@
       "review_timing_missing": true
     },
     {
-      "row_number": 14,
+      "row_number": 24,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -106,7 +104,7 @@
       "review_timing_missing": true
     },
     {
-      "row_number": 15,
+      "row_number": 25,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -134,63 +132,7 @@
       "review_timing_missing": true
     },
     {
-      "row_number": 16,
-      "has_gap": true,
-      "row_response_complete": false,
-      "row_fields_missing_count": 8,
-      "missing_row_fields": [
-        "reviewer_semantic_risk_label",
-        "reviewer_risk_atoms",
-        "reviewer_critical_atoms",
-        "reviewer_asr_confusion_terms",
-        "reviewer_would_asr_error_change_decision",
-        "reviewer_decision_change_reason",
-        "reviewer_expected_safe_action",
-        "reviewer_annotation_confidence"
-      ],
-      "model_assessments_expected_count": 3,
-      "model_assessments_complete_count": 0,
-      "model_assessments_missing_count": 3,
-      "model_fields_missing_count": 12,
-      "missing_model_fields": [
-        "model_reviewer_annotation_confidence",
-        "model_reviewer_critical_atoms",
-        "model_reviewer_expected_safe_action",
-        "model_reviewer_would_asr_error_change_decision"
-      ],
-      "review_timing_complete": false,
-      "review_timing_missing": true
-    },
-    {
-      "row_number": 17,
-      "has_gap": true,
-      "row_response_complete": false,
-      "row_fields_missing_count": 8,
-      "missing_row_fields": [
-        "reviewer_semantic_risk_label",
-        "reviewer_risk_atoms",
-        "reviewer_critical_atoms",
-        "reviewer_asr_confusion_terms",
-        "reviewer_would_asr_error_change_decision",
-        "reviewer_decision_change_reason",
-        "reviewer_expected_safe_action",
-        "reviewer_annotation_confidence"
-      ],
-      "model_assessments_expected_count": 3,
-      "model_assessments_complete_count": 0,
-      "model_assessments_missing_count": 3,
-      "model_fields_missing_count": 12,
-      "missing_model_fields": [
-        "model_reviewer_annotation_confidence",
-        "model_reviewer_critical_atoms",
-        "model_reviewer_expected_safe_action",
-        "model_reviewer_would_asr_error_change_decision"
-      ],
-      "review_timing_complete": false,
-      "review_timing_missing": true
-    },
-    {
-      "row_number": 18,
+      "row_number": 26,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -232,11 +174,11 @@
   },
   "error_counts": {
     "incomplete_response": 1,
-    "missing_review_timing": 6
+    "missing_review_timing": 4
   },
   "backup_path": "",
-  "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095000_0800_high_proxy_risk_response_template.tsv",
+  "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv",
   "source_batch_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json",
   "next_action": "Fill all required row and model fields in the response TSV, rerun dry-run with --require-complete and --require-timing, then apply with --write once status is response_complete.",
-  "runtime_seconds": 0.0009
+  "runtime_seconds": 0.0018
 }

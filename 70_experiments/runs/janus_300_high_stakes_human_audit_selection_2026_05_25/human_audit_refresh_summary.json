@@ -7,20 +7,20 @@
   "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "Remaining selected-300 review work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
   "audit_rows": 30,
-  "reviewed_rows": 12,
-  "pending_rows": 18,
+  "reviewed_rows": 26,
+  "pending_rows": 4,
   "model_assessments": 90,
-  "reviewed_model_assessments": 36,
-  "pending_model_assessments": 54,
+  "reviewed_model_assessments": 78,
+  "pending_model_assessments": 12,
   "validation_ok": true,
   "validation_error_counts": {},
   "validation_warning_counts": {
-    "pending_model_review": 54,
-    "pending_row_review": 18
+    "pending_model_review": 12,
+    "pending_row_review": 4
   },
   "review_summary_status": "partial_review",
   "progress_status": "partial_review",
-  "recommended_review_batch_count": 4,
+  "recommended_review_batch_count": 1,
   "predictor_status": "partial_review",
   "readiness_ok": true,
   "readiness_paper_ready": false,
@@ -60,34 +60,34 @@
   "human_recovery_ready": false,
   "review_work_order_status": "review_work_order_ready",
   "review_work_order_overview": {
-    "row_count": 6,
-    "row_work_order_steps": 30,
+    "row_count": 4,
+    "row_work_order_steps": 20,
     "packet_work_order_steps": 3,
-    "total_work_order_steps": 33,
-    "total_action_items": 126,
-    "row_field_action_items": 48,
-    "model_field_action_items": 72,
-    "timing_action_items": 6
+    "total_work_order_steps": 23,
+    "total_action_items": 84,
+    "row_field_action_items": 32,
+    "model_field_action_items": 48,
+    "timing_action_items": 4
   },
   "next_reviewer_operation": {
     "status": "reviewer_operation_ready",
     "current_step": {
-      "work_order_id": "row-13:01-mark-timing-start",
-      "row_number": "13",
+      "work_order_id": "row-23:01-mark-timing-start",
+      "row_number": "23",
       "step_order": "01",
       "step_type": "mark_timing_start",
       "status": "pending",
-      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 13 --mark-start --write",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 23 --mark-start --write",
       "completion_signal": "review_started_at is present for every model row in this selected row",
       "privacy_boundary": "tracked command only; local response TSV remains ignored"
     },
     "next_local_row_step": {
-      "work_order_id": "row-13:02-open-local-row",
-      "row_number": "13",
+      "work_order_id": "row-23:02-open-local-row",
+      "row_number": "23",
       "step_order": "02",
       "step_type": "open_local_row",
       "status": "local_only_required",
-      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --row-number 13 --show-row --access-log 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_local_row_access_log.tsv",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --row-number 23 --show-row --access-log 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_local_row_access_log.tsv",
       "completion_signal": "reviewer has inspected the local row without copying content into git",
       "privacy_boundary": "command output is transcript-bearing and must stay local-only"
     },
@@ -158,6 +158,6 @@
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"
   ],
-  "runtime_seconds": 0.0061,
+  "runtime_seconds": 0.014,
   "next_action": "Complete selected-300 risk-atom, decision-change, expected-action, confidence, per-model assessment, and per-row timing fields, then rerun the session-gated strict dry-run with --require-complete --require-timing before aggregate refresh."
 }

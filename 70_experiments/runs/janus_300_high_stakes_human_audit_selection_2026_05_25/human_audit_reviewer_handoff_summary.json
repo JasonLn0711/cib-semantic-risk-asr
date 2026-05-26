@@ -16,48 +16,46 @@
     "batch_summary": {
       "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json",
       "status": "present",
-      "sha256": "91ec8453c96b124ee5ef3f9734fd9886680304e436d2c61888f6dcc3c994e4f7"
+      "sha256": "654af7ac771b6022d5a216a93990394147c970a10d3ddb2a214d7a44d8d81d87"
     },
     "batch_status": {
       "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_current_review_batch_status_summary.json",
       "status": "present",
-      "sha256": "b756fcba399ede46c28ea8f68ddb01191a83196bd9e72780939a79f022dae383"
+      "sha256": "49f33e72dd8e4a4959a5e31355ebb09efa803435ff8002d9eeb8bb7ffc4a9874"
     },
     "template_summary": {
       "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_template_summary.json",
       "status": "present",
-      "sha256": "131fbba06d701a67ff7e1914ba89a6bd93080d0eb0343537ce312428af43ba7e"
+      "sha256": "6bff782b58247e7a2c1466c9424dce3923581e561b140792aefca25d17f2fab2"
     },
     "apply_summary": {
       "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json",
       "status": "present",
-      "sha256": "fca610ff418e7fb7d6b5905dc8135a4de0c3ed497b775279326dc30da2a6f78d"
+      "sha256": "6cd8b85b3aad9c6f424723bbc70b809bf71e341377099e6ff6c26387f0ee7d6b"
     },
     "apply_log_summary": {
       "path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_log_summary.json",
       "status": "present",
-      "sha256": "86fbe2f8d4d83e03bd9af1da3e7f55f66d5494cc1f5f27ad15e348632a592fa8"
+      "sha256": "155073794783e9777c4b3c12fbfec3af5a210d6dbdb8d7fbbeeccda8039d4690"
     }
   },
   "freshness_status": "fresh",
   "missing_inputs": [],
   "current_packet": {
-    "selection_stratum": "high_proxy_risk",
+    "selection_stratum": "clean_control",
     "row_numbers": [
-      13,
-      14,
-      15,
-      16,
-      17,
-      18
+      23,
+      24,
+      25,
+      26
     ],
-    "rows_in_batch": 6,
-    "model_assessments_in_batch": 18,
-    "local_packet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_batches/2026-05-26T095716_0800_high_proxy_risk.md"
+    "rows_in_batch": 4,
+    "model_assessments_in_batch": 12,
+    "local_packet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_batches/2026-05-26T103335_0800_clean_control.md"
   },
   "current_response": {
-    "local_response_template_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv",
-    "response_rows": 18,
+    "local_response_template_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv",
+    "response_rows": 12,
     "template_column_count": 19,
     "required_timing_fields": [
       "review_started_at",
@@ -77,31 +75,31 @@
     "latest_apply_ok": "False",
     "latest_error_keys": "incomplete_response,missing_review_timing",
     "reviewed_rows_in_batch": 0,
-    "pending_rows_in_batch": 6,
+    "pending_rows_in_batch": 4,
     "reviewed_model_assessments_in_batch": 0,
-    "pending_model_assessments_in_batch": 18,
+    "pending_model_assessments_in_batch": 12,
     "rows_with_timing": 0,
-    "rows_missing_timing": 6
+    "rows_missing_timing": 4
   },
   "apply_log": {
     "status": "apply_log_valid",
-    "entries": 22,
+    "entries": 36,
     "status_counts": {
-      "response_complete": 6,
-      "response_invalid": 2,
-      "response_pending": 14
+      "response_complete": 12,
+      "response_invalid": 5,
+      "response_pending": 19
     },
     "error_key_counts": {
       "extra_response_row_number": 1,
-      "incomplete_response": 15,
+      "incomplete_response": 23,
       "missing_batch_response_row": 1,
-      "missing_review_timing": 12,
+      "missing_review_timing": 20,
       "model_response_run_id_mismatch": 1,
-      "session_start_batch_row_mismatch": 1,
-      "session_start_batch_stratum_mismatch": 1,
+      "session_start_batch_row_mismatch": 4,
+      "session_start_batch_stratum_mismatch": 4,
       "write_requires_valid_preconditions": 1
     },
-    "latest_recorded_at": "2026-05-26T09:57:16+08:00"
+    "latest_recorded_at": "2026-05-26T10:34:44+08:00"
   },
   "reviewer_next_steps": [
     "Open the local packet path only in the local workspace; it is transcript-bearing.",
@@ -111,26 +109,22 @@
     "Run write_refresh_prepare_next only after strict_dry_run is response_complete."
   ],
   "commands": {
-    "strict_dry_run": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30",
-    "write_refresh_prepare_next": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --write --refresh-after-write --prepare-next-after-write --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30",
+    "strict_dry_run": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30",
+    "write_refresh_prepare_next": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --write --refresh-after-write --prepare-next-after-write --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30",
     "batch_status_audit": ".venv/bin/python 80_semantic_risk_asr/annotation/audit_human_review_batch_status.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --expected-rows 30",
-    "timing_start_write": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 13 --mark-start --write",
-    "timing_finish_write": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 13 --mark-finish --write",
+    "timing_start_write": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 23 --mark-start --write",
+    "timing_finish_write": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 23 --mark-finish --write",
     "timing_start_write_by_row": {
-      "13": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 13 --mark-start --write",
-      "14": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 14 --mark-start --write",
-      "15": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 15 --mark-start --write",
-      "16": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 16 --mark-start --write",
-      "17": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 17 --mark-start --write",
-      "18": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 18 --mark-start --write"
+      "23": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 23 --mark-start --write",
+      "24": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 24 --mark-start --write",
+      "25": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 25 --mark-start --write",
+      "26": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 26 --mark-start --write"
     },
     "timing_finish_write_by_row": {
-      "13": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 13 --mark-finish --write",
-      "14": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 14 --mark-finish --write",
-      "15": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 15 --mark-finish --write",
-      "16": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 16 --mark-finish --write",
-      "17": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 17 --mark-finish --write",
-      "18": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 18 --mark-finish --write"
+      "23": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 23 --mark-finish --write",
+      "24": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 24 --mark-finish --write",
+      "25": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 25 --mark-finish --write",
+      "26": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 26 --mark-finish --write"
     }
   },
   "tracked_outputs": {

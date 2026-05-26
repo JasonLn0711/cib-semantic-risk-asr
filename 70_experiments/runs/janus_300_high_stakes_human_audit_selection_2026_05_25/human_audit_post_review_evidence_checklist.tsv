@@ -1,7 +1,7 @@
 step_id	evidence_gate	status	paper_claim_status	evidence	next_action
-1	response closeout write readiness	blocked	not paper-ready	closeout_status=response_closeout_blocked; pending_rows=6; pending_model_assessments=18; require_timing=True; rows_missing_timing=6	fill the local response TSV row/model fields plus per-row timing, rerun session-gated strict dry-run with --require-complete --require-timing, then closeout
-2	post-write aggregate refresh	blocked	review-pending	refresh_status=partial_review; pending_rows=18; pending_model_assessments=54	run apply response with --write --refresh-after-write, then require refresh review_complete
-3	human-reviewed predictor refresh	blocked	proxy-only	predictor_status=partial_review; pending_model_assessments=54	refresh human-audit predictor outputs after selected rows are reviewed
+1	response closeout write readiness	blocked	not paper-ready	closeout_status=response_closeout_blocked; pending_rows=4; pending_model_assessments=12; require_timing=True; rows_missing_timing=4	fill the local response TSV row/model fields plus per-row timing, rerun session-gated strict dry-run with --require-complete --require-timing, then closeout
+2	post-write aggregate refresh	blocked	review-pending	refresh_status=partial_review; pending_rows=4; pending_model_assessments=12	run apply response with --write --refresh-after-write, then require refresh review_complete
+3	human-reviewed predictor refresh	blocked	proxy-only	predictor_status=partial_review; pending_model_assessments=12	refresh human-audit predictor outputs after selected rows are reviewed
 4	evidence-chain readiness	blocked	not paper-ready	paper_ready=False	run check_evidence_chain_readiness.py after human refresh
 5	publishable objective completion	blocked	not publishable-ready	publishable_ready=False	run audit_publishable_evidence_chain.py after human refresh
 6	consequence claim matrix	blocked	claims blocked or proxy	"paper_claims_ready=False; status_counts={""completed"": 1, ""proxy_completed"": 4, ""review_pending"": 2}"	rerun build_consequence_evidence_matrix.py after human refresh

@@ -5,12 +5,12 @@
   "output_boundary": "aggregate-only response closeout checklist; no row keys or transcript text",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
-  "selection_stratum": "high_proxy_risk",
-  "rows_in_batch": 6,
+  "selection_stratum": "clean_control",
+  "rows_in_batch": 4,
   "reviewed_rows_in_response": 0,
-  "pending_rows_in_response": 6,
+  "pending_rows_in_response": 4,
   "reviewed_model_assessments_in_response": 0,
-  "pending_model_assessments_in_response": 18,
+  "pending_model_assessments_in_response": 12,
   "latest_apply_status": "response_pending",
   "require_timing": true,
   "review_timing": {
@@ -22,25 +22,25 @@
       "review_elapsed_seconds"
     ],
     "rows_with_timing": 0,
-    "rows_missing_timing": 6,
+    "rows_missing_timing": 4,
     "total_review_elapsed_seconds": 0,
     "mean_review_elapsed_seconds": "",
     "min_review_elapsed_seconds": "",
     "max_review_elapsed_seconds": ""
   },
   "response_gap_overview": {
-    "rows_reported": 6,
-    "rows_with_any_gap": 6,
-    "rows_with_row_field_gaps": 6,
-    "rows_with_model_assessment_gaps": 6,
-    "rows_with_timing_gaps": 6,
-    "total_row_fields_missing": 48,
-    "total_model_assessments_missing": 18,
-    "total_model_fields_missing": 72
+    "rows_reported": 4,
+    "rows_with_any_gap": 4,
+    "rows_with_row_field_gaps": 4,
+    "rows_with_model_assessment_gaps": 4,
+    "rows_with_timing_gaps": 4,
+    "total_row_fields_missing": 32,
+    "total_model_assessments_missing": 12,
+    "total_model_fields_missing": 48
   },
   "response_gap_summary_by_row": [
     {
-      "row_number": 13,
+      "row_number": 23,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -68,7 +68,7 @@
       "review_timing_missing": true
     },
     {
-      "row_number": 14,
+      "row_number": 24,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -96,7 +96,7 @@
       "review_timing_missing": true
     },
     {
-      "row_number": 15,
+      "row_number": 25,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -124,63 +124,7 @@
       "review_timing_missing": true
     },
     {
-      "row_number": 16,
-      "has_gap": true,
-      "row_response_complete": false,
-      "row_fields_missing_count": 8,
-      "missing_row_fields": [
-        "reviewer_semantic_risk_label",
-        "reviewer_risk_atoms",
-        "reviewer_critical_atoms",
-        "reviewer_asr_confusion_terms",
-        "reviewer_would_asr_error_change_decision",
-        "reviewer_decision_change_reason",
-        "reviewer_expected_safe_action",
-        "reviewer_annotation_confidence"
-      ],
-      "model_assessments_expected_count": 3,
-      "model_assessments_complete_count": 0,
-      "model_assessments_missing_count": 3,
-      "model_fields_missing_count": 12,
-      "missing_model_fields": [
-        "model_reviewer_annotation_confidence",
-        "model_reviewer_critical_atoms",
-        "model_reviewer_expected_safe_action",
-        "model_reviewer_would_asr_error_change_decision"
-      ],
-      "review_timing_complete": false,
-      "review_timing_missing": true
-    },
-    {
-      "row_number": 17,
-      "has_gap": true,
-      "row_response_complete": false,
-      "row_fields_missing_count": 8,
-      "missing_row_fields": [
-        "reviewer_semantic_risk_label",
-        "reviewer_risk_atoms",
-        "reviewer_critical_atoms",
-        "reviewer_asr_confusion_terms",
-        "reviewer_would_asr_error_change_decision",
-        "reviewer_decision_change_reason",
-        "reviewer_expected_safe_action",
-        "reviewer_annotation_confidence"
-      ],
-      "model_assessments_expected_count": 3,
-      "model_assessments_complete_count": 0,
-      "model_assessments_missing_count": 3,
-      "model_fields_missing_count": 12,
-      "missing_model_fields": [
-        "model_reviewer_annotation_confidence",
-        "model_reviewer_critical_atoms",
-        "model_reviewer_expected_safe_action",
-        "model_reviewer_would_asr_error_change_decision"
-      ],
-      "review_timing_complete": false,
-      "review_timing_missing": true
-    },
-    {
-      "row_number": 18,
+      "row_number": 26,
       "has_gap": true,
       "row_response_complete": false,
       "row_fields_missing_count": 8,
@@ -210,32 +154,28 @@
   ],
   "response_gap_timing_commands": {
     "timing_start_write_by_row": {
-      "13": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 13 --mark-start --write",
-      "14": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 14 --mark-start --write",
-      "15": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 15 --mark-start --write",
-      "16": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 16 --mark-start --write",
-      "17": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 17 --mark-start --write",
-      "18": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 18 --mark-start --write"
+      "23": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 23 --mark-start --write",
+      "24": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 24 --mark-start --write",
+      "25": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 25 --mark-start --write",
+      "26": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 26 --mark-start --write"
     },
     "timing_finish_write_by_row": {
-      "13": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 13 --mark-finish --write",
-      "14": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 14 --mark-finish --write",
-      "15": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 15 --mark-finish --write",
-      "16": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 16 --mark-finish --write",
-      "17": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 17 --mark-finish --write",
-      "18": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 18 --mark-finish --write"
+      "23": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 23 --mark-finish --write",
+      "24": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 24 --mark-finish --write",
+      "25": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 25 --mark-finish --write",
+      "26": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 26 --mark-finish --write"
     }
   },
   "response_action_item_overview": {
-    "total_action_items": 126,
-    "row_field_action_items": 48,
-    "model_field_action_items": 72,
-    "timing_action_items": 6
+    "total_action_items": 84,
+    "row_field_action_items": 32,
+    "model_field_action_items": 48,
+    "timing_action_items": 4
   },
   "response_action_items": [
     {
-      "action_id": "row-13:row_field:reviewer_semantic_risk_label",
-      "row_number": 13,
+      "action_id": "row-23:row_field:reviewer_semantic_risk_label",
+      "row_number": 23,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_semantic_risk_label",
@@ -245,8 +185,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:row_field:reviewer_risk_atoms",
-      "row_number": 13,
+      "action_id": "row-23:row_field:reviewer_risk_atoms",
+      "row_number": 23,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_risk_atoms",
@@ -256,8 +196,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:row_field:reviewer_critical_atoms",
-      "row_number": 13,
+      "action_id": "row-23:row_field:reviewer_critical_atoms",
+      "row_number": 23,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_critical_atoms",
@@ -267,8 +207,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:row_field:reviewer_asr_confusion_terms",
-      "row_number": 13,
+      "action_id": "row-23:row_field:reviewer_asr_confusion_terms",
+      "row_number": 23,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_asr_confusion_terms",
@@ -278,8 +218,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:row_field:reviewer_would_asr_error_change_decision",
-      "row_number": 13,
+      "action_id": "row-23:row_field:reviewer_would_asr_error_change_decision",
+      "row_number": 23,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_would_asr_error_change_decision",
@@ -289,8 +229,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:row_field:reviewer_decision_change_reason",
-      "row_number": 13,
+      "action_id": "row-23:row_field:reviewer_decision_change_reason",
+      "row_number": 23,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_decision_change_reason",
@@ -300,8 +240,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:row_field:reviewer_expected_safe_action",
-      "row_number": 13,
+      "action_id": "row-23:row_field:reviewer_expected_safe_action",
+      "row_number": 23,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_expected_safe_action",
@@ -311,8 +251,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:row_field:reviewer_annotation_confidence",
-      "row_number": 13,
+      "action_id": "row-23:row_field:reviewer_annotation_confidence",
+      "row_number": 23,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_annotation_confidence",
@@ -322,8 +262,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:model_slot-1:model_reviewer_annotation_confidence",
-      "row_number": 13,
+      "action_id": "row-23:model_slot-1:model_reviewer_annotation_confidence",
+      "row_number": 23,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_annotation_confidence",
@@ -333,8 +273,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:model_slot-1:model_reviewer_critical_atoms",
-      "row_number": 13,
+      "action_id": "row-23:model_slot-1:model_reviewer_critical_atoms",
+      "row_number": 23,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_critical_atoms",
@@ -344,8 +284,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:model_slot-1:model_reviewer_expected_safe_action",
-      "row_number": 13,
+      "action_id": "row-23:model_slot-1:model_reviewer_expected_safe_action",
+      "row_number": 23,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_expected_safe_action",
@@ -355,8 +295,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:model_slot-1:model_reviewer_would_asr_error_change_decision",
-      "row_number": 13,
+      "action_id": "row-23:model_slot-1:model_reviewer_would_asr_error_change_decision",
+      "row_number": 23,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_would_asr_error_change_decision",
@@ -366,8 +306,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:model_slot-2:model_reviewer_annotation_confidence",
-      "row_number": 13,
+      "action_id": "row-23:model_slot-2:model_reviewer_annotation_confidence",
+      "row_number": 23,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_annotation_confidence",
@@ -377,8 +317,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:model_slot-2:model_reviewer_critical_atoms",
-      "row_number": 13,
+      "action_id": "row-23:model_slot-2:model_reviewer_critical_atoms",
+      "row_number": 23,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_critical_atoms",
@@ -388,8 +328,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:model_slot-2:model_reviewer_expected_safe_action",
-      "row_number": 13,
+      "action_id": "row-23:model_slot-2:model_reviewer_expected_safe_action",
+      "row_number": 23,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_expected_safe_action",
@@ -399,8 +339,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:model_slot-2:model_reviewer_would_asr_error_change_decision",
-      "row_number": 13,
+      "action_id": "row-23:model_slot-2:model_reviewer_would_asr_error_change_decision",
+      "row_number": 23,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_would_asr_error_change_decision",
@@ -410,8 +350,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:model_slot-3:model_reviewer_annotation_confidence",
-      "row_number": 13,
+      "action_id": "row-23:model_slot-3:model_reviewer_annotation_confidence",
+      "row_number": 23,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_annotation_confidence",
@@ -421,8 +361,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:model_slot-3:model_reviewer_critical_atoms",
-      "row_number": 13,
+      "action_id": "row-23:model_slot-3:model_reviewer_critical_atoms",
+      "row_number": 23,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_critical_atoms",
@@ -432,8 +372,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:model_slot-3:model_reviewer_expected_safe_action",
-      "row_number": 13,
+      "action_id": "row-23:model_slot-3:model_reviewer_expected_safe_action",
+      "row_number": 23,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_expected_safe_action",
@@ -443,8 +383,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:model_slot-3:model_reviewer_would_asr_error_change_decision",
-      "row_number": 13,
+      "action_id": "row-23:model_slot-3:model_reviewer_would_asr_error_change_decision",
+      "row_number": 23,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_would_asr_error_change_decision",
@@ -454,19 +394,19 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-13:review_timing",
-      "row_number": 13,
+      "action_id": "row-23:review_timing",
+      "row_number": 23,
       "action_scope": "review_timing",
       "model_assessment_slot": "",
       "field_name": "review_timing",
       "status": "pending",
       "reviewer_action": "record review_started_at/review_finished_at or review_elapsed_seconds",
-      "timing_start_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 13 --mark-start --write",
-      "timing_finish_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 13 --mark-finish --write"
+      "timing_start_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 23 --mark-start --write",
+      "timing_finish_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 23 --mark-finish --write"
     },
     {
-      "action_id": "row-14:row_field:reviewer_semantic_risk_label",
-      "row_number": 14,
+      "action_id": "row-24:row_field:reviewer_semantic_risk_label",
+      "row_number": 24,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_semantic_risk_label",
@@ -476,8 +416,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:row_field:reviewer_risk_atoms",
-      "row_number": 14,
+      "action_id": "row-24:row_field:reviewer_risk_atoms",
+      "row_number": 24,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_risk_atoms",
@@ -487,8 +427,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:row_field:reviewer_critical_atoms",
-      "row_number": 14,
+      "action_id": "row-24:row_field:reviewer_critical_atoms",
+      "row_number": 24,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_critical_atoms",
@@ -498,8 +438,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:row_field:reviewer_asr_confusion_terms",
-      "row_number": 14,
+      "action_id": "row-24:row_field:reviewer_asr_confusion_terms",
+      "row_number": 24,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_asr_confusion_terms",
@@ -509,8 +449,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:row_field:reviewer_would_asr_error_change_decision",
-      "row_number": 14,
+      "action_id": "row-24:row_field:reviewer_would_asr_error_change_decision",
+      "row_number": 24,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_would_asr_error_change_decision",
@@ -520,8 +460,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:row_field:reviewer_decision_change_reason",
-      "row_number": 14,
+      "action_id": "row-24:row_field:reviewer_decision_change_reason",
+      "row_number": 24,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_decision_change_reason",
@@ -531,8 +471,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:row_field:reviewer_expected_safe_action",
-      "row_number": 14,
+      "action_id": "row-24:row_field:reviewer_expected_safe_action",
+      "row_number": 24,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_expected_safe_action",
@@ -542,8 +482,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:row_field:reviewer_annotation_confidence",
-      "row_number": 14,
+      "action_id": "row-24:row_field:reviewer_annotation_confidence",
+      "row_number": 24,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_annotation_confidence",
@@ -553,8 +493,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:model_slot-1:model_reviewer_annotation_confidence",
-      "row_number": 14,
+      "action_id": "row-24:model_slot-1:model_reviewer_annotation_confidence",
+      "row_number": 24,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_annotation_confidence",
@@ -564,8 +504,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:model_slot-1:model_reviewer_critical_atoms",
-      "row_number": 14,
+      "action_id": "row-24:model_slot-1:model_reviewer_critical_atoms",
+      "row_number": 24,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_critical_atoms",
@@ -575,8 +515,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:model_slot-1:model_reviewer_expected_safe_action",
-      "row_number": 14,
+      "action_id": "row-24:model_slot-1:model_reviewer_expected_safe_action",
+      "row_number": 24,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_expected_safe_action",
@@ -586,8 +526,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:model_slot-1:model_reviewer_would_asr_error_change_decision",
-      "row_number": 14,
+      "action_id": "row-24:model_slot-1:model_reviewer_would_asr_error_change_decision",
+      "row_number": 24,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_would_asr_error_change_decision",
@@ -597,8 +537,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:model_slot-2:model_reviewer_annotation_confidence",
-      "row_number": 14,
+      "action_id": "row-24:model_slot-2:model_reviewer_annotation_confidence",
+      "row_number": 24,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_annotation_confidence",
@@ -608,8 +548,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:model_slot-2:model_reviewer_critical_atoms",
-      "row_number": 14,
+      "action_id": "row-24:model_slot-2:model_reviewer_critical_atoms",
+      "row_number": 24,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_critical_atoms",
@@ -619,8 +559,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:model_slot-2:model_reviewer_expected_safe_action",
-      "row_number": 14,
+      "action_id": "row-24:model_slot-2:model_reviewer_expected_safe_action",
+      "row_number": 24,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_expected_safe_action",
@@ -630,8 +570,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:model_slot-2:model_reviewer_would_asr_error_change_decision",
-      "row_number": 14,
+      "action_id": "row-24:model_slot-2:model_reviewer_would_asr_error_change_decision",
+      "row_number": 24,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_would_asr_error_change_decision",
@@ -641,8 +581,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:model_slot-3:model_reviewer_annotation_confidence",
-      "row_number": 14,
+      "action_id": "row-24:model_slot-3:model_reviewer_annotation_confidence",
+      "row_number": 24,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_annotation_confidence",
@@ -652,8 +592,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:model_slot-3:model_reviewer_critical_atoms",
-      "row_number": 14,
+      "action_id": "row-24:model_slot-3:model_reviewer_critical_atoms",
+      "row_number": 24,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_critical_atoms",
@@ -663,8 +603,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:model_slot-3:model_reviewer_expected_safe_action",
-      "row_number": 14,
+      "action_id": "row-24:model_slot-3:model_reviewer_expected_safe_action",
+      "row_number": 24,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_expected_safe_action",
@@ -674,8 +614,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:model_slot-3:model_reviewer_would_asr_error_change_decision",
-      "row_number": 14,
+      "action_id": "row-24:model_slot-3:model_reviewer_would_asr_error_change_decision",
+      "row_number": 24,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_would_asr_error_change_decision",
@@ -685,19 +625,19 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-14:review_timing",
-      "row_number": 14,
+      "action_id": "row-24:review_timing",
+      "row_number": 24,
       "action_scope": "review_timing",
       "model_assessment_slot": "",
       "field_name": "review_timing",
       "status": "pending",
       "reviewer_action": "record review_started_at/review_finished_at or review_elapsed_seconds",
-      "timing_start_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 14 --mark-start --write",
-      "timing_finish_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 14 --mark-finish --write"
+      "timing_start_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 24 --mark-start --write",
+      "timing_finish_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 24 --mark-finish --write"
     },
     {
-      "action_id": "row-15:row_field:reviewer_semantic_risk_label",
-      "row_number": 15,
+      "action_id": "row-25:row_field:reviewer_semantic_risk_label",
+      "row_number": 25,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_semantic_risk_label",
@@ -707,8 +647,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:row_field:reviewer_risk_atoms",
-      "row_number": 15,
+      "action_id": "row-25:row_field:reviewer_risk_atoms",
+      "row_number": 25,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_risk_atoms",
@@ -718,8 +658,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:row_field:reviewer_critical_atoms",
-      "row_number": 15,
+      "action_id": "row-25:row_field:reviewer_critical_atoms",
+      "row_number": 25,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_critical_atoms",
@@ -729,8 +669,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:row_field:reviewer_asr_confusion_terms",
-      "row_number": 15,
+      "action_id": "row-25:row_field:reviewer_asr_confusion_terms",
+      "row_number": 25,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_asr_confusion_terms",
@@ -740,8 +680,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:row_field:reviewer_would_asr_error_change_decision",
-      "row_number": 15,
+      "action_id": "row-25:row_field:reviewer_would_asr_error_change_decision",
+      "row_number": 25,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_would_asr_error_change_decision",
@@ -751,8 +691,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:row_field:reviewer_decision_change_reason",
-      "row_number": 15,
+      "action_id": "row-25:row_field:reviewer_decision_change_reason",
+      "row_number": 25,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_decision_change_reason",
@@ -762,8 +702,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:row_field:reviewer_expected_safe_action",
-      "row_number": 15,
+      "action_id": "row-25:row_field:reviewer_expected_safe_action",
+      "row_number": 25,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_expected_safe_action",
@@ -773,8 +713,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:row_field:reviewer_annotation_confidence",
-      "row_number": 15,
+      "action_id": "row-25:row_field:reviewer_annotation_confidence",
+      "row_number": 25,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_annotation_confidence",
@@ -784,8 +724,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:model_slot-1:model_reviewer_annotation_confidence",
-      "row_number": 15,
+      "action_id": "row-25:model_slot-1:model_reviewer_annotation_confidence",
+      "row_number": 25,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_annotation_confidence",
@@ -795,8 +735,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:model_slot-1:model_reviewer_critical_atoms",
-      "row_number": 15,
+      "action_id": "row-25:model_slot-1:model_reviewer_critical_atoms",
+      "row_number": 25,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_critical_atoms",
@@ -806,8 +746,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:model_slot-1:model_reviewer_expected_safe_action",
-      "row_number": 15,
+      "action_id": "row-25:model_slot-1:model_reviewer_expected_safe_action",
+      "row_number": 25,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_expected_safe_action",
@@ -817,8 +757,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:model_slot-1:model_reviewer_would_asr_error_change_decision",
-      "row_number": 15,
+      "action_id": "row-25:model_slot-1:model_reviewer_would_asr_error_change_decision",
+      "row_number": 25,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_would_asr_error_change_decision",
@@ -828,8 +768,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:model_slot-2:model_reviewer_annotation_confidence",
-      "row_number": 15,
+      "action_id": "row-25:model_slot-2:model_reviewer_annotation_confidence",
+      "row_number": 25,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_annotation_confidence",
@@ -839,8 +779,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:model_slot-2:model_reviewer_critical_atoms",
-      "row_number": 15,
+      "action_id": "row-25:model_slot-2:model_reviewer_critical_atoms",
+      "row_number": 25,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_critical_atoms",
@@ -850,8 +790,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:model_slot-2:model_reviewer_expected_safe_action",
-      "row_number": 15,
+      "action_id": "row-25:model_slot-2:model_reviewer_expected_safe_action",
+      "row_number": 25,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_expected_safe_action",
@@ -861,8 +801,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:model_slot-2:model_reviewer_would_asr_error_change_decision",
-      "row_number": 15,
+      "action_id": "row-25:model_slot-2:model_reviewer_would_asr_error_change_decision",
+      "row_number": 25,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_would_asr_error_change_decision",
@@ -872,8 +812,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:model_slot-3:model_reviewer_annotation_confidence",
-      "row_number": 15,
+      "action_id": "row-25:model_slot-3:model_reviewer_annotation_confidence",
+      "row_number": 25,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_annotation_confidence",
@@ -883,8 +823,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:model_slot-3:model_reviewer_critical_atoms",
-      "row_number": 15,
+      "action_id": "row-25:model_slot-3:model_reviewer_critical_atoms",
+      "row_number": 25,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_critical_atoms",
@@ -894,8 +834,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:model_slot-3:model_reviewer_expected_safe_action",
-      "row_number": 15,
+      "action_id": "row-25:model_slot-3:model_reviewer_expected_safe_action",
+      "row_number": 25,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_expected_safe_action",
@@ -905,8 +845,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:model_slot-3:model_reviewer_would_asr_error_change_decision",
-      "row_number": 15,
+      "action_id": "row-25:model_slot-3:model_reviewer_would_asr_error_change_decision",
+      "row_number": 25,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_would_asr_error_change_decision",
@@ -916,19 +856,19 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-15:review_timing",
-      "row_number": 15,
+      "action_id": "row-25:review_timing",
+      "row_number": 25,
       "action_scope": "review_timing",
       "model_assessment_slot": "",
       "field_name": "review_timing",
       "status": "pending",
       "reviewer_action": "record review_started_at/review_finished_at or review_elapsed_seconds",
-      "timing_start_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 15 --mark-start --write",
-      "timing_finish_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 15 --mark-finish --write"
+      "timing_start_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 25 --mark-start --write",
+      "timing_finish_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 25 --mark-finish --write"
     },
     {
-      "action_id": "row-16:row_field:reviewer_semantic_risk_label",
-      "row_number": 16,
+      "action_id": "row-26:row_field:reviewer_semantic_risk_label",
+      "row_number": 26,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_semantic_risk_label",
@@ -938,8 +878,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:row_field:reviewer_risk_atoms",
-      "row_number": 16,
+      "action_id": "row-26:row_field:reviewer_risk_atoms",
+      "row_number": 26,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_risk_atoms",
@@ -949,8 +889,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:row_field:reviewer_critical_atoms",
-      "row_number": 16,
+      "action_id": "row-26:row_field:reviewer_critical_atoms",
+      "row_number": 26,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_critical_atoms",
@@ -960,8 +900,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:row_field:reviewer_asr_confusion_terms",
-      "row_number": 16,
+      "action_id": "row-26:row_field:reviewer_asr_confusion_terms",
+      "row_number": 26,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_asr_confusion_terms",
@@ -971,8 +911,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:row_field:reviewer_would_asr_error_change_decision",
-      "row_number": 16,
+      "action_id": "row-26:row_field:reviewer_would_asr_error_change_decision",
+      "row_number": 26,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_would_asr_error_change_decision",
@@ -982,8 +922,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:row_field:reviewer_decision_change_reason",
-      "row_number": 16,
+      "action_id": "row-26:row_field:reviewer_decision_change_reason",
+      "row_number": 26,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_decision_change_reason",
@@ -993,8 +933,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:row_field:reviewer_expected_safe_action",
-      "row_number": 16,
+      "action_id": "row-26:row_field:reviewer_expected_safe_action",
+      "row_number": 26,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_expected_safe_action",
@@ -1004,8 +944,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:row_field:reviewer_annotation_confidence",
-      "row_number": 16,
+      "action_id": "row-26:row_field:reviewer_annotation_confidence",
+      "row_number": 26,
       "action_scope": "row_field",
       "model_assessment_slot": "",
       "field_name": "reviewer_annotation_confidence",
@@ -1015,8 +955,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:model_slot-1:model_reviewer_annotation_confidence",
-      "row_number": 16,
+      "action_id": "row-26:model_slot-1:model_reviewer_annotation_confidence",
+      "row_number": 26,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_annotation_confidence",
@@ -1026,8 +966,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:model_slot-1:model_reviewer_critical_atoms",
-      "row_number": 16,
+      "action_id": "row-26:model_slot-1:model_reviewer_critical_atoms",
+      "row_number": 26,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_critical_atoms",
@@ -1037,8 +977,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:model_slot-1:model_reviewer_expected_safe_action",
-      "row_number": 16,
+      "action_id": "row-26:model_slot-1:model_reviewer_expected_safe_action",
+      "row_number": 26,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_expected_safe_action",
@@ -1048,8 +988,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:model_slot-1:model_reviewer_would_asr_error_change_decision",
-      "row_number": 16,
+      "action_id": "row-26:model_slot-1:model_reviewer_would_asr_error_change_decision",
+      "row_number": 26,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 1,
       "field_name": "model_reviewer_would_asr_error_change_decision",
@@ -1059,8 +999,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:model_slot-2:model_reviewer_annotation_confidence",
-      "row_number": 16,
+      "action_id": "row-26:model_slot-2:model_reviewer_annotation_confidence",
+      "row_number": 26,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_annotation_confidence",
@@ -1070,8 +1010,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:model_slot-2:model_reviewer_critical_atoms",
-      "row_number": 16,
+      "action_id": "row-26:model_slot-2:model_reviewer_critical_atoms",
+      "row_number": 26,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_critical_atoms",
@@ -1081,8 +1021,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:model_slot-2:model_reviewer_expected_safe_action",
-      "row_number": 16,
+      "action_id": "row-26:model_slot-2:model_reviewer_expected_safe_action",
+      "row_number": 26,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_expected_safe_action",
@@ -1092,8 +1032,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:model_slot-2:model_reviewer_would_asr_error_change_decision",
-      "row_number": 16,
+      "action_id": "row-26:model_slot-2:model_reviewer_would_asr_error_change_decision",
+      "row_number": 26,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 2,
       "field_name": "model_reviewer_would_asr_error_change_decision",
@@ -1103,8 +1043,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:model_slot-3:model_reviewer_annotation_confidence",
-      "row_number": 16,
+      "action_id": "row-26:model_slot-3:model_reviewer_annotation_confidence",
+      "row_number": 26,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_annotation_confidence",
@@ -1114,8 +1054,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:model_slot-3:model_reviewer_critical_atoms",
-      "row_number": 16,
+      "action_id": "row-26:model_slot-3:model_reviewer_critical_atoms",
+      "row_number": 26,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_critical_atoms",
@@ -1125,8 +1065,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:model_slot-3:model_reviewer_expected_safe_action",
-      "row_number": 16,
+      "action_id": "row-26:model_slot-3:model_reviewer_expected_safe_action",
+      "row_number": 26,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_expected_safe_action",
@@ -1136,8 +1076,8 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:model_slot-3:model_reviewer_would_asr_error_change_decision",
-      "row_number": 16,
+      "action_id": "row-26:model_slot-3:model_reviewer_would_asr_error_change_decision",
+      "row_number": 26,
       "action_scope": "model_assessment_field",
       "model_assessment_slot": 3,
       "field_name": "model_reviewer_would_asr_error_change_decision",
@@ -1147,477 +1087,15 @@
       "timing_finish_write_command": "not_applicable"
     },
     {
-      "action_id": "row-16:review_timing",
-      "row_number": 16,
+      "action_id": "row-26:review_timing",
+      "row_number": 26,
       "action_scope": "review_timing",
       "model_assessment_slot": "",
       "field_name": "review_timing",
       "status": "pending",
       "reviewer_action": "record review_started_at/review_finished_at or review_elapsed_seconds",
-      "timing_start_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 16 --mark-start --write",
-      "timing_finish_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 16 --mark-finish --write"
-    },
-    {
-      "action_id": "row-17:row_field:reviewer_semantic_risk_label",
-      "row_number": 17,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_semantic_risk_label",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:row_field:reviewer_risk_atoms",
-      "row_number": 17,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_risk_atoms",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:row_field:reviewer_critical_atoms",
-      "row_number": 17,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_critical_atoms",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:row_field:reviewer_asr_confusion_terms",
-      "row_number": 17,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_asr_confusion_terms",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:row_field:reviewer_would_asr_error_change_decision",
-      "row_number": 17,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_would_asr_error_change_decision",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:row_field:reviewer_decision_change_reason",
-      "row_number": 17,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_decision_change_reason",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:row_field:reviewer_expected_safe_action",
-      "row_number": 17,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_expected_safe_action",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:row_field:reviewer_annotation_confidence",
-      "row_number": 17,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_annotation_confidence",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:model_slot-1:model_reviewer_annotation_confidence",
-      "row_number": 17,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 1,
-      "field_name": "model_reviewer_annotation_confidence",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:model_slot-1:model_reviewer_critical_atoms",
-      "row_number": 17,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 1,
-      "field_name": "model_reviewer_critical_atoms",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:model_slot-1:model_reviewer_expected_safe_action",
-      "row_number": 17,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 1,
-      "field_name": "model_reviewer_expected_safe_action",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:model_slot-1:model_reviewer_would_asr_error_change_decision",
-      "row_number": 17,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 1,
-      "field_name": "model_reviewer_would_asr_error_change_decision",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:model_slot-2:model_reviewer_annotation_confidence",
-      "row_number": 17,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 2,
-      "field_name": "model_reviewer_annotation_confidence",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:model_slot-2:model_reviewer_critical_atoms",
-      "row_number": 17,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 2,
-      "field_name": "model_reviewer_critical_atoms",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:model_slot-2:model_reviewer_expected_safe_action",
-      "row_number": 17,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 2,
-      "field_name": "model_reviewer_expected_safe_action",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:model_slot-2:model_reviewer_would_asr_error_change_decision",
-      "row_number": 17,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 2,
-      "field_name": "model_reviewer_would_asr_error_change_decision",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:model_slot-3:model_reviewer_annotation_confidence",
-      "row_number": 17,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 3,
-      "field_name": "model_reviewer_annotation_confidence",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:model_slot-3:model_reviewer_critical_atoms",
-      "row_number": 17,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 3,
-      "field_name": "model_reviewer_critical_atoms",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:model_slot-3:model_reviewer_expected_safe_action",
-      "row_number": 17,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 3,
-      "field_name": "model_reviewer_expected_safe_action",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:model_slot-3:model_reviewer_would_asr_error_change_decision",
-      "row_number": 17,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 3,
-      "field_name": "model_reviewer_would_asr_error_change_decision",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-17:review_timing",
-      "row_number": 17,
-      "action_scope": "review_timing",
-      "model_assessment_slot": "",
-      "field_name": "review_timing",
-      "status": "pending",
-      "reviewer_action": "record review_started_at/review_finished_at or review_elapsed_seconds",
-      "timing_start_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 17 --mark-start --write",
-      "timing_finish_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 17 --mark-finish --write"
-    },
-    {
-      "action_id": "row-18:row_field:reviewer_semantic_risk_label",
-      "row_number": 18,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_semantic_risk_label",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:row_field:reviewer_risk_atoms",
-      "row_number": 18,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_risk_atoms",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:row_field:reviewer_critical_atoms",
-      "row_number": 18,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_critical_atoms",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:row_field:reviewer_asr_confusion_terms",
-      "row_number": 18,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_asr_confusion_terms",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:row_field:reviewer_would_asr_error_change_decision",
-      "row_number": 18,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_would_asr_error_change_decision",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:row_field:reviewer_decision_change_reason",
-      "row_number": 18,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_decision_change_reason",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:row_field:reviewer_expected_safe_action",
-      "row_number": 18,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_expected_safe_action",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:row_field:reviewer_annotation_confidence",
-      "row_number": 18,
-      "action_scope": "row_field",
-      "model_assessment_slot": "",
-      "field_name": "reviewer_annotation_confidence",
-      "status": "pending",
-      "reviewer_action": "fill row-level response field in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:model_slot-1:model_reviewer_annotation_confidence",
-      "row_number": 18,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 1,
-      "field_name": "model_reviewer_annotation_confidence",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:model_slot-1:model_reviewer_critical_atoms",
-      "row_number": 18,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 1,
-      "field_name": "model_reviewer_critical_atoms",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:model_slot-1:model_reviewer_expected_safe_action",
-      "row_number": 18,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 1,
-      "field_name": "model_reviewer_expected_safe_action",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:model_slot-1:model_reviewer_would_asr_error_change_decision",
-      "row_number": 18,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 1,
-      "field_name": "model_reviewer_would_asr_error_change_decision",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:model_slot-2:model_reviewer_annotation_confidence",
-      "row_number": 18,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 2,
-      "field_name": "model_reviewer_annotation_confidence",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:model_slot-2:model_reviewer_critical_atoms",
-      "row_number": 18,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 2,
-      "field_name": "model_reviewer_critical_atoms",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:model_slot-2:model_reviewer_expected_safe_action",
-      "row_number": 18,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 2,
-      "field_name": "model_reviewer_expected_safe_action",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:model_slot-2:model_reviewer_would_asr_error_change_decision",
-      "row_number": 18,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 2,
-      "field_name": "model_reviewer_would_asr_error_change_decision",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:model_slot-3:model_reviewer_annotation_confidence",
-      "row_number": 18,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 3,
-      "field_name": "model_reviewer_annotation_confidence",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:model_slot-3:model_reviewer_critical_atoms",
-      "row_number": 18,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 3,
-      "field_name": "model_reviewer_critical_atoms",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:model_slot-3:model_reviewer_expected_safe_action",
-      "row_number": 18,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 3,
-      "field_name": "model_reviewer_expected_safe_action",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:model_slot-3:model_reviewer_would_asr_error_change_decision",
-      "row_number": 18,
-      "action_scope": "model_assessment_field",
-      "model_assessment_slot": 3,
-      "field_name": "model_reviewer_would_asr_error_change_decision",
-      "status": "pending",
-      "reviewer_action": "fill field for the corresponding model row in local response TSV",
-      "timing_start_write_command": "not_applicable",
-      "timing_finish_write_command": "not_applicable"
-    },
-    {
-      "action_id": "row-18:review_timing",
-      "row_number": 18,
-      "action_scope": "review_timing",
-      "model_assessment_slot": "",
-      "field_name": "review_timing",
-      "status": "pending",
-      "reviewer_action": "record review_started_at/review_finished_at or review_elapsed_seconds",
-      "timing_start_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 18 --mark-start --write",
-      "timing_finish_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --row-number 18 --mark-finish --write"
+      "timing_start_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 26 --mark-start --write",
+      "timing_finish_write_command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 26 --mark-finish --write"
     }
   ],
   "session_start_gate": {
@@ -1643,7 +1121,7 @@
     "missing_review_timing"
   ],
   "apply_log_status": "apply_log_valid",
-  "apply_log_entries": 22,
+  "apply_log_entries": 36,
   "checklist_status": "reviewer_action_ready",
   "checklist": [
     {
@@ -1658,27 +1136,27 @@
       "action": "confirm strict dry-run was session-gated",
       "status": "ready",
       "evidence": "require_complete=True; require_timing=True; session_gate_ok=True; rows_match=True; stratum_match=True",
-      "next_action": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30"
+      "next_action": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30"
     },
     {
       "step_id": "3",
       "action": "confirm row-level response completion",
       "status": "pending",
-      "evidence": "reviewed_rows=0; pending_rows=6; rows_with_row_field_gaps=6",
+      "evidence": "reviewed_rows=0; pending_rows=4; rows_with_row_field_gaps=4",
       "next_action": "fill required row-level risk and decision fields in the local response TSV; use response_gap_summary_by_row for row-number-only gaps"
     },
     {
       "step_id": "4",
       "action": "confirm model-level response completion",
       "status": "pending",
-      "evidence": "reviewed_model_assessments=0; pending_model_assessments=18; rows_with_model_assessment_gaps=6",
+      "evidence": "reviewed_model_assessments=0; pending_model_assessments=12; rows_with_model_assessment_gaps=4",
       "next_action": "fill every per-model decision-change and safe-action assessment"
     },
     {
       "step_id": "5",
       "action": "confirm required review timing completion",
       "status": "pending",
-      "evidence": "rows_with_timing=0; rows_missing_timing=6; rows_with_timing_gaps=6",
+      "evidence": "rows_with_timing=0; rows_missing_timing=4; rows_with_timing_gaps=4",
       "next_action": "fill review_started_at/review_finished_at or review_elapsed_seconds and rerun strict dry-run"
     },
     {
@@ -1693,7 +1171,7 @@
       "action": "write, refresh, and prepare next batch",
       "status": "blocked_until_response_complete",
       "evidence": "closeout_ready=False",
-      "next_action": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --write --refresh-after-write --prepare-next-after-write --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T095716_0800_high_proxy_risk_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30"
+      "next_action": ".venv/bin/python 80_semantic_risk_asr/annotation/apply_human_audit_batch_response.py --require-complete --require-timing --require-session-start-gate --session-start-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json --write --refresh-after-write --prepare-next-after-write --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --batch-summary 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json --output-dir 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25 --readiness-output-dir 70_experiments/runs/postdoc_evidence_chain_2026_05_25 --expected-rows 30"
     }
   ],
   "paper_ready_impact": "No paper-readiness change. This closeout only permits response write/refresh after the current response TSV passes the session-gated strict dry-run.",

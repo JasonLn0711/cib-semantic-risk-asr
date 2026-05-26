@@ -36,7 +36,7 @@
       "invariant": "strict response apply gate requires timing",
       "status": "pass",
       "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_summary.json",
-      "result": "apply dry-run records require_timing=true and 6 timing rows pending",
+      "result": "apply dry-run records require_timing=true and 4 timing rows pending",
       "next_action": "Run the session-gated strict response dry-run with --require-complete --require-timing."
     },
     {
@@ -44,7 +44,7 @@
       "invariant": "response closeout blocks on missing timing",
       "status": "pass",
       "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_closeout_summary.json",
-      "result": "closeout blocks write/refresh while 6 timing rows are missing",
+      "result": "closeout blocks write/refresh while 4 timing rows are missing",
       "next_action": "Keep write/refresh blocked until timing coverage is complete."
     },
     {
@@ -76,7 +76,7 @@
       "invariant": "current reviewer action packet remains ready but unfilled",
       "status": "pass",
       "evidence": "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_readiness_summary.json",
-      "result": "current packet has 6 rows, 18 model assessments, and 6 timing rows pending",
+      "result": "current packet has 4 rows, 12 model assessments, and 4 timing rows pending",
       "next_action": "Fill only local response fields and timing; do not reopen transcript review."
     },
     {
@@ -84,7 +84,7 @@
       "invariant": "current reviewer handoff is fresh and timing-aware",
       "status": "pass",
       "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_handoff_summary.json",
-      "result": "handoff is fresh and points to 6 pending rows, 18 model assessments, and 6 timing rows",
+      "result": "handoff is fresh and points to 4 pending rows, 12 model assessments, and 4 timing rows",
       "next_action": "Regenerate reviewer handoff and action checklist before opening the local review packet."
     },
     {
@@ -100,7 +100,7 @@
       "invariant": "per-row timing helper commands cover the current reviewer packet",
       "status": "pass",
       "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_handoff_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist_summary.json; 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_session_start_summary.json",
-      "result": "timing helper commands cover rows [13, 14, 15, 16, 17, 18] across handoff, action checklist, and session start",
+      "result": "timing helper commands cover rows [23, 24, 25, 26] across handoff, action checklist, and session start",
       "next_action": "Regenerate reviewer handoff, action checklist, and session start before local review timing entry."
     },
     {
@@ -108,7 +108,7 @@
       "invariant": "response gap TSV includes per-row timing helper commands",
       "status": "pass",
       "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_response_gap_checklist.tsv",
-      "result": "gap TSV rows ['13', '14', '15', '16', '17', '18'] match closeout gaps and handoff timing commands",
+      "result": "gap TSV rows ['23', '24', '25', '26'] match closeout gaps and handoff timing commands",
       "next_action": "Regenerate closeout gap TSV and reviewer handoff before local review timing entry."
     },
     {

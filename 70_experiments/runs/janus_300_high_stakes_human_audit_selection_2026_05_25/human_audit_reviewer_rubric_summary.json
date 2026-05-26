@@ -22,12 +22,12 @@
     "available": true,
     "ok": true,
     "status": "reviewer_action_ready",
-    "selection_stratum": "high_proxy_risk",
-    "pending_rows_in_batch": 6,
-    "rows_in_batch": 6,
-    "pending_model_assessments_in_batch": 18,
-    "model_assessments_in_batch": 18,
-    "rows_missing_timing": 6,
+    "selection_stratum": "clean_control",
+    "pending_rows_in_batch": 4,
+    "rows_in_batch": 4,
+    "pending_model_assessments_in_batch": 12,
+    "model_assessments_in_batch": 12,
+    "rows_missing_timing": 4,
     "latest_apply_status": "response_pending"
   },
   "consistency_checks": [

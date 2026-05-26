@@ -12,12 +12,12 @@
     "available": true,
     "ok": true,
     "status": "reviewer_action_ready",
-    "selection_stratum": "high_proxy_risk",
-    "rows_in_batch": 6,
-    "pending_rows_in_batch": 6,
-    "model_assessments_in_batch": 18,
-    "pending_model_assessments_in_batch": 18,
-    "rows_missing_timing": 6,
+    "selection_stratum": "clean_control",
+    "rows_in_batch": 4,
+    "pending_rows_in_batch": 4,
+    "model_assessments_in_batch": 12,
+    "pending_model_assessments_in_batch": 12,
+    "rows_missing_timing": 4,
     "latest_apply_status": "response_pending",
     "evidence": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_reviewer_action_checklist_summary.json"
   },
@@ -109,7 +109,7 @@
       "status": "partial_review",
       "paper_claim_status": "not paper-ready",
       "evidence": "human_audit_validation_summary.json; human_audit_reviewer_action_checklist_summary.json",
-      "result": "12/30 selected rows have risk-atom review fields complete and 36/90 model assessments are complete; transcript ground truth is not the pending item; current reviewer action gate is reviewer_action_ready with 6/6 packet rows and 18/18 model assessments pending, and 6/6 timing rows pending",
+      "result": "26/30 selected rows have risk-atom review fields complete and 78/90 model assessments are complete; transcript ground truth is not the pending item; current reviewer action gate is reviewer_action_ready with 4/4 packet rows and 12/12 model assessments pending, and 4/4 timing rows pending",
       "next_action": "Run the reviewer action checklist, fill selected-300 risk-atom, decision-change, expected-action, confidence, and per-model assessment fields plus per-row review timing; then run the session-gated strict response dry-run with --require-complete --require-timing before the aggregate refresh."
     }
   ],
