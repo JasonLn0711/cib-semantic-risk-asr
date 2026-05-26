@@ -35,6 +35,17 @@ DEFAULT_RUN_DIR = (
 SUMMARY_NAME = "human_audit_operation_record_summary.json"
 TSV_NAME = "human_audit_operation_record_audit.tsv"
 LOCAL_ROW_ACCESS_LOG_NAME = "human_audit_local_row_access_log.tsv"
+LOCAL_ROW_ACCESS_LOG_FIELDS = [
+    "recorded_at",
+    "operation",
+    "row_number",
+    "selection_stratum",
+    "reference_label",
+    "asr_hypothesis_count",
+    "model_assessment_count",
+    "access_status",
+    "audit_sheet_path",
+]
 
 LOG_SPECS = {
     "review_batch": "human_audit_review_batch_log.tsv",
@@ -77,6 +88,12 @@ def read_json(path: Path) -> dict[str, Any]:
 def read_tsv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle, delimiter="\t"))
+
+
+def read_tsv_with_fieldnames(path: Path) -> tuple[list[str], list[dict[str, str]]]:
+    with path.open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle, delimiter="\t")
+        return list(reader.fieldnames or []), list(reader)
 
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -194,12 +211,18 @@ def next_local_row_access_log_status(
     latest_operation = ""
     latest_recorded_at = ""
     row_matches_next_operation = False
+    exists = access_log_path.exists()
+    row_count = 0
+    required_fields_present = False
+    latest_record_ok = False
     safe = True
-    if access_log_path.exists():
-        rows = read_tsv(access_log_path)
+    if exists:
+        fieldnames, rows = read_tsv_with_fieldnames(access_log_path)
+        row_count = len(rows)
+        required_fields_present = all(field in fieldnames for field in LOCAL_ROW_ACCESS_LOG_FIELDS)
         latest = rows[-1] if rows else {}
         try:
-            assert_aggregate_safe({"latest": latest})
+            assert_aggregate_safe({"rows": rows})
         except ValueError:
             safe = False
         latest_row_number = latest.get("row_number", "")
@@ -207,18 +230,32 @@ def next_local_row_access_log_status(
         latest_operation = latest.get("operation", "")
         latest_recorded_at = latest.get("recorded_at", "")
         row_matches_next_operation = latest_row_number == row_number
-        status = "recorded" if rows and safe else "record_drift"
+        latest_record_ok = (
+            row_matches_next_operation
+            and latest_operation == "show_local_row"
+            and latest_access_status == "shown"
+            and bool(latest_recorded_at)
+        )
+        status = (
+            "recorded"
+            if rows and safe and required_fields_present and latest_record_ok
+            else "record_drift"
+        )
 
     payload = {
         "path": repo_relative(access_log_path, repo_root=repo_root),
         "route_ok": route_ok,
         "status": status,
+        "exists": exists,
+        "row_count": row_count,
+        "required_fields_present": required_fields_present,
         "next_row_number": row_number,
         "latest_row_number": latest_row_number,
         "latest_operation": latest_operation,
         "latest_access_status": latest_access_status,
         "latest_recorded_at": latest_recorded_at,
         "row_matches_next_operation": row_matches_next_operation,
+        "latest_record_ok": latest_record_ok,
     }
     assert_aggregate_safe(payload)
     return payload

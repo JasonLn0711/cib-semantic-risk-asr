@@ -769,12 +769,16 @@ def write_consistent_fixture(root: Path) -> None:
                 ),
                 "route_ok": True,
                 "status": "planned_not_yet_recorded",
+                "exists": False,
+                "row_count": 0,
+                "required_fields_present": False,
                 "next_row_number": "1",
                 "latest_row_number": "",
                 "latest_operation": "",
                 "latest_access_status": "",
                 "latest_recorded_at": "",
                 "row_matches_next_operation": False,
+                "latest_record_ok": False,
             },
             operation_records=[
                 {"operation_log_id": log_id, "alignment_status": "pass"}
@@ -1123,6 +1127,32 @@ def test_consistency_audit_fails_missing_local_row_access_route(tmp_path: Path) 
     operation_path = tmp_path / SUMMARY_SPECS["operation_records"]
     operation = json.loads(operation_path.read_text(encoding="utf-8"))
     operation["next_local_row_access_log"]["route_ok"] = False
+    operation_path.write_text(json.dumps(operation, ensure_ascii=False), encoding="utf-8")
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C081" for item in payload["failed_checks"])
+
+
+def test_consistency_audit_fails_recorded_access_log_row_drift(tmp_path: Path) -> None:
+    write_consistent_fixture(tmp_path)
+    operation_path = tmp_path / SUMMARY_SPECS["operation_records"]
+    operation = json.loads(operation_path.read_text(encoding="utf-8"))
+    operation["next_local_row_access_log"].update(
+        {
+            "status": "recorded",
+            "exists": True,
+            "row_count": 1,
+            "required_fields_present": True,
+            "latest_row_number": "2",
+            "latest_operation": "show_local_row",
+            "latest_access_status": "shown",
+            "latest_recorded_at": "2026-05-26T09:30:00",
+            "row_matches_next_operation": False,
+            "latest_record_ok": False,
+        }
+    )
     operation_path.write_text(json.dumps(operation, ensure_ascii=False), encoding="utf-8")
 
     payload = build_consistency_audit(tmp_path)

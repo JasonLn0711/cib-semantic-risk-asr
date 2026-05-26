@@ -167,6 +167,13 @@ def assert_aggregate_safe(payload: Any) -> None:
             raise ValueError("sensitive field token leaked into consistency audit")
 
 
+def safe_int(value: Any) -> int:
+    try:
+        return int(str(value).strip())
+    except (TypeError, ValueError):
+        return 0
+
+
 def check_row(
     *,
     check_id: str,
@@ -1258,7 +1265,23 @@ def add_local_row_access_log_route_check(
     route_status = str(access_log.get("status", ""))
     path = str(access_log.get("path", ""))
     path_ok = path.endswith("human_audit_local_row_access_log.tsv")
-    status_ok = route_status in {"planned_not_yet_recorded", "recorded"}
+    planned_state_ok = (
+        route_status == "planned_not_yet_recorded"
+        and access_log.get("exists") is False
+        and access_log.get("row_count") == 0
+    )
+    recorded_state_ok = (
+        route_status == "recorded"
+        and access_log.get("exists") is True
+        and safe_int(access_log.get("row_count")) > 0
+        and access_log.get("required_fields_present") is True
+        and access_log.get("latest_record_ok") is True
+        and access_log.get("row_matches_next_operation") is True
+        and access_log.get("latest_operation") == "show_local_row"
+        and access_log.get("latest_access_status") == "shown"
+        and bool(access_log.get("latest_recorded_at"))
+    )
+    status_ok = planned_state_ok or recorded_state_ok
     row_ok = (
         str(access_log.get("next_row_number", "")) == str(local_step.get("row_number", ""))
         and str(local_step.get("row_number", "")) != ""
@@ -1290,6 +1313,7 @@ def add_local_row_access_log_route_check(
                 else (
                     f"route_ok={route_ok}; status_ok={status_ok}; path_ok={path_ok}; "
                     f"row_ok={row_ok}; record_status={records.get('status', '')}; "
+                    f"access_log_status={route_status}; "
                     f"work_order_status={work_order.get('status', '')}"
                 )
             ),
