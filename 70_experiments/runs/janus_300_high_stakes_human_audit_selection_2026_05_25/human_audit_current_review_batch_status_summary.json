@@ -1,7 +1,7 @@
 {
   "ok": true,
-  "status": "batch_pending",
-  "batch_ready_for_refresh": false,
+  "status": "batch_complete",
+  "batch_ready_for_refresh": true,
   "input_boundary": "local ignored audit sheet plus tracked batch summary",
   "output_boundary": "aggregate-only batch completion status; no private row keys or transcript text",
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
@@ -14,32 +14,18 @@
     26
   ],
   "rows_in_batch": 4,
-  "reviewed_rows_in_batch": 0,
-  "pending_rows_in_batch": 4,
+  "reviewed_rows_in_batch": 4,
+  "pending_rows_in_batch": 0,
   "model_assessments_in_batch": 12,
-  "reviewed_model_assessments_in_batch": 0,
-  "pending_model_assessments_in_batch": 12,
+  "reviewed_model_assessments_in_batch": 12,
+  "pending_model_assessments_in_batch": 0,
   "invalid_row_numbers": [],
   "stratum_mismatch_rows": [],
-  "missing_row_field_counts": {
-    "reviewer_annotation_confidence": 4,
-    "reviewer_asr_confusion_terms": 4,
-    "reviewer_critical_atoms": 4,
-    "reviewer_decision_change_reason": 4,
-    "reviewer_expected_safe_action": 4,
-    "reviewer_risk_atoms": 4,
-    "reviewer_semantic_risk_label": 4,
-    "reviewer_would_asr_error_change_decision": 4
-  },
-  "missing_model_field_counts": {
-    "reviewer_annotation_confidence": 12,
-    "reviewer_critical_atoms": 12,
-    "reviewer_expected_safe_action": 12,
-    "reviewer_would_asr_error_change_decision": 12
-  },
+  "missing_row_field_counts": {},
+  "missing_model_field_counts": {},
   "source_batch_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json",
   "local_packet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_batches/2026-05-26T103335_0800_clean_control.md",
   "tracked_rows_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_current_review_batch_status_rows.tsv",
-  "next_action": "Complete all row fields and per-model assessments for this batch, then rerun this status audit before refreshing aggregate evidence.",
-  "runtime_seconds": 0.0015
+  "next_action": "Run refresh_human_audit_evidence.py, then prepare or audit the next review batch.",
+  "runtime_seconds": 0.001
 }

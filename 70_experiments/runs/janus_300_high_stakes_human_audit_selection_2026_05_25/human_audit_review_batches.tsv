@@ -1,2 +1,1 @@
 batch_order	selection_stratum	pending_rows	pending_model_assessments	primary_reason	completion_gate
-6	clean_control	4	12	provides negative/control rows for reviewer calibration	row fields plus all model-level assessments for rows in this stratum

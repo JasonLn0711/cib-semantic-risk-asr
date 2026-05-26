@@ -2,42 +2,35 @@
   "ok": true,
   "input_boundary": "local transcript-bearing audit sheet; do not commit input",
   "output_boundary": "aggregate-only; no audio IDs, sample IDs, transcripts, hypotheses, or reviewer notes",
-  "status": "partial_review",
+  "status": "review_complete",
   "audit_rows": 30,
-  "reviewed_rows": 26,
-  "pending_rows": 4,
+  "reviewed_rows": 30,
+  "pending_rows": 0,
   "model_assessments": 90,
-  "reviewed_model_assessments": 78,
-  "pending_model_assessments": 12,
+  "reviewed_model_assessments": 90,
+  "pending_model_assessments": 0,
   "malformed_model_assessments": 0,
-  "missing_required_field_counts": {
-    "reviewer_annotation_confidence": 4,
-    "reviewer_asr_confusion_terms": 4,
-    "reviewer_critical_atoms": 4,
-    "reviewer_decision_change_reason": 4,
-    "reviewer_expected_safe_action": 4,
-    "reviewer_risk_atoms": 4,
-    "reviewer_semantic_risk_label": 4,
-    "reviewer_would_asr_error_change_decision": 4
-  },
+  "missing_required_field_counts": {},
   "malformed_field_counts": {},
   "label_counts": {
     "reviewer_semantic_risk_label": {
-      "critical_escalation": 17,
-      "priority_review": 9
+      "critical_escalation": 18,
+      "priority_review": 11,
+      "review": 1
     },
     "reviewer_expected_safe_action": {
-      "critical_escalation": 17,
-      "priority_review": 9
+      "critical_escalation": 18,
+      "manual_review": 1,
+      "priority_review": 11
     },
     "reviewer_would_asr_error_change_decision": {
-      "no": 13,
+      "no": 17,
       "yes": 13
     },
     "reviewer_annotation_confidence": {
-      "high": 15,
-      "medium": 11
+      "high": 16,
+      "medium": 14
     }
   },
-  "wall_time_seconds": 0.0025
+  "wall_time_seconds": 0.0014
 }

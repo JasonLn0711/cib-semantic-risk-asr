@@ -6,20 +6,20 @@
   "reference_transcript_policy": "Reference transcripts are already human-reviewed ground truth for WER/CER scoring; this packet does not ask for duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "The packet asks reviewers to complete risk atoms, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
   "apply_log_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_batch_response_apply_log.tsv",
-  "apply_log_entries": 36,
+  "apply_log_entries": 42,
   "missing_log_columns": [],
   "status_counts": {
-    "response_complete": 12,
+    "response_complete": 18,
     "response_invalid": 5,
     "response_pending": 19
   },
   "mode_counts": {
-    "dry_run": 29,
-    "write": 7
+    "dry_run": 32,
+    "write": 10
   },
   "ok_counts": {
     "False": 24,
-    "True": 12
+    "True": 18
   },
   "error_key_counts": {
     "extra_response_row_number": 1,
@@ -32,26 +32,26 @@
     "write_requires_valid_preconditions": 1
   },
   "latest": {
-    "recorded_at": "2026-05-26T10:34:44+08:00",
-    "ok": "False",
-    "status": "response_pending",
-    "mode": "dry_run",
+    "recorded_at": "2026-05-26T10:48:40+08:00",
+    "ok": "True",
+    "status": "response_complete",
+    "mode": "write",
     "require_complete": "True",
     "require_timing": "True",
     "selection_stratum": "clean_control",
     "rows_in_batch": 4,
-    "reviewed_rows_in_response": 0,
-    "pending_rows_in_response": 4,
+    "reviewed_rows_in_response": 4,
+    "pending_rows_in_response": 0,
     "model_assessments_in_response": 12,
-    "reviewed_model_assessments_in_response": 0,
-    "pending_model_assessments_in_response": 12,
-    "rows_with_timing": 0,
-    "rows_missing_timing": 4,
-    "total_review_elapsed_seconds": "0",
-    "mean_review_elapsed_seconds": "",
-    "error_count_total": 5,
-    "error_keys": "incomplete_response,missing_review_timing",
-    "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv",
+    "reviewed_model_assessments_in_response": 12,
+    "pending_model_assessments_in_response": 0,
+    "rows_with_timing": 4,
+    "rows_missing_timing": 0,
+    "total_review_elapsed_seconds": "550.0",
+    "mean_review_elapsed_seconds": "137.5",
+    "error_count_total": 0,
+    "error_keys": "",
+    "response_sheet_path": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26_completed_batch6_human_response_authoritative_zip.tsv",
     "source_batch_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_next_review_batch_summary.json"
   },
   "next_action": "Fill all required row, model, and timing fields in the local response TSV, rerun strict dry-run until response_complete, then write and refresh."

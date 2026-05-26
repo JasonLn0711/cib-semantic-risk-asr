@@ -1,9 +1,8 @@
 severity	check	count
-warning	pending_model_review	12
-warning	pending_row_review	4
+info	schema_and_completion_gate	0
 info	audit_rows	30
-info	reviewed_rows	26
-info	pending_rows	4
+info	reviewed_rows	30
+info	pending_rows	0
 info	model_assessments	90
-info	reviewed_model_assessments	78
-info	pending_model_assessments	12
+info	reviewed_model_assessments	90
+info	pending_model_assessments	0

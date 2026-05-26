@@ -1,127 +1,184 @@
 {
-  "ok": true,
-  "status": "partial_review",
-  "require_complete": false,
+  "ok": false,
+  "status": "review_complete",
+  "require_complete": true,
   "input_boundary": "local ignored audit sheet only; no private row content is emitted",
   "output_boundary": "aggregate tracked outputs only",
   "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "Remaining selected-300 review work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
   "audit_rows": 30,
-  "reviewed_rows": 26,
-  "pending_rows": 4,
+  "reviewed_rows": 30,
+  "pending_rows": 0,
   "model_assessments": 90,
-  "reviewed_model_assessments": 78,
-  "pending_model_assessments": 12,
+  "reviewed_model_assessments": 90,
+  "pending_model_assessments": 0,
   "validation_ok": true,
   "validation_error_counts": {},
-  "validation_warning_counts": {
-    "pending_model_review": 12,
-    "pending_row_review": 4
-  },
-  "review_summary_status": "partial_review",
-  "progress_status": "partial_review",
-  "recommended_review_batch_count": 1,
-  "predictor_status": "partial_review",
+  "validation_warning_counts": {},
+  "review_summary_status": "review_complete",
+  "progress_status": "review_complete",
+  "recommended_review_batch_count": 0,
+  "predictor_status": "review_complete",
   "readiness_ok": true,
   "readiness_paper_ready": false,
   "readiness_status_counts": {
-    "completed": 5,
-    "partial_review": 1,
+    "completed": 6,
     "proxy_completed": 4
   },
   "completion_audit_ok": true,
   "publishable_ready": false,
   "completion_status_counts": {
-    "completed": 4,
-    "proxy_completed": 2,
-    "review_pending": 1
+    "completed": 5,
+    "proxy_completed": 2
   },
   "roadmap_audit_ok": true,
   "roadmap_complete": false,
   "roadmap_status_counts": {
     "blocked": 1,
-    "completed": 4,
-    "proxy_completed": 2,
-    "review_pending": 1
+    "completed": 5,
+    "proxy_completed": 2
   },
   "post_review_evidence_ok": false,
   "post_review_evidence_status": "post_review_evidence_blocked",
   "post_review_blocker_keys": [
-    "response_closeout_not_ready",
-    "human_refresh_not_complete",
-    "human_predictor_not_complete",
     "paper_ready_false",
     "publishable_ready_false",
-    "consequence_paper_claims_not_ready",
-    "recovery_proxy_only"
+    "consequence_paper_claims_not_ready"
   ],
-  "human_recovery_status": "partial_review",
-  "human_recovery_evidence_mode": "human_reviewed_pending",
-  "human_recovery_ready": false,
-  "review_work_order_status": "review_work_order_ready",
+  "human_recovery_status": "human_reviewed_complete",
+  "human_recovery_evidence_mode": "human_reviewed",
+  "human_recovery_ready": true,
+  "review_work_order_status": "review_work_order_blocked",
   "review_work_order_overview": {
-    "row_count": 4,
-    "row_work_order_steps": 20,
+    "row_count": 0,
+    "row_work_order_steps": 0,
     "packet_work_order_steps": 3,
-    "total_work_order_steps": 23,
-    "total_action_items": 84,
-    "row_field_action_items": 32,
-    "model_field_action_items": 48,
-    "timing_action_items": 4
+    "total_work_order_steps": 3,
+    "total_action_items": 0,
+    "row_field_action_items": 0,
+    "model_field_action_items": 0,
+    "timing_action_items": 0
   },
   "next_reviewer_operation": {
-    "status": "reviewer_operation_ready",
-    "current_step": {
-      "work_order_id": "row-23:01-mark-timing-start",
-      "row_number": "23",
-      "step_order": "01",
-      "step_type": "mark_timing_start",
-      "status": "pending",
-      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-26T103335_0800_clean_control_response_template.tsv --row-number 23 --mark-start --write",
-      "completion_signal": "review_started_at is present for every model row in this selected row",
-      "privacy_boundary": "tracked command only; local response TSV remains ignored"
-    },
-    "next_local_row_step": {
-      "work_order_id": "row-23:02-open-local-row",
-      "row_number": "23",
-      "step_order": "02",
-      "step_type": "open_local_row",
-      "status": "local_only_required",
-      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --row-number 23 --show-row --access-log 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_local_row_access_log.tsv",
-      "completion_signal": "reviewer has inspected the local row without copying content into git",
-      "privacy_boundary": "command output is transcript-bearing and must stay local-only"
-    },
-    "note": "Run current_step first. If current_step is mark_timing_start, then open next_local_row_step locally; command output is transcript-bearing and must not be copied into tracked files."
+    "status": "no_pending_row_steps",
+    "current_step": {},
+    "next_local_row_step": {}
   },
-  "post_review_sequence_status": "post_review_sequence_blocked",
+  "post_review_sequence_status": "post_review_sequence_ready_to_execute",
   "post_review_sequence_blocker_keys": [
-    "strict_dry_run",
-    "response_closeout",
-    "write_refresh_prepare_next",
-    "human_audit_refresh",
-    "strict_human_reviewed_recovery",
-    "post_review_checklist",
     "objective_requirements_audit"
   ],
   "post_review_sequence_executed_step_count": 0,
-  "operation_record_audit_ok": true,
-  "operation_record_status": "operation_records_ready",
-  "operation_record_failed_count": 0,
-  "operation_record_failed_records": [],
-  "consistency_audit_ok": true,
+  "operation_record_audit_ok": false,
+  "operation_record_status": "operation_records_drift",
+  "operation_record_failed_count": 3,
+  "operation_record_failed_records": [
+    {
+      "operation_log_id": "strict_apply",
+      "alignment_note": "strict-apply log drift"
+    },
+    {
+      "operation_log_id": "timing_helper",
+      "alignment_note": "timing log drift"
+    },
+    {
+      "operation_log_id": "post_review_sequence",
+      "alignment_note": "sequence log drift"
+    }
+  ],
+  "consistency_audit_ok": false,
   "consistency_status_counts": {
-    "pass": 26
+    "fail": 13,
+    "pass": 13
   },
-  "consistency_failed_checks": [],
+  "consistency_failed_checks": [
+    {
+      "check_id": "C030",
+      "invariant": "strict response apply gate requires timing",
+      "result": "apply dry-run timing requirement is stale or incomplete",
+      "next_action": "Run the session-gated strict response dry-run with --require-complete --require-timing."
+    },
+    {
+      "check_id": "C031",
+      "invariant": "response closeout blocks on missing timing",
+      "result": "closeout timing blocker is not aligned with current packet state",
+      "next_action": "Keep write/refresh blocked until timing coverage is complete."
+    },
+    {
+      "check_id": "C032",
+      "invariant": "top-level next actions route through the timing gate",
+      "result": "timing next-action drift in refresh",
+      "next_action": "Refresh top-level summaries so reviewers cannot bypass timing closeout."
+    },
+    {
+      "check_id": "C040",
+      "invariant": "review-pending state cannot be paper-ready",
+      "result": "at least one paper-facing gate conflicts with pending selected-300 review",
+      "next_action": "Keep claims proxy-only until response closeout, write, refresh, predictor, and recovery are complete."
+    },
+    {
+      "check_id": "C066",
+      "invariant": "post-review command plan preserves strict recovery order",
+      "result": "post-review command plan is missing, stale, out of order, or allows pending recovery evidence",
+      "next_action": "Refresh the post-review checklist before local response write/refresh and do not promote proxy recovery."
+    },
+    {
+      "check_id": "C071",
+      "invariant": "review work-order TSV covers current packet actions",
+      "result": "counts_match=True; row_coverage_ok=False; steps_ok=False; status=review_work_order_blocked; sensitive=False",
+      "next_action": "Regenerate review work order from action-items, closeout, and handoff summaries before local review."
+    },
+    {
+      "check_id": "C075",
+      "invariant": "review work-order strict dry-run preserves session and timing gates",
+      "result": "command_flags_ok=True; status=review_work_order_blocked",
+      "next_action": "Regenerate review work order so packet strict dry-run uses --require-complete --require-timing --require-session-start-gate without write flags."
+    },
+    {
+      "check_id": "C078",
+      "invariant": "review work-order summary exposes the next local operation",
+      "result": "current_ok=False; local_open_ok=False; status=review_work_order_blocked",
+      "next_action": "Regenerate the review work-order summary so reviewer execution can start from the tracked next operation without scanning the full TSV."
+    },
+    {
+      "check_id": "C079",
+      "invariant": "selected-300 reviewer operations have aggregate log coverage",
+      "result": "status_ok=False; counts_ok=False; packet_ok=True; next_operation_aligned=False",
+      "next_action": "Regenerate the operation-record audit after reviewer-session operations so every tracked operation has an aggregate log record before claims."
+    },
+    {
+      "check_id": "C081",
+      "invariant": "local row-open command has a repo-safe access-log route",
+      "result": "route_ok=False; status_ok=True; path_ok=True; row_ok=False; record_status=operation_records_drift; access_log_status=planned_not_yet_recorded; work_order_status=review_work_order_blocked",
+      "next_action": "Regenerate the review work-order and operation-record audit so the --show-row command includes --access-log before local review."
+    },
+    {
+      "check_id": "C074",
+      "invariant": "review work-order routes post-closeout through sequence runner",
+      "result": "sequence_route_ok=True; status=review_work_order_blocked",
+      "next_action": "Regenerate review work order so packet-level execution uses run_post_review_evidence_sequence.py --execute after response closeout."
+    },
+    {
+      "check_id": "C077",
+      "invariant": "post-review sequence execute mode stops before blocked gates",
+      "result": "policy_ok=True; status_ok=False",
+      "next_action": "Regenerate post-review sequence summary so --execute safety policy and stopped-step accounting are recorded before reviewer closeout."
+    },
+    {
+      "check_id": "C073",
+      "invariant": "objective audit records post-review sequence gate status",
+      "result": "status_ok=False; sequence_status_recorded=True; sequence_route_recorded=True; sensitive=False",
+      "next_action": "Regenerate the post-review sequence summary before the objective audit, and keep objective completion routed through run_post_review_evidence_sequence.py --execute."
+    }
+  ],
   "objective_requirements_audit_ok": true,
   "objective_requirements_ready": false,
   "objective_requirements_status_counts": {
-    "satisfied": 8,
-    "proxy_satisfied": 5,
-    "review_pending": 2
+    "satisfied": 10,
+    "proxy_satisfied": 5
   },
   "objective_requirements_proxy_count": 5,
-  "objective_requirements_blocking_count": 2,
+  "objective_requirements_blocking_count": 0,
   "downstream_outputs_refreshed": true,
   "outputs": [
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_validation_summary.json",
@@ -144,6 +201,7 @@
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion_summary.json",
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/postdoc_roadmap_completion.tsv",
     "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json",
+    "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_checklist.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order_summary.json",
@@ -158,6 +216,6 @@
     "70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency.tsv",
     "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json"
   ],
-  "runtime_seconds": 0.014,
-  "next_action": "Complete selected-300 risk-atom, decision-change, expected-action, confidence, per-model assessment, and per-row timing fields, then rerun the session-gated strict dry-run with --require-complete --require-timing before aggregate refresh."
+  "runtime_seconds": 0.0097,
+  "next_action": "Use refreshed aggregate summaries for paper-table drafting and human-reviewed predictor analysis."
 }

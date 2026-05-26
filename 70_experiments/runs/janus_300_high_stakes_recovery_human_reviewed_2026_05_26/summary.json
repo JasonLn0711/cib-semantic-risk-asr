@@ -1,21 +1,260 @@
 {
-  "ok": false,
-  "status": "partial_review",
-  "evidence_mode": "human_reviewed_pending",
-  "human_reviewed": false,
-  "review_status": "partial_review",
+  "ok": true,
+  "status": "human_reviewed_complete",
+  "evidence_mode": "human_reviewed",
+  "human_reviewed": true,
+  "review_status": "human_reviewed_complete",
   "input_boundary": "local transcript-bearing audit sheet; do not commit input",
-  "output_boundary": "aggregate-only human-reviewed recovery readiness summary",
+  "output_boundary": "aggregate-only human-reviewed recovery evidence",
+  "thresholds": {
+    "confidence_threshold": 0.7,
+    "sres_threshold": 20.0,
+    "ceis_threshold": 5.0,
+    "ensemble_mode": "priority"
+  },
   "audit_rows": 30,
-  "reviewed_rows": 26,
-  "pending_rows": 4,
+  "reviewed_rows": 30,
   "model_assessments": 90,
-  "reviewed_model_assessments": 78,
-  "pending_model_assessments": 12,
-  "policies": {},
-  "blocker_keys": [
-    "human_review_incomplete"
+  "reviewed_model_assessments": 90,
+  "sample_count": 90,
+  "reviewed_row_count": 30,
+  "human_reviewed_model_samples": 90,
+  "skipped_counts": {},
+  "reviewer_semantic_label_counts": {
+    "critical_escalation": 18,
+    "priority_review": 11,
+    "review": 1
+  },
+  "model_decision_change_counts": {
+    "no": 74,
+    "yes": 16
+  },
+  "policies": {
+    "no_recovery": {
+      "rows": 90,
+      "mismatch_count": 38,
+      "mismatch_rate": 0.4222,
+      "unsafe_downrouting_count": 29,
+      "unsafe_downrouting_rate": 0.3222,
+      "high_risk_missed_count": 6,
+      "high_risk_missed_rate": 0.0667,
+      "critical_miss_count": 1,
+      "critical_miss_rate": 0.0111,
+      "over_escalation_count": 9,
+      "over_escalation_rate": 0.1,
+      "triggered_count": 0,
+      "recovery_budget_rate": 0.0,
+      "machine_abstention_count": 0,
+      "machine_abstention_rate": 0.0,
+      "exact_recovered_error_count": 0,
+      "unsafe_downrouting_reduction_vs_no_recovery": 0,
+      "unsafe_downrouting_gain": 0.0,
+      "high_risk_missed_reduction_vs_no_recovery": 0,
+      "high_risk_missed_gain": 0.0,
+      "conservative_escalation_cost_count": 0,
+      "action_counts": {
+        "none": 90
+      },
+      "by_run": {
+        "breeze_asr25_base_high_stakes_300": {
+          "rows": 30,
+          "unsafe_downrouting_count": 20,
+          "high_risk_missed_count": 5
+        },
+        "breeze_asr25_lora_high_stakes_300": {
+          "rows": 30,
+          "unsafe_downrouting_count": 6
+        },
+        "breeze_asr25_partial_encoder_high_stakes_300": {
+          "rows": 30,
+          "unsafe_downrouting_count": 3,
+          "high_risk_missed_count": 1
+        }
+      }
+    },
+    "confidence_only_trigger": {
+      "rows": 90,
+      "mismatch_count": 38,
+      "mismatch_rate": 0.4222,
+      "unsafe_downrouting_count": 29,
+      "unsafe_downrouting_rate": 0.3222,
+      "high_risk_missed_count": 6,
+      "high_risk_missed_rate": 0.0667,
+      "critical_miss_count": 1,
+      "critical_miss_rate": 0.0111,
+      "over_escalation_count": 9,
+      "over_escalation_rate": 0.1,
+      "triggered_count": 0,
+      "recovery_budget_rate": 0.0,
+      "machine_abstention_count": 0,
+      "machine_abstention_rate": 0.0,
+      "exact_recovered_error_count": 0,
+      "unsafe_downrouting_reduction_vs_no_recovery": 0,
+      "unsafe_downrouting_gain": 0.0,
+      "high_risk_missed_reduction_vs_no_recovery": 0,
+      "high_risk_missed_gain": 0.0,
+      "conservative_escalation_cost_count": 0,
+      "action_counts": {
+        "none": 90
+      },
+      "by_run": {
+        "breeze_asr25_base_high_stakes_300": {
+          "rows": 30,
+          "unsafe_downrouting_count": 20,
+          "high_risk_missed_count": 5
+        },
+        "breeze_asr25_lora_high_stakes_300": {
+          "rows": 30,
+          "unsafe_downrouting_count": 6
+        },
+        "breeze_asr25_partial_encoder_high_stakes_300": {
+          "rows": 30,
+          "unsafe_downrouting_count": 3,
+          "high_risk_missed_count": 1
+        }
+      }
+    },
+    "sres_triggered_recovery": {
+      "rows": 90,
+      "mismatch_count": 33,
+      "mismatch_rate": 0.3667,
+      "unsafe_downrouting_count": 24,
+      "unsafe_downrouting_rate": 0.2667,
+      "high_risk_missed_count": 0,
+      "high_risk_missed_rate": 0.0,
+      "critical_miss_count": 0,
+      "critical_miss_rate": 0.0,
+      "over_escalation_count": 9,
+      "over_escalation_rate": 0.1,
+      "triggered_count": 35,
+      "recovery_budget_rate": 0.3889,
+      "machine_abstention_count": 0,
+      "machine_abstention_rate": 0.0,
+      "exact_recovered_error_count": 5,
+      "unsafe_downrouting_reduction_vs_no_recovery": 5,
+      "unsafe_downrouting_gain": 0.1724,
+      "high_risk_missed_reduction_vs_no_recovery": 6,
+      "high_risk_missed_gain": 1.0,
+      "conservative_escalation_cost_count": 0,
+      "action_counts": {
+        "none": 55,
+        "sres_conservative_escalation": 35
+      },
+      "by_run": {
+        "breeze_asr25_base_high_stakes_300": {
+          "rows": 30,
+          "unsafe_downrouting_count": 16,
+          "triggered_count": 22
+        },
+        "breeze_asr25_lora_high_stakes_300": {
+          "rows": 30,
+          "unsafe_downrouting_count": 6,
+          "triggered_count": 9
+        },
+        "breeze_asr25_partial_encoder_high_stakes_300": {
+          "rows": 30,
+          "triggered_count": 4,
+          "unsafe_downrouting_count": 2
+        }
+      }
+    },
+    "ceis_triggered_conservative_action": {
+      "rows": 90,
+      "mismatch_count": 33,
+      "mismatch_rate": 0.3667,
+      "unsafe_downrouting_count": 24,
+      "unsafe_downrouting_rate": 0.2667,
+      "high_risk_missed_count": 0,
+      "high_risk_missed_rate": 0.0,
+      "critical_miss_count": 0,
+      "critical_miss_rate": 0.0,
+      "over_escalation_count": 9,
+      "over_escalation_rate": 0.1,
+      "triggered_count": 35,
+      "recovery_budget_rate": 0.3889,
+      "machine_abstention_count": 0,
+      "machine_abstention_rate": 0.0,
+      "exact_recovered_error_count": 5,
+      "unsafe_downrouting_reduction_vs_no_recovery": 5,
+      "unsafe_downrouting_gain": 0.1724,
+      "high_risk_missed_reduction_vs_no_recovery": 6,
+      "high_risk_missed_gain": 1.0,
+      "conservative_escalation_cost_count": 0,
+      "action_counts": {
+        "ceis_conservative_escalation": 35,
+        "none": 55
+      },
+      "by_run": {
+        "breeze_asr25_base_high_stakes_300": {
+          "rows": 30,
+          "unsafe_downrouting_count": 16,
+          "triggered_count": 22
+        },
+        "breeze_asr25_lora_high_stakes_300": {
+          "rows": 30,
+          "unsafe_downrouting_count": 6,
+          "triggered_count": 9
+        },
+        "breeze_asr25_partial_encoder_high_stakes_300": {
+          "rows": 30,
+          "triggered_count": 4,
+          "unsafe_downrouting_count": 2
+        }
+      }
+    },
+    "ceis_ensemble_arbitration": {
+      "rows": 90,
+      "mismatch_count": 33,
+      "mismatch_rate": 0.3667,
+      "unsafe_downrouting_count": 24,
+      "unsafe_downrouting_rate": 0.2667,
+      "high_risk_missed_count": 0,
+      "high_risk_missed_rate": 0.0,
+      "critical_miss_count": 0,
+      "critical_miss_rate": 0.0,
+      "over_escalation_count": 9,
+      "over_escalation_rate": 0.1,
+      "triggered_count": 47,
+      "recovery_budget_rate": 0.5222,
+      "machine_abstention_count": 18,
+      "machine_abstention_rate": 0.2,
+      "exact_recovered_error_count": 5,
+      "unsafe_downrouting_reduction_vs_no_recovery": 5,
+      "unsafe_downrouting_gain": 0.1724,
+      "high_risk_missed_reduction_vs_no_recovery": 6,
+      "high_risk_missed_gain": 1.0,
+      "conservative_escalation_cost_count": 0,
+      "action_counts": {
+        "ceis_ensemble_conservative_escalation": 29,
+        "ensemble_interval_conservative_abstention": 18,
+        "none": 43
+      },
+      "by_run": {
+        "breeze_asr25_base_high_stakes_300": {
+          "rows": 30,
+          "unsafe_downrouting_count": 16,
+          "triggered_count": 23,
+          "machine_abstention_count": 6
+        },
+        "breeze_asr25_lora_high_stakes_300": {
+          "rows": 30,
+          "triggered_count": 15,
+          "machine_abstention_count": 6,
+          "unsafe_downrouting_count": 6
+        },
+        "breeze_asr25_partial_encoder_high_stakes_300": {
+          "rows": 30,
+          "triggered_count": 9,
+          "machine_abstention_count": 6,
+          "unsafe_downrouting_count": 2
+        }
+      }
+    }
+  },
+  "notes": [
+    "Recovery outcomes are scored against reviewer semantic risk labels.",
+    "CEIS-triggered policies use reviewed critical atoms when model CEIS atoms are absent.",
+    "Per-sample detail remains ignored because it can contain row keys."
   ],
-  "next_action": "Complete selected-300 row/model/timing review, refresh human audit aggregates, then rerun this human-reviewed recovery evaluator.",
-  "runtime_seconds": 0.0008
+  "runtime_seconds": 0.0018
 }

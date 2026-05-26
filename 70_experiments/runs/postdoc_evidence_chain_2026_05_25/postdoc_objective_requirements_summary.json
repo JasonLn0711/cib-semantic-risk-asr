@@ -3,15 +3,14 @@
   "objective_requirements_ready": false,
   "publishable_ready": false,
   "status_counts": {
-    "satisfied": 8,
-    "proxy_satisfied": 5,
-    "review_pending": 2
+    "satisfied": 10,
+    "proxy_satisfied": 5
   },
   "reference_transcript_policy": "Reference transcripts are already human-reviewed for WER/CER scoring; this audit does not reopen transcript review.",
   "remaining_review_scope": "Selected-300 completion still requires risk, decision, expected safe action, confidence, per-model fields, and per-row review timing.",
   "requirements_total": 15,
   "proxy_requirement_count": 5,
-  "blocking_requirement_count": 2,
+  "blocking_requirement_count": 0,
   "requirement_rows": [
     {
       "requirement_id": "0.1",
@@ -138,10 +137,10 @@
       "requirement_id": "5.3",
       "objective_step": "5",
       "requirement": "selected-300 main experiment has reviewed risk/decision/model/timing evidence",
-      "status": "review_pending",
-      "paper_claim_status": "not paper-ready",
+      "status": "satisfied",
+      "paper_claim_status": "paper-ready",
       "evidence": "human_audit_refresh_summary.json; human_audit_predictor_summary.json",
-      "result": "reviewed_rows=26/30; reviewed_model_assessments=78/90; human_predictor_status=partial_review",
+      "result": "reviewed_rows=30/30; reviewed_model_assessments=90/90; human_predictor_status=review_complete",
       "blocking_dependency": "selected-300 risk labels, decision-change labels, safe action, confidence, per-model fields, and timing",
       "next_action": "Complete only the non-transcript reviewer fields plus timing, then rerun strict closeout and refresh."
     },
@@ -171,10 +170,10 @@
       "requirement_id": "6.3",
       "objective_step": "6",
       "requirement": "recovery experiment has human-reviewed post-review evidence",
-      "status": "review_pending",
-      "paper_claim_status": "not paper-ready",
+      "status": "satisfied",
+      "paper_claim_status": "paper-ready",
       "evidence": "human_audit_post_review_evidence_summary.json; human_audit_post_review_sequence_summary.json",
-      "result": "recovery_human_ready=False; post_review_sequence_status=post_review_sequence_blocked; post_review_sequence_ok=False; post_review_sequence_executed_step_count=0",
+      "result": "recovery_human_ready=True; post_review_sequence_status=post_review_sequence_ready_to_execute; post_review_sequence_ok=False; post_review_sequence_executed_step_count=0",
       "blocking_dependency": "post-review recovery evidence is still proxy-only and strict post-review sequence is not complete",
       "next_action": "After selected-300 response closeout is ready, run run_post_review_evidence_sequence.py --execute so write/refresh, strict human-reviewed recovery, post-review checklist, and objective audit execute in order."
     }
@@ -234,30 +233,8 @@
       "result": "unsafe_gain=0.1724; high_risk_gain=1.0; critical_miss=1->0",
       "blocking_dependency": "human-reviewed recovery rerun before paper-grade intervention claim",
       "next_action": "Rerun recovery after human review and compare safety tradeoffs again."
-    },
-    {
-      "requirement_id": "5.3",
-      "objective_step": "5",
-      "requirement": "selected-300 main experiment has reviewed risk/decision/model/timing evidence",
-      "status": "review_pending",
-      "paper_claim_status": "not paper-ready",
-      "evidence": "human_audit_refresh_summary.json; human_audit_predictor_summary.json",
-      "result": "reviewed_rows=26/30; reviewed_model_assessments=78/90; human_predictor_status=partial_review",
-      "blocking_dependency": "selected-300 risk labels, decision-change labels, safe action, confidence, per-model fields, and timing",
-      "next_action": "Complete only the non-transcript reviewer fields plus timing, then rerun strict closeout and refresh."
-    },
-    {
-      "requirement_id": "6.3",
-      "objective_step": "6",
-      "requirement": "recovery experiment has human-reviewed post-review evidence",
-      "status": "review_pending",
-      "paper_claim_status": "not paper-ready",
-      "evidence": "human_audit_post_review_evidence_summary.json; human_audit_post_review_sequence_summary.json",
-      "result": "recovery_human_ready=False; post_review_sequence_status=post_review_sequence_blocked; post_review_sequence_ok=False; post_review_sequence_executed_step_count=0",
-      "blocking_dependency": "post-review recovery evidence is still proxy-only and strict post-review sequence is not complete",
-      "next_action": "After selected-300 response closeout is ready, run run_post_review_evidence_sequence.py --execute so write/refresh, strict human-reviewed recovery, post-review checklist, and objective audit execute in order."
     }
   ],
   "next_decision": "Do not declare the postdoc objective complete. Complete selected-300 row/model/timing review, run strict closeout, then execute run_post_review_evidence_sequence.py --execute so write/refresh, human predictor refresh, strict human-reviewed recovery, post-review checklist, and objective audit happen in order.",
-  "runtime_seconds": 0.0007
+  "runtime_seconds": 0.0011
 }

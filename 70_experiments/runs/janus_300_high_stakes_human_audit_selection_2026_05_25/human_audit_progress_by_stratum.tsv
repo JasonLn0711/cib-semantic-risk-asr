@@ -4,4 +4,4 @@ unsafe_downrouting	6	6	0	1.0	18	18	0	1.0
 high_proxy_risk	6	6	0	1.0	18	18	0	1.0
 model_disagreement	4	4	0	1.0	12	12	0	1.0
 risk_score_fill	4	4	0	1.0	12	12	0	1.0
-clean_control	4	0	4	0.0	12	0	12	0.0
+clean_control	4	4	0	1.0	12	12	0	1.0

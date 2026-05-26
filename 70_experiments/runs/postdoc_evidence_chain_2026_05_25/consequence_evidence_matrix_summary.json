@@ -2,9 +2,8 @@
   "ok": true,
   "paper_claims_ready": false,
   "status_counts": {
-    "completed": 1,
-    "proxy_completed": 4,
-    "review_pending": 2
+    "completed": 2,
+    "proxy_completed": 5
   },
   "reference_transcript_policy": "Reference transcripts are treated as already human-reviewed ground truth for WER/CER scoring; do not route duplicate transcript review unless future review fields or content differ from the accepted ground-truth transcript fields.",
   "remaining_review_scope": "Remaining selected-300 review work is limited to risk-atom labels, decision-change labels, expected safe action, confidence, per-model assessment fields, and per-row review timing.",
@@ -68,23 +67,23 @@
       "consequence_id": "C5",
       "claim_class": "human_evidence_gate",
       "consequence_claim": "The human-reviewed evidence path is ready to execute but not complete.",
-      "status": "review_pending",
-      "paper_claim_status": "not paper-ready",
+      "status": "completed",
+      "paper_claim_status": "human-reviewed evidence ready",
       "evidence_files": "human_audit_refresh_summary.json; human_audit_reviewer_preflight_summary.json",
-      "aggregate_result": "Review progress is 0/30 rows and 0/90 model assessments; preflight status is review_session_ready.",
+      "aggregate_result": "Review progress is 30/30 rows and 90/90 model assessments; preflight status is review_session_ready.",
       "blocking_dependency": "selected-300 risk atoms, decision-change labels, expected safe action, confidence, per-model assessments, and per-row timing",
-      "next_action": "Fill the current ready packet including timing, run strict dry-run with --require-complete --require-timing to response_complete, then write and refresh aggregate evidence."
+      "next_action": "Use completed human-reviewed selected-300 aggregate evidence; do not reopen transcript review."
     },
     {
       "consequence_id": "C6",
       "claim_class": "publishability",
       "consequence_claim": "The repo is not yet paper-ready despite strong proxy evidence.",
-      "status": "review_pending",
+      "status": "proxy_completed",
       "paper_claim_status": "not paper-ready",
       "evidence_files": "postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json",
-      "aggregate_result": "Publishable readiness is false; status counts are {'completed': 4, 'proxy_completed': 2, 'review_pending': 1}.",
+      "aggregate_result": "Publishable readiness is false; status counts are {'completed': 5, 'proxy_completed': 2}.",
       "blocking_dependency": "selected-300 human row/model/timing review and post-review predictor/recovery refresh",
-      "next_action": "Do not spend GPU time on more fine-tuning until the selected-300 human evidence gate closes."
+      "next_action": "Resolve remaining proxy-only evidence gates before paper-ready claims."
     }
   ],
   "blocking_or_proxy_items": [
@@ -117,21 +116,14 @@
       "next_action": "Rerun recovery once selected-300 reviewed labels exist; report critical miss, unsafe downrouting, over-escalation, abstention, stability gain, and budget."
     },
     {
-      "consequence_id": "C5",
-      "claim_class": "human_evidence_gate",
-      "status": "review_pending",
-      "blocking_dependency": "selected-300 risk atoms, decision-change labels, expected safe action, confidence, per-model assessments, and per-row timing",
-      "next_action": "Fill the current ready packet including timing, run strict dry-run with --require-complete --require-timing to response_complete, then write and refresh aggregate evidence."
-    },
-    {
       "consequence_id": "C6",
       "claim_class": "publishability",
-      "status": "review_pending",
+      "status": "proxy_completed",
       "blocking_dependency": "selected-300 human row/model/timing review and post-review predictor/recovery refresh",
-      "next_action": "Do not spend GPU time on more fine-tuning until the selected-300 human evidence gate closes."
+      "next_action": "Resolve remaining proxy-only evidence gates before paper-ready claims."
     }
   ],
   "first_principle_decision": "Move from model-centric ASR improvement to consequence-centric evidence: claims become paper-ready only when aggregate consequences are tied to human-reviewed risk/decision/model labels.",
   "next_decision": "Use the ready selected-300 packet to complete risk/decision/model/timing review, run the session-gated strict dry-run with --require-complete --require-timing, then rerun predictor and recovery analyses against reviewed labels.",
-  "runtime_seconds": 0.0029
+  "runtime_seconds": 0.0033
 }

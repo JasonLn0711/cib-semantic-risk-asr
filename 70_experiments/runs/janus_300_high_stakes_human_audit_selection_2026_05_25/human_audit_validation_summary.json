@@ -1,20 +1,17 @@
 {
   "ok": true,
-  "status": "partial_review",
-  "require_complete": false,
+  "status": "review_complete",
+  "require_complete": true,
   "expected_rows": 30,
   "audit_rows": 30,
-  "reviewed_rows": 26,
-  "pending_rows": 4,
+  "reviewed_rows": 30,
+  "pending_rows": 0,
   "model_assessments": 90,
-  "reviewed_model_assessments": 78,
-  "pending_model_assessments": 12,
+  "reviewed_model_assessments": 90,
+  "pending_model_assessments": 0,
   "error_counts": {},
-  "warning_counts": {
-    "pending_model_review": 12,
-    "pending_row_review": 4
-  },
+  "warning_counts": {},
   "input_boundary": "local transcript-bearing audit sheet; do not commit input",
   "output_boundary": "aggregate-only validation counts",
-  "runtime_seconds": 0.0012
+  "runtime_seconds": 0.0013
 }
