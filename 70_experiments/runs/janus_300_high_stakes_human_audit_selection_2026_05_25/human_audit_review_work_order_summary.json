@@ -33,6 +33,30 @@
   "session_start_status": "reviewer_session_started",
   "handoff_status": "reviewer_input_pending",
   "handoff_freshness_status": "fresh",
+  "next_reviewer_operation": {
+    "status": "reviewer_operation_ready",
+    "current_step": {
+      "work_order_id": "row-1:01-mark-timing-start",
+      "row_number": "1",
+      "step_order": "01",
+      "step_type": "mark_timing_start",
+      "status": "pending",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/mark_human_audit_response_timing.py --response-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/review_responses/2026-05-25T220915_0800_critical_or_high_risk_missed_response_template.tsv --row-number 1 --mark-start --write",
+      "completion_signal": "review_started_at is present for every model row in this selected row",
+      "privacy_boundary": "tracked command only; local response TSV remains ignored"
+    },
+    "next_local_row_step": {
+      "work_order_id": "row-1:02-open-local-row",
+      "row_number": "1",
+      "step_order": "02",
+      "step_type": "open_local_row",
+      "status": "local_only_required",
+      "command": ".venv/bin/python 80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py --audit-sheet 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/artifacts/human_risk_atom_audit_sheet.tsv --row-number 1 --show-row",
+      "completion_signal": "reviewer has inspected the local row without copying content into git",
+      "privacy_boundary": "command output is transcript-bearing and must stay local-only"
+    },
+    "note": "Run current_step first. If current_step is mark_timing_start, then open next_local_row_step locally; command output is transcript-bearing and must not be copied into tracked files."
+  },
   "tracked_outputs": {
     "review_work_order_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order_summary.json",
     "review_work_order_tsv": "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_review_work_order.tsv",

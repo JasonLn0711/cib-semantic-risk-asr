@@ -184,7 +184,7 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   awareness, per-row timing-helper command coverage, the response gap/action
   TSVs, the aggregate review work order, the post-review sequence gate, and
   the post-review command plan.
-  Current status is `ok=true` with `23/23` checks passing:
+  Current status is `ok=true` with `24/24` checks passing:
   transcript ground truth is not reopened, remaining review scope includes
   row/model/timing fields, proxy evidence is not promoted to paper claims, and
   expanded ASR/Gemma candidates remain behind locale/runtime gates. It also
@@ -201,7 +201,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   operations cannot bypass the strict sequence runner. Check `C075` requires the
   work-order packet strict dry-run to preserve `--require-complete`,
   `--require-timing`, and `--require-session-start-gate` without write-mode
-  flags, so local reviewer work cannot skip timing/session gates. Check `C076`
+  flags, so local reviewer work cannot skip timing/session gates. Check `C078`
+  requires the work-order summary to expose the next timing-start command and
+  the next local row-open command, with transcript-bearing command output kept
+  local-only, so reviewer execution can start from tracked aggregate evidence
+  without scanning the full TSV. Check `C076`
   applies the same strict dry-run command safety to the post-review sequence TSV
   before any write/refresh or human-reviewed recovery route can be treated as
   executable. Check `C077` requires the post-review sequence summary to record
