@@ -30,6 +30,7 @@ import audit_postdoc_objective_requirements as objective_audit  # noqa: E402
 import audit_postdoc_roadmap_completion as roadmap_audit  # noqa: E402
 import audit_publishable_evidence_chain as completion_audit  # noqa: E402
 import audit_human_review_progress as progress_audit  # noqa: E402
+import audit_human_audit_operation_records as operation_records  # noqa: E402
 import build_human_audit_review_work_order as review_work_order  # noqa: E402
 import check_evidence_chain_readiness as readiness  # noqa: E402
 import evaluate_human_reviewed_recovery_policies as human_recovery  # noqa: E402
@@ -579,6 +580,22 @@ def run_objective_requirements_gate(
     return payload, [output_json, output_tsv]
 
 
+def run_operation_record_gate(
+    *,
+    output_dir: Path,
+    repo_root: Path,
+) -> tuple[dict[str, Any], list[Path]]:
+    payload, rows = operation_records.build_operation_record_audit(
+        run_dir=output_dir,
+        repo_root=repo_root,
+    )
+    output_json = output_dir / operation_records.SUMMARY_NAME
+    output_tsv = output_dir / operation_records.TSV_NAME
+    operation_records.write_json(output_json, payload)
+    operation_records.write_tsv(output_tsv, rows)
+    return payload, [output_json, output_tsv]
+
+
 def refresh_human_audit_evidence(
     *,
     audit_sheet: Path,
@@ -617,6 +634,7 @@ def refresh_human_audit_evidence(
     human_recovery_payload: dict[str, Any] | None = None
     work_order_payload: dict[str, Any] | None = None
     post_review_sequence_payload: dict[str, Any] | None = None
+    operation_record_payload: dict[str, Any] | None = None
     consistency_payload: dict[str, Any] | None = None
     objective_payload: dict[str, Any] | None = None
     downstream_refreshed = False
@@ -692,6 +710,10 @@ def refresh_human_audit_evidence(
         "post_review_sequence_status": "",
         "post_review_sequence_blocker_keys": [],
         "post_review_sequence_executed_step_count": "",
+        "operation_record_audit_ok": "",
+        "operation_record_status": "",
+        "operation_record_failed_count": "",
+        "operation_record_failed_records": [],
         "consistency_audit_ok": "",
         "consistency_status_counts": {},
         "consistency_failed_checks": [],
@@ -830,6 +852,26 @@ def refresh_human_audit_evidence(
         payload["objective_requirements_blocking_count"] = objective_payload.get(
             "blocking_requirement_count",
             "",
+        )
+        payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
+        payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))
+        write_refresh_summary(output_dir, payload)
+        operation_record_payload, operation_record_outputs = run_operation_record_gate(
+            output_dir=output_dir,
+            repo_root=repo_root,
+        )
+        output_paths.extend(operation_record_outputs)
+        ok = ok and bool(operation_record_payload.get("ok"))
+        payload["ok"] = ok
+        payload["operation_record_audit_ok"] = operation_record_payload.get("ok")
+        payload["operation_record_status"] = operation_record_payload.get("status", "")
+        payload["operation_record_failed_count"] = operation_record_payload.get(
+            "failed_operation_record_count",
+            "",
+        )
+        payload["operation_record_failed_records"] = operation_record_payload.get(
+            "failed_operation_records",
+            [],
         )
         payload["outputs"] = [repo_relative(path, repo_root=repo_root) for path in output_paths]
         payload["outputs"].append(repo_relative(summary_path, repo_root=repo_root))

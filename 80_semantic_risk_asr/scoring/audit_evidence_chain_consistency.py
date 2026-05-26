@@ -109,6 +109,10 @@ SUMMARY_SPECS = {
         "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
         "human_audit_review_work_order_summary.json"
     ),
+    "operation_records": (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
+        "human_audit_operation_record_summary.json"
+    ),
     "post_review_sequence": (
         "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/"
         "human_audit_post_review_sequence_summary.json"
@@ -233,6 +237,7 @@ def add_policy_checks(payloads: dict[str, dict[str, Any]], rows: list[dict[str, 
         "handoff",
         "action_checklist",
         "session_start",
+        "operation_records",
     ]
     transcript_failures = [
         name
@@ -1236,6 +1241,88 @@ def add_review_work_order_next_operation_check(
     )
 
 
+def add_operation_record_check(
+    payloads: dict[str, dict[str, Any]],
+    rows: list[dict[str, str]],
+) -> None:
+    records = payloads.get("operation_records", {})
+    work_order = payloads.get("work_order", {})
+    refresh = payloads.get("refresh", {})
+    operation_rows = records.get("operation_records")
+    operation_rows = operation_rows if isinstance(operation_rows, list) else []
+    required_ids = {
+        "review_batch",
+        "preflight",
+        "session_start",
+        "strict_apply",
+        "timing_helper",
+        "post_review_sequence",
+    }
+    passed_ids = {
+        str(row.get("operation_log_id", ""))
+        for row in operation_rows
+        if isinstance(row, dict) and row.get("alignment_status") == "pass"
+    }
+    next_record = records.get("next_reviewer_operation")
+    next_record = next_record if isinstance(next_record, dict) else {}
+    next_work = work_order.get("next_reviewer_operation")
+    next_work = next_work if isinstance(next_work, dict) else {}
+    next_refresh = refresh.get("next_reviewer_operation")
+    next_refresh = next_refresh if isinstance(next_refresh, dict) else {}
+    record_current = next_record.get("current_step")
+    record_current = record_current if isinstance(record_current, dict) else {}
+    work_current = next_work.get("current_step")
+    work_current = work_current if isinstance(work_current, dict) else {}
+    refresh_current = next_refresh.get("current_step")
+    refresh_current = refresh_current if isinstance(refresh_current, dict) else {}
+    next_operation_aligned = (
+        record_current.get("work_order_id")
+        == work_current.get("work_order_id")
+        == refresh_current.get("work_order_id")
+        and record_current.get("step_type") == "mark_timing_start"
+    )
+    counts_ok = (
+        records.get("required_operation_log_count") == 6
+        and records.get("passed_operation_record_count") == 6
+        and records.get("failed_operation_record_count") == 0
+        and required_ids.issubset(passed_ids)
+    )
+    status_ok = (
+        records.get("ok") is True
+        and records.get("status") == "operation_records_ready"
+    )
+    packet = records.get("current_packet")
+    packet = packet if isinstance(packet, dict) else {}
+    packet_ok = (
+        packet.get("rows_in_batch") == 6
+        and packet.get("model_assessments_in_batch") == 18
+        and packet.get("pending_rows_in_batch") == 6
+        and packet.get("pending_model_assessments_in_batch") == 18
+        and packet.get("rows_missing_timing") == 6
+    )
+    passed = status_ok and counts_ok and packet_ok and next_operation_aligned
+    rows.append(
+        check_row(
+            check_id="C079",
+            invariant="selected-300 reviewer operations have aggregate log coverage",
+            passed=passed,
+            evidence=SUMMARY_SPECS["operation_records"],
+            result=(
+                "operation-record audit covers batch, preflight, session, strict apply, timing, and sequence logs"
+                if passed
+                else (
+                    f"status_ok={status_ok}; counts_ok={counts_ok}; "
+                    f"packet_ok={packet_ok}; next_operation_aligned={next_operation_aligned}"
+                )
+            ),
+            next_action=(
+                "Regenerate the operation-record audit after reviewer-session operations "
+                "so every tracked operation has an aggregate log record before claims."
+            ),
+        )
+    )
+
+
 def add_sequence_aware_objective_check(
     payloads: dict[str, dict[str, Any]],
     rows: list[dict[str, str]],
@@ -1378,6 +1465,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_review_work_order_check(root, payloads, rows)
         add_review_work_order_dry_run_gate_check(root, payloads, rows)
         add_review_work_order_next_operation_check(payloads, rows)
+        add_operation_record_check(payloads, rows)
         add_review_work_order_sequence_route_check(root, payloads, rows)
         add_post_review_sequence_check(root, payloads, rows)
         add_post_review_sequence_dry_run_gate_check(root, payloads, rows)

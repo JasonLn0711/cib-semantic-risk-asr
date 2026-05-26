@@ -331,6 +331,258 @@ def timing_commands(row_numbers: list[int] = ROW_NUMBERS) -> dict:
     }
 
 
+def next_reviewer_operation_fixture() -> dict:
+    return {
+        "status": "reviewer_operation_ready",
+        "current_step": {
+            "work_order_id": "row-1:01-mark-timing-start",
+            "row_number": "1",
+            "step_order": "01",
+            "step_type": "mark_timing_start",
+            "status": "pending",
+            "command": (
+                "mark_human_audit_response_timing.py --row-number 1 "
+                "--mark-start --write"
+            ),
+            "completion_signal": "review_started_at is present",
+            "privacy_boundary": "tracked command only; local response TSV remains ignored",
+        },
+        "next_local_row_step": {
+            "work_order_id": "row-1:02-open-local-row",
+            "row_number": "1",
+            "step_order": "02",
+            "step_type": "open_local_row",
+            "status": "local_only_required",
+            "command": "review_human_risk_atom_audit.py --row-number 1 --show-row",
+            "completion_signal": "reviewer has inspected the local row",
+            "privacy_boundary": "command output is transcript-bearing and must stay local-only",
+        },
+    }
+
+
+def write_simple_tsv(path: Path, header: list[str], row: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\t".join(header) + "\n" + "\t".join(row) + "\n", encoding="utf-8")
+
+
+def write_operation_logs_fixture(root: Path) -> None:
+    run_dir = root / Path(SUMMARY_SPECS["work_order"]).parent
+    write_simple_tsv(
+        run_dir / "human_audit_review_batch_log.tsv",
+        [
+            "created_at",
+            "selection_stratum",
+            "batch_order",
+            "rows_in_batch",
+            "row_numbers",
+            "local_packet_path",
+            "status",
+        ],
+        [
+            "2026-05-26T00:00:00+08:00",
+            "critical_or_high_risk_missed",
+            "1",
+            "6",
+            "1,2,3,4,5,6",
+            "artifacts/review_batches/current.md",
+            "batch_prepared",
+        ],
+    )
+    write_simple_tsv(
+        run_dir / "human_audit_reviewer_preflight_log.tsv",
+        [
+            "recorded_at",
+            "ok",
+            "status",
+            "handoff_freshness_status",
+            "handoff_status",
+            "latest_apply_status",
+            "selection_stratum",
+            "rows_in_batch",
+            "model_assessments_in_batch",
+            "local_packet_exists",
+            "local_response_template_exists",
+            "error_keys",
+            "handoff_summary",
+        ],
+        [
+            "2026-05-26T00:01:00+08:00",
+            "True",
+            "review_session_ready",
+            "handoff_fresh",
+            "reviewer_input_pending",
+            "response_pending",
+            "critical_or_high_risk_missed",
+            "6",
+            "18",
+            "True",
+            "True",
+            "",
+            "human_audit_reviewer_handoff_summary.json",
+        ],
+    )
+    write_simple_tsv(
+        run_dir / "human_audit_reviewer_session_start_log.tsv",
+        [
+            "recorded_at",
+            "ok",
+            "status",
+            "handoff_status",
+            "preflight_status",
+            "rubric_status",
+            "checklist_status",
+            "selection_stratum",
+            "rows_in_batch",
+            "pending_rows_in_batch",
+            "model_assessments_in_batch",
+            "pending_model_assessments_in_batch",
+            "rows_missing_timing",
+            "latest_apply_status",
+            "error_keys",
+            "session_summary",
+        ],
+        [
+            "2026-05-26T00:02:00+08:00",
+            "True",
+            "reviewer_session_started",
+            "reviewer_input_pending",
+            "review_session_ready",
+            "rubric_ready",
+            "reviewer_action_ready",
+            "critical_or_high_risk_missed",
+            "6",
+            "6",
+            "18",
+            "18",
+            "6",
+            "response_pending",
+            "",
+            "human_audit_reviewer_session_start_summary.json",
+        ],
+    )
+    write_simple_tsv(
+        run_dir / "human_audit_batch_response_apply_log.tsv",
+        [
+            "recorded_at",
+            "ok",
+            "status",
+            "mode",
+            "require_complete",
+            "require_timing",
+            "post_write_refresh_ran",
+            "post_write_batch_status",
+            "post_write_publishable_ready",
+            "post_write_next_batch_prepared",
+            "selection_stratum",
+            "rows_in_batch",
+            "reviewed_rows_in_response",
+            "pending_rows_in_response",
+            "model_assessments_in_response",
+            "reviewed_model_assessments_in_response",
+            "pending_model_assessments_in_response",
+            "rows_with_timing",
+            "rows_missing_timing",
+            "total_review_elapsed_seconds",
+            "mean_review_elapsed_seconds",
+            "error_count_total",
+            "error_keys",
+            "response_sheet_path",
+            "source_batch_summary",
+        ],
+        [
+            "2026-05-26T00:03:00+08:00",
+            "False",
+            "response_pending",
+            "dry_run",
+            "True",
+            "True",
+            "",
+            "",
+            "",
+            "",
+            "critical_or_high_risk_missed",
+            "6",
+            "0",
+            "6",
+            "18",
+            "0",
+            "18",
+            "0",
+            "6",
+            "0",
+            "",
+            "7",
+            "incomplete_response,missing_review_timing",
+            "artifacts/review_responses/current.tsv",
+            "human_audit_next_review_batch_summary.json",
+        ],
+    )
+    write_simple_tsv(
+        run_dir / "human_audit_response_timing_log.tsv",
+        [
+            "recorded_at",
+            "ok",
+            "status",
+            "mode",
+            "action",
+            "row_number",
+            "force",
+            "rows_in_response",
+            "rows_with_timing",
+            "rows_missing_timing",
+            "proposed_started_at",
+            "proposed_finished_at",
+            "proposed_elapsed_seconds",
+            "error_keys",
+            "response_sheet_path",
+        ],
+        [
+            "2026-05-26T00:04:00+08:00",
+            "True",
+            "timing_dry_run_ready",
+            "dry_run",
+            "start",
+            "1",
+            "False",
+            "18",
+            "1",
+            "5",
+            "2026-05-26T00:04:00+08:00",
+            "",
+            "",
+            "",
+            "artifacts/review_responses/current.tsv",
+        ],
+    )
+    write_simple_tsv(
+        run_dir / "human_audit_post_review_sequence_log.tsv",
+        [
+            "recorded_at",
+            "mode",
+            "ok",
+            "status",
+            "executed_step_count",
+            "stopped_step",
+            "blocker_keys",
+            "output_summary",
+        ],
+        [
+            "2026-05-26T00:05:00+08:00",
+            "plan_only",
+            "False",
+            "post_review_sequence_blocked",
+            "0",
+            "",
+            (
+                "strict_dry_run,response_closeout,write_refresh_prepare_next,"
+                "human_audit_refresh,strict_human_reviewed_recovery,"
+                "post_review_checklist,objective_requirements_audit"
+            ),
+            "human_audit_post_review_sequence_summary.json",
+        ],
+    )
+
+
 def write_consistent_fixture(root: Path) -> None:
     write_summary(
         root,
@@ -383,6 +635,7 @@ def write_consistent_fixture(root: Path) -> None:
             status="review_pending",
             publishable_ready=False,
             next_action="Complete per-row timing with --require-timing.",
+            next_reviewer_operation=next_reviewer_operation_fixture(),
         ),
     )
     write_summary(
@@ -482,32 +735,38 @@ def write_consistent_fixture(root: Path) -> None:
                 "model_field_action_items": 72,
                 "timing_action_items": 6,
             },
-            next_reviewer_operation={
-                "status": "reviewer_operation_ready",
-                "current_step": {
-                    "work_order_id": "row-1:01-mark-timing-start",
-                    "row_number": "1",
-                    "step_order": "01",
-                    "step_type": "mark_timing_start",
-                    "status": "pending",
-                    "command": (
-                        "mark_human_audit_response_timing.py --row-number 1 "
-                        "--mark-start --write"
-                    ),
-                    "completion_signal": "review_started_at is present",
-                    "privacy_boundary": "tracked command only; local response TSV remains ignored",
-                },
-                "next_local_row_step": {
-                    "work_order_id": "row-1:02-open-local-row",
-                    "row_number": "1",
-                    "step_order": "02",
-                    "step_type": "open_local_row",
-                    "status": "local_only_required",
-                    "command": "review_human_risk_atom_audit.py --row-number 1 --show-row",
-                    "completion_signal": "reviewer has inspected the local row",
-                    "privacy_boundary": "command output is transcript-bearing and must stay local-only",
-                },
+            next_reviewer_operation=next_reviewer_operation_fixture(),
+        ),
+    )
+    write_summary(
+        root,
+        "operation_records",
+        base_summary(
+            status="operation_records_ready",
+            required_operation_log_count=6,
+            passed_operation_record_count=6,
+            failed_operation_record_count=0,
+            current_packet={
+                "selection_stratum": "critical_or_high_risk_missed",
+                "row_numbers": ["1", "2", "3", "4", "5", "6"],
+                "rows_in_batch": 6,
+                "model_assessments_in_batch": 18,
+                "pending_rows_in_batch": 6,
+                "pending_model_assessments_in_batch": 18,
+                "rows_missing_timing": 6,
             },
+            next_reviewer_operation=next_reviewer_operation_fixture(),
+            operation_records=[
+                {"operation_log_id": log_id, "alignment_status": "pass"}
+                for log_id in (
+                    "review_batch",
+                    "preflight",
+                    "session_start",
+                    "strict_apply",
+                    "timing_helper",
+                    "post_review_sequence",
+                )
+            ],
         ),
     )
     write_summary(
@@ -644,6 +903,7 @@ def write_consistent_fixture(root: Path) -> None:
     write_action_items_tsv_fixture(root)
     write_work_order_tsv_fixture(root)
     write_post_review_sequence_tsv_fixture(root)
+    write_operation_logs_fixture(root)
 
 
 def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Path) -> None:
@@ -651,7 +911,7 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True
-    assert payload["status_counts"] == {"pass": 24}
+    assert payload["status_counts"] == {"pass": 25}
     assert not payload["failed_checks"]
     assert_aggregate_safe(payload)
 
@@ -822,6 +1082,20 @@ def test_consistency_audit_fails_review_work_order_missing_next_operation(
 
     assert payload["ok"] is False
     assert any(item["check_id"] == "C078" for item in payload["failed_checks"])
+
+
+def test_consistency_audit_fails_operation_record_drift(tmp_path: Path) -> None:
+    write_consistent_fixture(tmp_path)
+    operation_path = tmp_path / SUMMARY_SPECS["operation_records"]
+    operation = json.loads(operation_path.read_text(encoding="utf-8"))
+    operation["failed_operation_record_count"] = 1
+    operation["operation_records"][3]["alignment_status"] = "fail"
+    operation_path.write_text(json.dumps(operation, ensure_ascii=False), encoding="utf-8")
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C079" for item in payload["failed_checks"])
 
 
 def test_consistency_audit_fails_review_work_order_missing_sequence_route(

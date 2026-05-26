@@ -417,6 +417,7 @@ def test_refresh_complete_review_writes_predictor_aggregate(tmp_path: Path) -> N
 
 def test_refresh_updates_publishable_completion_audit(tmp_path: Path) -> None:
     load_readiness_fixture_writer()(tmp_path)
+    load_consistency_fixture_writer()(tmp_path)
     sheet = tmp_path / "audit.tsv"
     output_dir = (
         tmp_path
@@ -459,6 +460,7 @@ def test_refresh_updates_publishable_completion_audit(tmp_path: Path) -> None:
 
 def test_refresh_updates_roadmap_completion_audit(tmp_path: Path) -> None:
     load_readiness_fixture_writer()(tmp_path)
+    load_consistency_fixture_writer()(tmp_path)
     sheet = tmp_path / "audit.tsv"
     output_dir = (
         tmp_path
@@ -495,6 +497,7 @@ def test_refresh_updates_roadmap_completion_audit(tmp_path: Path) -> None:
 
 def test_refresh_updates_post_review_evidence_checklist(tmp_path: Path) -> None:
     load_readiness_fixture_writer()(tmp_path)
+    load_consistency_fixture_writer()(tmp_path)
     sheet = tmp_path / "audit.tsv"
     output_dir = (
         tmp_path
@@ -576,7 +579,10 @@ def test_refresh_updates_evidence_chain_consistency_audit(tmp_path: Path) -> Non
     assert "strict_dry_run" in payload["post_review_sequence_blocker_keys"]
     assert payload["post_review_sequence_executed_step_count"] == 0
     assert payload["consistency_audit_ok"] is True
-    assert payload["consistency_status_counts"] == {"pass": 24}
+    assert payload["operation_record_audit_ok"] is True
+    assert payload["operation_record_status"] == "operation_records_ready"
+    assert payload["operation_record_failed_count"] == 0
+    assert payload["consistency_status_counts"] == {"pass": 25}
     assert payload["consistency_failed_checks"] == []
     assert consistency_payload["ok"] is True
     assert (readiness_dir / "evidence_chain_consistency.tsv").exists()
