@@ -469,15 +469,19 @@ objective 已完成」，必須先讓這個 audit 的 proxy/review-pending rows 
   work-order local row-open command 已包含 `--access-log
   70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_local_row_access_log.tsv`；
   operation-record summary 記錄 `route_ok=true`、
-  `status=planned_not_yet_recorded`；access-log file 尚不存在，因為這一輪沒有
-  開啟任何 transcript-bearing row。
+  `status=planned_not_yet_recorded`、`exists=false`、`row_count=0`、
+  `required_fields_present=false`、`latest_record_ok=false`；access-log file
+  尚不存在，因為這一輪沒有開啟任何 transcript-bearing row。
 - 檢查內容：`C081` 要求 local-only `--show-row` command 在印出
   transcript-bearing row content 前，先有 repo-safe access-log route。Log
   schema 只記錄 row number、selection stratum、reference label、hypothesis
   count、model-assessment count、access status 和 audit sheet path；不記錄
   audio IDs、transcripts、hypotheses、selected sample IDs、local row content
-  或 reviewer notes。這是 local row-access provenance guardrail，不是 human
-  review completion。
+  或 reviewer notes。現在同一個檢查也區分兩種合法狀態：尚未開 row 時必須是
+  explicit planned state；如果 access-log file 已存在，latest row 必須是
+  `show_local_row`、`access_status=shown`，且 row number 必須對齊下一個
+  local row-open operation。這是 local row-access provenance guardrail，不是
+  human review completion。
 
 目前最重要的限制：
 

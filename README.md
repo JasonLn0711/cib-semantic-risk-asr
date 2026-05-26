@@ -169,7 +169,11 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   carries `--access-log` pointing to
   `human_audit_local_row_access_log.tsv`; the access log route is planned in
   tracked summaries, but no row-open log row exists yet because no local
-  transcript row was opened in this pass. This work order records only row
+  transcript row was opened in this pass. The operation-record summary now
+  records that state explicitly with `exists=false`, `row_count=0`,
+  `required_fields_present=false`, and `latest_record_ok=false`, so a later
+  row-open can be audited as recorded or drifted without tracking row content.
+  This work order records only row
   numbers, commands, field names, counts, status, privacy boundaries, and
   runtime; it does not track audio IDs, transcripts, hypotheses, selected
   sample IDs, local row content, or reviewer notes.
@@ -219,7 +223,10 @@ moved into stable `part-###` names. Large audio/transcript assets remain local.
   dry-run, timing helper, and post-review sequence logs before the reviewer
   route is treated as fully recorded. Check `C081` requires the next local
   row-open command to carry a repo-safe `--access-log` path before
-  transcript-bearing output is printed. Check `C076`
+  transcript-bearing output is printed, and verifies both the not-yet-recorded
+  state and the future recorded state by checking access-log existence,
+  required header fields, latest operation, latest row number, and access
+  status. Check `C076`
   applies the same strict dry-run command safety to the post-review sequence TSV
   before any write/refresh or human-reviewed recovery route can be treated as
   executable. Check `C077` requires the post-review sequence summary to record
