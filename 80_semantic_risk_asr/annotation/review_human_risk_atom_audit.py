@@ -29,6 +29,31 @@ from validate_human_risk_atom_audit import (
 )
 
 
+SCRIPT_PATH = Path(__file__).resolve()
+REPO_ROOT = SCRIPT_PATH.parents[2]
+ACCESS_LOG_NAME = "human_audit_local_row_access_log.tsv"
+ACCESS_LOG_FIELDS = [
+    "recorded_at",
+    "operation",
+    "row_number",
+    "selection_stratum",
+    "reference_label",
+    "asr_hypothesis_count",
+    "model_assessment_count",
+    "access_status",
+    "audit_sheet_path",
+]
+ACCESS_LOG_SENSITIVE_TOKENS = (
+    "audio_id",
+    "sample_id",
+    "reference_text",
+    "hypothesis_text",
+    "asr_hypotheses_json",
+    "reviewer_model_assessments_json",
+    "reviewer_notes",
+    "reviewer_verified_transcript",
+    "PRIVATE_",
+)
 ROW_UPDATE_FIELDS = {
     "reviewer_verified_transcript": "verified_transcript",
     "reviewer_semantic_risk_label": "semantic_risk_label",
@@ -41,6 +66,13 @@ ROW_UPDATE_FIELDS = {
     "reviewer_annotation_confidence": "confidence",
     "reviewer_notes": "notes",
 }
+
+
+def repo_relative(path: Path, *, repo_root: Path = REPO_ROOT) -> str:
+    try:
+        return str(path.resolve().relative_to(repo_root.resolve()))
+    except ValueError:
+        return str(path)
 
 
 def read_sheet(path: Path) -> tuple[list[str], list[dict[str, str]]]:
@@ -63,10 +95,38 @@ def write_sheet(path: Path, fieldnames: list[str], rows: list[dict[str, str]]) -
             writer.writerow({field: row.get(field, "") for field in fieldnames})
 
 
+def append_tsv(path: Path, row: dict[str, Any], fieldnames: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    write_header = not path.exists() or path.stat().st_size == 0
+    with path.open("a", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=fieldnames,
+            delimiter="\t",
+            lineterminator="\n",
+        )
+        if write_header:
+            writer.writeheader()
+        writer.writerow({field: row.get(field, "") for field in fieldnames})
+
+
+def assert_access_log_safe(payload: Any) -> None:
+    text = json.dumps(payload, ensure_ascii=False)
+    for token in ACCESS_LOG_SENSITIVE_TOKENS:
+        if token in text:
+            raise ValueError(f"sensitive token leaked into local row access log: {token}")
+
+
 def parse_json_field(value: str) -> Any:
     if not value.strip():
         return None
     return json.loads(value)
+
+
+def default_access_log_path(audit_sheet: Path) -> Path:
+    if audit_sheet.parent.name == "artifacts":
+        return audit_sheet.parent.parent / ACCESS_LOG_NAME
+    return audit_sheet.parent / ACCESS_LOG_NAME
 
 
 def split_atoms(value: str) -> list[str]:
@@ -169,6 +229,30 @@ def show_row(row_number: int, row: dict[str, str]) -> dict[str, Any]:
     }
 
 
+def access_log_row(
+    row_number: int,
+    row: dict[str, str],
+    *,
+    audit_sheet: Path,
+    repo_root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    hypotheses = parse_json_field(row.get("asr_hypotheses_json", "")) or []
+    assessments = parse_json_field(row.get("reviewer_model_assessments_json", "")) or []
+    payload = {
+        "recorded_at": datetime.now().isoformat(timespec="seconds"),
+        "operation": "show_local_row",
+        "row_number": row_number,
+        "selection_stratum": row.get("selection_stratum", ""),
+        "reference_label": row.get("reference_label", ""),
+        "asr_hypothesis_count": len(hypotheses) if isinstance(hypotheses, list) else 0,
+        "model_assessment_count": len(assessments) if isinstance(assessments, list) else 0,
+        "access_status": "shown",
+        "audit_sheet_path": repo_relative(audit_sheet, repo_root=repo_root),
+    }
+    assert_access_log_safe(payload)
+    return payload
+
+
 def update_row_from_args(row: dict[str, str], args: argparse.Namespace) -> bool:
     changed = False
     for field, arg_name in ROW_UPDATE_FIELDS.items():
@@ -230,6 +314,15 @@ def backup_sheet(path: Path) -> Path:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--audit-sheet", type=Path, required=True)
+    parser.add_argument("--repo-root", type=Path, default=REPO_ROOT)
+    parser.add_argument(
+        "--access-log",
+        type=Path,
+        help=(
+            "Repo-safe TSV log for --show-row access. Defaults next to the "
+            "audit run directory and records no audio IDs or transcript text."
+        ),
+    )
     parser.add_argument("--row-number", type=int)
     parser.add_argument("--audio-id")
     parser.add_argument("--list-pending", action="store_true")
@@ -269,6 +362,17 @@ def main() -> int:
 
     index, row = select_row(rows, row_number=args.row_number, audio_id=args.audio_id)
     if args.show_row:
+        access_log = args.access_log or default_access_log_path(args.audit_sheet)
+        append_tsv(
+            access_log,
+            access_log_row(
+                index + 1,
+                row,
+                audit_sheet=args.audit_sheet,
+                repo_root=args.repo_root,
+            ),
+            ACCESS_LOG_FIELDS,
+        )
         print(json.dumps(show_row(index + 1, row), ensure_ascii=False, indent=2))
         return 0
 

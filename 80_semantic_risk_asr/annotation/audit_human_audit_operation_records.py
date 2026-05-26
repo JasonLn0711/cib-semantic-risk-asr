@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import shlex
 import sys
 import time
 from pathlib import Path
@@ -33,6 +34,7 @@ DEFAULT_RUN_DIR = (
 )
 SUMMARY_NAME = "human_audit_operation_record_summary.json"
 TSV_NAME = "human_audit_operation_record_audit.tsv"
+LOCAL_ROW_ACCESS_LOG_NAME = "human_audit_local_row_access_log.tsv"
 
 LOG_SPECS = {
     "review_batch": "human_audit_review_batch_log.tsv",
@@ -113,6 +115,24 @@ def csv_values(value: Any) -> list[str]:
     return [item.strip() for item in str(value).split(",") if item.strip()]
 
 
+def command_arg(command: str, flag: str) -> str:
+    try:
+        parts = shlex.split(command)
+    except ValueError:
+        parts = command.split()
+    for index, part in enumerate(parts):
+        if part == flag and index + 1 < len(parts):
+            return parts[index + 1]
+    return ""
+
+
+def resolve_repo_path(value: str, *, repo_root: Path) -> Path:
+    path = Path(value)
+    if path.is_absolute():
+        return path
+    return repo_root / path
+
+
 def expected_context(run_dir: Path) -> dict[str, Any]:
     session = read_json(run_dir / "human_audit_reviewer_session_start_summary.json")
     refresh = read_json(run_dir / "human_audit_refresh_summary.json")
@@ -145,6 +165,63 @@ def expected_context(run_dir: Path) -> dict[str, Any]:
         "next_row_number": str(current_step.get("row_number", "1")),
         "next_work_order_id": current_step.get("work_order_id", ""),
     }
+
+
+def next_local_row_access_log_status(
+    *,
+    run_dir: Path,
+    repo_root: Path,
+    next_operation: dict[str, Any],
+) -> dict[str, Any]:
+    local_step = next_operation.get("next_local_row_step")
+    local_step = local_step if isinstance(local_step, dict) else {}
+    command = str(local_step.get("command", ""))
+    row_number = str(local_step.get("row_number", ""))
+    access_log_arg = command_arg(command, "--access-log")
+    access_log_path = resolve_repo_path(access_log_arg, repo_root=repo_root) if access_log_arg else (
+        run_dir / LOCAL_ROW_ACCESS_LOG_NAME
+    )
+    route_ok = (
+        local_step.get("step_type") == "open_local_row"
+        and "review_human_risk_atom_audit.py" in command
+        and "--show-row" in command
+        and "--access-log" in command
+        and bool(access_log_arg)
+    )
+    status = "planned_not_yet_recorded"
+    latest_row_number = ""
+    latest_access_status = ""
+    latest_operation = ""
+    latest_recorded_at = ""
+    row_matches_next_operation = False
+    safe = True
+    if access_log_path.exists():
+        rows = read_tsv(access_log_path)
+        latest = rows[-1] if rows else {}
+        try:
+            assert_aggregate_safe({"latest": latest})
+        except ValueError:
+            safe = False
+        latest_row_number = latest.get("row_number", "")
+        latest_access_status = latest.get("access_status", "")
+        latest_operation = latest.get("operation", "")
+        latest_recorded_at = latest.get("recorded_at", "")
+        row_matches_next_operation = latest_row_number == row_number
+        status = "recorded" if rows and safe else "record_drift"
+
+    payload = {
+        "path": repo_relative(access_log_path, repo_root=repo_root),
+        "route_ok": route_ok,
+        "status": status,
+        "next_row_number": row_number,
+        "latest_row_number": latest_row_number,
+        "latest_operation": latest_operation,
+        "latest_access_status": latest_access_status,
+        "latest_recorded_at": latest_recorded_at,
+        "row_matches_next_operation": row_matches_next_operation,
+    }
+    assert_aggregate_safe(payload)
+    return payload
 
 
 def status_field(row: dict[str, str]) -> str:
@@ -300,6 +377,11 @@ def build_operation_record_audit(
     work_order = read_json(run_dir / "human_audit_review_work_order_summary.json")
     next_operation = work_order.get("next_reviewer_operation")
     next_operation = next_operation if isinstance(next_operation, dict) else {}
+    access_log_status = next_local_row_access_log_status(
+        run_dir=run_dir,
+        repo_root=repo_root,
+        next_operation=next_operation,
+    )
     payload = {
         "ok": not failed,
         "status": "operation_records_ready" if not failed else "operation_records_drift",
@@ -327,6 +409,7 @@ def build_operation_record_audit(
             "rows_missing_timing": ctx["rows_missing_timing"],
         },
         "next_reviewer_operation": next_operation,
+        "next_local_row_access_log": access_log_status,
         "operation_records": rows,
         "runtime_seconds": round(time.time() - started, 4),
         "next_action": (

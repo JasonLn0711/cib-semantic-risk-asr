@@ -582,7 +582,7 @@ def test_refresh_updates_evidence_chain_consistency_audit(tmp_path: Path) -> Non
     assert payload["operation_record_audit_ok"] is True
     assert payload["operation_record_status"] == "operation_records_ready"
     assert payload["operation_record_failed_count"] == 0
-    assert payload["consistency_status_counts"] == {"pass": 25}
+    assert payload["consistency_status_counts"] == {"pass": 26}
     assert payload["consistency_failed_checks"] == []
     assert consistency_payload["ok"] is True
     assert (readiness_dir / "evidence_chain_consistency.tsv").exists()

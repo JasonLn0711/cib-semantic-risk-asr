@@ -123,10 +123,15 @@ def test_review_work_order_builds_safe_row_and_packet_steps(tmp_path: Path) -> N
     assert "--mark-start" in next_operation["current_step"]["command"]
     assert next_operation["next_local_row_step"]["step_type"] == "open_local_row"
     assert "--show-row" in next_operation["next_local_row_step"]["command"]
+    assert "--access-log" in next_operation["next_local_row_step"]["command"]
+    assert "human_audit_local_row_access_log.tsv" in next_operation["next_local_row_step"][
+        "command"
+    ]
     by_step = {row["step_type"]: row for row in rows}
     assert by_step["mark_timing_start"]["status"] == "pending"
     assert by_step["open_local_row"]["status"] == "local_only_required"
     assert "--show-row" in by_step["open_local_row"]["command"]
+    assert "--access-log" in by_step["open_local_row"]["command"]
     assert by_step["fill_row_fields"]["pending_action_items"] == 1
     assert by_step["fill_model_fields"]["pending_action_items"] == 1
     assert by_step["strict_dry_run"]["row_number"] == "packet"

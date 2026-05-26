@@ -28,6 +28,7 @@ from prepare_human_audit_review_batch import (  # noqa: E402
 
 WORK_ORDER_SUMMARY_NAME = "human_audit_review_work_order_summary.json"
 WORK_ORDER_TSV_NAME = "human_audit_review_work_order.tsv"
+LOCAL_ROW_ACCESS_LOG_NAME = "human_audit_local_row_access_log.tsv"
 DEFAULT_RUN_DIR = (
     REPO_ROOT
     / "70_experiments"
@@ -144,12 +145,20 @@ def action_fields(items: list[dict[str, str]]) -> str:
     return unique_csv([item.get("field_name", "") for item in items])
 
 
+def local_row_access_log_path(audit_sheet: Path) -> Path:
+    if audit_sheet.parent.name == "artifacts":
+        return audit_sheet.parent.parent / LOCAL_ROW_ACCESS_LOG_NAME
+    return audit_sheet.parent / LOCAL_ROW_ACCESS_LOG_NAME
+
+
 def local_show_row_command(audit_sheet: Path, row_number: str, *, repo_root: Path) -> str:
     audit_sheet_rel = repo_relative(audit_sheet, repo_root=repo_root)
+    access_log_rel = repo_relative(local_row_access_log_path(audit_sheet), repo_root=repo_root)
     return (
         ".venv/bin/python "
         "80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py "
-        f"--audit-sheet {audit_sheet_rel} --row-number {row_number} --show-row"
+        f"--audit-sheet {audit_sheet_rel} --row-number {row_number} --show-row "
+        f"--access-log {access_log_rel}"
     )
 
 

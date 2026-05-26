@@ -1215,6 +1215,7 @@ def add_review_work_order_next_operation_check(
         and local_step.get("status") == "local_only_required"
         and "review_human_risk_atom_audit.py" in str(local_step.get("command", ""))
         and "--show-row" in str(local_step.get("command", ""))
+        and "--access-log" in str(local_step.get("command", ""))
         and "local-only" in str(local_step.get("privacy_boundary", "")).lower()
     )
     status_ok = work_order.get("status") == "review_work_order_ready"
@@ -1236,6 +1237,65 @@ def add_review_work_order_next_operation_check(
             next_action=(
                 "Regenerate the review work-order summary so reviewer execution can "
                 "start from the tracked next operation without scanning the full TSV."
+            ),
+        )
+    )
+
+
+def add_local_row_access_log_route_check(
+    payloads: dict[str, dict[str, Any]],
+    rows: list[dict[str, str]],
+) -> None:
+    records = payloads.get("operation_records", {})
+    work_order = payloads.get("work_order", {})
+    next_work = work_order.get("next_reviewer_operation")
+    next_work = next_work if isinstance(next_work, dict) else {}
+    local_step = next_work.get("next_local_row_step")
+    local_step = local_step if isinstance(local_step, dict) else {}
+    command = str(local_step.get("command", ""))
+    access_log = records.get("next_local_row_access_log")
+    access_log = access_log if isinstance(access_log, dict) else {}
+    route_status = str(access_log.get("status", ""))
+    path = str(access_log.get("path", ""))
+    path_ok = path.endswith("human_audit_local_row_access_log.tsv")
+    status_ok = route_status in {"planned_not_yet_recorded", "recorded"}
+    row_ok = (
+        str(access_log.get("next_row_number", "")) == str(local_step.get("row_number", ""))
+        and str(local_step.get("row_number", "")) != ""
+    )
+    route_ok = (
+        access_log.get("route_ok") is True
+        and "--access-log" in command
+        and path in command
+        and "review_human_risk_atom_audit.py" in command
+        and "--show-row" in command
+    )
+    passed = (
+        records.get("status") == "operation_records_ready"
+        and work_order.get("status") == "review_work_order_ready"
+        and route_ok
+        and status_ok
+        and path_ok
+        and row_ok
+    )
+    rows.append(
+        check_row(
+            check_id="C081",
+            invariant="local row-open command has a repo-safe access-log route",
+            passed=passed,
+            evidence=f"{SUMMARY_SPECS['work_order']}; {SUMMARY_SPECS['operation_records']}",
+            result=(
+                "next local row-open command records a safe access-log path before transcript-bearing output"
+                if passed
+                else (
+                    f"route_ok={route_ok}; status_ok={status_ok}; path_ok={path_ok}; "
+                    f"row_ok={row_ok}; record_status={records.get('status', '')}; "
+                    f"work_order_status={work_order.get('status', '')}"
+                )
+            ),
+            next_action=(
+                "Regenerate the review work-order and operation-record audit so "
+                "the --show-row command includes --access-log before local review."
             ),
         )
     )
@@ -1466,6 +1526,7 @@ def build_consistency_audit(root: Path) -> dict[str, Any]:
         add_review_work_order_dry_run_gate_check(root, payloads, rows)
         add_review_work_order_next_operation_check(payloads, rows)
         add_operation_record_check(payloads, rows)
+        add_local_row_access_log_route_check(payloads, rows)
         add_review_work_order_sequence_route_check(root, payloads, rows)
         add_post_review_sequence_check(root, payloads, rows)
         add_post_review_sequence_dry_run_gate_check(root, payloads, rows)

@@ -353,7 +353,12 @@ def next_reviewer_operation_fixture() -> dict:
             "step_order": "02",
             "step_type": "open_local_row",
             "status": "local_only_required",
-            "command": "review_human_risk_atom_audit.py --row-number 1 --show-row",
+            "command": (
+                "review_human_risk_atom_audit.py --row-number 1 --show-row "
+                "--access-log 70_experiments/runs/"
+                "janus_300_high_stakes_human_audit_selection_2026_05_25/"
+                "human_audit_local_row_access_log.tsv"
+            ),
             "completion_signal": "reviewer has inspected the local row",
             "privacy_boundary": "command output is transcript-bearing and must stay local-only",
         },
@@ -756,6 +761,21 @@ def write_consistent_fixture(root: Path) -> None:
                 "rows_missing_timing": 6,
             },
             next_reviewer_operation=next_reviewer_operation_fixture(),
+            next_local_row_access_log={
+                "path": (
+                    "70_experiments/runs/"
+                    "janus_300_high_stakes_human_audit_selection_2026_05_25/"
+                    "human_audit_local_row_access_log.tsv"
+                ),
+                "route_ok": True,
+                "status": "planned_not_yet_recorded",
+                "next_row_number": "1",
+                "latest_row_number": "",
+                "latest_operation": "",
+                "latest_access_status": "",
+                "latest_recorded_at": "",
+                "row_matches_next_operation": False,
+            },
             operation_records=[
                 {"operation_log_id": log_id, "alignment_status": "pass"}
                 for log_id in (
@@ -911,7 +931,7 @@ def test_consistency_audit_passes_current_blocked_but_aligned_state(tmp_path: Pa
     payload = build_consistency_audit(tmp_path)
 
     assert payload["ok"] is True
-    assert payload["status_counts"] == {"pass": 25}
+    assert payload["status_counts"] == {"pass": 26}
     assert not payload["failed_checks"]
     assert_aggregate_safe(payload)
 
@@ -1096,6 +1116,19 @@ def test_consistency_audit_fails_operation_record_drift(tmp_path: Path) -> None:
 
     assert payload["ok"] is False
     assert any(item["check_id"] == "C079" for item in payload["failed_checks"])
+
+
+def test_consistency_audit_fails_missing_local_row_access_route(tmp_path: Path) -> None:
+    write_consistent_fixture(tmp_path)
+    operation_path = tmp_path / SUMMARY_SPECS["operation_records"]
+    operation = json.loads(operation_path.read_text(encoding="utf-8"))
+    operation["next_local_row_access_log"]["route_ok"] = False
+    operation_path.write_text(json.dumps(operation, ensure_ascii=False), encoding="utf-8")
+
+    payload = build_consistency_audit(tmp_path)
+
+    assert payload["ok"] is False
+    assert any(item["check_id"] == "C081" for item in payload["failed_checks"])
 
 
 def test_consistency_audit_fails_review_work_order_missing_sequence_route(

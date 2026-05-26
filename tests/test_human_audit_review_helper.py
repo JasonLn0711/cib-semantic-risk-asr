@@ -10,6 +10,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "80_semantic_risk_asr" / "annotation"))
 
 from review_human_risk_atom_audit import (  # noqa: E402
+    ACCESS_LOG_FIELDS,
+    access_log_row,
+    append_tsv,
+    default_access_log_path,
     parse_model_review,
     pending_summary,
     read_sheet,
@@ -124,6 +128,32 @@ def test_pending_summary_has_no_private_text(tmp_path: Path) -> None:
     assert "unsafe_downrouting" in payload["pending_by_selection_stratum"]
     assert "PRIVATE_" not in text
     assert "audio_private_001" not in text
+
+
+def test_show_row_access_log_is_repo_safe(tmp_path: Path) -> None:
+    sheet = tmp_path / "run" / "artifacts" / "audit.tsv"
+    sheet.parent.mkdir(parents=True, exist_ok=True)
+    write_rows(sheet, [base_row()])
+    _fieldnames, rows = read_sheet(sheet)
+
+    access_log = default_access_log_path(sheet)
+    payload = access_log_row(1, rows[0], audit_sheet=sheet, repo_root=tmp_path)
+    append_tsv(access_log, payload, ACCESS_LOG_FIELDS)
+    text = access_log.read_text(encoding="utf-8")
+
+    assert access_log == tmp_path / "run" / "human_audit_local_row_access_log.tsv"
+    assert payload["operation"] == "show_local_row"
+    assert payload["row_number"] == 1
+    assert payload["selection_stratum"] == "unsafe_downrouting"
+    assert payload["reference_label"] == "priority_review"
+    assert payload["asr_hypothesis_count"] == 1
+    assert payload["model_assessment_count"] == 1
+    assert "PRIVATE_" not in text
+    assert "audio_private_001" not in text
+    assert "audio_id" not in text
+    assert "reference_text" not in text
+    assert "hypothesis_text" not in text
+    assert "reviewer_notes" not in text
 
 
 def test_update_row_dry_run_completes_in_memory_without_writing(tmp_path: Path) -> None:

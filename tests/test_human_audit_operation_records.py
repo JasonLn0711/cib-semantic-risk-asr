@@ -36,6 +36,11 @@ def test_operation_record_audit_passes_current_pending_fixture(tmp_path: Path) -
     assert payload["next_reviewer_operation"]["current_step"]["work_order_id"] == (
         "row-1:01-mark-timing-start"
     )
+    assert payload["next_local_row_access_log"]["route_ok"] is True
+    assert payload["next_local_row_access_log"]["status"] == "planned_not_yet_recorded"
+    assert payload["next_local_row_access_log"]["path"].endswith(
+        "human_audit_local_row_access_log.tsv"
+    )
     assert {row["operation_log_id"] for row in rows} == {
         "review_batch",
         "preflight",

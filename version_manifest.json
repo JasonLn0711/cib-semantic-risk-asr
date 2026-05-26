@@ -1,28 +1,29 @@
 {
-  "version": "v2.5.199",
+  "version": "v2.5.200",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 199
+    "patch": 200
   },
-  "updated_at": "2026-05-26T08:32:46+08:00",
+  "updated_at": "2026-05-26T08:49:31+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "e1e2dce",
+  "base_commit": "2c9c429",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "60_whisper_asr_finetuning/configs/janus-15-asr-model-candidates.yaml",
-    "70_experiments/registry.tsv",
-    "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/README.md",
-    "70_experiments/runs/asr_candidate_current_recheck_2026_05_26/summary.json",
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/README.md",
-    "README.md",
-    "docs/asr_candidate_expansion_2026_05_25.md",
-    "docs/postdoc_next_steps_2026_05_25.md"
+    "80_semantic_risk_asr/annotation/audit_human_audit_operation_records.py",
+    "80_semantic_risk_asr/annotation/build_human_audit_review_work_order.py",
+    "80_semantic_risk_asr/annotation/review_human_risk_atom_audit.py",
+    "80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py",
+    "tests/test_evidence_chain_consistency.py",
+    "tests/test_human_audit_operation_records.py",
+    "tests/test_human_audit_refresh.py",
+    "tests/test_human_audit_review_helper.py",
+    "tests/test_human_audit_review_work_order.py"
   ]
 }
