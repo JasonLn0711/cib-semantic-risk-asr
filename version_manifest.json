@@ -1,23 +1,25 @@
 {
-  "version": "v2.5.211",
+  "version": "v2.5.212",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 211
+    "patch": 212
   },
-  "updated_at": "2026-05-26T10:39:06+08:00",
+  "updated_at": "2026-05-26T10:39:22+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "fc3412d",
+  "base_commit": "aeaf6c2",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "80_semantic_risk_asr/annotation/audit_human_audit_operation_records.py",
-    "80_semantic_risk_asr/scoring/audit_evidence_chain_consistency.py",
-    "tests/test_evidence_chain_consistency.py"
+    "docs/locale_gate_policy.md",
+    "docs/model_evaluation_state.md",
+    "runtime/gemma4_runtime_blocker.md",
+    "runtime/qwen3_asr_1_7b_runtime_check.md",
+    "scripts/check_locale_zh_tw.py"
   ]
 }

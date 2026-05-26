@@ -5,6 +5,20 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.212 - 2026-05-26T10:39:22+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `aeaf6c2`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `docs/locale_gate_policy.md`
+  - `docs/model_evaluation_state.md`
+  - `runtime/gemma4_runtime_blocker.md`
+  - `runtime/qwen3_asr_1_7b_runtime_check.md`
+  - `scripts/check_locale_zh_tw.py`
+
 ## v2.5.211 - 2026-05-26T10:39:06+08:00
 
 - Bump: `patch`
