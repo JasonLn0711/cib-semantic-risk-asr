@@ -521,22 +521,25 @@ model assessments, clustered within 30 reviewed audio rows. Diagnostic
 thresholds are selected on the scoped audit set for aggregate comparison and
 are not frozen deployment thresholds.
 
-| Predictor | AUC | Diagnostic threshold | Best F1 | Precision | Recall | True positive | False positive | False negative | Paper use |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| WER | 0.6964 | 42.59 | 0.4615 | 0.3913 | 0.5625 | 9 | 14 | 7 | Surface baseline |
-| CER | 0.7276 | 16.42 | 0.4516 | 0.3043 | 0.8750 | 14 | 32 | 2 | Surface baseline |
-| SRES total | 0.8995 | 270.0 | 0.6512 | 0.5185 | 0.8750 | 14 | 13 | 2 | Semantic-risk baseline |
-| CEIS max | 0.9117 | 5.0 | 0.6275 | 0.4571 | 1.0000 | 16 | 19 | 0 | Proposed decision-stability metric |
+| Predictor | Unit | AUC | Row-clustered AUC 95% CI | Diagnostic threshold | Best F1 | Row-clustered F1 95% CI | Precision | Recall | False negative | Paper use |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| WER | 90 model assessments / 30 rows | 0.6964 | 0.5737-0.8107 | 42.59 | 0.4615 | 0.2895-0.6667 | 0.3913 | 0.5625 | 7 | Surface baseline |
+| CER | 90 model assessments / 30 rows | 0.7276 | 0.6102-0.8351 | 16.42 | 0.4516 | 0.3200-0.6667 | 0.3043 | 0.8750 | 2 | Surface baseline |
+| SRES total | 90 model assessments / 30 rows | 0.8995 | 0.8127-0.9663 | 270.0 | 0.6512 | 0.4651-0.8400 | 0.5185 | 0.8750 | 2 | Semantic-risk baseline |
+| CEIS max | 90 model assessments / 30 rows | 0.9117 | 0.8522-0.9609 | 5.0 | 0.6275 | 0.4706-0.8136 | 0.4571 | 1.0000 | 0 | Proposed decision-stability metric |
 
 Evidence source:
 `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_comparison.tsv`.
+Row-clustered uncertainty source:
+`70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_clustered_ci.tsv`.
+Leave-one-row-out sensitivity source:
+`70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_leave_one_row_out.tsv`.
 
-CEIS has the strongest human-reviewed decision-change AUC and reaches recall
-1.0 at the diagnostic threshold, while SRES achieves the highest
-best-threshold F1 and fewer false positives. The CEIS/SRES AUC difference is
-small and should be interpreted with row-clustered uncertainty rather than as a
-definitive ranking. This supports CEIS as a conservative decision-stability
-signal while preserving SRES as a strong semantic-risk recovery baseline.
+CEIS has the strongest point-estimate human-reviewed decision-change AUC and
+reaches recall 1.0 at the diagnostic threshold, while SRES achieves the highest
+best-threshold F1 and fewer false positives. Row-clustered AUC intervals
+overlap for CEIS and SRES, so the evidence supports CEIS as a conservative
+decision-stability signal rather than a universally dominant classifier.
 
 ### Table 4. Human-Reviewed Recovery Policy Table
 
@@ -548,17 +551,21 @@ predictor table.
 Evidence mode: human-reviewed selected-300, 30 reviewed rows and 90 reviewed
 model assessments.
 
-| Policy | Model assessments | Unsafe downrouting | High-risk missed | Critical miss | Triggered count | Recovery budget | Severe misses eliminated | Triggers per severe miss eliminated | Machine abstention | Scoped interpretation |
+| Policy | Model assessments | Unsafe downrouting | High-risk missed | Critical miss | Recovery budget | Row-clustered budget 95% CI | Severe misses eliminated | Row-clustered severe-miss 95% CI | Triggers per severe miss eliminated | Scoped interpretation |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| No recovery | 90 | 29 | 6 | 1 | 0 | 0.0000 | 0 | n/a | 0 | Baseline decision risk |
-| Calibrated-confidence unavailable | 90 | 29 | 6 | 1 | 0 | 0.0000 | 0 | n/a | 0 | No calibrated confidence trigger available |
-| SRES-triggered recovery | 90 | 24 | 0 | 0 | 35 | 0.3889 | 7 | 5.0 | 0 | Semantic-risk recovery baseline |
-| CEIS-triggered conservative action | 90 | 24 | 0 | 0 | 35 | 0.3889 | 7 | 5.0 | 0 | CEIS conservative action reaches 0 high-risk missed and 0 critical miss in replay |
-| CEIS ensemble arbitration | 90 | 24 | 0 | 0 | 47 | 0.5222 | 7 | 6.7 | 18 | Adds abstention/interval behavior at higher budget |
+| No recovery | 90 | 29 | 6 | 1 | 0.0000 | 0.0000-0.0000 | 0 | 2-13 remaining severe misses | n/a | Baseline decision risk |
+| Calibrated-confidence unavailable | 90 | 29 | 6 | 1 | 0.0000 | 0.0000-0.0000 | 0 | 2-13 remaining severe misses | n/a | No calibrated confidence trigger available |
+| SRES-triggered recovery | 90 | 24 | 0 | 0 | 0.3889 | 0.3000-0.4889 | 7 | 0-0 remaining severe misses | 5.0 | Semantic-risk recovery baseline |
+| CEIS-triggered conservative action | 90 | 24 | 0 | 0 | 0.3889 | 0.3000-0.4889 | 7 | 0-0 remaining severe misses | 5.0 | Matches SRES severe-miss elimination at same budget in replay |
+| CEIS ensemble arbitration | 90 | 24 | 0 | 0 | 0.5222 | 0.4000-0.6556 | 7 | 0-0 remaining severe misses | 6.7 | Adds abstention/interval behavior at higher budget |
 
 Evidence sources:
 `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison.tsv`
 and `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json`.
+Row-clustered uncertainty source:
+`70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_clustered_ci.tsv`.
+Leave-one-row-out sensitivity source:
+`70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_leave_one_row_out.tsv`.
 
 Without recovery, the reviewed evidence contains 6 high-risk misses and 1
 critical miss. SRES-triggered recovery and CEIS-triggered conservative action
@@ -681,9 +688,10 @@ supports a focused high-stakes audit claim, not a population-level deployment
 claim.
 
 The 90 model assessments are clustered within 30 audio rows and should not be
-treated as 90 independent calls. Row-clustered bootstrap confidence intervals
-or leave-one-row-out sensitivity analysis should be added before making
-inferential claims about AUC, F1, recall, precision, or recovery budget.
+treated as 90 independent calls. The current submission-prep package reports
+row-clustered bootstrap intervals and leave-one-row-out sensitivity tables for
+predictor and recovery metrics; these remain uncertainty descriptions for a
+scoped audit rather than population-level deployment intervals.
 
 The number of positive decision-change cases is limited. Table 3 has 16
 positive model assessments, so AUC and threshold behavior should be interpreted
@@ -704,7 +712,10 @@ Recovery evidence is aggregate-only. This protects transcript-bearing call and
 review content, but limits external row-level reproducibility.
 
 CEIS depends on generated plausible variants and risk atom weights. Missed
-variants or misweighted atoms can affect instability scoring.
+variants or misweighted atoms can affect instability scoring. The current
+aggregate package records risk-atom coverage and a variant-coverage status
+table, but a full aggregate-only variant generation audit remains a submission
+polish item.
 
 The Taiwan Traditional Chinese locale policy is strict by design. Candidate
 model rejection may reflect deployment-locale mismatch, not universal ASR
@@ -761,8 +772,24 @@ adding transcript-bearing row content.
   `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json`
 - Human-reviewed predictor evidence:
   `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_comparison.tsv`
+- Human-reviewed predictor row-clustered CI:
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_clustered_ci.tsv`
+- Human-reviewed predictor leave-one-row-out sensitivity:
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_leave_one_row_out.tsv`
 - Human-reviewed recovery evidence:
   `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison.tsv`
+- Human-reviewed recovery row-clustered CI:
+  `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_clustered_ci.tsv`
+- Human-reviewed recovery leave-one-row-out sensitivity:
+  `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_leave_one_row_out.tsv`
+- Claim registry:
+  `70_experiments/runs/postdoc_evidence_chain_2026_05_25/claim_registry.tsv`
+- CEIS method summary:
+  `70_experiments/runs/postdoc_evidence_chain_2026_05_25/ceis_method_summary.tsv`
+- Selection provenance summary:
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/selection_provenance_summary.tsv`
+- Counterfactual variant coverage status:
+  `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/counterfactual_variant_coverage_summary.tsv`
 - Post-review evidence checklist:
   `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_post_review_evidence_summary.json`
 - Publishable evidence audit:

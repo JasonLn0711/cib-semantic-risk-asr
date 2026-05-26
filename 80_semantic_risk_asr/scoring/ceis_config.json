@@ -1,0 +1,68 @@
+{
+  "schema_version": "2026-05-26-submission-prep",
+  "score_name": "Counterfactual Escalation Instability Score",
+  "score_abbreviation": "CEIS",
+  "formula": "max_v Plausibility(v | x) * RiskAtomWeight(v) * DecisionDistance(f(x), f(v))",
+  "plausibility": {
+    "name": "Plausibility(v | x)",
+    "type": "bounded_proxy",
+    "range": [0.0, 1.0],
+    "not_claimed_as": "calibrated acoustic posterior",
+    "sources": [
+      "model_disagreement",
+      "Mandarin_phonetic_ambiguity",
+      "domain_slot_alternatives",
+      "runtime_quality_signals",
+      "acoustic_ambiguity_evidence_when_available"
+    ]
+  },
+  "risk_atom_weights": {
+    "negation": 5.0,
+    "amount": 5.0,
+    "action": 5.0,
+    "actor": 4.0,
+    "intent": 4.0,
+    "scam_pattern": 4.0,
+    "time": 3.0,
+    "uncertainty": 3.0,
+    "default": 1.0
+  },
+  "decision_function": {
+    "name": "f",
+    "labels": [
+      "no_escalation",
+      "review",
+      "priority_review",
+      "critical_escalation",
+      "conservative_machine_action",
+      "abstain"
+    ],
+    "base_ordinal_order": {
+      "no_escalation": 0,
+      "review": 1,
+      "priority_review": 2,
+      "critical_escalation": 3
+    },
+    "distance_policy": {
+      "same_action": 0,
+      "neighboring_review_state": 1,
+      "no_escalation_to_critical_escalation": 3,
+      "unsafe_downrouting_of_critical_event": "max_penalty",
+      "conservative_machine_action": "policy_action_interval",
+      "abstain": "policy_action_interval"
+    }
+  },
+  "threshold_policy": {
+    "table_3_threshold_type": "retrospective_best_threshold_on_scoped_audit_set",
+    "deployment_threshold_claimed": false,
+    "requires_for_deployment": "separate development-set threshold freeze"
+  },
+  "required_submission_ablations": [
+    "uniform_atom_weights",
+    "no_plausibility",
+    "binary_decision_flip_only",
+    "max_vs_top_k_mean",
+    "CEIS_by_atom_class"
+  ],
+  "privacy_boundary": "aggregate-only outputs; no transcript text, audio IDs, selected sample IDs, hypotheses, or reviewer notes"
+}

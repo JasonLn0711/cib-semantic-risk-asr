@@ -21,14 +21,14 @@ Decision: selected-300 人工審查不用重開。現在的工作是把統計、
 
 | Risk | Reviewer attack | Manuscript defense | Status |
 | --- | --- | --- | --- |
-| Clustered statistics | 90 assessments 來自 30 rows，不獨立 | 明講 clustered within rows；point estimates 是 descriptive；CI 用 row-clustered bootstrap 或 leave-one-row-out | Written; analysis pending |
+| Clustered statistics | 90 assessments 來自 30 rows，不獨立 | 明講 clustered within rows；point estimates 是 descriptive；CI 用 row-clustered bootstrap 或 leave-one-row-out | Written; CI and LOO generated |
 | Selection enrichment | selected-300 不是 prevalence sample，可能偏向 semantic-risk metrics | Selection Provenance 小節；稱為 enriched high-stakes audit surface | Written |
 | Threshold fitting | best threshold 在同一 evaluation set 選出 | 改稱 diagnostic threshold；不是 frozen deployment threshold | Written |
 | CEIS vs SRES | CEIS 不是全面勝利，Table 4 與 SRES tie | CEIS 是 conservative instability signal；SRES 是 strong semantic-risk baseline | Written |
 | Replay vs causal deployment | recovery 不是 live intervention | 改成 aggregate policy replay / eliminates in replay | Written |
 | Workload | 0.3889 budget 太抽象 | 35 triggers / 7 severe misses = 5.0 triggers per severe miss eliminated | Written |
 | Human review reliability | single reviewer / blinding / adjudication | 寫 expert audit，不 claim IAA；可做 5-10 row blinded spot-check | Written; optional validation |
-| Variant generation | variants 是否可重建、是否偏差 | 加 aggregate-only variant coverage audit backlog | Written; analysis pending |
+| Variant generation | variants 是否可重建、是否偏差 | 加 aggregate-only variant coverage audit backlog | Written; coverage status generated, counts pending |
 | CEIS scale | Plausibility 是否真 probability，weights/distance 是否固定 | 改成 bounded proxy；要求 weight/distance matrix and ablations | Written; analysis pending |
 | Decision function | `f(x)` 是什麼 | 新增 Downstream Decision Function | Written |
 | Confidence baseline | confidence-only 不是公平 baseline | 改成 calibrated-confidence unavailable | Written |
@@ -43,13 +43,12 @@ Decision: selected-300 人工審查不用重開。現在的工作是把統計、
 
 Do these only from aggregate-safe artifacts or controlled local recomputation:
 
-1. Row-clustered bootstrap CI or leave-one-row-out sensitivity for Table 3 and Table 4.
-2. Threshold-budget frontier table: false negatives and severe misses at fixed budgets 10%, 20%, 30%, 40%.
-3. Sensitivity excluding rows selected directly by CEIS/SRES-family signals.
-4. Aggregate-only variant coverage audit: variants per assessment, source mix, atom mix, rejected variants, no-risk controls.
-5. CEIS ablations: no plausibility, uniform atom weights, binary flip only, max versus top-k mean, by-atom class.
-6. Artifact manifest refinement with tokenizer/normalization policy, decoding parameters, random seeds, and hardware fields where available. First SHA256/source-commit/environment manifest is generated.
-7. Optional blinded second-reviewer spot-check over 5-10 rows, hiding model id and metric scores.
+1. Threshold-budget frontier table: false negatives and severe misses at fixed budgets 10%, 20%, 30%, 40%.
+2. Sensitivity excluding rows selected directly by CEIS/SRES-family signals.
+3. Aggregate-only variant coverage audit: variants per assessment, source mix, atom mix, rejected variants, no-risk controls. Current status table records that full variant counts are pending.
+4. CEIS ablations: no plausibility, uniform atom weights, binary flip only, max versus top-k mean, by-atom class.
+5. Artifact manifest refinement with tokenizer/normalization policy, decoding parameters, random seeds, and hardware fields where available. First SHA256/source-commit/environment manifest is generated.
+6. Optional blinded second-reviewer spot-check over 5-10 rows, hiding model id and metric scores.
 
 ## Manuscript Language Rules
 

@@ -275,7 +275,7 @@ Generated figure package:
 
 | Defense line | Manuscript action | Current state | Remaining analysis |
 | --- | --- | --- | --- |
-| Clustered statistics | 明講 90 model assessments clustered within 30 rows，不當成 90 independent calls | 已加入 N-ladder、Table 3 說明、Limitations | 補 row-clustered bootstrap CI 或 leave-one-row-out sensitivity |
+| Clustered statistics | 明講 90 model assessments clustered within 30 rows，不當成 90 independent calls | 已加入 N-ladder、Table 3 說明、Limitations；已產生 row-clustered bootstrap CI 與 leave-one-row-out sensitivity | 投稿前檢查 CI 詮釋不要寫成 population interval |
 | Selection enrichment | 明講 selected-300 是 enriched high-stakes audit surface，不是 prevalence sample | 已加入 Selection Provenance | 若要更強，排除 CEIS/SRES-selected rows 做 sensitivity |
 | Threshold policy | 把 best threshold 改成 diagnostic threshold，不當 deployment threshold | 已改 Table 3 與 Limitations | 補 threshold-budget frontier 與 fixed-budget FN 表 |
 | Governance boundary | 新增 Ethics, Privacy, Intended Use，限制 allowed/disallowed uses | 已加入 manuscript，補 NIH/NIST/EU citations | 投稿前補 IRB/exemption/DUA、retention、encryption、access-control 狀態 |
@@ -291,12 +291,11 @@ Generated figure package:
 
 Analysis backlog for submission polish:
 
-1. Row-clustered bootstrap or leave-one-row-out sensitivity for AUC/F1/recall/precision/recovery budget。
-2. Threshold-budget frontier table：固定 10%、20%、30%、40% budget 下的 FN / severe misses。
-3. Aggregate-only variant coverage audit：variant counts by source and atom, rejected variants, no-risk controls。
-4. CEIS ablations：no plausibility、uniform atom weights、binary flip only、max vs top-k mean、by-atom class。
-5. Artifact manifest：path、role、privacy class、generated_by、source inputs、sha256、source git commit、timestamp、environment。第一版已由 `build_artifact_manifest.py` 產生。
-6. Optional 5-10 row blinded second-reviewer spot-check，不重開 selected-300 review。
+1. Threshold-budget frontier table：固定 10%、20%、30%、40% budget 下的 FN / severe misses。
+2. Aggregate-only variant coverage audit：variant counts by source and atom, rejected variants, no-risk controls。目前已有 coverage status table，實際 variant counts 仍 pending。
+3. CEIS ablations：no plausibility、uniform atom weights、binary flip only、max vs top-k mean、by-atom class。
+4. Artifact manifest：path、role、privacy class、generated_by、source inputs、sha256、source git commit、timestamp、environment。第一版已由 `build_artifact_manifest.py` 產生，並同步到 postdoc evidence-chain run。
+5. Optional 5-10 row blinded second-reviewer spot-check，不重開 selected-300 review。
 
 ## 7. Citation Completion Checklist
 
@@ -349,11 +348,20 @@ Reviewer-reproducible tracked artifacts:
 - `70_experiments/registry.tsv`
 - `80_semantic_risk_asr/paper/artifact_manifest.tsv`
 - `80_semantic_risk_asr/paper/build_artifact_manifest.py`
+- `70_experiments/runs/postdoc_evidence_chain_2026_05_25/artifact_manifest.tsv`
+- `70_experiments/runs/postdoc_evidence_chain_2026_05_25/claim_registry.tsv`
+- `70_experiments/runs/postdoc_evidence_chain_2026_05_25/ceis_method_summary.tsv`
 - `70_experiments/runs/janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv`
 - `70_experiments/runs/wer_metric_audit_2026_05_25/journal_compliance_summary.json`
 - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_refresh_summary.json`
 - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_comparison.tsv`
+- `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_clustered_ci.tsv`
+- `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_leave_one_row_out.tsv`
+- `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/selection_provenance_summary.tsv`
+- `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/counterfactual_variant_coverage_summary.tsv`
 - `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison.tsv`
+- `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_clustered_ci.tsv`
+- `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_leave_one_row_out.tsv`
 - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json`
 - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/consequence_evidence_matrix.tsv`
 - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/evidence_chain_consistency_summary.json`

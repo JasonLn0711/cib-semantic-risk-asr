@@ -8,12 +8,20 @@ import hashlib
 import importlib.metadata
 import platform
 import subprocess
+import argparse
 from datetime import datetime, timezone
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "80_semantic_risk_asr" / "paper" / "artifact_manifest.tsv"
+DEFAULT_OUT = ROOT / "80_semantic_risk_asr" / "paper" / "artifact_manifest.tsv"
+POSTDOC_OUT = (
+    ROOT
+    / "70_experiments"
+    / "runs"
+    / "postdoc_evidence_chain_2026_05_25"
+    / "artifact_manifest.tsv"
+)
 
 ARTIFACTS = [
     (
@@ -57,6 +65,48 @@ ARTIFACTS = [
         "aggregate manifest-generation code",
         "manual script maintenance",
         "paper-facing aggregate artifacts",
+    ),
+    (
+        "docs/submission_readiness_plan.md",
+        "submission readiness scope-control plan",
+        "paper-facing governance documentation",
+        "manual submission planning pass",
+        "aggregate validation summaries",
+    ),
+    (
+        "docs/privacy_boundary.md",
+        "privacy boundary",
+        "paper-facing governance documentation",
+        "manual privacy boundary pass",
+        "aggregate artifact policy",
+    ),
+    (
+        "docs/intended_use_statement.md",
+        "intended use statement",
+        "paper-facing governance documentation",
+        "manual intended-use pass",
+        "aggregate artifact policy",
+    ),
+    (
+        "docs/artifact_privacy_classes.tsv",
+        "artifact privacy class registry",
+        "aggregate release-control table",
+        "manual privacy class pass",
+        "aggregate artifact policy",
+    ),
+    (
+        "docs/ceis_method_spec.md",
+        "CEIS method specification",
+        "paper-facing method documentation",
+        "manual method-spec pass",
+        "CEIS config and manuscript method text",
+    ),
+    (
+        "80_semantic_risk_asr/scoring/ceis_config.json",
+        "CEIS method configuration",
+        "aggregate method configuration",
+        "manual method-config pass",
+        "CEIS implementation and method spec",
     ),
     (
         "70_experiments/registry.tsv",
@@ -122,11 +172,39 @@ ARTIFACTS = [
         "reviewed model-assessment aggregate labels",
     ),
     (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_clustered_ci.tsv",
+        "human-reviewed predictor row-clustered uncertainty",
+        "aggregate predictor uncertainty table",
+        "80_semantic_risk_asr/scoring/bootstrap_human_audit_predictor_ci.py",
+        "local audit sheet read in controlled mode; aggregate output only",
+    ),
+    (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_leave_one_row_out.tsv",
+        "human-reviewed predictor leave-one-row-out sensitivity",
+        "aggregate predictor sensitivity table",
+        "80_semantic_risk_asr/scoring/bootstrap_human_audit_predictor_ci.py",
+        "local audit sheet read in controlled mode; aggregate output only",
+    ),
+    (
         "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison.tsv",
         "human-reviewed recovery evidence",
         "aggregate policy replay table",
         "human-reviewed recovery pipeline",
         "reviewed model-assessment aggregate labels",
+    ),
+    (
+        "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_clustered_ci.tsv",
+        "human-reviewed recovery row-clustered uncertainty",
+        "aggregate policy uncertainty table",
+        "80_semantic_risk_asr/scoring/bootstrap_human_audit_recovery_ci.py",
+        "local audit sheet read in controlled mode; aggregate output only",
+    ),
+    (
+        "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_leave_one_row_out.tsv",
+        "human-reviewed recovery leave-one-row-out sensitivity",
+        "aggregate policy sensitivity table",
+        "80_semantic_risk_asr/scoring/bootstrap_human_audit_recovery_ci.py",
+        "local audit sheet read in controlled mode; aggregate output only",
     ),
     (
         "70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json",
@@ -141,6 +219,48 @@ ARTIFACTS = [
         "aggregate validation summary",
         "evidence-chain consistency audit",
         "evidence-chain aggregate records",
+    ),
+    (
+        "70_experiments/runs/postdoc_evidence_chain_2026_05_25/claim_registry.tsv",
+        "claim registry",
+        "aggregate claim-to-evidence table",
+        "manual claim registry pass",
+        "aggregate evidence artifacts",
+    ),
+    (
+        "70_experiments/runs/postdoc_evidence_chain_2026_05_25/ceis_method_summary.tsv",
+        "CEIS method summary",
+        "aggregate method summary",
+        "manual method-summary pass",
+        "CEIS method spec and config",
+    ),
+    (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/selection_provenance_summary.tsv",
+        "selection provenance summary",
+        "aggregate selection provenance table",
+        "manual selection-provenance pass",
+        "selected-300 aggregate selection summaries",
+    ),
+    (
+        "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/counterfactual_variant_coverage_summary.tsv",
+        "counterfactual variant coverage status",
+        "aggregate coverage-status table",
+        "manual variant-coverage status pass",
+        "risk atom coverage and method contract",
+    ),
+    (
+        "80_semantic_risk_asr/scoring/bootstrap_human_audit_predictor_ci.py",
+        "predictor clustered uncertainty script",
+        "aggregate analysis code",
+        "manual script maintenance",
+        "local audit sheet controlled input; aggregate outputs",
+    ),
+    (
+        "80_semantic_risk_asr/scoring/bootstrap_human_audit_recovery_ci.py",
+        "recovery clustered uncertainty script",
+        "aggregate analysis code",
+        "manual script maintenance",
+        "local audit sheet controlled input; aggregate outputs",
     ),
 ]
 
@@ -187,7 +307,18 @@ def package_versions() -> str:
     return ";".join(values)
 
 
-def main() -> None:
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUT)
+    parser.add_argument(
+        "--also-postdoc",
+        action="store_true",
+        help="Also write the postdoc evidence-chain artifact manifest.",
+    )
+    return parser.parse_args()
+
+
+def build_manifest(out_path: Path) -> None:
     rows = list(ARTIFACTS)
     for figure in FIGURES:
         rows.append(
@@ -205,8 +336,8 @@ def main() -> None:
     py_version = platform.python_version()
     versions = package_versions()
 
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    with OUT.open("w", newline="", encoding="utf-8") as fh:
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with out_path.open("w", newline="", encoding="utf-8") as fh:
         writer = csv.writer(fh, delimiter="\t", lineterminator="\n")
         writer.writerow(
             [
@@ -238,7 +369,15 @@ def main() -> None:
                     versions,
                 ]
             )
-    print(f"Wrote {OUT}")
+    print(f"Wrote {out_path}")
+
+
+def main() -> None:
+    args = parse_args()
+    output = args.output if args.output.is_absolute() else ROOT / args.output
+    build_manifest(output)
+    if args.also_postdoc and output.resolve() != POSTDOC_OUT.resolve():
+        build_manifest(POSTDOC_OUT)
 
 
 if __name__ == "__main__":

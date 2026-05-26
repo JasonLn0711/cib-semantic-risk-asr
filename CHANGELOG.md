@@ -5,6 +5,38 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.231 - 2026-05-26T23:32:39+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `b74b9fa`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/counterfactual_variant_coverage_summary.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_clustered_ci.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_leave_one_row_out.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/selection_provenance_summary.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_clustered_ci.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_leave_one_row_out.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/artifact_manifest.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/ceis_method_summary.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/claim_registry.tsv`
+  - `80_semantic_risk_asr/paper/artifact_manifest.tsv`
+  - `80_semantic_risk_asr/paper/build_artifact_manifest.py`
+  - `80_semantic_risk_asr/paper/hostile_reviewer_hardening_checklist_2026_05_26.md`
+  - `80_semantic_risk_asr/paper/manuscript_draft.md`
+  - `80_semantic_risk_asr/paper/submission_readiness_package_zh.md`
+  - `80_semantic_risk_asr/scoring/bootstrap_human_audit_predictor_ci.py`
+  - `80_semantic_risk_asr/scoring/bootstrap_human_audit_recovery_ci.py`
+  - `80_semantic_risk_asr/scoring/ceis_config.json`
+  - `docs/REPO_MAP.md`
+  - `docs/artifact_privacy_classes.tsv`
+  - `docs/ceis_method_spec.md`
+  - `docs/intended_use_statement.md`
+  - `docs/privacy_boundary.md`
+  - `docs/submission_readiness_plan.md`
+
 ## v2.5.230 - 2026-05-26T23:09:29+08:00
 
 - Bump: `patch`

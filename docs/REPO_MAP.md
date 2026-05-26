@@ -95,3 +95,8 @@ organized extracted audio under `10_extracted_parts/`.
   when drafting the abstract, introduction, cover letter, talk track, or
   reviewer-facing story. It maps each introduction move to a citation or
   reviewed aggregate evidence source.
+- Use `docs/submission_readiness_plan.md`, `docs/privacy_boundary.md`,
+  `docs/intended_use_statement.md`, `docs/artifact_privacy_classes.tsv`, and
+  `docs/ceis_method_spec.md` as the submission-prep control layer for scope
+  control, aggregate-only release, intended-use boundaries, artifact privacy
+  classes, and CEIS method reconstruction.
