@@ -5,6 +5,26 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.234 - 2026-05-27T22:31:17+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `dc4b615`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/counterfactual_variant_coverage_summary.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/fixed_budget_recovery_frontier.tsv`
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/claim_registry.tsv`
+  - `80_semantic_risk_asr/paper/build_artifact_manifest.py`
+  - `80_semantic_risk_asr/paper/manuscript_draft.md`
+  - `80_semantic_risk_asr/scoring/build_counterfactual_variant_coverage_summary.py`
+  - `80_semantic_risk_asr/scoring/build_fixed_budget_recovery_frontier.py`
+  - `docs/artifact_privacy_classes.tsv`
+  - `docs/hostile_reviewer_checklist.md`
+  - `docs/submission_readiness_plan.md`
+  - `tests/test_submission_polish_artifacts.py`
+
 ## v2.5.233 - 2026-05-26T23:42:14+08:00
 
 - Bump: `patch`

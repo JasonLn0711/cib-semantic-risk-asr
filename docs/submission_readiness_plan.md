@@ -40,11 +40,14 @@ notes, runtime logs, local response sheets, or model weights.
 6. Freeze CEIS method spec, risk atom weights, downstream decision contract,
    and config.
 7. Maintain selected-300 selection provenance.
-8. Complete aggregate-only counterfactual variant coverage audit; current
-   status table records pending variant-count recomputation.
-9. Keep Limitations and Ethics/Privacy/Intended Use visible in the manuscript.
-10. Maintain checksum manifests and artifact privacy classes.
-11. Run hostile-reviewer checklist before submission packaging.
+8. Maintain aggregate-only counterfactual variant coverage audit; current
+   status reports CEIS top-atom proxy coverage and explicitly marks unavailable
+   source-specific variant-generation logs.
+9. Maintain fixed-budget recovery frontier for reviewer-visible budget tradeoff
+   analysis.
+10. Keep Limitations and Ethics/Privacy/Intended Use visible in the manuscript.
+11. Maintain checksum manifests and artifact privacy classes.
+12. Run hostile-reviewer checklist before submission packaging.
 
 ## Submission Package Boundary
 
@@ -58,6 +61,8 @@ Include:
 - predictor and recovery aggregate tables;
 - clustered CI tables when generated;
 - leave-one-row-out sensitivity tables;
+- fixed-budget recovery frontier;
+- counterfactual variant coverage summary;
 - consequence evidence matrix;
 - publishable evidence and consistency summaries;
 - privacy boundary and intended-use statements.

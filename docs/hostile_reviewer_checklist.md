@@ -21,7 +21,8 @@ privacy-preserving.
 | confidence-only baseline? | Named calibrated-confidence unavailable; it does not act as a calibrated confidence baseline. |
 | CEIS reconstructable? | `docs/ceis_method_spec.md`, `docs/risk_atom_weights.tsv`, `docs/downstream_decision_contract.md`, and `80_semantic_risk_asr/scoring/ceis_config.json` define the method contract. |
 | plausibility term? | Written as `Plausibility(v | x)`, a bounded proxy, not an acoustic posterior. |
-| variant coverage? | Aggregate status table exists; full aggregate variant count audit remains a submission polish item if source records are available. |
+| variant coverage? | Aggregate CEIS top-atom proxy coverage is reported without variant text; unavailable phonetic/domain/runtime/rejected-variant logs are named as a scope limitation. |
+| fixed-budget frontier? | Fixed-budget replay reports the trigger-budget tradeoff separately from diagnostic Table 4 thresholds. |
 | N ladder clear? | Manuscript and F6 separate 258 split, selected-300 provenance, 30 reviewed rows, and 90 model assessments. |
 | privacy boundary clear? | `docs/privacy_boundary.md` and `docs/artifact_privacy_classes.tsv` define release and local-only boundaries. |
 | intended use restricted? | `docs/intended_use_statement.md` disallows adverse automation and direct punitive use. |

@@ -235,6 +235,13 @@ ARTIFACTS = [
         "local audit sheet read in controlled mode; aggregate output only",
     ),
     (
+        "70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/fixed_budget_recovery_frontier.tsv",
+        "human-reviewed fixed-budget recovery frontier",
+        "aggregate policy frontier table",
+        "80_semantic_risk_asr/scoring/build_fixed_budget_recovery_frontier.py",
+        "local audit sheet read in controlled mode; aggregate output only",
+    ),
+    (
         "70_experiments/runs/postdoc_evidence_chain_2026_05_25/publishable_evidence_completion_summary.json",
         "publishable evidence gate",
         "aggregate validation summary",
@@ -271,10 +278,10 @@ ARTIFACTS = [
     ),
     (
         "70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/counterfactual_variant_coverage_summary.tsv",
-        "counterfactual variant coverage status",
-        "aggregate coverage-status table",
-        "manual variant-coverage status pass",
-        "risk atom coverage and method contract",
+        "counterfactual variant coverage summary",
+        "aggregate coverage table",
+        "80_semantic_risk_asr/scoring/build_counterfactual_variant_coverage_summary.py",
+        "local audit sheet read in controlled mode; aggregate output only",
     ),
     (
         "80_semantic_risk_asr/scoring/bootstrap_human_audit_predictor_ci.py",
@@ -286,6 +293,20 @@ ARTIFACTS = [
     (
         "80_semantic_risk_asr/scoring/bootstrap_human_audit_recovery_ci.py",
         "recovery clustered uncertainty script",
+        "aggregate analysis code",
+        "manual script maintenance",
+        "local audit sheet controlled input; aggregate outputs",
+    ),
+    (
+        "80_semantic_risk_asr/scoring/build_counterfactual_variant_coverage_summary.py",
+        "counterfactual variant coverage script",
+        "aggregate analysis code",
+        "manual script maintenance",
+        "local audit sheet controlled input; aggregate outputs",
+    ),
+    (
+        "80_semantic_risk_asr/scoring/build_fixed_budget_recovery_frontier.py",
+        "fixed-budget recovery frontier script",
         "aggregate analysis code",
         "manual script maintenance",
         "local audit sheet controlled input; aggregate outputs",

@@ -1,0 +1,9 @@
+score_metric	budget_target_rate	model_assessments	eligible_trigger_count	requested_trigger_count	triggered_count	observed_budget_rate	score_cutoff	unsafe_downrouting_count	high_risk_missed_count	critical_miss_count	severe_missed_count	severe_misses_eliminated_vs_no_recovery	non_severe_trigger_count	triggers_per_severe_miss_eliminated	threshold_type	replay_mode	privacy_boundary
+sres_total	0.1000	90	35	9	9	0.1000	285.0	28	4	0	4	3	6	3.0	fixed_budget_ranked_replay	aggregate_human_reviewed_conservative_replay	aggregate counts only
+sres_total	0.2000	90	35	18	18	0.2000	270.0	26	2	0	2	5	13	3.6	fixed_budget_ranked_replay	aggregate_human_reviewed_conservative_replay	aggregate counts only
+sres_total	0.3000	90	35	27	27	0.3000	270.0	26	2	0	2	5	22	5.4	fixed_budget_ranked_replay	aggregate_human_reviewed_conservative_replay	aggregate counts only
+sres_total	0.4000	90	35	36	35	0.3889	210.0	24	0	0	0	7	28	5.0	fixed_budget_ranked_replay	aggregate_human_reviewed_conservative_replay	aggregate counts only
+ceis	0.1000	90	35	9	9	0.1000	5.0	24	0	0	0	7	2	1.2857	fixed_budget_ranked_replay	aggregate_human_reviewed_conservative_replay	aggregate counts only
+ceis	0.2000	90	35	18	18	0.2000	5.0	24	0	0	0	7	11	2.5714	fixed_budget_ranked_replay	aggregate_human_reviewed_conservative_replay	aggregate counts only
+ceis	0.3000	90	35	27	27	0.3000	5.0	24	0	0	0	7	20	3.8571	fixed_budget_ranked_replay	aggregate_human_reviewed_conservative_replay	aggregate counts only
+ceis	0.4000	90	35	36	35	0.3889	5.0	24	0	0	0	7	28	5.0	fixed_budget_ranked_replay	aggregate_human_reviewed_conservative_replay	aggregate counts only

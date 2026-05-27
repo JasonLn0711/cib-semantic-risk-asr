@@ -398,12 +398,17 @@ directional pattern remains.
 
 ### Variant Coverage And Human Review Reliability
 
-Counterfactual variant generation needs an aggregate-only coverage audit before
-final submission. The current selected audit covers risk atoms in aggregate:
-action 25/25, actor 15/15, amount 23/23, negation 14/14, and scam pattern
-23/23 selected rows. A stronger supplement should report variants per
-assessment, source mix, atom mix, rejected variants, no-risk controls, and CEIS
-trigger rate on non-critical atom variants without exposing transcript text.
+The current aggregate-only coverage audit reports CEIS top-atom proxy coverage
+over the 90 reviewed model assessments. It records 90 aggregate proxy
+observations across 30 reviewed rows, with top-atom counts of negation 47,
+amount 37, action 3, and actor 3. The reviewed selection surface also covers
+risk-signal atoms in aggregate: action 25, actor 15, amount 23, negation 14,
+and scam pattern 23 selected rows. These counts support submission-safe
+coverage auditing, not release of variant text. Source-specific coverage is
+available for model-disagreement provenance in aggregate; phonetic,
+domain-slot, runtime-signal, rejected-variant, and full variant-generation logs
+are not currently reconstructed as release artifacts. Stronger generator claims
+therefore require a future aggregate variant-generation log.
 
 Human labels come from a completed expert audit rather than multi-annotator
 adjudication. Inter-annotator agreement is not claimed. A lightweight blinded
@@ -566,6 +571,8 @@ Row-clustered uncertainty source:
 `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_clustered_ci.tsv`.
 Leave-one-row-out sensitivity source:
 `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_leave_one_row_out.tsv`.
+Fixed-budget frontier source:
+`70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/fixed_budget_recovery_frontier.tsv`.
 
 Without recovery, the reviewed evidence contains 6 high-risk misses and 1
 critical miss. SRES-triggered recovery and CEIS-triggered conservative action
@@ -576,6 +583,15 @@ severe missed outcomes eliminated. CEIS ensemble arbitration preserves this
 policy replay eliminates the most severe missed-risk outcomes under the scoped
 labels, while residual unsafe downrouting remains at 24 and requires separate
 governance.
+
+A fixed-budget replay provides an additional operating view. At 10%, 20%, 30%,
+and 40% requested trigger budgets, CEIS-ranked conservative replay leaves 0
+high-risk misses and 0 critical misses under the scoped labels; the 10% point
+uses 9 triggers. SRES-ranked conservative replay leaves 4, 2, 2, and 0 severe
+missed outcomes at the same requested budgets, reaching 0 severe misses only
+when all 35 eligible SRES triggers are used. This frontier supports CEIS as a
+conservative decision-stability signal while preserving the Table 4 result that
+the diagnostic SRES and CEIS policies tie at the selected 0.3889 budget.
 
 ## Figure Package
 
@@ -786,6 +802,8 @@ adding transcript-bearing row content.
   `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_clustered_ci.tsv`
 - Human-reviewed recovery leave-one-row-out sensitivity:
   `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison_leave_one_row_out.tsv`
+- Human-reviewed recovery fixed-budget frontier:
+  `70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/fixed_budget_recovery_frontier.tsv`
 - Claim registry:
   `70_experiments/runs/postdoc_evidence_chain_2026_05_25/claim_registry.tsv`
 - CEIS method summary:
