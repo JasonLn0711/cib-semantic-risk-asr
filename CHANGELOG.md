@@ -5,6 +5,17 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.239 - 2026-05-28T10:05:23+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `d56b89f`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/postdoc_evidence_chain_2026_05_25/artifact_manifest.tsv`
+  - `80_semantic_risk_asr/paper/artifact_manifest.tsv`
+
 ## v2.5.238 - 2026-05-28T10:04:55+08:00
 
 - Bump: `patch`
