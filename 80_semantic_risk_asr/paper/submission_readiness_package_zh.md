@@ -1,8 +1,10 @@
 # 投稿準備包：CDS-ASR 論文下一步
 
 Date: 2026-05-26
+Latest status update: 2026-05-28
 
-Status: manuscript packaging and submission-readiness work plan
+Status: Route A direct-submission package active; manuscript polish and
+aggregate-only package refresh completed on 2026-05-28.
 
 Canonical draft:
 
@@ -15,6 +17,18 @@ Second-reviewer decision record:
 Primary rule:
 
 > 目前不新增 full-split ASR 實驗。下一步是把已完成的 evidence chain 轉成可投稿的 manuscript、表格、圖、appendix、artifact statement 與 reviewer-facing claim map。
+
+2026-05-28 FIRST PRINCIPLE update:
+
+> 現在最稀缺的資源不是更多模型實驗，而是 reviewer 第一頁注意力與可防守的 claim-evidence alignment。因此投稿面要把 frozen evidence chain 寫成有吸引力、可 citation 支撐、可重建、aggregate-only 的 decision-stability 故事；不要重開 selected-300 審查，也不要等待 second-reviewer spot-check 才進入 Route A。
+
+今日完成狀態：
+
+- Introduction 已依老師建議改成「現實世界 speech-to-decision 問題 → 既有 ASR / semantic metric / correction / selective prediction 解法 → decision-stability 缺口 → CDS-ASR 新觀點」。
+- `manuscript_submission.tex` 的主要表格已改成自動換行與比例欄寬，長模型名稱、artifact 路徑與 reviewer-facing 說明不再依賴固定欄寬硬塞。
+- Route A cover note 保持直接投稿、不等待 second reviewer 的界線：single-expert audit limitation 明講，inter-annotator agreement 不宣稱。
+- PDF 與 aggregate-only package 已重建在 local `/tmp`：`/tmp/cib_tex_build/manuscript_submission.pdf`、`/tmp/cib_submission_route_a_2026_05_28.zip`。
+- 最新已推到 domain repo `origin/main` 的投稿 polish commit 到 `4734cd9`；本文件更新只記錄狀態與下一步，不改 evidence boundary。
 
 ## 1. Current Gate Verdict
 

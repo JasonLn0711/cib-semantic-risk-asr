@@ -1,22 +1,22 @@
 {
-  "version": "v2.5.243",
+  "version": "v2.5.244",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 243
+    "patch": 244
   },
-  "updated_at": "2026-05-28T10:51:23+08:00",
+  "updated_at": "2026-05-28T10:55:33+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "a5902a4",
+  "base_commit": "4734cd9",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/artifact_manifest.tsv",
-    "80_semantic_risk_asr/paper/artifact_manifest.tsv"
+    "80_semantic_risk_asr/paper/submission_readiness_package_zh.md",
+    "docs/submission_readiness_plan.md"
   ]
 }

@@ -1,6 +1,7 @@
 # Submission Readiness Plan
 
 Date: 2026-05-26
+Latest status update: 2026-05-28
 
 Scope: CDS-ASR paper and aggregate artifact package
 
@@ -15,6 +16,23 @@ Current gate state:
 - roadmap completion: `roadmap_complete=true`, `blocking_gate=none`;
 - publishable evidence: `publishable_ready=true`;
 - evidence-chain consistency: `26/26` pass, `failed_checks=[]`.
+
+2026-05-28 Route A update:
+
+- Route A remains the active path: direct submission without waiting for a
+  second-reviewer blinded transcript-bearing spot-check.
+- The manuscript introduction has been revised into the attention-led sequence:
+  cited real-world speech-to-decision problem, cited current solution
+  landscape, remaining decision-stability gap, CDS-ASR contribution, scoped
+  evidence, and validation boundary.
+- The LaTeX submission tables now use automatic wrapping and proportional
+  column widths so long model names, artifact names, and reviewer-facing notes
+  stay readable without changing the evidence claims.
+- The rendered PDF and aggregate-only submission package were rebuilt locally:
+  `/tmp/cib_tex_build/manuscript_submission.pdf` and
+  `/tmp/cib_submission_route_a_2026_05_28.zip`.
+- Latest pushed domain-repo commit before this planning refresh:
+  `4734cd9` (`docs: refresh manifests after introduction polish`).
 
 ## Scope Control
 
@@ -48,6 +66,8 @@ notes, runtime logs, local response sheets, or model weights.
 10. Keep Limitations and Ethics/Privacy/Intended Use visible in the manuscript.
 11. Maintain checksum manifests and artifact privacy classes.
 12. Run hostile-reviewer checklist before submission packaging.
+13. For venue-specific submission, adjust formatting, cover-letter wording, and
+    bibliography style only; keep the frozen evidence boundary unchanged.
 
 ## Submission Package Boundary
 

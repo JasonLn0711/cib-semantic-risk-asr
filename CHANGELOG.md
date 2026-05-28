@@ -5,6 +5,17 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.244 - 2026-05-28T10:55:33+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `4734cd9`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/paper/submission_readiness_package_zh.md`
+  - `docs/submission_readiness_plan.md`
+
 ## v2.5.243 - 2026-05-28T10:51:23+08:00
 
 - Bump: `patch`
