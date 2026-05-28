@@ -1,7 +1,7 @@
 # Citation Seed
 
 These are verified citation seeds for the CDS-ASR paper framing as of
-2026-05-26. The manuscript bibliography lives in `references.bib`. Before final
+2026-05-28. The manuscript bibliography lives in `references.bib`. Before final
 submission, re-check source wording, target-journal style, and access dates.
 
 Use this file together with:
@@ -29,7 +29,7 @@ post-call analytics for customer issues, trends, self-service interactions, and
 agent compliance.
 
 - Source: https://docs.aws.amazon.com/connect/latest/adminguide/analyze-conversations.html
-- Access date: 2026-05-26
+- Access date: 2026-05-28
 - BibTeX key: `aws_contact_lens_analytics_2026`
 
 AWS also describes AI-powered contact-center analytics that use transcripts,
@@ -37,8 +37,8 @@ sentiment analysis, categories, summaries, compliance monitoring, and real-time
 alerts. This supports the premise that transcripts are already operational
 inputs, not just archival text.
 
-- Source: https://aws.amazon.com/connect/contact-lens/
-- Access date: 2026-05-26
+- Source: https://aws.amazon.com/products/connect/customer/conversational-analytics/
+- Access date: 2026-05-28
 - BibTeX key: `aws_connect_contact_lens_2026`
 
 ## Anti-Fraud Calls Are High-Stakes Decision Inputs
@@ -49,7 +49,7 @@ receive information. This anchors the paper's anti-fraud call-center setting.
 
 - Source: https://www.npa.gov.tw/en/app/artwebsite/view?id=8035&module=artwebsite&serno=ed2427e1-de0a-4f6f-8f68-8f83b604e89b
 - Page update date: 2024-10-18
-- Access date: 2026-05-26
+- Access date: 2026-05-28
 - BibTeX key: `npa_165_antifraud_hotline_2024`
 
 The FBI reported that IC3 received `1,008,597` complaints in its 2025 Internet
@@ -60,7 +60,7 @@ a large and growing operational problem.
 
 - Source: https://www.fbi.gov/news/press-releases/cryptocurrency-and-ai-scams-bilk-americans-of-billions
 - Publication date: 2026-04-06
-- Access date: 2026-05-26
+- Access date: 2026-05-28
 - BibTeX key: `fbi_crypto_ai_scams_2026`
 - Report source: https://www.fbi.gov/file-repository/2025_ic3report.pdf
 - BibTeX key: `fbi_ic3_2025_report_2026`
@@ -74,6 +74,7 @@ entity recognition.
 
 - Source: https://www.isca-archive.org/interspeech_2021/kim21e_interspeech.html
 - DOI: `10.21437/Interspeech.2021-1929`
+- Access date: 2026-05-28
 - BibTeX key: `kim2021semanticdistance`
 
 ## Semantic Metrics Can Better Reflect Practical Error Severity
@@ -84,6 +85,7 @@ better correlate with human judgments and downstream NLP tasks.
 
 - Source: https://www.isca-archive.org/interspeech_2023/rugayan23_interspeech.html
 - DOI: `10.21437/Interspeech.2023-1778`
+- Access date: 2026-05-28
 - BibTeX key: `rugayan2023asd`
 
 ## LLM Correction Still Remains Transcript-Centered
@@ -96,6 +98,7 @@ plausible ASR alternatives.
 
 - Source: https://www.isca-archive.org/interspeech_2024/naderi24_interspeech.html
 - DOI: `10.21437/Interspeech.2024-989`
+- Access date: 2026-05-28
 - BibTeX key: `naderi2024llmconfidence`
 
 ## High-Stakes ASR Supports Consequence-Aware Evaluation
@@ -107,6 +110,7 @@ downstream decision use case.
 
 - Source: https://www.nature.com/articles/s41746-020-0285-8
 - DOI: `10.1038/s41746-020-0285-8`
+- Access date: 2026-05-28
 - BibTeX key: `miner2020psychotherapy_asr`
 
 ## Selective Prediction And Abstention Support Conservative Action
@@ -117,6 +121,7 @@ action when prediction risk is high.
 
 - Source: https://research.ibm.com/publications/on-optimum-recognition-error-and-reject-tradeoff
 - DOI: `10.1109/TIT.1970.1054406`
+- Access date: 2026-05-28
 - BibTeX key: `chow1970reject`
 
 Geifman and El-Yaniv (2017) adapt selective classification to deep neural
@@ -124,8 +129,10 @@ networks and frame risk control through a coverage tradeoff. SelectiveNet
 extends this idea with an integrated reject option optimized end to end.
 
 - Source: https://papers.neurips.cc/paper/7073-selective-classification-for-deep-neural-networks
+- Access date: 2026-05-28
 - BibTeX key: `geifman2017selective`
 - Source: https://proceedings.mlr.press/v97/geifman19a.html
+- Access date: 2026-05-28
 - BibTeX key: `geifman2019selectivenet`
 
 Angelopoulos and Bates present conformal prediction as a distribution-free
@@ -134,6 +141,7 @@ positioning of CDS-ASR as an uncertainty-aware decision-evidence layer rather
 than a transcript-only score.
 
 - Source: https://arxiv.org/abs/2107.07511
+- Access date: 2026-05-28
 - BibTeX key: `angelopoulos2021conformal`
 
 ## Gap For This Paper

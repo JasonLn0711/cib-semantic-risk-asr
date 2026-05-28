@@ -32,10 +32,24 @@ ARTIFACTS = [
         "aggregate evidence artifacts",
     ),
     (
+        "80_semantic_risk_asr/paper/manuscript_submission.tex",
+        "LaTeX submission draft",
+        "paper-facing aggregate documentation",
+        "pandoc conversion from manuscript_draft.md",
+        "manuscript draft and citation bibliography",
+    ),
+    (
         "80_semantic_risk_asr/paper/references.bib",
         "bibliography",
         "paper-facing citation metadata",
         "manual citation pass",
+        "official source pages and papers",
+    ),
+    (
+        "80_semantic_risk_asr/paper/citation_seed.md",
+        "citation source register",
+        "paper-facing citation metadata",
+        "manual citation verification pass",
         "official source pages and papers",
     ),
     (
@@ -51,6 +65,13 @@ ARTIFACTS = [
         "paper-facing planning documentation",
         "manual hostile-reviewer pass",
         "aggregate manuscript and validation evidence",
+    ),
+    (
+        "80_semantic_risk_asr/paper/hostile_reviewer_final_pass_2026_05_28.md",
+        "final hostile reviewer pass",
+        "paper-facing planning documentation",
+        "manual hostile-reviewer pass",
+        "current manuscript, citations, figures, and aggregate artifacts",
     ),
     (
         "80_semantic_risk_asr/paper/generate_paper_figures.py",

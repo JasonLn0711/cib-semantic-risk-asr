@@ -36,6 +36,13 @@ RECOVERY_COMPARISON = (
     / "janus_300_high_stakes_recovery_human_reviewed_2026_05_26"
     / "policy_comparison.tsv"
 )
+FIXED_BUDGET_FRONTIER = (
+    ROOT
+    / "70_experiments"
+    / "runs"
+    / "janus_300_high_stakes_recovery_human_reviewed_2026_05_26"
+    / "fixed_budget_recovery_frontier.tsv"
+)
 CANDIDATE_SUMMARY = (
     ROOT
     / "70_experiments"
@@ -310,29 +317,20 @@ def figure_6_n_ladder() -> None:
 
 
 def figure_7_budget_risk_frontier() -> None:
-    rows = read_tsv(RECOVERY_COMPARISON)
-    label_map = {
-        "no_recovery": "None",
-        "confidence_only_trigger": "Conf. unavailable",
-        "sres_triggered_recovery": "SRES",
-        "ceis_triggered_conservative_action": "CEIS",
-        "ceis_ensemble_arbitration": "CEIS ensemble",
-    }
-    data = []
+    rows = read_tsv(FIXED_BUDGET_FRONTIER)
+    grouped: dict[str, list[tuple[float, int, int, float]]] = {"sres_total": [], "ceis": []}
     for row in rows:
-        severe = int(row["high_risk_missed_count"]) + int(row["critical_miss_count"])
-        data.append(
+        grouped[row["score_metric"]].append(
             (
-                label_map[row["policy"]],
-                float(row["recovery_budget_rate"]),
-                severe,
+                float(row["observed_budget_rate"]),
+                int(row["severe_missed_count"]),
                 int(row["triggered_count"]),
-                int(row["machine_abstention_count"]),
+                float(row["triggers_per_severe_miss_eliminated"]),
             )
         )
 
     parts = [text(36, 42, "F7. Budget-Risk Frontier In Aggregate Replay", "title")]
-    parts.append(text(36, 64, "X axis: trigger budget. Y axis: high-risk missed + critical miss.", "subtitle"))
+    parts.append(text(36, 64, "Fixed-budget ranked replay over 90 reviewed model assessments; aggregate-only.", "subtitle"))
     chart_x, chart_y, chart_w, chart_h = 110, 110, 720, 270
     max_x, max_y = 0.6, 7
     parts.append(f'<line x1="{chart_x}" y1="{chart_y + chart_h}" x2="{chart_x + chart_w}" y2="{chart_y + chart_h}" stroke="{COLORS["ink"]}" stroke-width="1.5"/>')
@@ -345,28 +343,44 @@ def figure_7_budget_risk_frontier() -> None:
         ty = chart_y + chart_h - tick / max_y * chart_h
         parts.append(f'<line x1="{chart_x}" y1="{ty:.1f}" x2="{chart_x + chart_w}" y2="{ty:.1f}" stroke="{COLORS["grid"]}" stroke-width="1"/>')
         parts.append(text(chart_x - 12, int(ty + 4), str(tick), "small", "end"))
-    colors = [COLORS["red"], COLORS["orange"], COLORS["green"], COLORS["blue"], COLORS["purple"]]
-    for i, (label, budget, severe, triggered, abstain) in enumerate(data):
-        px = chart_x + budget / max_x * chart_w
-        py = chart_y + chart_h - severe / max_y * chart_h
-        parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="8" fill="{colors[i]}" stroke="white" stroke-width="2"/>')
-        parts.append(text(int(px + 12), int(py - 8), label, "label"))
-        parts.append(text(int(px + 12), int(py + 10), f"trig {triggered}, abstain {abstain}", "small"))
+    series_style = {
+        "sres_total": ("SRES", COLORS["orange"]),
+        "ceis": ("CEIS", COLORS["green"]),
+    }
+    for metric, points in grouped.items():
+        label, color = series_style[metric]
+        sorted_points = sorted(points)
+        polyline = []
+        for budget, severe, _triggered, _ratio in sorted_points:
+            px = chart_x + budget / max_x * chart_w
+            py = chart_y + chart_h - severe / max_y * chart_h
+            polyline.append(f"{px:.1f},{py:.1f}")
+        points_attr = " ".join(polyline)
+        parts.append(
+            f'<polyline points="{points_attr}" fill="none" '
+            f'stroke="{color}" stroke-width="3"/>'
+        )
+        for budget, severe, triggered, ratio in sorted_points:
+            px = chart_x + budget / max_x * chart_w
+            py = chart_y + chart_h - severe / max_y * chart_h
+            parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="7" fill="{color}" stroke="white" stroke-width="2"/>')
+            parts.append(text(int(px + 10), int(py - 8), f"{label} trig {triggered}", "small"))
+            parts.append(text(int(px + 10), int(py + 10), f"ratio {ratio:g}", "small"))
     parts.append(text(110, 418, "Recovery budget", "label"))
     parts.append(text(870, 150, "Replay interpretation", "label"))
-    parts.append(text(870, 176, "No recovery and confidence-unavailable", "small"))
-    parts.append(text(870, 196, "remain at 7 severe misses.", "small"))
-    parts.append(text(870, 226, "SRES and CEIS reach 0 severe misses", "small"))
-    parts.append(text(870, 246, "at budget 0.3889.", "small"))
-    parts.append(text(870, 276, "CEIS ensemble also reaches 0", "small"))
-    parts.append(text(870, 296, "with abstention at budget 0.5222.", "small"))
+    parts.append(text(870, 176, "CEIS reaches 0 severe misses", "small"))
+    parts.append(text(870, 196, "at the 10% replay budget.", "small"))
+    parts.append(text(870, 226, "SRES reaches 0 severe misses", "small"))
+    parts.append(text(870, 246, "when all 35 eligible triggers are used.", "small"))
+    parts.append(text(870, 276, "This is retrospective replay,", "small"))
+    parts.append(text(870, 296, "not a deployment threshold.", "small"))
     (OUT_DIR / "f7_budget_risk_frontier.svg").write_text(svg_wrap(1180, 450, "\n".join(parts)), encoding="utf-8")
 
 
 def write_index() -> None:
     content = """# CDS-ASR Figure Package
 
-Date: 2026-05-26
+Date: 2026-05-28
 
 These manuscript figures are generated from aggregate-only evidence. They do
 not include transcript text, audio IDs, selected row IDs, reviewer notes,
@@ -386,7 +400,7 @@ python 80_semantic_risk_asr/paper/generate_paper_figures.py
 | F4. Recovery outcomes | `f4_recovery_outcomes.svg` | `f4_recovery_outcomes.pdf` | `policy_comparison.tsv` | aggregate policy counts |
 | F5. Model lane state | `f5_model_lane_state.svg` | `f5_model_lane_state.pdf` | main/candidate aggregate summaries | aggregate lane state |
 | F6. Evidence N-ladder | `f6_n_ladder.svg` | `f6_n_ladder.pdf` | method evidence units | aggregate counts only |
-| F7. Budget-risk frontier | `f7_budget_risk_frontier.svg` | `f7_budget_risk_frontier.pdf` | `policy_comparison.tsv` | aggregate policy counts |
+| F7. Budget-risk frontier | `f7_budget_risk_frontier.svg` | `f7_budget_risk_frontier.pdf` | `fixed_budget_recovery_frontier.tsv` | aggregate policy counts |
 """
     (OUT_DIR / "README.md").write_text(content, encoding="utf-8")
 

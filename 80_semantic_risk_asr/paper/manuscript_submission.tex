@@ -1,0 +1,1674 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newlength{\cslentryspacingunit} % times entry-spacing
+\setlength{\cslentryspacingunit}{\parskip}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+  \let\oldpar\par
+  \def\par{\hangindent=\cslhangindent\oldpar}
+  \fi
+  % set entry spacing
+  \setlength{\parskip}{#2\cslentryspacingunit}
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={When Low WER Becomes Dangerous: Counterfactual Decision-Stability ASR for High-Stakes Speech-Driven Decision Systems},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{When Low WER Becomes Dangerous: Counterfactual Decision-Stability
+ASR for High-Stakes Speech-Driven Decision Systems}
+\author{}
+\date{2026-05-28}
+
+\begin{document}
+\maketitle
+
+\hypertarget{manuscript-draft}{%
+\section{Manuscript Draft}\label{manuscript-draft}}
+
+Working title: When Low WER Becomes Dangerous: Counterfactual
+Decision-Stability ASR for High-Stakes Speech-Driven Decision Systems
+
+Status: paper-facing v0 draft with second-reviewer evidence-boundary
+revisions, results table package, reproducibility layer, scope control,
+limitations, and artifact availability plan.
+
+Date: 2026-05-28
+
+\hypertarget{evidence-boundary-freeze}{%
+\subsection{Evidence Boundary Freeze}\label{evidence-boundary-freeze}}
+
+This manuscript uses a scoped evidence chain:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The 258-row test split is used as scope-controlled split and
+  model-comparison evidence.
+\item
+  The selected-300 proxy outputs are used as input provenance and
+  row-selection evidence.
+\item
+  The selected-300 human-reviewed predictor and human-reviewed recovery
+  outputs are the paper-grade risk and recovery evidence.
+\end{enumerate}
+
+Reference transcripts remain accepted human-reviewed ground truth for
+WER/CER scoring. Transcript review is not reopened unless a future
+review task changes the field scope or challenges the accepted reference
+transcript content.
+
+Tracked manuscript artifacts must remain aggregate-only. Raw audio, raw
+transcripts, audio IDs, selected sample IDs, model hypotheses, local
+response sheets, reviewer notes, runtime logs, raw predictions, and
+model weights remain local or ignored and are not committed.
+
+Authoritative boundary records:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/evidence\_chain\_readiness\_summary.json}
+\item
+  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/publishable\_evidence\_completion\_summary.json}
+\item
+  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/consequence\_evidence\_matrix.tsv}
+\item
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_refresh\_summary.json}
+\end{itemize}
+
+\hypertarget{abstract}{%
+\subsection{Abstract}\label{abstract}}
+
+Speech-driven decision systems increasingly transform conversations into
+operational signals for routing, escalation, compliance monitoring, and
+case-handling decisions. In high-stakes anti-fraud calls, small ASR
+differences can land on decision atoms such as negation, amount, actor,
+action, time, and intent. A transcript can therefore remain close under
+WER or CER while a plausible alternative transcript changes the
+downstream decision.
+
+We propose Counterfactual Decision-Stability ASR (CDS-ASR), a framework
+that evaluates whether downstream decisions remain stable under
+acoustically and semantically plausible transcript alternatives. CDS-ASR
+extracts risk atoms, constructs plausible ASR alternatives, scores
+decision instability with Counterfactual Escalation Instability Score
+(CEIS), and applies constrained recovery or conservative machine action
+for high-risk spans while preserving aggregate-only reproducibility for
+sensitive call evidence.
+
+Across a six-model 258-row split comparison, selected-300 high-stakes
+provenance outputs, and a 30-row/90-model-assessment human-reviewed
+audit, CDS-ASR provides a consequence-centered evidence layer beyond
+transcript similarity. In the scoped selected-300 human-reviewed audit,
+CEIS achieves the highest decision-change AUC and a zero-false-negative
+operating point. In aggregate policy replay, risk-triggered policies,
+including CEIS-triggered conservative action, eliminate high-risk missed
+and critical miss counts under the aggregate-only claim boundary. These
+results support decision-stability evaluation as a scoped companion to
+transcript accuracy, semantic metrics, and confidence-aware correction.
+
+\hypertarget{introduction}{%
+\subsection{Introduction}\label{introduction}}
+
+Contact-center speech is becoming an operational input rather than a
+passive record. Commercial analytics systems already turn voice
+conversations and transcripts into categories, summaries, alerts,
+compliance cues, and routing signals (Amazon Web Services 2026a, 2026b).
+This workflow makes ASR output part of operational evidence: a
+transcript can support categorization, summarization, compliance review,
+alerts, and routing before a human ever reads the full call record.
+
+Anti-fraud hotlines provide a concrete high-stakes setting. Taiwan's
+National Police Agency describes the 165 hotline as a public anti-fraud
+channel where staff record incident details and provide information to
+victims (National Police Agency, Ministry of the Interior 2024). The
+scale of cyber-enabled fraud makes this triage problem consequential:
+the FBI's 2025 Internet Crime Report context reported more than one
+million IC3 complaints and large cyber-enabled fraud losses (Federal
+Bureau of Investigation 2026b, 2026a). In this setting, safer
+speech-driven triage is not only a transcription problem; it is a
+decision problem. The risk is concentrated in small spoken details:
+whether the caller already transferred money, whether the amount was
+30,000 or 300,000, who initiated contact, when the event happened, and
+whether the caller is certain. These are decision atoms. When ASR
+changes a decision atom, the downstream action can change even if most
+words remain similar.
+
+In this paper, ``dangerous'' is operationalized as ASR-induced decision
+change that can produce unsafe downrouting, high-risk missed escalation,
+or critical miss under the declared anti-fraud triage policy. This
+definition makes the title a measurable evidence claim rather than a
+general safety label.
+
+Current ASR evaluation and repair methods provide strong foundations for
+this setting. WER and CER give reproducible transcript-centered
+baselines. Semantic ASR metrics make evaluation more task-aware: Kim et
+al.~show that WER can fail to reflect downstream
+natural-language-understanding behavior, and Rugayan et al.~evaluate
+Aligned Semantic Distance as a semantic metric with stronger alignment
+to human judgments and downstream tasks (Kim et al. 2021; Rugayan,
+Salvi, and Svendsen 2023).
+
+LLM-based and confidence-aware correction methods strengthen the
+transcript repair layer. Naderi et al.~study post-hoc ASR correction
+with LLMs and use confidence-based filtering to reduce harmful changes
+to likely accurate transcripts (Naderi et al. 2024). Selective
+prediction and reject-option work also show how machine systems can
+trade coverage for lower error in settings where acting on uncertain
+predictions is costly (Chow 1970; Geifman and El-Yaniv 2017, 2019;
+Angelopoulos and Bates 2021). These methods make the evidence chain more
+informative, and they motivate the next question for high-stakes speech
+workflows: whether plausible ASR alternatives preserve the downstream
+decision.
+
+This decision-stability gap appears when a low edit-distance transcript
+still leaves uncertainty around negation, amount, action, actor, time,
+intent, or scam-pattern atoms. A transcript can remain close under
+WER/CER and still reverse whether a case should remain in routine
+review, move to priority review, or trigger critical escalation. The
+central research question is therefore decision-centered: would a
+plausible ASR alternative change the downstream high-stakes decision?
+
+We propose Counterfactual Decision-Stability ASR (CDS-ASR) to answer
+that question directly. The framework extracts risk atoms, generates
+acoustically and semantically plausible transcript alternatives,
+measures decision instability with CEIS, and applies constrained
+recovery or conservative machine action for high-risk spans. WER, CER,
+semantic metrics, SRES, confidence, and correction baselines remain
+comparison layers; the central contribution is the decision-stability
+test that connects transcript uncertainty back to the opening real-world
+decision problem.
+
+Verified source anchors for this introduction are maintained in
+\texttt{citation\_seed.md} and \texttt{references.bib}, with access
+dates refreshed on 2026-05-28. Empirical manuscript claims point to the
+aggregate artifacts listed in the Appendix.
+
+\hypertarget{related-work}{%
+\subsection{Related Work}\label{related-work}}
+
+\hypertarget{transcript-centered-asr-metrics}{%
+\subsubsection{Transcript-Centered ASR
+Metrics}\label{transcript-centered-asr-metrics}}
+
+Transcript accuracy metrics provide the reproducible baseline for ASR
+comparison. WER and CER remain necessary because they allow stable
+comparison across models and splits when tokenization, normalization,
+micro/macro scope, and zero-reference handling are declared. This
+manuscript keeps WER/CER as auditable surface metrics and uses the
+repo's metric audit to define the Chinese ASR reporting policy. The
+paper does not discard transcript accuracy; it treats WER/CER as the
+auditable surface layer that must be reported before stronger downstream
+claims are made.
+
+\hypertarget{semantic-and-downstream-aware-asr-evaluation}{%
+\subsubsection{Semantic And Downstream-Aware ASR
+Evaluation}\label{semantic-and-downstream-aware-asr-evaluation}}
+
+Semantic ASR metrics extend transcript evaluation toward meaning
+preservation and downstream task behavior. Kim et al.~introduce Semantic
+Distance for ASR performance analysis toward spoken-language
+understanding, motivating the move from literal correctness to semantic
+correctness for intent recognition, slot filling, semantic parsing, and
+named entity recognition (Kim et al. 2021). Rugayan et al.~evaluate
+Aligned Semantic Distance against WER and show its value for human
+perception and downstream NLP tasks (Rugayan, Salvi, and Svendsen 2023).
+CDS-ASR uses this line of work as a foundation and adds a direct
+decision-stability target: whether plausible ASR alternatives change a
+high-stakes downstream decision.
+
+\hypertarget{transcript-repair-and-conservative-decision-action}{%
+\subsubsection{Transcript Repair And Conservative Decision
+Action}\label{transcript-repair-and-conservative-decision-action}}
+
+LLM and confidence-aware correction methods provide transcript-repair
+baselines. Naderi et al.~show that confidence-based filtering can guide
+post-hoc LLM correction of ASR transcripts and reduce the chance of
+changing likely accurate transcripts (Naderi et al. 2024). CDS-ASR
+complements this line by evaluating the decision interval that remains
+when plausible ASR alternatives affect risk atoms. Recovery in this
+manuscript is automatic and machine-bounded: human review supplies
+evaluation labels and governance evidence, while risk-triggered policies
+supply the scoped intervention test.
+
+The conservative-action layer also connects to selective prediction and
+reject-option research. Chow formalizes the error-reject tradeoff for
+recognition systems (Chow 1970), while modern selective classification
+and SelectiveNet show how neural systems can abstain or reject to manage
+risk-coverage tradeoffs (Geifman and El-Yaniv 2017, 2019). Conformal
+prediction further motivates distribution-free uncertainty sets for
+high-risk systems (Angelopoulos and Bates 2021). CDS-ASR applies this
+governance intuition to speech-driven decision evidence: when transcript
+alternatives affect decision atoms, the system should expose the
+instability or take conservative action rather than treat one transcript
+as fully stable.
+
+High-stakes speech domains reinforce the need for consequence-aware ASR
+evaluation. In psychotherapy, Miner et al.~show that ASR feasibility
+depends on the clinical use case and that individual-level safety
+monitoring requires a more cautious threshold than population-level
+language analysis (Miner et al. 2020). CDS-ASR brings the same
+claim-evidence discipline to anti-fraud calls by separating transcript
+accuracy, semantic risk, decision instability, and aggregate recovery
+evidence.
+
+This paper positions ASR models as evidence-producing components. The
+protagonist is the downstream decision that changes when an acoustically
+plausible transcript difference lands on a decision-critical atom.
+
+\hypertarget{method}{%
+\subsection{Method}\label{method}}
+
+\hypertarget{problem-formulation}{%
+\subsubsection{Problem Formulation}\label{problem-formulation}}
+
+We study speech-driven decision systems where an audio segment is
+transcribed by ASR and then used by a downstream escalation workflow.
+The downstream label space includes routine review and higher-priority
+escalation states. The central unit is a model-sample: one ASR
+hypothesis for one audio row, evaluated against aggregate risk and
+decision-stability evidence.
+
+The paper asks whether the decision remains stable under plausible
+transcript alternatives. This makes transcript accuracy a supporting
+layer and decision-stability the primary high-stakes safety target.
+
+\hypertarget{cds-asr-pipeline}{%
+\subsubsection{CDS-ASR Pipeline}\label{cds-asr-pipeline}}
+
+CDS-ASR evaluates high-stakes ASR through a decision-stability pipeline:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{audio}
+\NormalTok{{-}\textgreater{} ASR transcript and runtime/quality signals}
+\NormalTok{{-}\textgreater{} risk atom extraction}
+\NormalTok{{-}\textgreater{} plausible counterfactual transcript variants}
+\NormalTok{{-}\textgreater{} downstream decision model}
+\NormalTok{{-}\textgreater{} SRES and CEIS scoring}
+\NormalTok{{-}\textgreater{} constrained recovery or conservative machine action}
+\end{Highlighting}
+\end{Shaded}
+
+Risk atoms are transcript spans whose alternatives can affect downstream
+decisions. This manuscript focuses on negation, amount, action, actor,
+time, intent, uncertainty, and scam-pattern atoms.
+
+CEIS scores the maximum decision-flip risk among plausible variants. In
+this paper-facing implementation, the plausibility term is a bounded
+proxy rather than a calibrated acoustic posterior:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{CEIS(x) = max over v in V(x) [}
+\NormalTok{    Plausibility(v | x) * RiskAtomWeight(v) * DecisionDistance(f(x), f(v))}
+\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{Plausibility(v\ \textbar{}\ x)} denotes a bounded proxy
+plausibility score derived from model disagreement, Mandarin phonetic
+ambiguity, domain-slot alternatives, and available ASR/runtime signals.
+\texttt{RiskAtomWeight(v)} is a risk-atom class weight defined by the
+decision-critical atom schema. \texttt{DecisionDistance} maps the
+downstream label space into an ordinal safety distance over
+\texttt{no\_escalation}, \texttt{review}, \texttt{priority\_review},
+\texttt{critical\_escalation}, conservative machine action, and
+abstention, with critical misses treated as the highest-risk direction
+for conservative action.
+
+\hypertarget{downstream-decision-function}{%
+\subsubsection{Downstream Decision
+Function}\label{downstream-decision-function}}
+
+The downstream decision function \texttt{f} is fixed before CEIS
+scoring. It maps each transcript or plausible variant into a declared
+triage action:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{f(transcript) in \{}
+\NormalTok{    no\_escalation,}
+\NormalTok{    manual\_review,}
+\NormalTok{    priority\_review,}
+\NormalTok{    critical\_escalation,}
+\NormalTok{    conservative\_machine\_action,}
+\NormalTok{    abstain}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+The distance function is policy-aligned rather than
+language-model-generated: same-action pairs have distance 0, neighboring
+review/escalation states have distance 1, and movement from no
+escalation or routine handling to critical escalation receives the
+largest distance. Unsafe downrouting of a critical event receives the
+maximum penalty used by the policy replay. The method contract is
+versioned in \texttt{docs/downstream\_decision\_contract.md} and
+\texttt{80\_semantic\_risk\_asr/scoring/ceis\_config.json} so CEIS
+rankings can be reconstructed from aggregate artifacts.
+
+\hypertarget{ceis-scale-discipline}{%
+\subsubsection{CEIS Scale Discipline}\label{ceis-scale-discipline}}
+
+All CEIS components are treated as bounded comparison terms, not
+calibrated probabilities. \texttt{Plausibility(v\ \textbar{}\ x)} is a
+proxy plausibility score; the paper does not claim an acoustic posterior
+unless a later implementation supplies one. \texttt{RiskAtomWeight(v)}
+and \texttt{DecisionDistance(f(x),\ f(v))} must be normalized or
+tabulated before final submission. The next method-hardening analyses
+are: uniform-weight ablation, no-plausibility ablation,
+binary-decision-flip ablation, max versus top-k mean aggregation, and
+CEIS behavior by atom class. Those analyses can be added only from
+aggregate-safe recomputation or reported as planned validation if the
+current artifact package cannot reconstruct them.
+
+Thresholds reported in the current predictor table are diagnostic
+operating points selected on the scoped reviewed audit. They are useful
+for aggregate comparison and reviewer inspection, but they are not
+frozen deployment thresholds unless later selected on a separate
+development set.
+
+Recovery remains automatic and machine-bounded. Human review is used as
+an evaluation and governance layer, not as the proposed recovery method.
+The recovery policies compare no recovery, confidence-only trigger,
+SRES-triggered recovery, CEIS-triggered conservative action, and CEIS
+ensemble arbitration.
+
+\hypertarget{risk-atom-schema}{%
+\subsubsection{Risk Atom Schema}\label{risk-atom-schema}}
+
+The risk atom schema focuses on decision-critical spans:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Risk atom
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Decision role
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Example effect
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Negation & reverses event state & transfer vs no transfer \\
+Amount & changes severity & 30,000 vs 300,000 \\
+Action & changes case stage & asking vs reporting vs transferring \\
+Actor & changes scam interpretation & bank, police, family, customer
+service \\
+Time & changes urgency & today, yesterday, next week \\
+Intent & changes routing & inquiry, report, complaint \\
+Uncertainty & changes confidence and safe action & sure, maybe, not
+sure \\
+Scam pattern & changes case type & investment, fake police, installment
+cancellation \\
+\end{longtable}
+
+\hypertarget{counterfactual-variant-contract}{%
+\subsubsection{Counterfactual Variant
+Contract}\label{counterfactual-variant-contract}}
+
+Counterfactual variants are plausible ASR alternatives concentrated
+around risk atoms. They are not generic paraphrases. A variant can be
+supported by acoustic ambiguity, Mandarin phonetic confusion,
+domain-slot alternatives, or model disagreement. The paper-facing claim
+is not that every possible variant is enumerated; it is that the
+generated alternatives make downstream decision-instability measurable.
+
+\hypertarget{recovery-policy-contract}{%
+\subsubsection{Recovery Policy
+Contract}\label{recovery-policy-contract}}
+
+The five-policy recovery experiment is:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  no recovery;
+\item
+  confidence-only trigger;
+\item
+  SRES-triggered recovery;
+\item
+  CEIS-triggered conservative action;
+\item
+  CEIS ensemble arbitration.
+\end{enumerate}
+
+The scoped recovery claim is evaluated only on aggregate human-reviewed
+selected-300 evidence. Per-row details stay local or ignored. At the
+policy layer, both SRES-triggered recovery and CEIS-triggered
+conservative action are reported as risk-triggered conservative
+policies; CEIS's distinct contribution is evaluated primarily in the
+predictor layer and in its decision-stability framing.
+
+\hypertarget{reproducibility-layer}{%
+\subsubsection{Reproducibility Layer}\label{reproducibility-layer}}
+
+The paper-facing ASR surface metric is \texttt{cer\_zh\_micro}. The
+supplemental word metric is \texttt{wer\_zh\_jieba\_micro}. Raw
+whitespace WER and legacy stored WER fields are audit-only because they
+are unstable for unsegmented Chinese transcripts.
+
+The metric policy is validated by
+\texttt{70\_experiments/runs/wer\_metric\_audit\_2026\_05\_25/}, which
+records manifest checks, zero-reference-unit checks, tokenizer and
+normalization policy, and \texttt{jiwer} cross-checks.
+
+The target transcription locale is Taiwan Traditional Chinese. New
+candidate models must satisfy the strict Taiwan Traditional Chinese
+locale gate before promotion. Previously completed comparable baselines
+are retained only as disclosed baselines, with locale-violation counts
+reported and no promotion claim attached. Post-decode OpenCC or other
+conversion can be evaluated only as a deployment repair lane; it cannot
+be used to claim that the raw ASR model passed the locale gate.
+
+Selected-300 human audit evidence is tracked only through aggregate
+outputs. The local transcript-bearing audit sheet remains ignored. The
+reviewed scope is risk atoms, decision-change labels, expected safe
+action, confidence, per-model assessment fields, and per-row timing. The
+current aggregate status is \texttt{review\_complete} with 30/30
+reviewed rows and 90/90 reviewed model assessments.
+
+All paper-facing claims point to aggregate artifacts. The manuscript
+does not require raw audio, raw transcripts, selected row IDs,
+hypotheses, reviewer notes, or model weights.
+
+\hypertarget{evaluation-units-and-n-ladder}{%
+\subsubsection{Evaluation Units And
+N-Ladder}\label{evaluation-units-and-n-ladder}}
+
+The manuscript separates evidence units explicitly so that model
+assessments are not mistaken for independent audio rows.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2143}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2857}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2857}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2143}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Layer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Unit
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Role
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Test split & audio rows & 258 & ASR model comparison \\
+Selected high-stakes provenance & selected candidate rows / outputs &
+300 & row-selection and provenance \\
+Human-reviewed audit rows & audio rows & 30 & decision-critical review
+unit \\
+Human-reviewed model assessments & model-row assessments & 90 &
+predictor and recovery evaluation \\
+\end{longtable}
+
+Because the 90 model assessments are clustered within 30 audio rows,
+inferential uncertainty should be estimated with row-clustered bootstrap
+resampling or leave-one-row-out sensitivity analysis. Point estimates
+are reported as scoped descriptive evidence; deployment claims do not
+treat the 90 assessments as independent calls.
+
+\hypertarget{selection-provenance-and-enrichment}{%
+\subsubsection{Selection Provenance And
+Enrichment}\label{selection-provenance-and-enrichment}}
+
+The selected-300 audit surface is an enriched high-stakes sample, not a
+prevalence-preserving sample of all anti-fraud calls. The selection
+summary uses aggregate-safe provenance signals from SRES scoring, CEIS
+scoring, and downstream escalation decisions, including high-risk
+missed, critical miss, unsafe downrouting, model disagreement, high
+proxy risk, risk-score fill, and clean-control strata. The aggregate
+selection thresholds recorded for the current package are
+\texttt{low\_wer\_threshold=10.0}, \texttt{sres\_threshold=20.0}, and
+\texttt{ceis\_threshold=5.0}.
+
+Predictor results therefore support metric behavior on an enriched
+high-stakes audit surface rather than population-level risk prevalence.
+If a submission emphasizes CEIS/SRES separation, a sensitivity check
+should exclude rows directly selected by CEIS or SRES family signals and
+confirm whether the same directional pattern remains.
+
+\hypertarget{variant-coverage-and-human-review-reliability}{%
+\subsubsection{Variant Coverage And Human Review
+Reliability}\label{variant-coverage-and-human-review-reliability}}
+
+The current aggregate-only coverage audit reports CEIS top-atom proxy
+coverage over the 90 reviewed model assessments. It records 90 aggregate
+proxy observations across 30 reviewed rows, with top-atom counts of
+negation 47, amount 37, action 3, and actor 3. The reviewed selection
+surface also covers risk-signal atoms in aggregate: action 25, actor 15,
+amount 23, negation 14, and scam pattern 23 selected rows. These counts
+support submission-safe coverage auditing, not release of variant text.
+Source-specific coverage is available for model-disagreement provenance
+in aggregate; phonetic, domain-slot, runtime-signal, rejected-variant,
+and full variant-generation logs are not currently reconstructed as
+release artifacts. Stronger generator claims therefore require a future
+aggregate variant-generation log.
+
+Human labels come from a completed expert audit rather than
+multi-annotator adjudication. A second-reviewer blinded spot-check is
+not included in the current submission-prep package, so inter-annotator
+agreement is not claimed. The claim boundary is therefore a completed
+single-expert audit over 30 reviewed rows and 90 model assessments. A
+future validation extension can add a blinded 5-10 row spot-check while
+preserving the frozen selected-300 review boundary.
+
+\hypertarget{experiments}{%
+\subsection{Experiments}\label{experiments}}
+
+Experiment 1 evaluates comparable ASR model evidence on the canonical
+258-row test split. This table supports model-comparison and split
+evidence, not the paper-grade selected-300 risk/recovery claims.
+
+Experiment 2 uses selected-300 high-stakes proxy outputs as input
+provenance. The selected-300 proxy outputs identify an enriched
+high-stakes evidence surface and the review sample, but their raw rows
+and transcript-bearing metric inputs remain local or ignored. This
+experiment supports selection provenance, not population prevalence.
+
+Experiment 3 evaluates WER, CER, SRES, and CEIS against human-reviewed
+decision-change labels over 90 model assessments from the selected-300
+audit. These assessments are clustered within 30 reviewed audio rows.
+This is the paper-grade predictor evidence for metric-insufficiency and
+decision-stability claims, reported as scoped descriptive evidence until
+row-clustered uncertainty is added.
+
+Experiment 4 evaluates five recovery policies against the same
+human-reviewed evidence layer. This is aggregate policy replay evidence,
+not a live causal deployment trial.
+
+Candidate ASR and multimodal models are kept in a separate exploratory
+lane. They must not enter the main ASR table until they pass
+field-contract, runtime-validity, and Taiwan Traditional Chinese locale
+gates in order.
+
+\hypertarget{results}{%
+\subsection{Results}\label{results}}
+
+The Results section separates comparable ASR evidence, candidate-lane
+boundaries, human-reviewed predictor evidence, and human-reviewed
+recovery evidence. This separation preserves claim-evidence alignment:
+the main ASR benchmark supports model-comparison context, while
+selected-300 human-reviewed outputs support paper-grade risk and
+recovery claims.
+
+Human review supplies evaluation labels only. The proposed recovery
+policies are automatic, aggregate-evaluated policies; no
+transcript-bearing row content is required for paper-facing claims.
+
+\hypertarget{table-1.-main-asr-benchmark-table}{%
+\subsubsection{Table 1. Main ASR Benchmark
+Table}\label{table-1.-main-asr-benchmark-table}}
+
+Table 1 reports six comparable ASR runs on the canonical 258-row split.
+The paper-facing primary ASR metric is \texttt{cer\_zh\_micro};
+\texttt{wer\_zh\_jieba\_micro} is reported as the supplemental segmented
+word metric. Unsafe downrouting and high-risk missed counts are
+scope-controlled split/model-comparison evidence, not the final
+selected-300 human-reviewed risk claim.
+
+Only models with completed comparable 258-row split evidence are
+included.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0909}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0909}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1212}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1212}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1212}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1212}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1212}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1212}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0909}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Run
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Model family
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Rows
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\texttt{cer\_zh\_micro}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\texttt{wer\_zh\_jieba\_micro}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Unsafe downrouting
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+High-risk missed
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Locale violation rows
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Paper use
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{breeze\_asr25\_partial\_encoder\_legacy\_best\_test\_split} &
+Breeze-ASR-25 partial encoder & 258 & 15.04 & 21.53 & 7 & 4 & 0 &
+Scope-controlled split/model comparison \\
+\texttt{breeze\_asr25\_lora\_legacy\_best\_test\_split} & Breeze-ASR-25
+LoRA & 258 & 18.23 & 25.59 & 10 & 7 & 0 & Scope-controlled split/model
+comparison \\
+\texttt{breeze\_asr25\_base\_test\_split} & Breeze-ASR-25 base & 258 &
+22.72 & 30.39 & 34 & 30 & 0 & Scope-controlled split/model comparison \\
+\texttt{breeze\_asr26\_test\_split} & Breeze-ASR-26 & 258 & 24.27 &
+32.29 & 27 & 22 & 0 & Optional dialect-aware comparator \\
+\texttt{whisper\_large\_v2\_test\_split} & Whisper large-v2 & 258 &
+24.72 & 32.23 & 33 & 28 & 1 & Comparable ASR baseline \\
+\texttt{whisper\_small\_test\_split} & Whisper small & 258 & 34.86 &
+43.44 & 76 & 70 & 4 & Comparable ASR baseline \\
+\end{longtable}
+
+Evidence source:
+\texttt{70\_experiments/runs/janus\_258\_test\_split\_asr\_cds\_proxy/asr\_cds\_proxy\_comparison.tsv}.
+
+The legacy Breeze-ASR-25 partial encoder is the strongest current
+hypothesis generator on the 258-row split, with the lowest
+\texttt{cer\_zh\_micro} and the lowest unsafe downrouting and high-risk
+missed counts among the six comparable runs. This supports using it as a
+strong ASR evidence layer while keeping final risk and recovery claims
+tied to the human-reviewed selected-300 outputs.
+
+\hypertarget{table-2.-candidate-and-exploratory-lane}{%
+\subsubsection{Table 2. Candidate And Exploratory
+Lane}\label{table-2.-candidate-and-exploratory-lane}}
+
+Table 2 reports bounded candidate-lane evidence for models that are not
+promoted to the main 258-row or selected-300 tables. These gates
+document feasibility, locale behavior, and runtime constraints without
+mixing exploratory candidates with comparable ASR baselines.
+
+These models are bounded negative, feasibility, or runtime evidence.
+They do not enter the main ASR benchmark table.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1250}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1250}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Candidate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Current gate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Rows
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\texttt{cer\_zh\_micro}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\texttt{wer\_zh\_jieba\_micro}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Locale/runtime result
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Decision
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Whisper large-v3 & Fixed 15-row contract & 15 & 33.33 & 42.04 & 2
+locale-violation rows, 23 simplified chars & Do not promote to 258-row
+or selected-300 \\
+Whisper large-v3-turbo & Fixed 15-row contract & 15 & 40.36 & 50.87 & 4
+locale-violation rows, 48 simplified chars & Retain as bounded
+feasibility evidence only; no split-level or selected-300 claim \\
+SenseVoiceSmall & Fixed 15-row contract & 15 & 63.12 & 78.98 & 14
+locale-violation rows, 209 simplified chars & Reject from full split
+until locale policy changes \\
+Qwen3-ASR-0.6B & Fixed 15-row contract & 15 & 64.16 & 81.07 & 15
+locale-violation rows, 260 simplified chars & Reject from full split
+until locale policy changes \\
+Qwen3-ASR-1.7B & Bounded load gate & 0 & n/a & n/a & Timeout before
+inference at fetch/load after about 60.07s & Retry only after isolated
+cache/download plan \\
+Gemma 4 E2B/E4B & Local multimodal class probe & 0 & n/a & n/a & Local
+Transformers 4.57.6 has no required Gemma 4 multimodal/audio class &
+Build isolated prompted multimodal runtime before testing \\
+\end{longtable}
+
+Evidence sources:
+\texttt{70\_experiments/runs/asr\_candidate\_current\_recheck\_2026\_05\_26/candidate\_current\_recheck\_summary.tsv}
+and
+\texttt{70\_experiments/runs/asr\_candidate\_current\_recheck\_2026\_05\_26/summary.json}.
+
+Whisper large-v3, Whisper large-v3-turbo, SenseVoiceSmall, and
+Qwen3-ASR-0.6B have field-contract evidence but fail strict Taiwan
+Traditional Chinese locale promotion criteria. Qwen3-ASR-1.7B remains
+stopped before inference at fetch/load, and Gemma 4 E2B/E4B remain
+blocked by local multimodal runtime support. The next validation layer
+is locale/runtime promotion, not a broader full-split ASR run.
+
+\hypertarget{table-3.-human-reviewed-predictor-table}{%
+\subsubsection{Table 3. Human-Reviewed Predictor
+Table}\label{table-3.-human-reviewed-predictor-table}}
+
+Table 3 reports aggregate predictor comparison against human-reviewed
+\texttt{human\_decision\_change\_yes} labels over 90 reviewed model
+assessments. WER/CER are transcript-surface baselines; SRES is the
+semantic-risk baseline; CEIS is the proposed decision-stability metric.
+
+Target: \texttt{human\_decision\_change\_yes}, 90 reviewed model
+assessments, 16 positive model assessments, clustered within 30 reviewed
+audio rows. Diagnostic thresholds are selected on the scoped audit set
+for aggregate comparison and are not frozen deployment thresholds.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0732}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0732}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0732}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Predictor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Unit
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+AUC
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Row-clustered AUC 95\% CI
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Diagnostic threshold
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Best F1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Row-clustered F1 95\% CI
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Precision
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Recall
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+False negative
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Paper use
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+WER & 90 model assessments / 30 rows & 0.6964 & 0.5699-0.8125 & 42.59 &
+0.4615 & 0.2857-0.6667 & 0.3913 & 0.5625 & 7 & Surface baseline \\
+CER & 90 model assessments / 30 rows & 0.7276 & 0.6084-0.8372 & 16.42 &
+0.4516 & 0.3158-0.6667 & 0.3043 & 0.8750 & 2 & Surface baseline \\
+SRES total & 90 model assessments / 30 rows & 0.8995 & 0.8119-0.9657 &
+270.0 & 0.6512 & 0.4667-0.8421 & 0.5185 & 0.8750 & 2 & Semantic-risk
+baseline \\
+CEIS max & 90 model assessments / 30 rows & 0.9117 & 0.8516-0.9615 & 5.0
+& 0.6275 & 0.4681-0.8148 & 0.4571 & 1.0000 & 0 & Proposed
+decision-stability metric \\
+\end{longtable}
+
+Evidence source:
+\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_comparison.tsv}.
+Row-clustered uncertainty source:
+\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_clustered\_ci.tsv}.
+Leave-one-row-out sensitivity source:
+\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_leave\_one\_row\_out.tsv}.
+
+CEIS has the strongest point-estimate human-reviewed decision-change AUC
+and reaches recall 1.0 at the diagnostic threshold, while SRES achieves
+the highest best-threshold F1 and fewer false positives. Row-clustered
+AUC intervals overlap for CEIS and SRES, so the evidence supports CEIS
+as a conservative decision-stability signal rather than a universally
+dominant classifier.
+
+\hypertarget{table-4.-human-reviewed-recovery-policy-table}{%
+\subsubsection{Table 4. Human-Reviewed Recovery Policy
+Table}\label{table-4.-human-reviewed-recovery-policy-table}}
+
+Table 4 reports five recovery policies evaluated as aggregate replay
+under human-reviewed selected-300 labels. The recovery evidence is
+aggregate-only and uses the same 30 reviewed rows and 90 reviewed model
+assessments as the predictor table.
+
+Evidence mode: human-reviewed selected-300, 30 reviewed rows and 90
+reviewed model assessments.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0714}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0714}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Policy
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Model assessments
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Unsafe downrouting
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+High-risk missed
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Critical miss
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Recovery budget
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Row-clustered budget 95\% CI
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Severe misses eliminated
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Row-clustered severe-miss 95\% CI
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Triggers per severe miss eliminated
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Scoped interpretation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+No recovery & 90 & 29 & 6 & 1 & 0.0000 & 0.0000-0.0000 & 0 & 2-13
+remaining severe misses & n/a & Baseline decision risk \\
+Calibrated-confidence unavailable & 90 & 29 & 6 & 1 & 0.0000 &
+0.0000-0.0000 & 0 & 2-13 remaining severe misses & n/a & No calibrated
+confidence trigger available \\
+SRES-triggered recovery & 90 & 24 & 0 & 0 & 0.3889 & 0.3000-0.4889 & 7 &
+0-0 remaining severe misses & 5.0 & Semantic-risk recovery baseline \\
+CEIS-triggered conservative action & 90 & 24 & 0 & 0 & 0.3889 &
+0.3000-0.4889 & 7 & 0-0 remaining severe misses & 5.0 & Matches SRES
+severe-miss elimination at same budget in replay \\
+CEIS ensemble arbitration & 90 & 24 & 0 & 0 & 0.5222 & 0.4000-0.6556 & 7
+& 0-0 remaining severe misses & 6.7 & Adds abstention/interval behavior
+at higher budget \\
+\end{longtable}
+
+Evidence sources:
+\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison.tsv}
+and
+\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/summary.json}.
+Row-clustered uncertainty source:
+\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_clustered\_ci.tsv}.
+Leave-one-row-out sensitivity source:
+\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_leave\_one\_row\_out.tsv}.
+Fixed-budget frontier source:
+\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/fixed\_budget\_recovery\_frontier.tsv}.
+
+Without recovery, the reviewed evidence contains 6 high-risk misses and
+1 critical miss. SRES-triggered recovery and CEIS-triggered conservative
+action both eliminate high-risk missed and critical miss counts in
+aggregate policy replay at the same 0.3889 trigger budget, corresponding
+to 35 triggers for 7 severe missed outcomes eliminated. CEIS ensemble
+arbitration preserves this 0/0 result while introducing abstention
+behavior at a higher 0.5222 budget. The policy replay eliminates the
+most severe missed-risk outcomes under the scoped labels, while residual
+unsafe downrouting remains at 24 and requires separate governance.
+
+A fixed-budget replay provides an additional operating view. At 10\%,
+20\%, 30\%, and 40\% requested trigger budgets, CEIS-ranked conservative
+replay leaves 0 high-risk misses and 0 critical misses under the scoped
+labels; the 10\% point uses 9 triggers. SRES-ranked conservative replay
+leaves 4, 2, 2, and 0 severe missed outcomes at the same requested
+budgets, reaching 0 severe misses only when all 35 eligible SRES
+triggers are used. This frontier supports CEIS as a conservative
+decision-stability signal while preserving the Table 4 result that the
+diagnostic SRES and CEIS policies tie at the selected 0.3889 budget.
+Appendix Table A1 reports the fixed-budget replay explicitly as an
+operating-point frontier rather than a deployment-threshold claim.
+
+\hypertarget{figure-package}{%
+\subsection{Figure Package}\label{figure-package}}
+
+The figure package is generated from aggregate-only inputs by
+\texttt{80\_semantic\_risk\_asr/paper/generate\_paper\_figures.py}. The
+generated SVGs and PDF exports and their privacy boundary are listed in
+\texttt{80\_semantic\_risk\_asr/paper/figures/}. The aggregate artifact
+manifest is generated by
+\texttt{80\_semantic\_risk\_asr/paper/build\_artifact\_manifest.py} and
+written to
+\texttt{80\_semantic\_risk\_asr/paper/artifact\_manifest.tsv}.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Figure
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+File
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Caption
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Source
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Privacy boundary
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+F1. CDS-ASR pipeline & \texttt{figures/f1\_cds\_asr\_pipeline.svg} &
+CDS-ASR converts audio into ASR hypotheses and runtime signals, extracts
+risk atoms, generates plausible variants, scores SRES/CEIS, and applies
+constrained recovery or conservative action. & Method section & No
+transcript text or row content \\
+F2. Evidence boundary & \texttt{figures/f2\_evidence\_boundary.svg} &
+The manuscript separates 258-row split/model-comparison evidence,
+selected-300 provenance evidence, and selected-300 human-reviewed
+predictor/recovery evidence. & publishable evidence summary & Aggregate
+status only \\
+F3. Predictor AUC & \texttt{figures/f3\_predictor\_auc.svg} & CEIS has
+the highest human-reviewed decision-change AUC in the scoped
+selected-300 audit, while SRES remains strongest on best-threshold F1;
+Table 3 reports row-clustered uncertainty. &
+\texttt{human\_audit\_predictor\_comparison.tsv} & Aggregate predictor
+metrics \\
+F4. Recovery outcomes & \texttt{figures/f4\_recovery\_outcomes.svg} &
+SRES-triggered recovery and CEIS-triggered conservative action both
+eliminate high-risk missed and critical miss counts in aggregate replay
+at the same 0.3889 budget. & \texttt{policy\_comparison.tsv} & Aggregate
+policy counts \\
+F5. Model lane state & \texttt{figures/f5\_model\_lane\_state.svg} &
+Main comparable split evidence, locale-gated candidates, and
+runtime-blocked probes remain separate until promotion gates are
+satisfied. & main/candidate aggregate summaries & Aggregate lane
+state \\
+F6. N-ladder & \texttt{figures/f6\_n\_ladder.svg} & The evidence chain
+separates 258 rows, selected-300 provenance, 30 reviewed rows, and 90
+clustered model assessments. & method evidence units & Aggregate counts
+only \\
+F7. Budget-risk frontier &
+\texttt{figures/f7\_budget\_risk\_frontier.svg} & Fixed-budget policy
+replay shows the trigger-budget tradeoff needed to eliminate severe
+missed outcomes under scoped labels. &
+\texttt{fixed\_budget\_recovery\_frontier.tsv} & Aggregate policy
+counts \\
+\end{longtable}
+
+Submission-package PDF exports are generated with the same basename
+under \texttt{80\_semantic\_risk\_asr/paper/figures/}.
+
+\hypertarget{discussion}{%
+\subsection{Discussion}\label{discussion}}
+
+The evidence supports a consequence-centered ASR evaluation claim:
+correct WER/CER reporting is necessary, but transcript similarity alone
+does not capture high-stakes decision instability. The reviewed
+selected-300 predictor table shows that SRES and CEIS align more
+strongly with human-reviewed decision-change labels than WER/CER in this
+scoped evidence layer.
+
+The model comparison should be presented as an evidence layer, not as a
+model leaderboard. The partial encoder is the strongest current ASR
+hypothesis generator on the comparable split, and the selected-300
+human-reviewed evidence shows how downstream decision evidence refines
+transcript-centered model comparison.
+
+The recovery result supports a scoped replay claim. Under human-reviewed
+selected-300 labels, risk-triggered conservative policies, including
+CEIS-triggered conservative action, eliminate high-risk missed and
+critical miss counts in aggregate replay. SRES-triggered recovery and
+CEIS-triggered conservative action reach this result at the same 0.3889
+trigger budget, while ensemble arbitration adds interval/abstention
+behavior as a higher-budget governance option. CEIS is therefore best
+presented as the more conservative decision-instability signal at the
+predictor layer, while SRES remains a strong semantic-risk recovery
+baseline.
+
+Improving ASR remains necessary, but stronger transcript models do not
+replace decision-stability analysis. The paper studies residual
+instability after transcript scoring: whether plausible ASR alternatives
+around decision atoms would change escalation, routing, or conservative
+action. This makes CDS-ASR a safety layer for the remaining decision
+interval, not a substitute for ASR model improvement.
+
+The aggregate-only artifact boundary is also a contribution to
+reproducible governance. The paper does not claim full public row-level
+reproducibility. Instead, it provides aggregate reproducibility,
+operation records, validation gates, and consistency checks under a
+privacy-preserving audit boundary.
+
+The candidate lane is already bounded by evidence. Whisper large-v3,
+Whisper large-v3-turbo, SenseVoiceSmall, and Qwen3-ASR-0.6B have
+small-gate evidence but fail strict Taiwan Traditional Chinese locale
+promotion criteria. Qwen3-ASR-1.7B is stopped by fetch/load timeout, and
+Gemma 4 E2B/E4B require an isolated multimodal runtime. The next
+validation step is locale/runtime validation, not a broader full-split
+ASR run.
+
+\hypertarget{claim-registry}{%
+\subsection{Claim Registry}\label{claim-registry}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Claim
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Scope
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Evidence artifact
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Statistic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Limitation / defense
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+CEIS has the strongest AUC among reported predictors & 90 clustered
+model assessments from 30 reviewed rows &
+\texttt{human\_audit\_predictor\_comparison.tsv} & AUC 0.9117 &
+Row-clustered CI needed; selected high-stakes audit surface \\
+CEIS reaches a zero-FN operating point & scoped selected-300 diagnostic
+threshold & \texttt{human\_audit\_predictor\_comparison.tsv} & FN 0,
+recall 1.0000 & Retrospective diagnostic threshold, not frozen
+deployment threshold \\
+SRES and CEIS conservative policies eliminate severe misses in replay &
+aggregate policy replay over reviewed assessments &
+\texttt{policy\_comparison.tsv} & high-risk missed 0, critical miss 0 &
+Replay evidence, not live causal deployment; policies tie at 0.3889
+budget \\
+Partial encoder is the strongest current ASR hypothesis generator &
+258-row split/model-comparison layer &
+\texttt{asr\_cds\_proxy\_comparison.tsv} & \texttt{cer\_zh\_micro}
+15.04, unsafe downrouting 7, high-risk missed 4 & Split-level
+model-comparison context only \\
+Selected-300 is a high-stakes audit surface & enriched selection
+provenance & \texttt{human\_audit\_selection\_summary.json},
+\texttt{selection\_strata.tsv} & 300 candidates, 30 reviewed rows, 90
+assessments & Not prevalence-preserving; selection enrichment
+disclosed \\
+Aggregate-only release supports reviewer-visible auditability & release
+and operation-record layer & validation summaries, evidence matrices,
+operation records, figure scripts & gate state: roadmap complete,
+publishable ready, consistency 26/26 & No public row-level transcript
+reproducibility \\
+\end{longtable}
+
+\hypertarget{ethics-privacy-and-intended-use}{%
+\subsection{Ethics, Privacy, And Intended
+Use}\label{ethics-privacy-and-intended-use}}
+
+This study treats transcript-bearing speech data as sensitive
+operational content. NIH human-subjects guidance treats the use, study,
+analysis, or generation of identifiable private information as a
+human-subjects trigger under the cited federal definition (National
+Institutes of Health 2024). This paper therefore keeps raw audio,
+transcript-bearing hypotheses, reviewer notes, row identifiers, local
+response sheets, and runtime logs outside the release boundary. Before
+any external data release or deployment claim, the institutional review,
+exemption, data-use, retention, encryption, and access control status
+must be documented.
+
+CDS-ASR is intended for ASR safety audit, risk-aware routing,
+manual-review prioritization, conservative escalation, and machine
+abstention. It is not intended for automatic guilt or fraud
+determination, automatic account freezing, service denial, punitive
+action, or direct law-enforcement reporting without human review.
+``Conservative machine action'' means preserving uncertainty, raising
+review priority, abstaining, or requiring human confirmation.
+
+This intended-use boundary aligns the paper with risk-management
+governance rather than autonomous adverse decision-making. NIST
+describes the AI RMF as a voluntary framework for managing AI risks to
+individuals, organizations, and society and for incorporating
+trustworthiness considerations into AI design, development, use, and
+evaluation (National Institute of Standards and Technology 2026). For
+cross-border or future deployment contexts, the EU AI Act illustrates
+the broader regulatory direction toward risk-based obligations and
+high-risk AI governance (European Commission 2026). This manuscript does
+not provide legal compliance analysis; it provides a scoped
+consequence-centered audit method and a privacy-preserving release
+boundary.
+
+\hypertarget{limitations-and-threats-to-validity}{%
+\subsection{Limitations And Threats To
+Validity}\label{limitations-and-threats-to-validity}}
+
+The human-reviewed evidence is scoped to 30 rows and 90 model
+assessments. It supports a focused high-stakes audit claim, not a
+population-level deployment claim.
+
+The 90 model assessments are clustered within 30 audio rows and should
+not be treated as 90 independent calls. The current submission-prep
+package reports row-clustered bootstrap intervals and leave-one-row-out
+sensitivity tables for predictor and recovery metrics; these remain
+uncertainty descriptions for a scoped audit rather than population-level
+deployment intervals.
+
+The number of positive decision-change cases is limited. Table 3 has 16
+positive model assessments, so AUC and threshold behavior should be
+interpreted with uncertainty.
+
+The selected-300 audit surface is deliberately enriched for high-stakes
+signals. It supports decision-stability behavior within the selected
+audit boundary, not population prevalence of ASR-induced harm across all
+calls.
+
+The reported best thresholds are diagnostic operating points on the
+scoped reviewed audit. They can overstate deployment performance unless
+threshold selection is later frozen on a separate development set.
+
+Human labels come from a completed expert audit rather than
+multi-annotator adjudication. No second-reviewer blinded spot-check is
+included in the current submission-prep package, so inter-annotator
+agreement is not claimed. This is a single-expert audit boundary, not a
+multi-annotator reliability claim.
+
+Recovery evidence is aggregate-only. This protects transcript-bearing
+call and review content, but limits external row-level reproducibility.
+
+CEIS depends on generated plausible variants and risk atom weights.
+Missed variants or misweighted atoms can affect instability scoring. The
+current aggregate package records risk-atom coverage and a
+variant-coverage status table, but a full source-specific aggregate
+variant generation audit remains a planned validation extension.
+
+The Taiwan Traditional Chinese locale policy is strict by design.
+Candidate model rejection may reflect deployment-locale mismatch, not
+universal ASR inferiority.
+
+Recovery policies eliminate high-risk missed and critical miss counts in
+aggregate replay, but Table 4 still leaves unsafe downrouting count at
+24 after SRES/CEIS conservative recovery. The evidence supports scoped
+severe-miss reduction, not elimination of all safety risk.
+
+The study does not include a deployment trial and does not estimate
+population prevalence of ASR-induced harm across all calls. It evaluates
+whether decision-critical ASR risk can be detected and mitigated within
+a deliberately enriched high-stakes audit surface.
+
+\hypertarget{appendix-artifact-availability}{%
+\subsection{Appendix / Artifact
+Availability}\label{appendix-artifact-availability}}
+
+\hypertarget{artifact-availability-statement}{%
+\subsubsection{Artifact Availability
+Statement}\label{artifact-availability-statement}}
+
+The repository release includes aggregate run records, validation
+summaries, metric tables, evidence matrices, figure-generation code, and
+paper-facing documentation. Raw audio, raw transcripts, selected row
+identifiers, audio identifiers, model hypotheses, transcript-bearing
+runtime logs, reviewer response sheets, reviewer notes, and model
+weights are not released because they may contain sensitive call or
+review content.
+
+Because transcript-bearing materials may contain sensitive call content,
+reproducibility is provided through aggregate validation artifacts,
+operation records, manifest checks, and consistency audits rather than
+through raw row release. This provides reviewer-visible auditability for
+model comparison, metric policy, selected-300 human-review status,
+predictor analysis, recovery-policy evaluation, candidate-lane
+boundaries, and consistency checks while preserving the local-only
+boundary for sensitive materials.
+
+The reviewer package should include an aggregate manifest with artifact
+path, role, privacy class, generator, source inputs, SHA256, source git
+commit, timestamp, Python version, metric-library versions, tokenizer
+policy, locale normalization policy, decoding parameters where
+available, random seeds where used, and hardware summary. The manifest
+records auditability metadata without adding transcript-bearing row
+content.
+
+\hypertarget{reviewer-reproducible-aggregate-artifacts}{%
+\subsubsection{Reviewer-Reproducible Aggregate
+Artifacts}\label{reviewer-reproducible-aggregate-artifacts}}
+
+\begin{itemize}
+\tightlist
+\item
+  Artifact manifest:
+  \texttt{80\_semantic\_risk\_asr/paper/artifact\_manifest.tsv}
+\item
+  Artifact manifest generator:
+  \texttt{80\_semantic\_risk\_asr/paper/build\_artifact\_manifest.py}
+\item
+  Experiment registry: \texttt{70\_experiments/registry.tsv}
+\item
+  Main 258-row comparison:
+  \texttt{70\_experiments/runs/janus\_258\_test\_split\_asr\_cds\_proxy/asr\_cds\_proxy\_comparison.tsv}
+\item
+  Metric-definition audit:
+  \texttt{70\_experiments/runs/wer\_metric\_audit\_2026\_05\_25/journal\_compliance\_summary.json}
+\item
+  Selected-300 human audit refresh:
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_refresh\_summary.json}
+\item
+  Human-reviewed predictor evidence:
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_comparison.tsv}
+\item
+  Human-reviewed predictor row-clustered CI:
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_clustered\_ci.tsv}
+\item
+  Human-reviewed predictor leave-one-row-out sensitivity:
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_leave\_one\_row\_out.tsv}
+\item
+  Human-reviewed recovery evidence:
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison.tsv}
+\item
+  Human-reviewed recovery row-clustered CI:
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_clustered\_ci.tsv}
+\item
+  Human-reviewed recovery leave-one-row-out sensitivity:
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_leave\_one\_row\_out.tsv}
+\item
+  Human-reviewed recovery fixed-budget frontier:
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/fixed\_budget\_recovery\_frontier.tsv}
+\item
+  Claim registry:
+  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/claim\_registry.tsv}
+\item
+  CEIS method summary:
+  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/ceis\_method\_summary.tsv}
+\item
+  Selection provenance summary:
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/selection\_provenance\_summary.tsv}
+\item
+  Counterfactual variant coverage status:
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/counterfactual\_variant\_coverage\_summary.tsv}
+\item
+  Post-review evidence checklist:
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_post\_review\_evidence\_summary.json}
+\item
+  Publishable evidence audit:
+  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/publishable\_evidence\_completion\_summary.json}
+\item
+  Consequence evidence matrix:
+  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/consequence\_evidence\_matrix.tsv}
+\item
+  Roadmap completion audit:
+  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/postdoc\_roadmap\_completion\_summary.json}
+\item
+  Evidence-chain consistency audit:
+  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/evidence\_chain\_consistency\_summary.json}
+\item
+  Candidate bounded recheck:
+  \texttt{70\_experiments/runs/asr\_candidate\_current\_recheck\_2026\_05\_26/summary.json}
+\end{itemize}
+
+\hypertarget{appendix-table-a1.-fixed-budget-recovery-frontier}{%
+\subsubsection{Appendix Table A1. Fixed-Budget Recovery
+Frontier}\label{appendix-table-a1.-fixed-budget-recovery-frontier}}
+
+The fixed-budget frontier is a retrospective aggregate replay over the
+same 90 reviewed model assessments. It reports what remains after
+applying ranked conservative triggers at requested trigger budgets.
+Requested 40\% budget maps to 35 eligible triggers, so the observed
+budget is 0.3889.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0769}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Score metric
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Requested budget
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Triggered
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Observed budget
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Unsafe downrouting
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+High-risk missed
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Critical miss
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Severe missed
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Severe misses eliminated
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Triggers per severe miss eliminated
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+SRES total & 0.1000 & 9 & 0.1000 & 28 & 4 & 0 & 4 & 3 & 3.0 \\
+SRES total & 0.2000 & 18 & 0.2000 & 26 & 2 & 0 & 2 & 5 & 3.6 \\
+SRES total & 0.3000 & 27 & 0.3000 & 26 & 2 & 0 & 2 & 5 & 5.4 \\
+SRES total & 0.4000 & 35 & 0.3889 & 24 & 0 & 0 & 0 & 7 & 5.0 \\
+CEIS & 0.1000 & 9 & 0.1000 & 24 & 0 & 0 & 0 & 7 & 1.2857 \\
+CEIS & 0.2000 & 18 & 0.2000 & 24 & 0 & 0 & 0 & 7 & 2.5714 \\
+CEIS & 0.3000 & 27 & 0.3000 & 24 & 0 & 0 & 0 & 7 & 3.8571 \\
+CEIS & 0.4000 & 35 & 0.3889 & 24 & 0 & 0 & 0 & 7 & 5.0 \\
+\end{longtable}
+
+Evidence source:
+\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/fixed\_budget\_recovery\_frontier.tsv}.
+
+\hypertarget{operation-records}{%
+\subsubsection{Operation Records}\label{operation-records}}
+
+The selected-300 reviewer route is documented through aggregate-only
+operation records, including response closeout, response apply logs,
+reviewer work order, post-review sequence, operation-record audit, and
+consistency audit. These records provide command-level reproducibility
+without exposing transcript or row content.
+
+Key records:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_response\_closeout\_summary.json}
+\item
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_batch\_response\_apply\_log.tsv}
+\item
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_review\_work\_order\_summary.json}
+\item
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_post\_review\_sequence\_summary.json}
+\item
+  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_operation\_record\_summary.json}
+\end{itemize}
+
+\hypertarget{privacy-and-local-only-boundary}{%
+\subsubsection{Privacy And Local-Only
+Boundary}\label{privacy-and-local-only-boundary}}
+
+The following stay local or ignored:
+
+\begin{itemize}
+\tightlist
+\item
+  raw audio;
+\item
+  raw transcripts;
+\item
+  selected sample IDs and audio IDs;
+\item
+  transcript-bearing audit sheets and response sheets;
+\item
+  reviewer notes;
+\item
+  raw model hypotheses and predictions;
+\item
+  transcript-bearing runtime logs;
+\item
+  checkpoints, adapters, and model weights;
+\item
+  local downloaded reviewer packets and zip files.
+\end{itemize}
+
+The tracked repo preserves aggregate counts, run records, validation
+summaries, metric tables, and paper-facing evidence matrices. This
+boundary lets reviewers audit the evidence chain while protecting
+transcript-bearing material.
+
+\hypertarget{validation-gate-commands}{%
+\subsection{Validation Gate Commands}\label{validation-gate-commands}}
+
+Run these after manuscript packaging changes:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{.venv/bin/python}\NormalTok{ 80\_semantic\_risk\_asr/scoring/audit\_postdoc\_roadmap\_completion.py }\AttributeTok{{-}{-}output{-}json}\NormalTok{ /tmp/cib\_roadmap\_completion\_check.json }\AttributeTok{{-}{-}output{-}tsv}\NormalTok{ /tmp/cib\_roadmap\_completion\_check.tsv}
+\ExtensionTok{.venv/bin/python}\NormalTok{ 80\_semantic\_risk\_asr/scoring/audit\_publishable\_evidence\_chain.py }\AttributeTok{{-}{-}output{-}json}\NormalTok{ /tmp/cib\_publishable\_check.json }\AttributeTok{{-}{-}output{-}tsv}\NormalTok{ /tmp/cib\_publishable\_check.tsv}
+\ExtensionTok{.venv/bin/python}\NormalTok{ 80\_semantic\_risk\_asr/scoring/audit\_evidence\_chain\_consistency.py }\AttributeTok{{-}{-}output{-}json}\NormalTok{ /tmp/cib\_consistency\_check.json }\AttributeTok{{-}{-}output{-}tsv}\NormalTok{ /tmp/cib\_consistency\_check.tsv}
+\end{Highlighting}
+\end{Shaded}
+
+Expected current gate state:
+
+\begin{itemize}
+\tightlist
+\item
+  roadmap completion: \texttt{roadmap\_complete=true},
+  \texttt{blocking\_gate=none};
+\item
+  publishable evidence: \texttt{publishable\_ready=true};
+\item
+  consistency audit: \texttt{26/26} checks pass,
+  \texttt{failed\_checks={[}{]}}.
+\end{itemize}
+
+\hypertarget{scope-control-for-additional-experiments}{%
+\subsection{Scope Control For Additional
+Experiments}\label{scope-control-for-additional-experiments}}
+
+Do not run new full-split ASR experiments now. Candidate models can move
+to 258-row or selected-300 only after strict Taiwan Traditional Chinese
+locale policy is satisfied or an isolated Gemma 4 multimodal runtime
+exists. Until then, the active work is manuscript drafting,
+results-table packaging, artifact availability, citation completion, and
+submission readiness.
+
+\hypertarget{refs}{}
+\begin{CSLReferences}{1}{0}
+\leavevmode\vadjust pre{\hypertarget{ref-aws_contact_lens_analytics_2026}{}}%
+Amazon Web Services. 2026a. {``Analyze Conversations Using
+Conversational Analytics in Connect Customer Contact Lens.''}
+\url{https://docs.aws.amazon.com/connect/latest/adminguide/analyze-conversations.html}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-aws_connect_contact_lens_2026}{}}%
+---------. 2026b. {``Contact Center Conversational Analytics - Amazon
+Connect.''}
+\url{https://aws.amazon.com/products/connect/customer/conversational-analytics/}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-angelopoulos2021conformal}{}}%
+Angelopoulos, Anastasios N., and Stephen Bates. 2021. {``A Gentle
+Introduction to Conformal Prediction and Distribution-Free Uncertainty
+Quantification.''} \url{https://arxiv.org/abs/2107.07511}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-chow1970reject}{}}%
+Chow, C. K. 1970. {``On Optimum Recognition Error and Reject
+Tradeoff.''} \emph{IEEE Transactions on Information Theory} 16 (1):
+41--46. \url{https://doi.org/10.1109/TIT.1970.1054406}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-eu_ai_act_2026}{}}%
+European Commission. 2026. {``AI Act.''}
+\url{https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-fbi_ic3_2025_report_2026}{}}%
+Federal Bureau of Investigation. 2026a. {``2025 Internet Crime
+Report.''} \url{https://www.fbi.gov/file-repository/2025_ic3report.pdf}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-fbi_crypto_ai_scams_2026}{}}%
+---------. 2026b. {``Cryptocurrency and AI Scams Bilk Americans of
+Billions.''}
+\url{https://www.fbi.gov/news/press-releases/cryptocurrency-and-ai-scams-bilk-americans-of-billions}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-geifman2017selective}{}}%
+Geifman, Yonatan, and Ran El-Yaniv. 2017. {``Selective Classification
+for Deep Neural Networks.''} In \emph{Advances in Neural Information
+Processing Systems 30}.
+\url{https://papers.neurips.cc/paper/7073-selective-classification-for-deep-neural-networks}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-geifman2019selectivenet}{}}%
+---------. 2019. {``SelectiveNet: A Deep Neural Network with an
+Integrated Reject Option.''} In \emph{Proceedings of the 36th
+International Conference on Machine Learning}, 97:2151--59. Proceedings
+of Machine Learning Research. PMLR.
+\url{https://proceedings.mlr.press/v97/geifman19a.html}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-kim2021semanticdistance}{}}%
+Kim, Suyoun, Abhinav Arora, Duc Le, Ching-Feng Yeh, Christian Fuegen,
+Ozlem Kalinli, and Michael L. Seltzer. 2021. {``Semantic Distance: A New
+Metric for ASR Performance Analysis Towards Spoken Language
+Understanding.''} In \emph{Interspeech 2021}, 1977--81.
+\url{https://doi.org/10.21437/Interspeech.2021-1929}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-miner2020psychotherapy_asr}{}}%
+Miner, Adam S., Albert Haque, Jason A. Fries, et al. 2020. {``Assessing
+the Accuracy of Automatic Speech Recognition for Psychotherapy.''}
+\emph{Npj Digital Medicine} 3: 82.
+\url{https://doi.org/10.1038/s41746-020-0285-8}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-naderi2024llmconfidence}{}}%
+Naderi, Maryam, Enno Hermann, Alexandre Nanchen, Sevada Hovsepyan, and
+Mathew Magimai.-Doss. 2024. {``Towards Interfacing Large Language Models
+with ASR Systems Using Confidence Measures and Prompting.''} In
+\emph{Interspeech 2024}, 2980--84.
+\url{https://doi.org/10.21437/Interspeech.2024-989}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-nist_ai_rmf_2026}{}}%
+National Institute of Standards and Technology. 2026. {``AI Risk
+Management Framework.''}
+\url{https://www.nist.gov/itl/ai-risk-management-framework}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-nih_human_subjects_research_2024}{}}%
+National Institutes of Health. 2024. {``Definition of Human Subjects
+Research.''}
+\url{https://grants.nih.gov/policy-and-compliance/policy-topics/human-subjects/research}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-npa_165_antifraud_hotline_2024}{}}%
+National Police Agency, Ministry of the Interior. 2024. {``165
+Anti-Fraud Hotline.''}
+\url{https://www.npa.gov.tw/en/app/artwebsite/view?id=8035\&module=artwebsite\&serno=ed2427e1-de0a-4f6f-8f68-8f83b604e89b}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-rugayan2023asd}{}}%
+Rugayan, Janine, Giampiero Salvi, and Torbjørn Svendsen. 2023.
+{``Perceptual and Task-Oriented Assessment of a Semantic Metric for ASR
+Evaluation.''} In \emph{Interspeech 2023}, 2158--62.
+\url{https://doi.org/10.21437/Interspeech.2023-1778}.
+
+\end{CSLReferences}
+
+\end{document}

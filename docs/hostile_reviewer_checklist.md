@@ -1,6 +1,6 @@
 # Hostile Reviewer Checklist
 
-Date: 2026-05-26
+Date: 2026-05-28
 
 Scope: final CDS-ASR submission pass
 
@@ -27,7 +27,8 @@ privacy-preserving.
 | privacy boundary clear? | `docs/privacy_boundary.md` and `docs/artifact_privacy_classes.tsv` define release and local-only boundaries. |
 | intended use restricted? | `docs/intended_use_statement.md` disallows adverse automation and direct punitive use. |
 | artifact checksums? | Paper and postdoc artifact manifests include SHA256 and source commit metadata. |
-| citations complete? | Manuscript citation keys resolve in `references.bib` and official web citations include 2026-05-26 access dates. |
+| citations complete? | Manuscript citation keys resolve in `references.bib`; web and online scholarly citations include 2026-05-28 access dates. |
+| second-reviewer spot-check? | Not included in the current submission-prep package; manuscript states a single-expert audit boundary and does not claim inter-annotator agreement. |
 | candidate lane separated? | Candidate models remain in fixed 15-row/runtime gate lane until locale/runtime promotion. |
 | locale gate contradiction? | Completed baselines with disclosed violations are retained only as baselines; new promotion requires strict locale gate. |
 

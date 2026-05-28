@@ -1,12 +1,15 @@
 artifact_path	privacy_class	release_status	contains_transcript	contains_audio_id	contains_model_hypothesis	contains_reviewer_note	safe_to_commit	reason
 80_semantic_risk_asr/paper/manuscript_draft.md	aggregate_public	tracked	no	no	no	no	yes	Manuscript references aggregate artifacts and scoped claims only.
+80_semantic_risk_asr/paper/manuscript_submission.tex	aggregate_public	tracked	no	no	no	no	yes	LaTeX submission draft generated from aggregate-only manuscript content.
 80_semantic_risk_asr/paper/references.bib	aggregate_public	tracked	no	no	no	no	yes	Citation metadata only.
+80_semantic_risk_asr/paper/citation_seed.md	aggregate_public	tracked	no	no	no	no	yes	Verified citation source register and access dates only.
 80_semantic_risk_asr/paper/artifact_manifest.tsv	aggregate_public	tracked	no	no	no	no	yes	SHA256 and environment metadata for aggregate artifacts.
 70_experiments/runs/postdoc_evidence_chain_2026_05_25/claim_registry.tsv	aggregate_public	tracked	no	no	no	no	yes	Claim-to-evidence mapping with aggregate statistics and limitations.
 70_experiments/runs/postdoc_evidence_chain_2026_05_25/artifact_manifest.tsv	aggregate_public	tracked	no	no	no	no	yes	SHA256 manifest for aggregate artifacts only.
 docs/risk_atom_weights.tsv	aggregate_public	tracked	no	no	no	no	yes	Policy-defined CEIS atom weights only.
 docs/downstream_decision_contract.md	aggregate_public	tracked	no	no	no	no	yes	Downstream decision label and distance contract only.
 docs/hostile_reviewer_checklist.md	aggregate_public	tracked	no	no	no	no	yes	Reviewer-risk checklist with aggregate claim boundaries only.
+80_semantic_risk_asr/paper/hostile_reviewer_final_pass_2026_05_28.md	aggregate_public	tracked	no	no	no	no	yes	Final hostile-reviewer pass over manuscript claims and aggregate artifacts.
 scripts/check_transcript_bearing_leaks.sh	aggregate_public	tracked	no	no	no	no	yes	Leak-scan script; does not contain transcript-bearing data.
 70_experiments/runs/janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv	aggregate_public	tracked	no	no	no	no	yes	Aggregate ASR comparison metrics.
 70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_comparison.tsv	aggregate_public	tracked	no	no	no	no	yes	Aggregate predictor metrics only.

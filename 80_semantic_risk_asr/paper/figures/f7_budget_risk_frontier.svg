@@ -8,7 +8,7 @@
   .small { font-size: 11px; fill: #52606d; }
 </style>
 <text x="36" y="42" class="title" text-anchor="start">F7. Budget-Risk Frontier In Aggregate Replay</text>
-<text x="36" y="64" class="subtitle" text-anchor="start">X axis: trigger budget. Y axis: high-risk missed + critical miss.</text>
+<text x="36" y="64" class="subtitle" text-anchor="start">Fixed-budget ranked replay over 90 reviewed model assessments; aggregate-only.</text>
 <line x1="110" y1="380" x2="830" y2="380" stroke="#1f2933" stroke-width="1.5"/>
 <line x1="110" y1="110" x2="110" y2="380" stroke="#1f2933" stroke-width="1.5"/>
 <line x1="110.0" y1="110" x2="110.0" y2="380" stroke="#d9e2ec" stroke-width="1"/>
@@ -35,27 +35,38 @@
 <text x="98" y="152" class="small" text-anchor="end">6</text>
 <line x1="110" y1="110.0" x2="830" y2="110.0" stroke="#d9e2ec" stroke-width="1"/>
 <text x="98" y="114" class="small" text-anchor="end">7</text>
-<circle cx="110.0" cy="110.0" r="8" fill="#d64545" stroke="white" stroke-width="2"/>
-<text x="122" y="102" class="label" text-anchor="start">None</text>
-<text x="122" y="120" class="small" text-anchor="start">trig 0, abstain 0</text>
-<circle cx="110.0" cy="110.0" r="8" fill="#f2994a" stroke="white" stroke-width="2"/>
-<text x="122" y="102" class="label" text-anchor="start">Conf. unavailable</text>
-<text x="122" y="120" class="small" text-anchor="start">trig 0, abstain 0</text>
-<circle cx="576.7" cy="380.0" r="8" fill="#219653" stroke="white" stroke-width="2"/>
-<text x="588" y="372" class="label" text-anchor="start">SRES</text>
-<text x="588" y="390" class="small" text-anchor="start">trig 35, abstain 0</text>
-<circle cx="576.7" cy="380.0" r="8" fill="#2f80ed" stroke="white" stroke-width="2"/>
-<text x="588" y="372" class="label" text-anchor="start">CEIS</text>
-<text x="588" y="390" class="small" text-anchor="start">trig 35, abstain 0</text>
-<circle cx="736.6" cy="380.0" r="8" fill="#7b61ff" stroke="white" stroke-width="2"/>
-<text x="748" y="372" class="label" text-anchor="start">CEIS ensemble</text>
-<text x="748" y="390" class="small" text-anchor="start">trig 47, abstain 18</text>
+<polyline points="230.0,225.7 350.0,302.9 470.0,302.9 576.7,380.0" fill="none" stroke="#f2994a" stroke-width="3"/>
+<circle cx="230.0" cy="225.7" r="7" fill="#f2994a" stroke="white" stroke-width="2"/>
+<text x="240" y="217" class="small" text-anchor="start">SRES trig 9</text>
+<text x="240" y="235" class="small" text-anchor="start">ratio 3</text>
+<circle cx="350.0" cy="302.9" r="7" fill="#f2994a" stroke="white" stroke-width="2"/>
+<text x="360" y="294" class="small" text-anchor="start">SRES trig 18</text>
+<text x="360" y="312" class="small" text-anchor="start">ratio 3.6</text>
+<circle cx="470.0" cy="302.9" r="7" fill="#f2994a" stroke="white" stroke-width="2"/>
+<text x="480" y="294" class="small" text-anchor="start">SRES trig 27</text>
+<text x="480" y="312" class="small" text-anchor="start">ratio 5.4</text>
+<circle cx="576.7" cy="380.0" r="7" fill="#f2994a" stroke="white" stroke-width="2"/>
+<text x="586" y="372" class="small" text-anchor="start">SRES trig 35</text>
+<text x="586" y="390" class="small" text-anchor="start">ratio 5</text>
+<polyline points="230.0,380.0 350.0,380.0 470.0,380.0 576.7,380.0" fill="none" stroke="#219653" stroke-width="3"/>
+<circle cx="230.0" cy="380.0" r="7" fill="#219653" stroke="white" stroke-width="2"/>
+<text x="240" y="372" class="small" text-anchor="start">CEIS trig 9</text>
+<text x="240" y="390" class="small" text-anchor="start">ratio 1.2857</text>
+<circle cx="350.0" cy="380.0" r="7" fill="#219653" stroke="white" stroke-width="2"/>
+<text x="360" y="372" class="small" text-anchor="start">CEIS trig 18</text>
+<text x="360" y="390" class="small" text-anchor="start">ratio 2.5714</text>
+<circle cx="470.0" cy="380.0" r="7" fill="#219653" stroke="white" stroke-width="2"/>
+<text x="480" y="372" class="small" text-anchor="start">CEIS trig 27</text>
+<text x="480" y="390" class="small" text-anchor="start">ratio 3.8571</text>
+<circle cx="576.7" cy="380.0" r="7" fill="#219653" stroke="white" stroke-width="2"/>
+<text x="586" y="372" class="small" text-anchor="start">CEIS trig 35</text>
+<text x="586" y="390" class="small" text-anchor="start">ratio 5</text>
 <text x="110" y="418" class="label" text-anchor="start">Recovery budget</text>
 <text x="870" y="150" class="label" text-anchor="start">Replay interpretation</text>
-<text x="870" y="176" class="small" text-anchor="start">No recovery and confidence-unavailable</text>
-<text x="870" y="196" class="small" text-anchor="start">remain at 7 severe misses.</text>
-<text x="870" y="226" class="small" text-anchor="start">SRES and CEIS reach 0 severe misses</text>
-<text x="870" y="246" class="small" text-anchor="start">at budget 0.3889.</text>
-<text x="870" y="276" class="small" text-anchor="start">CEIS ensemble also reaches 0</text>
-<text x="870" y="296" class="small" text-anchor="start">with abstention at budget 0.5222.</text>
+<text x="870" y="176" class="small" text-anchor="start">CEIS reaches 0 severe misses</text>
+<text x="870" y="196" class="small" text-anchor="start">at the 10% replay budget.</text>
+<text x="870" y="226" class="small" text-anchor="start">SRES reaches 0 severe misses</text>
+<text x="870" y="246" class="small" text-anchor="start">when all 35 eligible triggers are used.</text>
+<text x="870" y="276" class="small" text-anchor="start">This is retrospective replay,</text>
+<text x="870" y="296" class="small" text-anchor="start">not a deployment threshold.</text>
 </svg>
