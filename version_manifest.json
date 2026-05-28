@@ -1,22 +1,24 @@
 {
-  "version": "v2.5.237",
+  "version": "v2.5.238",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 237
+    "patch": 238
   },
-  "updated_at": "2026-05-28T09:50:13+08:00",
+  "updated_at": "2026-05-28T10:04:55+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "aa3ecf2",
+  "base_commit": "325beea",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/artifact_manifest.tsv",
-    "80_semantic_risk_asr/paper/artifact_manifest.tsv"
+    "80_semantic_risk_asr/paper/build_artifact_manifest.py",
+    "80_semantic_risk_asr/paper/cover_note_route_a_2026_05_28.md",
+    "80_semantic_risk_asr/paper/manuscript_submission.tex",
+    "docs/artifact_privacy_classes.tsv"
   ]
 }

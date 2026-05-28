@@ -129,65 +129,7 @@ ASR for High-Stakes Speech-Driven Decision Systems}
 
 \begin{document}
 \maketitle
-
-\hypertarget{manuscript-draft}{%
-\section{Manuscript Draft}\label{manuscript-draft}}
-
-Working title: When Low WER Becomes Dangerous: Counterfactual
-Decision-Stability ASR for High-Stakes Speech-Driven Decision Systems
-
-Status: paper-facing v0 draft with second-reviewer evidence-boundary
-revisions, results table package, reproducibility layer, scope control,
-limitations, and artifact availability plan.
-
-Date: 2026-05-28
-
-\hypertarget{evidence-boundary-freeze}{%
-\subsection{Evidence Boundary Freeze}\label{evidence-boundary-freeze}}
-
-This manuscript uses a scoped evidence chain:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  The 258-row test split is used as scope-controlled split and
-  model-comparison evidence.
-\item
-  The selected-300 proxy outputs are used as input provenance and
-  row-selection evidence.
-\item
-  The selected-300 human-reviewed predictor and human-reviewed recovery
-  outputs are the paper-grade risk and recovery evidence.
-\end{enumerate}
-
-Reference transcripts remain accepted human-reviewed ground truth for
-WER/CER scoring. Transcript review is not reopened unless a future
-review task changes the field scope or challenges the accepted reference
-transcript content.
-
-Tracked manuscript artifacts must remain aggregate-only. Raw audio, raw
-transcripts, audio IDs, selected sample IDs, model hypotheses, local
-response sheets, reviewer notes, runtime logs, raw predictions, and
-model weights remain local or ignored and are not committed.
-
-Authoritative boundary records:
-
-\begin{itemize}
-\tightlist
-\item
-  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/evidence\_chain\_readiness\_summary.json}
-\item
-  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/publishable\_evidence\_completion\_summary.json}
-\item
-  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/consequence\_evidence\_matrix.tsv}
-\item
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_refresh\_summary.json}
-\end{itemize}
-
-\hypertarget{abstract}{%
-\subsection{Abstract}\label{abstract}}
-
+\begin{abstract}
 Speech-driven decision systems increasingly transform conversations into
 operational signals for routing, escalation, compliance monitoring, and
 case-handling decisions. In high-stakes anti-fraud calls, small ASR
@@ -215,9 +157,10 @@ including CEIS-triggered conservative action, eliminate high-risk missed
 and critical miss counts under the aggregate-only claim boundary. These
 results support decision-stability evaluation as a scoped companion to
 transcript accuracy, semantic metrics, and confidence-aware correction.
+\end{abstract}
 
 \hypertarget{introduction}{%
-\subsection{Introduction}\label{introduction}}
+\section{Introduction}\label{introduction}}
 
 Contact-center speech is becoming an operational input rather than a
 passive record. Commercial analytics systems already turn voice
@@ -294,10 +237,10 @@ dates refreshed on 2026-05-28. Empirical manuscript claims point to the
 aggregate artifacts listed in the Appendix.
 
 \hypertarget{related-work}{%
-\subsection{Related Work}\label{related-work}}
+\section{Related Work}\label{related-work}}
 
 \hypertarget{transcript-centered-asr-metrics}{%
-\subsubsection{Transcript-Centered ASR
+\subsection{Transcript-Centered ASR
 Metrics}\label{transcript-centered-asr-metrics}}
 
 Transcript accuracy metrics provide the reproducible baseline for ASR
@@ -311,7 +254,7 @@ auditable surface layer that must be reported before stronger downstream
 claims are made.
 
 \hypertarget{semantic-and-downstream-aware-asr-evaluation}{%
-\subsubsection{Semantic And Downstream-Aware ASR
+\subsection{Semantic And Downstream-Aware ASR
 Evaluation}\label{semantic-and-downstream-aware-asr-evaluation}}
 
 Semantic ASR metrics extend transcript evaluation toward meaning
@@ -327,7 +270,7 @@ decision-stability target: whether plausible ASR alternatives change a
 high-stakes downstream decision.
 
 \hypertarget{transcript-repair-and-conservative-decision-action}{%
-\subsubsection{Transcript Repair And Conservative Decision
+\subsection{Transcript Repair And Conservative Decision
 Action}\label{transcript-repair-and-conservative-decision-action}}
 
 LLM and confidence-aware correction methods provide transcript-repair
@@ -366,10 +309,10 @@ protagonist is the downstream decision that changes when an acoustically
 plausible transcript difference lands on a decision-critical atom.
 
 \hypertarget{method}{%
-\subsection{Method}\label{method}}
+\section{Method}\label{method}}
 
 \hypertarget{problem-formulation}{%
-\subsubsection{Problem Formulation}\label{problem-formulation}}
+\subsection{Problem Formulation}\label{problem-formulation}}
 
 We study speech-driven decision systems where an audio segment is
 transcribed by ASR and then used by a downstream escalation workflow.
@@ -383,7 +326,7 @@ transcript alternatives. This makes transcript accuracy a supporting
 layer and decision-stability the primary high-stakes safety target.
 
 \hypertarget{cds-asr-pipeline}{%
-\subsubsection{CDS-ASR Pipeline}\label{cds-asr-pipeline}}
+\subsection{CDS-ASR Pipeline}\label{cds-asr-pipeline}}
 
 CDS-ASR evaluates high-stakes ASR through a decision-stability pipeline:
 
@@ -427,7 +370,7 @@ abstention, with critical misses treated as the highest-risk direction
 for conservative action.
 
 \hypertarget{downstream-decision-function}{%
-\subsubsection{Downstream Decision
+\subsection{Downstream Decision
 Function}\label{downstream-decision-function}}
 
 The downstream decision function \texttt{f} is fixed before CEIS
@@ -458,7 +401,7 @@ versioned in \texttt{docs/downstream\_decision\_contract.md} and
 rankings can be reconstructed from aggregate artifacts.
 
 \hypertarget{ceis-scale-discipline}{%
-\subsubsection{CEIS Scale Discipline}\label{ceis-scale-discipline}}
+\subsection{CEIS Scale Discipline}\label{ceis-scale-discipline}}
 
 All CEIS components are treated as bounded comparison terms, not
 calibrated probabilities. \texttt{Plausibility(v\ \textbar{}\ x)} is a
@@ -485,7 +428,7 @@ SRES-triggered recovery, CEIS-triggered conservative action, and CEIS
 ensemble arbitration.
 
 \hypertarget{risk-atom-schema}{%
-\subsubsection{Risk Atom Schema}\label{risk-atom-schema}}
+\subsection{Risk Atom Schema}\label{risk-atom-schema}}
 
 The risk atom schema focuses on decision-critical spans:
 
@@ -519,7 +462,7 @@ cancellation \\
 \end{longtable}
 
 \hypertarget{counterfactual-variant-contract}{%
-\subsubsection{Counterfactual Variant
+\subsection{Counterfactual Variant
 Contract}\label{counterfactual-variant-contract}}
 
 Counterfactual variants are plausible ASR alternatives concentrated
@@ -530,8 +473,7 @@ is not that every possible variant is enumerated; it is that the
 generated alternatives make downstream decision-instability measurable.
 
 \hypertarget{recovery-policy-contract}{%
-\subsubsection{Recovery Policy
-Contract}\label{recovery-policy-contract}}
+\subsection{Recovery Policy Contract}\label{recovery-policy-contract}}
 
 The five-policy recovery experiment is:
 
@@ -558,7 +500,7 @@ policies; CEIS's distinct contribution is evaluated primarily in the
 predictor layer and in its decision-stability framing.
 
 \hypertarget{reproducibility-layer}{%
-\subsubsection{Reproducibility Layer}\label{reproducibility-layer}}
+\subsection{Reproducibility Layer}\label{reproducibility-layer}}
 
 The paper-facing ASR surface metric is \texttt{cer\_zh\_micro}. The
 supplemental word metric is \texttt{wer\_zh\_jieba\_micro}. Raw
@@ -590,7 +532,7 @@ does not require raw audio, raw transcripts, selected row IDs,
 hypotheses, reviewer notes, or model weights.
 
 \hypertarget{evaluation-units-and-n-ladder}{%
-\subsubsection{Evaluation Units And
+\subsection{Evaluation Units And
 N-Ladder}\label{evaluation-units-and-n-ladder}}
 
 The manuscript separates evidence units explicitly so that model
@@ -631,7 +573,7 @@ are reported as scoped descriptive evidence; deployment claims do not
 treat the 90 assessments as independent calls.
 
 \hypertarget{selection-provenance-and-enrichment}{%
-\subsubsection{Selection Provenance And
+\subsection{Selection Provenance And
 Enrichment}\label{selection-provenance-and-enrichment}}
 
 The selected-300 audit surface is an enriched high-stakes sample, not a
@@ -651,7 +593,7 @@ should exclude rows directly selected by CEIS or SRES family signals and
 confirm whether the same directional pattern remains.
 
 \hypertarget{variant-coverage-and-human-review-reliability}{%
-\subsubsection{Variant Coverage And Human Review
+\subsection{Variant Coverage And Human Review
 Reliability}\label{variant-coverage-and-human-review-reliability}}
 
 The current aggregate-only coverage audit reports CEIS top-atom proxy
@@ -676,7 +618,7 @@ future validation extension can add a blinded 5-10 row spot-check while
 preserving the frozen selected-300 review boundary.
 
 \hypertarget{experiments}{%
-\subsection{Experiments}\label{experiments}}
+\section{Experiments}\label{experiments}}
 
 Experiment 1 evaluates comparable ASR model evidence on the canonical
 258-row test split. This table supports model-comparison and split
@@ -705,7 +647,7 @@ field-contract, runtime-validity, and Taiwan Traditional Chinese locale
 gates in order.
 
 \hypertarget{results}{%
-\subsection{Results}\label{results}}
+\section{Results}\label{results}}
 
 The Results section separates comparable ASR evidence, candidate-lane
 boundaries, human-reviewed predictor evidence, and human-reviewed
@@ -719,7 +661,7 @@ policies are automatic, aggregate-evaluated policies; no
 transcript-bearing row content is required for paper-facing claims.
 
 \hypertarget{table-1.-main-asr-benchmark-table}{%
-\subsubsection{Table 1. Main ASR Benchmark
+\subsection{Table 1. Main ASR Benchmark
 Table}\label{table-1.-main-asr-benchmark-table}}
 
 Table 1 reports six comparable ASR runs on the canonical 258-row split.
@@ -793,7 +735,7 @@ strong ASR evidence layer while keeping final risk and recovery claims
 tied to the human-reviewed selected-300 outputs.
 
 \hypertarget{table-2.-candidate-and-exploratory-lane}{%
-\subsubsection{Table 2. Candidate And Exploratory
+\subsection{Table 2. Candidate And Exploratory
 Lane}\label{table-2.-candidate-and-exploratory-lane}}
 
 Table 2 reports bounded candidate-lane evidence for models that are not
@@ -865,7 +807,7 @@ blocked by local multimodal runtime support. The next validation layer
 is locale/runtime promotion, not a broader full-split ASR run.
 
 \hypertarget{table-3.-human-reviewed-predictor-table}{%
-\subsubsection{Table 3. Human-Reviewed Predictor
+\subsection{Table 3. Human-Reviewed Predictor
 Table}\label{table-3.-human-reviewed-predictor-table}}
 
 Table 3 reports aggregate predictor comparison against human-reviewed
@@ -945,7 +887,7 @@ as a conservative decision-stability signal rather than a universally
 dominant classifier.
 
 \hypertarget{table-4.-human-reviewed-recovery-policy-table}{%
-\subsubsection{Table 4. Human-Reviewed Recovery Policy
+\subsection{Table 4. Human-Reviewed Recovery Policy
 Table}\label{table-4.-human-reviewed-recovery-policy-table}}
 
 Table 4 reports five recovery policies evaluated as aggregate replay
@@ -1045,7 +987,7 @@ Appendix Table A1 reports the fixed-budget replay explicitly as an
 operating-point frontier rather than a deployment-threshold claim.
 
 \hypertarget{figure-package}{%
-\subsection{Figure Package}\label{figure-package}}
+\section{Figure Package}\label{figure-package}}
 
 The figure package is generated from aggregate-only inputs by
 \texttt{80\_semantic\_risk\_asr/paper/generate\_paper\_figures.py}. The
@@ -1120,7 +1062,7 @@ Submission-package PDF exports are generated with the same basename
 under \texttt{80\_semantic\_risk\_asr/paper/figures/}.
 
 \hypertarget{discussion}{%
-\subsection{Discussion}\label{discussion}}
+\section{Discussion}\label{discussion}}
 
 The evidence supports a consequence-centered ASR evaluation claim:
 correct WER/CER reporting is necessary, but transcript similarity alone
@@ -1168,7 +1110,7 @@ validation step is locale/runtime validation, not a broader full-split
 ASR run.
 
 \hypertarget{claim-registry}{%
-\subsection{Claim Registry}\label{claim-registry}}
+\section{Claim Registry}\label{claim-registry}}
 
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
@@ -1223,7 +1165,7 @@ reproducibility \\
 \end{longtable}
 
 \hypertarget{ethics-privacy-and-intended-use}{%
-\subsection{Ethics, Privacy, And Intended
+\section{Ethics, Privacy, And Intended
 Use}\label{ethics-privacy-and-intended-use}}
 
 This study treats transcript-bearing speech data as sensitive
@@ -1259,7 +1201,7 @@ consequence-centered audit method and a privacy-preserving release
 boundary.
 
 \hypertarget{limitations-and-threats-to-validity}{%
-\subsection{Limitations And Threats To
+\section{Limitations And Threats To
 Validity}\label{limitations-and-threats-to-validity}}
 
 The human-reviewed evidence is scoped to 30 rows and 90 model
@@ -1316,11 +1258,11 @@ whether decision-critical ASR risk can be detected and mitigated within
 a deliberately enriched high-stakes audit surface.
 
 \hypertarget{appendix-artifact-availability}{%
-\subsection{Appendix / Artifact
+\section{Appendix / Artifact
 Availability}\label{appendix-artifact-availability}}
 
 \hypertarget{artifact-availability-statement}{%
-\subsubsection{Artifact Availability
+\subsection{Artifact Availability
 Statement}\label{artifact-availability-statement}}
 
 The repository release includes aggregate run records, validation
@@ -1349,7 +1291,7 @@ records auditability metadata without adding transcript-bearing row
 content.
 
 \hypertarget{reviewer-reproducible-aggregate-artifacts}{%
-\subsubsection{Reviewer-Reproducible Aggregate
+\subsection{Reviewer-Reproducible Aggregate
 Artifacts}\label{reviewer-reproducible-aggregate-artifacts}}
 
 \begin{itemize}
@@ -1425,7 +1367,7 @@ Artifacts}\label{reviewer-reproducible-aggregate-artifacts}}
 \end{itemize}
 
 \hypertarget{appendix-table-a1.-fixed-budget-recovery-frontier}{%
-\subsubsection{Appendix Table A1. Fixed-Budget Recovery
+\subsection{Appendix Table A1. Fixed-Budget Recovery
 Frontier}\label{appendix-table-a1.-fixed-budget-recovery-frontier}}
 
 The fixed-budget frontier is a retrospective aggregate replay over the
@@ -1485,7 +1427,7 @@ Evidence source:
 \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/fixed\_budget\_recovery\_frontier.tsv}.
 
 \hypertarget{operation-records}{%
-\subsubsection{Operation Records}\label{operation-records}}
+\subsection{Operation Records}\label{operation-records}}
 
 The selected-300 reviewer route is documented through aggregate-only
 operation records, including response closeout, response apply logs,
@@ -1510,7 +1452,7 @@ Key records:
 \end{itemize}
 
 \hypertarget{privacy-and-local-only-boundary}{%
-\subsubsection{Privacy And Local-Only
+\subsection{Privacy And Local-Only
 Boundary}\label{privacy-and-local-only-boundary}}
 
 The following stay local or ignored:
@@ -1543,7 +1485,7 @@ boundary lets reviewers audit the evidence chain while protecting
 transcript-bearing material.
 
 \hypertarget{validation-gate-commands}{%
-\subsection{Validation Gate Commands}\label{validation-gate-commands}}
+\section{Validation Gate Commands}\label{validation-gate-commands}}
 
 Run these after manuscript packaging changes:
 
@@ -1570,7 +1512,7 @@ Expected current gate state:
 \end{itemize}
 
 \hypertarget{scope-control-for-additional-experiments}{%
-\subsection{Scope Control For Additional
+\section{Scope Control For Additional
 Experiments}\label{scope-control-for-additional-experiments}}
 
 Do not run new full-split ASR experiments now. Candidate models can move

@@ -74,6 +74,13 @@ ARTIFACTS = [
         "current manuscript, citations, figures, and aggregate artifacts",
     ),
     (
+        "80_semantic_risk_asr/paper/cover_note_route_a_2026_05_28.md",
+        "Route A cover note and data availability statement",
+        "paper-facing submission documentation",
+        "manual submission-freeze pass",
+        "manuscript claim boundary and aggregate artifact policy",
+    ),
+    (
         "80_semantic_risk_asr/paper/generate_paper_figures.py",
         "figure generator",
         "aggregate figure-generation code",
