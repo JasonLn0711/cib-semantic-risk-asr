@@ -1,38 +1,22 @@
 {
-  "version": "v2.5.236",
+  "version": "v2.5.237",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 236
+    "patch": 237
   },
-  "updated_at": "2026-05-28T09:49:58+08:00",
+  "updated_at": "2026-05-28T09:50:13+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "3992a82",
+  "base_commit": "aa3ecf2",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "80_semantic_risk_asr/paper/build_artifact_manifest.py",
-    "80_semantic_risk_asr/paper/citation_seed.md",
-    "80_semantic_risk_asr/paper/figures/README.md",
-    "80_semantic_risk_asr/paper/figures/f1_cds_asr_pipeline.pdf",
-    "80_semantic_risk_asr/paper/figures/f2_evidence_boundary.pdf",
-    "80_semantic_risk_asr/paper/figures/f3_predictor_auc.pdf",
-    "80_semantic_risk_asr/paper/figures/f4_recovery_outcomes.pdf",
-    "80_semantic_risk_asr/paper/figures/f5_model_lane_state.pdf",
-    "80_semantic_risk_asr/paper/figures/f6_n_ladder.pdf",
-    "80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.pdf",
-    "80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.svg",
-    "80_semantic_risk_asr/paper/generate_paper_figures.py",
-    "80_semantic_risk_asr/paper/hostile_reviewer_final_pass_2026_05_28.md",
-    "80_semantic_risk_asr/paper/manuscript_draft.md",
-    "80_semantic_risk_asr/paper/manuscript_submission.tex",
-    "80_semantic_risk_asr/paper/references.bib",
-    "docs/artifact_privacy_classes.tsv",
-    "docs/hostile_reviewer_checklist.md"
+    "70_experiments/runs/postdoc_evidence_chain_2026_05_25/artifact_manifest.tsv",
+    "80_semantic_risk_asr/paper/artifact_manifest.tsv"
   ]
 }
