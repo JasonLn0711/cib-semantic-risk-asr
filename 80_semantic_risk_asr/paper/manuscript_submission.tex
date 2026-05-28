@@ -75,6 +75,10 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
 \usepackage{longtable,booktabs,array}
+\usepackage{tabularx}
+\usepackage{ragged2e}
+\usepackage{makecell}
+\usepackage{seqsplit}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -84,6 +88,11 @@
 % Allow footnotes in longtable head/foot
 \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
 \makesavenoteenv{longtable}
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.12}
+\newcolumntype{L}[1]{>{\hsize=#1\hsize\linewidth=\hsize\RaggedRight\arraybackslash\hspace{0pt}}X}
+\newcolumntype{R}[1]{>{\hsize=#1\hsize\linewidth=\hsize\RaggedLeft\arraybackslash\hspace{0pt}}X}
+\AtBeginEnvironment{tabularx}{\scriptsize}
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
@@ -432,22 +441,19 @@ ensemble arbitration.
 
 The risk atom schema focuses on decision-critical spans:
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\begin{tabularx}{\linewidth}{@{}
+  L{0.9999}
+  L{0.9999}
+  L{0.9999}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
+\begin{minipage}[b]{\linewidth}\RaggedRight
 Risk atom
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Decision role
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Example effect
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 Negation & reverses event state & transfer vs no transfer \\
 Amount & changes severity & 30,000 vs 300,000 \\
 Action & changes case stage & asking vs reporting vs transferring \\
@@ -459,7 +465,8 @@ Uncertainty & changes confidence and safe action & sure, maybe, not
 sure \\
 Scam pattern & changes case type & investment, fake police, installment
 cancellation \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabularx}
 
 \hypertarget{counterfactual-variant-contract}{%
 \subsection{Counterfactual Variant
@@ -538,25 +545,22 @@ N-Ladder}\label{evaluation-units-and-n-ladder}}
 The manuscript separates evidence units explicitly so that model
 assessments are not mistaken for independent audio rows.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2143}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2857}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2857}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2143}}@{}}
+\begin{tabularx}{\linewidth}{@{}
+  L{0.8572}
+  R{1.1428}
+  R{1.1428}
+  L{0.8572}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
+\begin{minipage}[b]{\linewidth}\RaggedRight
 Layer
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Unit
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 N
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Role
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 Test split & audio rows & 258 & ASR model comparison \\
 Selected high-stakes provenance & selected candidate rows / outputs &
 300 & row-selection and provenance \\
@@ -564,7 +568,8 @@ Human-reviewed audit rows & audio rows & 30 & decision-critical review
 unit \\
 Human-reviewed model assessments & model-row assessments & 90 &
 predictor and recovery evaluation \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabularx}
 
 Because the 90 model assessments are clustered within 30 audio rows,
 inferential uncertainty should be estimated with row-clustered bootstrap
@@ -674,55 +679,53 @@ selected-300 human-reviewed risk claim.
 Only models with completed comparable 258-row split evidence are
 included.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0909}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0909}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1212}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1212}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1212}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1212}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1212}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1212}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0909}}@{}}
+\begin{tabularx}{\linewidth}{@{}
+  L{2.4000}
+  L{1.2000}
+  R{0.4500}
+  R{0.7000}
+  R{0.8500}
+  R{0.7500}
+  R{0.7000}
+  R{0.7500}
+  L{1.2000}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
+\begin{minipage}[b]{\linewidth}\RaggedRight
 Run
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Model family
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Rows
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\texttt{cer\_zh\_micro}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\texttt{wer\_zh\_jieba\_micro}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
+\texttt{\seqsplit{cer\_zh\_micro}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
+\texttt{\seqsplit{wer\_zh\_jieba\_micro}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Unsafe downrouting
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 High-risk missed
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Locale violation rows
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Paper use
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\texttt{breeze\_asr25\_partial\_encoder\_legacy\_best\_test\_split} &
+\texttt{\seqsplit{breeze\_asr25\_partial\_encoder\_legacy\_best\_test\_split}} &
 Breeze-ASR-25 partial encoder & 258 & 15.04 & 21.53 & 7 & 4 & 0 &
 Scope-controlled split/model comparison \\
-\texttt{breeze\_asr25\_lora\_legacy\_best\_test\_split} & Breeze-ASR-25
+\texttt{\seqsplit{breeze\_asr25\_lora\_legacy\_best\_test\_split}} & Breeze-ASR-25
 LoRA & 258 & 18.23 & 25.59 & 10 & 7 & 0 & Scope-controlled split/model
 comparison \\
-\texttt{breeze\_asr25\_base\_test\_split} & Breeze-ASR-25 base & 258 &
+\texttt{\seqsplit{breeze\_asr25\_base\_test\_split}} & Breeze-ASR-25 base & 258 &
 22.72 & 30.39 & 34 & 30 & 0 & Scope-controlled split/model comparison \\
-\texttt{breeze\_asr26\_test\_split} & Breeze-ASR-26 & 258 & 24.27 &
+\texttt{\seqsplit{breeze\_asr26\_test\_split}} & Breeze-ASR-26 & 258 & 24.27 &
 32.29 & 27 & 22 & 0 & Optional dialect-aware comparator \\
-\texttt{whisper\_large\_v2\_test\_split} & Whisper large-v2 & 258 &
+\texttt{\seqsplit{whisper\_large\_v2\_test\_split}} & Whisper large-v2 & 258 &
 24.72 & 32.23 & 33 & 28 & 1 & Comparable ASR baseline \\
-\texttt{whisper\_small\_test\_split} & Whisper small & 258 & 34.86 &
+\texttt{\seqsplit{whisper\_small\_test\_split}} & Whisper small & 258 & 34.86 &
 43.44 & 76 & 70 & 4 & Comparable ASR baseline \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabularx}
 
 Evidence source:
 \texttt{70\_experiments/runs/janus\_258\_test\_split\_asr\_cds\_proxy/asr\_cds\_proxy\_comparison.tsv}.
@@ -746,34 +749,31 @@ mixing exploratory candidates with comparable ASR baselines.
 These models are bounded negative, feasibility, or runtime evidence.
 They do not enter the main ASR benchmark table.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1250}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1667}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1667}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1667}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1250}}@{}}
+\begin{tabularx}{\linewidth}{@{}
+  L{1.1000}
+  L{1.0000}
+  R{0.3500}
+  R{0.6000}
+  R{0.7500}
+  L{1.7000}
+  L{1.5000}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
+\begin{minipage}[b]{\linewidth}\RaggedRight
 Candidate
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Current gate
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Rows
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\texttt{cer\_zh\_micro}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\texttt{wer\_zh\_jieba\_micro}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
+\texttt{\seqsplit{cer\_zh\_micro}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
+\texttt{\seqsplit{wer\_zh\_jieba\_micro}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Locale/runtime result
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Decision
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 Whisper large-v3 & Fixed 15-row contract & 15 & 33.33 & 42.04 & 2
 locale-violation rows, 23 simplified chars & Do not promote to 258-row
 or selected-300 \\
@@ -792,7 +792,8 @@ cache/download plan \\
 Gemma 4 E2B/E4B & Local multimodal class probe & 0 & n/a & n/a & Local
 Transformers 4.57.6 has no required Gemma 4 multimodal/audio class &
 Build isolated prompted multimodal runtime before testing \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabularx}
 
 Evidence sources:
 \texttt{70\_experiments/runs/asr\_candidate\_current\_recheck\_2026\_05\_26/candidate\_current\_recheck\_summary.tsv}
@@ -820,46 +821,43 @@ assessments, 16 positive model assessments, clustered within 30 reviewed
 audio rows. Diagnostic thresholds are selected on the scoped audit set
 for aggregate comparison and are not frozen deployment thresholds.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0732}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0732}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0976}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0732}}@{}}
+\begin{tabularx}{\linewidth}{@{}
+  L{0.8000}
+  L{1.4000}
+  R{0.5500}
+  R{1.1000}
+  R{0.9500}
+  R{0.5500}
+  R{1.1000}
+  R{0.7000}
+  R{0.6000}
+  R{0.8000}
+  L{2.4500}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
+\begin{minipage}[b]{\linewidth}\RaggedRight
 Predictor
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Unit
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 AUC
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Row-clustered AUC 95\% CI
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Diagnostic threshold
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Best F1
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Row-clustered F1 95\% CI
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Precision
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Recall
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 False negative
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Paper use
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 WER & 90 model assessments / 30 rows & 0.6964 & 0.5699-0.8125 & 42.59 &
 0.4615 & 0.2857-0.6667 & 0.3913 & 0.5625 & 7 & Surface baseline \\
 CER & 90 model assessments / 30 rows & 0.7276 & 0.6084-0.8372 & 16.42 &
@@ -870,7 +868,8 @@ baseline \\
 CEIS max & 90 model assessments / 30 rows & 0.9117 & 0.8516-0.9615 & 5.0
 & 0.6275 & 0.4681-0.8148 & 0.4571 & 1.0000 & 0 & Proposed
 decision-stability metric \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabularx}
 
 Evidence source:
 \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_comparison.tsv}.
@@ -898,46 +897,43 @@ assessments as the predictor table.
 Evidence mode: human-reviewed selected-300, 30 reviewed rows and 90
 reviewed model assessments.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0714}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0714}}@{}}
+\begin{tabularx}{\linewidth}{@{}
+  L{1.5000}
+  R{0.6500}
+  R{0.7500}
+  R{0.7500}
+  R{0.6500}
+  R{0.7500}
+  R{1.1500}
+  R{0.8500}
+  R{1.2000}
+  R{0.9500}
+  L{1.8000}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
+\begin{minipage}[b]{\linewidth}\RaggedRight
 Policy
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Model assessments
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Unsafe downrouting
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 High-risk missed
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Critical miss
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Recovery budget
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Row-clustered budget 95\% CI
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Severe misses eliminated
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Row-clustered severe-miss 95\% CI
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Triggers per severe miss eliminated
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Scoped interpretation
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 No recovery & 90 & 29 & 6 & 1 & 0.0000 & 0.0000-0.0000 & 0 & 2-13
 remaining severe misses & n/a & Baseline decision risk \\
 Calibrated-confidence unavailable & 90 & 29 & 6 & 1 & 0.0000 &
@@ -951,7 +947,8 @@ severe-miss elimination at same budget in replay \\
 CEIS ensemble arbitration & 90 & 24 & 0 & 0 & 0.5222 & 0.4000-0.6556 & 7
 & 0-0 remaining severe misses & 6.7 & Adds abstention/interval behavior
 at higher budget \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabularx}
 
 Evidence sources:
 \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison.tsv}
@@ -998,65 +995,63 @@ manifest is generated by
 written to
 \texttt{80\_semantic\_risk\_asr/paper/artifact\_manifest.tsv}.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}@{}}
+\begin{tabularx}{\linewidth}{@{}
+  L{0.7000}
+  L{1.2000}
+  L{1.7000}
+  L{0.8000}
+  L{0.6000}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
+\begin{minipage}[b]{\linewidth}\RaggedRight
 Figure
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 File
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Caption
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Source
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Privacy boundary
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-F1. CDS-ASR pipeline & \texttt{figures/f1\_cds\_asr\_pipeline.svg} &
+F1. CDS-ASR pipeline & \texttt{\seqsplit{figures/f1\_cds\_asr\_pipeline.svg}} &
 CDS-ASR converts audio into ASR hypotheses and runtime signals, extracts
 risk atoms, generates plausible variants, scores SRES/CEIS, and applies
 constrained recovery or conservative action. & Method section & No
 transcript text or row content \\
-F2. Evidence boundary & \texttt{figures/f2\_evidence\_boundary.svg} &
+F2. Evidence boundary & \texttt{\seqsplit{figures/f2\_evidence\_boundary.svg}} &
 The manuscript separates 258-row split/model-comparison evidence,
 selected-300 provenance evidence, and selected-300 human-reviewed
 predictor/recovery evidence. & publishable evidence summary & Aggregate
 status only \\
-F3. Predictor AUC & \texttt{figures/f3\_predictor\_auc.svg} & CEIS has
+F3. Predictor AUC & \texttt{\seqsplit{figures/f3\_predictor\_auc.svg}} & CEIS has
 the highest human-reviewed decision-change AUC in the scoped
 selected-300 audit, while SRES remains strongest on best-threshold F1;
 Table 3 reports row-clustered uncertainty. &
-\texttt{human\_audit\_predictor\_comparison.tsv} & Aggregate predictor
+\texttt{\seqsplit{human\_audit\_predictor\_comparison.tsv}} & Aggregate predictor
 metrics \\
-F4. Recovery outcomes & \texttt{figures/f4\_recovery\_outcomes.svg} &
+F4. Recovery outcomes & \texttt{\seqsplit{figures/f4\_recovery\_outcomes.svg}} &
 SRES-triggered recovery and CEIS-triggered conservative action both
 eliminate high-risk missed and critical miss counts in aggregate replay
-at the same 0.3889 budget. & \texttt{policy\_comparison.tsv} & Aggregate
+at the same 0.3889 budget. & \texttt{\seqsplit{policy\_comparison.tsv}} & Aggregate
 policy counts \\
-F5. Model lane state & \texttt{figures/f5\_model\_lane\_state.svg} &
+F5. Model lane state & \texttt{\seqsplit{figures/f5\_model\_lane\_state.svg}} &
 Main comparable split evidence, locale-gated candidates, and
 runtime-blocked probes remain separate until promotion gates are
 satisfied. & main/candidate aggregate summaries & Aggregate lane
 state \\
-F6. N-ladder & \texttt{figures/f6\_n\_ladder.svg} & The evidence chain
+F6. N-ladder & \texttt{\seqsplit{figures/f6\_n\_ladder.svg}} & The evidence chain
 separates 258 rows, selected-300 provenance, 30 reviewed rows, and 90
 clustered model assessments. & method evidence units & Aggregate counts
 only \\
 F7. Budget-risk frontier &
-\texttt{figures/f7\_budget\_risk\_frontier.svg} & Fixed-budget policy
+\texttt{\seqsplit{figures/f7\_budget\_risk\_frontier.svg}} & Fixed-budget policy
 replay shows the trigger-budget tradeoff needed to eliminate severe
 missed outcomes under scoped labels. &
-\texttt{fixed\_budget\_recovery\_frontier.tsv} & Aggregate policy
+\texttt{\seqsplit{fixed\_budget\_recovery\_frontier.tsv}} & Aggregate policy
 counts \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabularx}
 
 Submission-package PDF exports are generated with the same basename
 under \texttt{80\_semantic\_risk\_asr/paper/figures/}.
@@ -1112,49 +1107,46 @@ ASR run.
 \hypertarget{claim-registry}{%
 \section{Claim Registry}\label{claim-registry}}
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}@{}}
+\begin{tabularx}{\linewidth}{@{}
+  L{1.2000}
+  L{1.0000}
+  L{1.1000}
+  L{0.8000}
+  L{0.9000}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
+\begin{minipage}[b]{\linewidth}\RaggedRight
 Claim
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Scope
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Evidence artifact
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Statistic
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedRight
 Limitation / defense
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 CEIS has the strongest AUC among reported predictors & 90 clustered
 model assessments from 30 reviewed rows &
-\texttt{human\_audit\_predictor\_comparison.tsv} & AUC 0.9117 &
+\texttt{\seqsplit{human\_audit\_predictor\_comparison.tsv}} & AUC 0.9117 &
 Row-clustered CI needed; selected high-stakes audit surface \\
 CEIS reaches a zero-FN operating point & scoped selected-300 diagnostic
-threshold & \texttt{human\_audit\_predictor\_comparison.tsv} & FN 0,
+threshold & \texttt{\seqsplit{human\_audit\_predictor\_comparison.tsv}} & FN 0,
 recall 1.0000 & Retrospective diagnostic threshold, not frozen
 deployment threshold \\
 SRES and CEIS conservative policies eliminate severe misses in replay &
 aggregate policy replay over reviewed assessments &
-\texttt{policy\_comparison.tsv} & high-risk missed 0, critical miss 0 &
+\texttt{\seqsplit{policy\_comparison.tsv}} & high-risk missed 0, critical miss 0 &
 Replay evidence, not live causal deployment; policies tie at 0.3889
 budget \\
 Partial encoder is the strongest current ASR hypothesis generator &
 258-row split/model-comparison layer &
-\texttt{asr\_cds\_proxy\_comparison.tsv} & \texttt{cer\_zh\_micro}
+\texttt{\seqsplit{asr\_cds\_proxy\_comparison.tsv}} & \texttt{\seqsplit{cer\_zh\_micro}}
 15.04, unsafe downrouting 7, high-risk missed 4 & Split-level
 model-comparison context only \\
 Selected-300 is a high-stakes audit surface & enriched selection
-provenance & \texttt{human\_audit\_selection\_summary.json},
-\texttt{selection\_strata.tsv} & 300 candidates, 30 reviewed rows, 90
+provenance & \texttt{\seqsplit{human\_audit\_selection\_summary.json}},
+\texttt{\seqsplit{selection\_strata.tsv}} & 300 candidates, 30 reviewed rows, 90
 assessments & Not prevalence-preserving; selection enrichment
 disclosed \\
 Aggregate-only release supports reviewer-visible auditability & release
@@ -1162,7 +1154,8 @@ and operation-record layer & validation summaries, evidence matrices,
 operation records, figure scripts & gate state: roadmap complete,
 publishable ready, consistency 26/26 & No public row-level transcript
 reproducibility \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabularx}
 
 \hypertarget{ethics-privacy-and-intended-use}{%
 \section{Ethics, Privacy, And Intended
@@ -1376,43 +1369,40 @@ applying ranked conservative triggers at requested trigger budgets.
 Requested 40\% budget maps to 35 eligible triggers, so the observed
 budget is 0.3889.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0769}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1026}}@{}}
+\begin{tabularx}{\linewidth}{@{}
+  L{0.7500}
+  R{0.9500}
+  R{0.6000}
+  R{0.8500}
+  R{0.8500}
+  R{0.8000}
+  R{0.7000}
+  R{0.7500}
+  R{1.0500}
+  R{2.7000}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
+\begin{minipage}[b]{\linewidth}\RaggedRight
 Score metric
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Requested budget
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Triggered
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Observed budget
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Unsafe downrouting
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 High-risk missed
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Critical miss
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Severe missed
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Severe misses eliminated
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Triggers per severe miss eliminated
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 SRES total & 0.1000 & 9 & 0.1000 & 28 & 4 & 0 & 4 & 3 & 3.0 \\
 SRES total & 0.2000 & 18 & 0.2000 & 26 & 2 & 0 & 2 & 5 & 3.6 \\
 SRES total & 0.3000 & 27 & 0.3000 & 26 & 2 & 0 & 2 & 5 & 5.4 \\
@@ -1421,7 +1411,8 @@ CEIS & 0.1000 & 9 & 0.1000 & 24 & 0 & 0 & 0 & 7 & 1.2857 \\
 CEIS & 0.2000 & 18 & 0.2000 & 24 & 0 & 0 & 0 & 7 & 2.5714 \\
 CEIS & 0.3000 & 27 & 0.3000 & 24 & 0 & 0 & 0 & 7 & 3.8571 \\
 CEIS & 0.4000 & 35 & 0.3889 & 24 & 0 & 0 & 0 & 7 & 5.0 \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabularx}
 
 Evidence source:
 \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/fixed\_budget\_recovery\_frontier.tsv}.
