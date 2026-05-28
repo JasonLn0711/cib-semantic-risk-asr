@@ -66,68 +66,73 @@ semantic metrics, and confidence-aware correction.
 
 ## Introduction
 
-Contact-center speech is becoming an operational input rather than a passive
-record. Commercial analytics systems already turn voice conversations and
-transcripts into categories, summaries, alerts, compliance cues, and routing
-signals [@aws_contact_lens_analytics_2026; @aws_connect_contact_lens_2026].
-This workflow makes ASR output part of operational evidence: a transcript can
-support categorization, summarization, compliance review, alerts, and routing
-before a human ever reads the full call record.
+Speech is no longer only a record of what happened in a call. In modern
+contact centers, speech is increasingly converted into operational signals:
+categories, summaries, compliance cues, real-time alerts, routing decisions,
+and escalation support. Commercial contact-center analytics already describe
+voice conversations and transcripts as inputs for automated categorization,
+summarization, compliance monitoring, and real-time assistance
+[@aws_contact_lens_analytics_2026; @aws_connect_contact_lens_2026]. This turns
+ASR output into a decision substrate. A transcript can influence how a case is
+categorized, which queue receives it, whether an alert is raised, and whether a
+human reviewer ever sees the full call context.
 
-Anti-fraud hotlines provide a concrete high-stakes setting. Taiwan's National
-Police Agency describes the 165 hotline as a public anti-fraud channel where
-staff record incident details and provide information to victims
-[@npa_165_antifraud_hotline_2024]. The scale of cyber-enabled fraud makes this
-triage problem consequential: the FBI's 2025 Internet Crime Report context
-reported more than one million IC3 complaints and large cyber-enabled fraud
-losses [@fbi_crypto_ai_scams_2026; @fbi_ic3_2025_report_2026]. In this setting,
-safer speech-driven triage is not only a transcription problem; it is a
-decision problem. The risk is concentrated in small spoken details: whether the
-caller already transferred money, whether the amount was 30,000 or 300,000,
-who initiated contact, when the event happened, and whether the caller is
-certain. These are decision atoms. When ASR changes a decision atom, the
-downstream action can change even if most words remain similar.
+Anti-fraud calls make this speech-to-decision pipeline concrete. Taiwan's
+National Police Agency describes the 165 hotline as a public anti-fraud channel
+where staff record incident details and provide information to victims
+[@npa_165_antifraud_hotline_2024]. The operational scale is large: the FBI's
+2025 Internet Crime Report context reported more than one million IC3
+complaints and large cyber-enabled fraud losses
+[@fbi_crypto_ai_scams_2026; @fbi_ic3_2025_report_2026]. In this setting, the
+important spoken facts are often small: whether money was already transferred,
+whether the amount was 30,000 or 300,000, who initiated contact, when the event
+happened, whether the caller is certain, and whether the scenario matches a
+known scam pattern. These are not merely words. They are decision atoms.
 
-In this paper, "dangerous" is operationalized as ASR-induced decision change
-that can produce unsafe downrouting, high-risk missed escalation, or critical
-miss under the declared anti-fraud triage policy. This definition makes the
-title a measurable evidence claim rather than a general safety label.
+This paper starts from the following practical risk: a transcript can be
+linguistically close and still operationally unsafe. A single ASR ambiguity
+around negation, amount, actor, action, time, intent, or scam pattern can move
+a case from routine review to priority review, or from escalation to unsafe
+downrouting. In this paper, "dangerous" is operationalized as ASR-induced
+decision change that can produce unsafe downrouting, high-risk missed
+escalation, or critical miss under the declared anti-fraud triage policy. The
+title is therefore a measurable claim about decision consequences, not a
+general safety slogan.
 
-Current ASR evaluation and repair methods provide strong foundations for this
-setting. WER and CER give reproducible transcript-centered baselines. Semantic
-ASR metrics make evaluation more task-aware: Kim et al. show that WER can fail
-to reflect downstream natural-language-understanding behavior, and Rugayan et
-al. evaluate Aligned Semantic Distance as a semantic metric with stronger
-alignment to human judgments and downstream tasks
-[@kim2021semanticdistance; @rugayan2023asd].
-
-LLM-based and confidence-aware correction methods strengthen the transcript
-repair layer. Naderi et al. study post-hoc ASR correction with LLMs and use
+Existing ASR evaluation and repair methods provide the foundation for this
+problem. WER and CER remain necessary because they make transcript accuracy
+auditable and comparable. Semantic ASR metrics make the evidence more
+task-aware: Kim et al. motivate Semantic Distance by showing that WER can fail
+to reflect downstream spoken-language-understanding behavior, and Rugayan et
+al. evaluate Aligned Semantic Distance as a semantic metric that better aligns
+with human judgments and downstream tasks
+[@kim2021semanticdistance; @rugayan2023asd]. Transcript repair also advances
+the pipeline. Naderi et al. study post-hoc ASR correction with LLMs and use
 confidence-based filtering to reduce harmful changes to likely accurate
-transcripts [@naderi2024llmconfidence]. Selective prediction and reject-option
-work also show how machine systems can trade coverage for lower error in
-settings where acting on uncertain predictions is costly
+transcripts [@naderi2024llmconfidence]. Selective prediction, reject-option,
+and conformal prediction work further show how systems can trade coverage,
+abstention, and uncertainty when acting on uncertain predictions is costly
 [@chow1970reject; @geifman2017selective; @geifman2019selectivenet;
-@angelopoulos2021conformal]. These methods make the evidence chain more
-informative, and they motivate the next question for high-stakes speech
-workflows: whether plausible ASR alternatives preserve the downstream decision.
+@angelopoulos2021conformal].
 
-This decision-stability gap appears when a low edit-distance transcript still
-leaves uncertainty around negation, amount, action, actor, time, intent, or
-scam-pattern atoms. A transcript can remain close under WER/CER and still
-reverse whether a case should remain in routine review, move to priority
-review, or trigger critical escalation. The central research question is
-therefore decision-centered: would a plausible ASR alternative change the
-downstream high-stakes decision?
+These methods make speech systems more measurable, semantic, correctable, and
+uncertainty-aware. The remaining gap is the decision-stability question. A
+semantic metric can report that two transcripts are close or far. A correction
+model can make a transcript more fluent or more likely. A confidence filter can
+avoid some risky changes. Yet a high-stakes workflow also needs to know whether
+plausible ASR alternatives would change the downstream action. In anti-fraud
+triage, the actionable question is not only "How accurate is the transcript?"
+but also: "Would another plausible transcript lead to a different safe action?"
 
 We propose Counterfactual Decision-Stability ASR (CDS-ASR) to answer that
-question directly. The framework extracts risk atoms, generates acoustically
-and semantically plausible transcript alternatives, measures decision
-instability with CEIS, and applies constrained recovery or conservative machine
-action for high-risk spans. WER, CER, semantic metrics, SRES, confidence, and
-correction baselines remain comparison layers; the central contribution is the
-decision-stability test that connects transcript uncertainty back to the
-opening real-world decision problem.
+question directly. CDS-ASR extracts decision-critical risk atoms, generates
+acoustically and semantically plausible transcript alternatives, measures
+decision instability with Counterfactual Escalation Instability Score (CEIS),
+and evaluates constrained recovery or conservative machine action for high-risk
+spans. WER, CER, semantic metrics, SRES, confidence, and correction baselines
+remain comparison layers. The central contribution is the new evaluation view:
+ASR for high-stakes speech-driven systems should be judged by whether the
+downstream decision remains stable under plausible transcript alternatives.
 
 Verified source anchors for this introduction are maintained in
 `citation_seed.md` and `references.bib`, with access dates refreshed on
