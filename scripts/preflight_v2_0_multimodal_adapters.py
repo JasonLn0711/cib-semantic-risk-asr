@@ -43,7 +43,7 @@ ADAPTERS = [
         "Qwen2.5-Omni",
         "Qwen/Qwen2.5-Omni-7B",
         "models--Qwen--Qwen2.5-Omni-7B",
-        "existing_repo_venv_qwen_omni_adapter",
+        "ignored_isolated_qwen_omni_runtime_lane",
         ("torch", "transformers", "accelerate", "huggingface_hub", "soundfile", "qwen_omni_utils"),
         "metadata_clean_manifest_ready",
     ),
@@ -52,7 +52,7 @@ ADAPTERS = [
         "Step-Audio 2 mini",
         "stepfun-ai/Step-Audio-2-mini",
         "models--stepfun-ai--Step-Audio-2-mini",
-        "existing_repo_venv_step_audio_adapter",
+        "ignored_isolated_step_audio_runtime_lane",
         ("torch", "transformers", "accelerate", "huggingface_hub", "soundfile"),
         "metadata_clean_manifest_ready",
     ),
@@ -61,7 +61,7 @@ ADAPTERS = [
         "MOSS-Audio",
         "OpenMOSS-Team/MOSS-Audio-4B-Instruct",
         "models--OpenMOSS-Team--MOSS-Audio-4B-Instruct",
-        "existing_repo_venv_moss_audio_adapter",
+        "ignored_isolated_moss_audio_runtime_lane",
         ("torch", "transformers", "accelerate", "huggingface_hub", "soundfile"),
         "metadata_clean_manifest_ready",
     ),
@@ -70,7 +70,7 @@ ADAPTERS = [
         "MiniCPM-o",
         "openbmb/MiniCPM-o-4_5",
         "models--openbmb--MiniCPM-o-4_5",
-        "existing_repo_venv_minicpm_o_adapter",
+        "ignored_isolated_minicpm_o_runtime_lane",
         ("torch", "transformers", "accelerate", "huggingface_hub", "soundfile"),
         "metadata_clean_manifest_ready",
     ),
@@ -79,7 +79,7 @@ ADAPTERS = [
         "Kimi-Audio",
         "moonshotai/Kimi-Audio-7B-Instruct",
         "models--moonshotai--Kimi-Audio-7B-Instruct",
-        "existing_repo_venv_kimi_audio_adapter",
+        "ignored_isolated_kimi_audio_runtime_lane",
         ("torch", "transformers", "accelerate", "huggingface_hub", "soundfile"),
         "size_boundary_decision_recorded_manifest_ready",
     ),
@@ -88,7 +88,7 @@ ADAPTERS = [
         "MOSS-Audio",
         "OpenMOSS-Team/MOSS-Audio-8B-Instruct",
         "models--OpenMOSS-Team--MOSS-Audio-8B-Instruct",
-        "existing_repo_venv_moss_audio_adapter",
+        "ignored_isolated_moss_audio_runtime_lane",
         ("torch", "transformers", "accelerate", "huggingface_hub", "soundfile"),
         "after_moss_4b_smoke_is_interpretable",
     ),
@@ -160,6 +160,20 @@ def write_tsv(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None
 
 
 def write_readme(out_dir: Path, summary: dict[str, Any]) -> None:
+    if summary["models_ready_for_smoke"] > 0:
+        next_step = (
+            "Run one-row transcript-only smoke for ready models, starting with "
+            "Qwen2.5-Omni-7B, and prepare isolated model-cache/download lanes for "
+            "the remaining planned model order. Keep local manifest values, "
+            "hypotheses, logs, and model caches outside git."
+        )
+    else:
+        next_step = (
+            "Prepare isolated model-cache/download lanes for the planned model "
+            "order, then run one-row transcript-only smoke starting with "
+            "Qwen2.5-Omni-7B. Keep local manifest values, hypotheses, logs, and "
+            "model caches outside git."
+        )
     text = f"""# v2.0 Batch 1 Adapter Preflight
 
 Date: 2026-05-31
@@ -188,9 +202,7 @@ gpu_present={summary['gpu_present']}
 
 ## Next Step
 
-Prepare isolated model-cache/download lanes for the planned model order, then
-run one-row transcript-only smoke starting with Qwen2.5-Omni-7B. Keep local
-manifest values, hypotheses, logs, and model caches outside git.
+{next_step}
 """
     (out_dir / "README.md").write_text(text, encoding="utf-8")
 

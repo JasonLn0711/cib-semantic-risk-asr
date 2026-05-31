@@ -16,8 +16,8 @@ download model weights and does not run model inference.
 
 ```text
 models_checked=6
-models_ready_for_smoke=0
-models_blocked_by_missing_runtime_modules=1
+models_ready_for_smoke=1
+models_blocked_by_missing_runtime_modules=0
 models_blocked_by_missing_cache=4
 models_deferred_by_gate_order=1
 manifest_exists=True
@@ -26,6 +26,4 @@ gpu_present=True
 
 ## Next Step
 
-Prepare isolated model-cache/download lanes for the planned model order, then
-run one-row transcript-only smoke starting with Qwen2.5-Omni-7B. Keep local
-manifest values, hypotheses, logs, and model caches outside git.
+Run one-row transcript-only smoke for ready models, starting with Qwen2.5-Omni-7B, and prepare isolated model-cache/download lanes for the remaining planned model order. Keep local manifest values, hypotheses, logs, and model caches outside git.

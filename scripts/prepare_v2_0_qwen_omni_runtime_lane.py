@@ -77,12 +77,28 @@ def cache_probe(cache_root: Path) -> dict[str, Any]:
 
 
 def write_readme(out_dir: Path, summary: dict[str, Any]) -> None:
+    if summary["status"] == "ready_for_qwen_one_row_smoke":
+        status_text = "runtime/cache lane ready; no model inference was run by this probe"
+        next_step = (
+            "Run Qwen one-row transcript-only smoke with the local-only manifest. "
+            "Keep model output and transcript-bearing logs in the ignored runtime lane."
+        )
+    else:
+        status_text = (
+            "runtime/cache lane blockers recorded; no package install, weight "
+            "download, or model inference was run by this probe"
+        )
+        next_step = (
+            "Create an ignored isolated Qwen runtime/cache lane, install the missing "
+            "runtime module there, download or attach the Qwen2.5-Omni-7B cache in "
+            "that lane, then rerun adapter preflight before one-row transcript-only "
+            "inference."
+        )
     text = f"""# Qwen2.5-Omni Runtime Lane Preparation
 
 Date: 2026-05-31
 
-Status: runtime/cache lane blockers recorded; no package install, weight
-download, or model inference was run
+Status: {status_text}
 
 本紀錄只保存 Qwen runtime lane aggregate status，不保存任何逐字稿或私有音訊內容。
 
@@ -104,9 +120,7 @@ runtime_lane_status={summary['status']}
 
 ## Next Step
 
-Create an ignored isolated Qwen runtime/cache lane, install the missing
-runtime module there, download or attach the Qwen2.5-Omni-7B cache in that
-lane, then rerun adapter preflight before one-row transcript-only inference.
+{next_step}
 """
     (out_dir / "README.md").write_text(text, encoding="utf-8")
 
@@ -144,6 +158,11 @@ def main() -> int:
         blockers.append("missing_qwen_model_cache")
 
     status = "ready_for_qwen_one_row_smoke" if not blockers else "blocked_before_qwen_one_row_smoke"
+    next_gate = (
+        "run_qwen_one_row_transcript_only_smoke"
+        if status == "ready_for_qwen_one_row_smoke"
+        else "create_ignored_qwen_runtime_cache_lane_then_rerun_adapter_preflight"
+    )
     summary = {
         "run_id": RUN_ID,
         "generated_at_unix": int(time.time()),
@@ -166,7 +185,7 @@ def main() -> int:
         "model_cache_present": cache_present,
         "model_cache_snapshot_count": cache["snapshot_count"],
         "blockers": blockers,
-        "next_gate": "create_ignored_qwen_runtime_cache_lane_then_rerun_adapter_preflight",
+        "next_gate": next_gate,
         "privacy": {
             "raw_audio_tracked": False,
             "row_ids_tracked": False,

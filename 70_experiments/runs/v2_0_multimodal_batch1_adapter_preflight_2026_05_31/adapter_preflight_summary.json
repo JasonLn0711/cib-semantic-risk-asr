@@ -1,6 +1,6 @@
 {
   "run_id": "v2_0_multimodal_batch1_adapter_preflight_2026_05_31",
-  "generated_at_unix": 1780241470,
+  "generated_at_unix": 1780244327,
   "gate": "Gate B adapter preflight",
   "status": "adapter_preflight_complete_no_inference",
   "python_version": "3.12.3",
@@ -10,8 +10,8 @@
   "manifest_exists": true,
   "manifest_rows": 1,
   "models_checked": 6,
-  "models_ready_for_smoke": 0,
-  "models_blocked_by_missing_runtime_modules": 1,
+  "models_ready_for_smoke": 1,
+  "models_blocked_by_missing_runtime_modules": 0,
   "models_blocked_by_missing_cache": 4,
   "models_deferred_by_gate_order": 1,
   "weights_downloaded_by_this_run": false,

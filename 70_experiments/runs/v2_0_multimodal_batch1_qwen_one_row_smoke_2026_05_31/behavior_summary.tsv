@@ -1,0 +1,2 @@
+model_family	model_id	execution_order	planned_gate	prompt_policy	smoke_status	output_rows	valid_text_outputs	raw_transcript_like_outputs	summary_or_answer_outputs	translation_outputs	tts_only_outputs	invented_timestamp_outputs	invented_speaker_label_outputs	failure_mode	promotion_decision	output_chars
+Qwen2.5-Omni	Qwen/Qwen2.5-Omni-7B	1	one_row_transcript_only_smoke	text_only_no_tts_no_timestamp_no_speaker_label	completed	1	1	1	0	0	0	0	0	none	promote_to_sentinel	70

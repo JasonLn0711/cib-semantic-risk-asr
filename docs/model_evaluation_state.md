@@ -127,7 +127,7 @@ Current Gate 0 decisions:
 | Family | Model / variant | Status | Next gate |
 | --- | --- | --- | --- |
 | Kimi-Audio | `moonshotai/Kimi-Audio-7B-Instruct` | `metadata_pending_size_boundary` | explicit size-boundary decision before runtime smoke |
-| Qwen2.5-Omni | `Qwen/Qwen2.5-Omni-7B` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
+| Qwen2.5-Omni | `Qwen/Qwen2.5-Omni-7B` | `one_row_transcript_smoke_passed` | sentinel controls |
 | Step-Audio 2 mini | `stepfun-ai/Step-Audio-2-mini` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
 | MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-4B-Instruct` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
 | MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-8B-Instruct` | `runtime_ready_after_4b_smoke` | after 4B environment and prompt contract are interpretable |
@@ -171,37 +171,39 @@ transcript-only adapters. The local manifest remains ignored and is not tracked.
 
 Gate B adapter preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/`.
-It used the existing repo `.venv` without upgrading it, found the RTX 5080 and
-local one-row manifest, and did not download model weights or run inference.
-Current status: `models_ready_for_smoke=0`,
-`models_blocked_by_missing_runtime_modules=1`,
+It now records the ignored isolated runtime-lane state after Qwen setup, found
+the RTX 5080 and local one-row manifest, and did not run inference during the
+preflight itself. Current status: `models_ready_for_smoke=1`,
+`models_blocked_by_missing_runtime_modules=0`,
 `models_blocked_by_missing_cache=4`, and
-`models_deferred_by_gate_order=1`. The immediate next action is isolated
-runtime/cache preparation, starting with Qwen2.5-Omni.
+`models_deferred_by_gate_order=1`.
 
 The Qwen2.5-Omni runtime/cache lane preparation is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_qwen_runtime_lane_2026_05_31/`.
-It confirms no repo-wide `.venv` modification, no package install, no weight
-download, and no inference. Current blockers are
-`qwen_omni_utils_import_blocked`, `missing_torchvision`, and
-`missing_qwen_model_cache`.
+It confirms no repo-wide `.venv` modification and no remaining Qwen runtime
+blockers. Qwen one-row transcript-only smoke is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_qwen_one_row_smoke_2026_05_31/`.
+The aggregate result is `valid_text_outputs=1`, `raw_transcript_like_outputs=1`,
+and `promotion_decision=promote_to_sentinel`; the transcript-bearing output
+remains local-only in the ignored runtime lane.
 
 Post-Gate0 completion path:
 
-1. prepare isolated runtime/cache lanes for the planned adapter order；
-2. run one-row transcript-only smoke for Qwen2.5-Omni, Step-Audio-2-mini,
-   MOSS-Audio-4B, MiniCPM-o 4.5, Kimi with size-boundary wording, and
-   MOSS-Audio-8B after MOSS 4B；
-3. prepare local-only manifests for sentinel controls, fixed
+1. run Qwen sentinel controls；
+2. prepare isolated runtime/cache lanes for Step-Audio-2-mini, MOSS-Audio-4B,
+   MiniCPM-o 4.5, Kimi with size-boundary wording, and MOSS-Audio-8B after
+   MOSS 4B；
+3. run one-row transcript-only smoke for the remaining planned models；
+4. prepare local-only manifests for fixed
    15-row, human-reviewed 30-row, promoted 258-row, and selected-300；
-4. run sentinel negative controls before any scored rows；
-5. promote only clean candidates to fixed 15-row transcript scoring, Taiwan
+5. run sentinel negative controls before any scored rows；
+6. promote only clean candidates to fixed 15-row transcript scoring, Taiwan
    utility/subgroup audit, and human-reviewed 30-row CDS evidence；
-6. refresh ASR controls for calibration, with Qwen3-ASR and Whisper-style
+7. refresh ASR controls for calibration, with Qwen3-ASR and Whisper-style
    baselines as the main Mandarin comparison anchors；
-7. escalate to 258-row and selected-300 only for scientific winners with clean
+8. escalate to 258-row and selected-300 only for scientific winners with clean
    runtime, locale, privacy, and license evidence；
-8. keep voice-interaction and long-audio/reasoning lanes separate until they
+9. keep voice-interaction and long-audio/reasoning lanes separate until they
    pass the transcript-only adapter.
 
 ## Promotion Requirements
