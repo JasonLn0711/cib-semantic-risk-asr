@@ -54,9 +54,9 @@ Post-Gate0 evidence now includes:
 The full end-to-end completion plan and reusable execution prompt are recorded
 in `docs/v2_0_multimodal_batch1_full_completion_plan.md`.
 
-The manifest preflight currently records that no local-only manifests are
-present; the immediate next action is to create or attach
-`one_row_smoke_manifest.local.tsv` without tracking it.
+The manifest preflight now records that the local-only one-row smoke manifest is
+present and ignored; the immediate next action is to run the real transcript-only
+runtime adapters.
 
 ## Post-Gate0 Completion Roadmap
 

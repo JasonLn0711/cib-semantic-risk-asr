@@ -1,16 +1,16 @@
 {
-  "version": "v2.5.250",
+  "version": "v2.5.251",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 250
+    "patch": 251
   },
-  "updated_at": "2026-05-31T23:22:02+08:00",
+  "updated_at": "2026-05-31T23:26:46+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "4fcf667",
+  "base_commit": "23ddcfa",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
@@ -22,9 +22,6 @@
     "70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/manifest_preflight_summary.tsv",
     "docs/model_evaluation_state.md",
     "docs/v2_0_multimodal_batch1_execution_runbook.md",
-    "docs/v2_0_multimodal_batch1_full_completion_plan.md",
-    "scripts/prepare_v2_0_multimodal_manifest_preflight.py",
-    "scripts/run_v2_0_multimodal_one_row_smoke.py",
-    "scripts/validate_v2_0_multimodal_manifest_preflight.py"
+    "docs/v2_0_multimodal_batch1_full_completion_plan.md"
   ]
 }

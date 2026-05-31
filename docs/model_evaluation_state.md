@@ -165,9 +165,9 @@ and Codex execution prompt is recorded in
 
 Gate A manifest preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/`.
-It found `0` local manifest files and sets the immediate next action to create
-or attach `one_row_smoke_manifest.local.tsv` locally before any real model
-inference.
+It now finds the local-only one-row manifest, records `1/6` expected local
+manifests present, and sets the immediate next action to run real one-row
+transcript-only adapters. The local manifest remains ignored and is not tracked.
 
 Post-Gate0 completion path:
 

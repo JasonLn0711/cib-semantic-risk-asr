@@ -2,9 +2,9 @@
 
 Date: 2026-05-31
 
-Status: full completion plan; Gate 0, Kimi size-boundary decision, and runtime
-smoke preflight are complete; Gate A manifest preflight is recorded and waiting
-for local-only one-row manifest; no model inference has been run yet
+Status: full completion plan; Gate 0, Kimi size-boundary decision, runtime
+smoke preflight, and Gate A one-row manifest preflight are complete; no model
+inference has been run yet
 
 本文件只記錄 aggregate planning、gate、artifact、validator、privacy boundary
 與 Codex execution prompt，不記錄任何逐字稿、row ID、音訊內容或模型輸出。
@@ -46,8 +46,8 @@ scripts/validate_v2_0_multimodal_runtime_smoke.py
 Current active gate:
 
 ```text
-Create or attach `one_row_smoke_manifest.local.tsv`, then run real model-family
-transcript-only runtime adapters.
+Run real model-family transcript-only runtime adapters with the local-only
+`one_row_smoke_manifest.local.tsv`.
 ```
 
 No model inference has been run yet for the v2.0 Batch 1 multimodal lane.
@@ -115,8 +115,9 @@ Purpose: prepare inputs without leaking protected content.
 
 Current status: aggregate preflight recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/`.
-The preflight found `0` local manifest files and marks the immediate next gate
-as `create_or_attach_one_row_smoke_manifest_local_tsv`.
+The preflight now finds `1` local manifest file, confirms the one-row manifest
+minimum is met, and marks the immediate next gate as
+`run_real_one_row_transcript_only_smoke_adapters`.
 
 Required local-only files:
 
@@ -156,11 +157,11 @@ Promotion rule:
 - local manifests exist, are ignored by git, and tracked summaries contain no
   protected row-level fields。
 
-Current blocker for real inference:
+Current Gate A result:
 
-- `one_row_smoke_manifest.local.tsv` is not present yet. This is not a repo
-  failure; it is the expected privacy-preserving boundary before any model
-  inference.
+- `one_row_smoke_manifest.local.tsv` is present locally and ignored by git；
+- the tracked preflight record stores only aggregate row/field counts and does
+  not store manifest field names or row-level values。
 
 ## Gate B: Runtime Adapter Implementation
 
@@ -666,8 +667,8 @@ Execution sequence:
 1. Inspect git status, runbook, full completion plan, model state, registry, and
    existing run folders.
 2. Confirm local-only manifests are ignored by git.
-3. Create or attach one_row_smoke_manifest.local.tsv without tracking it. The
-   current manifest preflight reports this as the immediate missing requirement.
+3. Confirm one_row_smoke_manifest.local.tsv remains ignored and use it for the
+   one-row smoke. The current manifest preflight reports this gate as ready.
 4. Implement or attach model-family adapters for Qwen2.5-Omni, Step-Audio-2-mini,
    MOSS-Audio-4B, MiniCPM-o 4.5, Kimi with size-boundary wording, and MOSS 8B
    after MOSS 4B.

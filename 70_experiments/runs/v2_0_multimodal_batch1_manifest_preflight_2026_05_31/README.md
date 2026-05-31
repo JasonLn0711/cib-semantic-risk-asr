@@ -24,9 +24,9 @@ reviewer notes, or local file paths.
 
 ```text
 manifest_specs=6
-manifest_files_present=0
-missing_required_next=True
-next_gate=create_or_attach_one_row_smoke_manifest_local_tsv
+manifest_files_present=1
+missing_required_next=False
+next_gate=run_real_one_row_transcript_only_smoke_adapters
 ```
 
 ## Next Step

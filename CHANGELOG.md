@@ -5,6 +5,22 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.251 - 2026-05-31T23:26:46+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `23ddcfa`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/README.md`
+  - `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/manifest_preflight_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/manifest_preflight_summary.tsv`
+  - `docs/model_evaluation_state.md`
+  - `docs/v2_0_multimodal_batch1_execution_runbook.md`
+  - `docs/v2_0_multimodal_batch1_full_completion_plan.md`
+
 ## v2.5.250 - 2026-05-31T23:22:02+08:00
 
 - Bump: `patch`

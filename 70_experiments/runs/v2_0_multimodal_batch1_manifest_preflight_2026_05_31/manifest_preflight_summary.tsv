@@ -1,5 +1,5 @@
 manifest_id	gate	default_local_path_class	exists	row_count	field_count	field_names_tracked	minimum_rows	required_before	gate_status
-one_row_smoke	Gate C one-row transcript-only smoke	repo_root_local_only	false	0	0	false	1	real one-row smoke inference	required_next
+one_row_smoke	Gate C one-row transcript-only smoke	repo_root_local_only	true	1	6	false	1	real one-row smoke inference	local_manifest_present_minimum_rows_met
 sentinel_negative_control	Gate D sentinel negative controls	repo_root_local_only	false	0	0	false	6	sentinel gate	pending_after_smoke
 fixed_15_row_multimodal	Gate E fixed 15-row transcript gate	repo_root_local_only	false	0	0	false	15	15-row transcript scoring	pending_after_sentinel
 human_reviewed_30_row_cds	Gate G human-reviewed 30-row CDS gate	repo_root_local_only	false	0	0	false	30	30-row CDS gate	pending_after_15_row
