@@ -48,7 +48,15 @@ Post-Gate0 evidence now includes:
 ```text
 70_experiments/runs/v2_0_multimodal_batch1_kimi_size_boundary_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31/
+70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/
 ```
+
+The full end-to-end completion plan and reusable execution prompt are recorded
+in `docs/v2_0_multimodal_batch1_full_completion_plan.md`.
+
+The manifest preflight currently records that no local-only manifests are
+present; the immediate next action is to create or attach
+`one_row_smoke_manifest.local.tsv` without tracking it.
 
 ## Post-Gate0 Completion Roadmap
 
@@ -898,7 +906,9 @@ Stop or defer a model when:
 
 ## Codex Goal Prompt
 
-Use this prompt to start a dedicated Codex execution goal:
+Use the longer prompt in `docs/v2_0_multimodal_batch1_full_completion_plan.md`
+for a full end-to-end run. This shorter prompt can start a dedicated Codex
+execution goal from the current gate:
 
 ```text
 Goal: Continue and complete the post-Gate0 v2.0 Batch 1 multimodal audio LLM
@@ -906,6 +916,7 @@ experiment in /home/jnln3799/every_on_git_ubuntu/cib-semantic-risk-asr through
 evidence-gated, privacy-safe run records.
 
 Context:
+- The full completion plan is recorded in docs/v2_0_multimodal_batch1_full_completion_plan.md.
 - The v2.0 design is recorded in docs/v2_0_multimodal_under_10b_experiment_plan.md.
 - The execution runbook is docs/v2_0_multimodal_batch1_execution_runbook.md.
 - Gate 0 metadata discovery is complete at:

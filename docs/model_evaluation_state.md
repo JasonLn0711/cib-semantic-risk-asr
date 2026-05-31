@@ -156,6 +156,19 @@ and local-only manifest boundary. No model inference, model-weight download,
 raw audio, row ID, transcript, model hypothesis, reviewer note, or
 transcript-bearing runtime log is tracked.
 
+The full completion plan through local-only manifest preparation, real
+model-family adapters, one-row smoke, sentinel controls, 15-row transcript
+gate, Taiwan utility/subgroup audit, 30-row CDS gate, ASR-control refresh,
+promoted 258-row, selected-300, secondary lanes, validators, completion audit,
+and Codex execution prompt is recorded in
+`docs/v2_0_multimodal_batch1_full_completion_plan.md`.
+
+Gate A manifest preflight is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/`.
+It found `0` local manifest files and sets the immediate next action to create
+or attach `one_row_smoke_manifest.local.tsv` locally before any real model
+inference.
+
 Post-Gate0 completion path:
 
 1. attach a local-only one-row manifest and real model-family adapters；

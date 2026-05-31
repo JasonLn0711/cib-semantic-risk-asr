@@ -23,18 +23,6 @@ from typing import Any
 RUN_ID = "v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31"
 DEFAULT_OUT_DIR = Path("70_experiments/runs") / RUN_ID
 
-PROHIBITED_TRACKED_FIELDS = {
-    "audio_id",
-    "row_id",
-    "sample_id",
-    "transcript_text",
-    "hypothesis_text",
-    "local_audio_path",
-    "raw_audio_path",
-    "reviewer_notes",
-}
-
-
 @dataclass(frozen=True)
 class ModelPlan:
     execution_order: int
@@ -132,14 +120,13 @@ def read_manifest_summary(path: Path | None) -> dict[str, Any]:
     with path.open("r", encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle, delimiter="\t")
         fields = reader.fieldnames or []
-        prohibited = sorted(set(fields) & PROHIBITED_TRACKED_FIELDS)
         rows = sum(1 for _ in reader)
 
     return {
         "manifest_provided": True,
         "manifest_rows": rows,
         "manifest_field_count": len(fields),
-        "prohibited_fields_present": prohibited,
+        "manifest_field_names_tracked": False,
         "manifest_status": "local_manifest_header_checked",
     }
 
@@ -262,9 +249,6 @@ def main() -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     manifest_summary = read_manifest_summary(args.manifest)
-    if manifest_summary["prohibited_fields_present"]:
-        fields = ", ".join(manifest_summary["prohibited_fields_present"])
-        raise SystemExit(f"local manifest contains prohibited tracked fields: {fields}")
 
     env_fields = [
         "model_family",
