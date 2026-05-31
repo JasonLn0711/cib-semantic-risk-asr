@@ -168,6 +168,36 @@ promoted 258-row, selected-300, secondary lanes, validators, completion audit,
 and Codex execution prompt is recorded in
 `docs/v2_0_multimodal_batch1_full_completion_plan.md`.
 
+### Batch 1 Completion Audit: 2026-06-01
+
+The raw v2.0 Batch 1 multimodal gate chain is now complete as an aggregate-only
+audit in
+`70_experiments/runs/v2_0_multimodal_batch1_completion_audit_2026_06_01/`.
+The audit verifies the requested primary zh-TW audio LLM lane:
+Kimi-Audio-7B-Instruct, Qwen2.5-Omni-7B, Step-Audio-2-mini,
+MOSS-Audio-4B/8B, and MiniCPM-o 4.5. MOSS is represented as separate 4B and
+8B decision rows because 4B reached sentinel controls while 8B hit a local
+resource boundary.
+
+The evidence-supported conclusion is
+`batch1_gate_chain_complete_no_scientific_winner`. Qwen2.5-Omni is the only
+model that reached fixed 15-row transcript scoring, but it failed the raw
+Taiwan Traditional Chinese locale gate with `locale_violation_rows=15`.
+MOSS-Audio-4B and MiniCPM-o 4.5 passed one-row transcript-like smoke but failed
+sentinel behavior controls. Step-Audio-2-mini failed the one-row raw transcript
+contract. Kimi-Audio is blocked by the isolated `flash_attn` / CUDA-toolchain
+dependency boundary. MOSS-Audio-8B is blocked by the local 16GB single-GPU
+memory boundary.
+
+FIRST PRINCIPLE decision: the scarce resource is clean gate evidence. Larger
+CDS-ASR compute is spent only after a model passes the prior transcript,
+sentinel, and zh-TW locale gates. Therefore Taiwan utility/subgroup,
+human-reviewed 30-row CDS, promoted 258-row, and selected-300 are skipped by
+gate policy for this raw run. The next scientific action is bounded repair
+planning: Qwen prompt/locale repair, MOSS 4B and MiniCPM sentinel repair, Step
+transcript-contract repair, Kimi dependency repair, and MOSS 8B resource route
+repair.
+
 Gate A manifest preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/`.
 It now finds the local-only one-row manifest, sentinel manifest, and fixed

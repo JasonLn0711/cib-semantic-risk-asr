@@ -1,0 +1,29 @@
+{
+  "run_id": "v2_0_multimodal_batch1_completion_audit_2026_06_01",
+  "generated_at_unix": 1780260595,
+  "gate": "v2.0 Batch 1 completion audit",
+  "status": "batch1_gate_chain_complete_no_scientific_winner",
+  "first_principle_decision": "The scarce resource is clean gate evidence. Larger CDS-ASR compute is spent only after a model passes the prior transcript, sentinel, and zh-TW locale gates.",
+  "primary_families_requested": 5,
+  "primary_model_rows_audited": 6,
+  "runtime_or_one_row_records_complete": 6,
+  "sentinel_models_attempted": 3,
+  "fixed_15_row_models_attempted": 1,
+  "scientific_winners": 0,
+  "taiwan_utility_subgroup_status": "skipped_by_gate_policy_no_fixed_15_survivor",
+  "human_reviewed_30_row_cds_status": "skipped_by_gate_policy_no_fixed_15_survivor",
+  "promoted_258_row_status": "skipped_by_gate_policy_no_scientific_winner",
+  "selected_300_status": "skipped_by_gate_policy_no_scientific_winner",
+  "next_research_action": "open bounded repair lanes: Qwen prompt/locale, MOSS 4B sentinel behavior, MiniCPM sentinel behavior, Step transcript contract, Kimi flash_attn/CUDA toolchain, and MOSS 8B resource route",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

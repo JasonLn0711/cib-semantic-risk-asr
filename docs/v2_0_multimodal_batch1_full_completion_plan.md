@@ -1171,3 +1171,70 @@ Definition of done:
 - validators pass;
 - registry, model state, runbooks, and run README files agree on final status.
 ```
+
+## Completion Audit And Remaining Plan
+
+Completion audit artifact:
+
+```text
+70_experiments/runs/v2_0_multimodal_batch1_completion_audit_2026_06_01/
+```
+
+The first raw Batch 1 gate chain is complete with no scientific winner. This
+means the current experiment has reached an evidence-backed stop point:
+
+| Larger gate | Current status | Reason |
+| --- | --- | --- |
+| Taiwan utility / subgroup audit | skipped by gate policy | no model passed a clean fixed 15-row zh-TW locale gate |
+| Human-reviewed 30-row CDS | skipped by gate policy | no clean fixed 15-row survivor |
+| Promoted 258-row | skipped by gate policy | zero scientific winners in raw Batch 1 |
+| Selected-300 high-stakes | skipped by gate policy | selected-300 is reserved for stable, licensed, scientific winners |
+
+The remaining complete plan is now a repair-first plan, not a larger-inference
+plan:
+
+1. Repair Qwen2.5-Omni prompt / locale behavior and rerun the same one-row,
+   sentinel, fixed 15-row sequence with raw and repaired results kept separate.
+2. Repair MOSS-Audio-4B sentinel behavior and rerun sentinel before any 15-row
+   scoring.
+3. Repair MiniCPM-o 4.5 sentinel behavior and explicitly choose quantized
+   feasibility versus full-bf16 quality scope before rerun.
+4. Repair Step-Audio-2-mini transcript-only contract before sentinel.
+5. Repair Kimi-Audio `flash_attn` / CUDA-toolchain dependency before one-row
+   rerun.
+6. Repair MOSS-Audio-8B resource route before one-row rerun.
+7. Promote a repaired model to Taiwan utility/subgroup only after it passes a
+   clean fixed 15-row raw zh-TW locale gate.
+8. Promote to 30-row CDS only after Taiwan utility/subgroup evidence is
+   interpretable.
+9. Promote to 258-row and selected-300 only for scientific winners.
+
+### Codex Goal Prompt For Repair-First Execution
+
+```text
+Using FIRST PRINCIPLE, continue the v2.0 Batch 1 multimodal audio LLM experiment
+in /home/jnln3799/every_on_git_ubuntu/cib-semantic-risk-asr from the completion
+audit at
+70_experiments/runs/v2_0_multimodal_batch1_completion_audit_2026_06_01/.
+
+Do not run Taiwan utility/subgroup, 30-row CDS, 258-row, or selected-300 until a
+repaired model passes one-row, sentinel, and fixed 15-row raw zh-TW locale gates.
+Keep raw audio, row IDs, transcripts, references, hypotheses, reviewer notes,
+local paths, model outputs, transcript-bearing logs, model caches, and local
+manifests local-only / ignored.
+
+Start with one bounded repair lane at a time:
+1. Qwen2.5-Omni prompt/locale repair;
+2. MOSS-Audio-4B sentinel behavior repair;
+3. MiniCPM-o 4.5 sentinel behavior repair with quantized/full-bf16 scope noted;
+4. Step-Audio-2-mini transcript-contract repair;
+5. Kimi-Audio flash_attn/CUDA-toolchain repair;
+6. MOSS-Audio-8B resource route repair.
+
+For each lane, write aggregate-only run records, update docs/model_evaluation_state.md,
+docs/v2_0_multimodal_batch1_execution_runbook.md,
+docs/v2_0_multimodal_batch1_full_completion_plan.md, and
+70_experiments/registry.tsv, run validators and transcript-bearing leak scan,
+commit logical slices separately, and push non-force to origin main while
+preserving local and remote commits.
+```

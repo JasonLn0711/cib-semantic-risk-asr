@@ -1145,3 +1145,33 @@ Definition of done for the full experiment:
 - No private row-level content is tracked.
 - Validation commands pass after each tracked update.
 ```
+
+## Completion Audit Update: 2026-06-01
+
+The first raw Batch 1 gate chain now has a completion audit:
+
+```text
+70_experiments/runs/v2_0_multimodal_batch1_completion_audit_2026_06_01/
+```
+
+The audit status is:
+
+```text
+batch1_gate_chain_complete_no_scientific_winner
+```
+
+This completes the current raw run without promoting any model to Taiwan
+utility/subgroup, human-reviewed 30-row CDS, 258-row, or selected-300. The stop
+is an evidence gate, not an abandonment of the model lane. The next runbook
+action is bounded repair planning:
+
+1. Qwen2.5-Omni prompt / locale repair, then repeat the raw fixed-gate chain.
+2. MOSS-Audio-4B sentinel behavior repair, then sentinel rerun before 15-row.
+3. MiniCPM-o 4.5 sentinel behavior repair under explicit quantized/full-bf16
+   scope.
+4. Step-Audio-2-mini transcript-contract repair before sentinel.
+5. Kimi-Audio `flash_attn` / CUDA-toolchain repair before one-row rerun.
+6. MOSS-Audio-8B resource route repair before one-row rerun.
+
+No larger CDS-ASR gate should run until one repaired model passes one-row,
+sentinel, and fixed 15-row zh-TW locale checks.

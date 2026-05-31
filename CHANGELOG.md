@@ -5,6 +5,26 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.263 - 2026-06-01T04:53:39+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `93f5d70`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_completion_audit_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_batch1_completion_audit_2026_06_01/completion_audit_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_batch1_completion_audit_2026_06_01/model_gate_decisions.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_completion_audit_2026_06_01/objective_requirement_audit.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_completion_audit_2026_06_01/stop_rule_summary.tsv`
+  - `docs/model_evaluation_state.md`
+  - `docs/v2_0_multimodal_batch1_execution_runbook.md`
+  - `docs/v2_0_multimodal_batch1_full_completion_plan.md`
+  - `scripts/audit_v2_0_multimodal_batch1_completion.py`
+  - `scripts/validate_v2_0_multimodal_batch1_completion_audit.py`
+
 ## v2.5.262 - 2026-06-01T04:44:52+08:00
 
 - Bump: `patch`

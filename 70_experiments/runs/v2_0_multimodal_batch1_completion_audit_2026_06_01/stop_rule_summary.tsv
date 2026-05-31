@@ -1,0 +1,5 @@
+gate	status	why	resume_condition
+Taiwan utility/subgroup audit	skipped_by_gate_policy	Qwen fixed 15-row failed locale gate; no other model reached fixed 15-row	a repaired or future model passes one-row, sentinel, and fixed 15-row locale gates
+human_reviewed_30_row_cds	skipped_by_gate_policy	no clean fixed 15-row survivor	clean fixed 15-row survivor with raw transcript validity and zh-TW locale behavior
+promoted_258_row	skipped_by_gate_policy	no scientific winner after the raw Batch 1 gate chain	30-row CDS evidence is interpretable and improves the CDS-ASR research question
+selected_300_high_stakes	skipped_by_gate_policy	selected-300 is only for stable, licensed, scientific winners	promoted model passes 258-row and is claim-relevant for high-stakes evidence
