@@ -5,17 +5,19 @@ Date: 2026-06-01
 Status: full completion plan; Gate 0, Kimi size-boundary decision, runtime
 smoke preflight, Gate A one-row manifest preflight, Gate B adapter preflight,
 Qwen isolated runtime/cache lane, Qwen one-row transcript-only smoke, and Qwen
-sentinel controls are complete; Step-Audio-2-mini isolated runtime/cache and
-one-row smoke are complete, with Step held in a prompt/runtime repair lane;
-MOSS-Audio-4B isolated runtime/cache and one-row smoke are complete, with MOSS
-4B promoted to sentinel candidate; MiniCPM-o 4.5 isolated runtime/cache and
-4-bit one-row transcript-only smoke are complete, with MiniCPM promoted to
-sentinel candidate under an explicit quantized local-feasibility boundary;
-Kimi-Audio isolated runtime/cache and one-row attempt are complete, with Kimi
-classified into an isolated flash_attn / CUDA-toolchain repair lane before any
-sentinel or 15-row gate; MOSS-Audio-8B isolated runtime/cache and one-row
-attempt are complete, with MOSS 8B classified into a 16GB single-GPU resource
-repair lane before any sentinel or 15-row gate
+sentinel controls are complete. Qwen is the only current fixed 15-row
+candidate. Step-Audio-2-mini isolated runtime/cache and one-row smoke are
+complete, with Step held in a prompt/runtime repair lane. MOSS-Audio-4B
+isolated runtime/cache, one-row smoke, and sentinel controls are complete; MOSS
+4B failed sentinel behavior controls and is not promoted to fixed 15-row from
+this run. MiniCPM-o 4.5 isolated runtime/cache, 4-bit one-row smoke, and
+sentinel controls are complete; MiniCPM failed sentinel behavior controls under
+the quantized local-feasibility boundary and is not promoted to fixed 15-row
+from this run. Kimi-Audio isolated runtime/cache and one-row attempt are
+complete, with Kimi classified into an isolated flash_attn / CUDA-toolchain
+repair lane before any sentinel or 15-row gate; MOSS-Audio-8B isolated
+runtime/cache and one-row attempt are complete, with MOSS 8B classified into a
+16GB single-GPU resource repair lane before any sentinel or 15-row gate
 
 本文件只記錄 aggregate planning、gate、artifact、validator、privacy boundary
 與 Codex execution prompt，不記錄任何逐字稿、row ID、音訊內容或模型輸出。
@@ -50,8 +52,10 @@ Completed tracked evidence:
 70_experiments/runs/v2_0_multimodal_batch1_step_audio_one_row_smoke_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_runtime_lane_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_one_row_smoke_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_sentinel_controls_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_runtime_lane_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_one_row_smoke_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_sentinel_controls_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_kimi_audio_runtime_lane_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_kimi_audio_one_row_smoke_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_moss_audio_8b_runtime_lane_2026_06_01/
@@ -73,6 +77,10 @@ scripts/validate_v2_0_qwen_omni_one_row_smoke.py
 scripts/prepare_v2_0_qwen_sentinel_manifest.py
 scripts/run_v2_0_qwen_omni_sentinel_controls.py
 scripts/validate_v2_0_qwen_omni_sentinel_controls.py
+scripts/run_v2_0_moss_audio_4b_sentinel_controls.py
+scripts/validate_v2_0_moss_audio_4b_sentinel_controls.py
+scripts/run_v2_0_minicpm_o_4_5_sentinel_controls.py
+scripts/validate_v2_0_minicpm_o_4_5_sentinel_controls.py
 scripts/prepare_v2_0_step_audio_runtime_lane.py
 scripts/run_v2_0_step_audio_one_row_smoke.py
 scripts/validate_v2_0_step_audio_one_row_smoke.py
@@ -98,13 +106,14 @@ Current active gate:
 Kimi-Audio has completed isolated runtime/cache setup and a one-row attempt,
 but the official main-model remote code requires `flash_attn`; the isolated
 environment cannot source-build it on this machine without
-`/usr/local/cuda/bin/nvcc`. Qwen, MOSS-Audio-4B, and MiniCPM-o 4.5 are sentinel
-candidates after transcript-like one-row evidence. Step-Audio-2-mini is parked
-in a prompt/runtime repair lane because its first one-row smoke produced valid
-text but not raw transcript-like output. MOSS-Audio-8B has completed the
-one-row attempt and is blocked by the local 16GB single-GPU memory boundary.
-The active promoted set for sentinel work is Qwen2.5-Omni, MOSS-Audio-4B, and
-MiniCPM-o 4.5.
+`/usr/local/cuda/bin/nvcc`. Qwen2.5-Omni has passed one-row smoke and sentinel
+controls and is the only current fixed 15-row candidate. MOSS-Audio-4B and
+MiniCPM-o 4.5 passed one-row transcript-like smoke but failed sentinel behavior
+controls, so both require bounded sentinel repair/rerun before any fixed
+15-row gate. Step-Audio-2-mini is parked in a prompt/runtime repair lane
+because its first one-row smoke produced valid text but not raw
+transcript-like output. MOSS-Audio-8B has completed the one-row attempt and is
+blocked by the local 16GB single-GPU memory boundary.
 ```
 
 Qwen2.5-Omni has completed one-row transcript-only inference and sentinel
@@ -114,12 +123,21 @@ audio stay in ignored local runtime lanes.
 MOSS-Audio-4B has completed isolated runtime/cache setup and one-row
 transcript-only smoke. The tracked records are aggregate-only; model output and
 local runtime/cache material stay in ignored local runtime lanes.
+Its sentinel controls are also complete; the aggregate result is
+`sentinel_pass_rows=3/6`, `hallucination_on_no_speech_rows=3`, and
+`promotion_decision=do_not_promote`. MOSS 4B is not a fixed 15-row candidate
+from this run.
 
 MiniCPM-o 4.5 has completed isolated runtime/cache setup and 4-bit NF4 one-row
 transcript-only smoke. The tracked records are aggregate-only; model output and
 local runtime/cache material stay in ignored local runtime lanes. The result is
 reported as local deployment feasibility and transcript-contract evidence
 because full-bf16 single-GPU loading exceeded the local 16GB GPU boundary.
+Its sentinel controls are also complete; the aggregate result is
+`sentinel_pass_rows=3/6`, `hallucination_on_no_speech_rows=1`,
+`summary_or_answer_rows=2`, `translation_rows=2`, and
+`promotion_decision=do_not_promote`. MiniCPM is not a fixed 15-row candidate
+from this run.
 
 MOSS-Audio-8B has completed isolated runtime/cache setup and a classified
 one-row attempt. The result is `blocked_runtime_resource` because loading the
@@ -273,9 +291,11 @@ Immediate runtime-lane implications:
    transcript-only smoke contract because the output was repetition /
    non-transcript-like text；
 3. MOSS-Audio-4B has passed runtime/cache setup and one-row transcript-only
-   smoke, with `promotion_decision=promote_to_sentinel`；
+   smoke, but failed sentinel controls with `sentinel_pass_rows=3/6` and
+   `promotion_decision=do_not_promote`；
 4. MiniCPM-o 4.5 has passed runtime/cache setup and 4-bit one-row
-   transcript-only smoke, with `promotion_decision=promote_to_sentinel` and an
+   transcript-only smoke, but failed sentinel controls with
+   `sentinel_pass_rows=3/6`, `promotion_decision=do_not_promote`, and an
    explicit quantized local-feasibility boundary；
 5. Kimi-Audio has an isolated model-cache/runtime lane and a classified
    one-row dependency boundary: the official main-model remote code requires
@@ -506,14 +526,83 @@ promotion_decision=promote_to_sentinel
 next_gate=moss_audio_4b_sentinel_controls
 ```
 
-Decision: MOSS-Audio-4B is promoted to the sentinel-candidate pool. MiniCPM-o
-4.5 has also joined the sentinel-candidate pool after 4-bit transcript-contract
-smoke. Kimi has now completed its isolated runtime/cache and one-row dependency
-gate but is blocked by the official `flash_attn` runtime requirement on this
-machine. MOSS 8B has now completed its one-row attempt and is blocked by the
-local 16GB single-GPU memory boundary. The remaining execution sequence moves
-to sentinel controls for MOSS 4B and MiniCPM while Kimi and MOSS 8B stay in
-bounded repair/resource lanes.
+Decision: MOSS-Audio-4B was promoted to the sentinel-candidate pool after this
+one-row gate. Its later sentinel gate failed, so the current decision is
+repair/rerun sentinel before any fixed 15-row promotion.
+
+## Gate D2: MOSS-Audio-4B Sentinel Controls
+
+Purpose: test whether MOSS-Audio-4B preserves the ASR boundary under no-speech,
+non-speech, long-pause, low-volume, and spoken-instruction controls after
+one-row transcript-like success.
+
+Current status: complete in
+`70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_sentinel_controls_2026_06_01/`.
+
+Tracked aggregate result:
+
+```text
+sentinel_rows=6
+sentinel_classes=6
+sentinel_pass_rows=3
+hallucination_on_no_speech_rows=3
+instruction_followed_rows=0
+summary_or_answer_rows=0
+translation_rows=0
+tts_only_rows=0
+invented_timestamp_rows=0
+invented_speaker_label_rows=0
+failure_mode=sentinel_behavior_violation
+promotion_decision=do_not_promote
+next_gate=review_local_outputs_and_rerun_sentinel
+```
+
+Decision: MOSS-Audio-4B does not enter fixed 15-row scoring from this run. The
+model remains scientifically relevant as a MOSS Instruct candidate, but the
+next MOSS 4B work must be a bounded sentinel repair/rerun that reduces
+no-speech and non-speech hallucination before larger CDS-ASR gates.
+
+## Gate D3: MiniCPM-o 4.5 Sentinel Controls
+
+Purpose: test whether the 4-bit NF4 MiniCPM local-feasibility lane preserves
+the transcript-only ASR boundary after one-row transcript-like success.
+
+Current status: complete in
+`70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_sentinel_controls_2026_06_01/`.
+
+Tracked aggregate result:
+
+```text
+sentinel_rows=6
+sentinel_classes=6
+sentinel_pass_rows=3
+hallucination_on_no_speech_rows=1
+instruction_followed_rows=0
+summary_or_answer_rows=2
+translation_rows=2
+tts_only_rows=0
+invented_timestamp_rows=0
+invented_speaker_label_rows=0
+failure_mode=sentinel_behavior_violation
+promotion_decision=do_not_promote
+next_gate=review_local_outputs_and_rerun_sentinel
+```
+
+Decision: MiniCPM-o 4.5 does not enter fixed 15-row scoring from this run. The
+result remains useful deployment-feasibility evidence for the quantized local
+lane, but it is not raw ASR-quality evidence for larger CDS-ASR promotion.
+MiniCPM needs a bounded sentinel repair/rerun before any fixed 15-row gate.
+
+Current Batch 1 promotion state after sentinel controls:
+
+```text
+Qwen2.5-Omni-7B: promote_to_15_row_candidate_pool
+MOSS-Audio-4B-Instruct: do_not_promote; sentinel repair/rerun
+MiniCPM-o 4.5: do_not_promote; sentinel repair/rerun; quantized boundary
+Step-Audio-2-mini: do_not_promote; prompt/runtime repair
+Kimi-Audio-7B-Instruct: blocked_runtime_dependency; flash_attn repair
+MOSS-Audio-8B-Instruct: blocked_runtime_resource; memory/resource repair
+```
 
 ## Gate C: One-Row Transcript-Only Smoke
 
@@ -959,6 +1048,10 @@ Current completed evidence:
   70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_runtime_lane_2026_06_01/
 - MiniCPM-o 4.5 one-row transcript-only smoke:
   70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_one_row_smoke_2026_06_01/
+- MOSS-Audio-4B sentinel controls:
+  70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_sentinel_controls_2026_06_01/
+- MiniCPM-o 4.5 sentinel controls:
+  70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_sentinel_controls_2026_06_01/
 
 Primary models:
 1. Qwen2.5-Omni-7B
@@ -988,17 +1081,21 @@ Execution sequence:
 2. Confirm local-only manifests are ignored by git.
 3. Confirm one_row_smoke_manifest.local.tsv and
    sentinel_negative_control_manifest.local.tsv remain ignored.
-4. Continue after the classified Kimi dependency boundary and MOSS 8B resource
-   boundary. Qwen has already passed one-row smoke and sentinel controls;
-   MOSS-Audio-4B and MiniCPM-o 4.5 have passed one-row smoke and wait as
-   sentinel candidates; Step, Kimi, and MOSS 8B remain in bounded repair /
-   resource lanes.
-5. Run sentinel negative controls for MOSS-Audio-4B and MiniCPM-o 4.5 before
-   any fixed 15-row gate.
+4. Continue after the classified Kimi dependency boundary, MOSS 8B resource
+   boundary, and completed sentinel controls. Qwen has passed one-row smoke
+   and sentinel controls and is the only current fixed 15-row candidate. MOSS-
+   Audio-4B and MiniCPM-o 4.5 passed one-row smoke but failed sentinel behavior
+   controls, so they require bounded sentinel repair/rerun before any fixed
+   15-row gate. Step, Kimi, and MOSS 8B remain in bounded repair / resource
+   lanes.
+5. Run Gate E fixed 15-row transcript scoring for Qwen2.5-Omni only, unless a
+   later bounded repair/rerun produces clean sentinel evidence for another
+   model.
 6. Write aggregate runtime_environment_summary.tsv, behavior_summary.tsv,
    gate_summary.json, and README.md. Classify every model as promoted, deferred,
    blocked, or fallback-only.
-7. Run Gate D sentinel negative controls only for smoke-promoted models.
+7. Run Gate D sentinel negative controls only for future smoke-promoted or
+   repaired models.
 8. Run Gate E fixed 15-row transcript scoring only for sentinel-promoted models.
 9. Run Gate F Taiwan utility/subgroup audit only for Gate E survivors.
 10. Run Gate G human-reviewed 30-row CDS gate only for models that preserve raw

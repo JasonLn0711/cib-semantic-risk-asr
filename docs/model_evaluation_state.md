@@ -129,10 +129,10 @@ Current Gate 0 decisions:
 | Kimi-Audio | `moonshotai/Kimi-Audio-7B-Instruct` | `one_row_smoke_classified_runtime_dependency_boundary` | flash_attn / CUDA-toolchain repair lane before any sentinel or 15-row gate |
 | Qwen2.5-Omni | `Qwen/Qwen2.5-Omni-7B` | `sentinel_controls_passed` | fixed 15-row candidate pool after Batch 1 smoke order remains governed |
 | Step-Audio 2 mini | `stepfun-ai/Step-Audio-2-mini` | `one_row_smoke_complete_not_promoted` | prompt/runtime repair before sentinel or 15-row |
-| MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-4B-Instruct` | `one_row_smoke_complete_promoted` | sentinel candidate |
+| MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-4B-Instruct` | `sentinel_controls_failed_behavior_violation` | do not promote to fixed 15-row from this run; repair/rerun sentinel only |
 | MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-8B-Instruct` | `one_row_smoke_classified_runtime_resource_boundary` | 16GB single-GPU resource repair before sentinel or 15-row |
 | MOSS-Audio Thinking | 4B / 8B Thinking variants | `defer_until_instruct_transcript_gate` | reasoning analysis after Instruct transcript gates |
-| MiniCPM-o | `openbmb/MiniCPM-o-4_5` | `one_row_smoke_complete_promoted_quantized` | sentinel candidate with quantized local-feasibility boundary |
+| MiniCPM-o | `openbmb/MiniCPM-o-4_5` | `sentinel_controls_failed_behavior_violation_quantized` | do not promote to fixed 15-row from this run; repair/rerun sentinel only |
 | MiniCPM-o fallback | `openbmb/MiniCPM-o-2_6`, `openbmb/MiniCPM-o-2_6-int4` | fallback only | only if 4.5 is not reproducible or strict 2025-only scope is required |
 
 Kimi-Audio remains scientifically important and now has an explicit scope
@@ -245,6 +245,27 @@ and transcript-contract evidence, not full-bf16 quality evidence. The
 transcript-bearing output remains local-only in the ignored MiniCPM runtime
 lane.
 
+MOSS-Audio-4B sentinel controls are recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_sentinel_controls_2026_06_01/`.
+The aggregate result is `sentinel_pass_rows=3/6`,
+`hallucination_on_no_speech_rows=3`, `instruction_followed_rows=0`,
+`failure_mode=sentinel_behavior_violation`, and
+`promotion_decision=do_not_promote`. This means the one-row transcript-like
+success is not sufficient evidence for fixed 15-row promotion. MOSS 4B stays
+in a sentinel repair/rerun lane; sentinel audio, manifest values, and model
+outputs remain local-only / ignored.
+
+MiniCPM-o 4.5 sentinel controls are recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_sentinel_controls_2026_06_01/`.
+The aggregate result is `sentinel_pass_rows=3/6`,
+`hallucination_on_no_speech_rows=1`, `summary_or_answer_rows=2`,
+`translation_rows=2`, `instruction_followed_rows=0`,
+`failure_mode=sentinel_behavior_violation`, and
+`promotion_decision=do_not_promote`. This remains quantized local-feasibility
+evidence and does not justify fixed 15-row promotion. MiniCPM stays in a
+sentinel repair/rerun lane; sentinel audio, manifest values, and model outputs
+remain local-only / ignored.
+
 Kimi-Audio runtime/cache preparation is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_kimi_audio_runtime_lane_2026_06_01/`.
 It confirms the explicit `Kimi-Audio-7B-Instruct` / HF-widget `10B params`
@@ -279,8 +300,10 @@ Post-Gate0 completion path:
    in an isolated runtime lane, while preserving the size-boundary wording；
 2. run a separate Step prompt/runtime repair, Kimi dependency repair, or MOSS
    8B resource repair only if the repair is bounded and isolated；
-3. run sentinel controls for each model that passes one-row smoke；the current
-   sentinel-candidate set is Qwen2.5-Omni, MOSS-Audio-4B, and MiniCPM-o 4.5；
+3. record the completed sentinel controls: Qwen2.5-Omni passed and is the only
+   current fixed 15-row candidate; MOSS-Audio-4B and MiniCPM-o 4.5 failed
+   sentinel behavior controls and require bounded repair/rerun before any
+   larger gate；
 4. prepare local-only manifests for fixed
    15-row, human-reviewed 30-row, promoted 258-row, and selected-300；
 5. promote only clean candidates to fixed 15-row transcript scoring, Taiwan
