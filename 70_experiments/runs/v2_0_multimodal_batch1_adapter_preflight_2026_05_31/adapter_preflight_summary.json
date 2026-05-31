@@ -1,0 +1,31 @@
+{
+  "run_id": "v2_0_multimodal_batch1_adapter_preflight_2026_05_31",
+  "generated_at_unix": 1780241470,
+  "gate": "Gate B adapter preflight",
+  "status": "adapter_preflight_complete_no_inference",
+  "python_version": "3.12.3",
+  "gpu_present": true,
+  "gpu_name": "NVIDIA GeForce RTX 5080",
+  "gpu_memory_total_mib": "16303",
+  "manifest_exists": true,
+  "manifest_rows": 1,
+  "models_checked": 6,
+  "models_ready_for_smoke": 0,
+  "models_blocked_by_missing_runtime_modules": 1,
+  "models_blocked_by_missing_cache": 4,
+  "models_deferred_by_gate_order": 1,
+  "weights_downloaded_by_this_run": false,
+  "model_inference_run": false,
+  "tracked_manifest_field_names": false,
+  "tracked_row_level_values": false,
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_cache_paths_tracked": false
+  },
+  "next_gate": "prepare isolated model-cache lanes then run real one-row transcript-only smoke adapters"
+}

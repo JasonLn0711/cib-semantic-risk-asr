@@ -3,8 +3,8 @@
 Date: 2026-05-31
 
 Status: full completion plan; Gate 0, Kimi size-boundary decision, runtime
-smoke preflight, and Gate A one-row manifest preflight are complete; no model
-inference has been run yet
+smoke preflight, Gate A one-row manifest preflight, and Gate B adapter preflight
+are complete; no model inference has been run yet
 
 本文件只記錄 aggregate planning、gate、artifact、validator、privacy boundary
 與 Codex execution prompt，不記錄任何逐字稿、row ID、音訊內容或模型輸出。
@@ -31,6 +31,7 @@ Completed tracked evidence:
 70_experiments/runs/v2_0_multimodal_batch1_kimi_size_boundary_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/
+70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/
 ```
 
 Tracked scripts:
@@ -39,6 +40,8 @@ Tracked scripts:
 scripts/collect_v2_0_batch1_candidate_snapshot.py
 scripts/prepare_v2_0_multimodal_manifest_preflight.py
 scripts/validate_v2_0_multimodal_manifest_preflight.py
+scripts/preflight_v2_0_multimodal_adapters.py
+scripts/validate_v2_0_multimodal_adapter_preflight.py
 scripts/run_v2_0_multimodal_one_row_smoke.py
 scripts/validate_v2_0_multimodal_runtime_smoke.py
 ```
@@ -46,8 +49,8 @@ scripts/validate_v2_0_multimodal_runtime_smoke.py
 Current active gate:
 
 ```text
-Run real model-family transcript-only runtime adapters with the local-only
-`one_row_smoke_manifest.local.tsv`.
+Prepare isolated runtime/cache lanes, then run real model-family transcript-only
+runtime adapters with the local-only `one_row_smoke_manifest.local.tsv`.
 ```
 
 No model inference has been run yet for the v2.0 Batch 1 multimodal lane.
@@ -168,6 +171,29 @@ Current Gate A result:
 Purpose: connect each model family to the transcript-only smoke harness without
 changing the repo-wide environment.
 
+Current status: aggregate adapter preflight recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/`.
+The preflight used the existing repo `.venv` without upgrading it, found the RTX
+5080 and local one-row manifest, and did not download weights or run inference.
+
+Current Gate B results:
+
+```text
+models_checked=6
+models_ready_for_smoke=0
+models_blocked_by_missing_runtime_modules=1
+models_blocked_by_missing_cache=4
+models_deferred_by_gate_order=1
+```
+
+Immediate runtime-lane implications:
+
+1. Qwen2.5-Omni needs an isolated runtime-lane fix for the missing `torchvision`
+   dependency before its adapter can import `qwen_omni_utils`；
+2. Step-Audio-2-mini, MOSS-Audio-4B, MiniCPM-o 4.5, and Kimi-Audio need
+   isolated model-cache/download lanes before one-row smoke；
+3. MOSS-Audio-8B remains deferred until MOSS-Audio-4B smoke is interpretable。
+
 Implementation requirements:
 
 1. one adapter per runtime family；
@@ -215,6 +241,12 @@ Promotion rule:
 - adapter can load or fail with a classifiable reason；
 - failure does not poison the shared environment；
 - no transcript-bearing logs are tracked。
+
+Current Gate B decision:
+
+- no model proceeds to real one-row inference yet；
+- the next action is isolated runtime/cache preparation in execution order,
+  starting with Qwen2.5-Omni because it is first in the planned smoke order。
 
 ## Gate C: One-Row Transcript-Only Smoke
 
@@ -640,6 +672,8 @@ Current completed evidence:
   70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31/
 - Manifest preflight:
   70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/
+- Adapter preflight:
+  70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/
 
 Primary models:
 1. Qwen2.5-Omni-7B
@@ -669,9 +703,9 @@ Execution sequence:
 2. Confirm local-only manifests are ignored by git.
 3. Confirm one_row_smoke_manifest.local.tsv remains ignored and use it for the
    one-row smoke. The current manifest preflight reports this gate as ready.
-4. Implement or attach model-family adapters for Qwen2.5-Omni, Step-Audio-2-mini,
-   MOSS-Audio-4B, MiniCPM-o 4.5, Kimi with size-boundary wording, and MOSS 8B
-   after MOSS 4B.
+4. Prepare isolated runtime/cache lanes for Qwen2.5-Omni, Step-Audio-2-mini,
+   MOSS-Audio-4B, MiniCPM-o 4.5, and Kimi with size-boundary wording; keep
+   MOSS 8B deferred until MOSS 4B smoke is interpretable.
 5. Run Gate C one-row transcript-only smoke in the planned order.
 6. Write aggregate runtime_environment_summary.tsv, behavior_summary.tsv,
    gate_summary.json, and README.md. Classify every model as promoted, deferred,
@@ -689,9 +723,9 @@ Execution sequence:
 15. Update docs/model_evaluation_state.md, docs/v2_0_multimodal_batch1_full_completion_plan.md,
     docs/v2_0_multimodal_batch1_execution_runbook.md, run README files, and
     70_experiments/registry.tsv after each gate.
-16. Run py_compile, manifest-preflight validator, runtime-smoke validator, TSV
-    checks, zh-TW locale checks, git diff --check, and transcript-bearing leak
-    scan after tracked updates.
+16. Run py_compile, manifest-preflight validator, adapter-preflight validator,
+    runtime-smoke validator, TSV checks, zh-TW locale checks, git diff --check,
+    and transcript-bearing leak scan after tracked updates.
 
 Definition of done:
 - every primary Batch 1 model has a final evidence-backed decision;

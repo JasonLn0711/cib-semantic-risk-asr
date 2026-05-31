@@ -169,9 +169,19 @@ It now finds the local-only one-row manifest, records `1/6` expected local
 manifests present, and sets the immediate next action to run real one-row
 transcript-only adapters. The local manifest remains ignored and is not tracked.
 
+Gate B adapter preflight is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/`.
+It used the existing repo `.venv` without upgrading it, found the RTX 5080 and
+local one-row manifest, and did not download model weights or run inference.
+Current status: `models_ready_for_smoke=0`,
+`models_blocked_by_missing_runtime_modules=1`,
+`models_blocked_by_missing_cache=4`, and
+`models_deferred_by_gate_order=1`. The immediate next action is isolated
+runtime/cache preparation, starting with Qwen2.5-Omni.
+
 Post-Gate0 completion path:
 
-1. attach a local-only one-row manifest and real model-family adapters；
+1. prepare isolated runtime/cache lanes for the planned adapter order；
 2. run one-row transcript-only smoke for Qwen2.5-Omni, Step-Audio-2-mini,
    MOSS-Audio-4B, MiniCPM-o 4.5, Kimi with size-boundary wording, and
    MOSS-Audio-8B after MOSS 4B；
