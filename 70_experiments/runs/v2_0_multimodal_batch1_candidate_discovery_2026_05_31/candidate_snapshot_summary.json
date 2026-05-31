@@ -1,0 +1,72 @@
+{
+  "run_id": "v2_0_multimodal_batch1_candidate_discovery_2026_05_31",
+  "generated_at_unix": 1780238246,
+  "generated_at_utc": "2026-05-31T14:37:26.742242+00:00",
+  "gate": "Gate 0 candidate discovery and license/runtime snapshot",
+  "batch1_families": [
+    "Kimi-Audio",
+    "Qwen2.5-Omni",
+    "Step-Audio 2 mini",
+    "MOSS-Audio",
+    "MiniCPM-o"
+  ],
+  "batch1_primary_models": [
+    "moonshotai/Kimi-Audio-7B-Instruct",
+    "Qwen/Qwen2.5-Omni-7B",
+    "stepfun-ai/Step-Audio-2-mini",
+    "OpenMOSS-Team/MOSS-Audio-4B-Instruct",
+    "OpenMOSS-Team/MOSS-Audio-8B-Instruct",
+    "openbmb/MiniCPM-o-4_5"
+  ],
+  "fallback_only_models": [
+    "openbmb/MiniCPM-o-2_6",
+    "openbmb/MiniCPM-o-2_6-int4"
+  ],
+  "rows": 10,
+  "errors": [],
+  "promotion_decision_counts": {
+    "metadata_pending_size_boundary": 1,
+    "runtime_ready_after_artifact_check": 4,
+    "runtime_ready_after_4b_smoke": 1,
+    "defer_until_instruct_transcript_gate": 2,
+    "fallback_only_not_batch1_main": 1,
+    "fallback_only_not_scientific_model": 1
+  },
+  "candidate_lane_counts": {
+    "batch1_primary_zh_tw_audio_llm": 6,
+    "batch1_reasoning_variant_after_instruct": 2,
+    "fallback_only": 1,
+    "fallback_runtime_variant_only": 1
+  },
+  "family_status": {
+    "Kimi-Audio": [
+      "moonshotai/Kimi-Audio-7B-Instruct=metadata_pending_size_boundary"
+    ],
+    "Qwen2.5-Omni": [
+      "Qwen/Qwen2.5-Omni-7B=runtime_ready_after_artifact_check"
+    ],
+    "Step-Audio 2 mini": [
+      "stepfun-ai/Step-Audio-2-mini=runtime_ready_after_artifact_check"
+    ],
+    "MOSS-Audio": [
+      "OpenMOSS-Team/MOSS-Audio-4B-Instruct=runtime_ready_after_artifact_check",
+      "OpenMOSS-Team/MOSS-Audio-8B-Instruct=runtime_ready_after_4b_smoke",
+      "OpenMOSS-Team/MOSS-Audio-4B-Thinking=defer_until_instruct_transcript_gate",
+      "OpenMOSS-Team/MOSS-Audio-8B-Thinking=defer_until_instruct_transcript_gate"
+    ],
+    "MiniCPM-o": [
+      "openbmb/MiniCPM-o-4_5=runtime_ready_after_artifact_check",
+      "openbmb/MiniCPM-o-2_6=fallback_only_not_batch1_main",
+      "openbmb/MiniCPM-o-2_6-int4=fallback_only_not_scientific_model"
+    ]
+  },
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "model_weights_downloaded": false
+  },
+  "next_gate": "isolated runtime smoke only for metadata-clean Batch 1 models; Kimi requires explicit size-boundary decision before runtime promotion"
+}
