@@ -1,0 +1,2 @@
+model_family	model_id	execution_order	planned_gate	prompt_policy	quantization_policy	smoke_status	output_rows	valid_text_outputs	raw_transcript_like_outputs	repetition_output	summary_or_answer_outputs	translation_outputs	tts_only_outputs	invented_timestamp_outputs	invented_speaker_label_outputs	failure_mode	promotion_decision	output_chars	longest_repeated_char_run
+MiniCPM-o	openbmb/MiniCPM-o-4_5	4	one_row_transcript_only_smoke	text_only_no_tts_no_tool_no_conversation	4bit_nf4_bfloat16_compute	completed	1	1	1	0	0	0	0	0	0	none	promote_to_sentinel	70	2

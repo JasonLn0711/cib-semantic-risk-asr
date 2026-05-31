@@ -1126,10 +1126,11 @@ Codex goal prompt, is recorded in
 3. Select runtime artifacts for all five Batch 1 families, including model
    revision SHA, license, artifact size, parameter-count source, audio-input
    method, text-output method, and speech-output disabling method.
-4. Build isolated runtime records for all five Batch 1 families. If setup must
-   be staged, execute Kimi, Qwen2.5-Omni, and Step-Audio first, then MOSS 4B,
-   MOSS 8B, and MiniCPM-o 4.5; the Batch 1 scientific scope remains the full
-   five-family set.
+4. Build isolated runtime records for all five Batch 1 families. Current staged
+   execution has completed Qwen2.5-Omni, Step-Audio-2-mini, MOSS-Audio-4B, and
+   MiniCPM-o 4.5; Kimi is the next isolated runtime/cache gate, and MOSS 8B
+   follows only after the remaining one-row order stays governed. The Batch 1
+   scientific scope remains the full five-family set.
 5. Run 1-row transcript-only smoke for every runtime-feasible Batch 1 model.
 6. Run sentinel negative controls for every Batch 1 model that passes 1-row
    smoke.
@@ -1141,9 +1142,10 @@ Codex goal prompt, is recorded in
 10. Run MOSS-Audio internally as 4B Instruct first, then 8B Instruct; Thinking
     variants move to reasoning analysis only after the corresponding Instruct
     transcript gate is interpretable.
-11. Run MiniCPM-o 4.5 as the Batch 1 MiniCPM target after artifact/license/runtime
-    verification; use MiniCPM-o 2.6 only as the conservative fallback when 4.5
-    is not reproducible or when a strictly 2025-only comparison is required.
+11. MiniCPM-o 4.5 is the Batch 1 MiniCPM target and now has 4-bit one-row
+    transcript-contract evidence; use MiniCPM-o 2.6 only as the conservative
+    fallback when 4.5 is not reproducible in the target environment or when a
+    strictly 2025-only comparison is required.
 12. Add the voice-interaction lane after Batch 1 transcript gates:
     Fun-Audio-Chat-8B, Voila-base/chat, and Baichuan-Audio-Instruct.
 13. Add the long-audio/reasoning lane after Batch 1 transcript gates:

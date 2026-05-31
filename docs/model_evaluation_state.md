@@ -130,15 +130,15 @@ Current Gate 0 decisions:
 | Qwen2.5-Omni | `Qwen/Qwen2.5-Omni-7B` | `sentinel_controls_passed` | fixed 15-row candidate pool after Batch 1 smoke order remains governed |
 | Step-Audio 2 mini | `stepfun-ai/Step-Audio-2-mini` | `one_row_smoke_complete_not_promoted` | prompt/runtime repair before sentinel or 15-row |
 | MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-4B-Instruct` | `one_row_smoke_complete_promoted` | sentinel candidate |
-| MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-8B-Instruct` | `eligible_after_remaining_one_row_order` | after MiniCPM/Kimi one-row order remains governed |
+| MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-8B-Instruct` | `eligible_after_remaining_one_row_order` | after Kimi one-row order remains governed |
 | MOSS-Audio Thinking | 4B / 8B Thinking variants | `defer_until_instruct_transcript_gate` | reasoning analysis after Instruct transcript gates |
-| MiniCPM-o | `openbmb/MiniCPM-o-4_5` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
+| MiniCPM-o | `openbmb/MiniCPM-o-4_5` | `one_row_smoke_complete_promoted_quantized` | sentinel candidate with quantized local-feasibility boundary |
 | MiniCPM-o fallback | `openbmb/MiniCPM-o-2_6`, `openbmb/MiniCPM-o-2_6-int4` | fallback only | only if 4.5 is not reproducible or strict 2025-only scope is required |
 
-The next executable gate is isolated runtime smoke only for metadata-clean Batch
-1 models. Kimi-Audio remains scientifically important, but it needs an explicit
-scope decision because the public model family/card uses the `7B` label while
-the current Hugging Face widget reports `10B params`.
+The next executable gate is Kimi-Audio isolated runtime/cache preparation and
+one-row transcript-only smoke. Kimi-Audio remains scientifically important and
+now has an explicit scope decision because the public model family/card uses
+the `7B` label while the current Hugging Face widget reports `10B params`.
 
 ### Post-Gate0 Evidence: 2026-05-31
 
@@ -171,12 +171,13 @@ and untracked.
 
 Gate B adapter preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/`.
-It now records the ignored isolated runtime-lane state after Qwen, Step, and
-MOSS-Audio-4B setup, found the RTX 5080 and local one-row manifest, and did not
-run inference during the preflight itself. Current status:
-`models_ready_for_smoke=3`,
+It now records the ignored isolated runtime-lane state after Qwen, Step,
+MOSS-Audio-4B, and MiniCPM-o 4.5 setup, found the RTX 5080 and local one-row
+manifest, and did not run inference during the preflight itself. Current
+status:
+`models_ready_for_smoke=4`,
 `models_blocked_by_missing_runtime_modules=0`,
-`models_blocked_by_missing_cache=2`, and
+`models_blocked_by_missing_cache=1`, and
 `models_deferred_by_gate_order=1`.
 
 The Qwen2.5-Omni runtime/cache lane preparation is recorded in
@@ -221,11 +222,28 @@ The aggregate result is `valid_text_outputs=1`,
 `promotion_decision=promote_to_sentinel`. The transcript-bearing output remains
 local-only in the ignored MOSS runtime lane.
 
+MiniCPM-o 4.5 runtime/cache preparation is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_runtime_lane_2026_06_01/`.
+It confirms an ignored isolated MiniCPM runtime lane, local cache snapshot,
+CUDA access, no repo-wide `.venv` modification, no runtime import blockers,
+and a 4-bit NF4 inference policy because full-bf16 single-GPU loading exceeds
+the local 16GB GPU boundary while CPU offload hits an audio-encoder
+meta-tensor boundary. MiniCPM-o 4.5 one-row smoke is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_one_row_smoke_2026_06_01/`.
+The aggregate result is `valid_text_outputs=1`,
+`raw_transcript_like_outputs=1`, `summary_or_answer_outputs=0`,
+`translation_outputs=0`, `tts_only_outputs=0`,
+`invented_timestamp_outputs=0`, `invented_speaker_label_outputs=0`, and
+`promotion_decision=promote_to_sentinel`. This is local deployment feasibility
+and transcript-contract evidence, not full-bf16 quality evidence. The
+transcript-bearing output remains local-only in the ignored MiniCPM runtime
+lane.
+
 Post-Gate0 completion path:
 
-1. prepare isolated runtime/cache lanes for MiniCPM-o 4.5, Kimi with
-   size-boundary wording, and MOSS-Audio-8B after the remaining one-row order
-   stays governed；
+1. prepare isolated runtime/cache lane for Kimi with size-boundary wording,
+   then decide MOSS-Audio-8B timing after the remaining one-row order stays
+   governed；
 2. run one-row transcript-only smoke for the remaining planned models and run a
    separate Step prompt/runtime repair only if it is bounded；
 3. run sentinel controls for each model that passes one-row smoke；

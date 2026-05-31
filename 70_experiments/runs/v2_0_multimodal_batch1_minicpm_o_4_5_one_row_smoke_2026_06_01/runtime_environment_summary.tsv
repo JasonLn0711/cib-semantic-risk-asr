@@ -1,0 +1,2 @@
+model_family	model_id	execution_order	runtime_lane	python_version	platform	quantization_policy	model_inference_run	local_output_tracked	transcript_bearing_logs_tracked
+MiniCPM-o	openbmb/MiniCPM-o-4_5	4	ignored_minicpm_o_runtime_lane	3.12.3	Linux-6.17.0-29-generic-x86_64-with-glibc2.39	4bit_nf4_bfloat16_compute	True	False	False
