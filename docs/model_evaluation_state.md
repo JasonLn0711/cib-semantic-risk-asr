@@ -114,6 +114,52 @@ The v2.0 lane preserves the existing paper-ready boundary. It should not reopen
 completed transcript review or mix prompted audio-language outputs into the
 pure ASR benchmark table.
 
+### Gate 0 Snapshot: 2026-05-31
+
+Gate 0 candidate discovery is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_candidate_discovery_2026_05_31/`.
+The snapshot is metadata-only and does not contain raw audio, row IDs,
+transcripts, hypotheses, reviewer notes, transcript-bearing runtime logs, or
+model weights.
+
+Current Gate 0 decisions:
+
+| Family | Model / variant | Status | Next gate |
+| --- | --- | --- | --- |
+| Kimi-Audio | `moonshotai/Kimi-Audio-7B-Instruct` | `metadata_pending_size_boundary` | explicit size-boundary decision before runtime smoke |
+| Qwen2.5-Omni | `Qwen/Qwen2.5-Omni-7B` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
+| Step-Audio 2 mini | `stepfun-ai/Step-Audio-2-mini` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
+| MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-4B-Instruct` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
+| MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-8B-Instruct` | `runtime_ready_after_4b_smoke` | after 4B environment and prompt contract are interpretable |
+| MOSS-Audio Thinking | 4B / 8B Thinking variants | `defer_until_instruct_transcript_gate` | reasoning analysis after Instruct transcript gates |
+| MiniCPM-o | `openbmb/MiniCPM-o-4_5` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
+| MiniCPM-o fallback | `openbmb/MiniCPM-o-2_6`, `openbmb/MiniCPM-o-2_6-int4` | fallback only | only if 4.5 is not reproducible or strict 2025-only scope is required |
+
+The next executable gate is isolated runtime smoke only for metadata-clean Batch
+1 models. Kimi-Audio remains scientifically important, but it needs an explicit
+scope decision because the public model family/card uses the `7B` label while
+the current Hugging Face widget reports `10B params`.
+
+Post-Gate0 completion path:
+
+1. record the Kimi size-boundary decision as an aggregate-only run record；
+2. build isolated runtime smoke scaffolding without changing the repo-wide
+   environment；
+3. prepare local-only manifests for one-row smoke, sentinel controls, fixed
+   15-row, human-reviewed 30-row, promoted 258-row, and selected-300；
+4. run one-row transcript-only smoke for Qwen2.5-Omni, Step-Audio-2-mini,
+   MOSS-Audio-4B, MiniCPM-o 4.5, then Kimi after size-boundary decision, and
+   MOSS-Audio-8B after MOSS 4B；
+5. run sentinel negative controls before any scored rows；
+6. promote only clean candidates to fixed 15-row transcript scoring, Taiwan
+   utility/subgroup audit, and human-reviewed 30-row CDS evidence；
+7. refresh ASR controls for calibration, with Qwen3-ASR and Whisper-style
+   baselines as the main Mandarin comparison anchors；
+8. escalate to 258-row and selected-300 only for scientific winners with clean
+   runtime, locale, privacy, and license evidence；
+9. keep voice-interaction and long-audio/reasoning lanes separate until they
+   pass the transcript-only adapter.
+
 ## Promotion Requirements
 
 A model can move from candidate lane to the next larger gate only if all of

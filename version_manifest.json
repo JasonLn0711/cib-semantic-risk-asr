@@ -1,25 +1,23 @@
 {
-  "version": "v2.5.247",
+  "version": "v2.5.248",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 247
+    "patch": 248
   },
-  "updated_at": "2026-05-31T22:50:58+08:00",
+  "updated_at": "2026-05-31T22:51:28+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "3ad0df3",
+  "base_commit": "3f6ba0d",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
     "70_experiments/registry.tsv",
-    "70_experiments/runs/v2_0_multimodal_batch1_candidate_discovery_2026_05_31/README.md",
-    "70_experiments/runs/v2_0_multimodal_batch1_candidate_discovery_2026_05_31/candidate_snapshot.tsv",
-    "70_experiments/runs/v2_0_multimodal_batch1_candidate_discovery_2026_05_31/candidate_snapshot_summary.json",
-    "scripts/collect_v2_0_batch1_candidate_snapshot.py"
+    "docs/model_evaluation_state.md",
+    "docs/v2_0_multimodal_batch1_execution_runbook.md"
   ]
 }

@@ -2,13 +2,14 @@
 
 Date: 2026-05-31
 
-Status: execution runbook; no model inference has been run yet
+Status: Gate 0 metadata discovery complete; no model inference has been run yet
 
 ## Current Gate
 
-目前 v2.0 多模態實驗已完成設計定位，尚未進入模型推論。第一個可執行
-gate 是 Batch 1 candidate discovery and license/runtime gate，而不是直接跑
-15-row、258-row 或 selected-300。
+目前 v2.0 多模態實驗已完成設計定位與 Batch 1 Gate 0 metadata discovery，
+尚未進入模型推論。下一個可執行 gate 是 post-Gate0 size-boundary decision
+and isolated transcript-only runtime smoke，而不是直接跑 15-row、258-row 或
+selected-300。
 
 Batch 1 primary zh-TW audio LLM experiment set is fixed as:
 
@@ -22,6 +23,341 @@ MiniCPM-o 4.5
 MiniCPM-o 2.6 只作為 fallback：當 MiniCPM-o 4.5 無法重現、授權不清、artifact
 不可用，或論文需要 strict 2025-only MiniCPM comparison 時才執行。它不是第六個
 Batch 1 主模型。
+
+Gate 0 evidence is recorded in:
+
+```text
+70_experiments/runs/v2_0_multimodal_batch1_candidate_discovery_2026_05_31/
+```
+
+Current post-Gate0 state:
+
+| Family | State | Immediate next step |
+| --- | --- | --- |
+| Kimi-Audio-7B-Instruct | primary candidate with size-boundary decision pending | write explicit 7B-label / 10B-widget scope decision before runtime smoke |
+| Qwen2.5-Omni-7B | ready for isolated artifact/runtime check | one-row transcript-only smoke |
+| Step-Audio-2-mini | ready for isolated artifact/runtime check | one-row transcript-only smoke |
+| MOSS-Audio-4B-Instruct | ready for isolated artifact/runtime check | one-row transcript-only smoke |
+| MOSS-Audio-8B-Instruct | ready after 4B smoke | run only after 4B environment and prompt contract are interpretable |
+| MiniCPM-o 4.5 | ready for isolated artifact/runtime check | one-row transcript-only smoke |
+
+## Post-Gate0 Completion Roadmap
+
+This is the complete concrete path from the current repo state to a finished
+v2.0 Batch 1 multimodal experiment. The first principle is evidence economy:
+spend the next unit of compute only when the prior gate proves the model is
+eligible, reproducible, locale-aware, and useful for CDS-ASR.
+
+### Step 1: Record The Kimi Size-Boundary Decision
+
+Purpose: keep Kimi-Audio in the primary scientific lane while making the
+under-10B boundary auditable.
+
+Required decision:
+
+```text
+Kimi-Audio-7B-Instruct remains a primary zh-TW audio-language candidate because
+the public family/model label is 7B and the research question targets practical
+under-10B-class audio LLMs. Runtime smoke is allowed only after the report
+records the public 7B label, the current HF widget 10B marker, the public
+artifact-storage footprint, and the claim boundary.
+```
+
+Tracked artifact:
+
+```text
+70_experiments/runs/v2_0_multimodal_batch1_kimi_size_boundary_2026_05_31/
+  README.md
+  kimi_size_boundary_summary.json
+```
+
+Stop rule:
+
+- If the team chooses strict widget-count enforcement, Kimi stays in a primary
+  scientific discussion lane but does not enter runtime scoring until loaded
+  parameter evidence supports the active scope.
+
+### Step 2: Build Isolated Runtime Smoke Scaffolding
+
+Purpose: make each audio LLM runnable without changing the paper-ready v1
+environment.
+
+Required outputs:
+
+```text
+scripts/run_v2_0_multimodal_one_row_smoke.py
+scripts/validate_v2_0_multimodal_runtime_smoke.py
+70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_<date>/
+  README.md
+  runtime_environment_summary.tsv
+  behavior_summary.tsv
+  gate_summary.json
+```
+
+Rules:
+
+1. use one isolated environment per toolkit family when needed；
+2. keep model caches and hypothesis JSONL local-only / ignored；
+3. record model ID, revision SHA, toolkit versions, GPU, dtype, timeout, prompt
+   ID, generation config ID, wall time, peak VRAM, and output class；
+4. force text-only output and disable TTS/speech output where supported；
+5. write only aggregate summaries into git。
+
+### Step 3: Prepare Local-Only Manifests
+
+Purpose: protect the existing private audio and transcript boundary.
+
+Required local-only manifests:
+
+```text
+one_row_smoke_manifest.local.tsv
+sentinel_negative_control_manifest.local.tsv
+fixed_15_row_multimodal_manifest.local.tsv
+human_reviewed_30_row_cds_manifest.local.tsv
+promoted_258_row_manifest.local.tsv
+selected_300_multimodal_manifest.local.tsv
+```
+
+Tracked records may mention only counts, split names, strata names, and
+aggregate metric names. They must not include audio IDs, row IDs, transcript
+text, model hypotheses, reviewer notes, or local file paths that reveal private
+content.
+
+### Step 4: Run Gate 1 One-Row Transcript-Only Smoke
+
+Purpose: prove that each metadata-clean Batch 1 model can produce one raw
+transcript-like text output.
+
+Initial execution order:
+
+```text
+Qwen2.5-Omni-7B
+Step-Audio-2-mini
+MOSS-Audio-4B-Instruct
+MiniCPM-o 4.5
+Kimi-Audio-7B-Instruct after size-boundary decision
+MOSS-Audio-8B-Instruct after MOSS 4B smoke
+```
+
+Promotion rule:
+
+1. model loads or fails with a classifiable runtime reason；
+2. text output is available；
+3. output is transcript-like, not a summary, answer, translation, safety advice,
+   or spoken-response placeholder；
+4. no TTS-only path is required；
+5. prompt, runtime, and behavior summaries are complete。
+
+### Step 5: Run Gate 1b Sentinel Negative Controls
+
+Purpose: test hallucination and audio-instruction/data confusion before any
+scored rows.
+
+Sentinel categories:
+
+```text
+silence_or_near_silence
+non_speech_background_noise
+overlapped_speech
+long_pause_before_speech
+low_volume_speech
+spoken_instruction_inside_audio
+```
+
+Promotion rule:
+
+- silence and non-speech do not produce substantive transcript content；
+- spoken instructions inside audio are transcribed as data, not followed；
+- invented speaker labels, invented timestamps, invented entities, and prompt
+  leakage are counted before the model reaches Gate 2。
+
+### Step 6: Run Gate 2 Fixed 15-Row Transcript Gate
+
+Purpose: compare raw transcription behavior under Taiwan Mandarin and
+Traditional Chinese output constraints.
+
+Required metrics:
+
+```text
+valid_output_rate
+cer_zh_micro
+wer_zh_jieba_micro
+simplified_char_rate
+locale_violation_rows
+summary_or_answer_rows
+translation_rows
+refusal_or_safety_advice_rows
+invented_timestamp_rows
+invented_speaker_label_rows
+runtime_seconds_per_row
+failure_mode_class
+```
+
+Promotion rule:
+
+- valid row output rate is at least 95%；
+- simplified-character rate is 0 for raw output；
+- locale-violation row rate is at most 1%；
+- raw text is not repaired before raw scoring；
+- weaknesses are recorded by behavior class and acoustic stratum。
+
+### Step 7: Run Taiwan Utility And Subgroup Audit
+
+Purpose: measure what matters for Taiwanese Mandarin and downstream risk
+reasoning, not only generic CER/WER.
+
+Required audit surfaces:
+
+```text
+taiwan_term_error_rate
+domain_term_error_rate
+english_abbreviation_error_rate
+transcript_fidelity_score
+speaker_turn_error_rate
+long_audio_drift_rate
+zh_tw_repair_load
+audio_duration_band
+overlapped_speech_flag
+low_volume_or_noise_flag
+mandarin_english_code_switch_or_dialectal_cue
+numeric_amount_negation_action_intent_stratum
+```
+
+Promotion rule:
+
+- subgroup weaknesses are acceptable only when visible, bounded, and not
+  concentrated in high-risk decision strata。
+
+### Step 8: Run Gate 3 Human-Reviewed 30-Row CDS Gate
+
+Purpose: test whether each transcript candidate improves or harms the CDS-ASR
+semantic-risk evidence chain.
+
+Required metrics:
+
+```text
+human_reviewed_risk_atoms_covered
+human_reviewed_risk_atoms_missed
+decision_change_count
+unsafe_downrouting
+high_risk_missed
+ceis_max
+ceis_total
+sres_total
+low_surface_error_danger_count
+recovery_policy_trigger_count
+conservative_escalation_cost
+```
+
+Promotion rule:
+
+- CEIS/SRES compute without manual transcript repair；
+- high-risk misses and unsafe downrouting are visible；
+- privacy-bearing row contents remain local-only。
+
+### Step 9: Refresh ASR Controls
+
+Purpose: separate transcription quality from audio-language interaction
+behavior.
+
+Control set:
+
+```text
+Whisper large-v3 / large-v3-turbo
+Qwen3-ASR-0.6B / 1.7B
+SenseVoice / Fun-ASR
+Qwen2-Audio-7B-Instruct
+Granite Speech non-zh sanity check only
+NVIDIA Parakeet / Canary only after language-support metadata gate
+```
+
+Promotion rule:
+
+- Qwen3-ASR and Whisper-style baselines calibrate Mandarin transcription；
+- Granite, Parakeet, and Canary remain sanity or metadata-gated controls unless
+  they show Taiwan Mandarin / Traditional Chinese ASR evidence。
+
+### Step 10: Run Gate 4 Promoted 258-Row Split
+
+Purpose: scale only the best eligible Batch 1 families to comparable split-level
+evidence.
+
+Run only:
+
+1. the best transcript-capable candidate per family；
+2. one runtime fallback if it reproduces behavior；
+3. the ASR controls needed for calibration。
+
+Stop rule:
+
+- do not run all candidates on 258 rows; Gate 4 is for promoted models with
+  clean runtime, locale, sentinel, 15-row, and 30-row evidence。
+
+### Step 11: Run Gate 5 Selected-300 High-Stakes Evidence
+
+Purpose: add paper-grade high-stakes evidence only for scientific winners.
+
+Required conditions:
+
+1. Gate 4 is clean；
+2. the model adds a new scientific contrast；
+3. runtime is stable enough to avoid partial-output bias；
+4. license permits paper/reviewer use。
+
+Tracked outputs:
+
+```text
+aggregate predictor table
+aggregate recovery table
+model-family comparison table
+runtime and governance table
+```
+
+### Step 12: Open Secondary Lanes After Batch 1
+
+Purpose: preserve a clean primary experiment while still capturing useful
+voice-interaction and long-audio research directions.
+
+Secondary order:
+
+```text
+Voice-interaction lane: Fun-Audio-Chat-8B, Voila-base/chat, Baichuan-Audio
+Long-audio / reasoning lane: Audio Flamingo Next, MOSS-Audio Thinking,
+future Step-Audio-2-mini Think if available
+```
+
+Rule:
+
+- these lanes can enter interaction or reasoning reports, but they enter raw
+  CDS-ASR tables only after passing the same transcript-only adapter。
+
+### Step 13: Package The Final Evidence
+
+Required final tracked artifacts:
+
+```text
+candidate discovery table
+runtime feasibility table
+15-row raw transcript gate table
+behavior taxonomy table
+Taiwan zh-TW utility table
+subgroup and sentinel risk table
+30-row human-reviewed CDS table
+runtime and governance table
+promoted 258-row / selected-300 comparison table if reached
+```
+
+Definition of complete:
+
+- each reported model has a pinned source, revision, license decision, parameter
+  or size-boundary decision, runtime record, prompt/config record, behavior
+  taxonomy, locale result, Taiwan utility result, CDS downstream result, and a
+  promotion/defer decision；
+- private audio, row IDs, transcripts, hypotheses, reviewer notes, and
+  transcript-bearing logs remain outside git；
+- the paper-facing summary separates primary zh-TW audio LLM evidence,
+  secondary voice-interaction evidence, long-audio/reasoning evidence, and ASR
+  controls。
 
 ## Definition Of Done
 
@@ -106,6 +442,10 @@ Stop rule:
 ### Phase 1: Gate 0 Candidate Discovery And License Snapshot
 
 Purpose: confirm the live model universe before spending GPU time.
+
+Current status: complete for the 2026-05-31 Batch 1 snapshot. Future runs should
+refresh this gate only when model metadata, license state, artifact availability,
+or the Batch 1 model list changes.
 
 Create:
 
@@ -540,20 +880,29 @@ Stop or defer a model when:
 Use this prompt to start a dedicated Codex execution goal:
 
 ```text
-Goal: Execute the v2.0 Batch 1 multimodal audio LLM experiment in
-/home/jnln3799/every_on_git_ubuntu/cib-semantic-risk-asr through evidence-gated,
-privacy-safe run records.
+Goal: Continue and complete the post-Gate0 v2.0 Batch 1 multimodal audio LLM
+experiment in /home/jnln3799/every_on_git_ubuntu/cib-semantic-risk-asr through
+evidence-gated, privacy-safe run records.
 
 Context:
 - The v2.0 design is recorded in docs/v2_0_multimodal_under_10b_experiment_plan.md.
 - The execution runbook is docs/v2_0_multimodal_batch1_execution_runbook.md.
+- Gate 0 metadata discovery is complete at:
+  70_experiments/runs/v2_0_multimodal_batch1_candidate_discovery_2026_05_31/
 - The first Batch 1 primary zh-TW audio LLM experiment set is fixed as:
   Kimi-Audio-7B-Instruct, Qwen2.5-Omni-7B, Step-Audio-2-mini,
   MOSS-Audio-4B/8B, and MiniCPM-o 4.5.
 - MiniCPM-o 2.6 is fallback only, not a sixth Batch 1 model.
-- The current active gate is Gate 0 candidate discovery and license/runtime
-  snapshot. Do not jump directly to 15-row, 258-row, selected-300, or secondary
-  interaction/reasoning lanes.
+- Current Gate 0 state:
+  - Kimi-Audio remains primary but requires explicit 7B-label / 10B-widget
+    size-boundary handling before runtime smoke.
+  - Qwen2.5-Omni-7B, Step-Audio-2-mini, MOSS-Audio-4B-Instruct, and MiniCPM-o
+    4.5 are ready for isolated artifact/runtime checks before one-row smoke.
+  - MOSS-Audio-8B-Instruct follows after the 4B smoke is interpretable.
+  - MOSS Thinking variants are deferred until Instruct transcript gates.
+- The current active gate is post-Gate0 size-boundary decision plus isolated
+  transcript-only runtime smoke. Do not jump directly to 15-row, 258-row,
+  selected-300, or secondary interaction/reasoning lanes.
 
 Hard boundaries:
 - Preserve the existing paper-ready CDS-ASR evidence chain.
@@ -569,31 +918,54 @@ Hard boundaries:
 Execution order:
 1. Inspect git status, relevant docs, registry, existing validators, and run
    records.
-2. Validate the current design baseline and registry TSV.
-3. Create Gate 0 run folder:
-   70_experiments/runs/v2_0_multimodal_batch1_candidate_discovery_2026_05_31/
-4. Build or update a candidate snapshot generator if needed.
-5. Refresh official metadata for the five Batch 1 families:
-   model ID, revision SHA, release/created date, last modified, license, gated
-   status, parameter count, artifact size, modality, audio input path, text
-   output path, speech-output disabling path, runtime, trust_remote_code, and
-   source URLs.
-6. Write candidate_snapshot.tsv, candidate_snapshot_summary.json, and README.md.
-7. Update 70_experiments/registry.tsv and docs/model_evaluation_state.md with
-   aggregate-only Gate 0 status.
-8. Run validation:
+2. Validate that Gate 0 artifacts are present and repo-safe.
+3. Record the Kimi size-boundary decision in a new aggregate-only run folder:
+   70_experiments/runs/v2_0_multimodal_batch1_kimi_size_boundary_2026_05_31/
+4. Build isolated runtime smoke scaffolding without upgrading the repo-wide
+   .venv. Track only aggregate runtime records.
+5. Prepare local-only manifests for one-row smoke, sentinel controls, fixed
+   15-row, human-reviewed 30-row, promoted 258-row, and selected-300. Do not
+   track row IDs, transcripts, hypotheses, reviewer notes, or transcript-bearing
+   logs.
+6. Run Gate 1 one-row transcript-only smoke in this order:
+   Qwen2.5-Omni-7B, Step-Audio-2-mini, MOSS-Audio-4B-Instruct, MiniCPM-o 4.5,
+   Kimi-Audio after size-boundary decision, and MOSS-Audio-8B after MOSS 4B.
+7. Write runtime_environment_summary.tsv, behavior_summary.tsv,
+   gate_summary.json, and README.md for the runtime smoke. Classify every model
+   as promoted, deferred, runtime-blocked, metadata-pending, or fallback-only.
+8. Run Gate 1b sentinel negative controls only for models with valid one-row
+   transcript-like output.
+9. Run Gate 2 fixed 15-row transcript gate only for models passing sentinel
+   controls.
+10. Run Taiwan utility and subgroup/acoustic audit for Gate 2 survivors.
+11. Run Gate 3 human-reviewed 30-row CDS gate only for models that preserve raw
+   transcript validity and locale behavior.
+12. Refresh ASR controls for calibration: Whisper large-v3/large-v3-turbo,
+   Qwen3-ASR 0.6B/1.7B, SenseVoice/Fun-ASR, Qwen2-Audio legacy bridge, and
+   Granite/Parakeet/Canary only under their documented metadata gates.
+13. Escalate to Gate 4 258-row split only for promoted model families.
+14. Escalate to Gate 5 selected-300 only for scientific winners that are stable,
+   licensed, and useful for the paper.
+15. Update docs/model_evaluation_state.md, 70_experiments/registry.tsv, and the
+   relevant run README files after each gate.
+16. Run validation after each tracked update:
    - registry TSV column-count check
+   - run TSV column-count checks
+   - python py_compile for touched scripts
    - zh-TW locale check for touched docs
    - git diff --check
-9. Stop after Gate 0 unless the user explicitly asks to proceed to runtime
-   smoke. Report which Batch 1 models are runtime-ready, metadata-pending,
-   license-blocked, or fallback-only.
+   - transcript-bearing leak scan for tracked aggregate TSV/JSON headers and
+     keys
 
-Definition of done for this goal turn:
-- Gate 0 artifacts exist and are repo-safe.
-- Batch 1 model metadata and license/runtime decisions are recorded.
+Definition of done for the full experiment:
+- Every reported model has a pinned source, revision, license decision, size or
+  size-boundary decision, runtime record, prompt/config record, behavior
+  taxonomy, locale result, Taiwan utility result, CDS downstream result, and a
+  promotion/defer decision.
+- Kimi's size-boundary handling is explicit before any runtime claim.
+- Only promoted models reach 258-row and selected-300 gates.
+- Secondary voice-interaction and long-audio/reasoning lanes remain separate
+  from raw ASR tables unless they pass the transcript-only adapter.
 - No private row-level content is tracked.
-- Validation commands pass.
-- The next gate is clearly identified as isolated runtime smoke only for
-  metadata-clean Batch 1 models.
+- Validation commands pass after each tracked update.
 ```
