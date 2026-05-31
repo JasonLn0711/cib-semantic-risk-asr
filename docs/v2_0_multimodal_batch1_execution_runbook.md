@@ -2,13 +2,15 @@
 
 Date: 2026-05-31
 
-Status: Gate 0 metadata discovery complete; no model inference has been run yet
+Status: Kimi size-boundary decision and runtime-smoke preflight complete; no
+model inference has been run yet
 
 ## Current Gate
 
-目前 v2.0 多模態實驗已完成設計定位與 Batch 1 Gate 0 metadata discovery，
-尚未進入模型推論。下一個可執行 gate 是 post-Gate0 size-boundary decision
-and isolated transcript-only runtime smoke，而不是直接跑 15-row、258-row 或
+目前 v2.0 多模態實驗已完成設計定位、Batch 1 Gate 0 metadata discovery、
+Kimi size-boundary decision，以及 isolated runtime-smoke preflight。尚未進入
+模型推論。下一個可執行 gate 是 attach local-only one-row manifest and run
+model-family transcript-only runtime adapters，而不是直接跑 15-row、258-row 或
 selected-300。
 
 Batch 1 primary zh-TW audio LLM experiment set is fixed as:
@@ -34,12 +36,19 @@ Current post-Gate0 state:
 
 | Family | State | Immediate next step |
 | --- | --- | --- |
-| Kimi-Audio-7B-Instruct | primary candidate with size-boundary decision pending | write explicit 7B-label / 10B-widget scope decision before runtime smoke |
-| Qwen2.5-Omni-7B | ready for isolated artifact/runtime check | one-row transcript-only smoke |
-| Step-Audio-2-mini | ready for isolated artifact/runtime check | one-row transcript-only smoke |
-| MOSS-Audio-4B-Instruct | ready for isolated artifact/runtime check | one-row transcript-only smoke |
+| Kimi-Audio-7B-Instruct | size-boundary decision recorded | one-row transcript-only smoke with explicit size-boundary wording |
+| Qwen2.5-Omni-7B | ready for isolated adapter/runtime execution | one-row transcript-only smoke |
+| Step-Audio-2-mini | ready for isolated adapter/runtime execution | one-row transcript-only smoke |
+| MOSS-Audio-4B-Instruct | ready for isolated adapter/runtime execution | one-row transcript-only smoke |
 | MOSS-Audio-8B-Instruct | ready after 4B smoke | run only after 4B environment and prompt contract are interpretable |
-| MiniCPM-o 4.5 | ready for isolated artifact/runtime check | one-row transcript-only smoke |
+| MiniCPM-o 4.5 | ready for isolated adapter/runtime execution | one-row transcript-only smoke |
+
+Post-Gate0 evidence now includes:
+
+```text
+70_experiments/runs/v2_0_multimodal_batch1_kimi_size_boundary_2026_05_31/
+70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31/
+```
 
 ## Post-Gate0 Completion Roadmap
 
@@ -52,6 +61,9 @@ eligible, reproducible, locale-aware, and useful for CDS-ASR.
 
 Purpose: keep Kimi-Audio in the primary scientific lane while making the
 under-10B boundary auditable.
+
+Current status: complete in
+`70_experiments/runs/v2_0_multimodal_batch1_kimi_size_boundary_2026_05_31/`.
 
 Required decision:
 
@@ -81,6 +93,15 @@ Stop rule:
 
 Purpose: make each audio LLM runnable without changing the paper-ready v1
 environment.
+
+Current status: preflight scaffolding complete in
+`70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31/`.
+The tracked runner and validator are:
+
+```text
+scripts/run_v2_0_multimodal_one_row_smoke.py
+scripts/validate_v2_0_multimodal_runtime_smoke.py
+```
 
 Required outputs:
 
@@ -889,20 +910,24 @@ Context:
 - The execution runbook is docs/v2_0_multimodal_batch1_execution_runbook.md.
 - Gate 0 metadata discovery is complete at:
   70_experiments/runs/v2_0_multimodal_batch1_candidate_discovery_2026_05_31/
+- Kimi size-boundary handling is complete at:
+  70_experiments/runs/v2_0_multimodal_batch1_kimi_size_boundary_2026_05_31/
+- Runtime-smoke preflight scaffolding is complete at:
+  70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31/
 - The first Batch 1 primary zh-TW audio LLM experiment set is fixed as:
   Kimi-Audio-7B-Instruct, Qwen2.5-Omni-7B, Step-Audio-2-mini,
   MOSS-Audio-4B/8B, and MiniCPM-o 4.5.
 - MiniCPM-o 2.6 is fallback only, not a sixth Batch 1 model.
-- Current Gate 0 state:
-  - Kimi-Audio remains primary but requires explicit 7B-label / 10B-widget
+- Current Gate 1 state:
+  - Kimi-Audio remains primary and has explicit 7B-label / 10B-widget
     size-boundary handling before runtime smoke.
   - Qwen2.5-Omni-7B, Step-Audio-2-mini, MOSS-Audio-4B-Instruct, and MiniCPM-o
-    4.5 are ready for isolated artifact/runtime checks before one-row smoke.
+    4.5 are ready for isolated adapter/runtime execution before one-row smoke.
   - MOSS-Audio-8B-Instruct follows after the 4B smoke is interpretable.
   - MOSS Thinking variants are deferred until Instruct transcript gates.
-- The current active gate is post-Gate0 size-boundary decision plus isolated
-  transcript-only runtime smoke. Do not jump directly to 15-row, 258-row,
-  selected-300, or secondary interaction/reasoning lanes.
+- The current active gate is attaching a local-only one-row manifest and running
+  isolated transcript-only runtime adapters. Do not jump directly to 15-row,
+  258-row, selected-300, or secondary interaction/reasoning lanes.
 
 Hard boundaries:
 - Preserve the existing paper-ready CDS-ASR evidence chain.
@@ -918,12 +943,12 @@ Hard boundaries:
 Execution order:
 1. Inspect git status, relevant docs, registry, existing validators, and run
    records.
-2. Validate that Gate 0 artifacts are present and repo-safe.
-3. Record the Kimi size-boundary decision in a new aggregate-only run folder:
-   70_experiments/runs/v2_0_multimodal_batch1_kimi_size_boundary_2026_05_31/
-4. Build isolated runtime smoke scaffolding without upgrading the repo-wide
-   .venv. Track only aggregate runtime records.
-5. Prepare local-only manifests for one-row smoke, sentinel controls, fixed
+2. Validate that Gate 0, Kimi size-boundary, and runtime-smoke preflight
+   artifacts are present and repo-safe.
+3. Attach or create the local-only one-row smoke manifest. Do not track it.
+4. Add model-family runtime adapters without upgrading the repo-wide .venv.
+   Track only aggregate runtime records.
+5. Prepare or confirm local-only manifests for sentinel controls, fixed
    15-row, human-reviewed 30-row, promoted 258-row, and selected-300. Do not
    track row IDs, transcripts, hypotheses, reviewer notes, or transcript-bearing
    logs.

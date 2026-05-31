@@ -140,24 +140,38 @@ The next executable gate is isolated runtime smoke only for metadata-clean Batch
 scope decision because the public model family/card uses the `7B` label while
 the current Hugging Face widget reports `10B params`.
 
+### Post-Gate0 Evidence: 2026-05-31
+
+The Kimi size-boundary decision is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_kimi_size_boundary_2026_05_31/`.
+Kimi-Audio may enter one-row transcript-only runtime smoke as a `7B`-labeled
+primary candidate with an explicit size-boundary validation layer. It cannot be
+reported as a strictly verified loaded-parameter `<10B` model until separate
+loaded-parameter evidence is recorded.
+
+The runtime-smoke preflight scaffold is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31/`.
+It defines the aggregate-only runtime and behavior schemas, execution order,
+and local-only manifest boundary. No model inference, model-weight download,
+raw audio, row ID, transcript, model hypothesis, reviewer note, or
+transcript-bearing runtime log is tracked.
+
 Post-Gate0 completion path:
 
-1. record the Kimi size-boundary decision as an aggregate-only run record；
-2. build isolated runtime smoke scaffolding without changing the repo-wide
-   environment；
-3. prepare local-only manifests for one-row smoke, sentinel controls, fixed
-   15-row, human-reviewed 30-row, promoted 258-row, and selected-300；
-4. run one-row transcript-only smoke for Qwen2.5-Omni, Step-Audio-2-mini,
-   MOSS-Audio-4B, MiniCPM-o 4.5, then Kimi after size-boundary decision, and
+1. attach a local-only one-row manifest and real model-family adapters；
+2. run one-row transcript-only smoke for Qwen2.5-Omni, Step-Audio-2-mini,
+   MOSS-Audio-4B, MiniCPM-o 4.5, Kimi with size-boundary wording, and
    MOSS-Audio-8B after MOSS 4B；
-5. run sentinel negative controls before any scored rows；
-6. promote only clean candidates to fixed 15-row transcript scoring, Taiwan
+3. prepare local-only manifests for sentinel controls, fixed
+   15-row, human-reviewed 30-row, promoted 258-row, and selected-300；
+4. run sentinel negative controls before any scored rows；
+5. promote only clean candidates to fixed 15-row transcript scoring, Taiwan
    utility/subgroup audit, and human-reviewed 30-row CDS evidence；
-7. refresh ASR controls for calibration, with Qwen3-ASR and Whisper-style
+6. refresh ASR controls for calibration, with Qwen3-ASR and Whisper-style
    baselines as the main Mandarin comparison anchors；
-8. escalate to 258-row and selected-300 only for scientific winners with clean
+7. escalate to 258-row and selected-300 only for scientific winners with clean
    runtime, locale, privacy, and license evidence；
-9. keep voice-interaction and long-audio/reasoning lanes separate until they
+8. keep voice-interaction and long-audio/reasoning lanes separate until they
    pass the transcript-only adapter.
 
 ## Promotion Requirements

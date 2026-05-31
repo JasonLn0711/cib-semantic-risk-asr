@@ -5,6 +5,27 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.249 - 2026-05-31T23:11:51+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `8ca3f89`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `.gitignore`
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_kimi_size_boundary_2026_05_31/README.md`
+  - `70_experiments/runs/v2_0_multimodal_batch1_kimi_size_boundary_2026_05_31/kimi_size_boundary_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31/README.md`
+  - `70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31/behavior_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31/gate_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31/runtime_environment_summary.tsv`
+  - `docs/model_evaluation_state.md`
+  - `docs/v2_0_multimodal_batch1_execution_runbook.md`
+  - `scripts/run_v2_0_multimodal_one_row_smoke.py`
+  - `scripts/validate_v2_0_multimodal_runtime_smoke.py`
+
 ## v2.5.248 - 2026-05-31T22:51:28+08:00
 
 - Bump: `patch`

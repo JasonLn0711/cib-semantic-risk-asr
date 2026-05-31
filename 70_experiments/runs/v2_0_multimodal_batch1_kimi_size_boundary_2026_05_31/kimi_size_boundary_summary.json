@@ -1,0 +1,34 @@
+{
+  "run_id": "v2_0_multimodal_batch1_kimi_size_boundary_2026_05_31",
+  "date": "2026-05-31",
+  "gate": "post-Gate0 Kimi size-boundary decision",
+  "status": "size_boundary_decision_recorded",
+  "model_family": "Kimi-Audio",
+  "model_id": "moonshotai/Kimi-Audio-7B-Instruct",
+  "gate0_source_run": "v2_0_multimodal_batch1_candidate_discovery_2026_05_31",
+  "gate0_source_artifact": "70_experiments/runs/v2_0_multimodal_batch1_candidate_discovery_2026_05_31/candidate_snapshot.tsv",
+  "public_model_label": "Kimi-Audio-7B-Instruct",
+  "hf_widget_parameter_marker": "10B params",
+  "artifact_storage_gib": 39.67,
+  "model_revision_sha": "9a82a84c37ad9eb1307fb6ed8d7b397862ef9e6b",
+  "license": "mit",
+  "decision": "allow_isolated_transcript_only_runtime_smoke_with_explicit_size_boundary_validation_layer",
+  "allowed_next_gate": "Gate 1 one-row transcript-only runtime smoke after artifact/runtime checks",
+  "required_reporting_wording": "7B-labeled Kimi-Audio primary candidate with an explicit size-boundary validation layer",
+  "disallowed_claims": [
+    "strictly verified <10B loaded-parameter model",
+    "loaded-parameter count verified",
+    "parameter boundary resolved by inference"
+  ],
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_weights_downloaded": false,
+    "local_model_cache_paths_tracked": false
+  },
+  "next_gate": "isolated one-row transcript-only runtime smoke"
+}

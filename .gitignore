@@ -75,3 +75,9 @@ hf_cache/
 70_experiments/runs/*/predictions/
 70_experiments/runs/*/logs/
 70_experiments/runs/*/models/
+
+# v2.0 multimodal runtime gates keep row-level inputs/outputs local-only.
+*.local.tsv
+*.local.jsonl
+*hypothesis*.jsonl
+*hypotheses*.jsonl
