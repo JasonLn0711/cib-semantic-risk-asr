@@ -24,9 +24,9 @@ reviewer notes, or local file paths.
 
 ```text
 manifest_specs=6
-manifest_files_present=2
+manifest_files_present=3
 missing_required_next=False
-next_gate=run_real_one_row_transcript_only_smoke_adapters
+next_gate=prepare_human_reviewed_30_row_cds_manifest_only_after_clean_15_row_gate
 ```
 
 ## Next Step

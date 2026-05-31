@@ -199,18 +199,31 @@ def main() -> int:
 
     present = sum(1 for row in rows if row["exists"] == "true")
     one_row = next(row for row in rows if row["manifest_id"] == "one_row_smoke")
+    sentinel = next(row for row in rows if row["manifest_id"] == "sentinel_negative_control")
+    fixed_15 = next(row for row in rows if row["manifest_id"] == "fixed_15_row_multimodal")
+    human_30 = next(row for row in rows if row["manifest_id"] == "human_reviewed_30_row_cds")
     missing_required_next = one_row["exists"] != "true" or int(one_row["row_count"]) < 1
-    next_gate = (
-        "create_or_attach_one_row_smoke_manifest_local_tsv"
-        if missing_required_next
-        else "run_real_one_row_transcript_only_smoke_adapters"
-    )
+    if missing_required_next:
+        next_gate = "create_or_attach_one_row_smoke_manifest_local_tsv"
+        status = "missing_required_next_manifest"
+    elif sentinel["exists"] != "true" or int(sentinel["row_count"]) < 6:
+        next_gate = "create_or_attach_sentinel_negative_control_manifest_local_tsv"
+        status = "ready_for_sentinel_manifest"
+    elif fixed_15["exists"] != "true" or int(fixed_15["row_count"]) < 15:
+        next_gate = "create_or_attach_fixed_15_row_multimodal_manifest_local_tsv"
+        status = "ready_for_fixed_15_manifest"
+    elif human_30["exists"] != "true" or int(human_30["row_count"]) < 30:
+        next_gate = "prepare_human_reviewed_30_row_cds_manifest_only_after_clean_15_row_gate"
+        status = "ready_through_fixed_15_manifest"
+    else:
+        next_gate = "all_expected_local_manifests_present"
+        status = "all_expected_manifests_present"
 
     summary = {
         "run_id": RUN_ID,
         "generated_at_unix": int(time.time()),
         "gate": "Gate A local-only manifest preflight",
-        "status": "missing_required_next_manifest" if missing_required_next else "ready_for_one_row_smoke",
+        "status": status,
         "manifest_specs": len(MANIFESTS),
         "manifest_files_present": present,
         "missing_required_next": missing_required_next,

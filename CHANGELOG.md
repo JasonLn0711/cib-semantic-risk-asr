@@ -5,6 +5,31 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.262 - 2026-06-01T04:44:52+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `61757d0`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/README.md`
+  - `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/manifest_preflight_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/manifest_preflight_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_qwen_fixed_15_row_transcript_gate_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_batch1_qwen_fixed_15_row_transcript_gate_2026_06_01/behavior_taxonomy_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_qwen_fixed_15_row_transcript_gate_2026_06_01/gate_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_batch1_qwen_fixed_15_row_transcript_gate_2026_06_01/locale_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_qwen_fixed_15_row_transcript_gate_2026_06_01/transcript_metric_summary.tsv`
+  - `docs/model_evaluation_state.md`
+  - `docs/v2_0_multimodal_batch1_execution_runbook.md`
+  - `docs/v2_0_multimodal_batch1_full_completion_plan.md`
+  - `docs/v2_0_multimodal_under_10b_experiment_plan.md`
+  - `scripts/prepare_v2_0_multimodal_manifest_preflight.py`
+  - `scripts/run_v2_0_qwen_omni_fixed_15_row_transcript_gate.py`
+  - `scripts/validate_v2_0_qwen_omni_fixed_15_row_transcript_gate.py`
+
 ## v2.5.261 - 2026-06-01T04:00:02+08:00
 
 - Bump: `patch`

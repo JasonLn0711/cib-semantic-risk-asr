@@ -1,0 +1,2 @@
+model_family	model_id	output_rows	valid_text_outputs	raw_transcript_like_outputs	summary_or_answer_rows	translation_rows	refusal_or_safety_advice_rows	tts_only_rows	invented_timestamp_rows	invented_speaker_label_rows	empty_output_rows	failure_rows
+Qwen2.5-Omni	Qwen/Qwen2.5-Omni-7B	15	15	15	0	0	0	0	0	0	0	0

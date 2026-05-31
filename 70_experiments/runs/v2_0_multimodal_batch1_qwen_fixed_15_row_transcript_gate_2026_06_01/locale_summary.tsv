@@ -1,0 +1,2 @@
+model_family	model_id	output_chars	cjk_chars	simplified_char_count	simplified_char_rate	locale_violation_rows	raw_scoring_after_opencc_repair
+Qwen2.5-Omni	Qwen/Qwen2.5-Omni-7B	2597	1356	233	17.1829	15	false

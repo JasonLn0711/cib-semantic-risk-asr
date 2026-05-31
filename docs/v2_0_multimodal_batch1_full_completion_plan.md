@@ -4,9 +4,10 @@ Date: 2026-06-01
 
 Status: full completion plan; Gate 0, Kimi size-boundary decision, runtime
 smoke preflight, Gate A one-row manifest preflight, Gate B adapter preflight,
-Qwen isolated runtime/cache lane, Qwen one-row transcript-only smoke, and Qwen
-sentinel controls are complete. Qwen is the only current fixed 15-row
-candidate. Step-Audio-2-mini isolated runtime/cache and one-row smoke are
+Qwen isolated runtime/cache lane, Qwen one-row transcript-only smoke, Qwen
+sentinel controls, and Qwen fixed 15-row transcript gate are complete. Qwen
+failed the raw zh-TW locale gate and is not promoted to Taiwan utility/subgroup
+or 30-row CDS from this run. Step-Audio-2-mini isolated runtime/cache and one-row smoke are
 complete, with Step held in a prompt/runtime repair lane. MOSS-Audio-4B
 isolated runtime/cache, one-row smoke, and sentinel controls are complete; MOSS
 4B failed sentinel behavior controls and is not promoted to fixed 15-row from
@@ -48,6 +49,7 @@ Completed tracked evidence:
 70_experiments/runs/v2_0_multimodal_batch1_qwen_runtime_lane_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_qwen_one_row_smoke_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_qwen_sentinel_controls_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_qwen_fixed_15_row_transcript_gate_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_step_audio_runtime_lane_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_step_audio_one_row_smoke_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_runtime_lane_2026_06_01/
@@ -77,6 +79,8 @@ scripts/validate_v2_0_qwen_omni_one_row_smoke.py
 scripts/prepare_v2_0_qwen_sentinel_manifest.py
 scripts/run_v2_0_qwen_omni_sentinel_controls.py
 scripts/validate_v2_0_qwen_omni_sentinel_controls.py
+scripts/run_v2_0_qwen_omni_fixed_15_row_transcript_gate.py
+scripts/validate_v2_0_qwen_omni_fixed_15_row_transcript_gate.py
 scripts/run_v2_0_moss_audio_4b_sentinel_controls.py
 scripts/validate_v2_0_moss_audio_4b_sentinel_controls.py
 scripts/run_v2_0_minicpm_o_4_5_sentinel_controls.py
@@ -107,7 +111,7 @@ Kimi-Audio has completed isolated runtime/cache setup and a one-row attempt,
 but the official main-model remote code requires `flash_attn`; the isolated
 environment cannot source-build it on this machine without
 `/usr/local/cuda/bin/nvcc`. Qwen2.5-Omni has passed one-row smoke and sentinel
-controls and is the only current fixed 15-row candidate. MOSS-Audio-4B and
+controls, then failed the fixed 15-row raw zh-TW locale gate. MOSS-Audio-4B and
 MiniCPM-o 4.5 passed one-row transcript-like smoke but failed sentinel behavior
 controls, so both require bounded sentinel repair/rerun before any fixed
 15-row gate. Step-Audio-2-mini is parked in a prompt/runtime repair lane
@@ -116,9 +120,14 @@ transcript-like output. MOSS-Audio-8B has completed the one-row attempt and is
 blocked by the local 16GB single-GPU memory boundary.
 ```
 
-Qwen2.5-Omni has completed one-row transcript-only inference and sentinel
-controls. The tracked records are aggregate-only; model outputs and sentinel
-audio stay in ignored local runtime lanes.
+Qwen2.5-Omni has completed one-row transcript-only inference, sentinel
+controls, and fixed 15-row transcript scoring. The tracked records are
+aggregate-only; model outputs, sentinel audio, and 15-row transcript-bearing
+outputs stay in ignored local runtime lanes. The fixed 15-row gate records
+`valid_output_rate=100.0`, `raw_transcript_like_outputs=15/15`,
+`locale_violation_rows=15`, `simplified_char_rate=17.1829`, and
+`promotion_decision=do_not_promote`, so Qwen does not enter Taiwan
+utility/subgroup or 30-row CDS from this raw run.
 
 MOSS-Audio-4B has completed isolated runtime/cache setup and one-row
 transcript-only smoke. The tracked records are aggregate-only; model output and
@@ -213,9 +222,9 @@ Purpose: prepare inputs without leaking protected content.
 
 Current status: aggregate preflight recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/`.
-The preflight now finds `1` local manifest file, confirms the one-row manifest
-minimum is met, and marks the immediate next gate as
-`run_real_one_row_transcript_only_smoke_adapters`.
+The preflight now finds `3` local manifest files: one-row smoke, sentinel, and
+fixed 15-row. It marks the next manifest boundary as human-reviewed 30-row
+preparation only after a clean fixed 15-row gate exists.
 
 Required local-only files:
 
@@ -260,7 +269,11 @@ Current Gate A result:
 - `one_row_smoke_manifest.local.tsv` is present locally and ignored by git；
 - `sentinel_negative_control_manifest.local.tsv` is present locally and ignored
   by git；
-- the manifest preflight now records `2/6` expected local manifests present；
+- `fixed_15_row_multimodal_manifest.local.tsv` is present locally and ignored
+  by git；
+- the manifest preflight now records `3/6` expected local manifests present；
+- the 30-row, promoted 258-row, and selected-300 manifests remain pending
+  because no current raw Batch 1 model has passed fixed 15-row；
 - the tracked preflight record stores only aggregate row/field counts and does
   not store manifest field names or row-level values。
 
@@ -286,7 +299,9 @@ models_deferred_by_gate_order=0
 
 Immediate runtime-lane implications:
 
-1. Qwen2.5-Omni has passed runtime/cache, one-row smoke, and sentinel controls；
+1. Qwen2.5-Omni has passed runtime/cache, one-row smoke, and sentinel controls,
+   then failed the fixed 15-row raw zh-TW locale gate with
+   `promotion_decision=do_not_promote`；
 2. Step-Audio-2-mini has passed runtime/cache setup but failed the
    transcript-only smoke contract because the output was repetition /
    non-transcript-like text；
@@ -596,13 +611,45 @@ MiniCPM needs a bounded sentinel repair/rerun before any fixed 15-row gate.
 Current Batch 1 promotion state after sentinel controls:
 
 ```text
-Qwen2.5-Omni-7B: promote_to_15_row_candidate_pool
+Qwen2.5-Omni-7B: fixed_15_row_failed_locale_gate; prompt/locale repair
 MOSS-Audio-4B-Instruct: do_not_promote; sentinel repair/rerun
 MiniCPM-o 4.5: do_not_promote; sentinel repair/rerun; quantized boundary
 Step-Audio-2-mini: do_not_promote; prompt/runtime repair
 Kimi-Audio-7B-Instruct: blocked_runtime_dependency; flash_attn repair
 MOSS-Audio-8B-Instruct: blocked_runtime_resource; memory/resource repair
 ```
+
+## Gate E1: Qwen2.5-Omni Fixed 15-Row Transcript Gate
+
+Purpose: test whether the only sentinel-promoted Batch 1 candidate preserves
+raw transcript validity and Taiwan Traditional Chinese locale behavior before
+any Taiwan utility/subgroup or 30-row CDS cost is spent.
+
+Current status: complete in
+`70_experiments/runs/v2_0_multimodal_batch1_qwen_fixed_15_row_transcript_gate_2026_06_01/`.
+
+Tracked aggregate result:
+
+```text
+rows=15
+valid_output_rate=100.0
+raw_transcript_like_outputs=15/15
+cer_zh_micro=126.7223
+wer_zh_jieba_micro=65.0538
+wer_tokenizer_policy=cjk_char_tokenizer_fallback_no_jieba_in_isolated_qwen_env
+simplified_char_rate=17.1829
+locale_violation_rows=15
+runtime_seconds_per_row=63.1933
+failure_mode=locale_violation
+promotion_decision=do_not_promote
+```
+
+Decision: Qwen2.5-Omni does not enter Taiwan utility/subgroup audit,
+human-reviewed 30-row CDS, promoted 258-row, or selected-300 from this raw run.
+The result is still useful: it proves the transcript-like adapter can produce
+15/15 outputs, while the raw output fails the Taiwan Traditional Chinese
+locale gate. The next Qwen work is a bounded prompt/locale repair lane, with
+raw and repaired quality reported separately if the team chooses to test it.
 
 ## Gate C: One-Row Transcript-Only Smoke
 
@@ -1052,6 +1099,8 @@ Current completed evidence:
   70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_sentinel_controls_2026_06_01/
 - MiniCPM-o 4.5 sentinel controls:
   70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_sentinel_controls_2026_06_01/
+- Qwen fixed 15-row transcript gate:
+  70_experiments/runs/v2_0_multimodal_batch1_qwen_fixed_15_row_transcript_gate_2026_06_01/
 
 Primary models:
 1. Qwen2.5-Omni-7B
@@ -1082,21 +1131,21 @@ Execution sequence:
 3. Confirm one_row_smoke_manifest.local.tsv and
    sentinel_negative_control_manifest.local.tsv remain ignored.
 4. Continue after the classified Kimi dependency boundary, MOSS 8B resource
-   boundary, and completed sentinel controls. Qwen has passed one-row smoke
-   and sentinel controls and is the only current fixed 15-row candidate. MOSS-
-   Audio-4B and MiniCPM-o 4.5 passed one-row smoke but failed sentinel behavior
-   controls, so they require bounded sentinel repair/rerun before any fixed
-   15-row gate. Step, Kimi, and MOSS 8B remain in bounded repair / resource
-   lanes.
-5. Run Gate E fixed 15-row transcript scoring for Qwen2.5-Omni only, unless a
-   later bounded repair/rerun produces clean sentinel evidence for another
-   model.
+   boundary, completed sentinel controls, and Qwen fixed 15-row locale failure.
+   Qwen has passed one-row smoke and sentinel controls but failed the raw
+   15-row zh-TW locale gate. MOSS-Audio-4B and MiniCPM-o 4.5 passed one-row
+   smoke but failed sentinel behavior controls, so they require bounded
+   sentinel repair/rerun before any fixed 15-row gate. Step, Kimi, and MOSS 8B
+   remain in bounded repair / resource lanes.
+5. Do not run Gate F Taiwan utility/subgroup or Gate G 30-row CDS until a
+   repaired or future model produces a clean fixed 15-row raw transcript gate.
 6. Write aggregate runtime_environment_summary.tsv, behavior_summary.tsv,
    gate_summary.json, and README.md. Classify every model as promoted, deferred,
    blocked, or fallback-only.
 7. Run Gate D sentinel negative controls only for future smoke-promoted or
    repaired models.
-8. Run Gate E fixed 15-row transcript scoring only for sentinel-promoted models.
+8. Treat Qwen Gate E as complete and failed by locale; run Gate E only for
+   future sentinel-promoted or repaired models.
 9. Run Gate F Taiwan utility/subgroup audit only for Gate E survivors.
 10. Run Gate G human-reviewed 30-row CDS gate only for models that preserve raw
     transcript validity and locale behavior.

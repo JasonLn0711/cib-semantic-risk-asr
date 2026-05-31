@@ -1,0 +1,2 @@
+model_family	model_id	gate	rows	expected_rows	valid_output_rate	cer_zh_micro	wer_zh_jieba_micro	runtime_seconds_per_row	wer_tokenizer_policy	failure_mode_class	promotion_decision
+Qwen2.5-Omni	Qwen/Qwen2.5-Omni-7B	fixed_15_row_transcript_gate	15	15	100.0	126.7223	65.0538	63.1933	cjk_char_tokenizer_fallback_no_jieba_in_isolated_qwen_env	locale_violation	do_not_promote

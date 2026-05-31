@@ -127,7 +127,7 @@ Current Gate 0 decisions:
 | Family | Model / variant | Status | Next gate |
 | --- | --- | --- | --- |
 | Kimi-Audio | `moonshotai/Kimi-Audio-7B-Instruct` | `one_row_smoke_classified_runtime_dependency_boundary` | flash_attn / CUDA-toolchain repair lane before any sentinel or 15-row gate |
-| Qwen2.5-Omni | `Qwen/Qwen2.5-Omni-7B` | `sentinel_controls_passed` | fixed 15-row candidate pool after Batch 1 smoke order remains governed |
+| Qwen2.5-Omni | `Qwen/Qwen2.5-Omni-7B` | `fixed_15_row_failed_locale_gate` | do not promote to Taiwan utility/subgroup, 30-row CDS, 258-row, or selected-300 from this raw run |
 | Step-Audio 2 mini | `stepfun-ai/Step-Audio-2-mini` | `one_row_smoke_complete_not_promoted` | prompt/runtime repair before sentinel or 15-row |
 | MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-4B-Instruct` | `sentinel_controls_failed_behavior_violation` | do not promote to fixed 15-row from this run; repair/rerun sentinel only |
 | MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-8B-Instruct` | `one_row_smoke_classified_runtime_resource_boundary` | 16GB single-GPU resource repair before sentinel or 15-row |
@@ -170,9 +170,11 @@ and Codex execution prompt is recorded in
 
 Gate A manifest preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/`.
-It now finds the local-only one-row manifest and sentinel manifest, records
-`2/6` expected local manifests present, and keeps local manifest values ignored
-and untracked.
+It now finds the local-only one-row manifest, sentinel manifest, and fixed
+15-row manifest, records `3/6` expected local manifests present, and keeps
+local manifest values ignored and untracked. The 30-row, promoted 258-row, and
+selected-300 manifests remain pending because no current raw Batch 1 model has
+passed fixed 15-row.
 
 Gate B adapter preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/`.
@@ -201,6 +203,18 @@ The aggregate result is `sentinel_pass_rows=6/6`,
 `hallucination_on_no_speech_rows=0`, `instruction_followed_rows=0`, and
 `promotion_decision=promote_to_15_row_candidate_pool`. The sentinel audio,
 manifest, and model outputs remain local-only / ignored.
+
+Qwen fixed 15-row transcript scoring is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_qwen_fixed_15_row_transcript_gate_2026_06_01/`.
+The aggregate result is `valid_output_rate=100.0`,
+`raw_transcript_like_outputs=15/15`, `cer_zh_micro=126.7223`,
+`wer_zh_jieba_micro=65.0538`, `simplified_char_rate=17.1829`,
+`locale_violation_rows=15`, `runtime_seconds_per_row=63.1933`, and
+`promotion_decision=do_not_promote`. This is strong negative evidence for the
+raw zh-TW locale gate, not a reason to discard Qwen as a general audio model.
+Qwen moves to a bounded prompt/locale repair lane before any Taiwan
+utility/subgroup, 30-row CDS, 258-row, or selected-300 gate. The transcript-
+bearing 15-row outputs remain local-only / ignored.
 
 Step-Audio-2-mini runtime/cache preparation is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_step_audio_runtime_lane_2026_06_01/`.
@@ -300,14 +314,14 @@ Post-Gate0 completion path:
    in an isolated runtime lane, while preserving the size-boundary wording；
 2. run a separate Step prompt/runtime repair, Kimi dependency repair, or MOSS
    8B resource repair only if the repair is bounded and isolated；
-3. record the completed sentinel controls: Qwen2.5-Omni passed and is the only
-   current fixed 15-row candidate; MOSS-Audio-4B and MiniCPM-o 4.5 failed
-   sentinel behavior controls and require bounded repair/rerun before any
-   larger gate；
-4. prepare local-only manifests for fixed
-   15-row, human-reviewed 30-row, promoted 258-row, and selected-300；
-5. promote only clean candidates to fixed 15-row transcript scoring, Taiwan
-   utility/subgroup audit, and human-reviewed 30-row CDS evidence；
+3. record the completed sentinel controls and Qwen fixed 15-row gate: Qwen
+   passed sentinel but failed the raw 15-row zh-TW locale gate; MOSS-Audio-4B
+   and MiniCPM-o 4.5 failed sentinel behavior controls and require bounded
+   repair/rerun before any larger gate；
+4. prepare local-only manifests for human-reviewed 30-row, promoted 258-row,
+   and selected-300 only after a clean fixed 15-row survivor exists；
+5. promote only clean candidates to Taiwan utility/subgroup audit and
+   human-reviewed 30-row CDS evidence；
 6. refresh ASR controls for calibration, with Qwen3-ASR and Whisper-style
    baselines as the main Mandarin comparison anchors；
 7. escalate to 258-row and selected-300 only for scientific winners with clean

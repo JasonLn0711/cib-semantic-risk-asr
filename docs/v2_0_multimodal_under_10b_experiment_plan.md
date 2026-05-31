@@ -5,12 +5,14 @@ Date: 2026-05-31
 Status: Batch 1 design plan; execution should start with a live
 candidate-discovery snapshot before any new inference run
 
-Current execution update: Qwen2.5-Omni-7B is the only current fixed 15-row
-candidate after passing one-row smoke and sentinel controls. MOSS-Audio-4B and
-MiniCPM-o 4.5 passed one-row transcript-like smoke but failed sentinel
-behavior controls, so they require bounded sentinel repair/rerun before any
-larger gate. Step-Audio-2-mini, Kimi-Audio, and MOSS-Audio-8B remain in
-prompt/runtime, dependency, and resource repair lanes respectively.
+Current execution update: Qwen2.5-Omni-7B passed one-row smoke and sentinel
+controls, then failed the fixed 15-row raw zh-TW locale gate with
+`locale_violation_rows=15`; it is not promoted to Taiwan utility/subgroup or
+30-row CDS from this raw run. MOSS-Audio-4B and MiniCPM-o 4.5 passed one-row
+transcript-like smoke but failed sentinel behavior controls, so they require
+bounded sentinel repair/rerun before any larger gate. Step-Audio-2-mini,
+Kimi-Audio, and MOSS-Audio-8B remain in prompt/runtime, dependency, and
+resource repair lanes respectively.
 
 Execution runbook:
 `docs/v2_0_multimodal_batch1_execution_runbook.md`

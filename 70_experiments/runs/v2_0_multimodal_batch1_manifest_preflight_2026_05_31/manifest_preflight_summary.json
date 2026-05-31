@@ -1,10 +1,10 @@
 {
   "run_id": "v2_0_multimodal_batch1_manifest_preflight_2026_05_31",
-  "generated_at_unix": 1780244844,
+  "generated_at_unix": 1780259956,
   "gate": "Gate A local-only manifest preflight",
-  "status": "ready_for_one_row_smoke",
+  "status": "ready_through_fixed_15_manifest",
   "manifest_specs": 6,
-  "manifest_files_present": 2,
+  "manifest_files_present": 3,
   "missing_required_next": false,
   "tracked_manifest_field_names": false,
   "tracked_row_level_values": false,
@@ -16,5 +16,5 @@
     "reviewer_notes_tracked": false,
     "local_paths_tracked": false
   },
-  "next_gate": "run_real_one_row_transcript_only_smoke_adapters"
+  "next_gate": "prepare_human_reviewed_30_row_cds_manifest_only_after_clean_15_row_gate"
 }
