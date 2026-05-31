@@ -1,6 +1,6 @@
 {
   "run_id": "v2_0_multimodal_batch1_adapter_preflight_2026_05_31",
-  "generated_at_unix": 1780244327,
+  "generated_at_unix": 1780246799,
   "gate": "Gate B adapter preflight",
   "status": "adapter_preflight_complete_no_inference",
   "python_version": "3.12.3",
@@ -10,9 +10,9 @@
   "manifest_exists": true,
   "manifest_rows": 1,
   "models_checked": 6,
-  "models_ready_for_smoke": 1,
+  "models_ready_for_smoke": 2,
   "models_blocked_by_missing_runtime_modules": 0,
-  "models_blocked_by_missing_cache": 4,
+  "models_blocked_by_missing_cache": 3,
   "models_deferred_by_gate_order": 1,
   "weights_downloaded_by_this_run": false,
   "model_inference_run": false,
@@ -27,5 +27,5 @@
     "local_paths_tracked": false,
     "model_cache_paths_tracked": false
   },
-  "next_gate": "prepare isolated model-cache lanes then run real one-row transcript-only smoke adapters"
+  "next_gate": "prepare_moss_audio_4b_isolated_runtime_cache_lane; keep_step_audio_in_prompt_runtime_repair_lane"
 }

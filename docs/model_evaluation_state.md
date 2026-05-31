@@ -128,7 +128,7 @@ Current Gate 0 decisions:
 | --- | --- | --- | --- |
 | Kimi-Audio | `moonshotai/Kimi-Audio-7B-Instruct` | `metadata_pending_size_boundary` | explicit size-boundary decision before runtime smoke |
 | Qwen2.5-Omni | `Qwen/Qwen2.5-Omni-7B` | `sentinel_controls_passed` | fixed 15-row candidate pool after Batch 1 smoke order remains governed |
-| Step-Audio 2 mini | `stepfun-ai/Step-Audio-2-mini` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
+| Step-Audio 2 mini | `stepfun-ai/Step-Audio-2-mini` | `one_row_smoke_complete_not_promoted` | prompt/runtime repair before sentinel or 15-row |
 | MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-4B-Instruct` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
 | MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-8B-Instruct` | `runtime_ready_after_4b_smoke` | after 4B environment and prompt contract are interpretable |
 | MOSS-Audio Thinking | 4B / 8B Thinking variants | `defer_until_instruct_transcript_gate` | reasoning analysis after Instruct transcript gates |
@@ -171,11 +171,11 @@ and untracked.
 
 Gate B adapter preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/`.
-It now records the ignored isolated runtime-lane state after Qwen setup, found
-the RTX 5080 and local one-row manifest, and did not run inference during the
-preflight itself. Current status: `models_ready_for_smoke=1`,
+It now records the ignored isolated runtime-lane state after Qwen and Step
+setup, found the RTX 5080 and local one-row manifest, and did not run inference
+during the preflight itself. Current status: `models_ready_for_smoke=2`,
 `models_blocked_by_missing_runtime_modules=0`,
-`models_blocked_by_missing_cache=4`, and
+`models_blocked_by_missing_cache=3`, and
 `models_deferred_by_gate_order=1`.
 
 The Qwen2.5-Omni runtime/cache lane preparation is recorded in
@@ -194,12 +194,24 @@ The aggregate result is `sentinel_pass_rows=6/6`,
 `promotion_decision=promote_to_15_row_candidate_pool`. The sentinel audio,
 manifest, and model outputs remain local-only / ignored.
 
+Step-Audio-2-mini runtime/cache preparation is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_step_audio_runtime_lane_2026_06_01/`.
+It confirms an ignored isolated runtime lane, local cache snapshot, CUDA
+access, no repo-wide `.venv` modification, and no runtime import blockers.
+Step one-row smoke is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_step_audio_one_row_smoke_2026_06_01/`.
+The aggregate result is `valid_text_outputs=1`,
+`raw_transcript_like_outputs=0`, `repetition_outputs=1`, and
+`promotion_decision=do_not_promote`. Step therefore stays in a bounded
+prompt/runtime repair lane and cannot enter sentinel controls or fixed 15-row
+scoring until raw transcript-like output is proven.
+
 Post-Gate0 completion path:
 
-1. prepare isolated runtime/cache lanes for Step-Audio-2-mini, MOSS-Audio-4B,
-   MiniCPM-o 4.5, Kimi with size-boundary wording, and MOSS-Audio-8B after
-   MOSS 4B；
-2. run one-row transcript-only smoke for the remaining planned models；
+1. prepare isolated runtime/cache lanes for MOSS-Audio-4B, MiniCPM-o 4.5,
+   Kimi with size-boundary wording, and MOSS-Audio-8B after MOSS 4B；
+2. run one-row transcript-only smoke for the remaining planned models and run
+   a separate Step prompt/runtime repair only if it is bounded；
 3. run sentinel controls for each model that passes one-row smoke；
 4. prepare local-only manifests for fixed
    15-row, human-reviewed 30-row, promoted 258-row, and selected-300；

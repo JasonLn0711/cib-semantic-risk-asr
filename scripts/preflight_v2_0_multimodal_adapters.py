@@ -143,11 +143,11 @@ def manifest_status(path: Path) -> dict[str, Any]:
     return {"manifest_exists": True, "manifest_rows": rows, "manifest_field_count": len(fields)}
 
 
-def cache_status(cache_root: Path, cache_dir_name: str) -> dict[str, Any]:
-    path = cache_root / cache_dir_name
-    if not path.exists():
+def cache_status(cache_roots: list[Path], cache_dir_name: str) -> dict[str, Any]:
+    matched = next((root / cache_dir_name for root in cache_roots if (root / cache_dir_name).exists()), None)
+    if matched is None:
         return {"cache_present": False, "snapshot_count": 0}
-    snapshots = path / "snapshots"
+    snapshots = matched / "snapshots"
     count = sum(1 for child in snapshots.iterdir() if child.is_dir()) if snapshots.exists() else 0
     return {"cache_present": True, "snapshot_count": count}
 
@@ -211,8 +211,15 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
-    parser.add_argument("--hf-cache", type=Path, default=Path.home() / ".cache/huggingface/hub")
+    parser.add_argument(
+        "--hf-cache",
+        type=Path,
+        action="append",
+        default=None,
+        help="HF cache root. May be passed multiple times for isolated runtime lanes.",
+    )
     args = parser.parse_args()
+    hf_cache_roots = args.hf_cache or [Path.home() / ".cache/huggingface/hub"]
 
     out_dir = args.out_dir
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -223,7 +230,7 @@ def main() -> int:
     for spec in ADAPTERS:
         versions = {name: module_version(name) for name in spec.required_modules}
         missing_modules = sorted(name for name, version in versions.items() if version == "missing" or version.startswith("import_error:"))
-        cache = cache_status(args.hf_cache, spec.cache_dir_name)
+        cache = cache_status(hf_cache_roots, spec.cache_dir_name)
         if spec.model_id == "OpenMOSS-Team/MOSS-Audio-8B-Instruct":
             gate_status = "defer_until_moss_4b_smoke"
         elif not manifest["manifest_exists"] or manifest["manifest_rows"] < 1:

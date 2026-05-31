@@ -16,9 +16,9 @@ download model weights and does not run model inference.
 
 ```text
 models_checked=6
-models_ready_for_smoke=1
+models_ready_for_smoke=2
 models_blocked_by_missing_runtime_modules=0
-models_blocked_by_missing_cache=4
+models_blocked_by_missing_cache=3
 models_deferred_by_gate_order=1
 manifest_exists=True
 gpu_present=True
@@ -26,4 +26,9 @@ gpu_present=True
 
 ## Next Step
 
-Run one-row transcript-only smoke for ready models, starting with Qwen2.5-Omni-7B, and prepare isolated model-cache/download lanes for the remaining planned model order. Keep local manifest values, hypotheses, logs, and model caches outside git.
+Qwen2.5-Omni has already passed one-row smoke and sentinel controls.
+Step-Audio-2-mini has a ready isolated runtime/cache lane but its one-row smoke
+did not satisfy the raw transcript-like contract, so it moves to a bounded
+prompt/runtime repair lane. The next setup gate is MOSS-Audio-4B-Instruct
+isolated runtime/cache preparation. Keep local manifest values, hypotheses,
+logs, and model caches outside git.

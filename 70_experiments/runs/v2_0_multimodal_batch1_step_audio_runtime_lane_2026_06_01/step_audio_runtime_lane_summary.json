@@ -1,0 +1,32 @@
+{
+  "run_id": "v2_0_multimodal_batch1_step_audio_runtime_lane_2026_06_01",
+  "generated_at_unix": 1780246740,
+  "gate": "Step-Audio-2-mini isolated runtime/cache lane preparation",
+  "status": "ready_for_step_audio_one_row_smoke",
+  "model_id": "stepfun-ai/Step-Audio-2-mini",
+  "runtime_lane_class": "ignored_isolated_step_audio_runtime_lane",
+  "repo_venv_modified_by_this_run": false,
+  "package_install_run": false,
+  "model_weights_downloaded_by_this_run": false,
+  "model_inference_run": false,
+  "gpu_present": true,
+  "gpu_name": "NVIDIA GeForce RTX 5080",
+  "gpu_memory_total_mib": "16303",
+  "torch_version": "2.12.0+cu130",
+  "transformers_version": "4.57.6",
+  "huggingface_hub_version": "0.36.2",
+  "model_cache_present": true,
+  "model_cache_snapshot_count": 1,
+  "runtime_import_blockers": [],
+  "audio_loader_policy": "soundfile_librosa_resample_avoids_torchaudio_torchcodec_dependency",
+  "next_gate": "run_step_audio_one_row_transcript_only_smoke",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

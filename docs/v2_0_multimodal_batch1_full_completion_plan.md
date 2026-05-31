@@ -5,7 +5,8 @@ Date: 2026-06-01
 Status: full completion plan; Gate 0, Kimi size-boundary decision, runtime
 smoke preflight, Gate A one-row manifest preflight, Gate B adapter preflight,
 Qwen isolated runtime/cache lane, Qwen one-row transcript-only smoke, and Qwen
-sentinel controls are complete
+sentinel controls are complete; Step-Audio-2-mini isolated runtime/cache and
+one-row smoke are complete, with Step held in a prompt/runtime repair lane
 
 本文件只記錄 aggregate planning、gate、artifact、validator、privacy boundary
 與 Codex execution prompt，不記錄任何逐字稿、row ID、音訊內容或模型輸出。
@@ -36,6 +37,8 @@ Completed tracked evidence:
 70_experiments/runs/v2_0_multimodal_batch1_qwen_runtime_lane_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_qwen_one_row_smoke_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_qwen_sentinel_controls_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_step_audio_runtime_lane_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_step_audio_one_row_smoke_2026_06_01/
 ```
 
 Tracked scripts:
@@ -53,6 +56,9 @@ scripts/validate_v2_0_qwen_omni_one_row_smoke.py
 scripts/prepare_v2_0_qwen_sentinel_manifest.py
 scripts/run_v2_0_qwen_omni_sentinel_controls.py
 scripts/validate_v2_0_qwen_omni_sentinel_controls.py
+scripts/prepare_v2_0_step_audio_runtime_lane.py
+scripts/run_v2_0_step_audio_one_row_smoke.py
+scripts/validate_v2_0_step_audio_one_row_smoke.py
 scripts/run_v2_0_multimodal_one_row_smoke.py
 scripts/validate_v2_0_multimodal_runtime_smoke.py
 ```
@@ -60,9 +66,11 @@ scripts/validate_v2_0_multimodal_runtime_smoke.py
 Current active gate:
 
 ```text
-Prepare the next isolated runtime/cache lane for Step-Audio-2-mini, then
-continue the planned one-row smoke order. Qwen may enter the 15-row candidate
-pool only after the remaining Batch 1 one-row/sentinel order stays governed.
+Prepare the next isolated runtime/cache lane for MOSS-Audio-4B-Instruct. Qwen
+may enter the 15-row candidate pool after the remaining Batch 1 smoke order
+stays governed. Step-Audio-2-mini is parked in a prompt/runtime repair lane
+because its first one-row smoke produced valid text but not raw
+transcript-like output.
 ```
 
 Qwen2.5-Omni has completed one-row transcript-only inference and sentinel
@@ -197,18 +205,21 @@ Current Gate B results:
 
 ```text
 models_checked=6
-models_ready_for_smoke=1
+models_ready_for_smoke=2
 models_blocked_by_missing_runtime_modules=0
-models_blocked_by_missing_cache=4
+models_blocked_by_missing_cache=3
 models_deferred_by_gate_order=1
 ```
 
 Immediate runtime-lane implications:
 
 1. Qwen2.5-Omni has passed runtime/cache, one-row smoke, and sentinel controls；
-2. Step-Audio-2-mini, MOSS-Audio-4B, MiniCPM-o 4.5, and Kimi-Audio need
-   isolated model-cache/download lanes before one-row smoke；
-3. MOSS-Audio-8B remains deferred until MOSS-Audio-4B smoke is interpretable。
+2. Step-Audio-2-mini has passed runtime/cache setup but failed the
+   transcript-only smoke contract because the output was repetition /
+   non-transcript-like text；
+3. MOSS-Audio-4B, MiniCPM-o 4.5, and Kimi-Audio need isolated
+   model-cache/download lanes before one-row smoke；
+4. MOSS-Audio-8B remains deferred until MOSS-Audio-4B smoke is interpretable。
 
 Implementation requirements:
 
@@ -261,8 +272,11 @@ Promotion rule:
 Current Gate B decision:
 
 - Qwen2.5-Omni is ready for one-row smoke and has now completed that smoke；
-- Step-Audio-2-mini, MOSS 4B, MiniCPM-o 4.5, and Kimi still need isolated
-  model-cache/download lanes before one-row smoke；
+- Step-Audio-2-mini has a ready isolated runtime/cache lane and completed the
+  one-row smoke, but its output failed the raw transcript-like contract by
+  repetition / non-transcript-like behavior；
+- MOSS 4B, MiniCPM-o 4.5, and Kimi still need isolated model-cache/download
+  lanes before one-row smoke；
 - MOSS 8B remains deferred until MOSS 4B smoke is interpretable。
 
 ## Gate B1: Qwen2.5-Omni Runtime/Cache Lane
@@ -314,8 +328,10 @@ invented_speaker_label_outputs=0
 promotion_decision=promote_to_sentinel
 ```
 
-The model output remains local-only in the ignored Qwen runtime lane. The next
-model-family setup gate is Step-Audio-2-mini isolated runtime/cache preparation.
+The model output remains local-only in the ignored Qwen runtime lane. Step has
+since completed runtime/cache setup and one-row smoke but was not promoted; the
+next model-family setup gate is MOSS-Audio-4B-Instruct isolated runtime/cache
+preparation.
 
 ## Gate D1: Qwen2.5-Omni Sentinel Controls
 
@@ -345,6 +361,44 @@ promotion_decision=promote_to_15_row_candidate_pool
 The sentinel manifest, generated sentinel audio, and model outputs remain
 local-only / ignored. This promotes Qwen into the fixed 15-row candidate pool,
 but it does not authorize skipping the remaining Batch 1 one-row smoke order.
+
+## Gate B2/C2: Step-Audio-2-mini Runtime Lane And One-Row Smoke
+
+Purpose: test whether Step-Audio-2-mini can serve as a transcript-only
+audio-language candidate before any sentinel or 15-row cost is spent.
+
+Runtime/cache status: complete in
+`70_experiments/runs/v2_0_multimodal_batch1_step_audio_runtime_lane_2026_06_01/`.
+The tracked aggregate record keeps the repo-wide `.venv` unchanged, confirms
+CUDA access, an isolated Step runtime lane, one local Step cache snapshot, and
+no runtime import blockers. The audio loader uses `soundfile` plus `librosa`
+resampling to avoid the `torchaudio` / `torchcodec` dependency path.
+
+One-row smoke status: complete in
+`70_experiments/runs/v2_0_multimodal_batch1_step_audio_one_row_smoke_2026_06_01/`.
+
+Tracked aggregate result:
+
+```text
+smoke_status=completed
+valid_text_outputs=1
+raw_transcript_like_outputs=0
+repetition_outputs=1
+summary_or_answer_outputs=0
+translation_outputs=0
+tts_only_outputs=0
+invented_timestamp_outputs=0
+invented_speaker_label_outputs=0
+failure_mode=repetition_or_non_transcript_output
+promotion_decision=do_not_promote
+next_gate=step_audio_prompt_or_runtime_repair_lane
+```
+
+Decision: Step-Audio-2-mini is not promoted to sentinel controls or fixed
+15-row scoring from this run. It remains scientifically relevant, but the next
+Step work must be a bounded prompt/runtime repair lane that proves raw
+transcript-like output before any larger gate. The next Batch 1 setup gate
+therefore moves to MOSS-Audio-4B-Instruct.
 
 ## Gate C: One-Row Transcript-Only Smoke
 
@@ -778,6 +832,10 @@ Current completed evidence:
   70_experiments/runs/v2_0_multimodal_batch1_qwen_one_row_smoke_2026_05_31/
 - Qwen sentinel controls:
   70_experiments/runs/v2_0_multimodal_batch1_qwen_sentinel_controls_2026_06_01/
+- Step-Audio-2-mini runtime/cache lane:
+  70_experiments/runs/v2_0_multimodal_batch1_step_audio_runtime_lane_2026_06_01/
+- Step-Audio-2-mini one-row smoke:
+  70_experiments/runs/v2_0_multimodal_batch1_step_audio_one_row_smoke_2026_06_01/
 
 Primary models:
 1. Qwen2.5-Omni-7B
@@ -807,11 +865,12 @@ Execution sequence:
 2. Confirm local-only manifests are ignored by git.
 3. Confirm one_row_smoke_manifest.local.tsv and
    sentinel_negative_control_manifest.local.tsv remain ignored.
-4. Continue from Step-Audio-2-mini isolated runtime/cache preparation; Qwen has
-   already passed one-row smoke and sentinel controls.
-5. Run Gate C one-row transcript-only smoke for Step-Audio-2-mini,
-   MOSS-Audio-4B, MiniCPM-o 4.5, Kimi with size-boundary wording, and MOSS 8B
-   after MOSS 4B is interpretable.
+4. Continue from MOSS-Audio-4B-Instruct isolated runtime/cache preparation.
+   Qwen has already passed one-row smoke and sentinel controls; Step has
+   completed one-row smoke but remains in prompt/runtime repair because the
+   output was repetition / non-transcript-like text.
+5. Run Gate C one-row transcript-only smoke for MOSS-Audio-4B, MiniCPM-o 4.5,
+   Kimi with size-boundary wording, and MOSS 8B after MOSS 4B is interpretable.
 6. Write aggregate runtime_environment_summary.tsv, behavior_summary.tsv,
    gate_summary.json, and README.md. Classify every model as promoted, deferred,
    blocked, or fallback-only.
