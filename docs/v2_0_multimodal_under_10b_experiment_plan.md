@@ -1127,10 +1127,12 @@ Codex goal prompt, is recorded in
    revision SHA, license, artifact size, parameter-count source, audio-input
    method, text-output method, and speech-output disabling method.
 4. Build isolated runtime records for all five Batch 1 families. Current staged
-   execution has completed Qwen2.5-Omni, Step-Audio-2-mini, MOSS-Audio-4B, and
-   MiniCPM-o 4.5; Kimi is the next isolated runtime/cache gate, and MOSS 8B
-   follows only after the remaining one-row order stays governed. The Batch 1
-   scientific scope remains the full five-family set.
+   execution has completed Qwen2.5-Omni, Step-Audio-2-mini, MOSS-Audio-4B,
+   MiniCPM-o 4.5, Kimi-Audio, and MOSS-Audio-8B one-row gates. Qwen, MOSS 4B,
+   and MiniCPM are the current sentinel candidates; Step is prompt/runtime
+   repair-only, Kimi is flash_attn dependency repair-only, and MOSS 8B is
+   16GB-GPU resource repair-only. The Batch 1 scientific scope remains the full
+   five-family set.
 5. Run 1-row transcript-only smoke for every runtime-feasible Batch 1 model.
 6. Run sentinel negative controls for every Batch 1 model that passes 1-row
    smoke.

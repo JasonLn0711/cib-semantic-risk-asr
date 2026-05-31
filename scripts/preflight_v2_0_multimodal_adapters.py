@@ -160,7 +160,18 @@ def write_tsv(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None
 
 
 def write_readme(out_dir: Path, summary: dict[str, Any]) -> None:
-    if summary["models_ready_for_smoke"] >= 5:
+    if summary["models_ready_for_smoke"] >= 6:
+        next_step = (
+            "All six Batch 1 adapter/cache lanes have now reached the "
+            "pre-inference readiness contract. Interpret readiness with the "
+            "one-row smoke records: Qwen2.5-Omni, MOSS-Audio-4B, and MiniCPM-o "
+            "4.5 are sentinel candidates; Step-Audio-2-mini is in a prompt/runtime "
+            "repair lane; Kimi-Audio is blocked by the official flash_attn "
+            "dependency boundary; and MOSS-Audio-8B is blocked by the local "
+            "16GB single-GPU memory boundary. Continue with sentinel controls "
+            "for MOSS-Audio-4B and MiniCPM-o 4.5 before any fixed 15-row gate."
+        )
+    elif summary["models_ready_for_smoke"] >= 5:
         next_step = (
             "Qwen2.5-Omni, MOSS-Audio-4B, MiniCPM-o 4.5, and Kimi-Audio have "
             "ignored model-cache/runtime lanes, while Step-Audio-2-mini has "
@@ -261,9 +272,7 @@ def main() -> int:
         versions = {name: module_version(name) for name in spec.required_modules}
         missing_modules = sorted(name for name, version in versions.items() if version == "missing" or version.startswith("import_error:"))
         cache = cache_status(hf_cache_roots, spec.cache_dir_name)
-        if spec.model_id == "OpenMOSS-Team/MOSS-Audio-8B-Instruct":
-            gate_status = "defer_until_moss_4b_smoke"
-        elif not manifest["manifest_exists"] or manifest["manifest_rows"] < 1:
+        if not manifest["manifest_exists"] or manifest["manifest_rows"] < 1:
             gate_status = "blocked_missing_local_manifest"
         elif missing_modules:
             gate_status = "blocked_missing_runtime_modules"
@@ -351,10 +360,9 @@ def main() -> int:
             "model_cache_paths_tracked": False,
         },
         "next_gate": (
-            "record_kimi_audio_one_row_dependency_boundary; "
-            "then_prepare_moss_audio_8b_or_run_sentinel_controls_for_transcript_like_candidates; "
+            "run_sentinel_controls_for_moss_audio_4b_and_minicpm_o_4_5; "
             "hold_qwen_moss_audio_4b_and_minicpm_o_4_5_as_sentinel_candidates; "
-            "keep_step_audio_in_prompt_runtime_repair_lane"
+            "keep_step_audio_kimi_audio_and_moss_audio_8b_in_repair_or_resource_lanes"
         )
     }
     (out_dir / "adapter_preflight_summary.json").write_text(

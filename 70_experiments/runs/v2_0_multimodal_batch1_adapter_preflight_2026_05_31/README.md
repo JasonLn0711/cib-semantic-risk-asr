@@ -16,14 +16,14 @@ download model weights and does not run model inference.
 
 ```text
 models_checked=6
-models_ready_for_smoke=5
+models_ready_for_smoke=6
 models_blocked_by_missing_runtime_modules=0
 models_blocked_by_missing_cache=0
-models_deferred_by_gate_order=1
+models_deferred_by_gate_order=0
 manifest_exists=True
 gpu_present=True
 ```
 
 ## Next Step
 
-Qwen2.5-Omni, MOSS-Audio-4B, MiniCPM-o 4.5, and Kimi-Audio have ignored model-cache/runtime lanes, while Step-Audio-2-mini has separate one-row evidence and remains in a prompt/runtime repair lane. Interpret Kimi's adapter readiness together with its one-row smoke record because the official main-model remote code requires flash_attn on this local machine. Continue with MOSS-Audio-8B setup only after this dependency boundary is recorded, then run sentinel controls for transcript-like candidates. Keep local manifest values, hypotheses, logs, and model caches outside git.
+All six Batch 1 adapter/cache lanes have now reached the pre-inference readiness contract. Interpret readiness with the one-row smoke records: Qwen2.5-Omni, MOSS-Audio-4B, and MiniCPM-o 4.5 are sentinel candidates; Step-Audio-2-mini is in a prompt/runtime repair lane; Kimi-Audio is blocked by the official flash_attn dependency boundary; and MOSS-Audio-8B is blocked by the local 16GB single-GPU memory boundary. Continue with sentinel controls for MOSS-Audio-4B and MiniCPM-o 4.5 before any fixed 15-row gate.

@@ -1,0 +1,2 @@
+model_family	model_id	execution_order	planned_gate	prompt_policy	smoke_status	output_rows	valid_text_outputs	raw_transcript_like_outputs	repetition_output	summary_or_answer_outputs	translation_outputs	tts_only_outputs	invented_timestamp_outputs	invented_speaker_label_outputs	failure_mode	promotion_decision	output_chars	longest_repeated_char_run
+MOSS-Audio	OpenMOSS-Team/MOSS-Audio-8B-Instruct	6	one_row_transcript_only_smoke	text_only_no_tts_no_tool_no_conversation	failed:RuntimeError	0	0	0	0	0	0	0	0	0	resource_error:cuda_out_of_memory	blocked_runtime_resource	0	0

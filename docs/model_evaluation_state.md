@@ -130,7 +130,7 @@ Current Gate 0 decisions:
 | Qwen2.5-Omni | `Qwen/Qwen2.5-Omni-7B` | `sentinel_controls_passed` | fixed 15-row candidate pool after Batch 1 smoke order remains governed |
 | Step-Audio 2 mini | `stepfun-ai/Step-Audio-2-mini` | `one_row_smoke_complete_not_promoted` | prompt/runtime repair before sentinel or 15-row |
 | MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-4B-Instruct` | `one_row_smoke_complete_promoted` | sentinel candidate |
-| MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-8B-Instruct` | `eligible_after_remaining_one_row_order` | after Kimi one-row order remains governed |
+| MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-8B-Instruct` | `one_row_smoke_classified_runtime_resource_boundary` | 16GB single-GPU resource repair before sentinel or 15-row |
 | MOSS-Audio Thinking | 4B / 8B Thinking variants | `defer_until_instruct_transcript_gate` | reasoning analysis after Instruct transcript gates |
 | MiniCPM-o | `openbmb/MiniCPM-o-4_5` | `one_row_smoke_complete_promoted_quantized` | sentinel candidate with quantized local-feasibility boundary |
 | MiniCPM-o fallback | `openbmb/MiniCPM-o-2_6`, `openbmb/MiniCPM-o-2_6-int4` | fallback only | only if 4.5 is not reproducible or strict 2025-only scope is required |
@@ -141,6 +141,9 @@ current Hugging Face widget reports `10B params`. Its first runtime attempt is
 classified separately from transcript quality: the cache/import lane is present,
 but the official main-model remote code requires `flash_attn` and the isolated
 environment cannot source-build it on this machine without `/usr/local/cuda/bin/nvcc`.
+MOSS-Audio-8B has also completed its isolated runtime/cache lane and one-row
+attempt; it is blocked by the local 16GB single-GPU memory boundary before any
+transcript-quality evidence is produced.
 
 ### Post-Gate0 Evidence: 2026-05-31
 
@@ -174,14 +177,14 @@ and untracked.
 Gate B adapter preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/`.
 It now records the ignored isolated runtime-lane state after Qwen, Step,
-MOSS-Audio-4B, MiniCPM-o 4.5, and Kimi cache/runtime setup, found the RTX 5080
-and local one-row manifest, and did not run inference during the preflight
-itself. Current
+MOSS-Audio-4B, MiniCPM-o 4.5, Kimi, and MOSS-Audio-8B cache/runtime setup,
+found the RTX 5080 and local one-row manifest, and did not run inference during
+the preflight itself. Current
 status:
-`models_ready_for_smoke=5`,
+`models_ready_for_smoke=6`,
 `models_blocked_by_missing_runtime_modules=0`,
 `models_blocked_by_missing_cache=0`, and
-`models_deferred_by_gate_order=1`.
+`models_deferred_by_gate_order=0`.
 
 The Qwen2.5-Omni runtime/cache lane preparation is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_qwen_runtime_lane_2026_05_31/`.
@@ -256,15 +259,28 @@ and `promotion_decision=blocked_runtime_dependency`. This is not a scientific
 quality rejection; it is a reproducible runtime dependency boundary before any
 sentinel, 15-row, or CDS scoring gate.
 
+MOSS-Audio-8B runtime/cache preparation is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_moss_audio_8b_runtime_lane_2026_06_01/`.
+It confirms an ignored isolated MOSS runtime lane, local 8B cache snapshot,
+official repo head, Apache-2.0 metadata, no repo-wide `.venv` modification, and
+an explicit memory-boundary warning because the 8B artifact is materially
+larger than the 4B candidate on a local 16GB GPU. MOSS-Audio-8B one-row smoke
+is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_moss_audio_8b_one_row_smoke_2026_06_01/`.
+The aggregate result is `smoke_status=failed:RuntimeError`,
+`failure_mode=resource_error:cuda_out_of_memory`, and
+`promotion_decision=blocked_runtime_resource`. This is not a transcript-quality
+result; MOSS 8B cannot enter sentinel controls, fixed 15-row scoring, 258-row,
+or selected-300 until a bounded resource route is proven.
+
 Post-Gate0 completion path:
 
 1. repair or route around Kimi's official `flash_attn` dependency boundary only
    in an isolated runtime lane, while preserving the size-boundary wording；
-2. run one-row transcript-only smoke for the remaining planned models and run a
-   separate Step prompt/runtime repair only if it is bounded；MOSS-Audio-8B is
-   the next primary-lane one-row setup candidate after Kimi's boundary is
-   recorded；
-3. run sentinel controls for each model that passes one-row smoke；
+2. run a separate Step prompt/runtime repair, Kimi dependency repair, or MOSS
+   8B resource repair only if the repair is bounded and isolated；
+3. run sentinel controls for each model that passes one-row smoke；the current
+   sentinel-candidate set is Qwen2.5-Omni, MOSS-Audio-4B, and MiniCPM-o 4.5；
 4. prepare local-only manifests for fixed
    15-row, human-reviewed 30-row, promoted 258-row, and selected-300；
 5. promote only clean candidates to fixed 15-row transcript scoring, Taiwan
