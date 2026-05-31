@@ -1,0 +1,2 @@
+model_family	model_id	execution_order	runtime_lane	python_version	platform	transcript_only_snapshot_policy	local_runtime_patch_policy	flash_attn_import_status	model_inference_run	local_output_tracked	transcript_bearing_logs_tracked
+Kimi-Audio	moonshotai/Kimi-Audio-7B-Instruct	5	ignored_kimi_audio_runtime_lane	3.12.3	Linux-6.17.0-29-generic-x86_64-with-glibc2.39	main_model_and_whisper_without_tts_detokenizer_or_vocoder	ignored_lane_lazy_detokenizer_import_and_whisper_sdpa_fallback	missing	False	False	False

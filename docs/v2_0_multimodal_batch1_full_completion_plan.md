@@ -10,7 +10,10 @@ one-row smoke are complete, with Step held in a prompt/runtime repair lane;
 MOSS-Audio-4B isolated runtime/cache and one-row smoke are complete, with MOSS
 4B promoted to sentinel candidate; MiniCPM-o 4.5 isolated runtime/cache and
 4-bit one-row transcript-only smoke are complete, with MiniCPM promoted to
-sentinel candidate under an explicit quantized local-feasibility boundary
+sentinel candidate under an explicit quantized local-feasibility boundary;
+Kimi-Audio isolated runtime/cache and one-row attempt are complete, with Kimi
+classified into an isolated flash_attn / CUDA-toolchain repair lane before any
+sentinel or 15-row gate
 
 本文件只記錄 aggregate planning、gate、artifact、validator、privacy boundary
 與 Codex execution prompt，不記錄任何逐字稿、row ID、音訊內容或模型輸出。
@@ -47,6 +50,8 @@ Completed tracked evidence:
 70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_one_row_smoke_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_runtime_lane_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_one_row_smoke_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_kimi_audio_runtime_lane_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_kimi_audio_one_row_smoke_2026_06_01/
 ```
 
 Tracked scripts:
@@ -73,6 +78,9 @@ scripts/validate_v2_0_moss_audio_4b_one_row_smoke.py
 scripts/prepare_v2_0_minicpm_o_runtime_lane.py
 scripts/run_v2_0_minicpm_o_4_5_one_row_smoke.py
 scripts/validate_v2_0_minicpm_o_4_5_one_row_smoke.py
+scripts/prepare_v2_0_kimi_audio_runtime_lane.py
+scripts/run_v2_0_kimi_audio_one_row_smoke.py
+scripts/validate_v2_0_kimi_audio_one_row_smoke.py
 scripts/run_v2_0_multimodal_one_row_smoke.py
 scripts/validate_v2_0_multimodal_runtime_smoke.py
 ```
@@ -80,11 +88,15 @@ scripts/validate_v2_0_multimodal_runtime_smoke.py
 Current active gate:
 
 ```text
-Prepare the next isolated runtime/cache lane for Kimi-Audio. Qwen,
-MOSS-Audio-4B, and MiniCPM-o 4.5 are sentinel candidates after transcript-like
-one-row evidence. Step-Audio-2-mini is parked in a prompt/runtime repair lane
-because its first one-row smoke produced valid text but not raw transcript-like
-output.
+Kimi-Audio has completed isolated runtime/cache setup and a one-row attempt,
+but the official main-model remote code requires `flash_attn`; the isolated
+environment cannot source-build it on this machine without
+`/usr/local/cuda/bin/nvcc`. Qwen, MOSS-Audio-4B, and MiniCPM-o 4.5 are sentinel
+candidates after transcript-like one-row evidence. Step-Audio-2-mini is parked
+in a prompt/runtime repair lane because its first one-row smoke produced valid
+text but not raw transcript-like output. The next primary-lane one-row setup
+candidate is MOSS-Audio-8B, while Kimi stays in a bounded runtime dependency
+repair lane.
 ```
 
 Qwen2.5-Omni has completed one-row transcript-only inference and sentinel
@@ -100,6 +112,12 @@ transcript-only smoke. The tracked records are aggregate-only; model output and
 local runtime/cache material stay in ignored local runtime lanes. The result is
 reported as local deployment feasibility and transcript-contract evidence
 because full-bf16 single-GPU loading exceeded the local 16GB GPU boundary.
+
+Kimi-Audio has completed isolated runtime/cache setup and a classified one-row
+attempt. The tracked records are aggregate-only; local patches, model cache,
+runtime logs, audio, row identifiers, and hypotheses stay in ignored runtime
+lanes. The result is a reproducible runtime dependency boundary, not a
+scientific quality rejection.
 
 ## Batch 1 Model Scope
 
@@ -229,9 +247,9 @@ Current Gate B results:
 
 ```text
 models_checked=6
-models_ready_for_smoke=4
+models_ready_for_smoke=5
 models_blocked_by_missing_runtime_modules=0
-models_blocked_by_missing_cache=1
+models_blocked_by_missing_cache=0
 models_deferred_by_gate_order=1
 ```
 
@@ -246,9 +264,13 @@ Immediate runtime-lane implications:
 4. MiniCPM-o 4.5 has passed runtime/cache setup and 4-bit one-row
    transcript-only smoke, with `promotion_decision=promote_to_sentinel` and an
    explicit quantized local-feasibility boundary；
-5. Kimi-Audio needs isolated model-cache/download lane before one-row smoke；
-6. MOSS-Audio-8B remains deferred until the planned remaining one-row order is
-   governed after the 4B prompt contract proved interpretable。
+5. Kimi-Audio has an isolated model-cache/runtime lane and a classified
+   one-row dependency boundary: the official main-model remote code requires
+   `flash_attn`, while the isolated local environment cannot build it without
+   `/usr/local/cuda/bin/nvcc`；
+6. MOSS-Audio-8B remains the next primary-lane one-row setup candidate after
+   Kimi's boundary has been recorded and after the 4B prompt contract proved
+   interpretable。
 
 Implementation requirements:
 
@@ -309,9 +331,11 @@ Current Gate B decision:
 - MiniCPM-o 4.5 has a ready isolated runtime/cache lane and completed 4-bit
   one-row smoke with raw transcript-like output under the quantized
   local-feasibility boundary；
-- Kimi still needs an isolated model-cache/download lane before one-row smoke；
-- MOSS 8B remains deferred until the remaining planned one-row order is
-  governed after MOSS 4B made the prompt contract interpretable。
+- Kimi has a ready isolated model-cache/runtime lane and a classified one-row
+  dependency boundary caused by the official main-model `flash_attn`
+  requirement on this local machine；
+- MOSS 8B is the next primary-lane one-row setup candidate after Kimi's
+  boundary is recorded and after MOSS 4B made the prompt contract interpretable。
 
 ## Gate B1: Qwen2.5-Omni Runtime/Cache Lane
 
@@ -471,9 +495,10 @@ next_gate=moss_audio_4b_sentinel_controls
 
 Decision: MOSS-Audio-4B is promoted to the sentinel-candidate pool. MiniCPM-o
 4.5 has also joined the sentinel-candidate pool after 4-bit transcript-contract
-smoke. The remaining one-row setup sequence continues with Kimi, while MOSS 8B
-becomes runtime-eligible only after the remaining planned one-row order stays
-governed.
+smoke. Kimi has now completed its isolated runtime/cache and one-row dependency
+gate but is blocked by the official `flash_attn` runtime requirement on this
+machine. The remaining one-row setup sequence continues with MOSS 8B while Kimi
+stays in a bounded dependency repair lane.
 
 ## Gate C: One-Row Transcript-Only Smoke
 
@@ -948,13 +973,14 @@ Execution sequence:
 2. Confirm local-only manifests are ignored by git.
 3. Confirm one_row_smoke_manifest.local.tsv and
    sentinel_negative_control_manifest.local.tsv remain ignored.
-4. Continue from Kimi isolated runtime/cache preparation. Qwen has already
-   passed one-row smoke and sentinel controls; MOSS-Audio-4B and MiniCPM-o 4.5
-   have passed one-row smoke and wait as sentinel candidates; Step has
-   completed one-row smoke but remains in prompt/runtime repair because the
-   output was repetition / non-transcript-like text.
-5. Run Gate C one-row transcript-only smoke for Kimi with size-boundary wording,
-   then MOSS 8B after the remaining one-row order is governed.
+4. Continue after the classified Kimi one-row dependency boundary. Qwen has
+   already passed one-row smoke and sentinel controls; MOSS-Audio-4B and
+   MiniCPM-o 4.5 have passed one-row smoke and wait as sentinel candidates;
+   Step has completed one-row smoke but remains in prompt/runtime repair
+   because the output was repetition / non-transcript-like text.
+5. Either repair Kimi's `flash_attn` dependency in an isolated lane or proceed
+   to MOSS 8B one-row setup; do not promote Kimi to sentinel until a
+   transcript-like one-row output exists.
 6. Write aggregate runtime_environment_summary.tsv, behavior_summary.tsv,
    gate_summary.json, and README.md. Classify every model as promoted, deferred,
    blocked, or fallback-only.

@@ -160,7 +160,19 @@ def write_tsv(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None
 
 
 def write_readme(out_dir: Path, summary: dict[str, Any]) -> None:
-    if summary["models_ready_for_smoke"] >= 4:
+    if summary["models_ready_for_smoke"] >= 5:
+        next_step = (
+            "Qwen2.5-Omni, MOSS-Audio-4B, MiniCPM-o 4.5, and Kimi-Audio have "
+            "ignored model-cache/runtime lanes, while Step-Audio-2-mini has "
+            "separate one-row evidence and remains in a prompt/runtime repair "
+            "lane. Interpret Kimi's adapter readiness together with its "
+            "one-row smoke record because the official main-model remote code "
+            "requires flash_attn on this local machine. Continue with MOSS-Audio-8B "
+            "setup only after this dependency boundary is recorded, then run "
+            "sentinel controls for transcript-like candidates. Keep local "
+            "manifest values, hypotheses, logs, and model caches outside git."
+        )
+    elif summary["models_ready_for_smoke"] >= 4:
         next_step = (
             "Qwen2.5-Omni, MOSS-Audio-4B, and MiniCPM-o 4.5 have one-row "
             "smoke evidence, while Step-Audio-2-mini is in a prompt/runtime "
@@ -339,10 +351,10 @@ def main() -> int:
             "model_cache_paths_tracked": False,
         },
         "next_gate": (
-            "prepare_kimi_audio_isolated_model_cache_lane; "
+            "record_kimi_audio_one_row_dependency_boundary; "
+            "then_prepare_moss_audio_8b_or_run_sentinel_controls_for_transcript_like_candidates; "
             "hold_qwen_moss_audio_4b_and_minicpm_o_4_5_as_sentinel_candidates; "
-            "keep_step_audio_in_prompt_runtime_repair_lane; "
-            "defer_moss_audio_8b_until_remaining_one_row_order_is_governed"
+            "keep_step_audio_in_prompt_runtime_repair_lane"
         )
     }
     (out_dir / "adapter_preflight_summary.json").write_text(

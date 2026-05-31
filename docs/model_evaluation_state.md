@@ -126,7 +126,7 @@ Current Gate 0 decisions:
 
 | Family | Model / variant | Status | Next gate |
 | --- | --- | --- | --- |
-| Kimi-Audio | `moonshotai/Kimi-Audio-7B-Instruct` | `metadata_pending_size_boundary` | explicit size-boundary decision before runtime smoke |
+| Kimi-Audio | `moonshotai/Kimi-Audio-7B-Instruct` | `one_row_smoke_classified_runtime_dependency_boundary` | flash_attn / CUDA-toolchain repair lane before any sentinel or 15-row gate |
 | Qwen2.5-Omni | `Qwen/Qwen2.5-Omni-7B` | `sentinel_controls_passed` | fixed 15-row candidate pool after Batch 1 smoke order remains governed |
 | Step-Audio 2 mini | `stepfun-ai/Step-Audio-2-mini` | `one_row_smoke_complete_not_promoted` | prompt/runtime repair before sentinel or 15-row |
 | MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-4B-Instruct` | `one_row_smoke_complete_promoted` | sentinel candidate |
@@ -135,10 +135,12 @@ Current Gate 0 decisions:
 | MiniCPM-o | `openbmb/MiniCPM-o-4_5` | `one_row_smoke_complete_promoted_quantized` | sentinel candidate with quantized local-feasibility boundary |
 | MiniCPM-o fallback | `openbmb/MiniCPM-o-2_6`, `openbmb/MiniCPM-o-2_6-int4` | fallback only | only if 4.5 is not reproducible or strict 2025-only scope is required |
 
-The next executable gate is Kimi-Audio isolated runtime/cache preparation and
-one-row transcript-only smoke. Kimi-Audio remains scientifically important and
-now has an explicit scope decision because the public model family/card uses
-the `7B` label while the current Hugging Face widget reports `10B params`.
+Kimi-Audio remains scientifically important and now has an explicit scope
+decision because the public model family/card uses the `7B` label while the
+current Hugging Face widget reports `10B params`. Its first runtime attempt is
+classified separately from transcript quality: the cache/import lane is present,
+but the official main-model remote code requires `flash_attn` and the isolated
+environment cannot source-build it on this machine without `/usr/local/cuda/bin/nvcc`.
 
 ### Post-Gate0 Evidence: 2026-05-31
 
@@ -172,12 +174,13 @@ and untracked.
 Gate B adapter preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/`.
 It now records the ignored isolated runtime-lane state after Qwen, Step,
-MOSS-Audio-4B, and MiniCPM-o 4.5 setup, found the RTX 5080 and local one-row
-manifest, and did not run inference during the preflight itself. Current
+MOSS-Audio-4B, MiniCPM-o 4.5, and Kimi cache/runtime setup, found the RTX 5080
+and local one-row manifest, and did not run inference during the preflight
+itself. Current
 status:
-`models_ready_for_smoke=4`,
+`models_ready_for_smoke=5`,
 `models_blocked_by_missing_runtime_modules=0`,
-`models_blocked_by_missing_cache=1`, and
+`models_blocked_by_missing_cache=0`, and
 `models_deferred_by_gate_order=1`.
 
 The Qwen2.5-Omni runtime/cache lane preparation is recorded in
@@ -239,13 +242,28 @@ and transcript-contract evidence, not full-bf16 quality evidence. The
 transcript-bearing output remains local-only in the ignored MiniCPM runtime
 lane.
 
+Kimi-Audio runtime/cache preparation is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_kimi_audio_runtime_lane_2026_06_01/`.
+It confirms the explicit `Kimi-Audio-7B-Instruct` / HF-widget `10B params`
+size-boundary layer, an ignored isolated Kimi runtime lane, the official repo
+submodule initialization, a local transcript-only snapshot policy that excludes
+TTS detokenizer/vocoder artifacts, and no repo-wide `.venv` modification. Kimi
+one-row smoke is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_kimi_audio_one_row_smoke_2026_06_01/`.
+The aggregate result is `smoke_status=failed:RuntimeError`,
+`failure_mode=runtime_dependency_error:flash_attn_required_by_official_main_model_remote_code`,
+and `promotion_decision=blocked_runtime_dependency`. This is not a scientific
+quality rejection; it is a reproducible runtime dependency boundary before any
+sentinel, 15-row, or CDS scoring gate.
+
 Post-Gate0 completion path:
 
-1. prepare isolated runtime/cache lane for Kimi with size-boundary wording,
-   then decide MOSS-Audio-8B timing after the remaining one-row order stays
-   governed；
+1. repair or route around Kimi's official `flash_attn` dependency boundary only
+   in an isolated runtime lane, while preserving the size-boundary wording；
 2. run one-row transcript-only smoke for the remaining planned models and run a
-   separate Step prompt/runtime repair only if it is bounded；
+   separate Step prompt/runtime repair only if it is bounded；MOSS-Audio-8B is
+   the next primary-lane one-row setup candidate after Kimi's boundary is
+   recorded；
 3. run sentinel controls for each model that passes one-row smoke；
 4. prepare local-only manifests for fixed
    15-row, human-reviewed 30-row, promoted 258-row, and selected-300；

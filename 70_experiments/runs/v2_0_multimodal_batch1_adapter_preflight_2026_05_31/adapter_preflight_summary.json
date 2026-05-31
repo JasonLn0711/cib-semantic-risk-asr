@@ -1,6 +1,6 @@
 {
   "run_id": "v2_0_multimodal_batch1_adapter_preflight_2026_05_31",
-  "generated_at_unix": 1780251595,
+  "generated_at_unix": 1780254671,
   "gate": "Gate B adapter preflight",
   "status": "adapter_preflight_complete_no_inference",
   "python_version": "3.12.3",
@@ -10,9 +10,9 @@
   "manifest_exists": true,
   "manifest_rows": 1,
   "models_checked": 6,
-  "models_ready_for_smoke": 4,
+  "models_ready_for_smoke": 5,
   "models_blocked_by_missing_runtime_modules": 0,
-  "models_blocked_by_missing_cache": 1,
+  "models_blocked_by_missing_cache": 0,
   "models_deferred_by_gate_order": 1,
   "weights_downloaded_by_this_run": false,
   "model_inference_run": false,
@@ -27,5 +27,5 @@
     "local_paths_tracked": false,
     "model_cache_paths_tracked": false
   },
-  "next_gate": "prepare_kimi_audio_isolated_model_cache_lane; hold_qwen_moss_audio_4b_and_minicpm_o_4_5_as_sentinel_candidates; keep_step_audio_in_prompt_runtime_repair_lane; defer_moss_audio_8b_until_remaining_one_row_order_is_governed"
+  "next_gate": "record_kimi_audio_one_row_dependency_boundary; then_prepare_moss_audio_8b_or_run_sentinel_controls_for_transcript_like_candidates; hold_qwen_moss_audio_4b_and_minicpm_o_4_5_as_sentinel_candidates; keep_step_audio_in_prompt_runtime_repair_lane"
 }
