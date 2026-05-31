@@ -50,6 +50,7 @@ Post-Gate0 evidence now includes:
 70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/
+70_experiments/runs/v2_0_multimodal_batch1_qwen_runtime_lane_2026_05_31/
 ```
 
 The full end-to-end completion plan and reusable execution prompt are recorded
@@ -63,6 +64,11 @@ The adapter preflight records that real one-row inference is not ready yet:
 Qwen2.5-Omni has one missing runtime module, Step-Audio-2-mini / MOSS 4B /
 MiniCPM-o 4.5 / Kimi need isolated model-cache lanes, and MOSS 8B remains
 deferred until MOSS 4B smoke.
+
+The Qwen runtime-lane preparation records the first concrete blocker set:
+`qwen_omni_utils_import_blocked`, `missing_torchvision`, and
+`missing_qwen_model_cache`. The next action is an ignored isolated Qwen
+runtime/cache lane before any Qwen inference.
 
 ## Post-Gate0 Completion Roadmap
 

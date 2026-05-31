@@ -32,6 +32,7 @@ Completed tracked evidence:
 70_experiments/runs/v2_0_multimodal_batch1_runtime_smoke_preflight_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/
+70_experiments/runs/v2_0_multimodal_batch1_qwen_runtime_lane_2026_05_31/
 ```
 
 Tracked scripts:
@@ -42,6 +43,8 @@ scripts/prepare_v2_0_multimodal_manifest_preflight.py
 scripts/validate_v2_0_multimodal_manifest_preflight.py
 scripts/preflight_v2_0_multimodal_adapters.py
 scripts/validate_v2_0_multimodal_adapter_preflight.py
+scripts/prepare_v2_0_qwen_omni_runtime_lane.py
+scripts/validate_v2_0_qwen_omni_runtime_lane.py
 scripts/run_v2_0_multimodal_one_row_smoke.py
 scripts/validate_v2_0_multimodal_runtime_smoke.py
 ```
@@ -247,6 +250,34 @@ Current Gate B decision:
 - no model proceeds to real one-row inference yet；
 - the next action is isolated runtime/cache preparation in execution order,
   starting with Qwen2.5-Omni because it is first in the planned smoke order。
+
+## Gate B1: Qwen2.5-Omni Runtime/Cache Lane
+
+Purpose: make the first planned Gate C model executable without changing the
+repo-wide `.venv`.
+
+Current status: aggregate Qwen lane preparation is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_qwen_runtime_lane_2026_05_31/`.
+It did not install packages, download model weights, or run inference.
+
+Current blockers:
+
+```text
+qwen_omni_utils_import_blocked
+missing_torchvision
+missing_qwen_model_cache
+```
+
+Required next action:
+
+1. create an ignored isolated Qwen runtime lane under
+   `70_experiments/runtime_lanes/`；
+2. install the missing runtime module in that ignored lane, not the repo-wide
+   `.venv`；
+3. download or attach the Qwen2.5-Omni-7B cache in the ignored lane；
+4. rerun Gate B adapter preflight；
+5. run Qwen one-row transcript-only smoke only after the adapter preflight marks
+   Qwen ready。
 
 ## Gate C: One-Row Transcript-Only Smoke
 

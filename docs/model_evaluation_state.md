@@ -179,6 +179,13 @@ Current status: `models_ready_for_smoke=0`,
 `models_deferred_by_gate_order=1`. The immediate next action is isolated
 runtime/cache preparation, starting with Qwen2.5-Omni.
 
+The Qwen2.5-Omni runtime/cache lane preparation is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_qwen_runtime_lane_2026_05_31/`.
+It confirms no repo-wide `.venv` modification, no package install, no weight
+download, and no inference. Current blockers are
+`qwen_omni_utils_import_blocked`, `missing_torchvision`, and
+`missing_qwen_model_cache`.
+
 Post-Gate0 completion path:
 
 1. prepare isolated runtime/cache lanes for the planned adapter order；

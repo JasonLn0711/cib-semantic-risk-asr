@@ -81,3 +81,6 @@ hf_cache/
 *.local.jsonl
 *hypothesis*.jsonl
 *hypotheses*.jsonl
+
+# Isolated runtime/model-cache lanes for large multimodal smoke tests.
+70_experiments/runtime_lanes/
