@@ -112,6 +112,19 @@ def write_tsv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> 
 
 def write_readme(out_dir: Path, summary: dict[str, Any]) -> None:
     missing = summary["missing_required_next"]
+    if missing:
+        next_step = (
+            "Create or attach `one_row_smoke_manifest.local.tsv` locally, then "
+            "run the real one-row transcript-only smoke adapters. Do not track "
+            "the local manifest."
+        )
+    else:
+        next_step = (
+            "Use the available local-only manifests for their active gates and "
+            "create later fixed-15, 30-row, 258-row, and selected-300 manifests "
+            "only when promotion rules require them. Do not track local "
+            "manifest values."
+        )
     text = f"""# v2.0 Batch 1 Manifest Preflight
 
 Date: 2026-05-31
@@ -145,8 +158,7 @@ next_gate={summary['next_gate']}
 
 ## Next Step
 
-Create or attach `one_row_smoke_manifest.local.tsv` locally, then run the real
-one-row transcript-only smoke adapters. Do not track the local manifest.
+{next_step}
 """
     (out_dir / "README.md").write_text(text, encoding="utf-8")
 

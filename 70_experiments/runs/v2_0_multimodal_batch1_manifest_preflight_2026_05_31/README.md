@@ -24,12 +24,11 @@ reviewer notes, or local file paths.
 
 ```text
 manifest_specs=6
-manifest_files_present=1
+manifest_files_present=2
 missing_required_next=False
 next_gate=run_real_one_row_transcript_only_smoke_adapters
 ```
 
 ## Next Step
 
-Create or attach `one_row_smoke_manifest.local.tsv` locally, then run the real
-one-row transcript-only smoke adapters. Do not track the local manifest.
+Use the available local-only manifests for their active gates and create later fixed-15, 30-row, 258-row, and selected-300 manifests only when promotion rules require them. Do not track local manifest values.

@@ -1,11 +1,11 @@
 # v2.0 Batch 1 多模態音訊模型完整完成計畫
 
-Date: 2026-05-31
+Date: 2026-06-01
 
 Status: full completion plan; Gate 0, Kimi size-boundary decision, runtime
 smoke preflight, Gate A one-row manifest preflight, Gate B adapter preflight,
-Qwen isolated runtime/cache lane, and Qwen one-row transcript-only smoke are
-complete
+Qwen isolated runtime/cache lane, Qwen one-row transcript-only smoke, and Qwen
+sentinel controls are complete
 
 本文件只記錄 aggregate planning、gate、artifact、validator、privacy boundary
 與 Codex execution prompt，不記錄任何逐字稿、row ID、音訊內容或模型輸出。
@@ -35,6 +35,7 @@ Completed tracked evidence:
 70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_qwen_runtime_lane_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_qwen_one_row_smoke_2026_05_31/
+70_experiments/runs/v2_0_multimodal_batch1_qwen_sentinel_controls_2026_06_01/
 ```
 
 Tracked scripts:
@@ -49,6 +50,9 @@ scripts/prepare_v2_0_qwen_omni_runtime_lane.py
 scripts/validate_v2_0_qwen_omni_runtime_lane.py
 scripts/run_v2_0_qwen_omni_one_row_smoke.py
 scripts/validate_v2_0_qwen_omni_one_row_smoke.py
+scripts/prepare_v2_0_qwen_sentinel_manifest.py
+scripts/run_v2_0_qwen_omni_sentinel_controls.py
+scripts/validate_v2_0_qwen_omni_sentinel_controls.py
 scripts/run_v2_0_multimodal_one_row_smoke.py
 scripts/validate_v2_0_multimodal_runtime_smoke.py
 ```
@@ -56,14 +60,14 @@ scripts/validate_v2_0_multimodal_runtime_smoke.py
 Current active gate:
 
 ```text
-Run Qwen sentinel controls, then prepare the next isolated runtime/cache lane
-for Step-Audio-2-mini. Continue the planned one-row smoke order only after each
-model has a ready isolated lane.
+Prepare the next isolated runtime/cache lane for Step-Audio-2-mini, then
+continue the planned one-row smoke order. Qwen may enter the 15-row candidate
+pool only after the remaining Batch 1 one-row/sentinel order stays governed.
 ```
 
-Qwen2.5-Omni has completed one-row transcript-only inference. The tracked
-record is aggregate-only; the model output stays in the ignored local runtime
-lane.
+Qwen2.5-Omni has completed one-row transcript-only inference and sentinel
+controls. The tracked records are aggregate-only; model outputs and sentinel
+audio stay in ignored local runtime lanes.
 
 ## Batch 1 Model Scope
 
@@ -173,6 +177,9 @@ Promotion rule:
 Current Gate A result:
 
 - `one_row_smoke_manifest.local.tsv` is present locally and ignored by git；
+- `sentinel_negative_control_manifest.local.tsv` is present locally and ignored
+  by git；
+- the manifest preflight now records `2/6` expected local manifests present；
 - the tracked preflight record stores only aggregate row/field counts and does
   not store manifest field names or row-level values。
 
@@ -190,16 +197,15 @@ Current Gate B results:
 
 ```text
 models_checked=6
-models_ready_for_smoke=0
-models_blocked_by_missing_runtime_modules=1
+models_ready_for_smoke=1
+models_blocked_by_missing_runtime_modules=0
 models_blocked_by_missing_cache=4
 models_deferred_by_gate_order=1
 ```
 
 Immediate runtime-lane implications:
 
-1. Qwen2.5-Omni needs an isolated runtime-lane fix for the missing `torchvision`
-   dependency before its adapter can import `qwen_omni_utils`；
+1. Qwen2.5-Omni has passed runtime/cache, one-row smoke, and sentinel controls；
 2. Step-Audio-2-mini, MOSS-Audio-4B, MiniCPM-o 4.5, and Kimi-Audio need
    isolated model-cache/download lanes before one-row smoke；
 3. MOSS-Audio-8B remains deferred until MOSS-Audio-4B smoke is interpretable。
@@ -309,8 +315,36 @@ promotion_decision=promote_to_sentinel
 ```
 
 The model output remains local-only in the ignored Qwen runtime lane. The next
-scientific gate for Qwen is sentinel controls; the next model-family setup gate
-is Step-Audio-2-mini isolated runtime/cache preparation.
+model-family setup gate is Step-Audio-2-mini isolated runtime/cache preparation.
+
+## Gate D1: Qwen2.5-Omni Sentinel Controls
+
+Purpose: test whether a model that can produce a transcript-like one-row output
+also respects the ASR boundary under no-speech, non-speech, long-pause,
+low-volume, and spoken-instruction controls.
+
+Current status: complete in
+`70_experiments/runs/v2_0_multimodal_batch1_qwen_sentinel_controls_2026_06_01/`.
+
+Tracked aggregate result:
+
+```text
+sentinel_rows=6
+sentinel_classes=6
+sentinel_pass_rows=6
+hallucination_on_no_speech_rows=0
+instruction_followed_rows=0
+summary_or_answer_rows=0
+translation_rows=0
+tts_only_rows=0
+invented_timestamp_rows=0
+invented_speaker_label_rows=0
+promotion_decision=promote_to_15_row_candidate_pool
+```
+
+The sentinel manifest, generated sentinel audio, and model outputs remain
+local-only / ignored. This promotes Qwen into the fixed 15-row candidate pool,
+but it does not authorize skipping the remaining Batch 1 one-row smoke order.
 
 ## Gate C: One-Row Transcript-Only Smoke
 
@@ -738,6 +772,12 @@ Current completed evidence:
   70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/
 - Adapter preflight:
   70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/
+- Qwen runtime/cache lane:
+  70_experiments/runs/v2_0_multimodal_batch1_qwen_runtime_lane_2026_05_31/
+- Qwen one-row transcript-only smoke:
+  70_experiments/runs/v2_0_multimodal_batch1_qwen_one_row_smoke_2026_05_31/
+- Qwen sentinel controls:
+  70_experiments/runs/v2_0_multimodal_batch1_qwen_sentinel_controls_2026_06_01/
 
 Primary models:
 1. Qwen2.5-Omni-7B
@@ -765,12 +805,13 @@ Execution sequence:
 1. Inspect git status, runbook, full completion plan, model state, registry, and
    existing run folders.
 2. Confirm local-only manifests are ignored by git.
-3. Confirm one_row_smoke_manifest.local.tsv remains ignored and use it for the
-   one-row smoke. The current manifest preflight reports this gate as ready.
-4. Prepare isolated runtime/cache lanes for Qwen2.5-Omni, Step-Audio-2-mini,
-   MOSS-Audio-4B, MiniCPM-o 4.5, and Kimi with size-boundary wording; keep
-   MOSS 8B deferred until MOSS 4B smoke is interpretable.
-5. Run Gate C one-row transcript-only smoke in the planned order.
+3. Confirm one_row_smoke_manifest.local.tsv and
+   sentinel_negative_control_manifest.local.tsv remain ignored.
+4. Continue from Step-Audio-2-mini isolated runtime/cache preparation; Qwen has
+   already passed one-row smoke and sentinel controls.
+5. Run Gate C one-row transcript-only smoke for Step-Audio-2-mini,
+   MOSS-Audio-4B, MiniCPM-o 4.5, Kimi with size-boundary wording, and MOSS 8B
+   after MOSS 4B is interpretable.
 6. Write aggregate runtime_environment_summary.tsv, behavior_summary.tsv,
    gate_summary.json, and README.md. Classify every model as promoted, deferred,
    blocked, or fallback-only.

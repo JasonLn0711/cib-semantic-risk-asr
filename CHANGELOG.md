@@ -5,6 +5,30 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.255 - 2026-06-01T00:28:33+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `3e31598`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/README.md`
+  - `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/manifest_preflight_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/manifest_preflight_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_qwen_sentinel_controls_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_batch1_qwen_sentinel_controls_2026_06_01/behavior_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_qwen_sentinel_controls_2026_06_01/gate_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_batch1_qwen_sentinel_controls_2026_06_01/runtime_environment_summary.tsv`
+  - `docs/model_evaluation_state.md`
+  - `docs/v2_0_multimodal_batch1_execution_runbook.md`
+  - `docs/v2_0_multimodal_batch1_full_completion_plan.md`
+  - `scripts/prepare_v2_0_multimodal_manifest_preflight.py`
+  - `scripts/prepare_v2_0_qwen_sentinel_manifest.py`
+  - `scripts/run_v2_0_qwen_omni_sentinel_controls.py`
+  - `scripts/validate_v2_0_qwen_omni_sentinel_controls.py`
+
 ## v2.5.254 - 2026-06-01T00:20:27+08:00
 
 - Bump: `patch`

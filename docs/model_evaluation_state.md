@@ -127,7 +127,7 @@ Current Gate 0 decisions:
 | Family | Model / variant | Status | Next gate |
 | --- | --- | --- | --- |
 | Kimi-Audio | `moonshotai/Kimi-Audio-7B-Instruct` | `metadata_pending_size_boundary` | explicit size-boundary decision before runtime smoke |
-| Qwen2.5-Omni | `Qwen/Qwen2.5-Omni-7B` | `one_row_transcript_smoke_passed` | sentinel controls |
+| Qwen2.5-Omni | `Qwen/Qwen2.5-Omni-7B` | `sentinel_controls_passed` | fixed 15-row candidate pool after Batch 1 smoke order remains governed |
 | Step-Audio 2 mini | `stepfun-ai/Step-Audio-2-mini` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
 | MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-4B-Instruct` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
 | MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-8B-Instruct` | `runtime_ready_after_4b_smoke` | after 4B environment and prompt contract are interpretable |
@@ -165,9 +165,9 @@ and Codex execution prompt is recorded in
 
 Gate A manifest preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/`.
-It now finds the local-only one-row manifest, records `1/6` expected local
-manifests present, and sets the immediate next action to run real one-row
-transcript-only adapters. The local manifest remains ignored and is not tracked.
+It now finds the local-only one-row manifest and sentinel manifest, records
+`2/6` expected local manifests present, and keeps local manifest values ignored
+and untracked.
 
 Gate B adapter preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/`.
@@ -187,23 +187,29 @@ The aggregate result is `valid_text_outputs=1`, `raw_transcript_like_outputs=1`,
 and `promotion_decision=promote_to_sentinel`; the transcript-bearing output
 remains local-only in the ignored runtime lane.
 
+Qwen sentinel controls are recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_qwen_sentinel_controls_2026_06_01/`.
+The aggregate result is `sentinel_pass_rows=6/6`,
+`hallucination_on_no_speech_rows=0`, `instruction_followed_rows=0`, and
+`promotion_decision=promote_to_15_row_candidate_pool`. The sentinel audio,
+manifest, and model outputs remain local-only / ignored.
+
 Post-Gate0 completion path:
 
-1. run Qwen sentinel controls；
-2. prepare isolated runtime/cache lanes for Step-Audio-2-mini, MOSS-Audio-4B,
+1. prepare isolated runtime/cache lanes for Step-Audio-2-mini, MOSS-Audio-4B,
    MiniCPM-o 4.5, Kimi with size-boundary wording, and MOSS-Audio-8B after
    MOSS 4B；
-3. run one-row transcript-only smoke for the remaining planned models；
+2. run one-row transcript-only smoke for the remaining planned models；
+3. run sentinel controls for each model that passes one-row smoke；
 4. prepare local-only manifests for fixed
    15-row, human-reviewed 30-row, promoted 258-row, and selected-300；
-5. run sentinel negative controls before any scored rows；
-6. promote only clean candidates to fixed 15-row transcript scoring, Taiwan
+5. promote only clean candidates to fixed 15-row transcript scoring, Taiwan
    utility/subgroup audit, and human-reviewed 30-row CDS evidence；
-7. refresh ASR controls for calibration, with Qwen3-ASR and Whisper-style
+6. refresh ASR controls for calibration, with Qwen3-ASR and Whisper-style
    baselines as the main Mandarin comparison anchors；
-8. escalate to 258-row and selected-300 only for scientific winners with clean
+7. escalate to 258-row and selected-300 only for scientific winners with clean
    runtime, locale, privacy, and license evidence；
-9. keep voice-interaction and long-audio/reasoning lanes separate until they
+8. keep voice-interaction and long-audio/reasoning lanes separate until they
    pass the transcript-only adapter.
 
 ## Promotion Requirements

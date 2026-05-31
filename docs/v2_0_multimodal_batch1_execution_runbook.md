@@ -1,17 +1,19 @@
 # v2.0 Batch 1 多模態音訊模型實驗執行 Runbook
 
-Date: 2026-05-31
+Date: 2026-06-01
 
 Status: Kimi size-boundary decision, runtime-smoke preflight, Qwen isolated
-runtime/cache lane, and Qwen one-row transcript-only smoke complete
+runtime/cache lane, Qwen one-row transcript-only smoke, and Qwen sentinel
+controls complete
 
 ## Current Gate
 
 目前 v2.0 多模態實驗已完成設計定位、Batch 1 Gate 0 metadata discovery、
 Kimi size-boundary decision、isolated runtime-smoke preflight、Qwen isolated
-runtime/cache lane，以及 Qwen one-row transcript-only smoke。下一個 Qwen gate
-是 sentinel controls；下一個模型 setup gate 是 Step-Audio-2-mini isolated
-runtime/cache lane。仍然不能直接跳到 15-row、258-row 或 selected-300。
+runtime/cache lane、Qwen one-row transcript-only smoke，以及 Qwen sentinel
+controls。下一個模型 setup gate 是 Step-Audio-2-mini isolated runtime/cache
+lane。Qwen 可進 fixed 15-row candidate pool，但整體 Batch 1 仍不能直接跳到
+258-row 或 selected-300。
 
 Batch 1 primary zh-TW audio LLM experiment set is fixed as:
 
@@ -37,7 +39,7 @@ Current post-Gate0 state:
 | Family | State | Immediate next step |
 | --- | --- | --- |
 | Kimi-Audio-7B-Instruct | size-boundary decision recorded | one-row transcript-only smoke with explicit size-boundary wording |
-| Qwen2.5-Omni-7B | one-row transcript-only smoke complete | sentinel controls |
+| Qwen2.5-Omni-7B | one-row smoke + sentinel controls complete | 15-row candidate pool after Batch 1 smoke order remains governed |
 | Step-Audio-2-mini | ready for isolated adapter/runtime execution | one-row transcript-only smoke |
 | MOSS-Audio-4B-Instruct | ready for isolated adapter/runtime execution | one-row transcript-only smoke |
 | MOSS-Audio-8B-Instruct | ready after 4B smoke | run only after 4B environment and prompt contract are interpretable |
@@ -52,14 +54,15 @@ Post-Gate0 evidence now includes:
 70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_qwen_runtime_lane_2026_05_31/
 70_experiments/runs/v2_0_multimodal_batch1_qwen_one_row_smoke_2026_05_31/
+70_experiments/runs/v2_0_multimodal_batch1_qwen_sentinel_controls_2026_06_01/
 ```
 
 The full end-to-end completion plan and reusable execution prompt are recorded
 in `docs/v2_0_multimodal_batch1_full_completion_plan.md`.
 
-The manifest preflight now records that the local-only one-row smoke manifest is
-present and ignored; the immediate next action is to run the real transcript-only
-runtime adapters.
+The manifest preflight now records that the local-only one-row smoke manifest
+and sentinel manifest are present and ignored; tracked files store only
+aggregate counts and gate status.
 
 The adapter preflight now records `models_ready_for_smoke=1`: Qwen2.5-Omni is
 ready in the ignored isolated runtime/cache lane. Step-Audio-2-mini / MOSS 4B /
@@ -67,8 +70,10 @@ MiniCPM-o 4.5 / Kimi still need isolated model-cache lanes, and MOSS 8B remains
 deferred until MOSS 4B smoke.
 
 The Qwen runtime-lane preparation now records no blockers. Qwen one-row
-transcript-only smoke completed with one valid transcript-like text output and
-no tracked transcript-bearing content. The next Qwen gate is sentinel controls.
+transcript-only smoke completed with one valid transcript-like text output, and
+Qwen sentinel controls passed `6/6` aggregate classes with
+`hallucination_on_no_speech_rows=0` and `instruction_followed_rows=0`. No
+tracked transcript-bearing content was added.
 
 ## Post-Gate0 Completion Roadmap
 
@@ -944,13 +949,16 @@ Context:
 - Current Gate 1 state:
   - Kimi-Audio remains primary and has explicit 7B-label / 10B-widget
     size-boundary handling before runtime smoke.
-  - Qwen2.5-Omni-7B, Step-Audio-2-mini, MOSS-Audio-4B-Instruct, and MiniCPM-o
-    4.5 are ready for isolated adapter/runtime execution before one-row smoke.
+  - Qwen2.5-Omni-7B has passed one-row transcript-only smoke and sentinel
+    controls, and may enter the fixed 15-row candidate pool after the remaining
+    Batch 1 smoke order remains governed.
+  - Step-Audio-2-mini, MOSS-Audio-4B-Instruct, MiniCPM-o 4.5, and Kimi still
+    need isolated runtime/cache lanes before one-row smoke.
   - MOSS-Audio-8B-Instruct follows after the 4B smoke is interpretable.
   - MOSS Thinking variants are deferred until Instruct transcript gates.
-- The current active gate is attaching a local-only one-row manifest and running
-  isolated transcript-only runtime adapters. Do not jump directly to 15-row,
-  258-row, selected-300, or secondary interaction/reasoning lanes.
+- The current active gate is Step-Audio-2-mini isolated runtime/cache
+  preparation, while Qwen waits in the fixed 15-row candidate pool. Do not jump
+  directly to 258-row, selected-300, or secondary interaction/reasoning lanes.
 
 Hard boundaries:
 - Preserve the existing paper-ready CDS-ASR evidence chain.
@@ -968,7 +976,7 @@ Execution order:
    records.
 2. Validate that Gate 0, Kimi size-boundary, and runtime-smoke preflight
    artifacts are present and repo-safe.
-3. Attach or create the local-only one-row smoke manifest. Do not track it.
+3. Confirm the local-only one-row and sentinel manifests remain ignored.
 4. Add model-family runtime adapters without upgrading the repo-wide .venv.
    Track only aggregate runtime records.
 5. Prepare or confirm local-only manifests for sentinel controls, fixed
@@ -982,9 +990,10 @@ Execution order:
    gate_summary.json, and README.md for the runtime smoke. Classify every model
    as promoted, deferred, runtime-blocked, metadata-pending, or fallback-only.
 8. Run Gate 1b sentinel negative controls only for models with valid one-row
-   transcript-like output.
+   transcript-like output. Qwen has passed this gate.
 9. Run Gate 2 fixed 15-row transcript gate only for models passing sentinel
-   controls.
+   controls; Qwen is eligible for the candidate pool, but the remaining Batch 1
+   one-row/sentinel order still needs execution.
 10. Run Taiwan utility and subgroup/acoustic audit for Gate 2 survivors.
 11. Run Gate 3 human-reviewed 30-row CDS gate only for models that preserve raw
    transcript validity and locale behavior.

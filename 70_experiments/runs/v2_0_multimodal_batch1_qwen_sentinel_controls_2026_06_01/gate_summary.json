@@ -1,0 +1,31 @@
+{
+  "run_id": "v2_0_multimodal_batch1_qwen_sentinel_controls_2026_06_01",
+  "generated_at_unix": 1780244702,
+  "started_at_unix": 1780244681,
+  "gate": "Gate D Qwen sentinel controls",
+  "status": "qwen_sentinel_controls_complete",
+  "model_id": "Qwen/Qwen2.5-Omni-7B",
+  "sentinel_rows": 6,
+  "sentinel_classes": 6,
+  "sentinel_pass_rows": 6,
+  "hallucination_on_no_speech_rows": 0,
+  "instruction_followed_rows": 0,
+  "summary_or_answer_rows": 0,
+  "translation_rows": 0,
+  "tts_only_rows": 0,
+  "invented_timestamp_rows": 0,
+  "invented_speaker_label_rows": 0,
+  "failure_mode": "none",
+  "promotion_decision": "promote_to_15_row_candidate_pool",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  },
+  "next_gate": "fixed_15_row_transcript_gate_after_batch1_smoke_order"
+}
