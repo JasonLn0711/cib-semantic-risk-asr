@@ -160,7 +160,15 @@ def write_tsv(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None
 
 
 def write_readme(out_dir: Path, summary: dict[str, Any]) -> None:
-    if summary["models_ready_for_smoke"] > 0:
+    if summary["models_ready_for_smoke"] >= 3:
+        next_step = (
+            "Qwen2.5-Omni and MOSS-Audio-4B have one-row smoke evidence, "
+            "while Step-Audio-2-mini is in a prompt/runtime repair lane. "
+            "Continue the remaining one-row order by preparing MiniCPM-o 4.5 "
+            "and Kimi isolated model-cache/download lanes. Keep local manifest "
+            "values, hypotheses, logs, and model caches outside git."
+        )
+    elif summary["models_ready_for_smoke"] > 0:
         next_step = (
             "Run one-row transcript-only smoke for ready models, starting with "
             "Qwen2.5-Omni-7B, and prepare isolated model-cache/download lanes for "
@@ -320,7 +328,11 @@ def main() -> int:
             "local_paths_tracked": False,
             "model_cache_paths_tracked": False,
         },
-        "next_gate": "prepare isolated model-cache lanes then run real one-row transcript-only smoke adapters",
+        "next_gate": (
+            "prepare_minicpm_o_4_5_and_kimi_isolated_model_cache_lanes; "
+            "hold_qwen_and_moss_audio_4b_as_sentinel_candidates; "
+            "keep_step_audio_in_prompt_runtime_repair_lane"
+        )
     }
     (out_dir / "adapter_preflight_summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n",

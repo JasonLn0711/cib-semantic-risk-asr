@@ -1,0 +1,2 @@
+model_family	model_id	execution_order	runtime_lane	python_version	platform	model_inference_run	local_output_tracked	transcript_bearing_logs_tracked
+MOSS-Audio	OpenMOSS-Team/MOSS-Audio-4B-Instruct	3	ignored_moss_audio_runtime_lane	3.12.3	Linux-6.17.0-29-generic-x86_64-with-glibc2.39	True	False	False

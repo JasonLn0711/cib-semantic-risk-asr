@@ -129,8 +129,8 @@ Current Gate 0 decisions:
 | Kimi-Audio | `moonshotai/Kimi-Audio-7B-Instruct` | `metadata_pending_size_boundary` | explicit size-boundary decision before runtime smoke |
 | Qwen2.5-Omni | `Qwen/Qwen2.5-Omni-7B` | `sentinel_controls_passed` | fixed 15-row candidate pool after Batch 1 smoke order remains governed |
 | Step-Audio 2 mini | `stepfun-ai/Step-Audio-2-mini` | `one_row_smoke_complete_not_promoted` | prompt/runtime repair before sentinel or 15-row |
-| MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-4B-Instruct` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
-| MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-8B-Instruct` | `runtime_ready_after_4b_smoke` | after 4B environment and prompt contract are interpretable |
+| MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-4B-Instruct` | `one_row_smoke_complete_promoted` | sentinel candidate |
+| MOSS-Audio | `OpenMOSS-Team/MOSS-Audio-8B-Instruct` | `eligible_after_remaining_one_row_order` | after MiniCPM/Kimi one-row order remains governed |
 | MOSS-Audio Thinking | 4B / 8B Thinking variants | `defer_until_instruct_transcript_gate` | reasoning analysis after Instruct transcript gates |
 | MiniCPM-o | `openbmb/MiniCPM-o-4_5` | `runtime_ready_after_artifact_check` | isolated transcript-only runtime smoke |
 | MiniCPM-o fallback | `openbmb/MiniCPM-o-2_6`, `openbmb/MiniCPM-o-2_6-int4` | fallback only | only if 4.5 is not reproducible or strict 2025-only scope is required |
@@ -171,11 +171,12 @@ and untracked.
 
 Gate B adapter preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_adapter_preflight_2026_05_31/`.
-It now records the ignored isolated runtime-lane state after Qwen and Step
-setup, found the RTX 5080 and local one-row manifest, and did not run inference
-during the preflight itself. Current status: `models_ready_for_smoke=2`,
+It now records the ignored isolated runtime-lane state after Qwen, Step, and
+MOSS-Audio-4B setup, found the RTX 5080 and local one-row manifest, and did not
+run inference during the preflight itself. Current status:
+`models_ready_for_smoke=3`,
 `models_blocked_by_missing_runtime_modules=0`,
-`models_blocked_by_missing_cache=3`, and
+`models_blocked_by_missing_cache=2`, and
 `models_deferred_by_gate_order=1`.
 
 The Qwen2.5-Omni runtime/cache lane preparation is recorded in
@@ -206,12 +207,27 @@ The aggregate result is `valid_text_outputs=1`,
 prompt/runtime repair lane and cannot enter sentinel controls or fixed 15-row
 scoring until raw transcript-like output is proven.
 
+MOSS-Audio-4B runtime/cache preparation is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_runtime_lane_2026_06_01/`.
+It confirms an ignored isolated OpenMOSS runtime lane, local 4B cache snapshot,
+CUDA access, no repo-wide `.venv` modification, official torch 2.9.1+cu128 /
+Transformers 4.57.1 runtime, and no runtime import blockers. MOSS-Audio-4B
+one-row smoke is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_one_row_smoke_2026_06_01/`.
+The aggregate result is `valid_text_outputs=1`,
+`raw_transcript_like_outputs=1`, `summary_or_answer_outputs=0`,
+`translation_outputs=0`, `tts_only_outputs=0`,
+`invented_timestamp_outputs=0`, `invented_speaker_label_outputs=0`, and
+`promotion_decision=promote_to_sentinel`. The transcript-bearing output remains
+local-only in the ignored MOSS runtime lane.
+
 Post-Gate0 completion path:
 
-1. prepare isolated runtime/cache lanes for MOSS-Audio-4B, MiniCPM-o 4.5,
-   Kimi with size-boundary wording, and MOSS-Audio-8B after MOSS 4B；
-2. run one-row transcript-only smoke for the remaining planned models and run
-   a separate Step prompt/runtime repair only if it is bounded；
+1. prepare isolated runtime/cache lanes for MiniCPM-o 4.5, Kimi with
+   size-boundary wording, and MOSS-Audio-8B after the remaining one-row order
+   stays governed；
+2. run one-row transcript-only smoke for the remaining planned models and run a
+   separate Step prompt/runtime repair only if it is bounded；
 3. run sentinel controls for each model that passes one-row smoke；
 4. prepare local-only manifests for fixed
    15-row, human-reviewed 30-row, promoted 258-row, and selected-300；
