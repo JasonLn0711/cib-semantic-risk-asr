@@ -1,7 +1,7 @@
 {
   "run_id": "v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01",
   "date": "2026-06-01",
-  "status": "plan_recorded_lora_rationale_gate_ready",
+  "status": "plan_recorded_baseline_and_lora_rationale_ready",
   "human_review_policy": "no_additional_human_review",
   "models": [
     "Qwen/Qwen3-ASR-0.6B",
@@ -15,6 +15,7 @@
   "next_phase_id": 1,
   "lora_intervention_rationale_required": true,
   "research_probe_lora_allowed": true,
+  "baseline_experiment_matrix_count": 12,
   "lora_rank_alpha_grid_count": 12,
   "primary_completion_decision_options": [
     "asr_control_scoped_survivor",

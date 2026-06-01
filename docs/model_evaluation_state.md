@@ -309,6 +309,13 @@ FireRedASR-LLM is a heavier short-audio / code-switching candidate; FireRedASR2
 is an optional metadata-gated newer branch after baseline FireRedASR evidence
 exists.
 
+The baseline plan now has a dedicated matrix in
+`70_experiments/runs/v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01/baseline_experiment_matrix.tsv`.
+Each model route is evaluated through raw baseline, Traditional Chinese
+deployment-repair baseline, subgroup baseline, and frozen LoRA comparison
+surfaces. This prevents raw CER/WER, OpenCC/Taiwan-term repair, and LoRA
+intervention evidence from collapsing into a single undifferentiated score.
+
 LoRA is designed as an intervention-rationale-gated rank/alpha experiment
 rather than an immediate full sweep. Imperfect CER/WER is not enough to open
 LoRA. A LoRA run needs either diagnostic-triggered evidence of a

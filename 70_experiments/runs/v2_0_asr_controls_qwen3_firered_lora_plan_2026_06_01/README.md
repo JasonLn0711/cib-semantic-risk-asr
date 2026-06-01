@@ -2,7 +2,7 @@
 
 Date: 2026-06-01
 
-Status: `plan_recorded_no_human_review_lora_grid_ready`
+Status: `plan_recorded_baseline_and_lora_rationale_ready`
 
 This record designs the next ASR-control and fine-tuning experiment lane for:
 
@@ -75,6 +75,11 @@ deterministic conversion are not enough by themselves to justify promotion.
 They may still motivate a research-probe LoRA only if the expected consequence
 test is stated in advance.
 
+For this requested experiment, LoRA is explicitly included as an effect and
+consequence test. The first LoRA run for each eligible route is the smallest
+rank 4 / alpha 8 smoke adapter. Larger rank/alpha runs are experimental probes
+and must be evaluated against frozen raw and repaired baselines.
+
 ## Why These Models
 
 Qwen3-ASR is a focused ASR family rather than a general audio LLM. The current
@@ -113,6 +118,25 @@ Sources:
 | FireRedASR-AED | no repo run yet | metadata, license, runtime, one-row, then fixed-15 |
 | FireRedASR-LLM | no repo run yet | short-audio runtime gate; likely heavier LoRA/resource boundary |
 | FireRedASR2 | no repo run yet | optional metadata-gated newer branch after FireRedASR baseline route |
+
+## Baseline Experiment Design
+
+Baseline is not a single score. Each model has three baseline surfaces:
+
+1. `raw_capability_view`: raw ASR output, raw CER/WER, raw locale behavior,
+   transcript-contract behavior, runtime, and duration/resource profile.
+2. `deployment_repair_view`: deterministic Simplified-to-Traditional
+   conversion, Taiwan lexical normalization, punctuation normalization, and
+   automatic semantic-damage proxy.
+3. `subgroup_baseline_view`: aggregate subgroup evidence for Taiwan terms,
+   English code-switching, identity / health / bank / reporting terms,
+   duration, low volume, and noisy rows when the approved manifest supports
+   those tags.
+
+The baseline matrix is tracked in `baseline_experiment_matrix.tsv`. It defines
+the exact raw, repaired, and LoRA-probe comparison questions for Qwen3-ASR-0.6B,
+Qwen3-ASR-1.7B, FireRedASR-AED, and FireRedASR-LLM. FireRedASR2 remains a
+metadata-gated extension and does not bypass the FireRedASR baseline route.
 
 ## Experiment Contract
 

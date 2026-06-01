@@ -32,9 +32,9 @@ If the defect is runtime timeout, duration limit, unstable output, hallucination
 severe low-overlap transcript, or an issue solved cleanly by deterministic
 conversion, LoRA is not the next promotion experiment.
 
-LoRA can still be run as a bounded research-probe experiment when the goal is
-to test the result and consequence of fine-tuning itself. That route must state
-the expected target, risk, frozen comparison baseline, and post-LoRA
+LoRA is included in this plan as a bounded research-probe experiment when the
+goal is to test the result and consequence of fine-tuning itself. That route
+must state the expected target, risk, frozen comparison baseline, and post-LoRA
 consequence checks before training starts. It remains intervention evidence
 until it passes the same post-training gates as any other route.
 
@@ -47,6 +47,19 @@ until it passes the same post-training gates as any other route.
 | FireRedASR-AED | efficient Chinese ASR candidate | metadata/license/runtime then short-audio one-row |
 | FireRedASR-LLM | LLM-integrated Chinese ASR candidate | short-audio batch_size=1 one-row after metadata gate |
 | FireRedASR2 | optional newer branch | metadata gate after FireRedASR baseline |
+
+## Baseline Design
+
+The requested baseline experiment has three layers:
+
+| Layer | Purpose | Output |
+| --- | --- | --- |
+| Raw baseline | Measure original ASR behavior without conversion | raw CER/WER, simplified-character rate, locale violation rows, transcript-contract behavior, runtime |
+| Traditional Chinese repair baseline | Measure deterministic deployment repair separately | OpenCC / Taiwan-term deltas, repaired CER/WER, semantic-damage proxy |
+| Subgroup baseline | Identify whether errors concentrate in Taiwan terms, code-switching, identity/health/bank/reporting terms, duration, or noise | aggregate subgroup proxy and stop/promote decision |
+
+The detailed baseline matrix is
+`70_experiments/runs/v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01/baseline_experiment_matrix.tsv`.
 
 ## LoRA Design
 
