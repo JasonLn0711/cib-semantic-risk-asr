@@ -5,6 +5,28 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.308 - 2026-06-01T20:28:10+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `acf0c30`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/adapter_hash_manifest.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/gate_decision.json`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/leakage_and_claim_boundary.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/post_training_gate_summary.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/training_smoke_status.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/training_smoke_summary.json`
+  - `docs/model_evaluation_state.md`
+  - `docs/v2_0_asr_controls_qwen3_firered_lora_plan.md`
+  - `scripts/run_v2_0_asr_controls_qwen3_lora_smoke_train.py`
+  - `scripts/validate_v2_0_asr_controls_qwen3_lora_smoke_train.py`
+
 ## v2.5.307 - 2026-06-01T20:12:34+08:00
 
 - Bump: `patch`

@@ -131,6 +131,17 @@ fixed-15 baseline (`15` rows), the contract cannot support clean promotion
 evidence; it can only test LoRA behavior and consequences before any larger
 gate is considered.
 
+That bounded route has now completed a smoke run in
+`70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/`.
+The local runtime loaded Qwen3-ASR-1.7B, attached LoRA to the inner trainable
+`thinker` module, completed one training step, saved the adapter, and reloaded
+it from the ignored runtime lane. The post-training one-row consequence gate
+did not pass: the aggregate record shows `CER=69.33`, `WER=73.47`, and
+`simplified_char_count=23`. The result is therefore operational LoRA
+feasibility plus negative consequence evidence, with decision
+`lora_research_probe_stop`. Validation split, 30-row CDS, 258-row,
+selected-300, and promotion claims remain closed.
+
 ## Lane 3: Multimodal Runtime-Blocked
 
 Gemma 4 E2B/E4B are tracked as prompted multimodal-audio candidates, not as pure

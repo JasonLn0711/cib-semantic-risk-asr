@@ -1,0 +1,8 @@
+phase	status	decision_label	blocker_class	aggregate_evidence	next_action
+runtime_imports	passed	runtime_dependencies_available		torch=2.12.0+cu130;transformers=4.57.6	load_model
+model_load	passed	model_loaded		load_seconds=4.1	attach_lora
+lora_attach	passed	lora_attached		trainable_parameters=4784128	one_step_train
+minimal_training_step	passed	minimal_train_step_completed		train_steps=1	save_adapter
+adapter_save	passed	lora_smoke_adapter_saved		adapter_file_count=3	reload_adapter
+adapter_reload	passed	lora_smoke_adapter_saved		adapter_reloaded=true	post_training_one_row_gate
+post_training_one_row_gate	failed	lora_smoke_one_row_consequence_failed	post_training_consequence	rows=1	lora_research_probe_stop

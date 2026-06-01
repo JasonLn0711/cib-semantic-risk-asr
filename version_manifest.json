@@ -1,32 +1,33 @@
 {
-  "version": "v2.5.307",
+  "version": "v2.5.308",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 307
+    "patch": 308
   },
-  "updated_at": "2026-06-01T20:12:34+08:00",
+  "updated_at": "2026-06-01T20:28:10+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "6fe8f4b",
+  "base_commit": "acf0c30",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
     "70_experiments/registry.tsv",
-    "70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/README.md",
-    "70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/aggregate_manifest_summary.tsv",
-    "70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/controlled_artifact_manifest.tsv",
-    "70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/normalization_policy.tsv",
-    "70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/payload_contract_summary.json",
-    "70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/smoke_route.tsv",
-    "70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/split_leakage_report.tsv",
+    "70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/README.md",
+    "70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/adapter_hash_manifest.tsv",
+    "70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/controlled_artifact_manifest.tsv",
+    "70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/gate_decision.json",
+    "70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/leakage_and_claim_boundary.tsv",
+    "70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/post_training_gate_summary.tsv",
+    "70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/training_smoke_status.tsv",
+    "70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/training_smoke_summary.json",
     "docs/model_evaluation_state.md",
     "docs/v2_0_asr_controls_qwen3_firered_lora_plan.md",
-    "scripts/prepare_v2_0_asr_controls_lora_payload_contract.py",
-    "scripts/validate_v2_0_asr_controls_lora_payload_contract.py"
+    "scripts/run_v2_0_asr_controls_qwen3_lora_smoke_train.py",
+    "scripts/validate_v2_0_asr_controls_qwen3_lora_smoke_train.py"
   ]
 }

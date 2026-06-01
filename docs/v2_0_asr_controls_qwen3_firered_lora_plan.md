@@ -191,6 +191,34 @@ locale checking. It may advance only to the validation split consequence check
 if the adapter loads cleanly and does not worsen the one-row semantic/locale
 proxy. This contract does not open 30-row CDS, 258-row, or selected-300.
 
+## Qwen3-ASR-1.7B LoRA r16/a32 Smoke Result: 2026-06-01
+
+The bounded smoke run is recorded in
+`70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01/`.
+It used the contract-defined local-only training manifest and did not modify
+the repo-wide environment. The first naive attempt showed that the outer
+Qwen3-ASR generation wrapper is not the trainable forward surface; the minimal
+repair was to attach LoRA to the inner `thinker` module, which exposes the
+standard audio/text forward interface.
+
+The repaired smoke completed the minimum operational proof:
+
+| Gate | Result |
+| --- | --- |
+| model load | passed |
+| LoRA attach | passed; trainable parameters `4784128` |
+| minimal train step | passed; `train_steps=1`, loss `2.240593` |
+| adapter save | passed; adapter hash recorded |
+| adapter reload | passed |
+| post-training one-row consequence | failed |
+
+The post-training one-row consequence gate records `CER=69.33`, `WER=73.47`,
+and `simplified_char_count=23`, so the decision is
+`lora_research_probe_stop`. This proves LoRA is operational on the local
+Qwen3-ASR-1.7B runtime, but it does not prove useful zh-TW improvement. The
+validation split, 30-row CDS, 258-row, selected-300, promotion claims, and
+broad rank/alpha sweeps remain closed.
+
 The final no-human closeout is recorded in
 `70_experiments/runs/v2_0_asr_controls_final_no_human_closeout_2026_06_01/`.
 The outcome is `no_human_no_winner_closeout`: deterministic conversion helped

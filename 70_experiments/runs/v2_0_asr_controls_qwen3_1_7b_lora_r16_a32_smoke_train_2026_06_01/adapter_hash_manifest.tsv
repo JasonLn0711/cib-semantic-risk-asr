@@ -1,0 +1,2 @@
+artifact_class	adapter_file_count	storage_policy	tracked_payload	sha256	reload_status
+qwen3_asr_1_7b_lora_adapter	3	ignored_runtime_lane_not_tracked	false	bc20d5406a6268e359d3380fd1e2dbb1f4caf5ece8d4e7914ab55945531c8df9	passed

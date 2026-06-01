@@ -1,0 +1,2 @@
+gate_name	rows	valid_output_rows	cer_zh	wer_zh	simplified_char_count	decision_label	claim_boundary
+post_training_one_row_consequence	1	1	69.33	73.47	23	lora_smoke_one_row_consequence_failed	one_row_consequence_only_not_promotion

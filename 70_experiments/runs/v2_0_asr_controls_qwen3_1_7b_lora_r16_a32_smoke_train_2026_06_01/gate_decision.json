@@ -1,0 +1,27 @@
+{
+  "run_id": "v2_0_asr_controls_qwen3_1_7b_lora_r16_a32_smoke_train_2026_06_01",
+  "date": "2026-06-01",
+  "decision": "lora_research_probe_stop",
+  "route_id": "qwen3_asr_1_7b_r16_a32_research_probe",
+  "model_id": "Qwen/Qwen3-ASR-1.7B",
+  "post_training_gate_run": true,
+  "next_gate": "lora_research_probe_stop",
+  "promotion_claim_allowed": false,
+  "larger_gates_open": false,
+  "claim_boundary": "bounded_research_probe_lora_consequence_only_not_diagnostic_proven_promotion",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "repaired_text_tracked": false,
+    "model_outputs_tracked": false,
+    "expert_notes_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "adapter_weights_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}
