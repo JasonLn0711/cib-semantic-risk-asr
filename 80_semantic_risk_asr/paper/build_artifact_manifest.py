@@ -39,6 +39,13 @@ ARTIFACTS = [
         "manuscript draft and citation bibliography",
     ),
     (
+        "80_semantic_risk_asr/paper/manuscript_submission.pdf",
+        "PDF submission draft",
+        "paper-facing aggregate documentation",
+        "latexmk xelatex build from manuscript_submission.tex",
+        "LaTeX submission draft and R-generated figure package",
+    ),
+    (
         "80_semantic_risk_asr/paper/references.bib",
         "bibliography",
         "paper-facing citation metadata",
@@ -81,11 +88,18 @@ ARTIFACTS = [
         "manuscript claim boundary and aggregate artifact policy",
     ),
     (
-        "80_semantic_risk_asr/paper/generate_paper_figures.py",
+        "80_semantic_risk_asr/paper/generate_paper_figures.R",
         "figure generator",
         "aggregate figure-generation code",
-        "manual script maintenance",
+        "R script maintenance",
         "aggregate evidence artifacts",
+    ),
+    (
+        "80_semantic_risk_asr/paper/generate_paper_figures.py",
+        "figure generator compatibility wrapper",
+        "aggregate figure-generation code",
+        "manual script maintenance",
+        "R figure generator",
     ),
     (
         "80_semantic_risk_asr/paper/build_artifact_manifest.py",
@@ -356,6 +370,14 @@ FIGURES = [
     "f6_n_ladder.pdf",
     "f7_budget_risk_frontier.svg",
     "f7_budget_risk_frontier.pdf",
+    "f8_low_wer_danger.svg",
+    "f8_low_wer_danger.pdf",
+    "f9_risk_atom_instability_heatmap.svg",
+    "f9_risk_atom_instability_heatmap.pdf",
+    "f10_human_reviewed_atom_outcomes.svg",
+    "f10_human_reviewed_atom_outcomes.pdf",
+    "f11_risk_atom_entropy_heatmap.svg",
+    "f11_risk_atom_entropy_heatmap.pdf",
     "README.md",
 ]
 
@@ -388,6 +410,25 @@ def package_versions() -> str:
             values.append(f"{name}={importlib.metadata.version(name)}")
         except importlib.metadata.PackageNotFoundError:
             values.append(f"{name}=unavailable")
+    rscript = ROOT / ".r-env" / "bin" / "Rscript"
+    if rscript.exists():
+        r_cmd = (
+            "pkgs <- c('ggplot2','readr','dplyr','tidyr','svglite','scales'); "
+            "cat(paste(paste0('r-', pkgs), "
+            "vapply(pkgs, function(p) as.character(packageVersion(p)), character(1)), "
+            "sep='=', collapse=';'))"
+        )
+        try:
+            r_versions = subprocess.check_output(
+                [str(rscript), "-e", r_cmd],
+                cwd=ROOT,
+                text=True,
+                stderr=subprocess.DEVNULL,
+            ).strip()
+            if r_versions:
+                values.append(r_versions)
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            values.append("r-figure-packages=unavailable")
     return ";".join(values)
 
 
@@ -410,7 +451,7 @@ def build_manifest(out_path: Path) -> None:
                 f"80_semantic_risk_asr/paper/figures/{figure}",
                 "generated manuscript figure" if figure.endswith(".svg") else "figure package index",
                 "aggregate figure artifact",
-                "80_semantic_risk_asr/paper/generate_paper_figures.py",
+                "80_semantic_risk_asr/paper/generate_paper_figures.R",
                 "aggregate method, predictor, recovery, and lane summaries",
             )
         )

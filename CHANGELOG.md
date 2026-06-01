@@ -5,6 +5,19 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.297 - 2026-06-01T18:07:18+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `70084ce`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `.gitignore`
+  - `80_semantic_risk_asr/paper/build_artifact_manifest.py`
+  - `80_semantic_risk_asr/paper/generate_paper_figures.R`
+  - `80_semantic_risk_asr/paper/generate_paper_figures.py`
+
 ## v2.5.296 - 2026-06-01T17:40:29+08:00
 
 - Bump: `patch`
