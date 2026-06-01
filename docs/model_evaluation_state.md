@@ -60,6 +60,35 @@ pass the promotion gates in order.
 The 15-row gates are useful negative evidence. They do not justify full-split
 promotion while raw output violates the Taiwan Traditional Chinese locale gate.
 
+### ASR-Control Repair And LoRA Lane: 2026-06-01
+
+The Qwen3-ASR / FireRedASR ASR-control lane is now explicitly separated from
+the multimodal audio-LLM lane. Its canonical design is recorded in
+`70_experiments/runs/v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01/`
+and documented in `docs/v2_0_asr_controls_qwen3_firered_lora_plan.md`.
+
+The first executable gates are complete:
+
+| Gate | Record | Decision |
+| --- | --- | --- |
+| Metadata refresh | `v2_0_asr_controls_metadata_refresh_2026_06_01` | Qwen3-ASR, FireRedASR, and FireRedASR2 source metadata recorded |
+| Manifest preflight | `v2_0_asr_controls_manifest_preflight_2026_06_01` | transcript-bearing/runtime/training/adapter payloads stay ignored or local-only |
+| Baseline matrix | `v2_0_asr_controls_baseline_matrix_record_2026_06_01` | raw, repair, subgroup, and LoRA comparison surfaces stay separate |
+| Qwen3-ASR-0.6B repair | `v2_0_asr_controls_qwen3_0_6b_trad_repair_baseline_2026_06_01` | do not promote repaired pipeline |
+
+Qwen3-ASR-0.6B deterministic Traditional Chinese repair lowered the aggregate
+fixed-15 CER from `64.1614` to `39.8051`, WER from `67.2811` to `40.3994`,
+simplified-character rate from `22.6253` to `0.6579`, and locale violation rows
+from `15` to `8`. This is a meaningful deployment-repair result, not raw model
+capability evidence. Because the automatic semantic proxy still records
+`semantic_damage_blocker_rows=8`, larger gates remain closed.
+
+Next actions stay ordered by evidence: Qwen3-ASR-1.7B must pass isolated
+one-row runtime before fixed-15 or LoRA; FireRedASR-AED/LLM must pass metadata,
+license, duration, and one-row runtime gates before short fixed-15; LoRA may
+start only after a diagnostic-triggered or bounded research-probe intervention
+rationale is recorded.
+
 ## Lane 3: Multimodal Runtime-Blocked
 
 Gemma 4 E2B/E4B are tracked as prompted multimodal-audio candidates, not as pure

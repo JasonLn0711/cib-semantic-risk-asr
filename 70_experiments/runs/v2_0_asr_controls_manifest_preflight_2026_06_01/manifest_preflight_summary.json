@@ -1,0 +1,23 @@
+{
+  "run_id": "v2_0_asr_controls_manifest_preflight_2026_06_01",
+  "date": "2026-06-01",
+  "status": "manifest_preflight_complete",
+  "artifact_records": 6,
+  "tracked_transcript_bearing_payloads_created": false,
+  "next_gate": "baseline_matrix_record_and_qwen3_0_6b_repair",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "repaired_text_tracked": false,
+    "model_outputs_tracked": false,
+    "expert_notes_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "adapter_weights_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

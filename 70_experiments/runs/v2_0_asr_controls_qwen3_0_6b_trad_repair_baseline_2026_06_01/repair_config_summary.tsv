@@ -1,0 +1,2 @@
+model_family	model_id	source_run_id	repair_runtime_class	opencc_package	opencc_variants	term_glossary_entries	raw_audio_tracked	repo_wide_venv_modified
+Qwen3-ASR	Qwen/Qwen3-ASR-0.6B	qwen3_asr_0_6b_15_row_candidate	ignored_opencc_python_reimplemented_target	opencc-python-reimplemented	s2tw;s2twp;s2twp_terms	10	false	false

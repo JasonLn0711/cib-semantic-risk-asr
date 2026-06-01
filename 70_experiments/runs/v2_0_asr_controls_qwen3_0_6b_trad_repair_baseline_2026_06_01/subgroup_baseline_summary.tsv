@@ -1,0 +1,5 @@
+subgroup	rows	raw_cer_zh_micro	repaired_cer_zh_micro	raw_wer_zh_micro	repaired_wer_zh_micro
+english_code_switch	8	62.8159	41.1552	66.7598	41.6201
+identity_health_bank_reporting	15	64.1614	39.8051	67.2811	40.3994
+scam_process_terms	13	62.6732	37.1638	64.6438	37.1152
+taiwan_terms	11	63.8993	38.8993	67.1859	39.3562

@@ -1,0 +1,2 @@
+model_family	model_id	raw_variant	repaired_variant	cer_delta_raw_to_repaired	wer_delta_raw_to_repaired	simplified_char_rate_delta	locale_violation_row_delta	semantic_damage_blocker_rows	promotion_decision
+Qwen3-ASR	Qwen/Qwen3-ASR-0.6B	raw	opencc_s2twp_terms	-24.3563	-26.8817	-21.9674	-7	8	do_not_promote_repaired_pipeline
