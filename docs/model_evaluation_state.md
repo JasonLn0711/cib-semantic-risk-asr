@@ -218,6 +218,41 @@ It defines the ordered path from repair-first Qwen/MOSS/MiniCPM/Step/Kimi/MOSS8
 lanes through fixed-15, Taiwan utility, 30-row CDS, 258-row, selected-300, and
 final closeout.
 
+### Auto-Only Closeout: 2026-06-01
+
+The no-human-review route is now executed as an aggregate-only Qwen automatic
+semantic-damage proxy in
+`70_experiments/runs/v2_0_multimodal_qwen_auto_semantic_damage_proxy_2026_06_01/`.
+The proxy reads raw and OpenCC/Taiwan-term repaired transcript-bearing payloads
+only from ignored local runtime lanes and tracks only aggregate blocker counts,
+metrics, gate status, and manifest hashes.
+
+The deterministic proxy checks CER/WER worsening, new hallucination proxy,
+critical term / proper-noun changes, abbreviation changes, suspicious length
+ratio changes, empty-output changes, locale residuals, and raw/repaired payload
+pairing. Current aggregate result: all semantic-damage checks are clean except
+the required locale residual check, which remains `7` rows. Because any
+nonzero blocker stops the auto-only route, the current final state is recorded
+in
+`70_experiments/runs/v2_0_multimodal_auto_only_no_winner_stop_2026_06_01/`
+as `auto_only_no_winner_stop`.
+
+FIRST PRINCIPLE decision: without human review, the evidence supports a
+no-winner conclusion under automatic-proxy rules, not a Taiwan utility,
+30-row CDS, 258-row, or selected-300 claim. The next expansion path is bounded
+LoRA feasibility with frozen baselines and post-training one-row / sentinel
+gates; raw model capability, repaired deployment-pipeline behavior, automatic
+proxy evidence, and fine-tuning evidence remain separate.
+
+The bounded LoRA feasibility lane is now started in
+`70_experiments/runs/v2_0_multimodal_bounded_lora_feasibility_start_2026_06_01/`.
+It selects Step-Audio-2-mini as the first candidate because Step passed the
+repaired one-row transcript contract and then failed no-speech / non-speech
+sentinel controls. The initial training question is limited to sentinel
+hallucination reduction. Training is not launched yet because the local private
+training payload manifest and LoRA adapter-loading evaluator contract are not
+ready; those gates must pass before any adapter training.
+
 ### Repair-First Phase Progress: 2026-06-01
 
 The first repair-first execution block has completed Phases 1-9 as

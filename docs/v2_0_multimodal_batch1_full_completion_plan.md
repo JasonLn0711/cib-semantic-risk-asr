@@ -1373,3 +1373,42 @@ winner. The repaired OpenCC/Taiwan-term variant reduces locale violations from
 The next Qwen-specific gate is human semantic-damage review before any Taiwan
 utility/subgroup audit. The global phase plan may continue to MOSS 4B and
 MiniCPM sentinel repair lanes while Qwen waits for repaired-pipeline review.
+
+### Auto-Only Closeout Evidence
+
+The user-facing route changed to no human review. The executed replacement gate
+is recorded in:
+
+```text
+70_experiments/runs/v2_0_multimodal_qwen_auto_semantic_damage_proxy_2026_06_01/
+70_experiments/runs/v2_0_multimodal_auto_only_no_winner_stop_2026_06_01/
+```
+
+The deterministic proxy checks the required automatic blockers over local-only
+raw/repaired Qwen payloads and tracks only aggregate results. It found no
+CER/WER worsening, new hallucination proxy, critical term / proper-noun change,
+abbreviation change, suspicious length-ratio change, empty-output change, or
+payload-pairing blocker. It did find `locale_residual_rows=7`, so the auto-only
+stop rule fires and the completion state is `auto_only_no_winner_stop`.
+
+This closes Taiwan utility/subgroup, human-reviewed 30-row CDS, 258-row, and
+selected-300 under the current auto-only evidence. The next route, if the team
+continues beyond the no-winner stop, is bounded LoRA feasibility with frozen
+pre-training baselines and post-training one-row / sentinel gates before any
+larger evaluation.
+
+### Bounded LoRA Feasibility Start
+
+The post-stop training lane has started in:
+
+```text
+70_experiments/runs/v2_0_multimodal_bounded_lora_feasibility_start_2026_06_01/
+```
+
+This is a feasibility start, not a training result. The selected first
+candidate is Step-Audio-2-mini, with the narrow training target
+`sentinel_no_speech_non_speech_hallucination_reduction`. Pre-training gates
+show the training question and candidate selection are locked, and the Step
+pre-training baseline exists as aggregate one-row / sentinel evidence. The lane
+does not launch training yet because the local private training payload
+manifest and LoRA adapter-loading evaluator contract are not ready.

@@ -486,6 +486,24 @@ stopped by sentinel behavior. Kimi remains blocked by the bounded
 bounded local 16GB single-GPU resource audit. There is no behavior-clean
 repaired survivor for fixed 15-row.
 
+Auto-only update: because human semantic-damage review is disallowed in the
+current route, Qwen now has a deterministic automatic semantic-damage proxy in
+`70_experiments/runs/v2_0_multimodal_qwen_auto_semantic_damage_proxy_2026_06_01/`.
+The proxy keeps transcript-bearing payloads local-only and records only
+aggregate counts and manifest hashes. It stops on `locale_residual_rows=7`,
+with all non-locale semantic-damage proxy checks at `0`. The final auto-only
+closeout is
+`70_experiments/runs/v2_0_multimodal_auto_only_no_winner_stop_2026_06_01/`.
+This preserves the repair-first claim boundary and moves any further work to a
+separate bounded LoRA feasibility route.
+
+The bounded LoRA route has now started in
+`70_experiments/runs/v2_0_multimodal_bounded_lora_feasibility_start_2026_06_01/`.
+It chooses Step-Audio-2-mini as the first candidate and limits the initial
+target to no-speech / non-speech sentinel hallucination reduction. Training is
+not launched from the repair guide itself; the LoRA lane must first produce a
+local-only payload manifest and adapter-loading evaluator contract.
+
 ## Codex Goal Prompt
 
 ```text

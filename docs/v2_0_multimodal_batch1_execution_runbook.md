@@ -162,6 +162,34 @@ If human review is not allowed, use
 The next action is deterministic Qwen automatic semantic-damage proxy design,
 not human review, larger CDS gates, or fine-tuning execution.
 
+Auto-only execution is now recorded in:
+
+```text
+70_experiments/runs/v2_0_multimodal_qwen_auto_semantic_damage_proxy_2026_06_01/
+70_experiments/runs/v2_0_multimodal_auto_only_no_winner_stop_2026_06_01/
+```
+
+The Qwen deterministic proxy found `locale_residual_rows=7` after
+OpenCC/Taiwan-term repair, while CER/WER worsening, new hallucination proxy,
+critical term / proper-noun changes, abbreviation changes, suspicious length
+ratio changes, empty-output changes, and payload pairing blockers were `0`.
+The current auto-only decision is therefore `auto_only_no_winner_stop`.
+Taiwan utility/subgroup, human-reviewed 30-row CDS, 258-row, and selected-300
+remain closed. The next experimental route is bounded LoRA feasibility, with
+training evidence kept separate from raw model and deployment-repair evidence.
+
+Bounded LoRA feasibility start is recorded in:
+
+```text
+70_experiments/runs/v2_0_multimodal_bounded_lora_feasibility_start_2026_06_01/
+```
+
+The lane selects Step-Audio-2-mini and locks the target to no-speech /
+non-speech sentinel hallucination reduction. Training execution is
+`not_started_pretraining_gates_incomplete`: the local private training payload
+manifest and LoRA adapter-loading evaluator contract must be prepared before a
+tiny LoRA smoke can run.
+
 The manifest preflight now records that the local-only one-row smoke,
 sentinel, and fixed 15-row manifests are present and ignored; tracked files
 store only aggregate counts and gate status.
