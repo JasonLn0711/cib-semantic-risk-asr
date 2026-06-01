@@ -1,41 +1,71 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="430" viewBox="0 0 1080 430" role="img">
-<rect width="1080" height="430" fill="white"/>
-<style>
-  text { font-family: Arial, Helvetica, sans-serif; fill: #1f2933; }
-  .title { font-size: 22px; font-weight: 700; }
-  .subtitle { font-size: 13px; fill: #52606d; }
-  .label { font-size: 13px; font-weight: 700; }
-  .small { font-size: 11px; fill: #52606d; }
-</style>
-<text x="36" y="42" class="title" text-anchor="start">F3. Human-Reviewed Predictor AUC</text>
-<text x="36" y="64" class="subtitle" text-anchor="start">Target: human_decision_change_yes over 90 reviewed model assessments.</text>
-<line x1="90" y1="375" x2="770" y2="375" stroke="#1f2933" stroke-width="1.5"/>
-<line x1="90" y1="105" x2="90" y2="375" stroke="#1f2933" stroke-width="1.5"/>
-<line x1="90" y1="375.0" x2="770" y2="375.0" stroke="#d9e2ec" stroke-width="1"/>
-<text x="78" y="379" class="small" text-anchor="end">0.00</text>
-<line x1="90" y1="307.5" x2="770" y2="307.5" stroke="#d9e2ec" stroke-width="1"/>
-<text x="78" y="311" class="small" text-anchor="end">0.25</text>
-<line x1="90" y1="240.0" x2="770" y2="240.0" stroke="#d9e2ec" stroke-width="1"/>
-<text x="78" y="244" class="small" text-anchor="end">0.50</text>
-<line x1="90" y1="172.5" x2="770" y2="172.5" stroke="#d9e2ec" stroke-width="1"/>
-<text x="78" y="176" class="small" text-anchor="end">0.75</text>
-<line x1="90" y1="105.0" x2="770" y2="105.0" stroke="#d9e2ec" stroke-width="1"/>
-<text x="78" y="109" class="small" text-anchor="end">1.00</text>
-<rect x="160" y="187.0" width="92" height="188.0" fill="#2f80ed" rx="4"/>
-<text x="206" y="176" class="small" text-anchor="middle">0.6964</text>
-<text x="206" y="401" class="label" text-anchor="middle">WER</text>
-<rect x="314" y="178.5" width="92" height="196.5" fill="#0f9f9a" rx="4"/>
-<text x="360" y="168" class="small" text-anchor="middle">0.7276</text>
-<text x="360" y="401" class="label" text-anchor="middle">CER</text>
-<rect x="468" y="132.1" width="92" height="242.9" fill="#f2994a" rx="4"/>
-<text x="514" y="122" class="small" text-anchor="middle">0.8995</text>
-<text x="514" y="401" class="label" text-anchor="middle">SRES</text>
-<rect x="622" y="128.8" width="92" height="246.2" fill="#219653" rx="4"/>
-<text x="668" y="118" class="small" text-anchor="middle">0.9117</text>
-<text x="668" y="401" class="label" text-anchor="middle">CEIS</text>
-<text x="810" y="142" class="label" text-anchor="start">Interpretation</text>
-<text x="810" y="170" class="small" text-anchor="start">CEIS has the highest AUC.</text>
-<text x="810" y="194" class="small" text-anchor="start">SRES has the best-threshold F1.</text>
-<text x="810" y="218" class="small" text-anchor="start">Claims remain scoped to selected-300</text>
-<text x="810" y="238" class="small" text-anchor="start">human-reviewed aggregate evidence.</text>
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='777.60pt' height='309.60pt' viewBox='0 0 777.60 309.60'>
+<g class='svglite'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+    .svglite g.glyphgroup path {
+      fill: inherit;
+      stroke: none;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw3NzcuNjB8MC4wMHwzMDkuNjA='>
+    <rect x='0.00' y='0.00' width='777.60' height='309.60' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw3NzcuNjB8MC4wMHwzMDkuNjA=)'>
+<rect x='0.000000000000064' y='0.00' width='777.60' height='309.60' style='stroke-width: 1.16; stroke: none; fill: #FFFFFF;' />
+</g>
+<defs>
+  <clipPath id='cpNTcuNzR8NzUzLjY5fDY0LjU4fDI2MS44OQ=='>
+    <rect x='57.74' y='64.58' width='695.95' height='197.31' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpNTcuNzR8NzUzLjY5fDY0LjU4fDI2MS44OQ==)'>
+<polyline points='57.74,252.92 753.69,252.92 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='57.74,210.22 753.69,210.22 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='57.74,167.51 753.69,167.51 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='57.74,124.80 753.69,124.80 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='57.74,82.09 753.69,82.09 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='157.16,261.89 157.16,64.58 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='322.86,261.89 322.86,64.58 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='488.56,261.89 488.56,64.58 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='654.27,261.89 654.27,64.58 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<rect x='105.79' y='133.96' width='102.74' height='118.97' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<rect x='271.49' y='128.63' width='102.74' height='124.30' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #0F9F9A;' />
+<rect x='437.20' y='99.26' width='102.74' height='153.66' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F2994A;' />
+<rect x='602.90' y='97.18' width='102.74' height='155.75' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #219653;' />
+<text x='157.16' y='130.89' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='22.31px' lengthAdjust='spacingAndGlyphs'>0.6964</text>
+<text x='322.86' y='125.56' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='22.31px' lengthAdjust='spacingAndGlyphs'>0.7276</text>
+<text x='488.56' y='96.19' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='22.31px' lengthAdjust='spacingAndGlyphs'>0.8995</text>
+<text x='654.27' y='94.11' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='22.31px' lengthAdjust='spacingAndGlyphs'>0.9117</text>
+</g>
+<g clip-path='url(#cpMC4wMHw3NzcuNjB8MC4wMHwzMDkuNjA=)'>
+<text x='52.36' y='256.12' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='13.94px' lengthAdjust='spacingAndGlyphs'>0.00</text>
+<text x='52.36' y='213.41' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='13.94px' lengthAdjust='spacingAndGlyphs'>0.25</text>
+<text x='52.36' y='170.70' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='13.94px' lengthAdjust='spacingAndGlyphs'>0.50</text>
+<text x='52.36' y='128.00' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='13.94px' lengthAdjust='spacingAndGlyphs'>0.75</text>
+<text x='52.36' y='85.29' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='13.94px' lengthAdjust='spacingAndGlyphs'>1.00</text>
+<text x='157.16' y='273.67' text-anchor='middle' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.45px' lengthAdjust='spacingAndGlyphs'>WER</text>
+<text x='322.86' y='273.67' text-anchor='middle' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.45px' lengthAdjust='spacingAndGlyphs'>CER</text>
+<text x='488.56' y='273.67' text-anchor='middle' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='13.94px' lengthAdjust='spacingAndGlyphs'>SRES</text>
+<text x='654.27' y='273.67' text-anchor='middle' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='13.94px' lengthAdjust='spacingAndGlyphs'>CEIS</text>
+<text transform='translate(31.91,163.24) rotate(-90)' text-anchor='middle' style='font-size: 12.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='20.75px' lengthAdjust='spacingAndGlyphs'>AUC</text>
+<text x='57.74' y='48.81' style='font-size: 13.00px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='340.05px' lengthAdjust='spacingAndGlyphs'>Target: human_decision_change_yes over 90 reviewed model assessments.</text>
+<text x='57.74' y='30.59' style='font-size: 19.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='248.14px' lengthAdjust='spacingAndGlyphs'>F3. Human-Reviewed Predictor AUC</text>
+<text x='753.69' y='288.85' text-anchor='end' style='font-size: 9.60px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='465.50px' lengthAdjust='spacingAndGlyphs'>CEIS has the highest AUC; SRES has the best-threshold F1. Claims remain scoped to selected-300 human-reviewed aggregate evidence.</text>
+</g>
+</g>
 </svg>

@@ -1,72 +1,102 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="450" viewBox="0 0 1180 450" role="img">
-<rect width="1180" height="450" fill="white"/>
-<style>
-  text { font-family: Arial, Helvetica, sans-serif; fill: #1f2933; }
-  .title { font-size: 22px; font-weight: 700; }
-  .subtitle { font-size: 13px; fill: #52606d; }
-  .label { font-size: 13px; font-weight: 700; }
-  .small { font-size: 11px; fill: #52606d; }
-</style>
-<text x="36" y="42" class="title" text-anchor="start">F7. Budget-Risk Frontier In Aggregate Replay</text>
-<text x="36" y="64" class="subtitle" text-anchor="start">Fixed-budget ranked replay over 90 reviewed model assessments; aggregate-only.</text>
-<line x1="110" y1="380" x2="830" y2="380" stroke="#1f2933" stroke-width="1.5"/>
-<line x1="110" y1="110" x2="110" y2="380" stroke="#1f2933" stroke-width="1.5"/>
-<line x1="110.0" y1="110" x2="110.0" y2="380" stroke="#d9e2ec" stroke-width="1"/>
-<text x="110" y="404" class="small" text-anchor="middle">0.0</text>
-<line x1="350.0" y1="110" x2="350.0" y2="380" stroke="#d9e2ec" stroke-width="1"/>
-<text x="350" y="404" class="small" text-anchor="middle">0.2</text>
-<line x1="590.0" y1="110" x2="590.0" y2="380" stroke="#d9e2ec" stroke-width="1"/>
-<text x="590" y="404" class="small" text-anchor="middle">0.4</text>
-<line x1="830.0" y1="110" x2="830.0" y2="380" stroke="#d9e2ec" stroke-width="1"/>
-<text x="830" y="404" class="small" text-anchor="middle">0.6</text>
-<line x1="110" y1="380.0" x2="830" y2="380.0" stroke="#d9e2ec" stroke-width="1"/>
-<text x="98" y="384" class="small" text-anchor="end">0</text>
-<line x1="110" y1="341.4" x2="830" y2="341.4" stroke="#d9e2ec" stroke-width="1"/>
-<text x="98" y="345" class="small" text-anchor="end">1</text>
-<line x1="110" y1="302.9" x2="830" y2="302.9" stroke="#d9e2ec" stroke-width="1"/>
-<text x="98" y="306" class="small" text-anchor="end">2</text>
-<line x1="110" y1="264.3" x2="830" y2="264.3" stroke="#d9e2ec" stroke-width="1"/>
-<text x="98" y="268" class="small" text-anchor="end">3</text>
-<line x1="110" y1="225.7" x2="830" y2="225.7" stroke="#d9e2ec" stroke-width="1"/>
-<text x="98" y="229" class="small" text-anchor="end">4</text>
-<line x1="110" y1="187.1" x2="830" y2="187.1" stroke="#d9e2ec" stroke-width="1"/>
-<text x="98" y="191" class="small" text-anchor="end">5</text>
-<line x1="110" y1="148.6" x2="830" y2="148.6" stroke="#d9e2ec" stroke-width="1"/>
-<text x="98" y="152" class="small" text-anchor="end">6</text>
-<line x1="110" y1="110.0" x2="830" y2="110.0" stroke="#d9e2ec" stroke-width="1"/>
-<text x="98" y="114" class="small" text-anchor="end">7</text>
-<polyline points="230.0,225.7 350.0,302.9 470.0,302.9 576.7,380.0" fill="none" stroke="#f2994a" stroke-width="3"/>
-<circle cx="230.0" cy="225.7" r="7" fill="#f2994a" stroke="white" stroke-width="2"/>
-<text x="240" y="217" class="small" text-anchor="start">SRES trig 9</text>
-<text x="240" y="235" class="small" text-anchor="start">ratio 3</text>
-<circle cx="350.0" cy="302.9" r="7" fill="#f2994a" stroke="white" stroke-width="2"/>
-<text x="360" y="294" class="small" text-anchor="start">SRES trig 18</text>
-<text x="360" y="312" class="small" text-anchor="start">ratio 3.6</text>
-<circle cx="470.0" cy="302.9" r="7" fill="#f2994a" stroke="white" stroke-width="2"/>
-<text x="480" y="294" class="small" text-anchor="start">SRES trig 27</text>
-<text x="480" y="312" class="small" text-anchor="start">ratio 5.4</text>
-<circle cx="576.7" cy="380.0" r="7" fill="#f2994a" stroke="white" stroke-width="2"/>
-<text x="586" y="372" class="small" text-anchor="start">SRES trig 35</text>
-<text x="586" y="390" class="small" text-anchor="start">ratio 5</text>
-<polyline points="230.0,380.0 350.0,380.0 470.0,380.0 576.7,380.0" fill="none" stroke="#219653" stroke-width="3"/>
-<circle cx="230.0" cy="380.0" r="7" fill="#219653" stroke="white" stroke-width="2"/>
-<text x="240" y="372" class="small" text-anchor="start">CEIS trig 9</text>
-<text x="240" y="390" class="small" text-anchor="start">ratio 1.2857</text>
-<circle cx="350.0" cy="380.0" r="7" fill="#219653" stroke="white" stroke-width="2"/>
-<text x="360" y="372" class="small" text-anchor="start">CEIS trig 18</text>
-<text x="360" y="390" class="small" text-anchor="start">ratio 2.5714</text>
-<circle cx="470.0" cy="380.0" r="7" fill="#219653" stroke="white" stroke-width="2"/>
-<text x="480" y="372" class="small" text-anchor="start">CEIS trig 27</text>
-<text x="480" y="390" class="small" text-anchor="start">ratio 3.8571</text>
-<circle cx="576.7" cy="380.0" r="7" fill="#219653" stroke="white" stroke-width="2"/>
-<text x="586" y="372" class="small" text-anchor="start">CEIS trig 35</text>
-<text x="586" y="390" class="small" text-anchor="start">ratio 5</text>
-<text x="110" y="418" class="label" text-anchor="start">Recovery budget</text>
-<text x="870" y="150" class="label" text-anchor="start">Replay interpretation</text>
-<text x="870" y="176" class="small" text-anchor="start">CEIS reaches 0 severe misses</text>
-<text x="870" y="196" class="small" text-anchor="start">at the 10% replay budget.</text>
-<text x="870" y="226" class="small" text-anchor="start">SRES reaches 0 severe misses</text>
-<text x="870" y="246" class="small" text-anchor="start">when all 35 eligible triggers are used.</text>
-<text x="870" y="276" class="small" text-anchor="start">This is retrospective replay,</text>
-<text x="870" y="296" class="small" text-anchor="start">not a deployment threshold.</text>
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='849.60pt' height='324.00pt' viewBox='0 0 849.60 324.00'>
+<g class='svglite'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+    .svglite g.glyphgroup path {
+      fill: inherit;
+      stroke: none;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw4NDkuNjB8MC4wMHwzMjQuMDA='>
+    <rect x='0.00' y='0.00' width='849.60' height='324.00' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw4NDkuNjB8MC4wMHwzMjQuMDA=)'>
+<rect x='0.000000000000064' y='0.00' width='849.60' height='324.00' style='stroke-width: 1.16; stroke: none; fill: #FFFFFF;' />
+</g>
+<defs>
+  <clipPath id='cpNDcuMjh8ODI1LjY5fDY0LjU4fDIyMC41OQ=='>
+    <rect x='47.28' y='64.58' width='778.41' height='156.01' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpNDcuMjh8ODI1LjY5fDY0LjU4fDIyMC41OQ==)'>
+<polyline points='47.28,213.50 825.69,213.50 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='47.28,193.24 825.69,193.24 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='47.28,172.98 825.69,172.98 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='47.28,152.72 825.69,152.72 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='47.28,132.46 825.69,132.46 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='47.28,112.20 825.69,112.20 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='47.28,91.93 825.69,91.93 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='47.28,71.67 825.69,71.67 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='82.67,220.59 82.67,64.58 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='318.55,220.59 318.55,64.58 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='554.43,220.59 554.43,64.58 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='790.31,220.59 790.31,64.58 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='200.61,213.50 318.55,213.50 436.49,213.50 541.34,213.50 ' style='stroke-width: 2.35; stroke: #219653; stroke-linecap: butt;' />
+<polyline points='200.61,132.46 318.55,172.98 436.49,172.98 541.34,213.50 ' style='stroke-width: 2.35; stroke: #F2994A; stroke-linecap: butt;' />
+<circle cx='200.61' cy='132.46' r='3.80' style='stroke-width: 0.77; stroke: #F2994A; fill: #F2994A;' />
+<circle cx='318.55' cy='172.98' r='3.80' style='stroke-width: 0.77; stroke: #F2994A; fill: #F2994A;' />
+<circle cx='436.49' cy='172.98' r='3.80' style='stroke-width: 0.77; stroke: #F2994A; fill: #F2994A;' />
+<circle cx='541.34' cy='213.50' r='3.80' style='stroke-width: 0.77; stroke: #F2994A; fill: #F2994A;' />
+<circle cx='200.61' cy='213.50' r='3.80' style='stroke-width: 0.77; stroke: #219653; fill: #219653;' />
+<circle cx='318.55' cy='213.50' r='3.80' style='stroke-width: 0.77; stroke: #219653; fill: #219653;' />
+<circle cx='436.49' cy='213.50' r='3.80' style='stroke-width: 0.77; stroke: #219653; fill: #219653;' />
+<circle cx='541.34' cy='213.50' r='3.80' style='stroke-width: 0.77; stroke: #219653; fill: #219653;' />
+<text x='201.47' y='111.76' style='font-size: 7.97px;fill: #F2994A; font-family: "EB Garamond Initials";' textLength='17.34px' lengthAdjust='spacingAndGlyphs'>trig 9</text>
+<text x='201.67' y='123.23' style='font-size: 7.97px;fill: #F2994A; font-family: "EB Garamond Initials";' textLength='21.28px' lengthAdjust='spacingAndGlyphs'>ratio 3</text>
+<text x='319.56' y='152.28' style='font-size: 7.97px;fill: #F2994A; font-family: "EB Garamond Initials";' textLength='20.23px' lengthAdjust='spacingAndGlyphs'>trig 18</text>
+<text x='319.90' y='163.75' style='font-size: 7.97px;fill: #F2994A; font-family: "EB Garamond Initials";' textLength='27.06px' lengthAdjust='spacingAndGlyphs'>ratio 3.6</text>
+<text x='437.50' y='152.28' style='font-size: 7.97px;fill: #F2994A; font-family: "EB Garamond Initials";' textLength='20.23px' lengthAdjust='spacingAndGlyphs'>trig 27</text>
+<text x='437.84' y='163.75' style='font-size: 7.97px;fill: #F2994A; font-family: "EB Garamond Initials";' textLength='27.06px' lengthAdjust='spacingAndGlyphs'>ratio 5.4</text>
+<text x='542.35' y='192.81' style='font-size: 7.97px;fill: #F2994A; font-family: "EB Garamond Initials";' textLength='20.23px' lengthAdjust='spacingAndGlyphs'>trig 35</text>
+<text x='542.40' y='204.28' style='font-size: 7.97px;fill: #F2994A; font-family: "EB Garamond Initials";' textLength='21.28px' lengthAdjust='spacingAndGlyphs'>ratio 5</text>
+<text x='201.47' y='192.81' style='font-size: 7.97px;fill: #219653; font-family: "EB Garamond Initials";' textLength='17.34px' lengthAdjust='spacingAndGlyphs'>trig 9</text>
+<text x='202.10' y='204.28' style='font-size: 7.97px;fill: #219653; font-family: "EB Garamond Initials";' textLength='29.95px' lengthAdjust='spacingAndGlyphs'>ratio 1.29</text>
+<text x='319.56' y='192.81' style='font-size: 7.97px;fill: #219653; font-family: "EB Garamond Initials";' textLength='20.23px' lengthAdjust='spacingAndGlyphs'>trig 18</text>
+<text x='320.04' y='204.28' style='font-size: 7.97px;fill: #219653; font-family: "EB Garamond Initials";' textLength='29.95px' lengthAdjust='spacingAndGlyphs'>ratio 2.57</text>
+<text x='437.50' y='192.81' style='font-size: 7.97px;fill: #219653; font-family: "EB Garamond Initials";' textLength='20.23px' lengthAdjust='spacingAndGlyphs'>trig 27</text>
+<text x='437.98' y='204.28' style='font-size: 7.97px;fill: #219653; font-family: "EB Garamond Initials";' textLength='29.95px' lengthAdjust='spacingAndGlyphs'>ratio 3.86</text>
+<text x='542.35' y='192.81' style='font-size: 7.97px;fill: #219653; font-family: "EB Garamond Initials";' textLength='20.23px' lengthAdjust='spacingAndGlyphs'>trig 35</text>
+<text x='542.40' y='204.28' style='font-size: 7.97px;fill: #219653; font-family: "EB Garamond Initials";' textLength='21.28px' lengthAdjust='spacingAndGlyphs'>ratio 5</text>
+</g>
+<g clip-path='url(#cpMC4wMHw4NDkuNjB8MC4wMHwzMjQuMDA=)'>
+<text x='41.90' y='216.70' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>0</text>
+<text x='41.90' y='196.44' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>1</text>
+<text x='41.90' y='176.18' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text x='41.90' y='155.91' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>3</text>
+<text x='41.90' y='135.65' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text x='41.90' y='115.39' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>5</text>
+<text x='41.90' y='95.13' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>6</text>
+<text x='41.90' y='74.87' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>7</text>
+<text x='82.67' y='232.37' text-anchor='middle' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.45px' lengthAdjust='spacingAndGlyphs'>0.0</text>
+<text x='318.55' y='232.37' text-anchor='middle' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.45px' lengthAdjust='spacingAndGlyphs'>0.2</text>
+<text x='554.43' y='232.37' text-anchor='middle' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.45px' lengthAdjust='spacingAndGlyphs'>0.4</text>
+<text x='790.31' y='232.37' text-anchor='middle' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.45px' lengthAdjust='spacingAndGlyphs'>0.6</text>
+<text x='436.49' y='246.17' text-anchor='middle' style='font-size: 12.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='67.19px' lengthAdjust='spacingAndGlyphs'>Recovery budget</text>
+<text transform='translate(31.91,142.59) rotate(-90)' text-anchor='middle' style='font-size: 12.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='143.12px' lengthAdjust='spacingAndGlyphs'>Severe missed outcomes remaining</text>
+<line x1='398.03' y1='276.26' x2='411.85' y2='276.26' style='stroke-width: 2.35; stroke: #219653; stroke-linecap: butt;' />
+<circle cx='404.94' cy='276.26' r='3.80' style='stroke-width: 0.77; stroke: #219653; fill: #219653;' />
+<line x1='441.20' y1='276.26' x2='455.03' y2='276.26' style='stroke-width: 2.35; stroke: #F2994A; stroke-linecap: butt;' />
+<circle cx='448.12' cy='276.26' r='3.80' style='stroke-width: 0.77; stroke: #F2994A; fill: #F2994A;' />
+<text x='419.56' y='279.46' style='font-size: 9.60px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='13.94px' lengthAdjust='spacingAndGlyphs'>CEIS</text>
+<text x='462.73' y='279.46' style='font-size: 9.60px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='13.94px' lengthAdjust='spacingAndGlyphs'>SRES</text>
+<text x='47.28' y='48.81' style='font-size: 13.00px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='382.66px' lengthAdjust='spacingAndGlyphs'>Fixed-budget ranked replay over 90 reviewed model assessments; aggregate-only.</text>
+<text x='47.28' y='30.59' style='font-size: 19.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='343.28px' lengthAdjust='spacingAndGlyphs'>F7. Budget-Risk Frontier In Aggregate Replay</text>
+<text x='825.69' y='303.25' text-anchor='end' style='font-size: 9.60px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='607.86px' lengthAdjust='spacingAndGlyphs'>CEIS reaches 0 severe misses at the 10% replay budget; SRES reaches 0 severe misses when all 35 eligible triggers are used. Retrospective replay, not a deployment threshold.</text>
+</g>
+</g>
 </svg>

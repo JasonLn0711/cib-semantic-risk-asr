@@ -1,43 +1,69 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="330" viewBox="0 0 1120 330" role="img">
-<rect width="1120" height="330" fill="white"/>
-<style>
-  text { font-family: Arial, Helvetica, sans-serif; fill: #1f2933; }
-  .title { font-size: 22px; font-weight: 700; }
-  .subtitle { font-size: 13px; fill: #52606d; }
-  .label { font-size: 13px; font-weight: 700; }
-  .small { font-size: 11px; fill: #52606d; }
-</style>
-<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#9fb3c8"/></marker></defs>
-<text x="34" y="42" class="title" text-anchor="start">F1. CDS-ASR Pipeline</text>
-<text x="34" y="64" class="subtitle" text-anchor="start">Aggregate-only method diagram; no transcript or row content.</text>
-<rect x="34" y="120" width="145" height="88" rx="6" fill="#ffffff" stroke="#2f80ed" stroke-width="1.4"/>
-<rect x="34" y="120" width="145" height="10" fill="#2f80ed" rx="5"/>
-<text x="106" y="160" class="label" text-anchor="middle">Audio</text>
-<text x="106" y="182" class="small" text-anchor="middle">speech input</text>
-<line x1="183" y1="164" x2="207" y2="164" stroke="#9fb3c8" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="214" y="120" width="145" height="88" rx="6" fill="#ffffff" stroke="#0f9f9a" stroke-width="1.4"/>
-<rect x="214" y="120" width="145" height="10" fill="#0f9f9a" rx="5"/>
-<text x="286" y="160" class="label" text-anchor="middle">ASR</text>
-<text x="286" y="182" class="small" text-anchor="middle">hypothesis + signals</text>
-<line x1="363" y1="164" x2="387" y2="164" stroke="#9fb3c8" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="394" y="120" width="145" height="88" rx="6" fill="#ffffff" stroke="#f2994a" stroke-width="1.4"/>
-<rect x="394" y="120" width="145" height="10" fill="#f2994a" rx="5"/>
-<text x="466" y="160" class="label" text-anchor="middle">Risk atoms</text>
-<text x="466" y="182" class="small" text-anchor="middle">negation, amount, actor</text>
-<line x1="543" y1="164" x2="567" y2="164" stroke="#9fb3c8" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="574" y="120" width="145" height="88" rx="6" fill="#ffffff" stroke="#7b61ff" stroke-width="1.4"/>
-<rect x="574" y="120" width="145" height="10" fill="#7b61ff" rx="5"/>
-<text x="646" y="160" class="label" text-anchor="middle">Variants</text>
-<text x="646" y="182" class="small" text-anchor="middle">plausible alternatives</text>
-<line x1="723" y1="164" x2="747" y2="164" stroke="#9fb3c8" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="754" y="120" width="145" height="88" rx="6" fill="#ffffff" stroke="#219653" stroke-width="1.4"/>
-<rect x="754" y="120" width="145" height="10" fill="#219653" rx="5"/>
-<text x="826" y="160" class="label" text-anchor="middle">SRES / CEIS</text>
-<text x="826" y="182" class="small" text-anchor="middle">decision instability</text>
-<line x1="903" y1="164" x2="927" y2="164" stroke="#9fb3c8" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="934" y="120" width="145" height="88" rx="6" fill="#ffffff" stroke="#d64545" stroke-width="1.4"/>
-<rect x="934" y="120" width="145" height="10" fill="#d64545" rx="5"/>
-<text x="1006" y="160" class="label" text-anchor="middle">Recovery</text>
-<text x="1006" y="182" class="small" text-anchor="middle">conservative action</text>
-<text x="34" y="278" class="subtitle" text-anchor="start">Human review supplies evaluation labels only; recovery policies remain automatic and aggregate-evaluated.</text>
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='806.40pt' height='237.60pt' viewBox='0 0 806.40 237.60'>
+<g class='svglite'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+    .svglite g.glyphgroup path {
+      fill: inherit;
+      stroke: none;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw4MDYuNDB8MC4wMHwyMzcuNjA='>
+    <rect x='0.00' y='0.00' width='806.40' height='237.60' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw4MDYuNDB8MC4wMHwyMzcuNjA=)'>
+<rect x='0.00' y='0.00' width='806.40' height='237.60' style='stroke-width: 0.00; stroke: none;' />
+<line x1='159.34' y1='122.18' x2='199.61' y2='122.18' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='188.38,128.66 199.61,122.18 188.38,115.70 ' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<line x1='271.20' y1='122.18' x2='311.47' y2='122.18' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='300.25,128.66 311.47,122.18 300.25,115.70 ' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<line x1='383.06' y1='122.18' x2='423.34' y2='122.18' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='412.11,128.66 423.34,122.18 412.11,115.70 ' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<line x1='494.93' y1='122.18' x2='535.20' y2='122.18' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='523.98,128.66 535.20,122.18 523.98,115.70 ' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<line x1='606.79' y1='122.18' x2='647.06' y2='122.18' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='635.84,128.66 647.06,122.18 635.84,115.70 ' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<rect x='83.27' y='88.26' width='80.54' height='67.82' style='stroke-width: 2.56; stroke: #2F80ED; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
+<rect x='195.13' y='88.26' width='80.54' height='67.82' style='stroke-width: 2.56; stroke: #0F9F9A; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
+<rect x='307.00' y='88.26' width='80.54' height='67.82' style='stroke-width: 2.56; stroke: #F2994A; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
+<rect x='418.86' y='88.26' width='80.54' height='67.82' style='stroke-width: 2.56; stroke: #7B61FF; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
+<rect x='530.73' y='88.26' width='80.54' height='67.82' style='stroke-width: 2.56; stroke: #219653; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
+<rect x='642.59' y='88.26' width='80.54' height='67.82' style='stroke-width: 2.56; stroke: #D64545; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
+<rect x='83.27' y='88.26' width='80.54' height='6.78' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<rect x='195.13' y='88.26' width='80.54' height='6.78' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #0F9F9A;' />
+<rect x='307.00' y='88.26' width='80.54' height='6.78' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F2994A;' />
+<rect x='418.86' y='88.26' width='80.54' height='6.78' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #7B61FF;' />
+<rect x='530.73' y='88.26' width='80.54' height='6.78' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #219653;' />
+<rect x='642.59' y='88.26' width='80.54' height='6.78' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #D64545;' />
+<text x='123.54' y='118.40' text-anchor='middle' style='font-size: 11.95px; font-family: "EB Garamond Initials";' textLength='30.88px' lengthAdjust='spacingAndGlyphs'>Audio</text>
+<text x='235.40' y='118.40' text-anchor='middle' style='font-size: 11.95px; font-family: "EB Garamond Initials";' textLength='20.62px' lengthAdjust='spacingAndGlyphs'>ASR</text>
+<text x='347.27' y='118.40' text-anchor='middle' style='font-size: 11.95px; font-family: "EB Garamond Initials";' textLength='45.00px' lengthAdjust='spacingAndGlyphs'>Risk atoms</text>
+<text x='459.13' y='118.40' text-anchor='middle' style='font-size: 11.95px; font-family: "EB Garamond Initials";' textLength='42.34px' lengthAdjust='spacingAndGlyphs'>Variants</text>
+<text x='571.00' y='118.40' text-anchor='middle' style='font-size: 11.95px; font-family: "EB Garamond Initials";' textLength='47.78px' lengthAdjust='spacingAndGlyphs'>SRES / CEIS</text>
+<text x='682.86' y='118.40' text-anchor='middle' style='font-size: 11.95px; font-family: "EB Garamond Initials";' textLength='36.31px' lengthAdjust='spacingAndGlyphs'>Recovery</text>
+<text x='123.54' y='136.74' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='38.44px' lengthAdjust='spacingAndGlyphs'>speech input</text>
+<text x='235.40' y='136.74' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='65.22px' lengthAdjust='spacingAndGlyphs'>hypothesis + signals</text>
+<text x='347.27' y='136.74' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='74.83px' lengthAdjust='spacingAndGlyphs'>decision-critical spans</text>
+<text x='459.13' y='136.74' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='70.47px' lengthAdjust='spacingAndGlyphs'>plausible alternatives</text>
+<text x='571.00' y='136.74' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='65.22px' lengthAdjust='spacingAndGlyphs'>decision instability</text>
+<text x='682.86' y='136.74' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='63.17px' lengthAdjust='spacingAndGlyphs'>conservative action</text>
+<text x='27.90' y='59.07' style='font-size: 12.00px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='279.50px' lengthAdjust='spacingAndGlyphs'>Aggregate-only method diagram; no transcript or row content.</text>
+<text x='27.90' y='39.23' style='font-size: 20.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='183.78px' lengthAdjust='spacingAndGlyphs'>F1. CDS-ASR Pipeline</text>
+<text x='27.90' y='214.45' style='font-size: 11.00px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='427.19px' lengthAdjust='spacingAndGlyphs'>Human review supplies evaluation labels only; recovery policies remain automatic and aggregate-evaluated.</text>
+</g>
+</g>
 </svg>

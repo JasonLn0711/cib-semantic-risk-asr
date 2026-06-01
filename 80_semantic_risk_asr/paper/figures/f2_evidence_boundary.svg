@@ -1,31 +1,53 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="390" viewBox="0 0 1160 390" role="img">
-<rect width="1160" height="390" fill="white"/>
-<style>
-  text { font-family: Arial, Helvetica, sans-serif; fill: #1f2933; }
-  .title { font-size: 22px; font-weight: 700; }
-  .subtitle { font-size: 13px; fill: #52606d; }
-  .label { font-size: 13px; font-weight: 700; }
-  .small { font-size: 11px; fill: #52606d; }
-</style>
-<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#9fb3c8"/></marker></defs>
-<text x="36" y="42" class="title" text-anchor="start">F2. Evidence Boundary</text>
-<text x="36" y="64" class="subtitle" text-anchor="start">Publishable evidence gate: True | status counts: {&#x27;completed&#x27;: 7}</text>
-<rect x="70" y="110" width="300" height="118" rx="6" fill="#ffffff" stroke="#2f80ed" stroke-width="1.4"/>
-<text x="88" y="144" class="label" text-anchor="start">258-row test split</text>
-<text x="88" y="172" class="small" text-anchor="start">scope-controlled split/model-comparison evidence</text>
-<text x="88" y="196" class="small" text-anchor="start">CER/WER + proxy risk metrics</text>
-<line x1="378" y1="168" x2="422" y2="168" stroke="#9fb3c8" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="430" y="110" width="300" height="118" rx="6" fill="#ffffff" stroke="#f2994a" stroke-width="1.4"/>
-<text x="448" y="144" class="label" text-anchor="start">selected-300 proxy outputs</text>
-<text x="448" y="172" class="small" text-anchor="start">input provenance and row-selection evidence</text>
-<text x="448" y="196" class="small" text-anchor="start">not final human-reviewed risk claim</text>
-<line x1="738" y1="168" x2="782" y2="168" stroke="#9fb3c8" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="790" y="110" width="300" height="118" rx="6" fill="#ffffff" stroke="#219653" stroke-width="1.4"/>
-<text x="808" y="144" class="label" text-anchor="start">selected-300 human-reviewed audit</text>
-<text x="808" y="172" class="small" text-anchor="start">paper-grade predictor and recovery evidence</text>
-<text x="808" y="196" class="small" text-anchor="start">30 rows / 90 model assessments</text>
-<rect x="70" y="270" width="1020" height="80" rx="6" fill="#f5f7fa" stroke="#bcccdc" stroke-width="1.4"/>
-<text x="92" y="302" class="label" text-anchor="start">Release boundary</text>
-<text x="92" y="328" class="small" text-anchor="start">Tracked: aggregate run records, validation summaries, metric tables, figure SVGs, and paper-facing evidence matrices.</text>
-<text x="92" y="348" class="small" text-anchor="start">Local-only: raw audio, transcripts, selected IDs, hypotheses, reviewer sheets/notes, runtime logs, model weights.</text>
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='835.20pt' height='280.80pt' viewBox='0 0 835.20 280.80'>
+<g class='svglite'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+    .svglite g.glyphgroup path {
+      fill: inherit;
+      stroke: none;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw4MzUuMjB8MC4wMHwyODAuODA='>
+    <rect x='0.00' y='0.00' width='835.20' height='280.80' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw4MzUuMjB8MC4wMHwyODAuODA=)'>
+<rect x='0.00' y='-0.000000000000057' width='835.20' height='280.80' style='stroke-width: 0.00; stroke: none;' />
+<line x1='269.03' y1='136.40' x2='337.60' y2='136.40' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='327.63,142.16 337.60,136.40 327.63,130.64 ' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<line x1='497.60' y1='136.40' x2='566.17' y2='136.40' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<polyline points='556.19,142.16 566.17,136.40 556.19,130.64 ' style='stroke-width: 2.35; stroke: #D9E2EC; stroke-linecap: butt;' />
+<rect x='102.18' y='91.63' width='173.71' height='89.54' style='stroke-width: 2.56; stroke: #2F80ED; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
+<rect x='330.75' y='91.63' width='173.71' height='89.54' style='stroke-width: 2.56; stroke: #F2994A; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
+<rect x='559.31' y='91.63' width='173.71' height='89.54' style='stroke-width: 2.56; stroke: #219653; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
+<text x='189.03' y='118.79' text-anchor='middle' style='font-size: 10.81px; font-family: "EB Garamond Initials";' textLength='72.28px' lengthAdjust='spacingAndGlyphs'>258-row test split</text>
+<text x='417.60' y='118.79' text-anchor='middle' style='font-size: 10.81px; font-family: "EB Garamond Initials";' textLength='105.19px' lengthAdjust='spacingAndGlyphs'>selected-300 proxy outputs</text>
+<text x='646.17' y='118.79' text-anchor='middle' style='font-size: 10.81px; font-family: "EB Garamond Initials";' textLength='129.94px' lengthAdjust='spacingAndGlyphs'>selected-300 human-reviewed audit</text>
+<text x='189.03' y='141.69' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='73.94px' lengthAdjust='spacingAndGlyphs'>split/model comparison</text>
+<text x='417.60' y='141.69' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='66.38px' lengthAdjust='spacingAndGlyphs'>selection provenance</text>
+<text x='646.17' y='141.69' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='88.80px' lengthAdjust='spacingAndGlyphs'>predictor/recovery evidence</text>
+<text x='189.03' y='160.45' text-anchor='middle' style='font-size: 8.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='88.17px' lengthAdjust='spacingAndGlyphs'>CER/WER + proxy risk metrics</text>
+<text x='417.60' y='160.45' text-anchor='middle' style='font-size: 8.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='109.94px' lengthAdjust='spacingAndGlyphs'>not final human-reviewed risk claim</text>
+<text x='646.17' y='160.45' text-anchor='middle' style='font-size: 8.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='95.50px' lengthAdjust='spacingAndGlyphs'>30 rows / 90 model assessments</text>
+<rect x='86.18' y='204.73' width='662.84' height='37.70' style='stroke-width: 1.16; stroke: #BCCCDC; stroke-linecap: butt; stroke-linejoin: miter; fill: #F5F7FA;' />
+<text x='113.61' y='219.93' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='60.84px' lengthAdjust='spacingAndGlyphs'>Release boundary</text>
+<text x='113.61' y='233.41' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='646.22px' lengthAdjust='spacingAndGlyphs'>Tracked: aggregate run records, validation summaries, metric tables, figure SVGs/PDFs. Local-only: raw audio, transcripts, selected IDs, hypotheses, reviewer sheets/notes, runtime logs, model weights.</text>
+<text x='27.90' y='59.07' style='font-size: 12.00px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='273.25px' lengthAdjust='spacingAndGlyphs'>Publishable evidence gate: TRUE | status counts: completed=7</text>
+<text x='27.90' y='39.23' style='font-size: 20.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='168.25px' lengthAdjust='spacingAndGlyphs'>F2. Evidence Boundary</text>
+</g>
+</g>
 </svg>
