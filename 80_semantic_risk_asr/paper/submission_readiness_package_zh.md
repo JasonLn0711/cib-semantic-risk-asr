@@ -256,12 +256,17 @@ Recommended figures:
 | F5 | Model lane state diagram | `docs/model_evaluation_state.md` and candidate summary | Show main table vs candidate vs runtime-blocked lanes |
 | F6 | Evidence N-ladder | method evidence units | Show 258 split, selected-300, 30 rows, and 90 clustered assessments |
 | F7 | Budget-risk frontier | `policy_comparison.tsv` | Show trigger budget versus severe missed outcomes in replay |
+| F8 | Low-WER danger signals | `low_wer_danger_summary.tsv` | Show that low-WER rows can still carry decision-risk signals |
+| F9 | Risk-atom instability heatmap | `risk_atom_instability.tsv` | Show instability by model and risk atom |
+| F10 | Human-reviewed risk-atom outcomes | `human_audit_risk_atom_review.tsv` | Connect reviewed atom coverage to criticality and decision change |
+| F11 | Risk-atom entropy heatmap | `risk_atom_instability.tsv` | Show whether instability is concentrated or distributed across atom classes |
 
 No figure should expose transcript text, sample IDs, audio IDs, reviewer notes,
 or row-level predictions.
 
 Generated figure package:
 
+- `80_semantic_risk_asr/paper/generate_paper_figures.R`
 - `80_semantic_risk_asr/paper/generate_paper_figures.py`
 - `80_semantic_risk_asr/paper/figures/README.md`
 - `80_semantic_risk_asr/paper/figures/f1_cds_asr_pipeline.svg`
@@ -278,6 +283,14 @@ Generated figure package:
 - `80_semantic_risk_asr/paper/figures/f6_n_ladder.pdf`
 - `80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.svg`
 - `80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.pdf`
+- `80_semantic_risk_asr/paper/figures/f8_low_wer_danger.svg`
+- `80_semantic_risk_asr/paper/figures/f8_low_wer_danger.pdf`
+- `80_semantic_risk_asr/paper/figures/f9_risk_atom_instability_heatmap.svg`
+- `80_semantic_risk_asr/paper/figures/f9_risk_atom_instability_heatmap.pdf`
+- `80_semantic_risk_asr/paper/figures/f10_human_reviewed_atom_outcomes.svg`
+- `80_semantic_risk_asr/paper/figures/f10_human_reviewed_atom_outcomes.pdf`
+- `80_semantic_risk_asr/paper/figures/f11_risk_atom_entropy_heatmap.svg`
+- `80_semantic_risk_asr/paper/figures/f11_risk_atom_entropy_heatmap.pdf`
 
 ## 5. Claim-To-Evidence Matrix
 
