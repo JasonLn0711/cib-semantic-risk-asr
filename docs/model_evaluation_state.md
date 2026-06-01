@@ -309,8 +309,13 @@ FireRedASR-LLM is a heavier short-audio / code-switching candidate; FireRedASR2
 is an optional metadata-gated newer branch after baseline FireRedASR evidence
 exists.
 
-LoRA is designed as a gated rank/alpha experiment rather than an immediate
-full sweep. The first smoke adapter is rank 4 / alpha 8; only a model that can
+LoRA is designed as a diagnostic-gated rank/alpha experiment rather than an
+immediate full sweep. Imperfect CER/WER is not enough to open LoRA. Each model
+must first produce raw/repaired fixed-15 evidence, locale behavior, automatic
+semantic-damage proxy, subgroup taxonomy, and runtime status. LoRA opens only
+for a fine-tuning-addressable failure such as stable locale style, repeated
+Taiwan-term substitutions, English abbreviation errors, or domain lexical
+omissions. The first smoke adapter is rank 4 / alpha 8; only a model that can
 train, save locally, reload, and pass post-training one-row transcript
 evaluation may expand to rank 8 / alpha 16, rank 16 / alpha 32, and optional
 rank 16 / alpha 16 sensitivity. Adapter weights, payloads, row-level

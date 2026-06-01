@@ -31,6 +31,10 @@ Core rules:
   semantic-damage proxy, and LoRA fine-tuning evidence separate.
 - Simplified Chinese output must be converted to Traditional Chinese only in
   the deployment-repair view; raw capability metrics must remain raw.
+- Do not treat imperfect CER/WER as an automatic reason to fine-tune. First
+  complete the raw/repaired diagnostic gates and classify the failure as
+  runtime, duration, raw capability, deterministic-repair, semantic-damage,
+  subgroup, or fine-tuning-addressable.
 
 Execute the phases in order:
 1. Refresh model metadata for Qwen3-ASR-0.6B, Qwen3-ASR-1.7B, FireRedASR-AED,
@@ -65,43 +69,50 @@ Execute the phases in order:
    and keep aggregate repaired metrics separate from raw metrics.
 9. Run automatic semantic-damage proxy for every repaired fixed-15 survivor.
    Any blocker stops promotion.
-10. Prepare LoRA payload contract only after a model has a clean enough
+10. Make a diagnostic-before-LoRA decision. Open LoRA only when the baseline
+    evidence shows a fine-tuning-addressable failure such as stable locale
+    style, repeatable Taiwan terminology substitutions, English abbreviation
+    errors, or domain lexical omissions. Do not open LoRA for runtime failures,
+    duration-limit failures, severe semantic hallucination, unstable empty
+    outputs, severe low-overlap transcripts, or issues solved cleanly by
+    deterministic repair.
+11. Prepare LoRA payload contract only after a model has a clean enough
     baseline question. Use accepted ground-truth training rows only, freeze
     validation/test splits, check leakage, and track only aggregate manifest
     hash/status.
-11. Run one smallest LoRA smoke adapter first:
+12. Run one smallest LoRA smoke adapter first:
     - Qwen3-ASR-0.6B rank=4 alpha=8
     - Qwen3-ASR-1.7B rank=4 alpha=8 only after one-row runtime success
     - FireRedASR-AED rank=4 alpha=8 only after AED raw/repaired baseline
     - FireRedASR-LLM rank=4 alpha=8 only after short-audio one-row success
-12. A LoRA smoke succeeds only if it trains, saves locally, reloads, and passes
+13. A LoRA smoke succeeds only if it trains, saves locally, reloads, and passes
     post-training one-row transcript evaluation. No adapter weights are tracked.
-13. Expand rank/alpha grid only for smoke survivors:
+14. Expand rank/alpha grid only for smoke survivors:
     - rank 4 alpha 8
     - rank 8 alpha 16
     - rank 16 alpha 32
     - optional rank 16 alpha 16 for alpha sensitivity
     Stop wider ranks when smaller ranks fail semantic proxy or resource gates.
-14. Evaluate post-LoRA fixed-15 and automatic semantic-damage proxy against
+15. Evaluate post-LoRA fixed-15 and automatic semantic-damage proxy against
     frozen raw and repaired baselines. Improvement must preserve transcript
     fidelity and reduce zh-TW locale/critical-term failures without increasing
     semantic blockers.
-15. Run limited automatic Taiwan utility/subgroup proxy only for clean
+16. Run limited automatic Taiwan utility/subgroup proxy only for clean
     survivors. Subgroups must include Taiwan terms, English code-switching,
     identity/health/bank/reporting terms, duration, and noisy/low-volume rows
     if available through approved aggregate manifests.
-16. Decide whether any survivor earns 30-row CDS, 258-row, or selected-300.
+17. Decide whether any survivor earns 30-row CDS, 258-row, or selected-300.
     Do not advance unless the prior gate proves claim-evidence alignment.
-17. Write final closeout:
+18. Write final closeout:
     - scoped ASR-control survivor, or
     - no-human no-winner closeout.
-18. Update docs/model_evaluation_state.md,
+19. Update docs/model_evaluation_state.md,
     docs/v2_0_asr_controls_qwen3_firered_lora_plan.md,
     70_experiments/registry.tsv, and planning bridge notes after each gate.
-19. Add validators for every new repo-safe run record. Run py_compile,
+20. Add validators for every new repo-safe run record. Run py_compile,
     validators, TSV width checks, git diff --check, and
     scripts/check_transcript_bearing_leaks.sh.
-20. Commit logical slices separately. Push non-force to origin main only after
+21. Commit logical slices separately. Push non-force to origin main only after
     fetching and confirming remote history will be preserved.
 
 Stop rules:
@@ -110,6 +121,10 @@ Stop rules:
 - No deployment-repair claim without raw baseline and automatic semantic proxy.
 - No LoRA grid before one tiny adapter can train, save, reload, and pass
   one-row transcript evaluation.
+- No LoRA at all before diagnostic evidence shows a fine-tuning-addressable
+  failure. If baseline diagnostics show runtime/resource failure, semantic
+  damage, or clean deterministic repair, stop or report the repaired baseline
+  instead.
 - No 30-row CDS, 258-row, or selected-300 without clean fixed-15 and semantic
   proxy evidence.
 - If Qwen3 and FireRedASR routes all fail runtime, locale, semantic-proxy, or

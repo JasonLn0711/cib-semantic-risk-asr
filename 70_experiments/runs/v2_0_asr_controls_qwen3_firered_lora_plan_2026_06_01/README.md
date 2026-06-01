@@ -35,6 +35,29 @@ scoring without new human review. They do not remove the need for leakage
 control, locale gates, automatic semantic-damage proxies, and strict train /
 validation / test separation.
 
+## Diagnostic-Before-LoRA Rule
+
+LoRA is not the default response to an imperfect CER/WER score. The first
+experiment must be diagnostic:
+
+```text
+runtime validity
+-> raw one-row transcript contract
+-> raw fixed-15 CER/WER and locale profile
+-> Traditional Chinese deployment-repair view
+-> automatic semantic-damage proxy
+-> subgroup error taxonomy
+-> LoRA necessity decision
+```
+
+Only error types that are plausibly learnable by fine-tuning should open LoRA:
+stable Simplified Chinese output that survives semantic proxy, recurring
+Taiwan terminology substitutions, consistent English abbreviation errors, or
+repeatable domain lexical omissions. Runtime failures, duration-limit failures,
+semantic hallucination, unstable empty output, severe low-overlap transcripts,
+or errors fixed cleanly by deterministic conversion are not enough by
+themselves to justify LoRA.
+
 ## Why These Models
 
 Qwen3-ASR is a focused ASR family rather than a general audio LLM. The current
@@ -119,5 +142,8 @@ This lane is complete when one of these states is recorded:
 - No 258-row, selected-300, or paper-facing claim opens from model reputation.
 - No LoRA adapter is evaluated on train rows only.
 - No OpenCC/Taiwan-term repaired output is mixed with raw capability evidence.
+- No LoRA starts only because CER/WER is imperfect; first classify the failure
+  as runtime, locale, deterministic-repair, semantic-damage, subgroup, or
+  fine-tuning-addressable.
 - No full-grid LoRA sweep runs before one tiny adapter can train, save, reload,
   and pass one-row evaluation.

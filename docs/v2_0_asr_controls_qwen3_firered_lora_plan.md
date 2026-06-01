@@ -18,6 +18,20 @@ The plan therefore treats Simplified-to-Traditional conversion as a deployment
 repair layer, and treats LoRA as a separate fine-tuning evidence layer. Both
 must prove they do not create semantic damage before any larger run.
 
+## Diagnostic Before LoRA
+
+The experiment should not move directly from "CER/WER is imperfect" to LoRA.
+The first goal is to classify the defect. A model must first produce raw and
+deployment-repaired fixed-15 evidence with CER/WER, locale rate, transcript
+contract behavior, automatic semantic-damage proxy, subgroup tags, and runtime
+status. LoRA opens only when the defect is plausibly learnable: stable locale
+style, repeated Taiwan-term substitutions, English abbreviation errors, or
+domain lexical omissions.
+
+If the defect is runtime timeout, duration limit, unstable output, hallucination,
+severe low-overlap transcript, or an issue solved cleanly by deterministic
+conversion, LoRA is not the next experiment.
+
 ## Model Positioning
 
 | Model | Position | First action |
@@ -30,7 +44,8 @@ must prove they do not create semantic damage before any larger run.
 
 ## LoRA Design
 
-LoRA is tested only after baseline evidence exists. The ordered grid is:
+LoRA is tested only after diagnostic baseline evidence proves a
+fine-tuning-addressable failure. The ordered grid is:
 
 | Stage | Rank | Alpha | Reason |
 | --- | ---: | ---: | --- |

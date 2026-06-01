@@ -73,14 +73,16 @@ def main() -> None:
         fail("expected at least 6 model gate rows")
     if len(lora_rows) != 12:
         fail(f"expected 12 LoRA grid rows, found {len(lora_rows)}")
-    if len(steps) != 16:
-        fail(f"expected 16 completion phases, found {len(steps)}")
+    if len(steps) != 17:
+        fail(f"expected 17 completion phases, found {len(steps)}")
     if len(contract_rows) < 8:
         fail("expected at least 8 no-human contract rows")
 
     phase_ids = [int(row["phase_id"]) for row in steps]
-    if phase_ids != list(range(16)):
+    if phase_ids != list(range(17)):
         fail(f"phase ids are not contiguous 0..15: {phase_ids}")
+    if steps[9]["phase_name"] != "diagnostic_before_lora_decision":
+        fail("phase 9 must be diagnostic_before_lora_decision")
 
     grid_ids = {row["grid_id"] for row in lora_rows}
     required_grid_ids = {
@@ -102,6 +104,8 @@ def main() -> None:
         fail("next phase must be metadata refresh")
     if summary.get("lora_rank_alpha_grid_count") != len(lora_rows):
         fail("LoRA grid count mismatch")
+    if summary.get("diagnostic_before_lora_required") is not True:
+        fail("diagnostic_before_lora_required must be true")
 
     privacy = summary.get("privacy_boundary", {})
     if privacy.get("repo_safe_aggregate_records_tracked") is not True:
