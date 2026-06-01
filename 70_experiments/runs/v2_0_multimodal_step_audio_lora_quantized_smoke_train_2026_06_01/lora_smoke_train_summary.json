@@ -1,0 +1,28 @@
+{
+  "run_id": "v2_0_multimodal_step_audio_lora_quantized_smoke_train_2026_06_01",
+  "generated_at_unix": 1780300339,
+  "started_at_unix": 1780300329,
+  "status": "step_audio_lora_smoke_train_failed",
+  "model_id": "stepfun-ai/Step-Audio-2-mini",
+  "source_pretraining_run_id": "v2_0_multimodal_step_audio_lora_pretraining_gate_2026_06_01",
+  "payload_rows": 4,
+  "load_in_4bit": true,
+  "training_execution_started": true,
+  "training_execution_completed": false,
+  "failure_mode": "RuntimeError:a view of a leaf Variable that requires grad is being used in an in-place operation.",
+  "adapter_saved": false,
+  "adapter_sha256": "not_available",
+  "claim_boundary": "failed_lora_smoke_runtime_evidence_not_model_improvement",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_outputs_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

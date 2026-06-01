@@ -1,0 +1,2 @@
+artifact_class	artifact_count	sensitivity	storage_policy	tracked_payload	sha256	manifest_status
+step_audio_lora_adapter	0	adapter_weight_artifact_not_created	not_created	false	not_available	training_failed_before_adapter_save

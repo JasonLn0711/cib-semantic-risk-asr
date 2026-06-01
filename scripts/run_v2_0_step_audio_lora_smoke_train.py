@@ -78,16 +78,18 @@ def write_failure(
     started_at: int,
     failure_mode: str,
     payload_rows: int = 0,
+    load_in_4bit: bool = False,
 ) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     summary = {
-        "run_id": RUN_ID,
+        "run_id": out_dir.name,
         "generated_at_unix": int(time.time()),
         "started_at_unix": started_at,
         "status": "step_audio_lora_smoke_train_failed",
         "model_id": MODEL_ID,
         "source_pretraining_run_id": SOURCE_PRETRAINING_RUN_ID,
         "payload_rows": payload_rows,
+        "load_in_4bit": load_in_4bit,
         "training_execution_started": True,
         "training_execution_completed": False,
         "failure_mode": failure_mode,
@@ -145,6 +147,7 @@ def main() -> int:
     parser.add_argument("--lora-r", type=int, default=4)
     parser.add_argument("--lora-alpha", type=int, default=8)
     parser.add_argument("--device", default="cuda")
+    parser.add_argument("--load-in-4bit", action="store_true")
     args = parser.parse_args()
 
     started_at = int(time.time())
@@ -153,8 +156,20 @@ def main() -> int:
     payload_rows = read_payload(args.payload)
 
     try:
-        from peft import LoraConfig, TaskType, get_peft_model
+        from peft import LoraConfig, TaskType, get_peft_model, prepare_model_for_kbit_training
         from transformers import AutoModelForCausalLM, AutoTokenizer
+
+        if args.load_in_4bit:
+            from transformers import BitsAndBytesConfig
+
+            quantization_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_use_double_quant=True,
+                bnb_4bit_compute_dtype=torch.bfloat16,
+            )
+        else:
+            quantization_config = None
 
         os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
         tokenizer = AutoTokenizer.from_pretrained(
@@ -168,11 +183,18 @@ def main() -> int:
             trust_remote_code=True,
             local_files_only=True,
             torch_dtype="auto",
+            quantization_config=quantization_config,
+            device_map="auto" if args.load_in_4bit else None,
         )
         if args.device == "cuda" and not torch.cuda.is_available():
             raise RuntimeError("cuda_requested_but_not_available")
         train_device = torch.device(args.device)
-        model = model.to(train_device)
+        if args.load_in_4bit:
+            model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=False)
+            if hasattr(model, "gradient_checkpointing_disable"):
+                model.gradient_checkpointing_disable()
+        else:
+            model = model.to(train_device)
         model = get_peft_model(
             model,
             LoraConfig(
@@ -183,6 +205,8 @@ def main() -> int:
                 target_modules=["q_proj", "v_proj"],
             ),
         )
+        if args.load_in_4bit and hasattr(model, "enable_input_require_grads"):
+            model.enable_input_require_grads()
         model.train()
         trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
         optimizer = torch.optim.AdamW((p for p in model.parameters() if p.requires_grad), lr=args.learning_rate)
@@ -211,8 +235,8 @@ def main() -> int:
                 outputs = model(
                     input_ids=inputs.input_ids.to(train_device),
                     attention_mask=inputs.attention_mask.to(train_device),
-                    wavs=wavs,
-                    wav_lens=wav_lens,
+                    wavs=wavs.to(train_device),
+                    wav_lens=wav_lens.to(train_device),
                 )
                 logits = outputs.logits[:, :-1, :].float()
                 shift_labels = labels[:, 1:].to(logits.device)
@@ -263,7 +287,7 @@ def main() -> int:
             ],
         )
         summary = {
-            "run_id": RUN_ID,
+            "run_id": args.out_dir.name,
             "generated_at_unix": int(time.time()),
             "started_at_unix": started_at,
             "status": "step_audio_lora_smoke_train_complete",
@@ -272,6 +296,7 @@ def main() -> int:
             "source_pretraining_run_id": SOURCE_PRETRAINING_RUN_ID,
             "payload_rows": len(payload_rows),
             "epochs": args.epochs,
+            "load_in_4bit": args.load_in_4bit,
             "train_steps": len(losses),
             "trainable_parameters": trainable_params,
             "first_loss": round(losses[0], 6),
@@ -313,8 +338,9 @@ def main() -> int:
         write_failure(
             out_dir=args.out_dir,
             started_at=started_at,
-            failure_mode=f"{type(exc).__name__}:{str(exc)[:160]}",
+            failure_mode=f"{type(exc).__name__}:{str(exc)[:220]}",
             payload_rows=len(payload_rows),
+            load_in_4bit=args.load_in_4bit,
         )
         print(f"step_audio_lora_smoke_train_failed {args.out_dir} {type(exc).__name__}")
         return 3
