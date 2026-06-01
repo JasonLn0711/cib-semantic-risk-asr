@@ -1,0 +1,35 @@
+{
+  "run_id": "v2_0_multimodal_bounded_lora_feasibility_start_2026_06_01",
+  "generated_at_unix": 1780298890,
+  "status": "bounded_lora_feasibility_start_recorded_training_not_started",
+  "source_auto_only_stop_run_id": "v2_0_multimodal_auto_only_no_winner_stop_2026_06_01",
+  "source_readiness_run_id": "v2_0_multimodal_finetuning_readiness_design_2026_06_01",
+  "primary_candidate": "Step-Audio-2-mini",
+  "training_target": "sentinel_no_speech_non_speech_hallucination_reduction",
+  "training_question_locked": true,
+  "training_execution_started": false,
+  "training_execution_status": "not_started_pretraining_gates_incomplete",
+  "blocking_gates": [
+    "local_private_training_payload",
+    "post_training_evaluator_adapter_hook"
+  ],
+  "required_next_actions": [
+    "prepare_local_only_payload_manifest_with_hash_status",
+    "add_or_document_lora_adapter_loading_contract_for_step_evaluators",
+    "freeze_step_pretraining_one_row_and_sentinel_baseline_aggregate_records",
+    "run_tiny_lora_smoke_only_after_pretraining_gates_pass"
+  ],
+  "claim_boundary": "fine_tuning_feasibility_start_not_training_result",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_outputs_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "run_id": "v2_0_multimodal_auto_only_no_winner_stop_2026_06_01",
+  "generated_at_unix": 1780298637,
+  "status": "auto_only_no_winner_stop",
+  "source_proxy_run_id": "v2_0_multimodal_qwen_auto_semantic_damage_proxy_2026_06_01",
+  "model_id": "Qwen/Qwen2.5-Omni-7B",
+  "rows": 15,
+  "semantic_damage_blocker_rows": 7,
+  "proxy_checks": {
+    "cer_worsening_rows": 0,
+    "wer_worsening_rows": 0,
+    "new_hallucination_proxy_rows": 0,
+    "critical_term_or_proper_noun_change_rows": 0,
+    "abbreviation_change_rows": 0,
+    "suspicious_length_ratio_rows": 0,
+    "empty_output_change_rows": 0,
+    "locale_residual_rows": 7,
+    "raw_payload_pair_mismatch_rows": 0
+  },
+  "human_review_status": "not_run_disallowed_by_auto_only_plan",
+  "taiwan_utility_proxy_status": "not_run_because_semantic_damage_proxy_not_clean",
+  "human_reviewed_30row_cds_status": "not_run",
+  "test_258_status": "not_run",
+  "selected_300_status": "not_run",
+  "fine_tuning_execution_status": "not_started",
+  "fine_tuning_next_gate": "bounded_lora_feasibility_design_only_if_team_accepts_new_training_route",
+  "claim_boundary": "no_scientific_winner_under_auto_only_proxy_evidence",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_outputs_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

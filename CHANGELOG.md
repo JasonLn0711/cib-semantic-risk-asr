@@ -5,6 +5,33 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.272 - 2026-06-01T15:30:14+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `f1650a6`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/v2_0_multimodal_auto_only_no_winner_stop_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_auto_only_no_winner_stop_2026_06_01/blocked_gate_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_auto_only_no_winner_stop_2026_06_01/final_auto_only_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_bounded_lora_feasibility_start_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_bounded_lora_feasibility_start_2026_06_01/bounded_lora_feasibility_start_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_bounded_lora_feasibility_start_2026_06_01/codex_goal_prompt.md`
+  - `70_experiments/runs/v2_0_multimodal_bounded_lora_feasibility_start_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_multimodal_bounded_lora_feasibility_start_2026_06_01/lora_candidate_selection.tsv`
+  - `70_experiments/runs/v2_0_multimodal_bounded_lora_feasibility_start_2026_06_01/lora_pretraining_gate.tsv`
+  - `70_experiments/runs/v2_0_multimodal_qwen_auto_semantic_damage_proxy_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_qwen_auto_semantic_damage_proxy_2026_06_01/auto_semantic_damage_proxy_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_qwen_auto_semantic_damage_proxy_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_multimodal_qwen_auto_semantic_damage_proxy_2026_06_01/proxy_blocker_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_qwen_auto_semantic_damage_proxy_2026_06_01/proxy_metric_summary.tsv`
+  - `scripts/prepare_v2_0_multimodal_bounded_lora_feasibility_start.py`
+  - `scripts/run_v2_0_qwen_auto_semantic_damage_proxy.py`
+  - `scripts/validate_v2_0_multimodal_bounded_lora_feasibility_start.py`
+  - `scripts/validate_v2_0_qwen_auto_semantic_damage_proxy.py`
+
 ## v2.5.271 - 2026-06-01T15:13:36+08:00
 
 - Bump: `patch`

@@ -1,0 +1,3 @@
+model_family	model_id	proxy_variant	rows	cer_zh_micro	wer_zh_micro	tokenizer_policy
+Qwen2.5-Omni	Qwen/Qwen2.5-Omni-7B	raw	15	126.7223	65.0538	cjk_char_tokenizer_fallback_no_jieba_in_auto_proxy_lane
+Qwen2.5-Omni	Qwen/Qwen2.5-Omni-7B	opencc_s2twp_terms	15	103.897	39.7849	cjk_char_tokenizer_fallback_no_jieba_in_auto_proxy_lane
