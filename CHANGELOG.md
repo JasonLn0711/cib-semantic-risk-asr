@@ -5,6 +5,20 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.310 - 2026-06-01T20:31:09+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `21b4055`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/paper/artifact_manifest.tsv`
+  - `80_semantic_risk_asr/paper/main_text_figure_table_strategy_2026_06_01_zh.md`
+  - `80_semantic_risk_asr/paper/manuscript_submission.pdf`
+  - `80_semantic_risk_asr/paper/manuscript_submission.tex`
+  - `80_semantic_risk_asr/paper/submission_readiness_package_zh.md`
+
 ## v2.5.309 - 2026-06-01T20:30:58+08:00
 
 - Bump: `patch`

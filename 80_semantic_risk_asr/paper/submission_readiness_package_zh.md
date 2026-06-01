@@ -1,10 +1,11 @@
 # 投稿準備包：CDS-ASR 論文下一步
 
 Date: 2026-05-26
-Latest status update: 2026-05-28
+Latest status update: 2026-06-01
 
-Status: Route A direct-submission package active; manuscript polish and
-aggregate-only package refresh completed on 2026-05-28.
+Status: Route A direct-submission package active; manuscript figure/table
+convergence implemented on 2026-06-01 with R-generated figures, R-generated
+LaTeX table fragments, and a rebuilt `manuscript_submission.pdf`.
 
 Canonical draft:
 
@@ -18,12 +19,20 @@ Primary rule:
 
 > 目前不新增 full-split ASR 實驗。下一步是把已完成的 evidence chain 轉成可投稿的 manuscript、表格、圖、appendix、artifact statement 與 reviewer-facing claim map。
 
+2026-06-01 FIRST PRINCIPLE update:
+
+> 現在的投稿瓶頸不是「再多放圖」或「再塞 manifest」，而是把 reviewer 需要判斷的證據線收斂成方法、核心證據、風險機制、政策 replay 四條主線。主文保留強圖與核心表；完整 F1-F11、候選模型表、fixed-budget frontier 明細與 claim registry 作為補充/manifest trace，讓 reproducibility 完整但不干擾主文論證。
+
 2026-05-28 FIRST PRINCIPLE update:
 
 > 現在最稀缺的資源不是更多模型實驗，而是 reviewer 第一頁注意力與可防守的 claim-evidence alignment。因此投稿面要把 frozen evidence chain 寫成有吸引力、可 citation 支撐、可重建、aggregate-only 的 decision-stability 故事；不要重開 selected-300 審查，也不要等待 second-reviewer spot-check 才進入 Route A。
 
 今日完成狀態：
 
+- `80_semantic_risk_asr/paper/generate_paper_figures.R` 已成為 R 端 canonical figure/table generator，輸出主文圖、補充圖與 `80_semantic_risk_asr/paper/tables/*.tex`。
+- `manuscript_submission.tex` 已移除主文 Figure Package table，主文圖表收斂為 F1、F2 evidence design、F3、F4、F7、F10，加上 R-generated Table 1、Table 3、Table 4。
+- F8、F9、F11、candidate lane 表與 Appendix Table A1 已放入 supplement/appendix；Claim Registry 轉為 supplementary governance evidence。
+- `manuscript_submission.pdf` 已以 `latexmk -xelatex` 重建；R-generated table fragments 使用 `tabularx` 自動換行，最新 LaTeX log 無 `Overfull`。
 - Introduction 已依老師建議改成「現實世界 speech-to-decision 問題 → 既有 ASR / semantic metric / correction / selective prediction 解法 → decision-stability 缺口 → CDS-ASR 新觀點」。
 - `manuscript_submission.tex` 的主要表格已改成自動換行與比例欄寬，長模型名稱、artifact 路徑與 reviewer-facing 說明不再依賴固定欄寬硬塞。
 - Route A cover note 保持直接投稿、不等待 second reviewer 的界線：single-expert audit limitation 明講，inter-annotator agreement 不宣稱。

@@ -2,6 +2,12 @@
 
 Date: 2026-06-01
 
+Implementation status: completed in the current manuscript build. The latest
+`manuscript_submission.tex` now inputs R-generated table fragments from
+`80_semantic_risk_asr/paper/tables/`, embeds the reduced main-text figure set,
+moves candidate/proxy/entropy material to supplement or appendix, and rebuilds
+`manuscript_submission.pdf` from the R-generated figure package.
+
 ## 結論
 
 主文不要放 11 張圖。這篇稿件若要投頂尖期刊，主文圖表應收斂成四條線：
