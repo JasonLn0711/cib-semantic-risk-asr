@@ -151,6 +151,12 @@ Run the Qwen repaired-pipeline human semantic-damage review first; all larger
 automatic gates remain closed unless that review passes or a new bounded repair
 design first produces a behavior-clean sentinel survivor.
 
+Fine-tuning is governed by
+`70_experiments/runs/v2_0_multimodal_finetuning_readiness_design_2026_06_01/`.
+Do not launch training from the current state. A future LoRA smoke can start
+only after a bounded training question, local payload manifest/hash/status,
+frozen baselines, and post-training one-row/sentinel evaluators are present.
+
 The manifest preflight now records that the local-only one-row smoke,
 sentinel, and fixed 15-row manifests are present and ignored; tracked files
 store only aggregate counts and gate status.

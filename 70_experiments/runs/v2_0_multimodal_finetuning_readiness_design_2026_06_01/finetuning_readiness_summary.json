@@ -1,0 +1,40 @@
+{
+  "run_id": "v2_0_multimodal_finetuning_readiness_design_2026_06_01",
+  "date": "2026-06-01",
+  "gate": "v2.0 multimodal fine-tuning readiness design",
+  "status": "readiness_design_recorded_do_not_train_yet",
+  "source_closeout": "70_experiments/runs/v2_0_multimodal_repair_chain_completion_audit_2026_06_01/completion_audit_summary.json",
+  "fine_tuning_now": false,
+  "next_training_gate": "fine_tuning_readiness_and_lora_feasibility_design",
+  "first_allowed_training_scope": "small_lora_feasibility_after_qwen_review_or_new_bounded_design",
+  "primary_training_target_if_unlocked": "sentinel_behavior_no_speech_non_speech_hallucination",
+  "candidate_priority": [
+    "Step-Audio-2-mini",
+    "MiniCPM-o 4.5",
+    "MOSS-Audio-4B",
+    "Qwen2.5-Omni repaired-pipeline only after human review",
+    "Kimi/MOSS8 only after runtime/resource repair"
+  ],
+  "required_pre_training_gates": [
+    "bounded_training_question",
+    "local_private_training_payload_manifested",
+    "baseline_one_row_and_sentinel_records",
+    "post_training_one_row_and_sentinel_eval_defined",
+    "raw_audio_never_tracked",
+    "manifest_hash_status_tracked"
+  ],
+  "promotion_rule": "post_training_sentinel_pass_rows_6_of_6_and_no_speech_hallucination_zero_before_fixed_15",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_outputs_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  },
+  "next_gate": "qwen_repaired_pipeline_human_semantic_damage_review_or_optional_lora_feasibility_design"
+}

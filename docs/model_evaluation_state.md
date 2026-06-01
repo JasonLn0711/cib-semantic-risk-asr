@@ -291,6 +291,15 @@ utility/subgroup, human-reviewed 30-row CDS, ASR-control calibration if needed,
 then 258-row and selected-300 only for a stable, licensed, claim-relevant
 scientific winner.
 
+The fine-tuning readiness decision is recorded in
+`70_experiments/runs/v2_0_multimodal_finetuning_readiness_design_2026_06_01/`.
+The decision is `fine_tuning_now=false`. Fine-tuning can become a bounded LoRA
+feasibility gate only after Qwen repaired-pipeline human review or an explicit
+new repair design, and only for a narrow target such as no-speech /
+non-speech sentinel hallucination. Step is the first future LoRA candidate if
+training is approved; Kimi and MOSS 8B remain not ready before runtime /
+resource repair.
+
 ### Phase 3 Qwen OpenCC Locale Repair: 2026-06-01
 
 Qwen2.5-Omni OpenCC / Taiwan-term locale repair is recorded in

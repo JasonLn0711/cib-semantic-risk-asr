@@ -5,6 +5,25 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.270 - 2026-06-01T10:57:18+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `227d9ea`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/v2_0_multimodal_finetuning_readiness_design_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_finetuning_readiness_design_2026_06_01/candidate_readiness.tsv`
+  - `70_experiments/runs/v2_0_multimodal_finetuning_readiness_design_2026_06_01/codex_goal_prompt.md`
+  - `70_experiments/runs/v2_0_multimodal_finetuning_readiness_design_2026_06_01/finetuning_readiness_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_finetuning_readiness_design_2026_06_01/lora_feasibility_gate.tsv`
+  - `docs/model_evaluation_state.md`
+  - `docs/v2_0_multimodal_batch1_execution_runbook.md`
+  - `docs/v2_0_multimodal_batch1_full_completion_plan.md`
+  - `scripts/validate_v2_0_multimodal_finetuning_readiness_design.py`
+
 ## v2.5.269 - 2026-06-01T10:17:47+08:00
 
 - Bump: `patch`

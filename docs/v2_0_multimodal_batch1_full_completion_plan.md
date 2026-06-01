@@ -208,6 +208,13 @@ Completion now means either claim-aligned promoted-winner evidence after Qwen
 repaired-pipeline human review and downstream gates, or a final no-winner stop
 record after Qwen review and optional bounded repair designs are closed.
 
+Fine-tuning is not the next execution gate. The readiness design is recorded in
+`70_experiments/runs/v2_0_multimodal_finetuning_readiness_design_2026_06_01/`.
+It permits only a future small LoRA feasibility design, not immediate training,
+and requires local/private payload manifests, frozen pre-training baselines,
+post-training one-row and sentinel evaluation, and `6/6` sentinel pass before
+any fixed-15 promotion.
+
 ## Batch 1 Model Scope
 
 Primary zh-TW audio LLM lane:
