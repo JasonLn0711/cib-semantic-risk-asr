@@ -1,0 +1,10 @@
+field_name	field_value	row_count
+expert_semantic_acceptability	accept	1
+expert_semantic_acceptability	minor_issue	2
+expert_semantic_acceptability	reject	4
+expert_locale_acceptability	minor_locale_residual	6
+expert_locale_acceptability	reject	1
+expert_critical_term_damage	major	5
+expert_critical_term_damage	minor	2
+expert_hallucination_or_omission	both	5
+expert_hallucination_or_omission	none	2

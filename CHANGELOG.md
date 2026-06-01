@@ -5,6 +5,23 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.281 - 2026-06-01T16:11:53+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `2c625e2`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/v2_0_multimodal_qwen_expert_review_completion_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_qwen_expert_review_completion_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_multimodal_qwen_expert_review_completion_2026_06_01/expert_review_aggregate_counts.tsv`
+  - `70_experiments/runs/v2_0_multimodal_qwen_expert_review_completion_2026_06_01/expert_review_completion_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_qwen_expert_review_completion_2026_06_01/expert_review_output_file_hashes.tsv`
+  - `70_experiments/runs/v2_0_multimodal_qwen_expert_review_completion_2026_06_01/expert_review_value_counts.tsv`
+  - `scripts/prepare_v2_0_qwen_expert_review_completion.py`
+  - `scripts/validate_v2_0_qwen_expert_review_completion.py`
+
 ## v2.5.280 - 2026-06-01T16:04:43+08:00
 
 - Bump: `patch`

@@ -1,0 +1,10 @@
+metric_name	metric_value	metric_scope
+review_rows	7	expert_review_completion
+semantic_accept_rows	1	expert_review_completion
+semantic_minor_issue_rows	2	expert_review_completion
+semantic_reject_rows	4	expert_review_completion
+critical_major_rows	5	expert_review_completion
+critical_minor_rows	2	expert_review_completion
+hallucination_or_omission_rows	5	expert_review_completion
+final_transcript_usable_rows	1	expert_review_completion
+semantic_damage_blocker_rows	5	expert_review_completion
