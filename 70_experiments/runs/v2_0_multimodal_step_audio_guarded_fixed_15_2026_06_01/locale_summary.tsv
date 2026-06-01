@@ -1,0 +1,2 @@
+model_family	model_id	output_chars	cjk_chars	simplified_char_count	simplified_char_rate	locale_violation_rows	raw_scoring_after_opencc_repair
+Step-Audio 2 mini	stepfun-ai/Step-Audio-2-mini	1564	799	0	0.0	0	false

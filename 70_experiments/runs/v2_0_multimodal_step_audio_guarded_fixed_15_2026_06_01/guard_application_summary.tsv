@@ -1,0 +1,2 @@
+model_family	model_id	rows	guard_no_speech_rows	pass_to_model_rows	guard_failure_rows	fixed_safe_output_rows	claim_boundary
+Step-Audio 2 mini	stepfun-ai/Step-Audio-2-mini	15	0	15	0	0	deterministic_deployment_repair_not_raw_model_capability

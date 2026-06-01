@@ -1,0 +1,2 @@
+model_family	model_id	rows	cer_zh_micro	wer_zh_jieba_micro	simplified_char_rate	tokenizer_policy	decision
+Step-Audio 2 mini	stepfun-ai/Step-Audio-2-mini	15	99.0953	99.1551	0.0	cjk_char_tokenizer_fallback_no_jieba_in_auto_proxy_lane	guarded_route_no_winner_stop

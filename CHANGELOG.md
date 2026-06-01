@@ -5,6 +5,33 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.289 - 2026-06-01T16:58:50+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `2c54054`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/v2_0_multimodal_guarded_route_no_winner_stop_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_guarded_route_no_winner_stop_2026_06_01/partial_stop_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_step_audio_guarded_auto_semantic_proxy_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_step_audio_guarded_auto_semantic_proxy_2026_06_01/auto_semantic_proxy_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_step_audio_guarded_auto_semantic_proxy_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_multimodal_step_audio_guarded_auto_semantic_proxy_2026_06_01/proxy_blocker_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_step_audio_guarded_auto_semantic_proxy_2026_06_01/proxy_metric_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_step_audio_guarded_fixed_15_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_step_audio_guarded_fixed_15_2026_06_01/behavior_taxonomy_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_step_audio_guarded_fixed_15_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_multimodal_step_audio_guarded_fixed_15_2026_06_01/gate_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_step_audio_guarded_fixed_15_2026_06_01/guard_application_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_step_audio_guarded_fixed_15_2026_06_01/locale_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_step_audio_guarded_fixed_15_2026_06_01/runtime_environment_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_step_audio_guarded_fixed_15_2026_06_01/transcript_metric_summary.tsv`
+  - `scripts/run_v2_0_step_audio_guarded_auto_semantic_proxy.py`
+  - `scripts/run_v2_0_step_audio_guarded_fixed_15.py`
+  - `scripts/validate_v2_0_step_audio_guarded_fixed15_and_proxy.py`
+
 ## v2.5.288 - 2026-06-01T16:43:37+08:00
 
 - Bump: `patch`

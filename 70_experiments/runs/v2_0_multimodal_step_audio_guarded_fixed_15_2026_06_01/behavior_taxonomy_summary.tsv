@@ -1,0 +1,2 @@
+model_family	model_id	output_rows	valid_text_outputs	raw_transcript_like_outputs	summary_or_answer_rows	translation_rows	tts_only_rows	invented_timestamp_rows	invented_speaker_label_rows	repetition_rows	empty_output_rows	failure_rows
+Step-Audio 2 mini	stepfun-ai/Step-Audio-2-mini	15	15	15	0	0	0	0	0	0	0	0

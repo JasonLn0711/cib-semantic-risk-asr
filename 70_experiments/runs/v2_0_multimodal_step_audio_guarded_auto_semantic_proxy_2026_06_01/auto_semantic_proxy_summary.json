@@ -1,0 +1,25 @@
+{
+  "run_id": "v2_0_multimodal_step_audio_guarded_auto_semantic_proxy_2026_06_01",
+  "generated_at_unix": 1780304151,
+  "status": "step_audio_guarded_auto_semantic_proxy_complete",
+  "model_id": "stepfun-ai/Step-Audio-2-mini",
+  "source_run_id": "v2_0_multimodal_step_audio_guarded_fixed_15_2026_06_01",
+  "rows": 15,
+  "semantic_damage_blocker_rows": 77,
+  "decision": "guarded_route_no_winner_stop",
+  "next_gate": "do_not_promote_guarded_step",
+  "claim_boundary": "deterministic_deployment_repair_automatic_proxy",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "repaired_text_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "adapter_weights_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}
