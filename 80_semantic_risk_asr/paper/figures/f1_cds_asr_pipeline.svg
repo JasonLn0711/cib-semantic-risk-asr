@@ -56,11 +56,16 @@
 <text x='571.00' y='118.40' text-anchor='middle' style='font-size: 11.95px; font-family: "EB Garamond Initials";' textLength='47.78px' lengthAdjust='spacingAndGlyphs'>SRES / CEIS</text>
 <text x='682.86' y='118.40' text-anchor='middle' style='font-size: 11.95px; font-family: "EB Garamond Initials";' textLength='36.31px' lengthAdjust='spacingAndGlyphs'>Recovery</text>
 <text x='123.54' y='136.74' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='38.44px' lengthAdjust='spacingAndGlyphs'>speech input</text>
-<text x='235.40' y='136.74' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='65.22px' lengthAdjust='spacingAndGlyphs'>hypothesis + signals</text>
-<text x='347.27' y='136.74' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='74.83px' lengthAdjust='spacingAndGlyphs'>decision-critical spans</text>
-<text x='459.13' y='136.74' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='70.47px' lengthAdjust='spacingAndGlyphs'>plausible alternatives</text>
-<text x='571.00' y='136.74' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='65.22px' lengthAdjust='spacingAndGlyphs'>decision instability</text>
-<text x='682.86' y='136.74' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='63.17px' lengthAdjust='spacingAndGlyphs'>conservative action</text>
+<text x='235.40' y='130.39' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='39.59px' lengthAdjust='spacingAndGlyphs'>hypothesis +</text>
+<text x='235.40' y='143.09' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='22.42px' lengthAdjust='spacingAndGlyphs'>signals</text>
+<text x='347.27' y='130.39' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='55.61px' lengthAdjust='spacingAndGlyphs'>decision-critical</text>
+<text x='347.27' y='143.09' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='16.02px' lengthAdjust='spacingAndGlyphs'>spans</text>
+<text x='459.13' y='130.39' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='28.83px' lengthAdjust='spacingAndGlyphs'>plausible</text>
+<text x='459.13' y='143.09' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='38.44px' lengthAdjust='spacingAndGlyphs'>alternatives</text>
+<text x='571.00' y='130.39' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='26.78px' lengthAdjust='spacingAndGlyphs'>decision</text>
+<text x='571.00' y='143.09' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='35.23px' lengthAdjust='spacingAndGlyphs'>instability</text>
+<text x='682.86' y='130.39' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='39.59px' lengthAdjust='spacingAndGlyphs'>conservative</text>
+<text x='682.86' y='143.09' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='20.38px' lengthAdjust='spacingAndGlyphs'>action</text>
 <text x='27.90' y='59.07' style='font-size: 12.00px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='279.50px' lengthAdjust='spacingAndGlyphs'>Aggregate-only method diagram; no transcript or row content.</text>
 <text x='27.90' y='39.23' style='font-size: 20.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='183.78px' lengthAdjust='spacingAndGlyphs'>F1. CDS-ASR Pipeline</text>
 <text x='27.90' y='214.45' style='font-size: 11.00px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='427.19px' lengthAdjust='spacingAndGlyphs'>Human review supplies evaluation labels only; recovery policies remain automatic and aggregate-evaluated.</text>

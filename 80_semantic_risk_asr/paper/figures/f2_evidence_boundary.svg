@@ -34,18 +34,31 @@
 <rect x='102.18' y='91.63' width='173.71' height='89.54' style='stroke-width: 2.56; stroke: #2F80ED; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
 <rect x='330.75' y='91.63' width='173.71' height='89.54' style='stroke-width: 2.56; stroke: #F2994A; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
 <rect x='559.31' y='91.63' width='173.71' height='89.54' style='stroke-width: 2.56; stroke: #219653; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
-<text x='189.03' y='118.79' text-anchor='middle' style='font-size: 10.81px; font-family: "EB Garamond Initials";' textLength='72.28px' lengthAdjust='spacingAndGlyphs'>258-row test split</text>
-<text x='417.60' y='118.79' text-anchor='middle' style='font-size: 10.81px; font-family: "EB Garamond Initials";' textLength='105.19px' lengthAdjust='spacingAndGlyphs'>selected-300 proxy outputs</text>
-<text x='646.17' y='118.79' text-anchor='middle' style='font-size: 10.81px; font-family: "EB Garamond Initials";' textLength='129.94px' lengthAdjust='spacingAndGlyphs'>selected-300 human-reviewed audit</text>
-<text x='189.03' y='141.69' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='73.94px' lengthAdjust='spacingAndGlyphs'>split/model comparison</text>
-<text x='417.60' y='141.69' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='66.38px' lengthAdjust='spacingAndGlyphs'>selection provenance</text>
-<text x='646.17' y='141.69' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='88.80px' lengthAdjust='spacingAndGlyphs'>predictor/recovery evidence</text>
-<text x='189.03' y='160.45' text-anchor='middle' style='font-size: 8.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='88.17px' lengthAdjust='spacingAndGlyphs'>CER/WER + proxy risk metrics</text>
-<text x='417.60' y='160.45' text-anchor='middle' style='font-size: 8.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='109.94px' lengthAdjust='spacingAndGlyphs'>not final human-reviewed risk claim</text>
-<text x='646.17' y='160.45' text-anchor='middle' style='font-size: 8.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='95.50px' lengthAdjust='spacingAndGlyphs'>30 rows / 90 model assessments</text>
+<text x='189.03' y='111.01' text-anchor='middle' style='font-size: 10.81px; font-family: "EB Garamond Initials";' textLength='48.66px' lengthAdjust='spacingAndGlyphs'>258-row test</text>
+<text x='189.03' y='126.57' text-anchor='middle' style='font-size: 10.81px; font-family: "EB Garamond Initials";' textLength='19.69px' lengthAdjust='spacingAndGlyphs'>split</text>
+<text x='417.60' y='111.01' text-anchor='middle' style='font-size: 10.81px; font-family: "EB Garamond Initials";' textLength='47.25px' lengthAdjust='spacingAndGlyphs'>selected-300</text>
+<text x='417.60' y='126.57' text-anchor='middle' style='font-size: 10.81px; font-family: "EB Garamond Initials";' textLength='54.00px' lengthAdjust='spacingAndGlyphs'>proxy outputs</text>
+<text x='646.17' y='103.22' text-anchor='middle' style='font-size: 10.81px; font-family: "EB Garamond Initials";' textLength='47.25px' lengthAdjust='spacingAndGlyphs'>selected-300</text>
+<text x='646.17' y='118.79' text-anchor='middle' style='font-size: 10.81px; font-family: "EB Garamond Initials";' textLength='55.12px' lengthAdjust='spacingAndGlyphs'>human-reviewed</text>
+<text x='646.17' y='134.36' text-anchor='middle' style='font-size: 10.81px; font-family: "EB Garamond Initials";' textLength='19.69px' lengthAdjust='spacingAndGlyphs'>audit</text>
+<text x='189.03' y='135.34' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='36.39px' lengthAdjust='spacingAndGlyphs'>split/model</text>
+<text x='189.03' y='148.05' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='34.34px' lengthAdjust='spacingAndGlyphs'>comparison</text>
+<text x='417.60' y='135.34' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='29.98px' lengthAdjust='spacingAndGlyphs'>selection</text>
+<text x='417.60' y='148.05' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='33.19px' lengthAdjust='spacingAndGlyphs'>provenance</text>
+<text x='646.17' y='135.34' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='59.97px' lengthAdjust='spacingAndGlyphs'>predictor/recovery</text>
+<text x='646.17' y='148.05' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='25.62px' lengthAdjust='spacingAndGlyphs'>evidence</text>
+<text x='189.03' y='154.31' text-anchor='middle' style='font-size: 8.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='47.75px' lengthAdjust='spacingAndGlyphs'>CER/WER + proxy</text>
+<text x='189.03' y='166.60' text-anchor='middle' style='font-size: 8.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='37.31px' lengthAdjust='spacingAndGlyphs'>risk metrics</text>
+<text x='417.60' y='148.16' text-anchor='middle' style='font-size: 8.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='29.09px' lengthAdjust='spacingAndGlyphs'>not final</text>
+<text x='417.60' y='160.45' text-anchor='middle' style='font-size: 8.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='43.53px' lengthAdjust='spacingAndGlyphs'>human-reviewed</text>
+<text x='417.60' y='172.74' text-anchor='middle' style='font-size: 8.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='31.09px' lengthAdjust='spacingAndGlyphs'>risk claim</text>
+<text x='646.17' y='154.31' text-anchor='middle' style='font-size: 8.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='38.42px' lengthAdjust='spacingAndGlyphs'>30 rows / 90</text>
+<text x='646.17' y='166.60' text-anchor='middle' style='font-size: 8.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='53.97px' lengthAdjust='spacingAndGlyphs'>model assessments</text>
 <rect x='86.18' y='204.73' width='662.84' height='37.70' style='stroke-width: 1.16; stroke: #BCCCDC; stroke-linecap: butt; stroke-linejoin: miter; fill: #F5F7FA;' />
 <text x='113.61' y='219.93' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='60.84px' lengthAdjust='spacingAndGlyphs'>Release boundary</text>
-<text x='113.61' y='233.41' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='646.22px' lengthAdjust='spacingAndGlyphs'>Tracked: aggregate run records, validation summaries, metric tables, figure SVGs/PDFs. Local-only: raw audio, transcripts, selected IDs, hypotheses, reviewer sheets/notes, runtime logs, model weights.</text>
+<text x='113.61' y='221.52' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='286.23px' lengthAdjust='spacingAndGlyphs'>Tracked: aggregate run records, validation summaries, metric tables, figure SVGs/PDFs.</text>
+<text x='113.61' y='233.41' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='267.83px' lengthAdjust='spacingAndGlyphs'>Local-only: raw audio, transcripts, selected IDs, hypotheses, reviewer sheets/notes,</text>
+<text x='113.61' y='245.29' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='86.16px' lengthAdjust='spacingAndGlyphs'>runtime logs, model weights.</text>
 <text x='27.90' y='59.07' style='font-size: 12.00px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='273.25px' lengthAdjust='spacingAndGlyphs'>Publishable evidence gate: TRUE | status counts: completed=7</text>
 <text x='27.90' y='39.23' style='font-size: 20.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='168.25px' lengthAdjust='spacingAndGlyphs'>F2. Evidence Boundary</text>
 </g>

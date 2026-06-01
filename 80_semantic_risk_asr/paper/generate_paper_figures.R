@@ -108,14 +108,18 @@ read_json_safe <- function(file) {
   fromJSON(file, simplifyVector = TRUE)
 }
 
+wrap_label <- function(x, width = 24) {
+  vapply(x, function(value) paste(strwrap(value, width = width), collapse = "\n"), character(1))
+}
+
 model_label <- function(x) {
-  recode(
+  wrap_label(recode(
     x,
     breeze_asr25_base_high_stakes_300 = "Breeze-ASR-25 base",
     breeze_asr25_lora_high_stakes_300 = "Breeze-ASR-25 LoRA",
     breeze_asr25_partial_encoder_high_stakes_300 = "Breeze-ASR-25 partial encoder",
     .default = str_replace_all(x, "_", " ")
-  )
+  ), width = 18)
 }
 
 figure_1_pipeline <- function() {
@@ -124,7 +128,8 @@ figure_1_pipeline <- function() {
     label = c("Audio", "ASR", "Risk atoms", "Variants", "SRES / CEIS", "Recovery"),
     sub = c("speech input", "hypothesis + signals", "decision-critical spans", "plausible alternatives", "decision instability", "conservative action"),
     color = c("blue", "teal", "orange", "purple", "green", "red")
-  )
+  ) %>%
+    mutate(across(c(label, sub), ~ wrap_label(.x, width = 14)))
   segments <- tibble(x = 1:5, xend = 2:6)
   p <- ggplot() +
     geom_segment(
@@ -171,7 +176,8 @@ figure_2_boundary <- function() {
     role = c("split/model comparison", "selection provenance", "predictor/recovery evidence"),
     note = c("CER/WER + proxy risk metrics", "not final human-reviewed risk claim", "30 rows / 90 model assessments"),
     color = c("blue", "orange", "green")
-  )
+  ) %>%
+    mutate(across(c(layer, role, note), ~ wrap_label(.x, width = 18)))
   p <- ggplot(layers, aes(x, y = 1)) +
     geom_segment(
       data = tibble(x = c(1, 2), xend = c(2, 3)),
@@ -185,7 +191,7 @@ figure_2_boundary <- function() {
     geom_text(aes(label = note, y = 0.82), color = palette[["muted"]], size = 3.0) +
     annotate("rect", xmin = 0.55, xmax = 3.45, ymin = 0.1, ymax = 0.42, fill = palette[["gray"]], color = "#BCCCDC") +
     annotate("text", x = 0.67, y = 0.32, label = "Release boundary", hjust = 0, fontface = "bold", size = 3.6) +
-    annotate("text", x = 0.67, y = 0.2, label = "Tracked: aggregate run records, validation summaries, metric tables, figure SVGs/PDFs. Local-only: raw audio, transcripts, selected IDs, hypotheses, reviewer sheets/notes, runtime logs, model weights.", hjust = 0, color = palette[["muted"]], size = 2.9) +
+    annotate("text", x = 0.67, y = 0.2, label = wrap_label("Tracked: aggregate run records, validation summaries, metric tables, figure SVGs/PDFs. Local-only: raw audio, transcripts, selected IDs, hypotheses, reviewer sheets/notes, runtime logs, model weights.", 92), hjust = 0, color = palette[["muted"]], size = 2.9) +
     scale_color_manual(values = palette[layers$color], guide = "none") +
     coord_cartesian(xlim = c(0.45, 3.55), ylim = c(0.02, 1.55), clip = "off") +
     labs(
@@ -270,7 +276,8 @@ figure_5_model_lanes <- function() {
     count = c(paste0(nrow(main_rows), " completed 258-row runs"), paste0(nrow(candidate_rows), " fixed 15-row candidates"), paste0(bounded_count, " bounded probes")),
     note = c("Used for split/model-comparison context", "No promotion until strict zh-TW gate is clean", "Qwen fetch/load timeout and Gemma runtime class block"),
     color = c("green", "orange", "red")
-  )
+  ) %>%
+    mutate(across(c(lane, count, note), ~ wrap_label(.x, width = 20)))
   p <- ggplot(lanes, aes(x, y = 1)) +
     geom_rect(aes(xmin = x - 0.38, xmax = x + 0.38, ymin = 0.68, ymax = 1.32, color = color), fill = "white", linewidth = 1.2) +
     geom_text(aes(label = lane, y = 1.15), fontface = "bold", size = 3.9) +
@@ -278,7 +285,7 @@ figure_5_model_lanes <- function() {
     geom_text(aes(label = note, y = 0.84), color = palette[["muted"]], size = 2.9) +
     annotate("rect", xmin = 0.55, xmax = 3.45, ymin = 0.2, ymax = 0.48, fill = palette[["gray"]], color = "#BCCCDC") +
     annotate("text", x = 0.66, y = 0.37, label = "Promotion rule", hjust = 0, fontface = "bold", size = 3.5) +
-    annotate("text", x = 0.66, y = 0.27, label = "Do not move candidates to 258-row or selected-300 until strict Taiwan Traditional Chinese locale evidence is clean or an isolated multimodal/audio runtime exists.", hjust = 0, color = palette[["muted"]], size = 2.9) +
+    annotate("text", x = 0.66, y = 0.27, label = wrap_label("Do not move candidates to 258-row or selected-300 until strict Taiwan Traditional Chinese locale evidence is clean or an isolated multimodal/audio runtime exists.", 88), hjust = 0, color = palette[["muted"]], size = 2.9) +
     scale_color_manual(values = palette[lanes$color], guide = "none") +
     coord_cartesian(xlim = c(0.45, 3.55), ylim = c(0.12, 1.45), clip = "off") +
     labs(
@@ -303,7 +310,8 @@ figure_6_n_ladder <- function() {
     n = c("258", "300", "30", "90"),
     role = c("ASR model comparison", "selection and provenance", "decision-critical review unit", "predictor and recovery replay"),
     color = c("blue", "orange", "green", "purple")
-  )
+  ) %>%
+    mutate(across(c(layer, unit, role), ~ wrap_label(.x, width = 18)))
   p <- ggplot(layers, aes(x, y = 1)) +
     geom_rect(aes(xmin = x - 0.38, xmax = x + 0.38, ymin = 0.66, ymax = 1.34, color = color), fill = "white", linewidth = 1.2) +
     geom_text(aes(label = layer, y = 1.17), fontface = "bold", size = 3.6) +
@@ -312,7 +320,7 @@ figure_6_n_ladder <- function() {
     geom_text(aes(label = role, y = 0.74), color = palette[["muted"]], size = 2.65) +
     annotate("rect", xmin = 0.55, xmax = 4.45, ymin = 0.24, ymax = 0.46, fill = palette[["gray"]], color = "#BCCCDC") +
     annotate("text", x = 0.67, y = 0.37, label = "Cluster rule", hjust = 0, fontface = "bold", size = 3.5) +
-    annotate("text", x = 0.67, y = 0.29, label = "The 90 reviewed assessments are clustered within 30 audio rows; uncertainty should use row-clustered bootstrap or leave-one-row-out sensitivity.", hjust = 0, color = palette[["muted"]], size = 2.9) +
+    annotate("text", x = 0.67, y = 0.29, label = wrap_label("The 90 reviewed assessments are clustered within 30 audio rows; uncertainty should use row-clustered bootstrap or leave-one-row-out sensitivity.", 96), hjust = 0, color = palette[["muted"]], size = 2.9) +
     scale_color_manual(values = palette[layers$color], guide = "none") +
     coord_cartesian(xlim = c(0.45, 4.55), ylim = c(0.18, 1.48), clip = "off") +
     labs(

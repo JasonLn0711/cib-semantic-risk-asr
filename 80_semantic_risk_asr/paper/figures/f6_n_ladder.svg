@@ -32,24 +32,34 @@
 <rect x='445.92' y='91.01' width='133.77' height='94.29' style='stroke-width: 2.56; stroke: #219653; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
 <rect x='621.93' y='91.01' width='133.77' height='94.29' style='stroke-width: 2.56; stroke: #7B61FF; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
 <text x='160.78' y='118.00' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='43.70px' lengthAdjust='spacingAndGlyphs'>Test split</text>
-<text x='336.79' y='118.00' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='72.00px' lengthAdjust='spacingAndGlyphs'>Selected provenance</text>
-<text x='512.81' y='118.00' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='74.38px' lengthAdjust='spacingAndGlyphs'>Human-reviewed audit</text>
-<text x='688.82' y='118.00' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='74.38px' lengthAdjust='spacingAndGlyphs'>Reviewed assessments</text>
+<text x='336.79' y='110.62' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='29.75px' lengthAdjust='spacingAndGlyphs'>Selected</text>
+<text x='336.79' y='125.37' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='38.53px' lengthAdjust='spacingAndGlyphs'>provenance</text>
+<text x='512.81' y='110.62' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='52.06px' lengthAdjust='spacingAndGlyphs'>Human-reviewed</text>
+<text x='512.81' y='125.37' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='18.59px' lengthAdjust='spacingAndGlyphs'>audit</text>
+<text x='688.82' y='110.62' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='29.75px' lengthAdjust='spacingAndGlyphs'>Reviewed</text>
+<text x='688.82' y='125.37' text-anchor='middle' style='font-size: 10.24px; font-family: "EB Garamond Initials";' textLength='40.91px' lengthAdjust='spacingAndGlyphs'>assessments</text>
 <text x='160.78' y='140.91' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='50.16px' lengthAdjust='spacingAndGlyphs'>Unit: audio rows</text>
-<text x='336.79' y='140.91' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='92.16px' lengthAdjust='spacingAndGlyphs'>Unit: candidate rows / outputs</text>
+<text x='336.79' y='134.97' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='67.08px' lengthAdjust='spacingAndGlyphs'>Unit: candidate rows /</text>
+<text x='336.79' y='146.85' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='22.08px' lengthAdjust='spacingAndGlyphs'>outputs</text>
 <text x='512.81' y='140.91' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='50.16px' lengthAdjust='spacingAndGlyphs'>Unit: audio rows</text>
-<text x='688.82' y='140.91' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='83.16px' lengthAdjust='spacingAndGlyphs'>Unit: model-row assessments</text>
+<text x='688.82' y='134.97' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='47.16px' lengthAdjust='spacingAndGlyphs'>Unit: model-row</text>
+<text x='688.82' y='146.85' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='33.00px' lengthAdjust='spacingAndGlyphs'>assessments</text>
 <text x='160.78' y='160.70' text-anchor='middle' style='font-size: 9.39px; font-family: "EB Garamond Initials";' textLength='29.81px' lengthAdjust='spacingAndGlyphs'>N = 258</text>
 <text x='336.79' y='160.70' text-anchor='middle' style='font-size: 9.39px; font-family: "EB Garamond Initials";' textLength='29.81px' lengthAdjust='spacingAndGlyphs'>N = 300</text>
 <text x='512.81' y='160.70' text-anchor='middle' style='font-size: 9.39px; font-family: "EB Garamond Initials";' textLength='26.41px' lengthAdjust='spacingAndGlyphs'>N = 30</text>
 <text x='688.82' y='160.70' text-anchor='middle' style='font-size: 9.39px; font-family: "EB Garamond Initials";' textLength='26.41px' lengthAdjust='spacingAndGlyphs'>N = 90</text>
-<text x='160.78' y='176.72' text-anchor='middle' style='font-size: 7.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='62.48px' lengthAdjust='spacingAndGlyphs'>ASR model comparison</text>
-<text x='336.79' y='176.72' text-anchor='middle' style='font-size: 7.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='67.62px' lengthAdjust='spacingAndGlyphs'>selection and provenance</text>
-<text x='512.81' y='176.72' text-anchor='middle' style='font-size: 7.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='80.30px' lengthAdjust='spacingAndGlyphs'>decision-critical review unit</text>
-<text x='688.82' y='176.72' text-anchor='middle' style='font-size: 7.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='81.30px' lengthAdjust='spacingAndGlyphs'>predictor and recovery replay</text>
+<text x='160.78' y='171.29' text-anchor='middle' style='font-size: 7.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='30.41px' lengthAdjust='spacingAndGlyphs'>ASR model</text>
+<text x='160.78' y='182.15' text-anchor='middle' style='font-size: 7.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='29.34px' lengthAdjust='spacingAndGlyphs'>comparison</text>
+<text x='336.79' y='171.29' text-anchor='middle' style='font-size: 7.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='36.55px' lengthAdjust='spacingAndGlyphs'>selection and</text>
+<text x='336.79' y='182.15' text-anchor='middle' style='font-size: 7.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='28.34px' lengthAdjust='spacingAndGlyphs'>provenance</text>
+<text x='512.81' y='171.29' text-anchor='middle' style='font-size: 7.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='47.48px' lengthAdjust='spacingAndGlyphs'>decision-critical</text>
+<text x='512.81' y='182.15' text-anchor='middle' style='font-size: 7.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='30.08px' lengthAdjust='spacingAndGlyphs'>review unit</text>
+<text x='688.82' y='171.29' text-anchor='middle' style='font-size: 7.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='36.55px' lengthAdjust='spacingAndGlyphs'>predictor and</text>
+<text x='688.82' y='182.15' text-anchor='middle' style='font-size: 7.54px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='42.02px' lengthAdjust='spacingAndGlyphs'>recovery replay</text>
 <rect x='81.58' y='213.04' width='686.44' height='30.51' style='stroke-width: 1.16; stroke: #BCCCDC; stroke-linecap: butt; stroke-linejoin: miter; fill: #F5F7FA;' />
 <text x='102.70' y='228.83' style='font-size: 9.96px; font-family: "EB Garamond Initials";' textLength='43.50px' lengthAdjust='spacingAndGlyphs'>Cluster rule</text>
-<text x='102.70' y='239.36' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='448.03px' lengthAdjust='spacingAndGlyphs'>The 90 reviewed assessments are clustered within 30 audio rows; uncertainty should use row-clustered bootstrap or leave-one-row-out sensitivity.</text>
+<text x='102.70' y='233.42' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='266.48px' lengthAdjust='spacingAndGlyphs'>The 90 reviewed assessments are clustered within 30 audio rows; uncertainty should use</text>
+<text x='102.70' y='245.30' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='178.55px' lengthAdjust='spacingAndGlyphs'>row-clustered bootstrap or leave-one-row-out sensitivity.</text>
 <text x='27.90' y='59.07' style='font-size: 12.00px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='435.00px' lengthAdjust='spacingAndGlyphs'>Evaluation units are separated to avoid treating clustered model assessments as independent calls.</text>
 <text x='27.90' y='39.23' style='font-size: 20.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='190.91px' lengthAdjust='spacingAndGlyphs'>F6. Evidence N-Ladder</text>
 </g>

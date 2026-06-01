@@ -1,25 +1,42 @@
 {
-  "version": "v2.5.299",
+  "version": "v2.5.300",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 299
+    "patch": 300
   },
-  "updated_at": "2026-06-01T18:07:38+08:00",
+  "updated_at": "2026-06-01T18:15:32+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "4ea2ee3",
+  "base_commit": "1863d4b",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
     "80_semantic_risk_asr/paper/artifact_manifest.tsv",
-    "80_semantic_risk_asr/paper/manuscript_draft.md",
+    "80_semantic_risk_asr/paper/figures/f10_human_reviewed_atom_outcomes.pdf",
+    "80_semantic_risk_asr/paper/figures/f11_risk_atom_entropy_heatmap.pdf",
+    "80_semantic_risk_asr/paper/figures/f11_risk_atom_entropy_heatmap.svg",
+    "80_semantic_risk_asr/paper/figures/f1_cds_asr_pipeline.pdf",
+    "80_semantic_risk_asr/paper/figures/f1_cds_asr_pipeline.svg",
+    "80_semantic_risk_asr/paper/figures/f2_evidence_boundary.pdf",
+    "80_semantic_risk_asr/paper/figures/f2_evidence_boundary.svg",
+    "80_semantic_risk_asr/paper/figures/f3_predictor_auc.pdf",
+    "80_semantic_risk_asr/paper/figures/f4_recovery_outcomes.pdf",
+    "80_semantic_risk_asr/paper/figures/f5_model_lane_state.pdf",
+    "80_semantic_risk_asr/paper/figures/f5_model_lane_state.svg",
+    "80_semantic_risk_asr/paper/figures/f6_n_ladder.pdf",
+    "80_semantic_risk_asr/paper/figures/f6_n_ladder.svg",
+    "80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.pdf",
+    "80_semantic_risk_asr/paper/figures/f8_low_wer_danger.pdf",
+    "80_semantic_risk_asr/paper/figures/f8_low_wer_danger.svg",
+    "80_semantic_risk_asr/paper/figures/f9_risk_atom_instability_heatmap.pdf",
+    "80_semantic_risk_asr/paper/figures/f9_risk_atom_instability_heatmap.svg",
+    "80_semantic_risk_asr/paper/generate_paper_figures.R",
     "80_semantic_risk_asr/paper/manuscript_submission.pdf",
-    "80_semantic_risk_asr/paper/manuscript_submission.tex",
-    "80_semantic_risk_asr/paper/submission_readiness_package_zh.md"
+    "80_semantic_risk_asr/paper/manuscript_submission.tex"
   ]
 }

@@ -79,6 +79,8 @@
 \usepackage{ragged2e}
 \usepackage{makecell}
 \usepackage{seqsplit}
+\usepackage{graphicx}
+\usepackage{float}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -88,12 +90,25 @@
 % Allow footnotes in longtable head/foot
 \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
 \makesavenoteenv{longtable}
-\setlength{\tabcolsep}{2pt}
+\setlength{\tabcolsep}{1pt}
 \renewcommand{\arraystretch}{1.12}
 \newcolumntype{L}[1]{>{\hsize=#1\hsize\linewidth=\hsize\RaggedRight\arraybackslash\hspace{0pt}}X}
 \newcolumntype{R}[1]{>{\hsize=#1\hsize\linewidth=\hsize\RaggedLeft\arraybackslash\hspace{0pt}}X}
-\AtBeginEnvironment{tabularx}{\scriptsize}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
+\AtBeginEnvironment{tabularx}{\fontsize{4}{4.5}\selectfont}
+\setlength{\emergencystretch}{12em} % prevent overfull lines
+\setlength{\hfuzz}{0pt}
+\tolerance=9999
+\hbadness=9999
+\AtBeginDocument{\Urlmuskip=0mu plus 2mu}
+\graphicspath{{80_semantic_risk_asr/paper/figures/}{figures/}}
+\newcommand{\codepath}[1]{\begingroup\ttfamily\scriptsize\seqsplit{#1}\endgroup}
+\newcommand{\paperfigure}[3]{%
+  \begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth,height=0.72\textheight,keepaspectratio]{#1}
+  \caption{\RaggedRight #2 Source: {\ttfamily\scriptsize\detokenize{#3}}.}
+  \end{figure}
+}
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
@@ -137,6 +152,7 @@ ASR for High-Stakes Speech-Driven Decision Systems}
 \date{2026-05-28}
 
 \begin{document}
+\sloppy
 \maketitle
 \begin{abstract}
 Speech-driven decision systems increasingly transform conversations into
@@ -409,8 +425,8 @@ review/escalation states have distance 1, and movement from no
 escalation or routine handling to critical escalation receives the
 largest distance. Unsafe downrouting of a critical event receives the
 maximum penalty used by the policy replay. The method contract is
-versioned in \texttt{docs/downstream\_decision\_contract.md} and
-\texttt{80\_semantic\_risk\_asr/scoring/ceis\_config.json} so CEIS
+versioned in \codepath{docs/downstream\_decision\_contract.md} and
+\codepath{80\_semantic\_risk\_asr/scoring/ceis\_config.json} so CEIS
 rankings can be reconstructed from aggregate artifacts.
 
 \hypertarget{ceis-scale-discipline}{%
@@ -519,7 +535,7 @@ whitespace WER and legacy stored WER fields are audit-only because they
 are unstable for unsegmented Chinese transcripts.
 
 The metric policy is validated by
-\texttt{70\_experiments/runs/wer\_metric\_audit\_2026\_05\_25/}, which
+\codepath{70\_experiments/runs/wer\_metric\_audit\_2026\_05\_25/}, which
 records manifest checks, zero-reference-unit checks, tokenizer and
 normalization policy, and \texttt{jiwer} cross-checks.
 
@@ -732,7 +748,7 @@ comparison \\
 \end{tabularx}
 
 Evidence source:
-\texttt{70\_experiments/runs/janus\_258\_test\_split\_asr\_cds\_proxy/asr\_cds\_proxy\_comparison.tsv}.
+\codepath{70\_experiments/runs/janus\_258\_test\_split\_asr\_cds\_proxy/asr\_cds\_proxy\_comparison.tsv}.
 
 The legacy Breeze-ASR-25 partial encoder is the strongest current
 hypothesis generator on the 258-row split, with the lowest
@@ -800,9 +816,9 @@ Build isolated prompted multimodal runtime before testing \\
 \end{tabularx}
 
 Evidence sources:
-\texttt{70\_experiments/runs/asr\_candidate\_current\_recheck\_2026\_05\_26/candidate\_current\_recheck\_summary.tsv}
+\codepath{70\_experiments/runs/asr\_candidate\_current\_recheck\_2026\_05\_26/candidate\_current\_recheck\_summary.tsv}
 and
-\texttt{70\_experiments/runs/asr\_candidate\_current\_recheck\_2026\_05\_26/summary.json}.
+\codepath{70\_experiments/runs/asr\_candidate\_current\_recheck\_2026\_05\_26/summary.json}.
 
 Whisper large-v3, Whisper large-v3-turbo, SenseVoiceSmall, and
 Qwen3-ASR-0.6B have field-contract evidence but fail strict Taiwan
@@ -853,7 +869,7 @@ Best F1
 \end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Row-clustered F1 95\% CI
 \end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
-Precision
+Prec.
 \end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Recall
 \end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
@@ -876,11 +892,11 @@ decision-stability metric \\
 \end{tabularx}
 
 Evidence source:
-\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_comparison.tsv}.
+\codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_comparison.tsv}.
 Row-clustered uncertainty source:
-\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_clustered\_ci.tsv}.
+\codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_clustered\_ci.tsv}.
 Leave-one-row-out sensitivity source:
-\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_leave\_one\_row\_out.tsv}.
+\codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_leave\_one\_row\_out.tsv}.
 
 CEIS has the strongest point-estimate human-reviewed decision-change AUC
 and reaches recall 1.0 at the diagnostic threshold, while SRES achieves
@@ -955,15 +971,15 @@ at higher budget \\
 \end{tabularx}
 
 Evidence sources:
-\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison.tsv}
+\codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison.tsv}
 and
-\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/summary.json}.
+\codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/summary.json}.
 Row-clustered uncertainty source:
-\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_clustered\_ci.tsv}.
+\codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_clustered\_ci.tsv}.
 Leave-one-row-out sensitivity source:
-\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_leave\_one\_row\_out.tsv}.
+\codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_leave\_one\_row\_out.tsv}.
 Fixed-budget frontier source:
-\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/fixed\_budget\_recovery\_frontier.tsv}.
+\codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/fixed\_budget\_recovery\_frontier.tsv}.
 
 Without recovery, the reviewed evidence contains 6 high-risk misses and
 1 critical miss. SRES-triggered recovery and CEIS-triggered conservative
@@ -991,16 +1007,16 @@ operating-point frontier rather than a deployment-threshold claim.
 \section{Figure Package}\label{figure-package}}
 
 The figure package is generated from aggregate-only inputs by
-\texttt{80\_semantic\_risk\_asr/paper/generate\_paper\_figures.R}. The Python
+\codepath{80\_semantic\_risk\_asr/paper/generate\_paper\_figures.R}. The Python
 entrypoint
-\texttt{80\_semantic\_risk\_asr/paper/generate\_paper\_figures.py} remains only
+\codepath{80\_semantic\_risk\_asr/paper/generate\_paper\_figures.py} remains only
 as a compatibility wrapper that calls the R script. The generated SVGs and PDF
 exports and their privacy boundary are listed in
-\texttt{80\_semantic\_risk\_asr/paper/figures/}. The aggregate artifact
+\codepath{80\_semantic\_risk\_asr/paper/figures/}. The aggregate artifact
 manifest is generated by
-\texttt{80\_semantic\_risk\_asr/paper/build\_artifact\_manifest.py} and
+\codepath{80\_semantic\_risk\_asr/paper/build\_artifact\_manifest.py} and
 written to
-\texttt{80\_semantic\_risk\_asr/paper/artifact\_manifest.tsv}.
+\codepath{80\_semantic\_risk\_asr/paper/artifact\_manifest.tsv}.
 
 \begin{tabularx}{\linewidth}{@{}
   L{0.7000}
@@ -1083,8 +1099,52 @@ counts \\
 \bottomrule\noalign{}
 \end{tabularx}
 
+\paperfigure{f1_cds_asr_pipeline.pdf}
+{CDS-ASR converts audio into ASR hypotheses and runtime signals, extracts risk atoms, generates plausible variants, scores SRES/CEIS, and applies constrained recovery or conservative action.}
+{method section}
+
+\paperfigure{f2_evidence_boundary.pdf}
+{The manuscript separates 258-row split/model-comparison evidence, selected-300 provenance evidence, and selected-300 human-reviewed predictor/recovery evidence.}
+{publishable evidence summary}
+
+\paperfigure{f3_predictor_auc.pdf}
+{CEIS has the highest human-reviewed decision-change AUC in the scoped selected-300 audit, while SRES remains strongest on best-threshold F1; Table 3 reports row-clustered uncertainty.}
+{human_audit_predictor_comparison.tsv}
+
+\paperfigure{f4_recovery_outcomes.pdf}
+{SRES-triggered recovery and CEIS-triggered conservative action both eliminate high-risk missed and critical miss counts in aggregate replay at the same 0.3889 budget.}
+{policy_comparison.tsv}
+
+\paperfigure{f5_model_lane_state.pdf}
+{Main comparable split evidence, locale-gated candidates, and runtime-blocked probes remain separate until promotion gates are satisfied.}
+{main/candidate aggregate summaries}
+
+\paperfigure{f6_n_ladder.pdf}
+{The evidence chain separates 258 rows, selected-300 provenance, 30 reviewed rows, and 90 clustered model assessments.}
+{method evidence units}
+
+\paperfigure{f7_budget_risk_frontier.pdf}
+{Fixed-budget policy replay shows the trigger-budget tradeoff needed to eliminate severe missed outcomes under scoped labels.}
+{fixed_budget_recovery_frontier.tsv}
+
+\paperfigure{f8_low_wer_danger.pdf}
+{Low-WER rows can still carry label-flip, unsafe-downrouting, and conservative-trigger signals, directly supporting the title claim that low WER can remain operationally dangerous.}
+{low_wer_danger_summary.tsv}
+
+\paperfigure{f9_risk_atom_instability_heatmap.pdf}
+{Instability concentrates differently by ASR model and decision-critical atom, showing the mechanism behind CEIS/SRES risk signals.}
+{risk_atom_instability.tsv}
+
+\paperfigure{f10_human_reviewed_atom_outcomes.pdf}
+{Human review connects risk-atom coverage to criticality and decision-change evidence across reviewed rows.}
+{human_audit_risk_atom_review.tsv}
+
+\paperfigure{f11_risk_atom_entropy_heatmap.pdf}
+{Atom-class entropy summarizes whether instability is concentrated in a few atom classes or distributed across several atom classes.}
+{risk_atom_instability.tsv}
+
 Submission-package PDF exports are generated with the same basename
-under \texttt{80\_semantic\_risk\_asr/paper/figures/}.
+under \codepath{80\_semantic\_risk\_asr/paper/figures/}.
 
 Word-level confusion entropy is a valuable next analysis, especially for
 frequently misrecognized decision words around negation, amount, transfer
@@ -1331,72 +1391,72 @@ Artifacts}\label{reviewer-reproducible-aggregate-artifacts}}
 \tightlist
 \item
   Artifact manifest:
-  \texttt{80\_semantic\_risk\_asr/paper/artifact\_manifest.tsv}
+  \codepath{80\_semantic\_risk\_asr/paper/artifact\_manifest.tsv}
 \item
   Artifact manifest generator:
-  \texttt{80\_semantic\_risk\_asr/paper/build\_artifact\_manifest.py}
+  \codepath{80\_semantic\_risk\_asr/paper/build\_artifact\_manifest.py}
 \item
   Experiment registry: \texttt{70\_experiments/registry.tsv}
 \item
   Main 258-row comparison:
-  \texttt{70\_experiments/runs/janus\_258\_test\_split\_asr\_cds\_proxy/asr\_cds\_proxy\_comparison.tsv}
+  \codepath{70\_experiments/runs/janus\_258\_test\_split\_asr\_cds\_proxy/asr\_cds\_proxy\_comparison.tsv}
 \item
   Metric-definition audit:
-  \texttt{70\_experiments/runs/wer\_metric\_audit\_2026\_05\_25/journal\_compliance\_summary.json}
+  \codepath{70\_experiments/runs/wer\_metric\_audit\_2026\_05\_25/journal\_compliance\_summary.json}
 \item
   Selected-300 human audit refresh:
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_refresh\_summary.json}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_refresh\_summary.json}
 \item
   Human-reviewed predictor evidence:
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_comparison.tsv}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_comparison.tsv}
 \item
   Human-reviewed predictor row-clustered CI:
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_clustered\_ci.tsv}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_clustered\_ci.tsv}
 \item
   Human-reviewed predictor leave-one-row-out sensitivity:
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_leave\_one\_row\_out.tsv}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_leave\_one\_row\_out.tsv}
 \item
   Human-reviewed recovery evidence:
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison.tsv}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison.tsv}
 \item
   Human-reviewed recovery row-clustered CI:
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_clustered\_ci.tsv}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_clustered\_ci.tsv}
 \item
   Human-reviewed recovery leave-one-row-out sensitivity:
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_leave\_one\_row\_out.tsv}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_leave\_one\_row\_out.tsv}
 \item
   Human-reviewed recovery fixed-budget frontier:
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/fixed\_budget\_recovery\_frontier.tsv}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/fixed\_budget\_recovery\_frontier.tsv}
 \item
   Claim registry:
-  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/claim\_registry.tsv}
+  \codepath{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/claim\_registry.tsv}
 \item
   CEIS method summary:
-  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/ceis\_method\_summary.tsv}
+  \codepath{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/ceis\_method\_summary.tsv}
 \item
   Selection provenance summary:
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/selection\_provenance\_summary.tsv}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/selection\_provenance\_summary.tsv}
 \item
   Counterfactual variant coverage status:
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/counterfactual\_variant\_coverage\_summary.tsv}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/counterfactual\_variant\_coverage\_summary.tsv}
 \item
   Post-review evidence checklist:
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_post\_review\_evidence\_summary.json}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_post\_review\_evidence\_summary.json}
 \item
   Publishable evidence audit:
-  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/publishable\_evidence\_completion\_summary.json}
+  \codepath{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/publishable\_evidence\_completion\_summary.json}
 \item
   Consequence evidence matrix:
-  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/consequence\_evidence\_matrix.tsv}
+  \codepath{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/consequence\_evidence\_matrix.tsv}
 \item
   Roadmap completion audit:
-  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/postdoc\_roadmap\_completion\_summary.json}
+  \codepath{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/postdoc\_roadmap\_completion\_summary.json}
 \item
   Evidence-chain consistency audit:
-  \texttt{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/evidence\_chain\_consistency\_summary.json}
+  \codepath{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/evidence\_chain\_consistency\_summary.json}
 \item
   Candidate bounded recheck:
-  \texttt{70\_experiments/runs/asr\_candidate\_current\_recheck\_2026\_05\_26/summary.json}
+  \codepath{70\_experiments/runs/asr\_candidate\_current\_recheck\_2026\_05\_26/summary.json}
 \end{itemize}
 
 \hypertarget{appendix-table-a1.-fixed-budget-recovery-frontier}{%
@@ -1426,7 +1486,7 @@ Score metric
 \end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Requested budget
 \end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
-Triggered
+Trig.
 \end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
 Observed budget
 \end{minipage} & \begin{minipage}[b]{\linewidth}\RaggedLeft
@@ -1455,7 +1515,7 @@ CEIS & 0.4000 & 35 & 0.3889 & 24 & 0 & 0 & 0 & 7 & 5.0 \\
 \end{tabularx}
 
 Evidence source:
-\texttt{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/fixed\_budget\_recovery\_frontier.tsv}.
+\codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/fixed\_budget\_recovery\_frontier.tsv}.
 
 \hypertarget{operation-records}{%
 \subsection{Operation Records}\label{operation-records}}
@@ -1471,15 +1531,15 @@ Key records:
 \begin{itemize}
 \tightlist
 \item
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_response\_closeout\_summary.json}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_response\_closeout\_summary.json}
 \item
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_batch\_response\_apply\_log.tsv}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_batch\_response\_apply\_log.tsv}
 \item
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_review\_work\_order\_summary.json}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_review\_work\_order\_summary.json}
 \item
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_post\_review\_sequence\_summary.json}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_post\_review\_sequence\_summary.json}
 \item
-  \texttt{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_operation\_record\_summary.json}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_operation\_record\_summary.json}
 \end{itemize}
 
 \hypertarget{privacy-and-local-only-boundary}{%
