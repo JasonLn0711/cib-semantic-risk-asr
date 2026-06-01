@@ -1,0 +1,36 @@
+{
+  "run_id": "v2_0_multimodal_repair_chain_completion_audit_2026_06_01",
+  "date": "2026-06-01",
+  "gate": "v2.0 multimodal repair-chain completion audit",
+  "status": "automated_repair_chain_complete_no_behavior_clean_survivor",
+  "source_plan": "70_experiments/runs/v2_0_multimodal_all_new_experiments_completion_plan_2026_06_01/phase_progress_2026_06_01.tsv",
+  "completed_phases": 9,
+  "blocked_larger_phases": [
+    "repaired_fixed_15_raw_and_locale_gate",
+    "taiwan_utility_subgroup_audit",
+    "human_reviewed_30_row_cds_gate",
+    "promoted_258_row_split",
+    "selected_300_high_stakes"
+  ],
+  "qwen_repaired_pipeline_human_review_pending": true,
+  "behavior_clean_repaired_sentinel_survivors": 0,
+  "fixed_15_repaired_rerun_open": false,
+  "taiwan_utility_open": false,
+  "human_reviewed_30_row_cds_open": false,
+  "promoted_258_row_open": false,
+  "selected_300_open": false,
+  "first_principle_decision": "Do not advance to larger CDS-ASR gates without a behavior-clean survivor or completed human semantic-damage review for the repaired Qwen pipeline.",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_outputs_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  },
+  "next_gate": "human_semantic_damage_review_for_qwen_repaired_pipeline_or_new_bounded_repair_design"
+}

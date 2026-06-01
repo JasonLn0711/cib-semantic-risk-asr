@@ -141,6 +141,10 @@ allowed to enter sentinel controls. The repaired sentinel gate then fails:
 local 16GB single-GPU resource audit. The fixed 15-row repaired rerun has no
 behavior-clean sentinel survivor.
 
+The automatic repair-chain completion audit is recorded in
+`70_experiments/runs/v2_0_multimodal_repair_chain_completion_audit_2026_06_01/`.
+It is the current stop / handoff record for automatic larger gates.
+
 The manifest preflight now records that the local-only one-row smoke,
 sentinel, and fixed 15-row manifests are present and ignored; tracked files
 store only aggregate counts and gate status.

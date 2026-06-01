@@ -196,6 +196,12 @@ selected-300 remain blocked until a prior gate produces claim-relevant
 survivor evidence. Qwen repaired-pipeline work requires human semantic-damage
 review before any larger repaired-pipeline gate.
 
+The automatic repair-chain completion audit is recorded in
+`70_experiments/runs/v2_0_multimodal_repair_chain_completion_audit_2026_06_01/`.
+It closes the automatically executable path with no behavior-clean repaired
+sentinel survivor and keeps Qwen human semantic-damage review as the only
+larger-gate unlock.
+
 ## Batch 1 Model Scope
 
 Primary zh-TW audio LLM lane:

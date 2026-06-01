@@ -276,6 +276,11 @@ human-reviewed 30-row CDS, promoted 258-row, or selected-300. Qwen remains the
 only repaired-pipeline review candidate, and it requires human semantic-damage
 review before any larger repaired-pipeline gate.
 
+The automatic repair-chain closeout is recorded in
+`70_experiments/runs/v2_0_multimodal_repair_chain_completion_audit_2026_06_01/`.
+It is a governed stop record, not a claim that human semantic review has been
+completed.
+
 ### Phase 3 Qwen OpenCC Locale Repair: 2026-06-01
 
 Qwen2.5-Omni OpenCC / Taiwan-term locale repair is recorded in
