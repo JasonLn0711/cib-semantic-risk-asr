@@ -5,14 +5,17 @@ Date: 2026-06-01
 Status: full completion plan; Gate 0, Kimi size-boundary decision, runtime
 smoke preflight, Gate A one-row manifest preflight, Gate B adapter preflight,
 Qwen isolated runtime/cache lane, Qwen one-row transcript-only smoke, Qwen
-sentinel controls, and Qwen fixed 15-row transcript gate are complete. Qwen
-failed the raw zh-TW locale gate and is not promoted to Taiwan utility/subgroup
-or 30-row CDS from this run. Step-Audio-2-mini isolated runtime/cache and one-row smoke are
+sentinel controls, Qwen fixed 15-row transcript gate, and Qwen OpenCC /
+Taiwan-term repair are complete. Qwen failed the raw zh-TW locale gate; the
+repaired pipeline is a review candidate, not raw model capability, and requires
+human semantic-damage review before Taiwan utility/subgroup or 30-row CDS.
+Step-Audio-2-mini isolated runtime/cache and one-row smoke are
 complete, with Step held in a prompt/runtime repair lane. MOSS-Audio-4B
-isolated runtime/cache, one-row smoke, and sentinel controls are complete; MOSS
-4B failed sentinel behavior controls and is not promoted to fixed 15-row from
-this run. MiniCPM-o 4.5 isolated runtime/cache, 4-bit one-row smoke, and
-sentinel controls are complete; MiniCPM failed sentinel behavior controls under
+isolated runtime/cache, one-row smoke, sentinel controls, and sentinel repair
+are complete; MOSS 4B still fails sentinel behavior controls and is not
+promoted to fixed 15-row from this run. MiniCPM-o 4.5 isolated runtime/cache,
+4-bit one-row smoke, sentinel controls, and sentinel repair are complete;
+MiniCPM improved but still fails one no-speech / non-speech sentinel row under
 the quantized local-feasibility boundary and is not promoted to fixed 15-row
 from this run. Kimi-Audio isolated runtime/cache and one-row attempt are
 complete, with Kimi classified into an isolated flash_attn / CUDA-toolchain
@@ -62,6 +65,9 @@ Completed tracked evidence:
 70_experiments/runs/v2_0_multimodal_batch1_kimi_audio_one_row_smoke_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_moss_audio_8b_runtime_lane_2026_06_01/
 70_experiments/runs/v2_0_multimodal_batch1_moss_audio_8b_one_row_smoke_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_sentinel_repair_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_sentinel_repair_2026_06_01/
 ```
 
 Tracked scripts:
@@ -100,6 +106,12 @@ scripts/validate_v2_0_kimi_audio_one_row_smoke.py
 scripts/prepare_v2_0_moss_audio_8b_runtime_lane.py
 scripts/run_v2_0_moss_audio_8b_one_row_smoke.py
 scripts/validate_v2_0_moss_audio_8b_one_row_smoke.py
+scripts/run_v2_0_qwen_opencc_locale_repair.py
+scripts/validate_v2_0_qwen_opencc_locale_repair.py
+scripts/run_v2_0_moss_audio_4b_sentinel_repair.py
+scripts/validate_v2_0_moss_audio_4b_sentinel_repair.py
+scripts/run_v2_0_minicpm_o_4_5_sentinel_repair.py
+scripts/validate_v2_0_minicpm_o_4_5_sentinel_repair.py
 scripts/run_v2_0_multimodal_one_row_smoke.py
 scripts/validate_v2_0_multimodal_runtime_smoke.py
 ```
@@ -158,6 +170,24 @@ attempt. The tracked records are aggregate-only; local patches, model cache,
 runtime logs, audio, row identifiers, and hypotheses stay in ignored runtime
 lanes. The result is a reproducible runtime dependency boundary, not a
 scientific quality rejection.
+
+Repair-first Phase 3-5 status:
+
+```text
+Phase 3 Qwen OpenCC/Taiwan-term repair: complete; repaired pipeline review candidate.
+Phase 4 MOSS-Audio-4B sentinel repair: complete; do_not_promote.
+Phase 5 MiniCPM-o 4.5 sentinel repair: complete; improved but do_not_promote.
+```
+
+The MOSS 4B repair did not change the scientific gate decision:
+`sentinel_pass_rows=3/6` and `hallucination_on_no_speech_rows=3`. The MiniCPM
+repair improved the quantized deployment-feasibility behavior from `3/6` to
+`5/6` and removed summary / translation behavior, but it still records
+`hallucination_on_no_speech_rows=1`. FIRST PRINCIPLE decision: Phase 11
+Taiwan utility, Phase 12 30-row CDS, Phase 14 258-row, and Phase 15
+selected-300 remain blocked until a prior gate produces claim-relevant
+survivor evidence. The next executable phase is Step-Audio-2-mini
+transcript-contract repair.
 
 ## Batch 1 Model Scope
 

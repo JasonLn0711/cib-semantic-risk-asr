@@ -218,6 +218,39 @@ It defines the ordered path from repair-first Qwen/MOSS/MiniCPM/Step/Kimi/MOSS8
 lanes through fixed-15, Taiwan utility, 30-row CDS, 258-row, selected-300, and
 final closeout.
 
+### Repair-First Phase Progress: 2026-06-01
+
+The first repair-first execution block has completed Phases 1-5 as
+aggregate-only evidence.
+
+Qwen2.5-Omni OpenCC / Taiwan-term repair is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01/`.
+This is deployment-pipeline evidence, not raw model capability. The repaired
+variant reduces raw `locale_violation_rows=15` to `7` and
+`simplified_char_rate=17.8466` to `0.5882`; it remains a
+`repaired_pipeline_review_candidate` and requires human semantic-damage review
+before any Taiwan utility/subgroup or CDS gate.
+
+MOSS-Audio-4B sentinel repair is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_sentinel_repair_2026_06_01/`.
+The stricter prompt does not clear the sentinel boundary:
+`sentinel_pass_rows=3/6`, `hallucination_on_no_speech_rows=3`, and
+`promotion_decision=do_not_promote`. MOSS 4B remains stopped before fixed
+15-row scoring.
+
+MiniCPM-o 4.5 sentinel repair is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_sentinel_repair_2026_06_01/`.
+The stricter prompt improves the quantized local-feasibility result to
+`sentinel_pass_rows=5/6` and removes summary / translation behavior, but
+`hallucination_on_no_speech_rows=1` remains. The decision is still
+`promotion_decision=do_not_promote`, so MiniCPM remains stopped before fixed
+15-row scoring.
+
+FIRST PRINCIPLE decision: after Phases 3-5, there is still no clean raw or
+repaired multimodal survivor eligible for Taiwan utility, human-reviewed
+30-row CDS, promoted 258-row, or selected-300. The next ordered gate is Phase
+6 Step-Audio-2-mini transcript-contract repair.
+
 ### Phase 3 Qwen OpenCC Locale Repair: 2026-06-01
 
 Qwen2.5-Omni OpenCC / Taiwan-term locale repair is recorded in

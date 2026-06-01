@@ -1,0 +1,2 @@
+model_family	model_id	gate	runtime_lane	python_version	platform	repair_prompt_id	quantization_policy	model_inference_run	local_output_tracked	transcript_bearing_logs_tracked	repo_wide_venv_modified
+MiniCPM-o	openbmb/MiniCPM-o-4_5	sentinel_repair	ignored_minicpm_o_runtime_lane	3.12.3	Linux-6.17.0-29-generic-x86_64-with-glibc2.39	minicpm_o_4_5_strict_no_speech_transcript_only_v1	4bit_nf4_bfloat16_compute	true	false	false	false

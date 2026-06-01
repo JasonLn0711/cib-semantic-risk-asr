@@ -4,17 +4,20 @@ Date: 2026-06-01
 
 Status: Kimi size-boundary decision, runtime-smoke preflight, Qwen isolated
 runtime/cache lane, Qwen one-row transcript-only smoke, Qwen sentinel controls,
-and Qwen fixed 15-row transcript gate complete; Qwen failed the raw zh-TW
-locale gate and is not promoted to Taiwan utility/subgroup or 30-row CDS from
-this run.
+Qwen fixed 15-row transcript gate, and Qwen OpenCC/Taiwan-term repair are
+complete; Qwen failed the raw zh-TW locale gate and the repaired pipeline still
+requires human semantic-damage review before Taiwan utility/subgroup or 30-row
+CDS.
 Step-Audio-2-mini isolated runtime/cache and one-row smoke are complete, with
 Step parked in a prompt/runtime repair lane. MOSS-Audio-4B isolated
-runtime/cache, one-row smoke, and sentinel controls are complete; sentinel
-behavior failed, so MOSS 4B is not promoted to fixed 15-row from this run.
+runtime/cache, one-row smoke, sentinel controls, and sentinel repair are
+complete; sentinel behavior still fails, so MOSS 4B is not promoted to fixed
+15-row from this run.
 MiniCPM-o 4.5 isolated
-runtime/cache, 4-bit one-row transcript-only smoke, and sentinel controls are
-complete; sentinel behavior failed under the quantized local-feasibility
-boundary, so MiniCPM is not promoted to fixed 15-row from this run. Kimi-Audio
+runtime/cache, 4-bit one-row transcript-only smoke, sentinel controls, and
+sentinel repair are complete; sentinel behavior improved but still fails under
+the quantized local-feasibility boundary, so MiniCPM is not promoted to fixed
+15-row from this run. Kimi-Audio
 isolated runtime/cache and one-row attempt are complete, with Kimi classified
 into an isolated flash_attn / CUDA-toolchain repair lane; MOSS-Audio-8B isolated
 runtime/cache and one-row attempt are complete, with MOSS 8B classified into a
@@ -103,6 +106,22 @@ Post-Gate0 evidence now includes:
 
 The full end-to-end completion plan and reusable execution prompt are recorded
 in `docs/v2_0_multimodal_batch1_full_completion_plan.md`.
+
+Repair-first Phase 3-5 evidence is now also tracked:
+
+```text
+70_experiments/runs/v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_sentinel_repair_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_minicpm_o_4_5_sentinel_repair_2026_06_01/
+```
+
+Qwen repair is deployment-pipeline evidence only: raw locale violations remain
+the raw model conclusion, while the OpenCC / Taiwan-term repaired variant moves
+from `15` to `7` locale-violation rows and must pass human semantic-damage
+review before larger repaired-pipeline gates. MOSS 4B sentinel repair remains
+`3/6` with `3` no-speech hallucination rows. MiniCPM sentinel repair improves
+to `5/6` and removes summary / translation behavior, but one no-speech /
+non-speech hallucination remains. Therefore Phase 11-15 gates remain blocked.
 
 The manifest preflight now records that the local-only one-row smoke,
 sentinel, and fixed 15-row manifests are present and ignored; tracked files

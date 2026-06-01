@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the v2.0 multimodal all-new-experiments completion plan record."""
+"""Validate aggregate-only MOSS-Audio-4B sentinel repair records."""
 
 from __future__ import annotations
 
@@ -10,12 +10,12 @@ from pathlib import Path
 from typing import Any
 
 
-RUN_DIR = Path("70_experiments/runs/v2_0_multimodal_all_new_experiments_completion_plan_2026_06_01")
+RUN_DIR = Path("70_experiments/runs/v2_0_multimodal_batch1_moss_audio_4b_sentinel_repair_2026_06_01")
 REQUIRED_FILES = {
     "README.md",
-    "completion_plan_summary.json",
-    "remaining_phase_plan.tsv",
-    "codex_goal_prompt.md",
+    "runtime_environment_summary.tsv",
+    "behavior_summary.tsv",
+    "gate_summary.json",
 }
 PROHIBITED_KEYS = {
     "audio_id",
@@ -68,54 +68,25 @@ def main() -> int:
     missing = sorted(name for name in REQUIRED_FILES if not (args.run_dir / name).exists())
     if missing:
         raise SystemExit(f"missing_required_files:{','.join(missing)}")
-
-    summary = json.loads((args.run_dir / "completion_plan_summary.json").read_text(encoding="utf-8"))
+    summary = json.loads((args.run_dir / "gate_summary.json").read_text(encoding="utf-8"))
     violations = check_json_keys(summary)
     if violations:
         raise SystemExit(f"prohibited_json_keys:{','.join(violations)}")
     privacy = summary.get("privacy", {})
     if any(privacy.get(key) for key in privacy):
         raise SystemExit("privacy_boundary_failed")
-    if summary.get("status") != "complete_remaining_plan_recorded":
+    if summary.get("model_id") != "OpenMOSS-Team/MOSS-Audio-4B-Instruct":
+        raise SystemExit("unexpected_model_id")
+    if summary.get("status") not in {
+        "moss_audio_4b_sentinel_repair_complete",
+        "moss_audio_4b_sentinel_repair_failed",
+    }:
         raise SystemExit("unexpected_status")
-    if int(summary.get("total_planned_phases", 0)) != 16:
-        raise SystemExit("total_planned_phases_must_be_16")
-
-    rows = read_tsv(args.run_dir / "remaining_phase_plan.tsv")
-    if len(rows) != 16:
-        raise SystemExit("remaining_phase_plan_must_have_16_rows")
-    orders = [int(row["phase_order"]) for row in rows]
-    if orders != list(range(1, 17)):
-        raise SystemExit("phase_order_must_be_1_to_16")
-
-    progress_path = args.run_dir / "phase_progress_2026_06_01.tsv"
-    if progress_path.exists():
-        progress_rows = read_tsv(progress_path)
-        if len(progress_rows) != 16:
-            raise SystemExit("phase_progress_must_have_16_rows")
-        complete_phases = {row["phase_id"] for row in progress_rows if row["status"] == "complete"}
-        required_complete = {
-            "governance_and_tracking_lock",
-            "controlled_artifact_manifest_setup",
-            "qwen_opencc_locale_repair",
-            "moss4_sentinel_repair",
-            "minicpm_sentinel_repair",
-        }
-        if not required_complete.issubset(complete_phases):
-            raise SystemExit("phase_progress_missing_completed_phase_1_to_5")
-
-    prompt = (args.run_dir / "codex_goal_prompt.md").read_text(encoding="utf-8")
-    required_phrases = [
-        "Raw audio is never tracked in Git",
-        "run Qwen2.5-Omni OpenCC",
-        "run selected-300 only for stable, licensed",
-        "commit logical slices separately",
-    ]
-    for phrase in required_phrases:
-        if phrase not in prompt:
-            raise SystemExit(f"missing_prompt_phrase:{phrase}")
-
-    print(f"multimodal_all_new_experiments_completion_plan_ok {args.run_dir}")
+    behavior = read_tsv(args.run_dir / "behavior_summary.tsv")
+    if summary.get("status") == "moss_audio_4b_sentinel_repair_complete" and len(behavior) != 6:
+        raise SystemExit("behavior_summary_must_have_6_rows_for_complete_run")
+    read_tsv(args.run_dir / "runtime_environment_summary.tsv")
+    print(f"moss_audio_4b_sentinel_repair_record_ok {args.run_dir}")
     return 0
 
 

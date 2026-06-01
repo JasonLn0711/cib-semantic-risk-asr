@@ -5,7 +5,9 @@ Date: 2026-06-01
 Status: design and execution guide after the first raw Batch 1 completion
 audit. This file records the next complete experiment design for all Batch 1
 primary multimodal audio models after the raw gate chain produced no scientific
-winner.
+winner. Phase 3 Qwen OpenCC/Taiwan-term repair, Phase 4 MOSS-Audio-4B sentinel
+repair, and Phase 5 MiniCPM-o 4.5 sentinel repair have now been executed and
+recorded as aggregate-only repair evidence.
 
 本文件記錄 repair-first 實驗設計、gate、指標、artifact、validator、tracking
 policy、privacy boundary 與 Codex execution prompt。新的追蹤原則是：
@@ -280,6 +282,19 @@ Promotion rule:
 - OpenCC repair is not allowed until MOSS 4B passes sentinel and reaches
   fixed 15-row transcript scoring.
 
+Executed result:
+
+```text
+v2_0_multimodal_batch1_moss_audio_4b_sentinel_repair_2026_06_01
+sentinel_pass_rows=3/6
+hallucination_on_no_speech_rows=3
+promotion_decision=do_not_promote
+```
+
+Decision: the stricter prompt did not clear the sentinel behavior boundary.
+MOSS 4B remains stopped before fixed 15-row, Taiwan utility, 30-row CDS,
+258-row, or selected-300.
+
 ### Lane C: MiniCPM-o 4.5 Sentinel Repair
 
 Current evidence:
@@ -303,6 +318,22 @@ Promotion rule:
 - MiniCPM must pass sentinel before fixed 15-row.
 - Any 15-row result under 4-bit NF4 must be reported as quantized deployment
   evidence, not full-bf16 model quality evidence.
+
+Executed result:
+
+```text
+v2_0_multimodal_batch1_minicpm_o_4_5_sentinel_repair_2026_06_01
+sentinel_pass_rows=5/6
+hallucination_on_no_speech_rows=1
+summary_or_answer_rows=0
+translation_rows=0
+promotion_decision=do_not_promote
+```
+
+Decision: the repair improves MiniCPM behavior under the quantized local
+feasibility boundary, but one no-speech / non-speech hallucination remains.
+MiniCPM remains stopped before fixed 15-row, Taiwan utility, 30-row CDS,
+258-row, or selected-300.
 
 ### Lane D: Step-Audio-2-mini Transcript-Contract Repair
 
@@ -447,6 +478,11 @@ Then proceed in this order:
 4. Step transcript-contract one-row repair；
 5. Kimi runtime dependency repair；
 6. MOSS 8B resource repair。
+
+Current progress: steps 1-3 are complete. Qwen is waiting for human
+semantic-damage review as a repaired pipeline; MOSS 4B and MiniCPM remain
+stopped by sentinel behavior. The next ordered experiment is Step
+transcript-contract one-row repair.
 
 ## Codex Goal Prompt
 
