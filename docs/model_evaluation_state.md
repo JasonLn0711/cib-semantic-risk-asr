@@ -281,6 +281,16 @@ The automatic repair-chain closeout is recorded in
 It is a governed stop record, not a claim that human semantic review has been
 completed.
 
+The remaining completion plan is recorded in
+`70_experiments/runs/v2_0_multimodal_remaining_completion_plan_2026_06_01/`.
+The next concrete gate is a local-only Qwen repaired-pipeline human
+semantic-damage review packet. If that review is declined or fails, the final
+completion path is a no-winner stop synthesis. If it passes, the only open
+larger route is explicitly labeled repaired-pipeline evidence: Taiwan
+utility/subgroup, human-reviewed 30-row CDS, ASR-control calibration if needed,
+then 258-row and selected-300 only for a stable, licensed, claim-relevant
+scientific winner.
+
 ### Phase 3 Qwen OpenCC Locale Repair: 2026-06-01
 
 Qwen2.5-Omni OpenCC / Taiwan-term locale repair is recorded in

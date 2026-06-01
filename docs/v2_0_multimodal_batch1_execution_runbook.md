@@ -145,6 +145,12 @@ The automatic repair-chain completion audit is recorded in
 `70_experiments/runs/v2_0_multimodal_repair_chain_completion_audit_2026_06_01/`.
 It is the current stop / handoff record for automatic larger gates.
 
+The remaining completion plan and reusable Codex prompt are recorded in
+`70_experiments/runs/v2_0_multimodal_remaining_completion_plan_2026_06_01/`.
+Run the Qwen repaired-pipeline human semantic-damage review first; all larger
+automatic gates remain closed unless that review passes or a new bounded repair
+design first produces a behavior-clean sentinel survivor.
+
 The manifest preflight now records that the local-only one-row smoke,
 sentinel, and fixed 15-row manifests are present and ignored; tracked files
 store only aggregate counts and gate status.

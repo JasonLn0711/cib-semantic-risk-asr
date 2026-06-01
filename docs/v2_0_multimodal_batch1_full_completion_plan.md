@@ -202,6 +202,12 @@ It closes the automatically executable path with no behavior-clean repaired
 sentinel survivor and keeps Qwen human semantic-damage review as the only
 larger-gate unlock.
 
+The full remaining completion route is recorded in
+`70_experiments/runs/v2_0_multimodal_remaining_completion_plan_2026_06_01/`.
+Completion now means either claim-aligned promoted-winner evidence after Qwen
+repaired-pipeline human review and downstream gates, or a final no-winner stop
+record after Qwen review and optional bounded repair designs are closed.
+
 ## Batch 1 Model Scope
 
 Primary zh-TW audio LLM lane:

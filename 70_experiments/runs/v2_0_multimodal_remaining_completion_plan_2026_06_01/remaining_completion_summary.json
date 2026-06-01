@@ -1,0 +1,27 @@
+{
+  "run_id": "v2_0_multimodal_remaining_completion_plan_2026_06_01",
+  "date": "2026-06-01",
+  "gate": "remaining completion planning after repair-chain closeout",
+  "status": "remaining_completion_plan_recorded_after_repair_chain_closeout",
+  "source_closeout": "70_experiments/runs/v2_0_multimodal_repair_chain_completion_audit_2026_06_01/completion_audit_summary.json",
+  "first_principle_decision": "The remaining bottleneck is claim-evidence alignment. Larger gates open only after Qwen repaired-pipeline human semantic-damage review passes or a new bounded repair produces a behavior-clean sentinel survivor.",
+  "remaining_primary_gate": "qwen_repaired_pipeline_human_semantic_damage_review",
+  "automatic_large_gate_status": "blocked",
+  "completion_states": [
+    "promoted_multimodal_winner_with_claim_aligned_large_gate_evidence",
+    "final_no_winner_stop_after_qwen_review_and_repair_options_are_closed"
+  ],
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_outputs_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  },
+  "next_gate": "prepare_qwen_repaired_pipeline_human_semantic_damage_review_packet"
+}
