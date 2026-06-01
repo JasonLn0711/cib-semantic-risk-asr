@@ -262,6 +262,24 @@ The repo-safe manifest is
 This is a packet-preparation record only: `human_review_status` is
 `packet_prepared_review_not_executed`, and no review result is claimed.
 
+### Bounded LoRA Execution Status: 2026-06-01
+
+Existing human-reviewed / accepted transcript ground truth can be used for
+training data as long as the evaluation splits stay protected. The first
+Step-Audio LoRA payload therefore uses a local-only 4-row smoke set: three
+no-speech / non-speech sentinel rows targeting `無法辨識`, plus one accepted
+ground-truth transcript anchor to protect transcript behavior. The payload is
+stored only in the ignored Step runtime lane; the tracked pretraining gate is
+`70_experiments/runs/v2_0_multimodal_step_audio_lora_pretraining_gate_2026_06_01/`.
+
+The post-training evaluators now support `--adapter-dir`, so adapter evaluation
+has a concrete contract. The first bounded smoke train is recorded in
+`70_experiments/runs/v2_0_multimodal_step_audio_lora_smoke_train_2026_06_01/`.
+Training execution did start, but it did not complete on the local 16GB GPU:
+`device_map=auto` produced a meta/cuda placement error, and the single-device
+CUDA retry hit out-of-memory before saving an adapter. This is resource-boundary
+evidence for the LoRA lane, not model-improvement evidence.
+
 ### Repair-First Phase Progress: 2026-06-01
 
 The first repair-first execution block has completed Phases 1-9 as

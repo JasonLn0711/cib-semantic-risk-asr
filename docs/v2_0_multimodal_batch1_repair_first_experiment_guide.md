@@ -504,6 +504,15 @@ target to no-speech / non-speech sentinel hallucination reduction. Training is
 not launched from the repair guide itself; the LoRA lane must first produce a
 local-only payload manifest and adapter-loading evaluator contract.
 
+Step-Audio LoRA has now progressed into its own execution lane. The local-only
+pretraining payload and evaluator contract are recorded in
+`70_experiments/runs/v2_0_multimodal_step_audio_lora_pretraining_gate_2026_06_01/`.
+The first smoke-train attempt is recorded in
+`70_experiments/runs/v2_0_multimodal_step_audio_lora_smoke_train_2026_06_01/`.
+Training started but stopped before adapter save at the local GPU resource
+boundary, so the next LoRA action is resource-route design rather than larger
+evaluation.
+
 ## Codex Goal Prompt
 
 ```text

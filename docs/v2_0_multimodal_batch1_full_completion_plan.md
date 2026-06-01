@@ -1412,3 +1412,18 @@ show the training question and candidate selection are locked, and the Step
 pre-training baseline exists as aggregate one-row / sentinel evidence. The lane
 does not launch training yet because the local private training payload
 manifest and LoRA adapter-loading evaluator contract are not ready.
+
+The next Step LoRA gates are now recorded:
+
+```text
+70_experiments/runs/v2_0_multimodal_step_audio_lora_pretraining_gate_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_lora_smoke_train_2026_06_01/
+```
+
+Existing accepted transcript ground truth is valid training supervision when
+holdout boundaries are preserved. The Step pretraining gate prepares a
+local-only 4-row smoke payload with 3 no-speech / non-speech negatives and 1
+accepted transcript anchor, and the post-training evaluators now support
+`--adapter-dir`. The smoke-train gate started execution but stopped before
+adapter save on the local 16GB GPU resource boundary. This records training
+execution evidence, not model-improvement evidence.

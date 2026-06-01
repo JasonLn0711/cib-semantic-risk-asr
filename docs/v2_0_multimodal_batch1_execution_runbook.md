@@ -207,6 +207,31 @@ The tracked manifest is:
 The packet contains transcript-bearing review material and must stay outside
 Git. The tracked status is `packet_prepared_review_not_executed`.
 
+For bounded LoRA, existing human-reviewed / accepted transcript ground truth is
+valid supervised training data when split boundaries are preserved. The first
+Step-Audio LoRA payload is prepared in an ignored runtime lane and tracked only
+as aggregate manifest/hash/status:
+
+```text
+70_experiments/runs/v2_0_multimodal_step_audio_lora_pretraining_gate_2026_06_01/
+```
+
+It contains 4 local-only smoke rows by manifest: 3 no-speech / non-speech
+negative controls and 1 accepted ground-truth transcript anchor. Step
+post-training evaluators now accept `--adapter-dir`.
+
+The first actual smoke-training attempt is recorded in:
+
+```text
+70_experiments/runs/v2_0_multimodal_step_audio_lora_smoke_train_2026_06_01/
+```
+
+Training execution started but stopped at the local resource boundary before
+adapter save: `device_map=auto` failed with meta/cuda placement, and
+single-device CUDA hit 16GB GPU OOM. The next LoRA action is a bounded resource
+route, such as smaller/quantized training, CPU/offload training, gradient
+checkpointing plus lower activation length, or external GPU execution.
+
 The manifest preflight now records that the local-only one-row smoke,
 sentinel, and fixed 15-row manifests are present and ignored; tracked files
 store only aggregate counts and gate status.
