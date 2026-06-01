@@ -1,0 +1,2 @@
+model_family	model_id	rows	guard_no_speech_rows	pass_to_model_rows	guard_failure_rows	fixed_safe_output_rows	claim_boundary
+MiniCPM-o	openbmb/MiniCPM-o-4_5	15	0	15	0	0	deterministic_deployment_repair_quantized_not_full_bf16_raw_capability

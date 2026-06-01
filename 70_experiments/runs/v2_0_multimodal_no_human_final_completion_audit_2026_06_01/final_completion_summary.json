@@ -1,0 +1,33 @@
+{
+  "run_id": "v2_0_multimodal_no_human_final_completion_audit_2026_06_01",
+  "date": "2026-06-01",
+  "status": "final_no_human_no_winner",
+  "human_review_policy": "no_additional_human_review",
+  "guarded_sentinel_survivors": 3,
+  "guarded_fixed_15_completed_models": 3,
+  "fixed_15_proxy_candidates": 1,
+  "automatic_semantic_proxy_completed_models": 1,
+  "guarded_route_survivors_after_proxy": 0,
+  "larger_gates_open": false,
+  "taiwan_utility_subgroup_run": false,
+  "human_reviewed_30_row_cds_run": false,
+  "promoted_258_row_run": false,
+  "selected_300_run": false,
+  "final_decision": "no_human_no_winner_stop",
+  "claim_boundary": "aggregate_no_human_completion_audit",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "repaired_text_tracked": false,
+    "model_outputs_tracked": false,
+    "expert_notes_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "adapter_weights_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

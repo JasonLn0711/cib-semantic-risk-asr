@@ -1,0 +1,2 @@
+model_family	model_id	output_chars	cjk_chars	simplified_char_count	simplified_char_rate	locale_violation_rows	raw_scoring_after_opencc_repair
+MiniCPM-o	openbmb/MiniCPM-o-4_5	1668	1464	223	15.2322	14	false

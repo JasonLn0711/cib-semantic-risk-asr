@@ -1,0 +1,2 @@
+model_family	model_id	output_chars	cjk_chars	simplified_char_count	simplified_char_rate	locale_violation_rows	raw_scoring_after_opencc_repair
+MOSS-Audio	OpenMOSS-Team/MOSS-Audio-4B-Instruct	1696	1431	27	1.8868	5	false

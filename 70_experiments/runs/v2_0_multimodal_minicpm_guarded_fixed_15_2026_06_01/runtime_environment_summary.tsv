@@ -1,0 +1,2 @@
+model_family	model_id	runtime_lane	python_version	platform	quantization_policy	model_inference_run	local_output_tracked	transcript_bearing_logs_tracked	tokenizer_policy
+MiniCPM-o	openbmb/MiniCPM-o-4_5	ignored_minicpm_o_runtime_lane	3.12.3	Linux-6.17.0-29-generic-x86_64-with-glibc2.39	4bit_nf4_bfloat16_compute	True	False	False	cjk_char_tokenizer_fallback_no_jieba_in_isolated_qwen_env
