@@ -89,6 +89,36 @@ license, duration, and one-row runtime gates before short fixed-15; LoRA may
 start only after a diagnostic-triggered or bounded research-probe intervention
 rationale is recorded.
 
+Qwen3-ASR-1.7B has now advanced beyond the old runtime timeout under the
+isolated-cache route. The runtime retry records
+`first_successful_inference_rows=1`, and the fixed-15 raw gate records
+`valid_output_rate=100.0`, but the raw lane remains locale-failed with
+`locale_violation_rows=15` and `simplified_char_rate=0.1499`. The separate
+Traditional Chinese repair view reduces aggregate CER/WER and locale residuals
+(`CER 62.8392 -> 37.7871`, `WER 66.129 -> 38.4025`,
+`locale_violation_rows 15 -> 5`), but the automatic proxy still records
+`semantic_damage_blocker_rows=5`. Therefore Qwen3-ASR-1.7B is useful evidence
+for runtime repair and deployment repair, but not a larger-gate or LoRA
+survivor.
+
+FireRedASR-AED-L has also completed the no-human runtime, fixed-15, and repair
+sequence. The AED route needed bounded local runtime repair
+(`cn2an`, `kaldi_native_fbank`, trusted checkpoint `weights_only=False`, and
+cuDNN disabled) before it produced an official example output and JANUS rows.
+The raw fixed-15 gate records `valid_output_rate=100.0`, but fails locale with
+`locale_violation_rows=15` and `simplified_char_rate=22.7884`. The repair view
+improves aggregate metrics (`CER 70.2853 -> 50.3132`,
+`WER 73.6559 -> 51.8433`, `locale_violation_rows 15 -> 6`) while retaining
+`semantic_damage_blocker_rows=6`, so AED is not a larger-gate or LoRA survivor.
+
+FireRedASR-LLM-L remains resource-gated before inference because the LLM route
+requires FireRedASR-LLM-L weights plus `Qwen/Qwen2-7B-Instruct`, and the local
+single 16GB GPU boundary is not clean enough for a claim-aligned LLM one-row
+run. The ASR-control LoRA decision record opens no training routes and no
+rank/alpha grid because every candidate either has nonzero automatic blockers
+or lacks raw one-row evidence. The final ASR-control closeout is
+`no_human_no_winner_closeout`.
+
 ## Lane 3: Multimodal Runtime-Blocked
 
 Gemma 4 E2B/E4B are tracked as prompted multimodal-audio candidates, not as pure

@@ -103,6 +103,71 @@ Taiwan utility/subgroup expansion, 30-row CDS, 258-row, selected-300, and LoRA
 promotion gates remain closed for this repaired route until a separate
 intervention rationale and clean post-training consequence check exist.
 
+## Qwen3-ASR-1.7B Runtime And Fixed-15 Gate: 2026-06-01
+
+The isolated-cache Qwen3-ASR-1.7B retry repaired the prior fetch/load blocker.
+The one-row runtime gate is recorded in
+`70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_runtime_retry_2026_06_01/`
+with `first_successful_inference_rows=1`, `exit_status=0`, and
+`promotion_decision=promote_to_fixed_15_raw_gate`.
+
+The fixed-15 raw gate is recorded in
+`70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_fixed_15_raw_2026_06_01/`.
+It produced 15/15 valid outputs, but raw locale evidence remains unsuitable for
+promotion: `cer_mean=63.7`, `wer_mean=80.43`,
+`simplified_char_rate=0.1499`, and `locale_violation_rows=15`.
+
+The deterministic Traditional Chinese repair view is recorded in
+`70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_trad_repair_baseline_2026_06_01/`.
+Repair lowered aggregate CER from `62.8392` to `37.7871`, WER from `66.129` to
+`38.4025`, simplified-character rate from `22.4463` to `0.3245`, and locale
+violation rows from `15` to `5`. This is a meaningful deployment-repair result,
+but it still records `semantic_damage_blocker_rows=5`, so Qwen3-ASR-1.7B does
+not enter Taiwan utility, 30-row CDS, 258-row, selected-300, or LoRA expansion
+from this gate.
+
+## FireRedASR Gates And Final Closeout: 2026-06-01
+
+FireRedASR-AED-L is now tested through the same ordered no-human gate sequence.
+The runtime gate is recorded in
+`70_experiments/runs/v2_0_asr_controls_firered_aed_runtime_gate_2026_06_01/`.
+It required bounded local runtime repairs: install `cn2an` and
+`kaldi_native_fbank`, set `torch.load(weights_only=False)` for the trusted
+official checkpoint, and disable cuDNN for this CUDA runtime. With those
+repairs, the AED route produced an official example output and one JANUS row,
+so it promoted only to short fixed-15 raw scoring.
+
+The FireRedASR-AED-L fixed-15 raw gate is recorded in
+`70_experiments/runs/v2_0_asr_controls_firered_aed_fixed_15_raw_2026_06_01/`.
+It produced 15/15 outputs, but raw locale evidence remained unsuitable:
+`CER=70.2853`, `WER=73.6559`, `simplified_char_rate=22.7884`, and
+`locale_violation_rows=15`.
+
+The FireRedASR-AED-L repair view is recorded in
+`70_experiments/runs/v2_0_asr_controls_firered_aed_trad_repair_baseline_2026_06_01/`.
+Repair lowered aggregate CER from `70.2853` to `50.3132`, WER from `73.6559`
+to `51.8433`, simplified-character rate from `22.7884` to `0.4944`, and
+locale violation rows from `15` to `6`, but
+`semantic_damage_blocker_rows=6`, so the AED route does not promote.
+
+FireRedASR-LLM-L is recorded in
+`70_experiments/runs/v2_0_asr_controls_firered_llm_resource_gate_2026_06_01/`
+as resource-gated before inference. The source route is 8.3B and requires both
+FireRedASR-LLM-L weights and `Qwen/Qwen2-7B-Instruct`; the local single 16GB
+GPU boundary is not clean enough to justify a one-row LLM run.
+
+LoRA intervention decisions are recorded in
+`70_experiments/runs/v2_0_asr_controls_lora_intervention_decisions_2026_06_01/`.
+No route opens LoRA training or rank/alpha grid expansion because current
+evidence either has nonzero automatic semantic/locale blockers or remains
+resource-blocked before one-row inference.
+
+The final no-human closeout is recorded in
+`70_experiments/runs/v2_0_asr_controls_final_no_human_closeout_2026_06_01/`.
+The outcome is `no_human_no_winner_closeout`: deterministic conversion helped
+form and aggregate error metrics, but no route has clean enough evidence to
+open Taiwan utility, 30-row CDS, 258-row, selected-300, or LoRA.
+
 ## Required Evaluation Metrics
 
 - raw CER and WER;
