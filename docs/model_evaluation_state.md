@@ -198,6 +198,19 @@ planning: Qwen prompt/locale repair, MOSS 4B and MiniCPM sentinel repair, Step
 transcript-contract repair, Kimi dependency repair, and MOSS 8B resource route
 repair.
 
+The complete repair-first design is recorded in
+`docs/v2_0_multimodal_batch1_repair_first_experiment_guide.md`. It defines the
+next experiment sequence for all Batch 1 models and keeps raw model capability
+separate from OpenCC / Taiwan-term deployment repair evidence.
+
+Tracking policy update: raw audio remains outside Git. All repo-safe experiment
+records must be tracked, including run README files, aggregate summaries,
+validators, registry entries, gate decisions, repair configuration, and
+artifact manifests. Non-audio row-level or transcript-bearing payloads are
+tracked only after redaction / approval; otherwise the tracked record must at
+least preserve manifest, hash, sensitivity class, storage policy, and gate
+status so the experiment remains auditable without exposing protected content.
+
 Gate A manifest preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/`.
 It now finds the local-only one-row manifest, sentinel manifest, and fixed

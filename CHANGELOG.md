@@ -5,6 +5,25 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.264 - 2026-06-01T09:20:19+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `01dca35`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_repair_first_design_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_batch1_repair_first_design_2026_06_01/gate_sequence.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_repair_first_design_2026_06_01/model_repair_plan.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_repair_first_design_2026_06_01/repair_first_design_summary.json`
+  - `docs/model_evaluation_state.md`
+  - `docs/v2_0_multimodal_batch1_execution_runbook.md`
+  - `docs/v2_0_multimodal_batch1_full_completion_plan.md`
+  - `docs/v2_0_multimodal_batch1_repair_first_experiment_guide.md`
+  - `scripts/validate_v2_0_multimodal_batch1_repair_first_design.py`
+
 ## v2.5.263 - 2026-06-01T04:53:39+08:00
 
 - Bump: `patch`

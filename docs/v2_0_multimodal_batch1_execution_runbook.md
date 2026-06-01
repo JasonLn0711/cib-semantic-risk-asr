@@ -1175,3 +1175,28 @@ action is bounded repair planning:
 
 No larger CDS-ASR gate should run until one repaired model passes one-row,
 sentinel, and fixed 15-row zh-TW locale checks.
+
+Detailed repair-first design for all Batch 1 models is now recorded in:
+
+```text
+docs/v2_0_multimodal_batch1_repair_first_experiment_guide.md
+```
+
+Use that guide for the next execution phase. The immediate first experiment is
+Qwen2.5-Omni OpenCC / Taiwan-term locale repair on the existing local-only
+fixed-15 outputs, with raw and repaired results kept separate.
+
+Tracking policy for this phase:
+
+```text
+raw audio: never tracked
+repo-safe experiment records: tracked
+aggregate summaries, validators, registry entries, and gate decisions: tracked
+non-audio row-level or transcript-bearing payloads: tracked only after redaction/approval
+non-audio local payload existence: tracked through manifest/hash/status records
+```
+
+This replaces any ambiguous "local-only means invisible" reading. If a
+non-audio artifact cannot be committed safely, the experiment must still commit
+a repo-safe record that proves what artifact class exists, how it is stored,
+what hash/manifest status it has, and which gate decision it supports.

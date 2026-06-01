@@ -1,0 +1,35 @@
+{
+  "run_id": "v2_0_multimodal_batch1_repair_first_design_2026_06_01",
+  "date": "2026-06-01",
+  "gate": "repair-first experiment design",
+  "status": "repair_first_design_recorded",
+  "source_completion_audit": "70_experiments/runs/v2_0_multimodal_batch1_completion_audit_2026_06_01/completion_audit_summary.json",
+  "first_principle_decision": "After zero raw scientific winners, the next valid experiment is repair-first gate evidence, not larger inference.",
+  "primary_model_rows": 6,
+  "primary_families": 5,
+  "immediate_first_experiment": "v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01",
+  "raw_model_claim_boundary": "raw outputs remain the only basis for raw model capability claims",
+  "deployment_repair_claim_boundary": "OpenCC and Taiwan-term repaired outputs may support deployment-pipeline repair claims only",
+  "tracking_policy": {
+    "raw_audio": "never_tracked",
+    "repo_safe_experiment_records": "tracked",
+    "aggregate_summaries_and_validators": "tracked",
+    "non_audio_row_level_or_transcript_bearing_payloads": "tracked_only_after_redaction_or_approval",
+    "non_audio_local_payload_existence": "tracked_through_manifest_hash_and_status_records"
+  },
+  "larger_gate_policy": "taiwan_utility_30_row_258_row_selected_300_blocked_until_repaired_or_raw_gate_survivor",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_outputs_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false,
+    "local_manifest_values_tracked": false
+  },
+  "next_gate": "qwen_opencc_taiwan_term_locale_repair_fixed_15"
+}

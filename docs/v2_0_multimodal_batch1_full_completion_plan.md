@@ -1238,3 +1238,29 @@ docs/v2_0_multimodal_batch1_full_completion_plan.md, and
 commit logical slices separately, and push non-force to origin main while
 preserving local and remote commits.
 ```
+
+## Repair-First Experiment Guide
+
+The complete design for the next experimental phase is recorded in:
+
+```text
+docs/v2_0_multimodal_batch1_repair_first_experiment_guide.md
+```
+
+This guide covers every Batch 1 primary model and separates raw model
+capability from repaired deployment-pipeline capability. The immediate first
+execution should be Qwen2.5-Omni OpenCC / Taiwan-term fixed-15 locale repair,
+because Qwen is the only raw Batch 1 model with 15 transcript-like outputs and
+its failure mode is specifically zh-TW locale behavior.
+
+Tracking policy for the repair-first phase:
+
+1. raw audio is never tracked；
+2. every repo-safe experiment record is tracked；
+3. aggregate summaries, validators, registry rows, run README files, repair
+   configs, gate decisions, and artifact manifests are tracked；
+4. non-audio row-level or transcript-bearing payloads are tracked only after
+   redaction / approval；
+5. when a non-audio payload remains local or controlled-store, the tracked repo
+   must still record artifact class, count, sensitivity, storage policy,
+   hash/manifest status, and the gate decision it supports。
