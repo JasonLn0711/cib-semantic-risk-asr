@@ -5,6 +5,20 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.286 - 2026-06-01T16:34:43+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `bda7035`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `docs/model_evaluation_state.md`
+  - `docs/v2_0_multimodal_batch1_execution_runbook.md`
+  - `docs/v2_0_multimodal_batch1_full_completion_plan.md`
+  - `docs/v2_0_multimodal_batch1_repair_first_experiment_guide.md`
+
 ## v2.5.285 - 2026-06-01T16:34:32+08:00
 
 - Bump: `patch`

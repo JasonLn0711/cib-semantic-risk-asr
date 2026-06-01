@@ -333,6 +333,25 @@ The route is:
 
 No additional human review is part of this route.
 
+Current guard execution status:
+
+```text
+70_experiments/runs/v2_0_multimodal_acoustic_guard_design_2026_06_01/
+70_experiments/runs/v2_0_multimodal_acoustic_guard_manifest_preflight_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_guarded_one_row_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_guarded_sentinel_2026_06_01/
+70_experiments/runs/v2_0_multimodal_moss4_guarded_sentinel_2026_06_01/
+70_experiments/runs/v2_0_multimodal_minicpm_guarded_sentinel_2026_06_01/
+70_experiments/runs/v2_0_multimodal_guarded_survivor_audit_2026_06_01/
+```
+
+The guard route has three deterministic deployment-repair survivors:
+Step-Audio-2-mini, MOSS-Audio-4B-Instruct, and MiniCPM-o 4.5. Each has
+`sentinel_pass_rows=6/6` and `hallucination_on_no_speech_rows=0` after guarded
+replay. The next gate is guarded fixed-15 transcript and zh-TW locale scoring
+for these survivors. This does not open Taiwan utility, 30-row CDS, 258-row, or
+selected-300.
+
 The manifest preflight now records that the local-only one-row smoke,
 sentinel, and fixed 15-row manifests are present and ignored; tracked files
 store only aggregate counts and gate status.

@@ -634,6 +634,27 @@ or fine-tuned survivor that passes all prior gates, or a final no-human
 no-winner closeout after deterministic guard, changed LoRA, and optional
 bounded runtime/resource routes have evidence.
 
+The first deterministic guard gates are now executed as aggregate-only records:
+
+```text
+70_experiments/runs/v2_0_multimodal_acoustic_guard_design_2026_06_01/
+70_experiments/runs/v2_0_multimodal_acoustic_guard_manifest_preflight_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_guarded_one_row_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_guarded_sentinel_2026_06_01/
+70_experiments/runs/v2_0_multimodal_moss4_guarded_sentinel_2026_06_01/
+70_experiments/runs/v2_0_multimodal_minicpm_guarded_sentinel_2026_06_01/
+70_experiments/runs/v2_0_multimodal_guarded_survivor_audit_2026_06_01/
+```
+
+The guard uses audio-only aggregate features to route silence, stationary tone,
+and broadband noise to the fixed safe output `無法辨識` before audio LLM
+prompting. It is deployment-repair evidence. It is not raw model capability.
+Under guarded replay, Step-Audio, MOSS 4B, and MiniCPM all reach
+`sentinel_pass_rows=6/6` and `hallucination_on_no_speech_rows=0`; the survivor
+audit therefore opens only the next fixed-15 transcript / zh-TW locale gate for
+these three guarded pipelines. Taiwan utility, 30-row CDS, 258-row, and
+selected-300 remain closed.
+
 ## Promotion Requirements
 
 A model can move from candidate lane to the next larger gate only if all of

@@ -1477,3 +1477,11 @@ iteration 2 with a changed intervention that gives stronger weight to
 no-speech / non-speech negatives. Kimi and MOSS8 remain optional bounded
 runtime/resource lanes. The final output is either a scoped non-human repaired
 or fine-tuned survivor, or a final no-human no-winner closeout.
+
+Guard execution has now advanced through survivor audit:
+`v2_0_multimodal_step_audio_guarded_sentinel_2026_06_01`,
+`v2_0_multimodal_moss4_guarded_sentinel_2026_06_01`, and
+`v2_0_multimodal_minicpm_guarded_sentinel_2026_06_01` each pass sentinel under
+deterministic deployment repair. The survivor audit records three fixed-15
+candidates. The next required gate is guarded fixed-15 transcript / zh-TW
+locale scoring; no larger gate is open yet.

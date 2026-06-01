@@ -554,6 +554,11 @@ no-speech / non-speech guard across the models that repeatedly hallucinated on
 sentinel controls. Only if that route fails does it proceed to Step-Audio LoRA
 iteration 2 with a changed negative-weighted intervention.
 
+The deterministic guard route has now produced three guarded sentinel
+survivors: Step-Audio-2-mini, MOSS-Audio-4B-Instruct, and MiniCPM-o 4.5. These
+are deployment-repair survivors only. The next gate is fixed-15 transcript and
+zh-TW locale scoring under the guarded-pipeline claim boundary.
+
 ## Codex Goal Prompt
 
 ```text
