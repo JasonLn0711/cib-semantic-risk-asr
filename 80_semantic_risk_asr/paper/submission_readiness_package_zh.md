@@ -245,7 +245,24 @@ Second-reviewer table nuance:
 
 ### Figure Package
 
-Recommended figures:
+2026-06-01 figure/table strategy update:
+
+- Full decision record:
+  `80_semantic_risk_asr/paper/main_text_figure_table_strategy_2026_06_01_zh.md`.
+- The R-generated F1-F11 package remains useful for reproducibility and
+  supplement/repo-manifest traceability, but the main article should not embed
+  all 11 figures.
+- Main-text figures should converge on method, core evidence, risk mechanism,
+  and policy replay: keep F1, merged F2/F6 evidence design, F3, F4, F7, and
+  F10 after redrawing them for journal readability.
+- Move F8/F9/F11 to supplement, and move or delete F5. Remove the Figure
+  Package table from the article body and keep it as supplement/repo manifest.
+- Table 3 and Table 4 are core main-text tables. Table 1 may stay after
+  shortening model/run identifiers. Table 2, Figure Package table, and Claim
+  Registry table should move to supplement. Appendix Table A1 remains in the
+  appendix.
+
+Historical generated figures:
 
 | Figure ID | Figure | Source | Purpose |
 | --- | --- | --- | --- |

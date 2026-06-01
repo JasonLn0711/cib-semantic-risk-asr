@@ -1,23 +1,22 @@
 {
-  "version": "v2.5.304",
+  "version": "v2.5.305",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 304
+    "patch": 305
   },
-  "updated_at": "2026-06-01T18:59:17+08:00",
+  "updated_at": "2026-06-01T19:50:55+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "a368634",
+  "base_commit": "7a40922",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/registry.tsv",
-    "docs/model_evaluation_state.md",
-    "docs/v2_0_asr_controls_qwen3_firered_lora_plan.md"
+    "80_semantic_risk_asr/paper/main_text_figure_table_strategy_2026_06_01_zh.md",
+    "80_semantic_risk_asr/paper/submission_readiness_package_zh.md"
   ]
 }
