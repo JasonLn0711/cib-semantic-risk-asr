@@ -655,6 +655,25 @@ audit therefore opens only the next fixed-15 transcript / zh-TW locale gate for
 these three guarded pipelines. Taiwan utility, 30-row CDS, 258-row, and
 selected-300 remain closed.
 
+### Failure-Informed No-Human Roadmap: 2026-06-01
+
+The updated no-human completion roadmap is recorded in
+`70_experiments/runs/v2_0_multimodal_failure_informed_full_completion_roadmap_2026_06_01/`.
+It starts from the completed Qwen expert-review negative evidence,
+Step-Audio LoRA iteration 1 post-sentinel failure, and deterministic acoustic
+guard survivor audit. The current next gate is guarded fixed-15 transcript and
+zh-TW locale scoring for Step-Audio-2-mini, MOSS-Audio-4B-Instruct, and
+MiniCPM-o 4.5.
+
+FIRST PRINCIPLE decision: the scarce resource is claim-evidence alignment after
+observed failures. Guarded survivors are deployment-repair candidates, not raw
+model winners. They cannot enter Taiwan utility/subgroup, human-reviewed
+30-row CDS, 258-row, or selected-300 until fixed-15 and deterministic automatic
+semantic-damage proxy both pass. If the guarded route closes with no survivor,
+the only training route is a changed Step LoRA iteration 2 design targeting
+no-speech / non-speech hallucination; if that also fails sentinel, the correct
+completion state is final no-human no-winner closeout.
+
 ## Promotion Requirements
 
 A model can move from candidate lane to the next larger gate only if all of

@@ -591,3 +591,28 @@ git diff --check, and transcript-bearing leak scan. Commit logical slices
 separately and push non-force to origin main while preserving local and remote
 commits.
 ```
+
+## Failure-Informed No-Human Completion Update
+
+The updated execution contract is recorded in
+`70_experiments/runs/v2_0_multimodal_failure_informed_full_completion_roadmap_2026_06_01/`.
+It keeps four evidence lanes separate:
+
+```text
+raw model capability
+deterministic deployment repair capability
+automatic proxy capability
+fine-tuning capability
+```
+
+The current next gate is guarded fixed-15 transcript and zh-TW locale scoring
+for Step-Audio-2-mini, MOSS-Audio-4B-Instruct, and MiniCPM-o 4.5. These are
+guarded deployment-repair candidates selected by acoustic-guard sentinel
+evidence. They do not become raw model winners, and they do not open Taiwan
+utility, 30-row CDS, 258-row, or selected-300 until fixed-15 and deterministic
+automatic semantic-damage proxy pass.
+
+If guarded fixed-15 or semantic-damage proxy fails for all survivors, the only
+fine-tuning route is a changed Step LoRA iteration 2 design with stronger
+no-speech / non-speech target weighting or oversampling. Repeating LoRA
+iteration 1 unchanged is not claim-evidence aligned.

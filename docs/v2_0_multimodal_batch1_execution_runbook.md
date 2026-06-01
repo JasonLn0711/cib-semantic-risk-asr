@@ -1483,3 +1483,23 @@ The repaired result is useful deployment-pipeline evidence. It does not convert
 Qwen into a raw zh-TW model-quality winner. Qwen cannot advance to Taiwan
 utility/subgroup or CDS until the repaired text receives semantic-damage review
 and remains claim-relevant.
+
+## Failure-Informed No-Human Roadmap Update
+
+The no-human completion roadmap after the Qwen expert-review negative evidence,
+Step-Audio LoRA iteration 1 failure, and acoustic-guard survivor audit is
+recorded in:
+
+```text
+70_experiments/runs/v2_0_multimodal_failure_informed_full_completion_roadmap_2026_06_01/
+```
+
+The current active execution gate is guarded fixed-15 transcript and zh-TW
+locale scoring for Step-Audio-2-mini, MOSS-Audio-4B-Instruct, and MiniCPM-o
+4.5. This is a deterministic deployment-repair route. It does not overwrite
+raw model capability conclusions and does not open Taiwan utility/subgroup,
+30-row CDS, 258-row, or selected-300 until fixed-15 and deterministic
+automatic semantic-damage proxy both pass. If all guarded survivors fail
+fixed-15 or the proxy, the remaining bounded option is a changed Step LoRA
+iteration 2 design; if that also fails sentinel, write final no-human
+no-winner closeout.

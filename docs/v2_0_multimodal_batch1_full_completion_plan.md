@@ -1485,3 +1485,19 @@ Guard execution has now advanced through survivor audit:
 deterministic deployment repair. The survivor audit records three fixed-15
 candidates. The next required gate is guarded fixed-15 transcript / zh-TW
 locale scoring; no larger gate is open yet.
+
+The failure-informed full completion roadmap is recorded in:
+
+```text
+70_experiments/runs/v2_0_multimodal_failure_informed_full_completion_roadmap_2026_06_01/
+```
+
+It turns the failure history into the remaining execution contract. The current
+next gate is guarded fixed-15 transcript and zh-TW locale scoring for
+Step-Audio-2-mini, MOSS-Audio-4B-Instruct, and MiniCPM-o 4.5. These candidates
+are deterministic deployment-repair candidates, not raw model winners. They
+may advance only after fixed-15, automatic semantic-damage proxy, and limited
+Taiwan utility/subgroup proxy pass. If the guarded route closes with no
+survivor, the only training path is a changed Step LoRA iteration 2 design that
+targets no-speech / non-speech hallucination; repeating iteration 1 unchanged
+is not evidence-aligned.
