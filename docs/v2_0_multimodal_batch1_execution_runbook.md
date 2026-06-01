@@ -1526,3 +1526,22 @@ The proxy then stops the Step guarded route with
 Step does not advance to Taiwan utility/subgroup, 30-row CDS, 258-row, or
 selected-300. Continue phase 10 with the remaining guarded fixed-15 candidates:
 MOSS-Audio-4B-Instruct and MiniCPM-o 4.5.
+
+## No-Human Final Completion Update
+
+Tracked final audit:
+
+```text
+70_experiments/runs/v2_0_multimodal_no_human_final_completion_audit_2026_06_01/
+```
+
+MOSS-Audio-4B and MiniCPM-o 4.5 have now also completed guarded fixed-15.
+MOSS4 stops at fixed-15 with `locale_violation_rows=5` and
+`simplified_char_rate=1.8868`. MiniCPM stops at fixed-15 with
+`raw_transcript_like_outputs=14/15`, `locale_violation_rows=14`, and
+`simplified_char_rate=15.2322`. Step stops at automatic proxy with
+`semantic_damage_blocker_rows=77`.
+
+The no-human route therefore closes as `final_no_human_no_winner`. Do not run
+Taiwan utility/subgroup, human-reviewed 30-row CDS, 258-row, or selected-300
+from this evidence.

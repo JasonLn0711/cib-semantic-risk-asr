@@ -632,3 +632,11 @@ Taiwan utility/subgroup, 30-row CDS, 258-row, or selected-300 from this guarded
 route. Continue the same guarded fixed-15/proxy sequence for MOSS-Audio-4B and
 MiniCPM-o 4.5 before deciding whether a changed Step LoRA iteration 2 remains
 worth the compute.
+
+MOSS-Audio-4B and MiniCPM-o 4.5 have now completed guarded fixed-15 and both
+stop before semantic proxy. The no-human route closes in
+`70_experiments/runs/v2_0_multimodal_no_human_final_completion_audit_2026_06_01/`
+as `final_no_human_no_winner`. This closes Taiwan utility/subgroup, 30-row
+CDS, 258-row, and selected-300 for the no-human route. A future Step LoRA
+iteration 2 would be a new bounded training experiment, not a continuation of a
+surviving guarded route.

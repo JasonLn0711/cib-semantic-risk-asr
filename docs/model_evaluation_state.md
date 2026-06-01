@@ -696,6 +696,27 @@ utility/subgroup, 30-row CDS, 258-row, and selected-300 under this guarded
 route. MOSS-Audio-4B-Instruct and MiniCPM-o 4.5 remain the two guarded
 fixed-15 candidates.
 
+### No-Human Final Completion: 2026-06-01
+
+The no-human v2.0 multimodal route is now closed in
+`70_experiments/runs/v2_0_multimodal_no_human_final_completion_audit_2026_06_01/`
+with `status=final_no_human_no_winner`.
+
+Guarded fixed-15 was completed for all three guarded sentinel survivors:
+
+| Model | Furthest no-human gate | Decision |
+| --- | --- | --- |
+| Step-Audio-2-mini | automatic semantic-damage proxy | stopped with `semantic_damage_blocker_rows=77` |
+| MOSS-Audio-4B-Instruct | guarded fixed-15 | stopped with `locale_violation_rows=5` and `simplified_char_rate=1.8868` |
+| MiniCPM-o 4.5 | guarded fixed-15 | stopped with `raw_transcript_like_outputs=14/15`, `locale_violation_rows=14`, and `simplified_char_rate=15.2322` |
+
+No model reaches Taiwan utility/subgroup, human-reviewed 30-row CDS, promoted
+258-row, or selected-300. Optional Kimi and MOSS8 capacity routes remain
+deferred behind bounded external/runtime evidence and do not bypass one-row or
+sentinel gates. The final supported claim is negative and scoped: deterministic
+guarding improves no-speech / non-speech sentinel behavior, but no no-human
+pipeline in this run produces claim-aligned CDS-ASR transcript evidence.
+
 ## Promotion Requirements
 
 A model can move from candidate lane to the next larger gate only if all of

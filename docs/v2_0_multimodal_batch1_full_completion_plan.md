@@ -1516,3 +1516,11 @@ semantic proxy therefore closes Step with `semantic_damage_blocker_rows=77`.
 This is a partial guarded-route stop, not the final all-model closeout,
 because MOSS-Audio-4B-Instruct and MiniCPM-o 4.5 still require guarded fixed-15
 and proxy evidence.
+
+MOSS-Audio-4B-Instruct and MiniCPM-o 4.5 have now completed guarded fixed-15.
+Both stop before semantic proxy: MOSS4 because locale residuals remain
+(`locale_violation_rows=5`), and MiniCPM because transcript form and locale are
+not clean (`raw_transcript_like_outputs=14/15`, `locale_violation_rows=14`).
+The final no-human audit is recorded in
+`70_experiments/runs/v2_0_multimodal_no_human_final_completion_audit_2026_06_01/`.
+All larger gates remain closed.
