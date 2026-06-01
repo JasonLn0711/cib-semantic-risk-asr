@@ -85,7 +85,7 @@ promotion_decision={summary['promotion_decision']}
 def write_failure(out_dir: Path, started_at: int, failure_mode: str, manifest_rows: int = 0) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     summary = {
-        "run_id": RUN_ID,
+        "run_id": out_dir.name,
         "generated_at_unix": int(time.time()),
         "started_at_unix": started_at,
         "gate": "Phase 9 Step-Audio-2-mini repaired sentinel controls",
@@ -105,6 +105,22 @@ def write_failure(out_dir: Path, started_at: int, failure_mode: str, manifest_ro
     write_tsv(out_dir / "behavior_summary.tsv", [], behavior_fields())
     write_tsv(out_dir / "runtime_environment_summary.tsv", [environment_row(False)], list(environment_row(False)))
     write_readme(out_dir, summary)
+
+
+def model_remote_module(model: Any) -> Any:
+    remote_model = getattr(getattr(model, "base_model", None), "model", model)
+    return sys.modules[remote_model.__class__.__module__]
+
+
+def model_input_device(model: Any) -> torch.device:
+    for candidate in (model, getattr(getattr(model, "base_model", None), "model", None)):
+        device = getattr(candidate, "device", None)
+        if device is not None:
+            return torch.device(device)
+    for parameter in model.parameters():
+        if parameter.device.type != "meta":
+            return parameter.device
+    return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def main() -> int:
@@ -149,7 +165,8 @@ def main() -> int:
 
             model = PeftModel.from_pretrained(model, args.adapter_dir, is_trainable=False)
             model.eval()
-        remote_module = sys.modules[model.__class__.__module__]
+        remote_module = model_remote_module(model)
+        input_device = model_input_device(model)
         behavior_rows: list[dict[str, Any]] = []
         local_outputs: list[dict[str, Any]] = []
         for row in manifest_rows:
@@ -168,10 +185,10 @@ def main() -> int:
             wav_lens = torch.tensor([feature_len], dtype=torch.long)
             with torch.inference_mode():
                 output_ids = model.generate(
-                    input_ids=inputs.input_ids.to(model.device),
-                    attention_mask=inputs.attention_mask.to(model.device),
-                    wavs=wavs,
-                    wav_lens=wav_lens,
+                    input_ids=inputs.input_ids.to(input_device),
+                    attention_mask=inputs.attention_mask.to(input_device),
+                    wavs=wavs.to(input_device),
+                    wav_lens=wav_lens.to(input_device),
                     max_new_tokens=args.max_new_tokens,
                     do_sample=False,
                     repetition_penalty=1.12,
@@ -205,7 +222,7 @@ def main() -> int:
         instruction_rows = sum(int(row["instruction_followed_output"]) for row in behavior_rows)
         promote = pass_rows == len(behavior_rows) and hallucination_rows == 0 and instruction_rows == 0
         summary = {
-            "run_id": RUN_ID,
+            "run_id": args.out_dir.name,
             "generated_at_unix": int(time.time()),
             "started_at_unix": started_at,
             "gate": "Phase 9 Step-Audio-2-mini repaired sentinel controls",

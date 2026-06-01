@@ -1,25 +1,35 @@
 {
-  "version": "v2.5.278",
+  "version": "v2.5.279",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 278
+    "patch": 279
   },
-  "updated_at": "2026-06-01T15:54:43+08:00",
+  "updated_at": "2026-06-01T16:04:36+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "aed83bd",
+  "base_commit": "42ec1ab",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/registry.tsv",
-    "docs/model_evaluation_state.md",
-    "docs/v2_0_multimodal_batch1_execution_runbook.md",
-    "docs/v2_0_multimodal_batch1_full_completion_plan.md",
-    "docs/v2_0_multimodal_batch1_repair_first_experiment_guide.md"
+    "70_experiments/runs/v2_0_multimodal_step_audio_lora_post_one_row_2026_06_01/README.md",
+    "70_experiments/runs/v2_0_multimodal_step_audio_lora_post_one_row_2026_06_01/behavior_summary.tsv",
+    "70_experiments/runs/v2_0_multimodal_step_audio_lora_post_one_row_2026_06_01/gate_summary.json",
+    "70_experiments/runs/v2_0_multimodal_step_audio_lora_post_one_row_2026_06_01/runtime_environment_summary.tsv",
+    "70_experiments/runs/v2_0_multimodal_step_audio_lora_post_sentinel_controls_2026_06_01/README.md",
+    "70_experiments/runs/v2_0_multimodal_step_audio_lora_post_sentinel_controls_2026_06_01/behavior_summary.tsv",
+    "70_experiments/runs/v2_0_multimodal_step_audio_lora_post_sentinel_controls_2026_06_01/gate_summary.json",
+    "70_experiments/runs/v2_0_multimodal_step_audio_lora_post_sentinel_controls_2026_06_01/runtime_environment_summary.tsv",
+    "70_experiments/runs/v2_0_multimodal_step_audio_lora_quantized_no_input_grad_smoke_train_2026_06_01/README.md",
+    "70_experiments/runs/v2_0_multimodal_step_audio_lora_quantized_no_input_grad_smoke_train_2026_06_01/controlled_artifact_manifest.tsv",
+    "70_experiments/runs/v2_0_multimodal_step_audio_lora_quantized_no_input_grad_smoke_train_2026_06_01/lora_smoke_train_summary.json",
+    "70_experiments/runs/v2_0_multimodal_step_audio_lora_quantized_no_input_grad_smoke_train_2026_06_01/training_metric_summary.tsv",
+    "scripts/run_v2_0_step_audio_lora_smoke_train.py",
+    "scripts/run_v2_0_step_audio_sentinel_controls.py",
+    "scripts/run_v2_0_step_audio_transcript_contract_repair.py"
   ]
 }

@@ -205,8 +205,6 @@ def main() -> int:
                 target_modules=["q_proj", "v_proj"],
             ),
         )
-        if args.load_in_4bit and hasattr(model, "enable_input_require_grads"):
-            model.enable_input_require_grads()
         model.train()
         trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
         optimizer = torch.optim.AdamW((p for p in model.parameters() if p.requires_grad), lr=args.learning_rate)

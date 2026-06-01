@@ -1,0 +1,5 @@
+metric_name	metric_value	metric_scope
+train_steps	4	tiny_lora_smoke
+first_loss	1.035483	tiny_lora_smoke
+last_loss	0.641448	tiny_lora_smoke
+trainable_parameters	1261568	tiny_lora_smoke

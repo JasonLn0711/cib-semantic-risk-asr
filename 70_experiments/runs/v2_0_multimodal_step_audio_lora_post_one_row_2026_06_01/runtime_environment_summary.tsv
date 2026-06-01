@@ -1,0 +1,2 @@
+model_family	model_id	runtime_lane	repair_prompt_id	python_version	platform	model_inference_run	local_output_tracked	transcript_bearing_logs_tracked
+Step-Audio 2 mini	stepfun-ai/Step-Audio-2-mini	ignored_step_audio_2_mini_runtime_lane	step_audio_2_mini_strict_transcript_contract_v1	3.12.3	Linux-6.17.0-29-generic-x86_64-with-glibc2.39	True	False	False

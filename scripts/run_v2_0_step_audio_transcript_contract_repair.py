@@ -13,6 +13,7 @@ import time
 from pathlib import Path
 from typing import Any
 
+import torch
 import run_v2_0_step_audio_one_row_smoke as base
 
 
@@ -84,7 +85,7 @@ def write_outputs(
         "transcript_bearing_logs_tracked": False,
     }
     summary = {
-        "run_id": RUN_ID,
+        "run_id": out_dir.name,
         "generated_at_unix": int(time.time()),
         "started_at_unix": started_at,
         "gate": "Phase 6 Step-Audio-2-mini transcript-contract repair",
@@ -192,6 +193,22 @@ def failed_behavior(exc: Exception) -> dict[str, Any]:
     }
 
 
+def model_remote_module(model: Any) -> Any:
+    remote_model = getattr(getattr(model, "base_model", None), "model", model)
+    return sys.modules[remote_model.__class__.__module__]
+
+
+def model_input_device(model: Any) -> torch.device:
+    for candidate in (model, getattr(getattr(model, "base_model", None), "model", None)):
+        device = getattr(candidate, "device", None)
+        if device is not None:
+            return torch.device(device)
+    for parameter in model.parameters():
+        if parameter.device.type != "meta":
+            return parameter.device
+    return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--manifest", type=Path, default=Path("one_row_smoke_manifest.local.tsv"))
@@ -217,7 +234,6 @@ def main() -> int:
     try:
         audio_file, manifest_rows, manifest_fields = base.read_manifest(args.manifest)
         audio, sample_rate, seconds = base.load_waveform(audio_file)
-        import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
         os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
@@ -239,7 +255,8 @@ def main() -> int:
 
             model = PeftModel.from_pretrained(model, args.adapter_dir, is_trainable=False)
             model.eval()
-        remote_module = sys.modules[model.__class__.__module__]
+        remote_module = model_remote_module(model)
+        input_device = model_input_device(model)
         mel = remote_module.log_mel_spectrogram(audio)
         feature_len = mel.shape[-1]
         token_count = remote_module.compute_token_num(feature_len)
@@ -254,10 +271,10 @@ def main() -> int:
         wav_lens = torch.tensor([feature_len], dtype=torch.long)
         with torch.inference_mode():
             output_ids = model.generate(
-                input_ids=inputs.input_ids.to(model.device),
-                attention_mask=inputs.attention_mask.to(model.device),
-                wavs=wavs,
-                wav_lens=wav_lens,
+                input_ids=inputs.input_ids.to(input_device),
+                attention_mask=inputs.attention_mask.to(input_device),
+                wavs=wavs.to(input_device),
+                wav_lens=wav_lens.to(input_device),
                 max_new_tokens=args.max_new_tokens,
                 do_sample=False,
                 repetition_penalty=1.12,
