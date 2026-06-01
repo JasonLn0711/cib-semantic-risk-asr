@@ -211,6 +211,29 @@ tracked only after redaction / approval; otherwise the tracked record must at
 least preserve manifest, hash, sensitivity class, storage policy, and gate
 status so the experiment remains auditable without exposing protected content.
 
+The complete remaining route for all new multimodal experiments is now recorded
+in
+`70_experiments/runs/v2_0_multimodal_all_new_experiments_completion_plan_2026_06_01/`.
+It defines the ordered path from repair-first Qwen/MOSS/MiniCPM/Step/Kimi/MOSS8
+lanes through fixed-15, Taiwan utility, 30-row CDS, 258-row, selected-300, and
+final closeout.
+
+### Phase 3 Qwen OpenCC Locale Repair: 2026-06-01
+
+Qwen2.5-Omni OpenCC / Taiwan-term locale repair is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01/`.
+This is deployment-pipeline repair evidence, not raw model capability. The
+raw fixed-15 output remains the raw model conclusion: it failed the zh-TW
+locale gate. The repaired-pipeline aggregate improves locale behavior:
+`locale_violation_rows` changes from `15` to `7`, and
+`simplified_char_rate` changes from `17.8466` to `0.5882`. Aggregate CER/WER
+also improve under the documented CJK tokenizer fallback
+(`cer_delta_raw_to_repaired=-22.8253`, `wer_delta_raw_to_repaired=-25.2689`).
+The tracked decision is `repaired_pipeline_review_candidate`, with
+`human_semantic_review_status=not_run`. Therefore the next Qwen gate is human
+semantic-damage review for the repaired pipeline before any Taiwan
+utility/subgroup or CDS gate.
+
 Gate A manifest preflight is recorded in
 `70_experiments/runs/v2_0_multimodal_batch1_manifest_preflight_2026_05_31/`.
 It now finds the local-only one-row manifest, sentinel manifest, and fixed

@@ -1,0 +1,2 @@
+model_family	model_id	source_run_id	repair_runtime_class	opencc_package	opencc_variants	term_glossary_entries	raw_audio_tracked	repo_wide_venv_modified
+Qwen2.5-Omni	Qwen/Qwen2.5-Omni-7B	v2_0_multimodal_batch1_qwen_fixed_15_row_transcript_gate_2026_06_01	ignored_isolated_opencc_python_reimplemented_target	opencc-python-reimplemented	s2tw;s2twp;s2twp_terms	9	false	false

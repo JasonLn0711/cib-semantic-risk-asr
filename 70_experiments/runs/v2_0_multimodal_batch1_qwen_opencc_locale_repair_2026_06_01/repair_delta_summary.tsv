@@ -1,0 +1,2 @@
+model_family	model_id	raw_variant	repaired_variant	cer_delta_raw_to_repaired	wer_delta_raw_to_repaired	simplified_char_rate_delta	locale_violation_row_delta	term_replacements	semantic_damage_proxy_rows	new_hallucination_rows_after_repair	human_semantic_review_status	promotion_decision
+Qwen2.5-Omni	Qwen/Qwen2.5-Omni-7B	raw	opencc_s2twp_terms	-22.8253	-25.2689	-17.2584	-8	0	0	0	not_run	repaired_pipeline_review_candidate

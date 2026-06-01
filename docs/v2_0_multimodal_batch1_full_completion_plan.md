@@ -1264,3 +1264,50 @@ Tracking policy for the repair-first phase:
 5. when a non-audio payload remains local or controlled-store, the tracked repo
    must still record artifact class, count, sensitivity, storage policy,
    hash/manifest status, and the gate decision it supports。
+
+## All-New-Experiments Completion Plan
+
+The complete plan from the current repair-first state through final closeout is
+recorded in:
+
+```text
+70_experiments/runs/v2_0_multimodal_all_new_experiments_completion_plan_2026_06_01/
+```
+
+This plan defines 16 ordered phases:
+
+1. governance and tracking lock；
+2. controlled-artifact manifest setup；
+3. Qwen OpenCC / Taiwan-term locale repair；
+4. MOSS 4B sentinel repair；
+5. MiniCPM sentinel repair；
+6. Step transcript-contract repair；
+7. Kimi runtime dependency repair；
+8. MOSS 8B resource route repair；
+9. repaired one-row and sentinel chain；
+10. repaired fixed-15 raw and locale gate；
+11. Taiwan utility / subgroup audit；
+12. human-reviewed 30-row CDS gate；
+13. ASR-control refresh；
+14. promoted 258-row split；
+15. selected-300 high-stakes gate；
+16. final synthesis and closeout audit。
+
+Completion is defined as either promoted scientific-winner evidence or a final
+no-winner stop record with validators, registry, docs, and planning bridge
+aligned.
+
+### Phase 3 Evidence: Qwen OpenCC Locale Repair
+
+Phase 3 is complete in:
+
+```text
+70_experiments/runs/v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01/
+```
+
+The result supports a repaired deployment-pipeline candidate, not a raw model
+winner. The repaired OpenCC/Taiwan-term variant reduces locale violations from
+`15` to `7` rows and simplified-character rate from `17.8466` to `0.5882`.
+The next Qwen-specific gate is human semantic-damage review before any Taiwan
+utility/subgroup audit. The global phase plan may continue to MOSS 4B and
+MiniCPM sentinel repair lanes while Qwen waits for repaired-pipeline review.

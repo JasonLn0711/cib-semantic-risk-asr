@@ -1,0 +1,33 @@
+{
+  "run_id": "v2_0_multimodal_all_new_experiments_completion_plan_2026_06_01",
+  "date": "2026-06-01",
+  "gate": "all-new-experiments completion planning",
+  "status": "complete_remaining_plan_recorded",
+  "current_start_point": "batch1_gate_chain_complete_no_scientific_winner",
+  "source_completion_audit": "70_experiments/runs/v2_0_multimodal_batch1_completion_audit_2026_06_01/completion_audit_summary.json",
+  "source_repair_design": "70_experiments/runs/v2_0_multimodal_batch1_repair_first_design_2026_06_01/repair_first_design_summary.json",
+  "first_principle_decision": "A model advances only when the prior gate proves the next experiment can answer the CDS-ASR research question with claim-evidence alignment.",
+  "total_planned_phases": 16,
+  "immediate_next_experiment": "v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01",
+  "completion_definition": "promoted_scientific_winner_evidence_or_final_no_winner_stop_record",
+  "tracking_policy": {
+    "raw_audio": "never_tracked",
+    "repo_safe_experiment_records": "tracked",
+    "aggregate_summaries_validators_registry_gate_decisions": "tracked",
+    "non_audio_sensitive_payloads": "tracked_only_after_redaction_or_approval",
+    "controlled_payload_existence": "tracked_through_manifest_hash_sensitivity_storage_and_gate_status"
+  },
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_outputs_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  },
+  "next_gate": "qwen_opencc_locale_repair"
+}

@@ -1200,3 +1200,38 @@ This replaces any ambiguous "local-only means invisible" reading. If a
 non-audio artifact cannot be committed safely, the experiment must still commit
 a repo-safe record that proves what artifact class exists, how it is stored,
 what hash/manifest status it has, and which gate decision it supports.
+
+The full remaining route through every new experiment is recorded in:
+
+```text
+70_experiments/runs/v2_0_multimodal_all_new_experiments_completion_plan_2026_06_01/
+```
+
+Use its `remaining_phase_plan.tsv` as the active execution checklist and
+`codex_goal_prompt.md` as the reusable execution prompt.
+
+## Phase 3 Update: Qwen OpenCC Locale Repair
+
+Tracked evidence:
+
+```text
+70_experiments/runs/v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01/
+```
+
+Result:
+
+```text
+raw_locale_violation_rows=15
+repaired_locale_violation_rows=7
+raw_simplified_char_rate=17.8466
+repaired_simplified_char_rate=0.5882
+cer_delta_raw_to_repaired=-22.8253
+wer_delta_raw_to_repaired=-25.2689
+promotion_decision=repaired_pipeline_review_candidate
+human_semantic_review_status=not_run
+```
+
+The repaired result is useful deployment-pipeline evidence. It does not convert
+Qwen into a raw zh-TW model-quality winner. Qwen cannot advance to Taiwan
+utility/subgroup or CDS until the repaired text receives semantic-damage review
+and remains claim-relevant.

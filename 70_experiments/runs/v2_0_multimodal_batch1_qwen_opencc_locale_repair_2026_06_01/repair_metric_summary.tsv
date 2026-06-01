@@ -1,0 +1,5 @@
+model_family	model_id	repair_variant	rows	cer_zh_micro	wer_zh_micro	simplified_char_count	cjk_chars	simplified_char_rate	locale_violation_rows	term_replacements	cer_worse_than_raw_rows	wer_worse_than_raw_rows
+Qwen2.5-Omni	Qwen/Qwen2.5-Omni-7B	raw	15	126.7223	65.0538	242	1356	17.8466	15	0	0	0
+Qwen2.5-Omni	Qwen/Qwen2.5-Omni-7B	opencc_s2tw	15	103.1315	38.9401	8	1356	0.59	7	0	0	0
+Qwen2.5-Omni	Qwen/Qwen2.5-Omni-7B	opencc_s2twp	15	103.897	39.7849	8	1360	0.5882	7	0	0	0
+Qwen2.5-Omni	Qwen/Qwen2.5-Omni-7B	opencc_s2twp_terms	15	103.897	39.7849	8	1360	0.5882	7	0	0	0

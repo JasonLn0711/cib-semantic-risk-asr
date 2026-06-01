@@ -1,30 +1,37 @@
 {
-  "version": "v2.5.264",
+  "version": "v2.5.265",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 264
+    "patch": 265
   },
-  "updated_at": "2026-06-01T09:20:19+08:00",
+  "updated_at": "2026-06-01T09:47:46+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "01dca35",
+  "base_commit": "9d3c415",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
     "70_experiments/registry.tsv",
-    "70_experiments/runs/v2_0_multimodal_batch1_repair_first_design_2026_06_01/README.md",
-    "70_experiments/runs/v2_0_multimodal_batch1_repair_first_design_2026_06_01/gate_sequence.tsv",
-    "70_experiments/runs/v2_0_multimodal_batch1_repair_first_design_2026_06_01/model_repair_plan.tsv",
-    "70_experiments/runs/v2_0_multimodal_batch1_repair_first_design_2026_06_01/repair_first_design_summary.json",
+    "70_experiments/runs/v2_0_multimodal_all_new_experiments_completion_plan_2026_06_01/README.md",
+    "70_experiments/runs/v2_0_multimodal_all_new_experiments_completion_plan_2026_06_01/codex_goal_prompt.md",
+    "70_experiments/runs/v2_0_multimodal_all_new_experiments_completion_plan_2026_06_01/completion_plan_summary.json",
+    "70_experiments/runs/v2_0_multimodal_all_new_experiments_completion_plan_2026_06_01/remaining_phase_plan.tsv",
+    "70_experiments/runs/v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01/README.md",
+    "70_experiments/runs/v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01/controlled_artifact_manifest.tsv",
+    "70_experiments/runs/v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01/gate_summary.json",
+    "70_experiments/runs/v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01/repair_config_summary.tsv",
+    "70_experiments/runs/v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01/repair_delta_summary.tsv",
+    "70_experiments/runs/v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01/repair_metric_summary.tsv",
     "docs/model_evaluation_state.md",
     "docs/v2_0_multimodal_batch1_execution_runbook.md",
     "docs/v2_0_multimodal_batch1_full_completion_plan.md",
-    "docs/v2_0_multimodal_batch1_repair_first_experiment_guide.md",
-    "scripts/validate_v2_0_multimodal_batch1_repair_first_design.py"
+    "scripts/run_v2_0_qwen_opencc_locale_repair.py",
+    "scripts/validate_v2_0_multimodal_all_new_experiments_completion_plan.py",
+    "scripts/validate_v2_0_qwen_opencc_locale_repair.py"
   ]
 }
