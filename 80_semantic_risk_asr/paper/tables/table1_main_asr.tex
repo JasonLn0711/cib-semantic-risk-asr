@@ -1,0 +1,20 @@
+\begin{table}[!htbp]
+\centering
+\caption{Main ASR benchmark on the canonical 258-row split. Run identifiers are reported in the supplement.}
+\label{tab:main-asr}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{1.15}R{0.55}R{0.72}R{0.80}R{0.72}R{0.72}R{0.70}L{1.60}@{}}
+\toprule
+Model & Rows & CER zh micro & WER zh jieba micro & Unsafe downrouting & High-risk missed & Locale violations & Paper role
+\\
+\midrule
+Breeze-ASR-25 partial encoder & 258 & 15.04 & 21.53 &  7 &  4 & 0 & Strongest ASR evidence layer \\
+Breeze-ASR-25 LoRA & 258 & 18.23 & 25.59 & 10 &  7 & 0 & Split/model context \\
+Breeze-ASR-25 base & 258 & 22.72 & 30.39 & 34 & 30 & 0 & Split/model context \\
+Breeze-ASR-26 & 258 & 24.27 & 32.29 & 27 & 22 & 0 & Split/model context \\
+Whisper large-v2 & 258 & 24.72 & 32.23 & 33 & 28 & 1 & Comparable baseline \\
+Whisper small & 258 & 34.86 & 43.44 & 76 & 70 & 4 & Comparable baseline \\
+\bottomrule
+\end{tabularx}
+\\[0.4em]{\footnotesize\RaggedRight CER zh micro is the primary ASR surface metric; WER zh jieba micro is supplemental. Unsafe downrouting and high-risk missed counts are split/model-comparison evidence, not final selected-300 human-reviewed risk claims.\par}
+\end{table}

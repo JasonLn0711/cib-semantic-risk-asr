@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='806.40pt' height='316.80pt' viewBox='0 0 806.40 316.80'>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='489.60pt' height='223.20pt' viewBox='0 0 489.60 223.20'>
 <g class='svglite'>
 <defs>
   <style type='text/css'><![CDATA[
@@ -21,80 +21,146 @@
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
 <defs>
-  <clipPath id='cpMC4wMHw4MDYuNDB8MC4wMHwzMTYuODA='>
-    <rect x='0.00' y='0.00' width='806.40' height='316.80' />
+  <clipPath id='cpMC4wMHw0ODkuNjB8MC4wMHwyMjMuMjA='>
+    <rect x='0.00' y='0.00' width='489.60' height='223.20' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpMC4wMHw4MDYuNDB8MC4wMHwzMTYuODA=)'>
-<rect x='0.000000000000064' y='-0.000000000000057' width='806.40' height='316.80' style='stroke-width: 1.16; stroke: none; fill: #FFFFFF;' />
+<g clip-path='url(#cpMC4wMHw0ODkuNjB8MC4wMHwyMjMuMjA=)'>
+<rect x='0.00' y='0.00' width='489.60' height='223.20' style='stroke-width: 0.87; stroke: none; fill: #FFFFFF;' />
 </g>
 <defs>
-  <clipPath id='cpNDcuMjh8NzgyLjQ5fDY0LjU4fDIyNy45MA=='>
-    <rect x='47.28' y='64.58' width='735.21' height='163.32' />
+  <clipPath id='cpMzEuNDd8MTY4LjY0fDUyLjE5fDE4OC4wOA=='>
+    <rect x='31.47' y='52.19' width='137.16' height='135.89' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpNDcuMjh8NzgyLjQ5fDY0LjU4fDIyNy45MA==)'>
-<polyline points='47.28,202.80 782.49,202.80 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='47.28,185.13 782.49,185.13 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='47.28,167.45 782.49,167.45 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='47.28,149.78 782.49,149.78 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='47.28,132.10 782.49,132.10 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='47.28,114.43 782.49,114.43 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='47.28,96.75 782.49,96.75 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='47.28,79.07 782.49,79.07 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='132.11,227.90 132.11,64.58 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='273.50,227.90 273.50,64.58 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='414.89,227.90 414.89,64.58 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='556.27,227.90 556.27,64.58 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='697.66,227.90 697.66,64.58 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<rect x='560.51' y='96.75' width='43.83' height='106.05' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F2994A;' />
-<rect x='508.20' y='185.13' width='43.83' height='17.68' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #D64545;' />
-<rect x='419.13' y='96.75' width='43.83' height='106.05' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F2994A;' />
-<rect x='366.82' y='185.13' width='43.83' height='17.68' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #D64545;' />
-<rect x='701.90' y='202.80' width='43.83' height='0.00' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F2994A;' />
-<rect x='649.59' y='202.80' width='43.83' height='0.00' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #D64545;' />
-<rect x='136.36' y='202.80' width='43.83' height='0.00' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F2994A;' />
-<rect x='84.04' y='202.80' width='43.83' height='0.00' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #D64545;' />
-<rect x='277.74' y='202.80' width='43.83' height='0.00' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F2994A;' />
-<rect x='225.43' y='202.80' width='43.83' height='0.00' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #D64545;' />
-<text x='582.43' y='94.63' text-anchor='middle' style='font-size: 9.10px; font-family: "EB Garamond Initials";' textLength='3.31px' lengthAdjust='spacingAndGlyphs'>6</text>
-<text x='530.12' y='183.01' text-anchor='middle' style='font-size: 9.10px; font-family: "EB Garamond Initials";' textLength='3.31px' lengthAdjust='spacingAndGlyphs'>1</text>
-<text x='441.04' y='94.63' text-anchor='middle' style='font-size: 9.10px; font-family: "EB Garamond Initials";' textLength='3.31px' lengthAdjust='spacingAndGlyphs'>6</text>
-<text x='388.73' y='183.01' text-anchor='middle' style='font-size: 9.10px; font-family: "EB Garamond Initials";' textLength='3.31px' lengthAdjust='spacingAndGlyphs'>1</text>
-<text x='723.81' y='200.68' text-anchor='middle' style='font-size: 9.10px; font-family: "EB Garamond Initials";' textLength='3.31px' lengthAdjust='spacingAndGlyphs'>0</text>
-<text x='671.50' y='200.68' text-anchor='middle' style='font-size: 9.10px; font-family: "EB Garamond Initials";' textLength='3.31px' lengthAdjust='spacingAndGlyphs'>0</text>
-<text x='158.27' y='200.68' text-anchor='middle' style='font-size: 9.10px; font-family: "EB Garamond Initials";' textLength='3.31px' lengthAdjust='spacingAndGlyphs'>0</text>
-<text x='105.96' y='200.68' text-anchor='middle' style='font-size: 9.10px; font-family: "EB Garamond Initials";' textLength='3.31px' lengthAdjust='spacingAndGlyphs'>0</text>
-<text x='299.66' y='200.68' text-anchor='middle' style='font-size: 9.10px; font-family: "EB Garamond Initials";' textLength='3.31px' lengthAdjust='spacingAndGlyphs'>0</text>
-<text x='247.34' y='200.68' text-anchor='middle' style='font-size: 9.10px; font-family: "EB Garamond Initials";' textLength='3.31px' lengthAdjust='spacingAndGlyphs'>0</text>
-<text x='556.27' y='215.46' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='19.22px' lengthAdjust='spacingAndGlyphs'>trig 0</text>
-<text x='414.89' y='215.46' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='19.22px' lengthAdjust='spacingAndGlyphs'>trig 0</text>
-<text x='697.66' y='215.46' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='22.42px' lengthAdjust='spacingAndGlyphs'>trig 35</text>
-<text x='132.11' y='215.46' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='22.42px' lengthAdjust='spacingAndGlyphs'>trig 35</text>
-<text x='273.50' y='215.46' text-anchor='middle' style='font-size: 8.82px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='22.42px' lengthAdjust='spacingAndGlyphs'>trig 47</text>
+<g clip-path='url(#cpMzEuNDd8MTY4LjY0fDUyLjE5fDE4OC4wOA==)'>
+<polyline points='31.47,181.90 168.64,181.90 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='31.47,140.73 168.64,140.73 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='31.47,99.55 168.64,99.55 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='31.47,58.37 168.64,58.37 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='51.07,188.08 51.07,52.19 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='83.73,188.08 83.73,52.19 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='116.38,188.08 116.38,52.19 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='149.04,188.08 149.04,52.19 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<rect x='40.94' y='58.37' width='20.25' height='123.53' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<rect x='73.60' y='181.90' width='20.25' height='0.00' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<rect x='106.26' y='181.90' width='20.25' height='0.00' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<rect x='138.92' y='181.90' width='20.25' height='0.00' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<text x='51.07' y='57.19' text-anchor='middle' style='font-size: 7.11px; font-family: "EB Garamond Initials";' textLength='2.59px' lengthAdjust='spacingAndGlyphs'>6</text>
+<text x='83.73' y='180.72' text-anchor='middle' style='font-size: 7.11px; font-family: "EB Garamond Initials";' textLength='2.59px' lengthAdjust='spacingAndGlyphs'>0</text>
+<text x='116.38' y='180.72' text-anchor='middle' style='font-size: 7.11px; font-family: "EB Garamond Initials";' textLength='2.59px' lengthAdjust='spacingAndGlyphs'>0</text>
+<text x='149.04' y='180.72' text-anchor='middle' style='font-size: 7.11px; font-family: "EB Garamond Initials";' textLength='2.59px' lengthAdjust='spacingAndGlyphs'>0</text>
 </g>
-<g clip-path='url(#cpMC4wMHw4MDYuNDB8MC4wMHwzMTYuODA=)'>
-<text x='41.90' y='206.00' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>0</text>
-<text x='41.90' y='188.32' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>1</text>
-<text x='41.90' y='170.65' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>2</text>
-<text x='41.90' y='152.97' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>3</text>
-<text x='41.90' y='135.30' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>4</text>
-<text x='41.90' y='117.62' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>5</text>
-<text x='41.90' y='99.95' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>6</text>
-<text x='41.90' y='82.27' text-anchor='end' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='3.48px' lengthAdjust='spacingAndGlyphs'>7</text>
-<text x='132.11' y='239.68' text-anchor='middle' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='13.94px' lengthAdjust='spacingAndGlyphs'>CEIS</text>
-<text x='273.50' y='239.68' text-anchor='middle' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='31.36px' lengthAdjust='spacingAndGlyphs'>CEIS ens.</text>
-<text x='414.89' y='239.68' text-anchor='middle' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='18.69px' lengthAdjust='spacingAndGlyphs'>Conf.</text>
-<text x='556.27' y='239.68' text-anchor='middle' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='21.31px' lengthAdjust='spacingAndGlyphs'>None</text>
-<text x='697.66' y='239.68' text-anchor='middle' style='font-size: 9.60px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='13.94px' lengthAdjust='spacingAndGlyphs'>SRES</text>
-<text transform='translate(31.91,146.24) rotate(-90)' text-anchor='middle' style='font-size: 12.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='99.38px' lengthAdjust='spacingAndGlyphs'>Missed severe outcomes</text>
-<rect x='338.89' y='261.20' width='15.73' height='15.73' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #D64545;' />
-<rect x='413.42' y='261.20' width='15.73' height='15.73' style='stroke-width: 1.16; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F2994A;' />
-<text x='361.37' y='272.26' style='font-size: 9.60px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='45.30px' lengthAdjust='spacingAndGlyphs'>Critical miss</text>
-<text x='435.91' y='272.26' style='font-size: 9.60px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='55.75px' lengthAdjust='spacingAndGlyphs'>High-risk missed</text>
-<text x='47.28' y='48.81' style='font-size: 13.00px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='281.41px' lengthAdjust='spacingAndGlyphs'>Counts over 90 reviewed model assessments; aggregate-only.</text>
-<text x='47.28' y='30.59' style='font-size: 19.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='380.22px' lengthAdjust='spacingAndGlyphs'>F4. Recovery Outcomes Under Human-Reviewed Labels</text>
-<text x='782.49' y='296.05' text-anchor='end' style='font-size: 9.60px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='273.36px' lengthAdjust='spacingAndGlyphs'>SRES and CEIS conservative policies both reach 0/0 at recovery budget 0.3889.</text>
+<g clip-path='url(#cpMC4wMHw0ODkuNjB8MC4wMHwyMjMuMjA=)'>
+</g>
+<defs>
+  <clipPath id='cpMTg3LjU5fDMyNC43NXw1Mi4xOXwxODguMDg='>
+    <rect x='187.59' y='52.19' width='137.16' height='135.89' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMTg3LjU5fDMyNC43NXw1Mi4xOXwxODguMDg=)'>
+<polyline points='187.59,181.90 324.75,181.90 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='187.59,151.02 324.75,151.02 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='187.59,120.14 324.75,120.14 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='187.59,89.25 324.75,89.25 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='187.59,58.37 324.75,58.37 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='207.19,188.08 207.19,52.19 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='239.84,188.08 239.84,52.19 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='272.50,188.08 272.50,52.19 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='305.16,188.08 305.16,52.19 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<rect x='197.06' y='58.37' width='20.25' height='123.53' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<rect x='229.72' y='181.90' width='20.25' height='0.00' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<rect x='262.38' y='181.90' width='20.25' height='0.00' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<rect x='295.03' y='181.90' width='20.25' height='0.00' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<text x='207.19' y='57.19' text-anchor='middle' style='font-size: 7.11px; font-family: "EB Garamond Initials";' textLength='2.59px' lengthAdjust='spacingAndGlyphs'>1</text>
+<text x='239.84' y='180.72' text-anchor='middle' style='font-size: 7.11px; font-family: "EB Garamond Initials";' textLength='2.59px' lengthAdjust='spacingAndGlyphs'>0</text>
+<text x='272.50' y='180.72' text-anchor='middle' style='font-size: 7.11px; font-family: "EB Garamond Initials";' textLength='2.59px' lengthAdjust='spacingAndGlyphs'>0</text>
+<text x='305.16' y='180.72' text-anchor='middle' style='font-size: 7.11px; font-family: "EB Garamond Initials";' textLength='2.59px' lengthAdjust='spacingAndGlyphs'>0</text>
+</g>
+<g clip-path='url(#cpMC4wMHw0ODkuNjB8MC4wMHwyMjMuMjA=)'>
+</g>
+<defs>
+  <clipPath id='cpMzM4LjQ5fDQ3NS42NXw1Mi4xOXwxODguMDg='>
+    <rect x='338.49' y='52.19' width='137.16' height='135.89' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMzM4LjQ5fDQ3NS42NXw1Mi4xOXwxODguMDg=)'>
+<polyline points='338.49,181.90 475.65,181.90 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='338.49,139.31 475.65,139.31 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='338.49,96.71 475.65,96.71 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='338.49,54.11 475.65,54.11 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='358.08,188.08 358.08,52.19 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='390.74,188.08 390.74,52.19 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='423.40,188.08 423.40,52.19 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='456.06,188.08 456.06,52.19 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<rect x='347.96' y='58.37' width='20.25' height='123.53' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<rect x='380.62' y='79.67' width='20.25' height='102.23' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<rect x='413.28' y='79.67' width='20.25' height='102.23' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<rect x='445.93' y='79.67' width='20.25' height='102.23' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2F80ED;' />
+<text x='358.08' y='57.19' text-anchor='middle' style='font-size: 7.11px; font-family: "EB Garamond Initials";' textLength='5.19px' lengthAdjust='spacingAndGlyphs'>29</text>
+<text x='390.74' y='78.49' text-anchor='middle' style='font-size: 7.11px; font-family: "EB Garamond Initials";' textLength='5.19px' lengthAdjust='spacingAndGlyphs'>24</text>
+<text x='423.40' y='78.49' text-anchor='middle' style='font-size: 7.11px; font-family: "EB Garamond Initials";' textLength='5.19px' lengthAdjust='spacingAndGlyphs'>24</text>
+<text x='456.06' y='78.49' text-anchor='middle' style='font-size: 7.11px; font-family: "EB Garamond Initials";' textLength='5.19px' lengthAdjust='spacingAndGlyphs'>24</text>
+</g>
+<g clip-path='url(#cpMC4wMHw0ODkuNjB8MC4wMHwyMjMuMjA=)'>
+</g>
+<defs>
+  <clipPath id='cpMzEuNDd8MTY4LjY0fDM4LjEyfDUyLjE5'>
+    <rect x='31.47' y='38.12' width='137.16' height='14.07' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMzEuNDd8MTY4LjY0fDM4LjEyfDUyLjE5)'>
+<text x='100.05' y='47.55' text-anchor='middle' style='font-size: 7.20px;fill: #1A1A1A; font-family: "EB Garamond Initials";' textLength='41.75px' lengthAdjust='spacingAndGlyphs'>High-risk missed</text>
+</g>
+<g clip-path='url(#cpMC4wMHw0ODkuNjB8MC4wMHwyMjMuMjA=)'>
+</g>
+<defs>
+  <clipPath id='cpMTg3LjU5fDMyNC43NXwzOC4xMnw1Mi4xOQ=='>
+    <rect x='187.59' y='38.12' width='137.16' height='14.07' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMTg3LjU5fDMyNC43NXwzOC4xMnw1Mi4xOQ==)'>
+<text x='256.17' y='47.55' text-anchor='middle' style='font-size: 7.20px;fill: #1A1A1A; font-family: "EB Garamond Initials";' textLength='33.92px' lengthAdjust='spacingAndGlyphs'>Critical miss</text>
+</g>
+<g clip-path='url(#cpMC4wMHw0ODkuNjB8MC4wMHwyMjMuMjA=)'>
+</g>
+<defs>
+  <clipPath id='cpMzM4LjQ5fDQ3NS42NXwzOC4xMnw1Mi4xOQ=='>
+    <rect x='338.49' y='38.12' width='137.16' height='14.07' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMzM4LjQ5fDQ3NS42NXwzOC4xMnw1Mi4xOQ==)'>
+<text x='407.07' y='47.55' text-anchor='middle' style='font-size: 7.20px;fill: #1A1A1A; font-family: "EB Garamond Initials";' textLength='48.88px' lengthAdjust='spacingAndGlyphs'>Unsafe downrouting</text>
+</g>
+<g clip-path='url(#cpMC4wMHw0ODkuNjB8MC4wMHwyMjMuMjA=)'>
+<text transform='translate(53.09,196.45) rotate(-25)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='35.19px' lengthAdjust='spacingAndGlyphs'>No recovery</text>
+<text transform='translate(85.75,196.45) rotate(-25)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.44px' lengthAdjust='spacingAndGlyphs'>SRES</text>
+<text transform='translate(118.41,196.45) rotate(-25)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.44px' lengthAdjust='spacingAndGlyphs'>CEIS</text>
+<text transform='translate(151.06,196.45) rotate(-25)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='33.92px' lengthAdjust='spacingAndGlyphs'>CEIS ensemble</text>
+<text transform='translate(209.21,196.45) rotate(-25)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='35.19px' lengthAdjust='spacingAndGlyphs'>No recovery</text>
+<text transform='translate(241.87,196.45) rotate(-25)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.44px' lengthAdjust='spacingAndGlyphs'>SRES</text>
+<text transform='translate(274.52,196.45) rotate(-25)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.44px' lengthAdjust='spacingAndGlyphs'>CEIS</text>
+<text transform='translate(307.18,196.45) rotate(-25)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='33.92px' lengthAdjust='spacingAndGlyphs'>CEIS ensemble</text>
+<text transform='translate(360.11,196.45) rotate(-25)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='35.19px' lengthAdjust='spacingAndGlyphs'>No recovery</text>
+<text transform='translate(392.77,196.45) rotate(-25)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.44px' lengthAdjust='spacingAndGlyphs'>SRES</text>
+<text transform='translate(425.42,196.45) rotate(-25)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.44px' lengthAdjust='spacingAndGlyphs'>CEIS</text>
+<text transform='translate(458.08,196.45) rotate(-25)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='33.92px' lengthAdjust='spacingAndGlyphs'>CEIS ensemble</text>
+<text x='334.46' y='184.30' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='2.61px' lengthAdjust='spacingAndGlyphs'>0</text>
+<text x='334.46' y='141.70' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='5.22px' lengthAdjust='spacingAndGlyphs'>10</text>
+<text x='334.46' y='99.10' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='5.22px' lengthAdjust='spacingAndGlyphs'>20</text>
+<text x='334.46' y='56.51' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='5.22px' lengthAdjust='spacingAndGlyphs'>30</text>
+<text x='183.56' y='184.30' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.44px' lengthAdjust='spacingAndGlyphs'>0.00</text>
+<text x='183.56' y='153.41' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.44px' lengthAdjust='spacingAndGlyphs'>0.25</text>
+<text x='183.56' y='122.53' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.44px' lengthAdjust='spacingAndGlyphs'>0.50</text>
+<text x='183.56' y='91.65' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.44px' lengthAdjust='spacingAndGlyphs'>0.75</text>
+<text x='183.56' y='60.77' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='10.44px' lengthAdjust='spacingAndGlyphs'>1.00</text>
+<text x='27.44' y='184.30' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='2.61px' lengthAdjust='spacingAndGlyphs'>0</text>
+<text x='27.44' y='143.12' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='2.61px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text x='27.44' y='101.94' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='2.61px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text x='27.44' y='60.77' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='2.61px' lengthAdjust='spacingAndGlyphs'>6</text>
+<text transform='translate(19.95,120.14) rotate(-90)' text-anchor='middle' style='font-size: 9.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='134.77px' lengthAdjust='spacingAndGlyphs'>Count over 90 reviewed model assessments</text>
+<text x='31.47' y='31.00' style='font-size: 9.00px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='325.08px' lengthAdjust='spacingAndGlyphs'>Risk-triggered policies eliminate high-risk and critical misses, while unsafe downrouting remains.</text>
+<text x='31.47' y='17.29' style='font-size: 11.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='173.44px' lengthAdjust='spacingAndGlyphs'>Residual risk after aggregate policy replay</text>
 </g>
 </g>
 </svg>

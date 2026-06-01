@@ -5,6 +5,44 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.309 - 2026-06-01T20:30:58+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `5c15209`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/paper/figures/README.md`
+  - `80_semantic_risk_asr/paper/figures/f10_human_reviewed_atom_outcomes.pdf`
+  - `80_semantic_risk_asr/paper/figures/f10_human_reviewed_atom_outcomes.svg`
+  - `80_semantic_risk_asr/paper/figures/f11_risk_atom_entropy_heatmap.pdf`
+  - `80_semantic_risk_asr/paper/figures/f11_risk_atom_entropy_heatmap.svg`
+  - `80_semantic_risk_asr/paper/figures/f1_cds_asr_pipeline.pdf`
+  - `80_semantic_risk_asr/paper/figures/f1_cds_asr_pipeline.svg`
+  - `80_semantic_risk_asr/paper/figures/f2_evidence_design.pdf`
+  - `80_semantic_risk_asr/paper/figures/f2_evidence_design.svg`
+  - `80_semantic_risk_asr/paper/figures/f3_predictor_auc.pdf`
+  - `80_semantic_risk_asr/paper/figures/f3_predictor_auc.svg`
+  - `80_semantic_risk_asr/paper/figures/f4_recovery_outcomes.pdf`
+  - `80_semantic_risk_asr/paper/figures/f4_recovery_outcomes.svg`
+  - `80_semantic_risk_asr/paper/figures/f5_model_lane_state.pdf`
+  - `80_semantic_risk_asr/paper/figures/f5_model_lane_state.svg`
+  - `80_semantic_risk_asr/paper/figures/f6_n_ladder.pdf`
+  - `80_semantic_risk_asr/paper/figures/f6_n_ladder.svg`
+  - `80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.pdf`
+  - `80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.svg`
+  - `80_semantic_risk_asr/paper/figures/f8_low_wer_danger.pdf`
+  - `80_semantic_risk_asr/paper/figures/f8_low_wer_danger.svg`
+  - `80_semantic_risk_asr/paper/figures/f9_risk_atom_instability_heatmap.pdf`
+  - `80_semantic_risk_asr/paper/figures/f9_risk_atom_instability_heatmap.svg`
+  - `80_semantic_risk_asr/paper/generate_paper_figures.R`
+  - `80_semantic_risk_asr/paper/tables/table1_main_asr.tex`
+  - `80_semantic_risk_asr/paper/tables/table3_predictor.tex`
+  - `80_semantic_risk_asr/paper/tables/table4_recovery.tex`
+  - `80_semantic_risk_asr/paper/tables/table_a1_fixed_budget_frontier.tex`
+  - `80_semantic_risk_asr/paper/tables/table_s2_candidates.tex`
+
 ## v2.5.308 - 2026-06-01T20:28:10+08:00
 
 - Bump: `patch`

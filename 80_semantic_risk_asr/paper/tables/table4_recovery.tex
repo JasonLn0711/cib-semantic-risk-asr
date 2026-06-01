@@ -1,0 +1,18 @@
+\begin{table}[!htbp]
+\centering
+\caption{Aggregate policy replay under human-reviewed selected-300 labels.}
+\label{tab:recovery}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{1.35}R{0.55}R{0.55}R{0.55}R{0.60}R{0.85}R{0.70}R{0.75}R{0.75}@{}}
+\toprule
+Policy & Unsafe & High-risk & Critical & Budget & Budget CI & Severe elim. & Severe rem. CI & Trig. / elim.
+\\
+\midrule
+No recovery & 29 & 6 & 1 & 0.000 & 0.000--0.000 & 0 & 2--13 & n/a \\
+SRES recovery & 24 & 0 & 0 & 0.389 & 0.300--0.489 & 7 & 0--0 & 5.0 \\
+CEIS conservative action & 24 & 0 & 0 & 0.389 & 0.300--0.489 & 7 & 0--0 & 5.0 \\
+CEIS ensemble arbitration & 24 & 0 & 0 & 0.522 & 0.400--0.656 & 7 & 0--0 & 6.7 \\
+\bottomrule
+\end{tabularx}
+\\[0.4em]{\footnotesize\RaggedRight Confidence-only recovery is not shown as a main policy because calibrated confidence was unavailable and produced no triggers. Residual unsafe downrouting remains after risk-triggered policies and should be treated as a separate governance issue.\par}
+\end{table}

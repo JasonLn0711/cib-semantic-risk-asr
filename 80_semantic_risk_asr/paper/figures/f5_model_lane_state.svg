@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='835.20pt' height='295.20pt' viewBox='0 0 835.20 295.20'>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='460.80pt' height='201.60pt' viewBox='0 0 460.80 201.60'>
 <g class='svglite'>
 <defs>
   <style type='text/css'><![CDATA[
@@ -21,41 +21,45 @@
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
 <defs>
-  <clipPath id='cpMC4wMHw4MzUuMjB8MC4wMHwyOTUuMjA='>
-    <rect x='0.00' y='0.00' width='835.20' height='295.20' />
+  <clipPath id='cpMC4wMHw0NjAuODB8MC4wMHwyMDEuNjA='>
+    <rect x='0.00' y='0.00' width='460.80' height='201.60' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpMC4wMHw4MzUuMjB8MC4wMHwyOTUuMjA=)'>
-<rect x='0.00' y='0.00' width='835.20' height='295.20' style='stroke-width: 0.00; stroke: none;' />
-<rect x='102.18' y='91.15' width='173.71' height='93.04' style='stroke-width: 2.56; stroke: #219653; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
-<rect x='330.75' y='91.15' width='173.71' height='93.04' style='stroke-width: 2.56; stroke: #F2994A; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
-<rect x='559.31' y='91.15' width='173.71' height='93.04' style='stroke-width: 2.56; stroke: #D64545; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
-<text x='189.03' y='111.58' text-anchor='middle' style='font-size: 11.10px; font-family: "EB Garamond Initials";' textLength='61.92px' lengthAdjust='spacingAndGlyphs'>Main comparable</text>
-<text x='189.03' y='127.56' text-anchor='middle' style='font-size: 11.10px; font-family: "EB Garamond Initials";' textLength='20.16px' lengthAdjust='spacingAndGlyphs'>split</text>
-<text x='417.60' y='111.58' text-anchor='middle' style='font-size: 11.10px; font-family: "EB Garamond Initials";' textLength='56.80px' lengthAdjust='spacingAndGlyphs'>Locale-gated</text>
-<text x='417.60' y='127.56' text-anchor='middle' style='font-size: 11.10px; font-family: "EB Garamond Initials";' textLength='40.31px' lengthAdjust='spacingAndGlyphs'>candidates</text>
-<text x='646.17' y='111.58' text-anchor='middle' style='font-size: 11.10px; font-family: "EB Garamond Initials";' textLength='61.92px' lengthAdjust='spacingAndGlyphs'>Runtime-blocked</text>
-<text x='646.17' y='127.56' text-anchor='middle' style='font-size: 11.10px; font-family: "EB Garamond Initials";' textLength='25.64px' lengthAdjust='spacingAndGlyphs'>probes</text>
-<text x='189.03' y='137.06' text-anchor='middle' style='font-size: 9.10px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='65.31px' lengthAdjust='spacingAndGlyphs'>6 completed 258-row</text>
-<text x='189.03' y='150.17' text-anchor='middle' style='font-size: 9.10px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='13.25px' lengthAdjust='spacingAndGlyphs'>runs</text>
-<text x='417.60' y='137.06' text-anchor='middle' style='font-size: 9.10px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='47.56px' lengthAdjust='spacingAndGlyphs'>4 fixed 15-row</text>
-<text x='417.60' y='150.17' text-anchor='middle' style='font-size: 9.10px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='33.12px' lengthAdjust='spacingAndGlyphs'>candidates</text>
-<text x='646.17' y='143.61' text-anchor='middle' style='font-size: 9.10px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='58.69px' lengthAdjust='spacingAndGlyphs'>10 bounded probes</text>
-<text x='189.03' y='151.80' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='25.08px' lengthAdjust='spacingAndGlyphs'>Used for</text>
-<text x='189.03' y='163.69' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='69.23px' lengthAdjust='spacingAndGlyphs'>split/model-comparison</text>
-<text x='189.03' y='175.57' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='22.08px' lengthAdjust='spacingAndGlyphs'>context</text>
-<text x='417.60' y='151.80' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='63.56px' lengthAdjust='spacingAndGlyphs'>No promotion until</text>
-<text x='417.60' y='163.69' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='56.25px' lengthAdjust='spacingAndGlyphs'>strict zh-TW gate</text>
-<text x='417.60' y='175.57' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='24.00px' lengthAdjust='spacingAndGlyphs'>is clean</text>
-<text x='646.17' y='151.80' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='51.33px' lengthAdjust='spacingAndGlyphs'>Qwen fetch/load</text>
-<text x='646.17' y='163.69' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='57.16px' lengthAdjust='spacingAndGlyphs'>timeout and Gemma</text>
-<text x='646.17' y='175.57' text-anchor='middle' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='58.08px' lengthAdjust='spacingAndGlyphs'>runtime class block</text>
-<rect x='86.18' y='213.27' width='662.84' height='40.71' style='stroke-width: 1.16; stroke: #BCCCDC; stroke-linecap: butt; stroke-linejoin: miter; fill: #F5F7FA;' />
-<text x='111.32' y='232.58' style='font-size: 9.96px; font-family: "EB Garamond Initials";' textLength='54.64px' lengthAdjust='spacingAndGlyphs'>Promotion rule</text>
-<text x='111.32' y='240.61' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='266.30px' lengthAdjust='spacingAndGlyphs'>Do not move candidates to 258-row or selected-300 until strict Taiwan Traditional</text>
-<text x='111.32' y='252.49' style='font-size: 8.25px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='245.39px' lengthAdjust='spacingAndGlyphs'>Chinese locale evidence is clean or an isolated multimodal/audio runtime exists.</text>
-<text x='27.90' y='59.07' style='font-size: 12.00px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='347.19px' lengthAdjust='spacingAndGlyphs'>Main benchmark, candidate-lane, and runtime-blocked evidence are kept separate.</text>
-<text x='27.90' y='39.23' style='font-size: 20.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='173.53px' lengthAdjust='spacingAndGlyphs'>F5. Model Lane State</text>
+<g clip-path='url(#cpMC4wMHw0NjAuODB8MC4wMHwyMDEuNjA=)'>
+<rect x='-0.000000000000064' y='0.00' width='460.80' height='201.60' style='stroke-width: 0.87; stroke: none; fill: #FFFFFF;' />
+</g>
+<defs>
+  <clipPath id='cpNzcuMzB8NDQ2Ljg1fDI1LjAwfDE2OS44Mg=='>
+    <rect x='77.30' y='25.00' width='369.56' height='144.82' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpNzcuMzB8NDQ2Ljg1fDI1LjAwfDE2OS44Mg==)'>
+<polyline points='77.30,142.67 446.85,142.67 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='77.30,97.41 446.85,97.41 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='77.30,52.16 446.85,52.16 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='77.30,169.82 77.30,25.00 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='168.54,169.82 168.54,25.00 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='259.79,169.82 259.79,25.00 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='351.04,169.82 351.04,25.00 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='442.29,169.82 442.29,25.00 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<rect x='77.30' y='38.58' width='273.75' height='27.15' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #52606D;' />
+<rect x='77.30' y='83.84' width='182.50' height='27.15' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #52606D;' />
+<rect x='77.30' y='129.09' width='91.25' height='27.15' style='stroke-width: 0.87; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #52606D;' />
+<text x='354.97' y='54.71' style='font-size: 7.68px; font-family: "EB Garamond Initials";' textLength='78.52px' lengthAdjust='spacingAndGlyphs'>Use for split/model context</text>
+<text x='261.94' y='99.97' style='font-size: 7.68px; font-family: "EB Garamond Initials";' textLength='42.95px' lengthAdjust='spacingAndGlyphs'>Supplement only</text>
+<text x='171.53' y='145.23' style='font-size: 7.68px; font-family: "EB Garamond Initials";' textLength='59.73px' lengthAdjust='spacingAndGlyphs'>Engineering gate only</text>
+</g>
+<g clip-path='url(#cpMC4wMHw0NjAuODB8MC4wMHwyMDEuNjA=)'>
+<text x='73.26' y='145.06' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='59.31px' lengthAdjust='spacingAndGlyphs'>Runtime-blocked probes</text>
+<text x='73.26' y='99.81' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='36.53px' lengthAdjust='spacingAndGlyphs'>Candidate lane</text>
+<text x='73.26' y='54.55' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='55.75px' lengthAdjust='spacingAndGlyphs'>Main comparable split</text>
+<text x='77.30' y='178.65' text-anchor='middle' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='2.61px' lengthAdjust='spacingAndGlyphs'>0</text>
+<text x='168.54' y='178.65' text-anchor='middle' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='2.61px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text x='259.79' y='178.65' text-anchor='middle' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='2.61px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text x='351.04' y='178.65' text-anchor='middle' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='2.61px' lengthAdjust='spacingAndGlyphs'>6</text>
+<text x='442.29' y='178.65' text-anchor='middle' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='2.61px' lengthAdjust='spacingAndGlyphs'>8</text>
+<text x='262.07' y='188.99' text-anchor='middle' style='font-size: 9.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='80.25px' lengthAdjust='spacingAndGlyphs'>Aggregate record count</text>
+<text x='77.30' y='17.29' style='font-size: 11.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='134.88px' lengthAdjust='spacingAndGlyphs'>Supplementary model lane boundary</text>
 </g>
 </g>
 </svg>

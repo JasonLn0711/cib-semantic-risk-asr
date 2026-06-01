@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='828.00pt' height='396.00pt' viewBox='0 0 828.00 396.00'>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='460.80pt' height='230.40pt' viewBox='0 0 460.80 230.40'>
 <g class='svglite'>
 <defs>
   <style type='text/css'><![CDATA[
@@ -21,101 +21,95 @@
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
 <defs>
-  <clipPath id='cpMC4wMHw4MjguMDB8MC4wMHwzOTYuMDA='>
-    <rect x='0.00' y='0.00' width='828.00' height='396.00' />
+  <clipPath id='cpMC4wMHw0NjAuODB8MC4wMHwyMzAuNDA='>
+    <rect x='0.00' y='0.00' width='460.80' height='230.40' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpMC4wMHw4MjguMDB8MC4wMHwzOTYuMDA=)'>
-<rect x='0.00' y='0.00' width='828.00' height='396.00' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<g clip-path='url(#cpMC4wMHw0NjAuODB8MC4wMHwyMzAuNDA=)'>
+<rect x='0.00' y='-0.000000000000057' width='460.80' height='230.40' style='stroke-width: 0.87; stroke: none; fill: #FFFFFF;' />
 </g>
 <defs>
-  <clipPath id='cpNzguMDR8ODA0LjA5fDYyLjY2fDI2OC44OQ=='>
-    <rect x='78.04' y='62.66' width='726.04' height='206.24' />
+  <clipPath id='cpOTkuMTl8NDQ2Ljg1fDM4LjEyfDEzNy4zMA=='>
+    <rect x='99.19' y='38.12' width='347.67' height='99.17' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpNzguMDR8ODA0LjA5fDYyLjY2fDI2OC44OQ==)'>
-<polyline points='78.04,230.23 804.09,230.23 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='78.04,165.78 804.09,165.78 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='78.04,101.33 804.09,101.33 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='161.82,268.89 161.82,62.66 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='301.44,268.89 301.44,62.66 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='441.07,268.89 441.07,62.66 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='580.69,268.89 580.69,62.66 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<polyline points='720.32,268.89 720.32,62.66 ' style='stroke-width: 0.75; stroke: #D9E2EC; stroke-linecap: butt;' />
-<rect x='92.01' y='198.00' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #FAC531;' />
-<rect x='231.63' y='198.00' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #D15074;' />
-<rect x='371.26' y='198.00' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F2F324;' />
-<rect x='510.88' y='198.00' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0F921;' />
-<rect x='650.50' y='198.00' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F89C40;' />
-<rect x='92.01' y='133.55' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8610A0;' />
-<rect x='231.63' y='133.55' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #850FA0;' />
-<rect x='371.26' y='133.55' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #94189B;' />
-<rect x='510.88' y='133.55' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #90169C;' />
-<rect x='650.50' y='133.55' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #6601A6;' />
-<rect x='92.01' y='69.10' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2A078E;' />
-<rect x='231.63' y='69.10' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #350691;' />
-<rect x='371.26' y='69.10' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #24078C;' />
-<rect x='510.88' y='69.10' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2B078E;' />
-<rect x='650.50' y='69.10' width='139.62' height='64.45' style='stroke-width: 1.71; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #0D0887;' />
-<text x='161.82' y='226.92' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>8.4%</text>
-<text x='161.82' y='239.21' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='18.66px' lengthAdjust='spacingAndGlyphs'>22/263</text>
-<text x='301.44' y='226.92' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>5.5%</text>
-<text x='301.44' y='239.21' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='18.66px' lengthAdjust='spacingAndGlyphs'>13/235</text>
-<text x='441.07' y='226.92' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>9.3%</text>
-<text x='441.07' y='239.21' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='18.66px' lengthAdjust='spacingAndGlyphs'>20/215</text>
-<text x='580.69' y='226.92' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>9.4%</text>
-<text x='580.69' y='239.21' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='18.66px' lengthAdjust='spacingAndGlyphs'>13/138</text>
-<text x='720.32' y='226.92' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>7.5%</text>
-<text x='720.32' y='239.21' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='18.66px' lengthAdjust='spacingAndGlyphs'>19/253</text>
-<text x='161.82' y='162.47' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>3.4%</text>
-<text x='161.82' y='174.77' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='15.55px' lengthAdjust='spacingAndGlyphs'>9/263</text>
-<text x='301.44' y='162.47' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>3.4%</text>
-<text x='301.44' y='174.77' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='15.55px' lengthAdjust='spacingAndGlyphs'>8/236</text>
-<text x='441.07' y='162.47' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>3.7%</text>
-<text x='441.07' y='174.77' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='15.55px' lengthAdjust='spacingAndGlyphs'>8/214</text>
-<text x='580.69' y='162.47' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>3.6%</text>
-<text x='580.69' y='174.77' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='15.55px' lengthAdjust='spacingAndGlyphs'>5/137</text>
-<text x='720.32' y='162.47' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>2.8%</text>
-<text x='720.32' y='174.77' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='15.55px' lengthAdjust='spacingAndGlyphs'>7/255</text>
-<text x='161.82' y='98.03' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>1.5%</text>
-<text x='161.82' y='110.32' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='15.55px' lengthAdjust='spacingAndGlyphs'>4/262</text>
-<text x='301.44' y='98.03' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>1.7%</text>
-<text x='301.44' y='110.32' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='15.55px' lengthAdjust='spacingAndGlyphs'>4/234</text>
-<text x='441.07' y='98.03' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>1.4%</text>
-<text x='441.07' y='110.32' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='15.55px' lengthAdjust='spacingAndGlyphs'>3/210</text>
-<text x='580.69' y='98.03' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>1.5%</text>
-<text x='580.69' y='110.32' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='15.55px' lengthAdjust='spacingAndGlyphs'>2/130</text>
-<text x='720.32' y='98.03' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='12.44px' lengthAdjust='spacingAndGlyphs'>1.2%</text>
-<text x='720.32' y='110.32' text-anchor='middle' style='font-size: 8.54px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='15.55px' lengthAdjust='spacingAndGlyphs'>3/253</text>
+<g clip-path='url(#cpOTkuMTl8NDQ2Ljg1fDM4LjEyfDEzNy4zMA==)'>
+<polyline points='99.19,118.70 446.85,118.70 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='99.19,87.71 446.85,87.71 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='99.19,56.72 446.85,56.72 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='139.30,137.30 139.30,38.12 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='206.16,137.30 206.16,38.12 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='273.02,137.30 273.02,38.12 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='339.88,137.30 339.88,38.12 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='406.74,137.30 406.74,38.12 ' style='stroke-width: 0.87; stroke: #EBEBEB; stroke-linecap: butt;' />
+<rect x='239.59' y='41.22' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #FAC531;' />
+<rect x='105.87' y='41.22' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #D15074;' />
+<rect x='306.45' y='41.22' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F2F324;' />
+<rect x='373.31' y='41.22' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0F921;' />
+<rect x='172.73' y='41.22' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F89C40;' />
+<rect x='239.59' y='72.22' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8610A0;' />
+<rect x='105.87' y='72.22' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #850FA0;' />
+<rect x='306.45' y='72.22' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #94189B;' />
+<rect x='373.31' y='72.22' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #90169C;' />
+<rect x='172.73' y='72.22' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #6601A6;' />
+<rect x='239.59' y='103.21' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2A078E;' />
+<rect x='105.87' y='103.21' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #350691;' />
+<rect x='306.45' y='103.21' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #24078C;' />
+<rect x='373.31' y='103.21' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2B078E;' />
+<rect x='172.73' y='103.21' width='66.86' height='30.99' style='stroke-width: 0.75; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #0D0887;' />
+<text x='273.02' y='55.31' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>8.4%</text>
+<text x='273.02' y='62.68' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='14.91px' lengthAdjust='spacingAndGlyphs'>22/263</text>
+<text x='139.30' y='55.31' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>5.5%</text>
+<text x='139.30' y='62.68' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='14.91px' lengthAdjust='spacingAndGlyphs'>13/235</text>
+<text x='339.88' y='55.31' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>9.3%</text>
+<text x='339.88' y='62.68' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='14.91px' lengthAdjust='spacingAndGlyphs'>20/215</text>
+<text x='406.74' y='55.31' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>9.4%</text>
+<text x='406.74' y='62.68' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='14.91px' lengthAdjust='spacingAndGlyphs'>13/138</text>
+<text x='206.16' y='55.31' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>7.5%</text>
+<text x='206.16' y='62.68' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='14.91px' lengthAdjust='spacingAndGlyphs'>19/253</text>
+<text x='273.02' y='86.30' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>3.4%</text>
+<text x='273.02' y='93.67' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>9/263</text>
+<text x='139.30' y='86.30' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>3.4%</text>
+<text x='139.30' y='93.67' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>8/236</text>
+<text x='339.88' y='86.30' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>3.7%</text>
+<text x='339.88' y='93.67' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>8/214</text>
+<text x='406.74' y='86.30' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>3.6%</text>
+<text x='406.74' y='93.67' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>5/137</text>
+<text x='206.16' y='86.30' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>2.8%</text>
+<text x='206.16' y='93.67' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>7/255</text>
+<text x='273.02' y='117.29' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>1.5%</text>
+<text x='273.02' y='124.67' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>4/262</text>
+<text x='139.30' y='117.29' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>1.7%</text>
+<text x='139.30' y='124.67' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>4/234</text>
+<text x='339.88' y='117.29' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>1.4%</text>
+<text x='339.88' y='124.67' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>3/210</text>
+<text x='406.74' y='117.29' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>1.5%</text>
+<text x='406.74' y='124.67' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>2/130</text>
+<text x='206.16' y='117.29' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='9.94px' lengthAdjust='spacingAndGlyphs'>1.2%</text>
+<text x='206.16' y='124.67' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>3/253</text>
 </g>
-<g clip-path='url(#cpMC4wMHw4MjguMDB8MC4wMHwzOTYuMDA=)'>
-<text x='73.11' y='228.40' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='47.23px' lengthAdjust='spacingAndGlyphs'>Breeze-ASR-25</text>
-<text x='73.11' y='237.91' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='12.81px' lengthAdjust='spacingAndGlyphs'>base</text>
-<text x='73.11' y='163.95' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='47.23px' lengthAdjust='spacingAndGlyphs'>Breeze-ASR-25</text>
-<text x='73.11' y='173.46' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='25.09px' lengthAdjust='spacingAndGlyphs'>LoRA</text>
-<text x='73.11' y='99.51' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='47.23px' lengthAdjust='spacingAndGlyphs'>Breeze-ASR-25</text>
-<text x='73.11' y='109.01' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='49.20px' lengthAdjust='spacingAndGlyphs'>partial encoder</text>
-<text transform='translate(164.30,279.14) rotate(-25)' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='20.38px' lengthAdjust='spacingAndGlyphs'>action</text>
-<text transform='translate(303.92,279.14) rotate(-25)' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='17.17px' lengthAdjust='spacingAndGlyphs'>actor</text>
-<text transform='translate(443.54,279.14) rotate(-25)' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='20.38px' lengthAdjust='spacingAndGlyphs'>amount</text>
-<text transform='translate(583.17,279.14) rotate(-25)' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='26.78px' lengthAdjust='spacingAndGlyphs'>negation</text>
-<text transform='translate(722.79,279.14) rotate(-25)' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='38.44px' lengthAdjust='spacingAndGlyphs'>scam pattern</text>
-<text x='441.07' y='307.79' text-anchor='middle' style='font-size: 11.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='37.44px' lengthAdjust='spacingAndGlyphs'>Risk atom</text>
-<text x='371.13' y='340.79' style='font-size: 11.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='32.00px' lengthAdjust='spacingAndGlyphs'>Unstable</text>
-<text x='371.13' y='352.67' style='font-size: 11.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='48.00px' lengthAdjust='spacingAndGlyphs'>variant rate</text>
-<image width='86.40' height='17.28' x='424.61' y='327.46' preserveAspectRatio='none' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAABCAYAAABkOJMpAAAA0klEQVQ4jYVSSZLEMAiTyBz60u/uX4/mYIxZ0pmDC4QWSFX4fn30A+ICcIGwXQWY41pXzz0TQedmde0XDcHwM+UebuPpoxpuu4ZHKYcAoVWp5Su9QB7d6uWaqQu+z6DQM+9IuSz90Y280j/M2i4CoCndpfQWRsb2wCUvIv9/PW5x8qDehHLj3PU972iR7zGEZ1R78DmPdtedZs/vNRXPnec7cn9mrjOB/B2c//he19PuLWuazgCx8VsfGSrekUtAqd/z8PpMiVe5w3H4lHap7RX+AF9enQvvpnCEAAAAAElFTkSuQmCC'/>
-<polyline points='438.46,341.28 438.46,344.74 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<polyline points='464.62,341.28 464.62,344.74 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<polyline points='490.77,341.28 490.77,344.74 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<polyline points='438.46,330.91 438.46,327.46 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<polyline points='464.62,330.91 464.62,327.46 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<polyline points='490.77,330.91 490.77,327.46 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
-<text x='438.46' y='356.08' text-anchor='middle' style='font-size: 8.80px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='6.41px' lengthAdjust='spacingAndGlyphs'>2%</text>
-<text x='464.62' y='356.08' text-anchor='middle' style='font-size: 8.80px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='6.41px' lengthAdjust='spacingAndGlyphs'>5%</text>
-<text x='490.77' y='356.08' text-anchor='middle' style='font-size: 8.80px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='6.41px' lengthAdjust='spacingAndGlyphs'>8%</text>
-<text x='78.04' y='47.18' style='font-size: 12.00px;fill: #52606D; font-family: "EB Garamond Initials";' textLength='325.62px' lengthAdjust='spacingAndGlyphs'>Instability concentrates differently by model and decision-critical atom.</text>
-<text x='78.04' y='29.92' style='font-size: 18.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='241.31px' lengthAdjust='spacingAndGlyphs'>F9. Risk-Atom Instability Heatmap</text>
-<text x='804.09' y='375.48' text-anchor='end' style='font-size: 8.80px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='362.83px' lengthAdjust='spacingAndGlyphs'>Source: risk_atom_instability.tsv. Counts are aggregate proxy variant rows; no transcript text or sample IDs.</text>
+<g clip-path='url(#cpMC4wMHw0NjAuODB8MC4wMHwyMzAuNDA=)'>
+<text x='95.15' y='121.10' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='81.20px' lengthAdjust='spacingAndGlyphs'>Breeze-ASR-25 partial encoder</text>
+<text x='95.15' y='90.10' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='61.59px' lengthAdjust='spacingAndGlyphs'>Breeze-ASR-25 LoRA</text>
+<text x='95.15' y='59.11' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='51.55px' lengthAdjust='spacingAndGlyphs'>Breeze-ASR-25 base</text>
+<text transform='translate(141.70,145.48) rotate(-30)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='14.00px' lengthAdjust='spacingAndGlyphs'>actor</text>
+<text transform='translate(208.55,145.48) rotate(-30)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='31.31px' lengthAdjust='spacingAndGlyphs'>scam pattern</text>
+<text transform='translate(275.41,145.48) rotate(-30)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='16.61px' lengthAdjust='spacingAndGlyphs'>action</text>
+<text transform='translate(342.27,145.48) rotate(-30)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='16.61px' lengthAdjust='spacingAndGlyphs'>amount</text>
+<text transform='translate(409.13,145.48) rotate(-30)' text-anchor='end' style='font-size: 7.20px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='21.83px' lengthAdjust='spacingAndGlyphs'>negation</text>
+<text x='273.02' y='171.20' text-anchor='middle' style='font-size: 9.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='30.70px' lengthAdjust='spacingAndGlyphs'>Risk atom</text>
+<image width='86.40' height='17.28' x='229.82' y='187.29' preserveAspectRatio='none' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAABCAYAAABkOJMpAAAA0klEQVQ4jYVSSZLEMAiTyBz60u/uX4/mYIxZ0pmDC4QWSFX4fn30A+ICcIGwXQWY41pXzz0TQedmde0XDcHwM+UebuPpoxpuu4ZHKYcAoVWp5Su9QB7d6uWaqQu+z6DQM+9IuSz90Y280j/M2i4CoCndpfQWRsb2wCUvIv9/PW5x8qDehHLj3PU972iR7zGEZ1R78DmPdtedZs/vNRXPnec7cn9mrjOB/B2c//he19PuLWuazgCx8VsfGSrekUtAqd/z8PpMiVe5w3H4lHap7RX+AF9enQvvpnCEAAAAAElFTkSuQmCC'/>
+<polyline points='243.67,201.12 243.67,204.57 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='269.83,201.12 269.83,204.57 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='295.99,201.12 295.99,204.57 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='243.67,190.75 243.67,187.29 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='269.83,190.75 269.83,187.29 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='295.99,190.75 295.99,187.29 ' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' />
+<text x='243.67' y='213.84' text-anchor='middle' style='font-size: 7.20px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='5.22px' lengthAdjust='spacingAndGlyphs'>2%</text>
+<text x='269.83' y='213.84' text-anchor='middle' style='font-size: 7.20px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='5.22px' lengthAdjust='spacingAndGlyphs'>5%</text>
+<text x='295.99' y='213.84' text-anchor='middle' style='font-size: 7.20px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='5.22px' lengthAdjust='spacingAndGlyphs'>8%</text>
+<text x='99.19' y='31.00' style='font-size: 9.00px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='243.38px' lengthAdjust='spacingAndGlyphs'>Aggregate proxy variant rows; no transcript text or sample identifiers.</text>
+<text x='99.19' y='17.29' style='font-size: 11.00px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='122.88px' lengthAdjust='spacingAndGlyphs'>Risk-atom instability by model</text>
 </g>
 </g>
 </svg>

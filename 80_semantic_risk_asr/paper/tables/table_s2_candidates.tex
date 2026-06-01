@@ -1,0 +1,18 @@
+\begin{table}[!htbp]
+\centering
+\caption{Candidate and exploratory lane evidence.}
+\label{tab:s2-candidates}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{1.35}R{0.55}R{0.55}R{0.55}R{0.75}L{1.25}@{}}
+\toprule
+Candidate & Rows & CER & WER & Locale violations & Decision
+\\
+\midrule
+Whisper large-v3 & 15 & 33.33 & 42.04 &  2 & bounded exploratory lane \\
+Whisper large-v3 turbo & 15 & 40.36 & 50.87 &  4 & bounded exploratory lane \\
+SenseVoice small & 15 & 63.12 & 78.98 & 14 & bounded exploratory lane \\
+Qwen3-ASR 0.6B & 15 & 64.16 & 81.07 & 15 & bounded exploratory lane \\
+\bottomrule
+\end{tabularx}
+\\[0.4em]{\footnotesize\RaggedRight Candidate models are engineering-gated evidence and are not promoted to the main ASR benchmark or selected-300 claims from this table.\par}
+\end{table}
