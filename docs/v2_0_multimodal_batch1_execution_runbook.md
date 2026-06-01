@@ -1503,3 +1503,26 @@ automatic semantic-damage proxy both pass. If all guarded survivors fail
 fixed-15 or the proxy, the remaining bounded option is a changed Step LoRA
 iteration 2 design; if that also fails sentinel, write final no-human
 no-winner closeout.
+
+## Step Guarded Fixed-15 And Proxy Update
+
+Tracked evidence:
+
+```text
+70_experiments/runs/v2_0_multimodal_step_audio_guarded_fixed_15_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_guarded_auto_semantic_proxy_2026_06_01/
+70_experiments/runs/v2_0_multimodal_guarded_route_no_winner_stop_2026_06_01/
+```
+
+Step-Audio-2-mini completed the guarded fixed-15 transcript / zh-TW locale
+gate under deterministic deployment-repair scope. Aggregate fixed-15 result:
+`valid_output_rate=100.0`, `raw_transcript_like_outputs=15/15`,
+`simplified_char_rate=0.0`, `locale_violation_rows=0`,
+`cer_zh_micro=99.0953`, and `wer_zh_jieba_micro=99.1551`. This gate opens only
+the deterministic semantic-damage proxy, not Taiwan utility.
+
+The proxy then stops the Step guarded route with
+`semantic_damage_blocker_rows=77` and `decision=guarded_route_no_winner_stop`.
+Step does not advance to Taiwan utility/subgroup, 30-row CDS, 258-row, or
+selected-300. Continue phase 10 with the remaining guarded fixed-15 candidates:
+MOSS-Audio-4B-Instruct and MiniCPM-o 4.5.

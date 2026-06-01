@@ -1501,3 +1501,18 @@ Taiwan utility/subgroup proxy pass. If the guarded route closes with no
 survivor, the only training path is a changed Step LoRA iteration 2 design that
 targets no-speech / non-speech hallucination; repeating iteration 1 unchanged
 is not evidence-aligned.
+
+Step-Audio-2-mini has now completed the guarded fixed-15 and deterministic
+semantic-proxy path:
+
+```text
+70_experiments/runs/v2_0_multimodal_step_audio_guarded_fixed_15_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_guarded_auto_semantic_proxy_2026_06_01/
+```
+
+The fixed-15 gate satisfied output/locale form but had very high transcript
+error (`cer_zh_micro=99.0953`, `wer_zh_jieba_micro=99.1551`). The automatic
+semantic proxy therefore closes Step with `semantic_damage_blocker_rows=77`.
+This is a partial guarded-route stop, not the final all-model closeout,
+because MOSS-Audio-4B-Instruct and MiniCPM-o 4.5 still require guarded fixed-15
+and proxy evidence.

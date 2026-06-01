@@ -616,3 +616,19 @@ If guarded fixed-15 or semantic-damage proxy fails for all survivors, the only
 fine-tuning route is a changed Step LoRA iteration 2 design with stronger
 no-speech / non-speech target weighting or oversampling. Repeating LoRA
 iteration 1 unchanged is not claim-evidence aligned.
+
+Step-Audio-2-mini has completed this next guarded path through fixed-15 and
+automatic semantic proxy:
+
+```text
+70_experiments/runs/v2_0_multimodal_step_audio_guarded_fixed_15_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_guarded_auto_semantic_proxy_2026_06_01/
+```
+
+The fixed-15 gate remains deployment-repair evidence and not raw model
+capability. It passes output form and locale, then the deterministic proxy
+blocks promotion with `semantic_damage_blocker_rows=77`. Step should not enter
+Taiwan utility/subgroup, 30-row CDS, 258-row, or selected-300 from this guarded
+route. Continue the same guarded fixed-15/proxy sequence for MOSS-Audio-4B and
+MiniCPM-o 4.5 before deciding whether a changed Step LoRA iteration 2 remains
+worth the compute.

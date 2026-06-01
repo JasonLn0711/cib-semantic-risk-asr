@@ -674,6 +674,28 @@ the only training route is a changed Step LoRA iteration 2 design targeting
 no-speech / non-speech hallucination; if that also fails sentinel, the correct
 completion state is final no-human no-winner closeout.
 
+### Step Guarded Fixed-15 And Proxy: 2026-06-01
+
+Step-Audio-2-mini now has guarded fixed-15 and deterministic semantic-proxy
+evidence:
+
+```text
+70_experiments/runs/v2_0_multimodal_step_audio_guarded_fixed_15_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_guarded_auto_semantic_proxy_2026_06_01/
+70_experiments/runs/v2_0_multimodal_guarded_route_no_winner_stop_2026_06_01/
+```
+
+The fixed-15 gate is deployment-repair evidence: the acoustic guard passed all
+15 rows to the model, `valid_output_rate=100.0`, `raw_transcript_like_outputs=15/15`,
+`simplified_char_rate=0.0`, and `locale_violation_rows=0`. The same run records
+very high transcript error (`cer_zh_micro=99.0953`,
+`wer_zh_jieba_micro=99.1551`), so it only promotes to deterministic semantic
+proxy. The proxy then records `semantic_damage_blocker_rows=77` and
+`decision=guarded_route_no_winner_stop`. Step is therefore closed for Taiwan
+utility/subgroup, 30-row CDS, 258-row, and selected-300 under this guarded
+route. MOSS-Audio-4B-Instruct and MiniCPM-o 4.5 remain the two guarded
+fixed-15 candidates.
+
 ## Promotion Requirements
 
 A model can move from candidate lane to the next larger gate only if all of
