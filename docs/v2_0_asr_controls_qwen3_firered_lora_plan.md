@@ -162,6 +162,35 @@ No route opens LoRA training or rank/alpha grid expansion because current
 evidence either has nonzero automatic semantic/locale blockers or remains
 resource-blocked before one-row inference.
 
+## Qwen3-ASR-1.7B Bounded LoRA Payload Contract: 2026-06-01
+
+The first ASR-control LoRA payload contract is now recorded in
+`70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/`.
+This updates the previous "no LoRA promotion" decision without changing its
+claim boundary: Qwen3-ASR-1.7B still has
+`semantic_damage_blocker_rows=5`, so it is not a diagnostic-proven LoRA
+promotion route. The new contract opens only a bounded research-probe route to
+measure the consequence of LoRA on Taiwan Traditional Chinese ASR.
+
+The transcript-bearing training payload is generated from already reviewed
+ground truth and remains local-only under the ignored runtime lane. Git tracks
+only aggregate counts, hashes, leakage decisions, normalization policy, and the
+first route contract. The split is `train=9`, `validation=3`, and `test=3`.
+The leakage report records `fixed15_baseline_overlap=15`, which means post-LoRA
+fixed-15 behavior can be used as a memorization/consequence probe but cannot
+serve as clean promotion evidence.
+
+The first route is:
+
+| Route | Model | Rank | Alpha | Status | Claim boundary |
+| --- | --- | ---: | ---: | --- | --- |
+| `qwen3_asr_1_7b_r16_a32_research_probe` | `Qwen/Qwen3-ASR-1.7B` | 16 | 32 | payload ready, training not started | bounded research-probe LoRA, not diagnostic-proven promotion LoRA |
+
+The first post-training gate is train/save/reload plus one-row transcript and
+locale checking. It may advance only to the validation split consequence check
+if the adapter loads cleanly and does not worsen the one-row semantic/locale
+proxy. This contract does not open 30-row CDS, 258-row, or selected-300.
+
 The final no-human closeout is recorded in
 `70_experiments/runs/v2_0_asr_controls_final_no_human_closeout_2026_06_01/`.
 The outcome is `no_human_no_winner_closeout`: deterministic conversion helped

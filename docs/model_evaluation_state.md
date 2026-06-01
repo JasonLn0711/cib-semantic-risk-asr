@@ -119,6 +119,18 @@ rank/alpha grid because every candidate either has nonzero automatic blockers
 or lacks raw one-row evidence. The final ASR-control closeout is
 `no_human_no_winner_closeout`.
 
+A new ASR-control LoRA payload contract is now recorded in
+`70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/`.
+It preserves the no-promotion conclusion while opening a narrower consequence
+probe: `Qwen/Qwen3-ASR-1.7B` with rank `16` and alpha `32`, defined as
+`bounded_research_probe_lora`. The payload is generated from already reviewed
+ground truth into local-only train/validation/test manifests (`9/3/3` rows).
+Tracked evidence is limited to aggregate counts, hashes, leakage decisions, and
+the route contract. Because the leakage report records full overlap with the
+fixed-15 baseline (`15` rows), the contract cannot support clean promotion
+evidence; it can only test LoRA behavior and consequences before any larger
+gate is considered.
+
 ## Lane 3: Multimodal Runtime-Blocked
 
 Gemma 4 E2B/E4B are tracked as prompted multimodal-audio candidates, not as pure

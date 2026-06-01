@@ -5,6 +5,27 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.307 - 2026-06-01T20:12:34+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `6fe8f4b`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/aggregate_manifest_summary.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/normalization_policy.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/payload_contract_summary.json`
+  - `70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/smoke_route.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_lora_payload_contract_2026_06_01/split_leakage_report.tsv`
+  - `docs/model_evaluation_state.md`
+  - `docs/v2_0_asr_controls_qwen3_firered_lora_plan.md`
+  - `scripts/prepare_v2_0_asr_controls_lora_payload_contract.py`
+  - `scripts/validate_v2_0_asr_controls_lora_payload_contract.py`
+
 ## v2.5.306 - 2026-06-01T20:09:22+08:00
 
 - Bump: `patch`
