@@ -605,6 +605,35 @@ no-speech / non-speech hallucination failure. Larger gates remain closed; the
 next training action must change the intervention design before rerunning the
 same one-row -> sentinel sequence.
 
+### Failure-Informed No-Human Completion Route: 2026-06-01
+
+The complete remaining route after Qwen expert review and Step LoRA iteration 1
+is recorded in
+`70_experiments/runs/v2_0_multimodal_failure_informed_no_human_completion_plan_2026_06_01/`.
+
+The failure analysis groups the remaining work into five clusters:
+
+1. Qwen repaired-pipeline semantic damage blocks final transcript use.
+2. Step, MOSS 4B, and MiniCPM failures concentrate on no-speech / non-speech
+   hallucination and behavior-control sentinels.
+3. Step LoRA is technically feasible, but iteration 1 did not solve the target
+   sentinel failure.
+4. Kimi remains a runtime-dependency lane before quality evidence.
+5. MOSS 8B remains a resource lane before quality evidence.
+
+The next recommended non-human solution is deterministic deployment repair
+before more model scaling: add an audio-only acoustic no-speech / non-speech
+guard that can return `無法辨識` before prompting the audio LLM. This directly
+targets the most repeated failure cluster and keeps the claim separate from raw
+model capability. If the guard route has no survivor, the next training route
+is Step-Audio LoRA iteration 2 with a changed negative-weighted intervention,
+not a repeat of iteration 1.
+
+The completion state remains one of two outcomes: a scoped non-human repaired
+or fine-tuned survivor that passes all prior gates, or a final no-human
+no-winner closeout after deterministic guard, changed LoRA, and optional
+bounded runtime/resource routes have evidence.
+
 ## Promotion Requirements
 
 A model can move from candidate lane to the next larger gate only if all of

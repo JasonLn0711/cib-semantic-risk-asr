@@ -547,6 +547,13 @@ and post-training sentinel controls still failed with
 correct stopping point for LoRA iteration 1: feasibility is proven, but the
 target failure remains, so larger gates remain closed.
 
+The next plan after these failures is recorded in
+`70_experiments/runs/v2_0_multimodal_failure_informed_no_human_completion_plan_2026_06_01/`.
+It does not add human review. It first tests a deterministic acoustic
+no-speech / non-speech guard across the models that repeatedly hallucinated on
+sentinel controls. Only if that route fails does it proceed to Step-Audio LoRA
+iteration 2 with a changed negative-weighted intervention.
+
 ## Codex Goal Prompt
 
 ```text

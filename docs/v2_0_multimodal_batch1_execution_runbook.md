@@ -309,6 +309,30 @@ adapter evaluation, but not improvement on the target sentinel hallucination
 failure. Do not proceed to fixed 15-row, Taiwan utility, 30-row CDS, 258-row,
 or selected-300 from this LoRA iteration.
 
+The failure-informed no-human route is now recorded in:
+
+```text
+70_experiments/runs/v2_0_multimodal_failure_informed_no_human_completion_plan_2026_06_01/
+```
+
+Use this as the active plan after Qwen expert review and Step LoRA iteration 1.
+The route is:
+
+1. freeze current negative evidence and privacy boundaries；
+2. design a deterministic acoustic no-speech / non-speech guard before audio
+   LLM prompting；
+3. run guarded one-row/sentinel gates for Step, and guarded sentinel gates for
+   MOSS 4B and MiniCPM；
+4. promote only guarded sentinel survivors to fixed-15 and automatic
+   semantic-damage proxy；
+5. if no guarded survivor exists, run Step LoRA iteration 2 with a changed
+   negative-weighted intervention；
+6. treat Kimi and MOSS8 as optional bounded runtime/resource lanes；
+7. finish with either a scoped non-human repaired/fine-tuned survivor or final
+   no-human no-winner closeout.
+
+No additional human review is part of this route.
+
 The manifest preflight now records that the local-only one-row smoke,
 sentinel, and fixed 15-row manifests are present and ignored; tracked files
 store only aggregate counts and gate status.

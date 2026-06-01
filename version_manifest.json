@@ -1,25 +1,25 @@
 {
-  "version": "v2.5.283",
+  "version": "v2.5.284",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 283
+    "patch": 284
   },
-  "updated_at": "2026-06-01T16:18:28+08:00",
+  "updated_at": "2026-06-01T16:18:34+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "79ab38e",
+  "base_commit": "7661bb3",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "70_experiments/runs/v2_0_multimodal_failure_informed_no_human_completion_plan_2026_06_01/README.md",
-    "70_experiments/runs/v2_0_multimodal_failure_informed_no_human_completion_plan_2026_06_01/codex_goal_prompt.md",
-    "70_experiments/runs/v2_0_multimodal_failure_informed_no_human_completion_plan_2026_06_01/failure_informed_completion_summary.json",
-    "70_experiments/runs/v2_0_multimodal_failure_informed_no_human_completion_plan_2026_06_01/failure_lesson_matrix.tsv",
-    "70_experiments/runs/v2_0_multimodal_failure_informed_no_human_completion_plan_2026_06_01/no_human_remaining_phase_plan.tsv"
+    "70_experiments/registry.tsv",
+    "docs/model_evaluation_state.md",
+    "docs/v2_0_multimodal_batch1_execution_runbook.md",
+    "docs/v2_0_multimodal_batch1_full_completion_plan.md",
+    "docs/v2_0_multimodal_batch1_repair_first_experiment_guide.md"
   ]
 }

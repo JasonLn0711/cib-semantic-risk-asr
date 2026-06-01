@@ -1460,3 +1460,20 @@ transcript contract but failed sentinel controls with `sentinel_pass_rows=3/6`
 and `hallucination_on_no_speech_rows=3`. LoRA iteration 1 is a successful
 feasibility proof and a negative model-improvement result for the target
 sentinel hallucination failure; larger gates remain closed.
+
+### Failure-Informed No-Human Completion Plan
+
+The full remaining route from all observed failures is now recorded in:
+
+```text
+70_experiments/runs/v2_0_multimodal_failure_informed_no_human_completion_plan_2026_06_01/
+```
+
+The plan prioritizes a deterministic acoustic no-speech / non-speech guard
+before additional model scaling because the repeated failures are concentrated
+in sentinel hallucination and behavior control. If deterministic guard repair
+does not produce a behavior-clean survivor, the next route is Step-Audio LoRA
+iteration 2 with a changed intervention that gives stronger weight to
+no-speech / non-speech negatives. Kimi and MOSS8 remain optional bounded
+runtime/resource lanes. The final output is either a scoped non-human repaired
+or fine-tuned survivor, or a final no-human no-winner closeout.
