@@ -521,6 +521,21 @@ Step remote-code / k-bit autograd compatibility error. This keeps the LoRA
 lane alive as backend/resource feasibility work, but it does not create an
 adapter and does not unlock post-training or larger CDS-ASR gates.
 
+The next resource-route attempt removed the input-require-grad hook from the
+4-bit path and completed:
+
+```text
+70_experiments/runs/v2_0_multimodal_step_audio_lora_quantized_no_input_grad_smoke_train_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_lora_post_one_row_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_lora_post_sentinel_controls_2026_06_01/
+```
+
+The local-only adapter was created and hashed, post-training one-row passed,
+and post-training sentinel controls still failed with
+`sentinel_pass_rows=3/6` and `hallucination_on_no_speech_rows=3`. This is the
+correct stopping point for LoRA iteration 1: feasibility is proven, but the
+target failure remains, so larger gates remain closed.
+
 ## Codex Goal Prompt
 
 ```text

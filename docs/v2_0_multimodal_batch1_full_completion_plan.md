@@ -1419,6 +1419,9 @@ The next Step LoRA gates are now recorded:
 70_experiments/runs/v2_0_multimodal_step_audio_lora_pretraining_gate_2026_06_01/
 70_experiments/runs/v2_0_multimodal_step_audio_lora_smoke_train_2026_06_01/
 70_experiments/runs/v2_0_multimodal_step_audio_lora_quantized_smoke_train_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_lora_quantized_no_input_grad_smoke_train_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_lora_post_one_row_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_lora_post_sentinel_controls_2026_06_01/
 ```
 
 Existing accepted transcript ground truth is valid training supervision when
@@ -1432,3 +1435,10 @@ resource route also started but stopped before adapter save with a Step
 remote-code / k-bit autograd compatibility error. The next gate is therefore
 backend/resource repair that produces a real adapter hash before any
 post-training one-row, sentinel, or larger CDS-ASR evaluation.
+
+The follow-up 4-bit NF4 no-input-grad route produced a local-only adapter and
+therefore advanced to post-training evaluation. The adapter passed one-row
+transcript contract but failed sentinel controls with `sentinel_pass_rows=3/6`
+and `hallucination_on_no_speech_rows=3`. LoRA iteration 1 is a successful
+feasibility proof and a negative model-improvement result for the target
+sentinel hallucination failure; larger gates remain closed.

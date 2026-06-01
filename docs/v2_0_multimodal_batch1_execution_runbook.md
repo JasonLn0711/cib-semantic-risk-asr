@@ -247,6 +247,41 @@ evidence, not a training-quality or model-improvement result. Do not run
 post-training one-row, sentinel, 15-row, Taiwan utility, 30-row CDS, 258-row,
 or selected-300 until an adapter is actually created and hashed.
 
+The next bounded backend route succeeded by removing the input-require-grad
+hook from the 4-bit route:
+
+```text
+70_experiments/runs/v2_0_multimodal_step_audio_lora_quantized_no_input_grad_smoke_train_2026_06_01/
+```
+
+Result:
+
+```text
+status=step_audio_lora_smoke_train_complete
+train_steps=4
+trainable_parameters=1261568
+first_loss=1.035483
+last_loss=0.641448
+adapter_sha256=14a0fdfb45009b2a452dbbdf5c3efd0b54dac935547715b55a9a29e65b39e5a6
+```
+
+The adapter remains local-only in the ignored runtime lane. Post-training
+evaluation was run immediately:
+
+```text
+70_experiments/runs/v2_0_multimodal_step_audio_lora_post_one_row_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_lora_post_sentinel_controls_2026_06_01/
+```
+
+The one-row transcript contract passed after loading the adapter:
+`valid_text_outputs=1`, `raw_transcript_like_outputs=1`, and all behavior
+violations were `0`. The sentinel gate did not pass:
+`sentinel_pass_rows=3/6`, `hallucination_on_no_speech_rows=3`,
+`promotion_decision=do_not_promote`. This proves bounded LoRA execution and
+adapter evaluation, but not improvement on the target sentinel hallucination
+failure. Do not proceed to fixed 15-row, Taiwan utility, 30-row CDS, 258-row,
+or selected-300 from this LoRA iteration.
+
 The manifest preflight now records that the local-only one-row smoke,
 sentinel, and fixed 15-row manifests are present and ignored; tracked files
 store only aggregate counts and gate status.

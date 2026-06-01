@@ -566,6 +566,9 @@ Two execution attempts are now recorded:
 ```text
 70_experiments/runs/v2_0_multimodal_step_audio_lora_smoke_train_2026_06_01/
 70_experiments/runs/v2_0_multimodal_step_audio_lora_quantized_smoke_train_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_lora_quantized_no_input_grad_smoke_train_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_lora_post_one_row_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_lora_post_sentinel_controls_2026_06_01/
 ```
 
 The non-quantized attempt started training but stopped before adapter save at
@@ -573,13 +576,25 @@ the local 16GB GPU resource boundary. The quantized 4-bit NF4 attempt loaded
 the checkpoint shards and started the training path, but stopped before adapter
 save with a Step remote-code / k-bit autograd compatibility error:
 `RuntimeError:a view of a leaf Variable that requires grad is being used in an
-in-place operation.` No adapter exists, no post-training one-row/sentinel
-evaluation is valid yet, and no model-improvement claim is made.
+in-place operation.`
 
-The next LoRA gate is a bounded backend/resource decision: use an external
-larger GPU, a Step-compatible PEFT backend patch, CPU/offload route, or a
-shorter activation / target-module route that first creates an adapter and then
-passes post-training one-row plus sentinel controls.
+The follow-up 4-bit NF4 route without the input-require-grad hook completed
+training and created a local-only adapter. The tracked record reports
+`train_steps=4`, `trainable_parameters=1261568`, `first_loss=1.035483`,
+`last_loss=0.641448`, and adapter hash
+`14a0fdfb45009b2a452dbbdf5c3efd0b54dac935547715b55a9a29e65b39e5a6`; adapter
+weights stay outside Git. Post-training one-row evaluation passed the
+transcript contract and promoted the adapter to sentinel controls. The
+post-training sentinel gate then completed with `sentinel_pass_rows=3/6` and
+`hallucination_on_no_speech_rows=3`, so the LoRA iteration remains
+`do_not_promote`.
+
+FIRST PRINCIPLE decision: LoRA feasibility is now proven at the smoke level,
+including adapter creation and adapter-loading evaluation. Model-improvement
+evidence is not proven because the trained adapter did not solve the target
+no-speech / non-speech hallucination failure. Larger gates remain closed; the
+next training action must change the intervention design before rerunning the
+same one-row -> sentinel sequence.
 
 ## Promotion Requirements
 
