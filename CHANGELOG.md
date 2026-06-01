@@ -5,6 +5,16 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.301 - 2026-06-01T18:26:25+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `fa0be61`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01/codex_goal_prompt.md`
+
 ## v2.5.300 - 2026-06-01T18:15:32+08:00
 
 - Bump: `patch`
