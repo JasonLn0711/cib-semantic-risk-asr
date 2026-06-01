@@ -3,7 +3,7 @@ existing_ground_truth_use	Accepted transcript ground truth may be used for train
 raw_vs_repaired_separation	Raw model output metrics and deployment-repaired output metrics must be reported separately.	Simplified-to-Traditional conversion is operational repair, not raw capability.
 traditional_chinese_conversion	Use deterministic OpenCC plus Taiwan-term lexical normalization before deployment-view scoring.	The user requirement is Traditional Chinese output; Qwen3 and FireRed may emit Simplified Chinese by default.
 semantic_proxy_required	Every repaired or LoRA route needs automatic semantic-damage proxy before promotion.	Previous Qwen repair improved CER/WER but still had critical-term damage.
-diagnostic_before_lora	LoRA may start only after raw/repaired baseline metrics and automatic taxonomy show a fine-tuning-addressable failure.	Imperfect CER/WER alone does not prove that fine-tuning is the correct intervention.
+lora_intervention_rationale	LoRA may start after either a diagnostic-triggered fine-tuning-addressable failure or a bounded research-probe rationale is recorded.	Imperfect CER/WER alone does not prove that fine-tuning is the correct intervention, but LoRA can still be tested when the expected consequence is specified.
 lora_payload_privacy	LoRA payloads, row-level transcripts, and adapter weights remain local-only or controlled-store.	Training data and adapter weights can leak transcript-bearing content.
 rank_alpha_order	Smallest rank/alpha smoke runs before wider grid.	This prevents spending compute on adapters that cannot train/reload or preserve transcript contract.
 no_new_human_review	No additional manual expert review is implemented in this route.	The requested completion path is automatic/no-human.

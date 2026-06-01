@@ -32,9 +32,10 @@ Core rules:
 - Simplified Chinese output must be converted to Traditional Chinese only in
   the deployment-repair view; raw capability metrics must remain raw.
 - Do not treat imperfect CER/WER as an automatic reason to fine-tune. First
-  complete the raw/repaired diagnostic gates and classify the failure as
-  runtime, duration, raw capability, deterministic-repair, semantic-damage,
-  subgroup, or fine-tuning-addressable.
+  record a LoRA intervention rationale. The rationale may be
+  diagnostic-triggered after raw/repaired gates, or it may be a bounded
+  research-probe rationale that tests the result and consequence of
+  fine-tuning itself.
 
 Execute the phases in order:
 1. Refresh model metadata for Qwen3-ASR-0.6B, Qwen3-ASR-1.7B, FireRedASR-AED,
@@ -69,13 +70,16 @@ Execute the phases in order:
    and keep aggregate repaired metrics separate from raw metrics.
 9. Run automatic semantic-damage proxy for every repaired fixed-15 survivor.
    Any blocker stops promotion.
-10. Make a diagnostic-before-LoRA decision. Open LoRA only when the baseline
-    evidence shows a fine-tuning-addressable failure such as stable locale
-    style, repeatable Taiwan terminology substitutions, English abbreviation
-    errors, or domain lexical omissions. Do not open LoRA for runtime failures,
-    duration-limit failures, severe semantic hallucination, unstable empty
-    outputs, severe low-overlap transcripts, or issues solved cleanly by
-    deterministic repair.
+10. Make a LoRA intervention-rationale decision. Do not open LoRA merely
+    because CER/WER is imperfect. Open LoRA through one of two explicit routes:
+    - diagnostic-triggered LoRA, when baseline evidence shows a
+      fine-tuning-addressable failure such as stable locale style, repeatable
+      Taiwan terminology substitutions, English abbreviation errors, or domain
+      lexical omissions.
+    - research-probe LoRA, when the goal is to test the result and consequence
+      of fine-tuning itself before full diagnostics are complete. This route
+      must predefine expected target, risk, frozen comparison baseline, and
+      post-LoRA consequence checks.
 11. Prepare LoRA payload contract only after a model has a clean enough
     baseline question. Use accepted ground-truth training rows only, freeze
     validation/test splits, check leakage, and track only aggregate manifest
@@ -121,10 +125,9 @@ Stop rules:
 - No deployment-repair claim without raw baseline and automatic semantic proxy.
 - No LoRA grid before one tiny adapter can train, save, reload, and pass
   one-row transcript evaluation.
-- No LoRA at all before diagnostic evidence shows a fine-tuning-addressable
-  failure. If baseline diagnostics show runtime/resource failure, semantic
-  damage, or clean deterministic repair, stop or report the repaired baseline
-  instead.
+- No LoRA at all before an intervention rationale exists. The rationale may be
+  diagnostic-triggered or research-probe, but it must not be "CER/WER is
+  imperfect, therefore fine-tune."
 - No 30-row CDS, 258-row, or selected-300 without clean fixed-15 and semantic
   proxy evidence.
 - If Qwen3 and FireRedASR routes all fail runtime, locale, semantic-proxy, or

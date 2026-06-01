@@ -35,10 +35,11 @@ scoring without new human review. They do not remove the need for leakage
 control, locale gates, automatic semantic-damage proxies, and strict train /
 validation / test separation.
 
-## Diagnostic-Before-LoRA Rule
+## Diagnostic And LoRA Rationale Rule
 
 LoRA is not the default response to an imperfect CER/WER score. The first
-experiment must be diagnostic:
+experiment should be diagnostic whenever the purpose is model selection or
+promotion:
 
 ```text
 runtime validity
@@ -50,13 +51,29 @@ runtime validity
 -> LoRA necessity decision
 ```
 
-Only error types that are plausibly learnable by fine-tuning should open LoRA:
-stable Simplified Chinese output that survives semantic proxy, recurring
-Taiwan terminology substitutions, consistent English abbreviation errors, or
-repeatable domain lexical omissions. Runtime failures, duration-limit failures,
-semantic hallucination, unstable empty output, severe low-overlap transcripts,
-or errors fixed cleanly by deterministic conversion are not enough by
-themselves to justify LoRA.
+This diagnostic route is not a mandatory precondition for every LoRA experiment.
+LoRA may also be run as a bounded intervention probe when the research question
+is to measure the result and consequence of fine-tuning itself. In that case,
+the run must explicitly record the intervention rationale, expected target,
+risk, frozen comparison baseline, and post-LoRA consequence checks before
+training starts.
+
+Two LoRA routes are therefore allowed:
+
+1. `diagnostic_triggered_lora`: baseline evidence shows a plausibly learnable
+   failure such as stable Simplified Chinese output that survives semantic
+   proxy, recurring Taiwan terminology substitutions, consistent English
+   abbreviation errors, or repeatable domain lexical omissions.
+2. `research_probe_lora`: LoRA is run deliberately to test whether
+   fine-tuning helps or harms, even before all larger diagnostics are complete.
+   It must stay bounded, local-only, and separately reported as intervention
+   evidence, not as a promoted ASR-control result.
+
+Runtime failures, duration-limit failures, semantic hallucination, unstable
+empty output, severe low-overlap transcripts, or errors fixed cleanly by
+deterministic conversion are not enough by themselves to justify promotion.
+They may still motivate a research-probe LoRA only if the expected consequence
+test is stated in advance.
 
 ## Why These Models
 
@@ -119,7 +136,7 @@ capability.
 | H2: Qwen3-ASR-1.7B improves raw or repaired quality enough to justify larger gates | one-row runtime success, fixed-15 raw and repaired metrics, clean proxy | stop before fixed-15 if first inference row cannot be produced |
 | H3: FireRedASR-AED is an efficient Chinese-ASR control for short Taiwan Mandarin clips | one-row, fixed-15, duration-bound subgroup, repaired locale gate | stop if duration gate or locale gate fails |
 | H4: FireRedASR-LLM / FireRedASR2-LLM adds value for code-switching and dialect stress rows | metadata / license / runtime gate, short-audio fixed-15, subgroup proxy | stop if resource or max-duration boundary blocks reproducible runs |
-| H5: LoRA can reduce zh-TW locale and critical-term errors without hurting transcript fidelity | smoke adapter, post-LoRA one-row, fixed-15, automatic proxy, frozen baseline comparison | stop if adapter cannot train/reload or proxy worsens |
+| H5: LoRA can reduce zh-TW locale and critical-term errors without hurting transcript fidelity, or can reveal the consequence of fine-tuning on a bounded probe | intervention rationale, smoke adapter, post-LoRA one-row, fixed-15, automatic proxy, frozen baseline comparison | stop if adapter cannot train/reload, proxy worsens, or consequence cannot be measured |
 
 ## Completion Definition
 
@@ -142,8 +159,8 @@ This lane is complete when one of these states is recorded:
 - No 258-row, selected-300, or paper-facing claim opens from model reputation.
 - No LoRA adapter is evaluated on train rows only.
 - No OpenCC/Taiwan-term repaired output is mixed with raw capability evidence.
-- No LoRA starts only because CER/WER is imperfect; first classify the failure
-  as runtime, locale, deterministic-repair, semantic-damage, subgroup, or
-  fine-tuning-addressable.
+- No LoRA starts only because CER/WER is imperfect. Before LoRA, record either
+  a diagnostic-triggered reason or a research-probe reason with expected
+  consequence checks.
 - No full-grid LoRA sweep runs before one tiny adapter can train, save, reload,
   and pass one-row evaluation.

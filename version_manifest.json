@@ -1,16 +1,16 @@
 {
-  "version": "v2.5.294",
+  "version": "v2.5.295",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 294
+    "patch": 295
   },
-  "updated_at": "2026-06-01T17:30:30+08:00",
+  "updated_at": "2026-06-01T17:33:10+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "63e4b65",
+  "base_commit": "2b09811",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",

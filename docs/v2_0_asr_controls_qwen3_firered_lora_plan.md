@@ -18,19 +18,25 @@ The plan therefore treats Simplified-to-Traditional conversion as a deployment
 repair layer, and treats LoRA as a separate fine-tuning evidence layer. Both
 must prove they do not create semantic damage before any larger run.
 
-## Diagnostic Before LoRA
+## Diagnostic And LoRA Rationale
 
 The experiment should not move directly from "CER/WER is imperfect" to LoRA.
-The first goal is to classify the defect. A model must first produce raw and
-deployment-repaired fixed-15 evidence with CER/WER, locale rate, transcript
-contract behavior, automatic semantic-damage proxy, subgroup tags, and runtime
-status. LoRA opens only when the defect is plausibly learnable: stable locale
-style, repeated Taiwan-term substitutions, English abbreviation errors, or
-domain lexical omissions.
+For model promotion, the first goal is to classify the defect. A model should
+first produce raw and deployment-repaired fixed-15 evidence with CER/WER,
+locale rate, transcript contract behavior, automatic semantic-damage proxy,
+subgroup tags, and runtime status. LoRA opens from this route when the defect
+is plausibly learnable: stable locale style, repeated Taiwan-term
+substitutions, English abbreviation errors, or domain lexical omissions.
 
 If the defect is runtime timeout, duration limit, unstable output, hallucination,
 severe low-overlap transcript, or an issue solved cleanly by deterministic
-conversion, LoRA is not the next experiment.
+conversion, LoRA is not the next promotion experiment.
+
+LoRA can still be run as a bounded research-probe experiment when the goal is
+to test the result and consequence of fine-tuning itself. That route must state
+the expected target, risk, frozen comparison baseline, and post-LoRA
+consequence checks before training starts. It remains intervention evidence
+until it passes the same post-training gates as any other route.
 
 ## Model Positioning
 
@@ -44,8 +50,9 @@ conversion, LoRA is not the next experiment.
 
 ## LoRA Design
 
-LoRA is tested only after diagnostic baseline evidence proves a
-fine-tuning-addressable failure. The ordered grid is:
+LoRA is tested only after an intervention rationale exists: either
+diagnostic-triggered evidence of a fine-tuning-addressable failure, or a bounded
+research-probe rationale. The ordered grid is:
 
 | Stage | Rank | Alpha | Reason |
 | --- | ---: | ---: | --- |

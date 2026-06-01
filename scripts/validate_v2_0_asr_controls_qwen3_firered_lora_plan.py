@@ -81,8 +81,8 @@ def main() -> None:
     phase_ids = [int(row["phase_id"]) for row in steps]
     if phase_ids != list(range(17)):
         fail(f"phase ids are not contiguous 0..15: {phase_ids}")
-    if steps[9]["phase_name"] != "diagnostic_before_lora_decision":
-        fail("phase 9 must be diagnostic_before_lora_decision")
+    if steps[9]["phase_name"] != "lora_intervention_rationale_decision":
+        fail("phase 9 must be lora_intervention_rationale_decision")
 
     grid_ids = {row["grid_id"] for row in lora_rows}
     required_grid_ids = {
@@ -104,8 +104,10 @@ def main() -> None:
         fail("next phase must be metadata refresh")
     if summary.get("lora_rank_alpha_grid_count") != len(lora_rows):
         fail("LoRA grid count mismatch")
-    if summary.get("diagnostic_before_lora_required") is not True:
-        fail("diagnostic_before_lora_required must be true")
+    if summary.get("lora_intervention_rationale_required") is not True:
+        fail("lora_intervention_rationale_required must be true")
+    if summary.get("research_probe_lora_allowed") is not True:
+        fail("research_probe_lora_allowed must be true")
 
     privacy = summary.get("privacy_boundary", {})
     if privacy.get("repo_safe_aggregate_records_tracked") is not True:
