@@ -206,6 +206,7 @@ def main() -> int:
         )
         / SNAPSHOT_SHA,
     )
+    parser.add_argument("--adapter-dir", type=Path, default=None)
     parser.add_argument("--max-new-tokens", type=int, default=96)
     args = parser.parse_args()
 
@@ -233,6 +234,11 @@ def main() -> int:
             torch_dtype="auto",
             device_map="auto",
         )
+        if args.adapter_dir is not None:
+            from peft import PeftModel
+
+            model = PeftModel.from_pretrained(model, args.adapter_dir, is_trainable=False)
+            model.eval()
         remote_module = sys.modules[model.__class__.__module__]
         mel = remote_module.log_mel_spectrogram(audio)
         feature_len = mel.shape[-1]

@@ -113,6 +113,7 @@ def main() -> int:
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
     parser.add_argument("--local-output-dir", type=Path, default=DEFAULT_LOCAL_OUTPUT_DIR)
     parser.add_argument("--snapshot-dir", type=Path, default=DEFAULT_SNAPSHOT_DIR)
+    parser.add_argument("--adapter-dir", type=Path, default=None)
     parser.add_argument("--max-new-tokens", type=int, default=96)
     args = parser.parse_args()
 
@@ -143,6 +144,11 @@ def main() -> int:
             torch_dtype="auto",
             device_map="auto",
         )
+        if args.adapter_dir is not None:
+            from peft import PeftModel
+
+            model = PeftModel.from_pretrained(model, args.adapter_dir, is_trainable=False)
+            model.eval()
         remote_module = sys.modules[model.__class__.__module__]
         behavior_rows: list[dict[str, Any]] = []
         local_outputs: list[dict[str, Any]] = []
