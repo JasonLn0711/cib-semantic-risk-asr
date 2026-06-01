@@ -1,0 +1,28 @@
+{
+  "run_id": "v2_0_asr_controls_firered_llm_resource_gate_2026_06_01",
+  "date": "2026-06-01",
+  "status": "firered_llm_resource_gate_blocked_before_inference",
+  "model_id": "FireRedASR-LLM-L",
+  "rows": 0,
+  "one_row_inference_run": false,
+  "reason": "llm_route_requires_firered_llm_weights_plus_qwen2_7b_instruct;resource_boundary_not_clean_for_16gb_single_gpu",
+  "promotion_decision": "do_not_promote",
+  "larger_gates_open": false,
+  "lora_open": false,
+  "claim_boundary": "resource_metadata_gate_only_no_transcript_quality_evidence",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "repaired_text_tracked": false,
+    "model_outputs_tracked": false,
+    "expert_notes_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "adapter_weights_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

@@ -1,0 +1,2 @@
+model_family	model_id	run_id	rows	valid_output_rate	cer_zh_micro	wer_zh_micro	simplified_char_count	simplified_char_rate	locale_violation_rows	outer_wall_time	max_resident_set_kb	exit_status	promotion_decision
+FireRedASR	FireRedASR-AED-L	v2_0_asr_controls_firered_aed_fixed_15_raw_2026_06_01	15	100.0	70.2853	73.6559	322	22.7884	15	0:30.47	10114920	0	promote_to_traditional_chinese_repair_view

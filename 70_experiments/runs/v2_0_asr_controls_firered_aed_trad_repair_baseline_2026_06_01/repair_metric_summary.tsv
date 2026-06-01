@@ -1,0 +1,5 @@
+model_family	model_id	repair_variant	rows	cer_zh_micro	wer_zh_micro	simplified_char_count	cjk_chars	simplified_char_rate	locale_violation_rows	term_replacements	cer_worse_than_raw_rows	wer_worse_than_raw_rows	critical_term_damage_rows	length_ratio_blocker_rows	empty_output_rows	low_overlap_rows
+FireRedASR	FireRedASR-AED-L	raw	15	70.2853	73.6559	322	1413	22.7884	15	0	0	0	0	0	0	0
+FireRedASR	FireRedASR-AED-L	opencc_s2tw	15	49.6173	51.0753	7	1413	0.4954	6	0	0	0	0	0	0	0
+FireRedASR	FireRedASR-AED-L	opencc_s2twp	15	50.3132	51.8433	7	1416	0.4944	6	0	0	0	0	0	0	0
+FireRedASR	FireRedASR-AED-L	opencc_s2twp_terms	15	50.3132	51.8433	7	1416	0.4944	6	0	0	0	0	0	0	0

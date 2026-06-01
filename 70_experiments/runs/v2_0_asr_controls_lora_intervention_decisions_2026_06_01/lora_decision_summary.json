@@ -1,0 +1,25 @@
+{
+  "run_id": "v2_0_asr_controls_lora_intervention_decisions_2026_06_01",
+  "date": "2026-06-01",
+  "status": "lora_intervention_decisions_complete_no_training_opened",
+  "routes_considered": 4,
+  "lora_training_routes_opened": 0,
+  "rank_alpha_grid_routes_opened": 0,
+  "decision": "do_not_train_lora_for_current_asr_control_evidence",
+  "reason": "no route has clean enough baseline/proxy/resource evidence for a claim-aligned LoRA consequence test",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "repaired_text_tracked": false,
+    "model_outputs_tracked": false,
+    "expert_notes_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "adapter_weights_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

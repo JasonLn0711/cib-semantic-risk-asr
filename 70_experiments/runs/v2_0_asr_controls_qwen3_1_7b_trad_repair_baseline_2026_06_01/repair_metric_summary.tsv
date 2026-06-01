@@ -1,0 +1,5 @@
+model_family	model_id	repair_variant	rows	cer_zh_micro	wer_zh_micro	simplified_char_count	cjk_chars	simplified_char_rate	locale_violation_rows	term_replacements	cer_worse_than_raw_rows	wer_worse_than_raw_rows	critical_term_damage_rows	length_ratio_blocker_rows	empty_output_rows	low_overlap_rows
+Qwen3-ASR	Qwen/Qwen3-ASR-1.7B	raw	15	62.8392	66.129	345	1537	22.4463	15	0	0	0	0	0	0	0
+Qwen3-ASR	Qwen/Qwen3-ASR-1.7B	opencc_s2tw	15	36.8824	37.404	5	1537	0.3253	5	0	0	0	0	0	0	0
+Qwen3-ASR	Qwen/Qwen3-ASR-1.7B	opencc_s2twp	15	37.7871	38.4025	5	1541	0.3245	5	0	0	0	0	0	0	0
+Qwen3-ASR	Qwen/Qwen3-ASR-1.7B	opencc_s2twp_terms	15	37.7871	38.4025	5	1541	0.3245	5	0	0	0	0	0	0	0

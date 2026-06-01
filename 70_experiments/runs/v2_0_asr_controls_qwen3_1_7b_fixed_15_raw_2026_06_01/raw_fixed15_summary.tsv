@@ -1,0 +1,2 @@
+model_family	model_id	run_id	rows	cer_mean	wer_mean	metric_normalization	wer_tokenizer	model_load_time_seconds	wall_time_seconds	seconds_per_row	simplified_char_count	simplified_char_rate	locale_violation_rows	valid_output_rate	outer_wall_time	max_resident_set_kb	promotion_decision
+Qwen3-ASR	Qwen/Qwen3-ASR-1.7B	v2_0_asr_controls_qwen3_1_7b_fixed_15_raw_2026_06_01	15	63.7	80.43	zh_asr	jieba	4.59	20.01	1.334	270	0.1499	15	100.0	0:24.32	5416432	promote_to_traditional_chinese_repair_view

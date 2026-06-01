@@ -1,0 +1,30 @@
+{
+  "run_id": "v2_0_asr_controls_final_no_human_closeout_2026_06_01",
+  "date": "2026-06-01",
+  "status": "final_no_human_no_winner_closeout",
+  "final_outcome": "no_human_no_winner_closeout",
+  "models_or_routes_recorded": 5,
+  "larger_gates_open": false,
+  "lora_training_routes_opened": 0,
+  "thirty_row_cds_open": false,
+  "split_258_open": false,
+  "selected_300_open": false,
+  "simplified_to_traditional_helped": true,
+  "simplified_to_traditional_boundary": "improved locale/CER/WER form metrics but left nonzero automatic semantic/locale blockers",
+  "supported_claim_boundary": "ASR-control runtime and deployment-repair evidence only; no winner for downstream CDS-ASR claims without additional evidence",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "repaired_text_tracked": false,
+    "model_outputs_tracked": false,
+    "expert_notes_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "adapter_weights_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

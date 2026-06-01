@@ -5,6 +5,57 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.303 - 2026-06-01T18:59:11+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `276196a`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/v2_0_asr_controls_final_no_human_closeout_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_asr_controls_final_no_human_closeout_2026_06_01/final_closeout_summary.json`
+  - `70_experiments/runs/v2_0_asr_controls_final_no_human_closeout_2026_06_01/final_route_decisions.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_fixed_15_raw_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_fixed_15_raw_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_fixed_15_raw_2026_06_01/gate_summary.json`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_fixed_15_raw_2026_06_01/raw_fixed15_summary.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_runtime_gate_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_runtime_gate_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_runtime_gate_2026_06_01/gate_summary.json`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_runtime_gate_2026_06_01/runtime_summary.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_trad_repair_baseline_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_trad_repair_baseline_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_trad_repair_baseline_2026_06_01/gate_summary.json`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_trad_repair_baseline_2026_06_01/repair_delta_summary.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_trad_repair_baseline_2026_06_01/repair_metric_summary.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_firered_aed_trad_repair_baseline_2026_06_01/subgroup_baseline_summary.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_firered_llm_resource_gate_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_asr_controls_firered_llm_resource_gate_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_firered_llm_resource_gate_2026_06_01/gate_summary.json`
+  - `70_experiments/runs/v2_0_asr_controls_firered_llm_resource_gate_2026_06_01/resource_gate_summary.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_lora_intervention_decisions_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_asr_controls_lora_intervention_decisions_2026_06_01/lora_decision_summary.json`
+  - `70_experiments/runs/v2_0_asr_controls_lora_intervention_decisions_2026_06_01/lora_intervention_decisions.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_fixed_15_raw_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_fixed_15_raw_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_fixed_15_raw_2026_06_01/gate_summary.json`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_fixed_15_raw_2026_06_01/raw_fixed15_summary.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_runtime_retry_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_runtime_retry_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_runtime_retry_2026_06_01/gate_summary.json`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_runtime_retry_2026_06_01/runtime_summary.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_trad_repair_baseline_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_trad_repair_baseline_2026_06_01/controlled_artifact_manifest.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_trad_repair_baseline_2026_06_01/gate_summary.json`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_trad_repair_baseline_2026_06_01/repair_delta_summary.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_trad_repair_baseline_2026_06_01/repair_metric_summary.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_1_7b_trad_repair_baseline_2026_06_01/subgroup_baseline_summary.tsv`
+  - `scripts/run_v2_0_asr_controls_firered_aed_gates.py`
+  - `scripts/run_v2_0_asr_controls_lora_and_closeout.py`
+  - `scripts/run_v2_0_asr_controls_qwen3_1_7b_gates.py`
+  - `scripts/validate_v2_0_asr_controls_baseline_gates.py`
+
 ## v2.5.302 - 2026-06-01T18:26:39+08:00
 
 - Bump: `patch`

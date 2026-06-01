@@ -18,6 +18,15 @@ RUNTIME_PAYLOAD = (
     "v2_0_asr_controls_qwen3_0_6b_trad_repair_baseline_2026_06_01/"
     "qwen3_0_6b_trad_repair_outputs.local.jsonl"
 )
+QWEN17_RUNTIME_PAYLOAD = (
+    ROOT
+    / "70_experiments/runtime_lanes/asr_controls/local_outputs/"
+    "v2_0_asr_controls_qwen3_1_7b_fixed_15_raw_2026_06_01/"
+    "predictions/v2_0_asr_controls_qwen3_1_7b_fixed_15_raw_2026_06_01_predictions.jsonl"
+)
+FIRERED_AED_PAYLOAD = (
+    ROOT / "70_experiments/runtime_lanes/asr_controls/firered/local_outputs/firered_aed_fixed15_disable_cudnn.txt"
+)
 
 REQUIRED_RUN_FILES = {
     "v2_0_asr_controls_metadata_refresh_2026_06_01": [
@@ -43,6 +52,62 @@ REQUIRED_RUN_FILES = {
         "subgroup_baseline_summary.tsv",
         "controlled_artifact_manifest.tsv",
         "gate_summary.json",
+    ],
+    "v2_0_asr_controls_qwen3_1_7b_runtime_retry_2026_06_01": [
+        "README.md",
+        "runtime_summary.tsv",
+        "controlled_artifact_manifest.tsv",
+        "gate_summary.json",
+    ],
+    "v2_0_asr_controls_qwen3_1_7b_fixed_15_raw_2026_06_01": [
+        "README.md",
+        "raw_fixed15_summary.tsv",
+        "controlled_artifact_manifest.tsv",
+        "gate_summary.json",
+    ],
+    "v2_0_asr_controls_qwen3_1_7b_trad_repair_baseline_2026_06_01": [
+        "README.md",
+        "repair_metric_summary.tsv",
+        "repair_delta_summary.tsv",
+        "subgroup_baseline_summary.tsv",
+        "controlled_artifact_manifest.tsv",
+        "gate_summary.json",
+    ],
+    "v2_0_asr_controls_firered_aed_runtime_gate_2026_06_01": [
+        "README.md",
+        "runtime_summary.tsv",
+        "controlled_artifact_manifest.tsv",
+        "gate_summary.json",
+    ],
+    "v2_0_asr_controls_firered_aed_fixed_15_raw_2026_06_01": [
+        "README.md",
+        "raw_fixed15_summary.tsv",
+        "controlled_artifact_manifest.tsv",
+        "gate_summary.json",
+    ],
+    "v2_0_asr_controls_firered_aed_trad_repair_baseline_2026_06_01": [
+        "README.md",
+        "repair_metric_summary.tsv",
+        "repair_delta_summary.tsv",
+        "subgroup_baseline_summary.tsv",
+        "controlled_artifact_manifest.tsv",
+        "gate_summary.json",
+    ],
+    "v2_0_asr_controls_firered_llm_resource_gate_2026_06_01": [
+        "README.md",
+        "resource_gate_summary.tsv",
+        "controlled_artifact_manifest.tsv",
+        "gate_summary.json",
+    ],
+    "v2_0_asr_controls_lora_intervention_decisions_2026_06_01": [
+        "README.md",
+        "lora_intervention_decisions.tsv",
+        "lora_decision_summary.json",
+    ],
+    "v2_0_asr_controls_final_no_human_closeout_2026_06_01": [
+        "README.md",
+        "final_route_decisions.tsv",
+        "final_closeout_summary.json",
     ],
 }
 
@@ -124,15 +189,16 @@ def assert_no_tracked_leaks() -> None:
 
 
 def assert_runtime_payload_ignored() -> None:
-    if not RUNTIME_PAYLOAD.exists():
-        fail(f"missing local runtime payload: {RUNTIME_PAYLOAD}")
-    result = subprocess.run(
-        ["git", "check-ignore", "-q", str(RUNTIME_PAYLOAD)],
-        cwd=ROOT,
-        check=False,
-    )
-    if result.returncode != 0:
-        fail(f"runtime transcript-bearing payload is not git-ignored: {RUNTIME_PAYLOAD}")
+    for payload in [RUNTIME_PAYLOAD, QWEN17_RUNTIME_PAYLOAD, FIRERED_AED_PAYLOAD]:
+        if not payload.exists():
+            fail(f"missing local runtime payload: {payload}")
+        result = subprocess.run(
+            ["git", "check-ignore", "-q", str(payload)],
+            cwd=ROOT,
+            check=False,
+        )
+        if result.returncode != 0:
+            fail(f"runtime transcript-bearing payload is not git-ignored: {payload}")
 
 
 def main() -> None:
@@ -190,6 +256,87 @@ def main() -> None:
         fail("larger gates must remain closed")
     if gate["semantic_damage_blocker_rows"] <= 0:
         fail("semantic damage proxy must record blocker rows for no-promotion decision")
+
+    qwen17_runtime = read_json(
+        RUNS / "v2_0_asr_controls_qwen3_1_7b_runtime_retry_2026_06_01/gate_summary.json"
+    )
+    if qwen17_runtime["rows"] != 1 or qwen17_runtime["first_successful_inference_rows"] != 1:
+        fail("Qwen3-ASR-1.7B runtime retry must record one successful inference row")
+    if qwen17_runtime["promotion_decision"] != "promote_to_fixed_15_raw_gate":
+        fail("Qwen3-ASR-1.7B runtime retry promotion decision mismatch")
+
+    qwen17_raw = read_json(
+        RUNS / "v2_0_asr_controls_qwen3_1_7b_fixed_15_raw_2026_06_01/gate_summary.json"
+    )
+    if qwen17_raw["rows"] != 15:
+        fail("Qwen3-ASR-1.7B raw gate must summarize 15 rows")
+    if qwen17_raw["locale_violation_rows"] != 15:
+        fail("Qwen3-ASR-1.7B raw gate should preserve strict locale failure evidence")
+    if qwen17_raw["larger_gates_open"] is not False:
+        fail("Qwen3-ASR-1.7B raw gate must not open larger gates")
+
+    qwen17_metrics = read_tsv(
+        RUNS / "v2_0_asr_controls_qwen3_1_7b_trad_repair_baseline_2026_06_01/repair_metric_summary.tsv"
+    )
+    if len(qwen17_metrics) != 4:
+        fail(f"expected 4 Qwen3-ASR-1.7B repair metric rows, found {len(qwen17_metrics)}")
+    if any(row["rows"] != "15" for row in qwen17_metrics):
+        fail("each Qwen3-ASR-1.7B repair variant must aggregate 15 rows")
+    qwen17_repair = read_json(
+        RUNS / "v2_0_asr_controls_qwen3_1_7b_trad_repair_baseline_2026_06_01/gate_summary.json"
+    )
+    if qwen17_repair["promotion_decision"] != "do_not_promote_repaired_pipeline":
+        fail("Qwen3-ASR-1.7B repair gate should remain closed")
+    if qwen17_repair["semantic_damage_blocker_rows"] <= 0:
+        fail("Qwen3-ASR-1.7B repair proxy must record blocker rows")
+    if qwen17_repair["larger_gates_open"] is not False:
+        fail("Qwen3-ASR-1.7B repair gate must not open larger gates")
+
+    firered_runtime = read_json(
+        RUNS / "v2_0_asr_controls_firered_aed_runtime_gate_2026_06_01/gate_summary.json"
+    )
+    if firered_runtime["rows"] != 1 or firered_runtime["promotion_decision"] != "promote_to_short_fixed_15_raw_gate":
+        fail("FireRedASR-AED runtime gate must promote to short fixed-15 raw gate")
+
+    firered_raw = read_json(
+        RUNS / "v2_0_asr_controls_firered_aed_fixed_15_raw_2026_06_01/gate_summary.json"
+    )
+    if firered_raw["rows"] != 15 or firered_raw["locale_violation_rows"] != 15:
+        fail("FireRedASR-AED raw fixed-15 gate must preserve 15-row locale-failed evidence")
+    if firered_raw["larger_gates_open"] is not False:
+        fail("FireRedASR-AED raw fixed-15 gate must not open larger gates")
+
+    firered_repair = read_json(
+        RUNS / "v2_0_asr_controls_firered_aed_trad_repair_baseline_2026_06_01/gate_summary.json"
+    )
+    if firered_repair["promotion_decision"] != "do_not_promote_repaired_pipeline":
+        fail("FireRedASR-AED repair gate should remain closed")
+    if firered_repair["semantic_damage_blocker_rows"] <= 0:
+        fail("FireRedASR-AED repair proxy must record blocker rows")
+    if firered_repair["larger_gates_open"] is not False:
+        fail("FireRedASR-AED repair gate must not open larger gates")
+
+    firered_llm = read_json(
+        RUNS / "v2_0_asr_controls_firered_llm_resource_gate_2026_06_01/gate_summary.json"
+    )
+    if firered_llm["one_row_inference_run"] is not False or firered_llm["lora_open"] is not False:
+        fail("FireRedASR-LLM must remain blocked before inference and LoRA")
+
+    lora = read_json(
+        RUNS / "v2_0_asr_controls_lora_intervention_decisions_2026_06_01/lora_decision_summary.json"
+    )
+    if lora["lora_training_routes_opened"] != 0 or lora["rank_alpha_grid_routes_opened"] != 0:
+        fail("LoRA decisions must keep training and rank/alpha grid closed")
+
+    final = read_json(
+        RUNS / "v2_0_asr_controls_final_no_human_closeout_2026_06_01/final_closeout_summary.json"
+    )
+    if final["final_outcome"] != "no_human_no_winner_closeout":
+        fail("final closeout outcome mismatch")
+    if final["larger_gates_open"] is not False:
+        fail("final closeout must keep larger gates closed")
+    if final["lora_training_routes_opened"] != 0:
+        fail("final closeout must not open LoRA training")
 
     for run_id, files in REQUIRED_RUN_FILES.items():
         for filename in files:

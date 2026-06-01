@@ -1,0 +1,31 @@
+{
+  "run_id": "v2_0_asr_controls_qwen3_1_7b_runtime_retry_2026_06_01",
+  "date": "2026-06-01",
+  "status": "qwen3_1_7b_one_row_runtime_success",
+  "model_id": "Qwen/Qwen3-ASR-1.7B",
+  "rows": 1,
+  "first_successful_inference_rows": 1,
+  "cer_mean": 72.94,
+  "wer_mean": 89.58,
+  "simplified_char_rate": 0.1121,
+  "locale_violation_rows": 1,
+  "outer_wall_time": "5:48.76",
+  "exit_status": "0",
+  "promotion_decision": "promote_to_fixed_15_raw_gate",
+  "claim_boundary": "runtime_feasibility_and_one_row_raw_quality_only",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "repaired_text_tracked": false,
+    "model_outputs_tracked": false,
+    "expert_notes_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "adapter_weights_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

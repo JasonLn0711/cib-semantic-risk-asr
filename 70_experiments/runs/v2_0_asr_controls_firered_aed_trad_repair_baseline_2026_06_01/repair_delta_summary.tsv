@@ -1,0 +1,2 @@
+model_family	model_id	raw_variant	repaired_variant	cer_delta_raw_to_repaired	wer_delta_raw_to_repaired	simplified_char_rate_delta	locale_violation_row_delta	semantic_damage_blocker_rows	promotion_decision
+FireRedASR	FireRedASR-AED-L	raw	opencc_s2twp_terms	-19.9721	-21.8126	-22.294	-9	6	do_not_promote_repaired_pipeline

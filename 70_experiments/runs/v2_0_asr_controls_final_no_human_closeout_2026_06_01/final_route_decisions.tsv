@@ -1,0 +1,6 @@
+route_id	model_id	highest_gate	decision	larger_gates_open
+qwen3_0_6b	Qwen/Qwen3-ASR-0.6B	fixed15_repair_proxy	do_not_promote_repaired_pipeline	false
+qwen3_1_7b	Qwen/Qwen3-ASR-1.7B	fixed15_repair_proxy_after_runtime_repair	do_not_promote_repaired_pipeline	false
+firered_aed	FireRedASR-AED-L	fixed15_repair_proxy_after_runtime_repair	do_not_promote_repaired_pipeline	false
+firered_llm	FireRedASR-LLM-L	resource_metadata_gate	blocked_runtime_resource_before_inference	false
+fireredasr2_optional	FireRedASR2-AED/LLM	metadata_gated_optional	defer_until_baseline_fireredasr_survivor	false

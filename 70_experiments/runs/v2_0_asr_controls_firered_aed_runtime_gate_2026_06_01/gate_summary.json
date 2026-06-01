@@ -1,0 +1,35 @@
+{
+  "run_id": "v2_0_asr_controls_firered_aed_runtime_gate_2026_06_01",
+  "date": "2026-06-01",
+  "status": "firered_aed_one_row_runtime_success",
+  "model_id": "FireRedASR-AED-L",
+  "rows": 1,
+  "official_example_rows": 1,
+  "source_repo_head": "834635e",
+  "hf_model_revision": "e57f5960d03cff1071ff7acbb409314d1e70ed3d",
+  "runtime_repairs": [
+    "install_cn2an",
+    "install_kaldi_native_fbank",
+    "torch_load_weights_only_false_for_trusted_checkpoint",
+    "disable_cudnn_for_cuda_runtime"
+  ],
+  "simplified_char_rate": 26.9841,
+  "locale_violation_rows": 1,
+  "promotion_decision": "promote_to_short_fixed_15_raw_gate",
+  "claim_boundary": "runtime_feasibility_and_one_row_raw_quality_only",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "repaired_text_tracked": false,
+    "model_outputs_tracked": false,
+    "expert_notes_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "adapter_weights_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}
