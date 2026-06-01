@@ -1,0 +1,40 @@
+{
+  "run_id": "v2_0_multimodal_failure_informed_full_completion_roadmap_2026_06_01",
+  "date": "2026-06-01",
+  "status": "roadmap_recorded_next_gate_guarded_fixed_15",
+  "human_review_policy": "no_additional_human_review",
+  "current_next_gate": "guarded_fixed_15_transcript_and_zh_tw_locale",
+  "guarded_fixed_15_candidates": [
+    "Step-Audio-2-mini",
+    "MOSS-Audio-4B-Instruct",
+    "MiniCPM-o 4.5"
+  ],
+  "completed_phases": 8,
+  "next_phase_id": 8,
+  "total_planned_phases": 17,
+  "completion_definition": [
+    "scoped_non_human_survivor",
+    "final_no_human_no_winner"
+  ],
+  "privacy_boundary": {
+    "raw_audio_tracked": false,
+    "row_identifiers_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "repaired_text_tracked": false,
+    "model_outputs_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "adapter_weights_tracked": false,
+    "repo_safe_aggregate_records_tracked": true
+  },
+  "claim_separation": [
+    "raw_model_capability",
+    "deterministic_deployment_repair_capability",
+    "automatic_proxy_capability",
+    "fine_tuning_capability",
+    "runtime_resource_feasibility"
+  ],
+  "stop_rule": "do_not_advance_to_taiwan_utility_30_row_258_row_or_selected_300_until_prior_non_human_gate_passes"
+}

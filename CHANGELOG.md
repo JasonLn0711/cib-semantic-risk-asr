@@ -5,6 +5,21 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.287 - 2026-06-01T16:43:26+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `43bb77d`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/v2_0_multimodal_failure_informed_full_completion_roadmap_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_failure_informed_full_completion_roadmap_2026_06_01/codex_goal_prompt.md`
+  - `70_experiments/runs/v2_0_multimodal_failure_informed_full_completion_roadmap_2026_06_01/failure_to_action_matrix.tsv`
+  - `70_experiments/runs/v2_0_multimodal_failure_informed_full_completion_roadmap_2026_06_01/full_completion_steps.tsv`
+  - `70_experiments/runs/v2_0_multimodal_failure_informed_full_completion_roadmap_2026_06_01/roadmap_summary.json`
+  - `scripts/validate_v2_0_multimodal_failure_informed_full_completion_roadmap.py`
+
 ## v2.5.286 - 2026-06-01T16:34:43+08:00
 
 - Bump: `patch`
