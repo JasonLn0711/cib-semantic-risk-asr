@@ -513,6 +513,14 @@ Training started but stopped before adapter save at the local GPU resource
 boundary, so the next LoRA action is resource-route design rather than larger
 evaluation.
 
+The first resource-route attempt is now also recorded in
+`70_experiments/runs/v2_0_multimodal_step_audio_lora_quantized_smoke_train_2026_06_01/`.
+It uses 4-bit NF4 loading with `bitsandbytes` installed only in the ignored
+Step runtime lane. The run started but stopped before adapter save with a
+Step remote-code / k-bit autograd compatibility error. This keeps the LoRA
+lane alive as backend/resource feasibility work, but it does not create an
+adapter and does not unlock post-training or larger CDS-ASR gates.
+
 ## Codex Goal Prompt
 
 ```text

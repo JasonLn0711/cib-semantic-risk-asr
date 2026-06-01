@@ -232,6 +232,21 @@ single-device CUDA hit 16GB GPU OOM. The next LoRA action is a bounded resource
 route, such as smaller/quantized training, CPU/offload training, gradient
 checkpointing plus lower activation length, or external GPU execution.
 
+The first bounded resource route has also been attempted:
+
+```text
+70_experiments/runs/v2_0_multimodal_step_audio_lora_quantized_smoke_train_2026_06_01/
+```
+
+This route installed `bitsandbytes` only in the ignored Step runtime lane and
+ran the same local-only 4-row payload with 4-bit NF4 loading. It passed the
+metadata/training-start boundary but stopped before adapter save with
+`RuntimeError:a view of a leaf Variable that requires grad is being used in an
+in-place operation.` This is Step remote-code / k-bit autograd compatibility
+evidence, not a training-quality or model-improvement result. Do not run
+post-training one-row, sentinel, 15-row, Taiwan utility, 30-row CDS, 258-row,
+or selected-300 until an adapter is actually created and hashed.
+
 The manifest preflight now records that the local-only one-row smoke,
 sentinel, and fixed 15-row manifests are present and ignored; tracked files
 store only aggregate counts and gate status.

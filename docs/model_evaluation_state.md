@@ -547,6 +547,40 @@ Post-Gate0 completion path:
 8. keep voice-interaction and long-audio/reasoning lanes separate until they
    pass the transcript-only adapter.
 
+### Bounded Step-Audio LoRA Update: 2026-06-01
+
+Existing accepted / human-reviewed transcript ground truth is valid supervised
+training data for this project when split boundaries are preserved. The v2.0
+training lane therefore treats accepted transcript anchors as usable training
+supervision, while test, selected-300, CDS evaluation, and any transcript-
+bearing payloads remain protected by the local-only / manifest-hash policy.
+
+The first Step-Audio LoRA payload is recorded in
+`70_experiments/runs/v2_0_multimodal_step_audio_lora_pretraining_gate_2026_06_01/`.
+It is a local-only 4-row smoke payload: 3 no-speech / non-speech negative
+controls plus 1 accepted transcript anchor. Git tracks only aggregate counts,
+sensitivity/storage policy, hash status, and evaluator-contract status.
+
+Two execution attempts are now recorded:
+
+```text
+70_experiments/runs/v2_0_multimodal_step_audio_lora_smoke_train_2026_06_01/
+70_experiments/runs/v2_0_multimodal_step_audio_lora_quantized_smoke_train_2026_06_01/
+```
+
+The non-quantized attempt started training but stopped before adapter save at
+the local 16GB GPU resource boundary. The quantized 4-bit NF4 attempt loaded
+the checkpoint shards and started the training path, but stopped before adapter
+save with a Step remote-code / k-bit autograd compatibility error:
+`RuntimeError:a view of a leaf Variable that requires grad is being used in an
+in-place operation.` No adapter exists, no post-training one-row/sentinel
+evaluation is valid yet, and no model-improvement claim is made.
+
+The next LoRA gate is a bounded backend/resource decision: use an external
+larger GPU, a Step-compatible PEFT backend patch, CPU/offload route, or a
+shorter activation / target-module route that first creates an adapter and then
+passes post-training one-row plus sentinel controls.
+
 ## Promotion Requirements
 
 A model can move from candidate lane to the next larger gate only if all of
