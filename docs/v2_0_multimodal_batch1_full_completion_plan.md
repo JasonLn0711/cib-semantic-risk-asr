@@ -1397,6 +1397,24 @@ continues beyond the no-winner stop, is bounded LoRA feasibility with frozen
 pre-training baselines and post-training one-row / sentinel gates before any
 larger evaluation.
 
+### Qwen Expert Review Completion
+
+The previously prepared Qwen locale-residual expert-review packet now has a
+completed local-only review output:
+
+```text
+70_experiments/runs/v2_0_multimodal_qwen_expert_review_completion_2026_06_01/
+```
+
+The completed ZIP remains in Downloads and is tracked only by filename, hash,
+aggregate counts, and storage policy. The expert review finds that the repaired
+residual subset is not suitable as final transcript evidence:
+`semantic_accept_rows=1`, `semantic_reject_rows=4`, `critical_major_rows=5`,
+`hallucination_or_omission_rows=5`, and `final_transcript_usable_rows=1` out
+of `7`. Decision: `do_not_promote_repaired_pipeline`. This expert evidence
+independently supports keeping Qwen Taiwan utility, 30-row CDS, 258-row, and
+selected-300 closed for this repaired-pipeline result.
+
 ### Bounded LoRA Feasibility Start
 
 The post-stop training lane has started in:

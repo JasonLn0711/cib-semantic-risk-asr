@@ -497,6 +497,17 @@ closeout is
 This preserves the repair-first claim boundary and moves any further work to a
 separate bounded LoRA feasibility route.
 
+Expert-review update: the Qwen locale-residual packet has now been returned as
+a completed local-only review package and summarized in
+`70_experiments/runs/v2_0_multimodal_qwen_expert_review_completion_2026_06_01/`.
+The expert aggregate result is `semantic_accept_rows=1/7`,
+`semantic_reject_rows=4/7`, `critical_major_rows=5/7`,
+`hallucination_or_omission_rows=5/7`, and
+`final_transcript_usable_rows=1/7`. Decision:
+`do_not_promote_repaired_pipeline`. This does not reopen larger Qwen gates; it
+confirms that the repaired residual subset is not safe as final transcript
+evidence.
+
 The bounded LoRA route has now started in
 `70_experiments/runs/v2_0_multimodal_bounded_lora_feasibility_start_2026_06_01/`.
 It chooses Step-Audio-2-mini as the first candidate and limits the initial

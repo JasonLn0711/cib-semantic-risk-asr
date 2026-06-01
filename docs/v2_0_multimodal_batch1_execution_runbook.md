@@ -207,6 +207,33 @@ The tracked manifest is:
 The packet contains transcript-bearing review material and must stay outside
 Git. The tracked status is `packet_prepared_review_not_executed`.
 
+The completed expert review package is now recorded as aggregate-only evidence:
+
+```text
+70_experiments/runs/v2_0_multimodal_qwen_expert_review_completion_2026_06_01/
+```
+
+The completed ZIP is stored in Downloads as
+`qwen_expert_review_outputs_2026_06_01.zip` and remains outside Git. The
+tracked record stores only row counts, value counts, file hashes, and gate
+status. Result:
+
+```text
+review_rows=7
+semantic_accept_rows=1
+semantic_minor_issue_rows=2
+semantic_reject_rows=4
+critical_major_rows=5
+critical_minor_rows=2
+hallucination_or_omission_rows=5
+final_transcript_usable_rows=1
+promotion_decision=do_not_promote_repaired_pipeline
+```
+
+This closes Qwen repaired-pipeline promotion from the locale-residual expert
+review path. The repaired output remains useful repair evidence but is not
+acceptable final transcript evidence for larger gates.
+
 For bounded LoRA, existing human-reviewed / accepted transcript ground truth is
 valid supervised training data when split boundaries are preserved. The first
 Step-Audio LoRA payload is prepared in an ignored runtime lane and tracked only

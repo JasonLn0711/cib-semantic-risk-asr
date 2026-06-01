@@ -253,14 +253,23 @@ hallucination reduction. Training is not launched yet because the local private
 training payload manifest and LoRA adapter-loading evaluator contract are not
 ready; those gates must pass before any adapter training.
 
-If an expert review is needed, the locale-residual Qwen rows are packaged
-locally in `~/Downloads/v2_0_multimodal_qwen_expert_review_packet_2026_06_01/`
-and
-`~/Downloads/v2_0_multimodal_qwen_expert_review_packet_2026_06_01.zip`.
-The repo-safe manifest is
+The locale-residual Qwen rows were first packaged locally in
 `70_experiments/runs/v2_0_multimodal_qwen_expert_review_packet_2026_06_01/`.
-This is a packet-preparation record only: `human_review_status` is
-`packet_prepared_review_not_executed`, and no review result is claimed.
+The completed expert review is now summarized in
+`70_experiments/runs/v2_0_multimodal_qwen_expert_review_completion_2026_06_01/`.
+The completed ZIP, TSV, PDF, DOCX, and Markdown report remain outside Git
+because they contain transcript-bearing fields and identifying fragments. Git
+tracks only aggregate counts and file/hash/status records.
+
+Expert-review result: `review_row_count=7`, `semantic_accept_rows=1`,
+`semantic_minor_issue_rows=2`, `semantic_reject_rows=4`,
+`critical_major_rows=5`, `critical_minor_rows=2`,
+`hallucination_or_omission_rows=5`, and
+`final_transcript_usable_rows=1`. The decision is
+`do_not_promote_repaired_pipeline`: the Qwen repaired residual subset is useful
+as deployment repair evidence, but it is not safe as final transcript evidence.
+Taiwan utility, 30-row CDS, 258-row, and selected-300 remain closed for this
+Qwen repaired-pipeline result.
 
 ### Bounded LoRA Execution Status: 2026-06-01
 
