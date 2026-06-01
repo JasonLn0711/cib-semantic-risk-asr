@@ -5,6 +5,27 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.293 - 2026-06-01T17:23:25+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `78402ec`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01/codex_goal_prompt.md`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01/full_completion_steps.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01/lora_grid.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01/model_gate_plan.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01/no_human_evaluation_contract.tsv`
+  - `70_experiments/runs/v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01/qwen3_firered_lora_plan_summary.json`
+  - `docs/REPO_MAP.md`
+  - `docs/model_evaluation_state.md`
+  - `docs/v2_0_asr_controls_qwen3_firered_lora_plan.md`
+  - `scripts/validate_v2_0_asr_controls_qwen3_firered_lora_plan.py`
+
 ## v2.5.292 - 2026-06-01T17:09:46+08:00
 
 - Bump: `patch`

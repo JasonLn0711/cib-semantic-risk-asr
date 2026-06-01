@@ -103,3 +103,9 @@ organized extracted audio under `10_extracted_parts/`.
   `docs/downstream_decision_contract.md`, and
   `docs/hostile_reviewer_checklist.md` for the CEIS weight contract,
   downstream decision-distance contract, and final hostile-reviewer pass.
+- Use `docs/v2_0_asr_controls_qwen3_firered_lora_plan.md` for the Qwen3-ASR /
+  FireRedASR ASR-control and LoRA extension. It is the planning bridge for the
+  run record in
+  `70_experiments/runs/v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01/`
+  and keeps raw ASR capability, Traditional Chinese deployment repair,
+  automatic semantic-damage proxy, and LoRA fine-tuning evidence separate.

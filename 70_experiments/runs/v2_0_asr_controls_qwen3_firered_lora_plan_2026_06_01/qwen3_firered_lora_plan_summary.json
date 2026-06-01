@@ -1,0 +1,37 @@
+{
+  "run_id": "v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01",
+  "date": "2026-06-01",
+  "status": "plan_recorded_no_human_review_lora_grid_ready",
+  "human_review_policy": "no_additional_human_review",
+  "models": [
+    "Qwen/Qwen3-ASR-0.6B",
+    "Qwen/Qwen3-ASR-1.7B",
+    "FireRedASR-AED-L",
+    "FireRedASR-LLM-L",
+    "FireRedASR2-AED_metadata_gated",
+    "FireRedASR2-LLM_metadata_gated"
+  ],
+  "current_next_gate": "model_metadata_refresh_and_local_only_manifest_preflight",
+  "next_phase_id": 1,
+  "lora_rank_alpha_grid_count": 12,
+  "primary_completion_decision_options": [
+    "asr_control_scoped_survivor",
+    "asr_control_no_human_no_winner"
+  ],
+  "privacy_boundary": {
+    "repo_safe_aggregate_records_tracked": true,
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "repaired_text_tracked": false,
+    "model_outputs_tracked": false,
+    "expert_notes_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "adapter_weights_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

@@ -1,0 +1,9 @@
+contract_item	required_rule	reason
+existing_ground_truth_use	Accepted transcript ground truth may be used for training and scoring without new human review.	It is already reviewed evidence, but must still respect split leakage and privacy boundaries.
+raw_vs_repaired_separation	Raw model output metrics and deployment-repaired output metrics must be reported separately.	Simplified-to-Traditional conversion is operational repair, not raw capability.
+traditional_chinese_conversion	Use deterministic OpenCC plus Taiwan-term lexical normalization before deployment-view scoring.	The user requirement is Traditional Chinese output; Qwen3 and FireRed may emit Simplified Chinese by default.
+semantic_proxy_required	Every repaired or LoRA route needs automatic semantic-damage proxy before promotion.	Previous Qwen repair improved CER/WER but still had critical-term damage.
+lora_payload_privacy	LoRA payloads, row-level transcripts, and adapter weights remain local-only or controlled-store.	Training data and adapter weights can leak transcript-bearing content.
+rank_alpha_order	Smallest rank/alpha smoke runs before wider grid.	This prevents spending compute on adapters that cannot train/reload or preserve transcript contract.
+no_new_human_review	No additional manual expert review is implemented in this route.	The requested completion path is automatic/no-human.
+larger_gate_lock	30-row CDS, 258-row, and selected-300 stay closed until fixed-15 and semantic proxy pass.	This preserves evidence-gated progression learned from failures.

@@ -271,6 +271,51 @@ as deployment repair evidence, but it is not safe as final transcript evidence.
 Taiwan utility, 30-row CDS, 258-row, and selected-300 remain closed for this
 Qwen repaired-pipeline result.
 
+### ASR-Control / LoRA Extension: 2026-06-01
+
+The next ASR-control fine-tuning design is recorded in
+`70_experiments/runs/v2_0_asr_controls_qwen3_firered_lora_plan_2026_06_01/`
+and summarized in
+`docs/v2_0_asr_controls_qwen3_firered_lora_plan.md`.
+
+FIRST PRINCIPLE decision: the v2.0 multimodal no-human route closed as
+`final_no_human_no_winner`, so the next useful experiment is a focused ASR
+control lane rather than another open-ended audio LLM route. Qwen3-ASR and
+FireRedASR are positioned as ASR-specific candidates because their public
+model families target Chinese / dialect / English or code-switching speech
+recognition. The plan keeps four evidence layers separate:
+
+```text
+raw ASR capability
+-> deterministic Traditional Chinese deployment repair
+-> automatic semantic-damage proxy
+-> LoRA fine-tuning evidence
+```
+
+`Qwen/Qwen3-ASR-0.6B` already has negative fixed-15 evidence in this repo:
+it is runnable, but failed the strict Taiwan Traditional Chinese locale gate
+on all 15 pilot rows. Its next action is therefore not immediate large-split
+promotion, but a repaired fixed-15 view using deterministic OpenCC /
+Taiwan-term normalization followed by automatic semantic-damage proxy.
+
+`Qwen/Qwen3-ASR-1.7B` remains behind runtime evidence: the current local check
+timed out before first inference. Its next action is an isolated cache/runtime
+retry with pinned versions, explicit timeout, GPU/resource summary, and exactly
+one inference row before any fixed-15 or LoRA work.
+
+FireRedASR enters through metadata, license, duration, dependency, and runtime
+gates. FireRedASR-AED is the efficient short-audio baseline candidate;
+FireRedASR-LLM is a heavier short-audio / code-switching candidate; FireRedASR2
+is an optional metadata-gated newer branch after baseline FireRedASR evidence
+exists.
+
+LoRA is designed as a gated rank/alpha experiment rather than an immediate
+full sweep. The first smoke adapter is rank 4 / alpha 8; only a model that can
+train, save locally, reload, and pass post-training one-row transcript
+evaluation may expand to rank 8 / alpha 16, rank 16 / alpha 32, and optional
+rank 16 / alpha 16 sensitivity. Adapter weights, payloads, row-level
+transcripts, raw outputs, local paths, and model caches remain outside Git.
+
 ### Bounded LoRA Execution Status: 2026-06-01
 
 Existing human-reviewed / accepted transcript ground truth can be used for
