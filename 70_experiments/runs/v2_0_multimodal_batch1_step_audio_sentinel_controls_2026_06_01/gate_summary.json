@@ -1,0 +1,33 @@
+{
+  "run_id": "v2_0_multimodal_batch1_step_audio_sentinel_controls_2026_06_01",
+  "generated_at_unix": 1780279632,
+  "started_at_unix": 1780279508,
+  "gate": "Phase 9 Step-Audio-2-mini repaired sentinel controls",
+  "status": "step_audio_sentinel_controls_complete",
+  "model_id": "stepfun-ai/Step-Audio-2-mini",
+  "model_revision_sha": "e36fdd5d71e0ea22f09dd94bbab9bfc544ca1e36",
+  "source_repair_run_id": "v2_0_multimodal_batch1_step_audio_transcript_contract_repair_2026_06_01",
+  "sentinel_rows": 6,
+  "sentinel_classes": 6,
+  "sentinel_pass_rows": 3,
+  "hallucination_on_no_speech_rows": 3,
+  "instruction_followed_rows": 0,
+  "summary_or_answer_rows": 0,
+  "translation_rows": 0,
+  "tts_only_rows": 0,
+  "invented_timestamp_rows": 0,
+  "invented_speaker_label_rows": 0,
+  "failure_mode": "sentinel_behavior_violation",
+  "promotion_decision": "do_not_promote",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  },
+  "next_gate": "review_local_outputs_and_repair_again"
+}

@@ -1,0 +1,30 @@
+{
+  "run_id": "v2_0_multimodal_batch1_moss_audio_8b_resource_repair_2026_06_01",
+  "generated_at_unix": 1780279421,
+  "gate": "Phase 8 MOSS-Audio-8B bounded resource-route repair",
+  "status": "moss_audio_8b_resource_repair_blocked",
+  "model_id": "OpenMOSS-Team/MOSS-Audio-8B-Instruct",
+  "source_run_id": "v2_0_multimodal_batch1_moss_audio_8b_one_row_smoke_2026_06_01",
+  "gpu_name": "NVIDIA GeForce RTX 5080",
+  "gpu_memory_total_mib": "16303",
+  "gpu_memory_free_mib": "15342",
+  "model_artifact_storage_gib": 16.87,
+  "bitsandbytes_available": false,
+  "repo_wide_venv_modified": false,
+  "external_gpu_route_used": false,
+  "single_gpu_resource_route_feasible": false,
+  "repair_decision": "no_bounded_local_single_gpu_resource_route_proven",
+  "failure_mode": "local_16gb_gpu_oom_and_no_quantized_runtime_route_available",
+  "promotion_decision": "blocked_runtime_resource",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  },
+  "next_gate": "external_gpu_or_approved_quantized_resource_route_before_one_row_rerun"
+}

@@ -220,7 +220,7 @@ final closeout.
 
 ### Repair-First Phase Progress: 2026-06-01
 
-The first repair-first execution block has completed Phases 1-5 as
+The first repair-first execution block has completed Phases 1-9 as
 aggregate-only evidence.
 
 Qwen2.5-Omni OpenCC / Taiwan-term repair is recorded in
@@ -246,10 +246,35 @@ The stricter prompt improves the quantized local-feasibility result to
 `promotion_decision=do_not_promote`, so MiniCPM remains stopped before fixed
 15-row scoring.
 
-FIRST PRINCIPLE decision: after Phases 3-5, there is still no clean raw or
-repaired multimodal survivor eligible for Taiwan utility, human-reviewed
-30-row CDS, promoted 258-row, or selected-300. The next ordered gate is Phase
-6 Step-Audio-2-mini transcript-contract repair.
+Step-Audio-2-mini transcript-contract repair is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_step_audio_transcript_contract_repair_2026_06_01/`.
+The stricter one-row prompt repairs the raw transcript contract:
+`raw_transcript_like_outputs=1`, `repetition_outputs=0`, and
+`promotion_decision=promote_to_sentinel`.
+
+Kimi-Audio dependency repair is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_kimi_audio_dependency_repair_2026_06_01/`.
+The bounded audit confirms the isolated lane still lacks `flash_attn` and
+`nvcc` is unavailable, so Kimi remains `blocked_runtime_dependency` without an
+approved external/toolchain route.
+
+MOSS-Audio-8B resource repair is recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_moss_audio_8b_resource_repair_2026_06_01/`.
+The bounded audit confirms no local 16GB single-GPU route is proven: the 8B
+artifact is about `16.87 GiB`, and the isolated MOSS runtime has no
+`bitsandbytes` quantized route. MOSS 8B remains `blocked_runtime_resource`.
+
+Step repaired sentinel controls are recorded in
+`70_experiments/runs/v2_0_multimodal_batch1_step_audio_sentinel_controls_2026_06_01/`.
+The repaired one-row transcript contract does not survive sentinel controls:
+`sentinel_pass_rows=3/6`, `hallucination_on_no_speech_rows=3`, and
+`promotion_decision=do_not_promote`.
+
+FIRST PRINCIPLE decision: after Phases 3-9, there is no behavior-clean raw or
+repaired multimodal survivor eligible for fixed 15-row rerun, Taiwan utility,
+human-reviewed 30-row CDS, promoted 258-row, or selected-300. Qwen remains the
+only repaired-pipeline review candidate, and it requires human semantic-damage
+review before any larger repaired-pipeline gate.
 
 ### Phase 3 Qwen OpenCC Locale Repair: 2026-06-01
 

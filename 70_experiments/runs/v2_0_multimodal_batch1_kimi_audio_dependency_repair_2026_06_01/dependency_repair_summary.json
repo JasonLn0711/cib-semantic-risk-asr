@@ -1,0 +1,27 @@
+{
+  "run_id": "v2_0_multimodal_batch1_kimi_audio_dependency_repair_2026_06_01",
+  "generated_at_unix": 1780279421,
+  "gate": "Phase 7 Kimi-Audio flash_attn/CUDA-toolchain dependency repair",
+  "status": "kimi_audio_dependency_repair_blocked",
+  "model_id": "moonshotai/Kimi-Audio-7B-Instruct",
+  "source_run_id": "v2_0_multimodal_batch1_kimi_audio_one_row_smoke_2026_06_01",
+  "probe_status": "probe_completed",
+  "flash_attn_import_status": "missing",
+  "nvcc_available": false,
+  "repo_wide_venv_modified": false,
+  "unbounded_cuda_toolchain_install_attempted": false,
+  "repair_decision": "cannot_repair_inside_current_bounded_local_lane",
+  "failure_mode": "flash_attn_required_but_no_flash_attn_and_no_nvcc_for_bounded_source_build",
+  "promotion_decision": "blocked_runtime_dependency",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  },
+  "next_gate": "external_or_toolchain_approved_kimi_runtime_repair"
+}

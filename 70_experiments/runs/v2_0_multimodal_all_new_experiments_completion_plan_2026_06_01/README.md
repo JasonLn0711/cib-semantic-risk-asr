@@ -29,17 +29,24 @@ batch1_gate_chain_complete_no_scientific_winner
 ## Phase Progress Update
 
 The tracked progress file
-`phase_progress_2026_06_01.tsv` records Phases 1-5 as complete. Qwen
+`phase_progress_2026_06_01.tsv` records Phases 1-9 as complete. Qwen
 OpenCC/Taiwan-term repair is a deployment-pipeline review candidate and still
 needs human semantic-damage review before larger repaired-pipeline gates.
 MOSS-Audio-4B sentinel repair remains `do_not_promote` with `3/6` sentinel
 passes and `3` no-speech hallucination rows. MiniCPM-o 4.5 sentinel repair
 improves to `5/6` and removes summary / translation behavior, but one
 no-speech / non-speech hallucination remains, so it is also `do_not_promote`.
+Step-Audio-2-mini transcript-contract repair succeeds at one-row and therefore
+enters sentinel controls, but the repaired sentinel gate fails with `3/6`
+passes and `3` no-speech hallucination rows. Kimi remains blocked by the
+bounded `flash_attn` / CUDA-toolchain repair audit, and MOSS-Audio-8B remains
+blocked by the bounded 16GB single-GPU resource-route audit.
 
-The next executable phase is Phase 6 Step-Audio-2-mini transcript-contract
-repair. Phases 11-15 remain blocked until prior gates produce survivor evidence
-that can answer the CDS-ASR research question with claim-evidence alignment.
+The next larger automatic gate, fixed-15 repaired rerun, has no behavior-clean
+sentinel survivor. Qwen can proceed only through a separate human
+semantic-damage review as a repaired deployment pipeline. Phases 10-15 remain
+blocked until prior gates produce survivor evidence that can answer the CDS-ASR
+research question with claim-evidence alignment.
 
 ## Completion Definition
 

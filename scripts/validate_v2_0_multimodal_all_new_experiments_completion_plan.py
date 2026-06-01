@@ -100,9 +100,13 @@ def main() -> int:
             "qwen_opencc_locale_repair",
             "moss4_sentinel_repair",
             "minicpm_sentinel_repair",
+            "step_transcript_contract_repair",
+            "kimi_runtime_dependency_repair",
+            "moss8_resource_route_repair",
+            "repaired_one_row_and_sentinel_chain",
         }
         if not required_complete.issubset(complete_phases):
-            raise SystemExit("phase_progress_missing_completed_phase_1_to_5")
+            raise SystemExit("phase_progress_missing_completed_phase_1_to_9")
 
     prompt = (args.run_dir / "codex_goal_prompt.md").read_text(encoding="utf-8")
     required_phrases = [

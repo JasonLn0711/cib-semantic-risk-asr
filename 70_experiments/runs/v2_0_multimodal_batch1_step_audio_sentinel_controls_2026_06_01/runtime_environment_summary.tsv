@@ -1,0 +1,2 @@
+model_family	model_id	gate	runtime_lane	python_version	platform	model_inference_run	local_output_tracked	transcript_bearing_logs_tracked
+Step-Audio 2 mini	stepfun-ai/Step-Audio-2-mini	sentinel_controls_after_transcript_contract_repair	ignored_step_audio_2_mini_runtime_lane	3.12.3	Linux-6.17.0-29-generic-x86_64-with-glibc2.39	true	false	false

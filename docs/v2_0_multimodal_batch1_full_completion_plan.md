@@ -177,17 +177,24 @@ Repair-first Phase 3-5 status:
 Phase 3 Qwen OpenCC/Taiwan-term repair: complete; repaired pipeline review candidate.
 Phase 4 MOSS-Audio-4B sentinel repair: complete; do_not_promote.
 Phase 5 MiniCPM-o 4.5 sentinel repair: complete; improved but do_not_promote.
+Phase 6 Step-Audio-2-mini transcript-contract repair: complete; promote_to_sentinel.
+Phase 7 Kimi-Audio dependency repair audit: complete; blocked_runtime_dependency.
+Phase 8 MOSS-Audio-8B resource repair audit: complete; blocked_runtime_resource.
+Phase 9 Step-Audio repaired sentinel controls: complete; do_not_promote.
 ```
 
 The MOSS 4B repair did not change the scientific gate decision:
 `sentinel_pass_rows=3/6` and `hallucination_on_no_speech_rows=3`. The MiniCPM
 repair improved the quantized deployment-feasibility behavior from `3/6` to
 `5/6` and removed summary / translation behavior, but it still records
-`hallucination_on_no_speech_rows=1`. FIRST PRINCIPLE decision: Phase 11
-Taiwan utility, Phase 12 30-row CDS, Phase 14 258-row, and Phase 15
+`hallucination_on_no_speech_rows=1`. Step repair succeeds at the one-row
+transcript contract but fails repaired sentinel controls with `3/6` passes and
+`3` no-speech hallucination rows. Kimi and MOSS 8B remain bounded runtime /
+resource blockers. FIRST PRINCIPLE decision: Phase 10 fixed-15 repaired rerun,
+Phase 11 Taiwan utility, Phase 12 30-row CDS, Phase 14 258-row, and Phase 15
 selected-300 remain blocked until a prior gate produces claim-relevant
-survivor evidence. The next executable phase is Step-Audio-2-mini
-transcript-contract repair.
+survivor evidence. Qwen repaired-pipeline work requires human semantic-damage
+review before any larger repaired-pipeline gate.
 
 ## Batch 1 Model Scope
 

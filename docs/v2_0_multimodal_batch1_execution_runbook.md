@@ -123,6 +123,24 @@ review before larger repaired-pipeline gates. MOSS 4B sentinel repair remains
 to `5/6` and removes summary / translation behavior, but one no-speech /
 non-speech hallucination remains. Therefore Phase 11-15 gates remain blocked.
 
+Repair-first Phase 6-9 evidence is now also tracked:
+
+```text
+70_experiments/runs/v2_0_multimodal_batch1_step_audio_transcript_contract_repair_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_kimi_audio_dependency_repair_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_moss_audio_8b_resource_repair_2026_06_01/
+70_experiments/runs/v2_0_multimodal_batch1_step_audio_sentinel_controls_2026_06_01/
+```
+
+Step transcript-contract repair succeeds at one-row
+(`raw_transcript_like_outputs=1`, `repetition_outputs=0`) and is therefore
+allowed to enter sentinel controls. The repaired sentinel gate then fails:
+`sentinel_pass_rows=3/6`, `hallucination_on_no_speech_rows=3`, and
+`promotion_decision=do_not_promote`. Kimi remains blocked by the bounded
+`flash_attn` / `nvcc` dependency audit. MOSS 8B remains blocked by the bounded
+local 16GB single-GPU resource audit. The fixed 15-row repaired rerun has no
+behavior-clean sentinel survivor.
+
 The manifest preflight now records that the local-only one-row smoke,
 sentinel, and fixed 15-row manifests are present and ignored; tracked files
 store only aggregate counts and gate status.

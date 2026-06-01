@@ -5,6 +5,45 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.267 - 2026-06-01T10:10:53+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `ded9c52`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/v2_0_multimodal_all_new_experiments_completion_plan_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_all_new_experiments_completion_plan_2026_06_01/phase_progress_2026_06_01.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_kimi_audio_dependency_repair_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_batch1_kimi_audio_dependency_repair_2026_06_01/dependency_repair_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_batch1_kimi_audio_dependency_repair_2026_06_01/runtime_dependency_probe.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_moss_audio_8b_resource_repair_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_batch1_moss_audio_8b_resource_repair_2026_06_01/resource_probe.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_moss_audio_8b_resource_repair_2026_06_01/resource_repair_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_batch1_step_audio_sentinel_controls_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_batch1_step_audio_sentinel_controls_2026_06_01/behavior_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_step_audio_sentinel_controls_2026_06_01/gate_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_batch1_step_audio_sentinel_controls_2026_06_01/runtime_environment_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_step_audio_transcript_contract_repair_2026_06_01/README.md`
+  - `70_experiments/runs/v2_0_multimodal_batch1_step_audio_transcript_contract_repair_2026_06_01/behavior_summary.tsv`
+  - `70_experiments/runs/v2_0_multimodal_batch1_step_audio_transcript_contract_repair_2026_06_01/gate_summary.json`
+  - `70_experiments/runs/v2_0_multimodal_batch1_step_audio_transcript_contract_repair_2026_06_01/runtime_environment_summary.tsv`
+  - `docs/model_evaluation_state.md`
+  - `docs/v2_0_multimodal_batch1_execution_runbook.md`
+  - `docs/v2_0_multimodal_batch1_full_completion_plan.md`
+  - `docs/v2_0_multimodal_batch1_repair_first_experiment_guide.md`
+  - `scripts/audit_v2_0_kimi_audio_dependency_repair.py`
+  - `scripts/audit_v2_0_moss_audio_8b_resource_repair.py`
+  - `scripts/run_v2_0_step_audio_sentinel_controls.py`
+  - `scripts/run_v2_0_step_audio_transcript_contract_repair.py`
+  - `scripts/validate_v2_0_kimi_audio_dependency_repair.py`
+  - `scripts/validate_v2_0_moss_audio_8b_resource_repair.py`
+  - `scripts/validate_v2_0_multimodal_all_new_experiments_completion_plan.py`
+  - `scripts/validate_v2_0_step_audio_sentinel_controls.py`
+  - `scripts/validate_v2_0_step_audio_transcript_contract_repair.py`
+
 ## v2.5.266 - 2026-06-01T09:58:42+08:00
 
 - Bump: `patch`

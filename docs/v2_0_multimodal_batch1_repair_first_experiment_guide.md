@@ -479,10 +479,12 @@ Then proceed in this order:
 5. Kimi runtime dependency repair；
 6. MOSS 8B resource repair。
 
-Current progress: steps 1-3 are complete. Qwen is waiting for human
-semantic-damage review as a repaired pipeline; MOSS 4B and MiniCPM remain
-stopped by sentinel behavior. The next ordered experiment is Step
-transcript-contract one-row repair.
+Current progress: steps 1-6 are complete. Qwen is waiting for human
+semantic-damage review as a repaired pipeline. MOSS 4B, MiniCPM, and Step are
+stopped by sentinel behavior. Kimi remains blocked by the bounded
+`flash_attn` / `nvcc` dependency audit, and MOSS 8B remains blocked by the
+bounded local 16GB single-GPU resource audit. There is no behavior-clean
+repaired survivor for fixed 15-row.
 
 ## Codex Goal Prompt
 

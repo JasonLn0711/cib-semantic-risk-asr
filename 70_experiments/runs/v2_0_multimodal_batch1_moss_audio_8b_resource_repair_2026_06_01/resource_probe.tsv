@@ -1,0 +1,2 @@
+gpu_memory_total_mib	gpu_memory_free_mib	model_artifact_storage_gib	bitsandbytes_available	promotion_decision
+16303	15342	16.87	false	blocked_runtime_resource
