@@ -1,0 +1,30 @@
+{
+  "run_id": "v2_0_multimodal_moss4_guarded_sentinel_2026_06_01",
+  "generated_at_unix": 1780302628,
+  "status": "guarded_sentinel_controls_complete",
+  "model_id": "OpenMOSS-Team/MOSS-Audio-4B-Instruct",
+  "source_sentinel_run_id": "v2_0_multimodal_batch1_moss_audio_4b_sentinel_repair_2026_06_01",
+  "sentinel_rows": 6,
+  "sentinel_pass_rows": 6,
+  "hallucination_on_no_speech_rows": 0,
+  "instruction_followed_rows": 0,
+  "summary_or_answer_rows": 0,
+  "translation_rows": 0,
+  "tts_only_rows": 0,
+  "invented_timestamp_rows": 0,
+  "invented_speaker_label_rows": 0,
+  "promotion_decision": "promote_to_fixed_15_candidate_pool",
+  "claim_boundary": "deterministic_guarded_replay_deployment_repair_not_raw_model_capability",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_outputs_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

@@ -1,0 +1,4 @@
+rule_name	threshold	guard_output
+silence_rms_max_threshold	rms_max <= 0.001	無法辨識
+stationary_tone_threshold	rms_mean >= 0.02 and rms_cv <= 0.05 and 0.02 <= zcr_mean <= 0.25	無法辨識
+broadband_noise_threshold	zcr_mean >= 0.15 and rms_cv <= 0.45 and active_ratio >= 0.9 and high_energy_ratio <= 0.1	無法辨識

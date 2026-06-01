@@ -1,0 +1,4 @@
+model_key	model_id	source_run_id	sentinel_pass_rows	hallucination_on_no_speech_rows	behavior_clean_survivor	next_gate
+step_audio	stepfun-ai/Step-Audio-2-mini	v2_0_multimodal_step_audio_guarded_sentinel_2026_06_01	6	0	true	guarded_fixed_15
+moss4	OpenMOSS-Team/MOSS-Audio-4B-Instruct	v2_0_multimodal_moss4_guarded_sentinel_2026_06_01	6	0	true	guarded_fixed_15
+minicpm	openbmb/MiniCPM-o-4_5	v2_0_multimodal_minicpm_guarded_sentinel_2026_06_01	6	0	true	guarded_fixed_15

@@ -1,0 +1,2 @@
+model_family	model_id	planned_gate	repair_prompt_id	smoke_status	output_rows	valid_text_outputs	raw_transcript_like_outputs	repetition_output	summary_or_answer_outputs	translation_outputs	tts_only_outputs	invented_timestamp_outputs	invented_speaker_label_outputs	failure_mode	promotion_decision	output_chars	longest_repeated_char_run
+Step-Audio 2 mini	stepfun-ai/Step-Audio-2-mini	transcript_contract_repair_one_row	step_audio_2_mini_strict_transcript_contract_v1	completed_guard_pass_through	1	1	1	0	0	0	0	0	0	none	promote_to_sentinel	77	1

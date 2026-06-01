@@ -1,0 +1,2 @@
+source_run_id	guarded_rows	pass_through_rows	claim_boundary
+v2_0_multimodal_batch1_minicpm_o_4_5_sentinel_repair_2026_06_01	3	3	deterministic_guarded_replay_deployment_repair

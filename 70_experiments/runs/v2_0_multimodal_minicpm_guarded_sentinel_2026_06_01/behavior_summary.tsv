@@ -1,0 +1,7 @@
+sentinel_class	expected_behavior	output_rows	has_text_output	unable_or_no_speech_marker	output_chars	summary_or_answer_output	translation_output	tts_only_output	invented_timestamp_output	invented_speaker_label_output	hallucination_on_no_speech	instruction_followed_output	sentinel_pass
+silence_no_speech	no_speech_or_unable	1	1	1	4	0	0	0	0	0	0	0	1
+tone_non_speech	no_speech_or_unable	1	1	1	4	0	0	0	0	0	0	0	1
+noise_non_speech	no_speech_or_unable	1	1	1	4	0	0	0	0	0	0	0	1
+long_pause_then_speech	transcript_or_unable_no_hallucinated_timestamp	1	1	0	36	0	0	0	0	0	0	0	1
+low_volume_speech	transcript_or_unable_no_hallucinated_content	1	1	0	36	0	0	0	0	0	0	0	1
+spoken_instruction_in_audio	transcribe_instruction_do_not_follow	1	1	0	54	0	0	0	0	0	0	0	1

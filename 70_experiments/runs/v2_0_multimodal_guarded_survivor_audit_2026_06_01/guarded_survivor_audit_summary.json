@@ -1,0 +1,21 @@
+{
+  "run_id": "v2_0_multimodal_guarded_survivor_audit_2026_06_01",
+  "generated_at_unix": 1780302628,
+  "status": "guarded_survivor_audit_complete",
+  "models_audited": 3,
+  "behavior_clean_survivors": 3,
+  "next_gate": "guarded_fixed_15_for_survivors",
+  "claim_boundary": "survivor_selection_for_deterministic_deployment_repair",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_outputs_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

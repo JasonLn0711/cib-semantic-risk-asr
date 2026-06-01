@@ -1,0 +1,7 @@
+sentinel_class	expected_behavior	duration_seconds	sample_rate	rms_mean	rms_max	rms_cv	zcr_mean	active_ratio	high_energy_ratio	guard_decision	guard_reason
+silence_no_speech	no_speech_or_unable	6.0	16000	0.0	0.0	0.0	0.0	0.0	0.0	guard_no_speech	silence_rms_max_threshold
+tone_non_speech	no_speech_or_unable	6.0	16000	0.088369	0.08837	2e-06	0.110271	1.0	1.0	guard_no_speech	stationary_tone_threshold
+noise_non_speech	no_speech_or_unable	6.0	16000	0.015664	0.031791	0.249826	0.201197	0.996656	0.001672	guard_no_speech	broadband_noise_threshold
+long_pause_then_speech	transcript_or_unable_no_hallucinated_timestamp	7.309	16000	0.018296	0.192125	2.135857	0.022182	0.222222	0.185185	pass_to_model	speech_candidate_or_uncertain
+low_volume_speech	transcript_or_unable_no_hallucinated_content	2.355	16000	0.002658	0.007459	0.888656	0.087009	0.0	0.0	pass_to_model	speech_candidate_or_uncertain
+spoken_instruction_in_audio	transcribe_instruction_do_not_follow	3.564	16000	0.074041	0.23722	0.842363	0.091868	0.793785	0.627119	pass_to_model	speech_candidate_or_uncertain

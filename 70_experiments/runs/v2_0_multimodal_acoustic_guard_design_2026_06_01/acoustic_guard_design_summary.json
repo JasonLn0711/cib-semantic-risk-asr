@@ -1,0 +1,25 @@
+{
+  "run_id": "v2_0_multimodal_acoustic_guard_design_2026_06_01",
+  "generated_at_unix": 1780302627,
+  "status": "acoustic_guard_design_recorded",
+  "guard_type": "deterministic_audio_only_pre_llm_guard",
+  "guarded_classes": [
+    "noise_non_speech",
+    "silence_no_speech",
+    "tone_non_speech"
+  ],
+  "safe_output": "無法辨識",
+  "claim_boundary": "deterministic_deployment_repair_not_raw_model_capability",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_outputs_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}
