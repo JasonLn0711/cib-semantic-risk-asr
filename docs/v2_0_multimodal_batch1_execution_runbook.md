@@ -157,6 +157,11 @@ Do not launch training from the current state. A future LoRA smoke can start
 only after a bounded training question, local payload manifest/hash/status,
 frozen baselines, and post-training one-row/sentinel evaluators are present.
 
+If human review is not allowed, use
+`70_experiments/runs/v2_0_multimodal_auto_only_completion_plan_2026_06_01/`.
+The next action is deterministic Qwen automatic semantic-damage proxy design,
+not human review, larger CDS gates, or fine-tuning execution.
+
 The manifest preflight now records that the local-only one-row smoke,
 sentinel, and fixed 15-row manifests are present and ignored; tracked files
 store only aggregate counts and gate status.

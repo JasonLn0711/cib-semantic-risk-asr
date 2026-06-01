@@ -300,6 +300,14 @@ non-speech sentinel hallucination. Step is the first future LoRA candidate if
 training is approved; Kimi and MOSS 8B remain not ready before runtime /
 resource repair.
 
+The no-human-review completion route is recorded in
+`70_experiments/runs/v2_0_multimodal_auto_only_completion_plan_2026_06_01/`.
+This supersedes the human-review unlock for the current user constraint. The
+next concrete gate is a deterministic Qwen automatic semantic-damage proxy
+over local raw/repaired payloads, with only aggregate counts and manifest /
+hash status tracked. If that proxy is not clean, the final state is
+`auto_only_no_winner_stop`.
+
 ### Phase 3 Qwen OpenCC Locale Repair: 2026-06-01
 
 Qwen2.5-Omni OpenCC / Taiwan-term locale repair is recorded in

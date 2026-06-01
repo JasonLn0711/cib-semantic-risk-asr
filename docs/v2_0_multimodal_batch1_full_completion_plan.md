@@ -215,6 +215,12 @@ and requires local/private payload manifests, frozen pre-training baselines,
 post-training one-row and sentinel evaluation, and `6/6` sentinel pass before
 any fixed-15 promotion.
 
+Under the no-human-review constraint, the active remaining path is
+`70_experiments/runs/v2_0_multimodal_auto_only_completion_plan_2026_06_01/`.
+It uses an automatic Qwen semantic-damage proxy instead of human semantic
+review and restricts the endpoint to either a limited automatic-proxy repaired
+pipeline claim or `auto_only_no_winner_stop`.
+
 ## Batch 1 Model Scope
 
 Primary zh-TW audio LLM lane:
