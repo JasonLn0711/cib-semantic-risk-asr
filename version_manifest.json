@@ -1,25 +1,29 @@
 {
-  "version": "v2.5.273",
+  "version": "v2.5.274",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 273
+    "patch": 274
   },
-  "updated_at": "2026-06-01T15:30:24+08:00",
+  "updated_at": "2026-06-01T15:35:07+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "9aa99dc",
+  "base_commit": "33c0c9b",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
     "70_experiments/registry.tsv",
+    "70_experiments/runs/v2_0_multimodal_qwen_expert_review_packet_2026_06_01/README.md",
+    "70_experiments/runs/v2_0_multimodal_qwen_expert_review_packet_2026_06_01/controlled_artifact_manifest.tsv",
+    "70_experiments/runs/v2_0_multimodal_qwen_expert_review_packet_2026_06_01/expert_review_packet_summary.json",
+    "70_experiments/runs/v2_0_multimodal_qwen_expert_review_packet_2026_06_01/packet_file_hashes.tsv",
     "docs/model_evaluation_state.md",
     "docs/v2_0_multimodal_batch1_execution_runbook.md",
-    "docs/v2_0_multimodal_batch1_full_completion_plan.md",
-    "docs/v2_0_multimodal_batch1_repair_first_experiment_guide.md"
+    "scripts/prepare_v2_0_qwen_expert_review_packet.py",
+    "scripts/validate_v2_0_qwen_expert_review_packet.py"
   ]
 }

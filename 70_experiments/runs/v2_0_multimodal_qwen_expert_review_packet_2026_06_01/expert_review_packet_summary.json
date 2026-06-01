@@ -1,0 +1,29 @@
+{
+  "run_id": "v2_0_multimodal_qwen_expert_review_packet_2026_06_01",
+  "generated_at_unix": 1780299210,
+  "status": "qwen_expert_review_packet_prepared_local_only",
+  "source_proxy_run_id": "v2_0_multimodal_qwen_auto_semantic_damage_proxy_2026_06_01",
+  "source_raw_run_id": "v2_0_multimodal_batch1_qwen_fixed_15_row_transcript_gate_2026_06_01",
+  "source_repair_run_id": "v2_0_multimodal_batch1_qwen_opencc_locale_repair_2026_06_01",
+  "model_id": "Qwen/Qwen2.5-Omni-7B",
+  "review_scope": "locale_residual_rows_after_auto_semantic_proxy",
+  "review_row_count": 7,
+  "packet_location_policy": "downloads_folder_local_only_not_tracked",
+  "packet_directory_name": "v2_0_multimodal_qwen_expert_review_packet_2026_06_01",
+  "packet_zip_name": "v2_0_multimodal_qwen_expert_review_packet_2026_06_01.zip",
+  "packet_zip_sha256": "e6dde6261d16b234c1b1f96cedd5e1511b18d9f50142e1692ac27baa0a14440d",
+  "human_review_status": "packet_prepared_review_not_executed",
+  "claim_boundary": "expert_review_packet_only_not_review_result",
+  "privacy": {
+    "raw_audio_tracked": false,
+    "row_ids_tracked": false,
+    "transcripts_tracked": false,
+    "references_tracked": false,
+    "hypotheses_tracked": false,
+    "reviewer_notes_tracked": false,
+    "local_paths_tracked": false,
+    "model_outputs_tracked": false,
+    "transcript_bearing_runtime_logs_tracked": false,
+    "model_cache_paths_tracked": false
+  }
+}

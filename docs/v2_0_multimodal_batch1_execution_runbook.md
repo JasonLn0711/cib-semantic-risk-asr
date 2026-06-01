@@ -190,6 +190,23 @@ non-speech sentinel hallucination reduction. Training execution is
 manifest and LoRA adapter-loading evaluator contract must be prepared before a
 tiny LoRA smoke can run.
 
+For expert review routing, the Qwen locale-residual rows have a local-only
+packet in Downloads:
+
+```text
+~/Downloads/v2_0_multimodal_qwen_expert_review_packet_2026_06_01/
+~/Downloads/v2_0_multimodal_qwen_expert_review_packet_2026_06_01.zip
+```
+
+The tracked manifest is:
+
+```text
+70_experiments/runs/v2_0_multimodal_qwen_expert_review_packet_2026_06_01/
+```
+
+The packet contains transcript-bearing review material and must stay outside
+Git. The tracked status is `packet_prepared_review_not_executed`.
+
 The manifest preflight now records that the local-only one-row smoke,
 sentinel, and fixed 15-row manifests are present and ignored; tracked files
 store only aggregate counts and gate status.

@@ -253,6 +253,15 @@ hallucination reduction. Training is not launched yet because the local private
 training payload manifest and LoRA adapter-loading evaluator contract are not
 ready; those gates must pass before any adapter training.
 
+If an expert review is needed, the locale-residual Qwen rows are packaged
+locally in `~/Downloads/v2_0_multimodal_qwen_expert_review_packet_2026_06_01/`
+and
+`~/Downloads/v2_0_multimodal_qwen_expert_review_packet_2026_06_01.zip`.
+The repo-safe manifest is
+`70_experiments/runs/v2_0_multimodal_qwen_expert_review_packet_2026_06_01/`.
+This is a packet-preparation record only: `human_review_status` is
+`packet_prepared_review_not_executed`, and no review result is claimed.
+
 ### Repair-First Phase Progress: 2026-06-01
 
 The first repair-first execution block has completed Phases 1-9 as
