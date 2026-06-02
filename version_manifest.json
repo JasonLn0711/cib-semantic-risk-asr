@@ -1,25 +1,24 @@
 {
-  "version": "v2.5.310",
+  "version": "v2.5.311",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 310
+    "patch": 311
   },
-  "updated_at": "2026-06-01T20:31:09+08:00",
+  "updated_at": "2026-06-02T14:34:47+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "21b4055",
+  "base_commit": "c965f61",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "80_semantic_risk_asr/paper/artifact_manifest.tsv",
-    "80_semantic_risk_asr/paper/main_text_figure_table_strategy_2026_06_01_zh.md",
+    "80_semantic_risk_asr/paper/figures/figure1_cds_asr_pipeline_redrawn.pdf",
+    "80_semantic_risk_asr/paper/figures/figure2_evidence_ladder_redrawn.pdf",
     "80_semantic_risk_asr/paper/manuscript_submission.pdf",
-    "80_semantic_risk_asr/paper/manuscript_submission.tex",
-    "80_semantic_risk_asr/paper/submission_readiness_package_zh.md"
+    "80_semantic_risk_asr/paper/manuscript_submission.tex"
   ]
 }
