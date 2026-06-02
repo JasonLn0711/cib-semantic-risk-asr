@@ -5,6 +5,24 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.317 - 2026-06-02T23:02:14+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `37abc86`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/janus_300_high_stakes_ceis_ablation_dual_reviewer_2026_06_02/INTERPRETATION.md`
+  - `70_experiments/runs/janus_300_high_stakes_ceis_ablation_dual_reviewer_2026_06_02/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_ceis_ablation_dual_reviewer_2026_06_02/ceis_ablation_delta_summary.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_ceis_ablation_dual_reviewer_2026_06_02/ceis_ablation_model_summary.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_ceis_ablation_dual_reviewer_2026_06_02/ceis_ablation_policy_replay.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_ceis_ablation_dual_reviewer_2026_06_02/ceis_ablation_predictor_summary.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_ceis_ablation_dual_reviewer_2026_06_02/ceis_ablation_summary.json`
+  - `80_semantic_risk_asr/scoring/analyze_ceis_ablation.py`
+  - `tests/test_ceis_ablation.py`
+
 ## v2.5.316 - 2026-06-02T18:35:34+08:00
 
 - Bump: `patch`
