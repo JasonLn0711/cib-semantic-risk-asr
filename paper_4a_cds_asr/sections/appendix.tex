@@ -10,10 +10,12 @@ The appendix records the aggregate artifacts used by the manuscript. Long operat
 \item Recovery replay: \artifact{70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison.tsv}
 \item Fixed-budget frontier: \artifact{70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/fixed_budget_recovery_frontier.tsv}
 \item Risk atom review: \artifact{70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_risk_atom_review.tsv}
+\item Completed dual-reviewer audit record: \artifact{70_experiments/runs/janus_300_high_stakes_human_audit_completed_300_dual_reviewer_2026_06_02/}
+\item CEIS ablation summary: \artifact{70_experiments/runs/janus_300_high_stakes_ceis_ablation_dual_reviewer_2026_06_02/}
 \item CEIS method summary: \artifact{70_experiments/runs/postdoc_evidence_chain_2026_05_25/ceis_method_summary.tsv}
 \item Artifact manifest: \artifact{80_semantic_risk_asr/paper/artifact_manifest.tsv}
 \end{itemize}
 
 \section{Ablation Status}
 
-Aggregate-safe CEIS ablation inputs were not found in the current repository state. The required ablation plan is recorded in \artifact{paper_4a_cds_asr/TODO_required_before_submission.md}. No ablation results are fabricated in this manuscript.
+Aggregate-safe CEIS ablation is complete on the selected-300 dual-reviewer surface. The tracked output folder contains \artifact{ceis_ablation_summary.json}, \artifact{ceis_ablation_predictor_summary.tsv}, \artifact{ceis_ablation_policy_replay.tsv}, \artifact{ceis_ablation_model_summary.tsv}, \artifact{ceis_ablation_delta_summary.tsv}, and an interpretation note. These outputs are aggregate-only and exclude transcript-bearing reviewer sheets, merged sheets, raw audio, raw transcripts, row identifiers, reviewer notes, and completed review packages.

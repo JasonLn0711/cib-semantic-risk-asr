@@ -7,7 +7,7 @@ Date: 2026-06-02
 - R figures regenerated with `.r-env/bin/Rscript paper_4a_cds_asr/r/build_all_figures.R`.
 - LaTeX compiled with `latexmk -pdf -interaction=nonstopmode -halt-on-error -output-directory=/tmp/paper4a_build main.tex` from `paper_4a_cds_asr/`.
 - Final PDF copied to `paper_4a_cds_asr/paper_4a_cds_asr.pdf`.
-- Final PDF: 11 pages.
+- Final PDF: 13 pages.
 - Final log scan found no undefined citations, unresolved references, LaTeX errors, or overfull boxes.
 
 ## Figure Regeneration
@@ -33,29 +33,48 @@ The R scripts read only aggregate TSV inputs:
 - `fixed_budget_recovery_frontier.tsv`
 - `human_audit_risk_atom_review.tsv`
 
+The regenerated manuscript also references aggregate-only completion and
+ablation artifacts:
+
+- `human_audit_completion_checks.tsv`
+- `human_audit_reviewer_agreement.tsv`
+- `human_audit_reviewer_agreement_summary.json`
+- `human_audit_row_level_distribution.tsv`
+- `ceis_ablation_summary.json`
+- `ceis_ablation_predictor_summary.tsv`
+- `ceis_ablation_policy_replay.tsv`
+- `ceis_ablation_model_summary.tsv`
+- `ceis_ablation_delta_summary.tsv`
+
 Conceptual figures are drawn from manuscript protocol text and aggregate evidence counts. No R script reads raw audio, raw transcripts, selected row identifiers, reviewer notes, or transcript-bearing runtime logs.
 
-## Claim-Boundary Check
+## Claim-Evidence Check
 
-- The manuscript treats the 90 assessments as clustered within 30 reviewed rows.
-- CEIS is framed as a conservative decision-stability signal, not a universal classifier.
-- CEIS plausibility is framed as a bounded proxy, not a calibrated acoustic posterior.
+- The manuscript treats the 900 model-level assessments per reviewer as
+  clustered within 300 selected rows per reviewer.
+- CEIS is framed as a decision-stability evidence signal and audit mechanism,
+  not as a deployment threshold.
+- CEIS plausibility is framed as a bounded proxy and calibration handle, not a
+  calibrated acoustic posterior.
 - Thresholds are framed as diagnostic operating points, not deployment thresholds.
 - selected-300 is framed as an enriched high-stakes audit surface, not a prevalence-preserving sample.
-- Human review is framed as a single-expert audit.
+- Human review is framed as a completed 300-row dual-reviewer audit with
+  Cohen's kappa reported as a validation layer.
 - Deployment readiness is not claimed.
 
-## CSL Submission Hold
+## CSL Submission Gate
 
-- Expert review indicates the current 30-row single-reviewer evidence should be
-  treated as a pilot audit layer rather than the final CSL submission surface.
-- A 120-row expansion queue was created at
-  `70_experiments/runs/janus_300_high_stakes_human_audit_expansion_120_csl_2026_06_02/`.
-- The local 120-row audit sheet is under ignored `artifacts/`; tracked outputs
-  report only aggregate selection, atom coverage, and model-signal coverage.
-- Submission should wait until 100+ rows are fully reviewed, second-reviewer
-  agreement is computed, and CEIS ablations are regenerated.
+- Expert review completed the selected-300 audit surface for two reviewers:
+  300/300 row-level fields and 900/900 model-level assessments per reviewer.
+- Cohen's kappa is recorded for decision change (`0.849970`),
+  semantic-risk label (`1.000000`), expected safe action (`0.851426`), and
+  annotation confidence (`0.934274`).
+- CEIS ablation is generated from aggregate-only outputs on the dual-reviewer
+  surface, including full CEIS, without atom weights, without plausibility,
+  binary atom, and top-3 variants.
+- The current manuscript, figure, and PDF rebuild is validated from these
+  completed evidence layers.
 
 ## Ablation Status
 
-Aggregate-safe CEIS ablation inputs were not found. No ablation results were fabricated. Required missing inputs are listed in `TODO_required_before_submission.md`.
+Aggregate-safe CEIS ablation is complete in `70_experiments/runs/janus_300_high_stakes_ceis_ablation_dual_reviewer_2026_06_02/`. Full CEIS reaches AUC `0.717039` for strict decision-change labels for both reviewers. Simplified variants remain nearly identical, which supports the contribution-first interpretation that decision-changing risk-atom instability is the stable CDS-ASR evidence signal. Policy replay triggers conservative action on `35/900` model-level assessments and reduces high-risk missed cases from `6` to `0` and critical misses from `1` to `0` for both reviewers.

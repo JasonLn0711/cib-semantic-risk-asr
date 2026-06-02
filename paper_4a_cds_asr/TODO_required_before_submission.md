@@ -2,11 +2,9 @@
 
 Date: 2026-06-02
 
-Status: do not submit yet. The 100+ row human audit and dual-reviewer agreement
-gates are completed at the full selected-300 scope. The remaining mandatory
-evidence addition before Computer Speech \& Language submission is
-aggregate-safe CEIS ablation, followed by manuscript/table/figure regeneration.
-No ablation result should be fabricated.
+Status: required manuscript regeneration complete. The 100+ row human audit,
+dual-reviewer agreement, aggregate-safe CEIS ablation, manuscript/table/figure
+updates, and PDF validation are completed at the full selected-300 scope.
 
 Recommended before submission:
 
@@ -18,8 +16,8 @@ is `70_experiments/runs/janus_300_high_stakes_human_audit_completed_300_dual_rev
 
 | Requirement | Current state | Required before submission |
 | --- | --- |
-| Reviewed rows | Completed: 300 rows per reviewer | Update manuscript from pilot wording after CEIS ablation |
-| Model assessments | Completed: 900 model-level assessments per reviewer | Regenerate predictor/replay/ablation tables from expanded surface |
+| Reviewed rows | Completed: 300 rows per reviewer | Manuscript updated from pilot-only wording to dual-reviewer evidence |
+| Model assessments | Completed: 900 model-level assessments per reviewer | CEIS ablation and replay table added from expanded surface |
 | Output boundary | Aggregate-only summaries | No raw audio, transcripts, row IDs, reviewer notes, hypotheses, or local response sheets in git |
 | Current completion run | `70_experiments/runs/janus_300_high_stakes_human_audit_completed_300_dual_reviewer_2026_06_02/` | Use aggregate-only record; keep completed package local/download-only |
 
@@ -39,15 +37,27 @@ Recorded Cohen's kappa values: decision change `0.849970`, semantic-risk label
 
 ## 3. CEIS Ablation
 
-| Ablation | Missing aggregate input needed |
-| --- | --- |
-| CEIS full | Versioned aggregate predictor and replay metrics on the expanded reviewed surface. |
-| CEIS without atom weights | Recompute CEIS with risk-atom weights set to a constant. |
-| CEIS without plausibility | Recompute CEIS with the plausibility term removed or set to a constant. |
-| CEIS binary atom | Recompute from binary decision-change / atom-trigger presence rather than weighted distance. |
-| Max versus top-k aggregation | Compare maximum aggregation and top-k aggregation over variants. |
-| CEIS by atom class | Stratify aggregate metrics by risk atom class without transcript-bearing spans or row identifiers. |
+The CEIS ablation gate is complete. The aggregate-only run is
+`70_experiments/runs/janus_300_high_stakes_ceis_ablation_dual_reviewer_2026_06_02/`.
 
-If these artifacts are generated later, they should remain aggregate-only and
-must not include raw audio, transcripts, row identifiers, reviewer notes, or
-transcript-bearing logs.
+| Ablation | Current state |
+| --- | --- |
+| CEIS full | Completed on 900 reviewed model-level assessments per reviewer. |
+| CEIS without atom weights | Completed; AUC delta versus full CEIS is `0.000000` for strict decision-change labels. |
+| CEIS without plausibility | Completed; AUC delta versus full CEIS is `0.000000` for strict decision-change labels. |
+| CEIS binary atom | Completed; AUC delta versus full CEIS is approximately `0.000572`. |
+| Max versus top-k aggregation | Completed with `ceis_full_top3_mean`; AUC delta versus full CEIS is approximately `0.000550`. |
+| CEIS by atom class | Supported as aggregate unstable-atom counts in the run summary; transcript-bearing spans remain outside git. |
+
+The paper-facing interpretation is contribution-first: the ablation shows that
+decision-changing risk-atom instability is a stable CDS-ASR evidence signal.
+Plausibility and atom weights remain explicit CEIS design components and
+calibration handles for richer acoustic and domain-prior validation.
+
+## 4. Final Submission Checks
+
+- [x] Regenerate R figures after the updated evidence ladder and pilot predictor labels.
+- [x] Rebuild LaTeX PDF.
+- [x] Check citations, references, overfull boxes, and aggregate-only artifact references.
+- [x] Confirm no raw audio, transcripts, row identifiers, reviewer notes,
+  hypotheses, merged reviewer sheets, or completed review zip are committed.

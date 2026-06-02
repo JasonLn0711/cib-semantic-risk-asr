@@ -2,7 +2,7 @@
 
 \subsection{Evidence Layers}
 
-The evidence design separates four layers: the 258-row ASR model-comparison split, selected-300 enriched high-stakes provenance outputs, 30 human-reviewed audit rows, and 90 model-row assessments clustered within those 30 reviewed rows. Figure~\ref{fig:evidence_ladder} summarizes the design.
+The evidence design separates four layers: the 258-row ASR model-comparison split, selected-300 enriched high-stakes provenance outputs, a completed 300-row dual-reviewer human audit, and 900 model-level assessments per reviewer clustered within those 300 reviewed rows. Figure~\ref{fig:evidence_ladder} summarizes the design.
 
 \begin{figure}[htbp]
 \centering
@@ -11,7 +11,7 @@ The evidence design separates four layers: the 258-row ASR model-comparison spli
 \label{fig:evidence_ladder}
 \end{figure}
 
-The 258-row split provides ASR model-comparison context. The selected-300 layer is an enriched high-stakes audit surface and is not prevalence-preserving. The reviewed evidence layer currently consists of 30 rows and 90 clustered model assessments. The outcome label is human-reviewed decision change. Human review is treated as a completed single-expert pilot audit; no inter-annotator agreement claim is made in the current draft. The CSL submission-validation layer expands this audit to 100+ completed rows and adds a second reviewer so that Cohen's kappa, or Fleiss' kappa if more than two reviewers are used, can be reported before submission.
+The 258-row split provides ASR model-comparison context. The selected-300 layer is an enriched high-stakes audit surface and is not prevalence-preserving. The reviewed evidence layer consists of 300 rows per reviewer and 900 clustered model-level assessments per reviewer. The outcome label is human-reviewed decision change. Two reviewers completed the same selected-300 surface; Cohen's kappa is 0.849970 for decision-change labels, 1.000000 for semantic-risk labels, 0.851426 for expected safe action, and 0.934274 for annotation confidence. Reviewer agreement is treated as a validation layer over the same audit surface, while reviewer-specific labels are preserved separately for CEIS ablation rather than collapsed into an inferred adjudication.
 
 \subsection{Baselines And Outcome}
 
@@ -20,3 +20,7 @@ The predictor comparison evaluates WER, CER, SRES, and CEIS against human-review
 \subsection{Uncertainty And Sensitivity}
 
 Row-clustered uncertainty is reported from \artifact{70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_clustered_ci.tsv}. Leave-one-row-out sensitivity is recorded in \artifact{70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_predictor_leave_one_row_out.tsv}. Recovery-policy uncertainty and sensitivity are recorded in the corresponding aggregate recovery artifacts.
+
+\subsection{CEIS Ablation Design}
+
+The expanded dual-reviewer surface is used for an aggregate-only CEIS ablation. The variants are full CEIS, CEIS without atom weights, CEIS without plausibility, binary atom triggering, and top-3 mean aggregation over full CEIS components. The ablation isolates the mechanism that CDS-ASR contributes: decision-changing risk-atom instability under plausible alternatives. All ablation outputs are reviewer-separated aggregate summaries and exclude raw audio, transcripts, row identifiers, hypotheses, reviewer notes, and transcript-bearing merged sheets.

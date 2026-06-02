@@ -2,16 +2,17 @@
 
 Date: 2026-06-02
 
-Status: human audit expansion and dual-reviewer agreement completed; CEIS
-ablation remains before CSL submission.
+Status: human audit expansion, dual-reviewer agreement, and CEIS ablation
+completed; final manuscript/PDF validation remains before CSL submission.
 
 ## 判斷
 
 目前 Paper 4-a 是一份可讀、可編譯、aggregate-only 邊界清楚的 scoped
 manuscript foundation。2026-06-02 expert review 已完成 selected-300 全量
 human audit 與 dual-reviewer agreement，讓 100+ human audit 與 Kappa gate
-升級為 completed evidence layer。正式投稿前的剩餘補強是 CEIS ablation 與
-manuscript/table/figure regeneration。
+升級為 completed evidence layer。CEIS ablation 也已在同一 dual-reviewer
+surface 上完成。正式投稿前的剩餘補強是 manuscript/table/figure/PDF 的最後
+validation。
 
 ## 必補 Gate
 
@@ -20,7 +21,7 @@ manuscript/table/figure regeneration。
 | Human audit | Completed: 300/300 rows per reviewer | 100+ completed reviewed rows | `70_experiments/runs/janus_300_high_stakes_human_audit_completed_300_dual_reviewer_2026_06_02/` |
 | Dual reviewer | Completed: two reviewers on same 300-row surface | 第二位 reviewer 完成同一 100+ row surface | completed local package; tracked aggregate record |
 | Reviewer agreement | Completed: Cohen's kappa recorded | Cohen's kappa；若超過兩位 reviewer 則 Fleiss' kappa | `human_audit_reviewer_agreement_summary.json`, `human_audit_reviewer_agreement.tsv` |
-| CEIS ablation | 缺 aggregate-safe ablation inputs | CEIS full、without atom weights、without plausibility、binary atom | future aggregate-only ablation run |
+| CEIS ablation | Completed: aggregate-safe dual-reviewer run | CEIS full、without atom weights、without plausibility、binary atom、top-3 | `70_experiments/runs/janus_300_high_stakes_ceis_ablation_dual_reviewer_2026_06_02/` |
 
 ## Human Audit Expansion
 
@@ -31,9 +32,8 @@ Expert review completed the full 300-row surface. Both reviewers completed
 
 - local review sheet 放在 ignored `artifacts/`。
 - tracked outputs 只留 selection summary、stratum coverage、risk atom coverage、model signal coverage。
-- Manuscript evidence can now be updated from `30 rows / 90 assessments` pilot
-  wording to the completed 300-row / 900-assessment dual-reviewer surface after
-  CEIS ablation and figure/table regeneration.
+- Manuscript evidence is being updated from pilot wording to the completed
+  300-row / 900-assessment dual-reviewer surface with CEIS ablation.
 
 ## Dual Reviewer Agreement
 
@@ -51,8 +51,8 @@ artifacts.
 
 ## CEIS Ablation
 
-下一個 ablation run 應用 local transcript-bearing CEIS metric input 重算，但
-只輸出 aggregate predictor / replay summaries。最小 ablation set：
+CEIS ablation 已應用 local-only completed review 與 CEIS metric input 重算，
+tracked outputs 只保留 aggregate predictor / replay summaries：
 
 | Variant | Definition |
 | --- | --- |
@@ -60,21 +60,20 @@ artifacts.
 | without atom weights | `plausibility * 1 * decision_distance` |
 | without plausibility | `1 * atom_weight * decision_distance` |
 | binary atom | binary trigger from atom-level decision change / instability |
+| top-3 mean | top-3 mean over full CEIS variant components |
 
-主文可以把 ablation 放在 Results 或 Appendix，但投稿版本至少要在 reviewer-facing
-claim map 裡明確回答：CEIS 的訊號是否真的來自 plausibility、risk atom weight、
-decision distance 的組合，而不是單一 threshold artifact。
+主文已加入 Results ablation 小節與 table。貢獻導向解讀是：decision-changing
+risk-atom instability 是穩定 CDS-ASR evidence signal；plausibility 與 atom
+weights 是 CEIS 的 explicit calibration handles，可支撐後續更豐富的 acoustic
+與 domain-prior validation。
 
 ## Manuscript Update Rule
 
-Before CEIS ablation and regeneration, the current manuscript may still contain
-stale pilot-audit wording that should be treated as pending update:
+Manuscript regeneration should verify that stale pilot-only evidence wording
+has been replaced where it refers to the submission-critical evidence layer.
+The text should no longer describe the main validation surface as a
+single-reviewer pilot, a 30/90 assessment-only evidence layer, an agreement-free
+review, or a pending-ablation state.
 
-- `single-expert pilot audit`
-- `30 rows / 90 clustered model assessments`
-- `no inter-annotator agreement claim`
-- `CEIS ablations pending`
-
-After CEIS ablation, rebuild figures, tables, appendix, claim registry, and PDF,
-then update the manuscript to the completed 300-row dual-reviewer evidence
-surface and move the submission checklist toward ready.
+Next step: rebuild figures, tables, appendix, claim registry, and PDF, then run
+the final submission readiness check.
