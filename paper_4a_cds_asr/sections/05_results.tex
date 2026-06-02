@@ -1,0 +1,51 @@
+\section{Results}
+
+\subsection{ASR Model-Comparison Context}
+
+Table~\ref{tab:asr_benchmark} reports the 258-row ASR benchmark context. The partial-encoder run has the strongest current aggregate CER and WER profile in this split. This is model-comparison context only; it does not by itself establish downstream safety.
+
+\input{tables/table1_asr_benchmark}
+
+\subsection{Predictor Comparison}
+
+Table~\ref{tab:predictor} and Figure~\ref{fig:predictor_auc} compare WER, CER, SRES, and CEIS against human-reviewed decision-change labels. CEIS has the strongest point AUC in the scoped audit and reaches a zero-false-negative diagnostic operating point. This is reported as a decision-stability signal under the selected audit boundary, not as a deployment threshold or universal classifier claim.
+
+\input{tables/table2_predictor}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{figures/fig3_predictor_auc.pdf}
+\caption{Predictor comparison for WER, CER, SRES, and CEIS with row-clustered intervals. Source artifacts: \artifact{human_audit_predictor_comparison.tsv} and \artifact{human_audit_predictor_clustered_ci.tsv}.}
+\label{fig:predictor_auc}
+\end{figure}
+
+\subsection{Aggregate Policy Replay}
+
+Table~\ref{tab:policy} and Figure~\ref{fig:policy_replay} report aggregate policy replay. SRES-triggered recovery and CEIS-triggered conservative action eliminate high-risk missed and critical miss counts in aggregate replay at the same diagnostic budget. CEIS ensemble arbitration adds abstention behavior at a higher budget.
+
+\input{tables/table3_policy_replay}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{figures/fig4_policy_replay.pdf}
+\caption{Aggregate policy replay under human-reviewed selected-300 labels. Source artifact: \artifact{70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/policy_comparison.tsv}.}
+\label{fig:policy_replay}
+\end{figure}
+
+\subsection{Fixed-Budget Frontier And Risk Atoms}
+
+Figure~\ref{fig:frontier} shows the fixed-budget conservative replay frontier. Figure~\ref{fig:risk_atom} summarizes human-reviewed decision-change evidence by risk atom.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{figures/fig5_fixed_budget_frontier.pdf}
+\caption{Fixed-budget conservative replay frontier. Source artifact: \artifact{70_experiments/runs/janus_300_high_stakes_recovery_human_reviewed_2026_05_26/fixed_budget_recovery_frontier.tsv}.}
+\label{fig:frontier}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{figures/fig6_risk_atom_review.pdf}
+\caption{Human-reviewed decision-change evidence by risk atom. Source artifact: \artifact{70_experiments/runs/janus_300_high_stakes_human_audit_selection_2026_05_25/human_audit_risk_atom_review.tsv}.}
+\label{fig:risk_atom}
+\end{figure}

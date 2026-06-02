@@ -5,6 +5,54 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.315 - 2026-06-02T18:35:22+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `0af2d55`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `paper_4a_cds_asr/CHANGELOG.md`
+  - `paper_4a_cds_asr/TODO_required_before_submission.md`
+  - `paper_4a_cds_asr/figures/fig1_pipeline.pdf`
+  - `paper_4a_cds_asr/figures/fig1_pipeline.png`
+  - `paper_4a_cds_asr/figures/fig2_evidence_ladder.pdf`
+  - `paper_4a_cds_asr/figures/fig2_evidence_ladder.png`
+  - `paper_4a_cds_asr/figures/fig3_predictor_auc.pdf`
+  - `paper_4a_cds_asr/figures/fig3_predictor_auc.png`
+  - `paper_4a_cds_asr/figures/fig4_policy_replay.pdf`
+  - `paper_4a_cds_asr/figures/fig4_policy_replay.png`
+  - `paper_4a_cds_asr/figures/fig5_fixed_budget_frontier.pdf`
+  - `paper_4a_cds_asr/figures/fig5_fixed_budget_frontier.png`
+  - `paper_4a_cds_asr/figures/fig6_risk_atom_review.pdf`
+  - `paper_4a_cds_asr/figures/fig6_risk_atom_review.png`
+  - `paper_4a_cds_asr/main.tex`
+  - `paper_4a_cds_asr/paper_4a_cds_asr.pdf`
+  - `paper_4a_cds_asr/r/build_all_figures.R`
+  - `paper_4a_cds_asr/r/build_fig1_pipeline.R`
+  - `paper_4a_cds_asr/r/build_fig2_evidence_ladder.R`
+  - `paper_4a_cds_asr/r/build_fig3_predictor_auc.R`
+  - `paper_4a_cds_asr/r/build_fig4_policy_replay.R`
+  - `paper_4a_cds_asr/r/build_fig5_fixed_budget_frontier.R`
+  - `paper_4a_cds_asr/r/build_fig6_risk_atom_review.R`
+  - `paper_4a_cds_asr/r/plot_common.R`
+  - `paper_4a_cds_asr/references.bib`
+  - `paper_4a_cds_asr/sections/01_introduction.tex`
+  - `paper_4a_cds_asr/sections/02_related_work.tex`
+  - `paper_4a_cds_asr/sections/03_method.tex`
+  - `paper_4a_cds_asr/sections/04_experimental_setup.tex`
+  - `paper_4a_cds_asr/sections/05_results.tex`
+  - `paper_4a_cds_asr/sections/06_discussion.tex`
+  - `paper_4a_cds_asr/sections/07_limitations_ethics.tex`
+  - `paper_4a_cds_asr/sections/appendix.tex`
+  - `paper_4a_cds_asr/submission_readiness_checklist.md`
+  - `paper_4a_cds_asr/tables/table1_asr_benchmark.tex`
+  - `paper_4a_cds_asr/tables/table2_predictor.tex`
+  - `paper_4a_cds_asr/tables/table3_policy_replay.tex`
+  - `paper_4a_cds_asr/tables/table_risk_atoms.tex`
+  - `paper_4a_cds_asr/validation_report.md`
+
 ## v2.5.314 - 2026-06-02T18:35:09+08:00
 
 - Bump: `patch`

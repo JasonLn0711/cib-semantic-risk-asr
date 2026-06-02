@@ -1,0 +1,11 @@
+\section{Introduction}
+
+Speech is increasingly converted into operational signals. Contact-center and anti-fraud workflows use ASR hypotheses as inputs to routing, escalation, compliance review, and case-handling decisions. In these settings, transcript accuracy is necessary but not sufficient: a small ambiguity around a decision-critical detail can change whether a case is escalated, routed to routine review, or held for conservative manual assessment.
+
+This paper focuses on high-stakes speech-driven decision systems where errors affect spoken decision atoms: negation, amount, actor, action, time, intent, uncertainty, and scam pattern. A transcript can remain close under WER or CER while a plausible ASR alternative changes the downstream action. The central evaluation question is therefore not only how similar the transcript is to a reference, but whether plausible transcript alternatives would preserve the decision.
+
+We introduce Counterfactual Decision-Stability ASR (CDS-ASR), a downstream-aware ASR evaluation framework. CDS-ASR identifies risk atoms, constructs bounded plausible ASR counterfactual variants, scores decision instability with CEIS, and evaluates conservative recovery policies through aggregate replay. The motivating case is anti-fraud triage, but the method is framed as speech evaluation: it tests whether ASR hypotheses remain stable with respect to downstream actions.
+
+The paper makes four contributions. First, it formulates decision-stability evaluation for ASR in high-stakes speech-to-decision workflows. Second, it defines risk atoms as decision-critical transcript spans and uses plausible ASR alternatives to stress the downstream decision function. Third, it evaluates CEIS against WER, CER, and SRES using human-reviewed decision-change labels from 30 reviewed rows and 90 clustered model assessments. Fourth, it reports aggregate policy replay as a scoped intervention analysis, with thresholds treated as diagnostic operating points rather than deployment rules.
+
+All empirical claims are tied to aggregate artifacts. Raw audio, raw transcripts, selected row identifiers, reviewer notes, and transcript-bearing runtime logs remain outside the public release boundary.

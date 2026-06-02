@@ -1,0 +1,7 @@
+\section{Discussion}
+
+The evidence supports a speech-evaluation claim: WER and CER remain necessary, but high-stakes speech-driven decision systems need an additional decision-stability layer. CEIS directly targets the question of whether plausible ASR alternatives around risk atoms would change downstream action.
+
+CEIS should be interpreted conservatively. It is not a calibrated acoustic posterior and not a universal classifier. It is a decision-instability signal built from bounded plausible variants, risk-atom weighting, and downstream decision distance. In the current scoped audit, CEIS has the strongest point AUC and a zero-false-negative diagnostic operating point, while SRES remains a strong semantic-risk baseline.
+
+Better ASR models reduce transcript error but do not remove the need for downstream decision-stability analysis. The model-comparison split identifies the strongest current hypothesis generator; the human-reviewed audit tests whether remaining uncertainty affects decisions.

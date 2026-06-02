@@ -1,0 +1,15 @@
+\begin{table}[htbp]
+\centering
+\caption{Predictor performance against human-reviewed decision-change labels. Source: \artifact{human_audit_predictor_comparison.tsv}. Thresholds are diagnostic operating points on the scoped audit set.}
+\label{tab:predictor}
+\begin{tabular}{lrrrrr}
+\toprule
+Metric & AUC & Best threshold & F1 & Recall & FN \\
+\midrule
+WER & 0.6964 & 42.59 & 0.4615 & 0.5625 & 7 \\
+CER & 0.7276 & 16.42 & 0.4516 & 0.8750 & 2 \\
+SRES & 0.8995 & 270.00 & 0.6512 & 0.8750 & 2 \\
+CEIS & 0.9117 & 5.00 & 0.6275 & 1.0000 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}

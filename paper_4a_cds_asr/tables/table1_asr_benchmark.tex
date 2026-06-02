@@ -1,0 +1,15 @@
+\begin{table}[htbp]
+\centering
+\caption{Main ASR benchmark on the 258-row split. Source: \artifact{70_experiments/runs/janus_258_test_split_asr_cds_proxy/asr_cds_proxy_comparison.tsv}.}
+\label{tab:asr_benchmark}
+\begin{tabular}{lrrrr}
+\toprule
+Run & Rows & CER zh micro & WER zh jieba micro & High-risk missed \\
+\midrule
+Partial encoder & 258 & 15.04 & 21.53 & 4 \\
+LoRA legacy best & 258 & 18.23 & 25.59 & 7 \\
+Breeze ASR25 base & 258 & 22.72 & 30.39 & 30 \\
+Breeze ASR26 & 258 & 24.27 & 32.29 & 22 \\
+\bottomrule
+\end{tabular}
+\end{table}

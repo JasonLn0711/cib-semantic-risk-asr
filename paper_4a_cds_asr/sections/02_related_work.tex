@@ -1,0 +1,13 @@
+\section{Related Work}
+
+\paragraph{Transcript-centered ASR evaluation.}
+WER and CER remain core ASR evaluation metrics because they provide auditable transcript-similarity measures. For Chinese-language ASR, this manuscript treats character-level reporting as the primary paper-facing accuracy layer and segmented word metrics as supplemental evidence. The aggregate metric-compliance audit is recorded in \artifact{70_experiments/runs/wer_metric_audit_2026_05_25/journal_compliance_summary.json}.
+
+\paragraph{Semantic and downstream-aware ASR evaluation.}
+Semantic ASR metrics extend transcript-centered evaluation by asking whether a transcript preserves meaning or downstream task behavior. CDS-ASR builds on this direction but targets a specific decision-stability question: whether plausible ASR alternatives around decision-critical atoms would change downstream action.
+
+\paragraph{ASR correction and confidence-aware repair.}
+ASR correction and confidence filtering improve transcript usability and reduce avoidable repair risk. CDS-ASR is complementary. It does not replace correction; it evaluates whether the remaining uncertainty interval around risk atoms is still decision-stable.
+
+\paragraph{Selective prediction, reject option, and abstention.}
+Selective prediction and reject-option methods provide background for conservative action under uncertainty \citep{chow1970reject,angelopoulos2021conformal}. In CDS-ASR, conservative action means abstention, review prioritization, or escalation for human confirmation. It is not an automated punitive or adverse-action decision.

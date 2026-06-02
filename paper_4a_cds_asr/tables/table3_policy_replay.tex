@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering
+\caption{Aggregate policy replay under human-reviewed selected-300 labels. Source: \artifact{policy_comparison.tsv}.}
+\label{tab:policy}
+\small
+\begin{tabularx}{\linewidth}{@{}Lrrrr@{}}
+\toprule
+Policy & Budget & Unsafe downrouting & High-risk missed & Critical miss \\
+\midrule
+No recovery & 0.0000 & 29 & 6 & 1 \\
+Confidence only & 0.0000 & 29 & 6 & 1 \\
+SRES recovery & 0.3889 & 24 & 0 & 0 \\
+CEIS conservative action & 0.3889 & 24 & 0 & 0 \\
+CEIS ensemble arbitration & 0.5222 & 24 & 0 & 0 \\
+\bottomrule
+\end{tabularx}
+\end{table}
