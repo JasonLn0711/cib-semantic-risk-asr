@@ -9,6 +9,10 @@ Date: 2026-06-02
 - Final PDF copied to `paper_4a_cds_asr/paper_4a_cds_asr.pdf`.
 - Final PDF: 13 pages.
 - Final log scan found no undefined citations, unresolved references, LaTeX errors, or overfull boxes.
+- Title and first-page narrative updated to the contribution-first frame:
+  `From Transcripts To Decisions`, with cited real-world ASR adoption,
+  cited semantic/downstream ASR evaluation work, and CDS-ASR introduced as the
+  next decision-stability evaluation layer.
 
 ## Figure Regeneration
 
@@ -52,15 +56,13 @@ Conceptual figures are drawn from manuscript protocol text and aggregate evidenc
 
 - The manuscript treats the 900 model-level assessments per reviewer as
   clustered within 300 selected rows per reviewer.
-- CEIS is framed as a decision-stability evidence signal and audit mechanism,
-  not as a deployment threshold.
-- CEIS plausibility is framed as a bounded proxy and calibration handle, not a
-  calibrated acoustic posterior.
-- Thresholds are framed as diagnostic operating points, not deployment thresholds.
+- CEIS is framed as a decision-stability evidence signal and audit mechanism.
+- CEIS plausibility is framed as a bounded proxy and calibration handle.
+- Thresholds are framed as retrospective diagnostic operating points.
 - selected-300 is framed as an enriched high-stakes audit surface, not a prevalence-preserving sample.
 - Human review is framed as a completed 300-row dual-reviewer audit with
   Cohen's kappa reported as a validation layer.
-- Deployment readiness is not claimed.
+- Deployment readiness is routed to the next validation path.
 
 ## CSL Submission Gate
 

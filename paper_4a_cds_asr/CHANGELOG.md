@@ -16,8 +16,13 @@ Date: 2026-06-02
   layer over the same selected-300 audit surface.
 - Added CEIS ablation reporting for full CEIS, without atom weights, without
   plausibility, binary atom, and top-3 aggregation variants.
-- Preserved claim-evidence alignment: no deployment readiness claim,
-  diagnostic thresholds only, selected-300 as an enriched audit surface, and
-  model-level assessments clustered within selected rows.
+- Updated the title and first-page narrative to the contribution-first frame:
+  real-world speech-to-action use with citations, current transcript/semantic/
+  uncertainty solution landscape with citations, and CDS-ASR as the next
+  decision-stability evaluation layer.
+- Preserved claim-evidence alignment through positive-scope wording:
+  retrospective diagnostic thresholds, selected-300 as an enriched audit
+  surface, model-level assessments clustered within selected rows, and live
+  deployment readiness routed to the next validation path.
 - Updated R figure-generation scripts for the 300-row / 900-assessment evidence
   ladder and pilot predictor labeling.

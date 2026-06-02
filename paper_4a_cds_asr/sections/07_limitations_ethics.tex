@@ -1,7 +1,7 @@
-\section{Limitations And Ethics}
+\section{Scope, Ethics, And Validation Path}
 
 The reviewed audit is a selected high-stakes validation surface: 300 human-reviewed rows per reviewer and 900 model-level assessments per reviewer clustered within those rows. The 900 assessments are not 900 independent calls; they are model-level assessments nested within 300 selected rows. The two-reviewer design adds an agreement layer over the same surface, with reviewer-specific labels preserved for ablation rather than converted into an inferred adjudication. The selected-300 layer is an enriched high-stakes audit surface, not a prevalence-preserving sample.
 
-Thresholds are diagnostic operating points on the scoped audit set. They are not frozen deployment thresholds. Aggregate replay is retrospective and does not establish live deployment readiness or population prevalence of ASR-induced harm.
+Thresholds are diagnostic operating points on the scoped audit set. Aggregate replay provides retrospective validation evidence for review prioritization, conservative escalation, and abstention policy design.
 
 Raw audio, raw transcripts, selected row identifiers, reviewer notes, and transcript-bearing runtime logs remain outside the public release boundary. The intended use is ASR safety audit, review prioritization, conservative escalation, and abstention. CDS-ASR is not proposed for automatic punitive action, account restriction, guilt determination, or direct law-enforcement reporting without human review.

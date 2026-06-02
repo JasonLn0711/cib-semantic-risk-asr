@@ -14,6 +14,8 @@ the selected-300 scope.
 - [x] LaTeX compiled successfully.
 - [x] Leak check confirms R scripts do not access raw audio, transcripts, row IDs, reviewer notes, or transcript-bearing logs.
 - [x] Every central empirical claim points to an aggregate artifact in the caption, table note, method text, or appendix artifact list.
+- [x] First-page narrative opens with cited real-world ASR use, fairly cites current transcript/semantic/uncertainty solutions, and introduces CDS-ASR as the decision-stability contribution.
+- [x] Human-facing manuscript prose uses contribution-first positive-scope framing rather than defensive posture.
 - [x] Final citation and cross-reference check complete.
 - [x] Human audit expanded from 30 rows to 100+ completed reviewed rows; completed at 300 rows per reviewer.
 - [x] Second reviewer completes the same 100+ row surface; completed on the same 300-row surface.

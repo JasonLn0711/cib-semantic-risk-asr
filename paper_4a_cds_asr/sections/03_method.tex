@@ -31,8 +31,8 @@ CEIS is a bounded decision-instability score over plausible variants:
 \[
 \mathrm{CEIS}(x) = \max_{v \in V(x)} P_{\mathrm{plaus}}(v \mid x) \cdot W_{\mathrm{atom}}(v) \cdot D(d(\hat{t}), d(v)).
 \]
-Here $V(x)$ is the set of plausible variants, $P_{\mathrm{plaus}}$ is a bounded plausibility proxy, $W_{\mathrm{atom}}$ is a risk-atom weight, and $D$ is a downstream decision-distance term. The plausibility term is not a calibrated acoustic posterior. CEIS is therefore interpreted as a conservative decision-stability signal, not as a universally dominant classifier.
+Here $V(x)$ is the set of plausible variants, $P_{\mathrm{plaus}}$ is a bounded plausibility proxy, $W_{\mathrm{atom}}$ is a risk-atom weight, and $D$ is a downstream decision-distance term. The plausibility term serves as a bounded calibration handle for ranking decision-instability evidence. CEIS is therefore interpreted as a conservative decision-stability signal for the scoped audit surface.
 
 \subsection{Recovery Policy Contract}
 
-Aggregate policy replay compares no recovery, confidence-only triggering, SRES-triggered recovery, CEIS-triggered conservative action, and CEIS ensemble arbitration. Replay thresholds are diagnostic operating points on the scoped audit set, not deployment thresholds.
+Aggregate policy replay compares no recovery, confidence-only triggering, SRES-triggered recovery, CEIS-triggered conservative action, and CEIS ensemble arbitration. Replay thresholds are retrospective diagnostic operating points on the scoped audit set.

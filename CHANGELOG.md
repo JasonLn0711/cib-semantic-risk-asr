@@ -5,6 +5,29 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.319 - 2026-06-02T23:23:39+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `b5625c3`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `AGENTS.md`
+  - `docs/research_writing_style_policy.md`
+  - `paper_4a_cds_asr/CHANGELOG.md`
+  - `paper_4a_cds_asr/main.tex`
+  - `paper_4a_cds_asr/paper_4a_cds_asr.pdf`
+  - `paper_4a_cds_asr/references.bib`
+  - `paper_4a_cds_asr/sections/01_introduction.tex`
+  - `paper_4a_cds_asr/sections/02_related_work.tex`
+  - `paper_4a_cds_asr/sections/03_method.tex`
+  - `paper_4a_cds_asr/sections/05_results.tex`
+  - `paper_4a_cds_asr/sections/06_discussion.tex`
+  - `paper_4a_cds_asr/sections/07_limitations_ethics.tex`
+  - `paper_4a_cds_asr/submission_readiness_checklist.md`
+  - `paper_4a_cds_asr/validation_report.md`
+
 ## v2.5.318 - 2026-06-02T23:11:13+08:00
 
 - Bump: `patch`

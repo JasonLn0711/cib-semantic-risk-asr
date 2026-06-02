@@ -35,11 +35,11 @@ language.
 ## Audience-Attractive Paper Shape
 
 Teacher-feedback rule: a paper can be technically steady and still fail to
-earn attention. For manuscript-facing writing, do not open with the method or a
-balanced internal status summary. Open with a cited real-world or credible
-near-future problem that a reader can recognize as consequential. Then show the
-current solution landscape fairly, name the remaining claim-evidence gap, and
-introduce this work as the new viewpoint that addresses that opening problem.
+earn attention. For manuscript-facing writing, open with a cited real-world or
+credible near-future problem that a reader can recognize as consequential. Then
+show the current solution landscape fairly, name the remaining
+claim-evidence opportunity, and introduce this work as the new viewpoint that
+addresses that opening problem.
 
 When a document needs to hold attention, use this sequence:
 
@@ -53,9 +53,16 @@ real-world or credible near-future problem
 -> scope controls and next validation path
 ```
 
-The gap should be written as a claim-evidence fit statement. First state what
-the existing method enables; then state the remaining problem that motivates
-CDS-ASR.
+The remaining opportunity should be written as a claim-evidence fit statement.
+First state what the existing method enables; then state the validation,
+workflow, safety, or decision-stability layer that motivates CDS-ASR.
+
+Avoid making negation, apology, or defensive posture the organizing voice of a
+paper. Human-facing manuscript prose should not read like a list of what the
+work cannot claim. Use affirmative constructions such as "this enables", "the
+evidence supports", "the next validation layer is", and "the contribution is".
+Exact prohibitions belong in machine-facing validators, safety rules,
+operational checklists, and legal/privacy boundaries.
 
 For manuscript introductions, use the concrete blueprint in:
 
