@@ -14,7 +14,7 @@
 \DeclareRobustCommand{\artifact}[1]{\nolinkurl{#1}}
 \newcolumntype{L}{>{\raggedright\arraybackslash}X}
 
-\title{Reviewer-Auditable Reproducibility Without Transcript Release: An Aggregate-Only Framework for Sensitive Speech AI Evaluation}
+\title{Auditable Without Transcripts: Aggregate-Only Reproducibility for Sensitive Speech AI Evidence}
 \author{Author names omitted for submission planning}
 \date{2026-06-02}
 
@@ -23,11 +23,11 @@
 \maketitle
 
 \begin{abstract}
-Reproducible evaluation is difficult when AI systems are tested on sensitive speech evidence. Raw audio, transcripts, row identifiers, reviewer notes, response sheets, model hypotheses, and runtime logs may contain private operational content, yet reviewers still need to inspect whether reported claims are supported by traceable evidence. This paper proposes aggregate-only reproducibility as a responsible-AI framework for sensitive speech evaluation. The framework separates public aggregate artifacts from local-only transcript-bearing materials and links each paper-facing claim to evidence layers, artifact manifests, validation gates, operation records, privacy classes, and explicit release boundaries.
+Sensitive speech AI studies increasingly produce evidence from audio, transcripts, model hypotheses, reviewer judgments, runtime logs, and operational decisions. Responsible AI documentation and risk-management practice encourage traceable evaluation, while sensitive speech settings require a release boundary that protects transcript-bearing material. This paper introduces aggregate-only reproducibility as a reviewer-auditable evidence architecture for that setting. The framework turns sensitive evaluation into a structured claim-evidence package: public aggregate artifacts, local-only transcript-bearing evidence, artifact manifests, validation gates, operation records, privacy classes, and explicit release-boundary decisions.
 
-We develop the framework through a CDS-ASR case study in high-stakes speech-to-decision evaluation. The case contains four distinct evidence layers: a 258-row ASR test split for model-comparison context, selected-300 provenance outputs for enriched audit-surface construction, 30 human-reviewed audit rows yielding 90 clustered model assessments for decision-change evaluation, and aggregate policy replay for recovery analysis. Instead of releasing raw speech or transcript-bearing row content, the case provides reviewer-visible auditability through aggregate tables, generated figures, claim registries, artifact manifests, row-clustered uncertainty summaries, leave-one-row-out sensitivity summaries, and consistency checks.
+We develop the framework through a CDS-ASR case study in high-stakes speech-to-decision evaluation. The case contains four distinct evidence layers: a 258-row ASR test split for model-comparison context, selected-300 provenance outputs for enriched audit-surface construction, a completed 300-row dual-reviewer human audit with 900 model-level assessments per reviewer and Cohen's kappa agreement summaries, and aggregate policy replay for recovery analysis. Instead of releasing raw speech or transcript-bearing row content, the case provides reviewer-visible auditability through aggregate tables, generated figures, claim registries, artifact manifests, agreement summaries, validation checks, and release-boundary records.
 
-The contribution is claim-evidence stewardship. Aggregate-only reproducibility does not provide full row-level external reproduction and does not claim legal compliance, privacy completion, or deployment readiness. It offers a bounded audit mode for sensitive speech AI studies whose evidence can be made reviewer-auditable without public transcript release.
+The contribution is claim-evidence stewardship for sensitive speech AI. Aggregate-only reproducibility gives reviewers a concrete way to inspect artifact completeness, metric definitions, validation gates, agreement evidence, figure regeneration, and claim-scope alignment while transcript-bearing rows remain under governed local control. It complements row-level reproduction with a privacy-preserving audit mode for studies whose evidence can be made inspectable without public transcript release.
 \end{abstract}
 
 \noindent\textbf{Keywords:} trustworthy AI; reproducible evaluation; sensitive speech data; artifact manifest; claim-evidence alignment; responsible AI audit.

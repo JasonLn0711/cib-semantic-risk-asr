@@ -10,4 +10,5 @@ Date: 2026-06-02
 - [x] All R figures generated.
 - [x] LaTeX compiled successfully.
 - [x] Leak check confirms R scripts do not access raw audio, transcripts, row IDs, reviewer notes, response sheets, model hypotheses, or transcript-bearing logs.
+- [x] Completed selected-300 dual-reviewer audit and Cohen's kappa summaries are represented as aggregate audit evidence.
 - [x] Final citation and cross-reference check complete.

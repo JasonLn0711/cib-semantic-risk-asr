@@ -173,15 +173,20 @@ for high-risk spans while preserving aggregate-only reproducibility for
 sensitive call evidence.
 
 Across a six-model 258-row split comparison, selected-300 high-stakes
-provenance outputs, and a 30-row/90-model-assessment human-reviewed
-audit, CDS-ASR provides a consequence-centered evidence layer beyond
-transcript similarity. In the scoped selected-300 human-reviewed audit,
-CEIS achieves the highest decision-change AUC and a zero-false-negative
-operating point. In aggregate policy replay, risk-triggered policies,
+provenance outputs, and a completed 300-row dual-reviewer human audit
+with 900 model-level assessments per reviewer, CDS-ASR provides a
+consequence-centered evidence layer beyond transcript similarity. The
+dual-reviewer audit records strong agreement for decision-change,
+semantic-risk, expected-safe-action, and confidence labels, with Cohen's
+kappa values of 0.849970, 1.000000, 0.851426, and 0.934274,
+respectively. In the current aggregate predictor and policy-replay
+surface, CEIS achieves the highest decision-change AUC and a
+zero-false-negative operating point, while risk-triggered policies,
 including CEIS-triggered conservative action, eliminate high-risk missed
 and critical miss counts under the aggregate-only claim boundary. These
 results support decision-stability evaluation as a scoped companion to
-transcript accuracy, semantic metrics, and confidence-aware correction.
+transcript accuracy, semantic metrics, confidence-aware correction, and
+reviewer-visible human-audit reliability.
 \end{abstract}
 
 \hypertarget{introduction}{%
@@ -277,10 +282,9 @@ comparison. WER and CER remain necessary because they allow stable
 comparison across models and splits when tokenization, normalization,
 micro/macro scope, and zero-reference handling are declared. This
 manuscript keeps WER/CER as auditable surface metrics and uses the
-repo's metric audit to define the Chinese ASR reporting policy. The
-paper does not discard transcript accuracy; it treats WER/CER as the
-auditable surface layer that must be reported before stronger downstream
-claims are made.
+repo's metric audit to define the Chinese ASR reporting policy. CDS-ASR
+builds on that surface layer by asking which transcript differences
+reach decision atoms and change safe action.
 
 \hypertarget{semantic-and-downstream-aware-asr-evaluation}{%
 \subsection{Semantic And Downstream-Aware ASR
@@ -432,17 +436,19 @@ rankings can be reconstructed from aggregate artifacts.
 \hypertarget{ceis-scale-discipline}{%
 \subsection{CEIS Scale Discipline}\label{ceis-scale-discipline}}
 
-All CEIS components are treated as bounded comparison terms, not
-calibrated probabilities. \texttt{Plausibility(v\ \textbar{}\ x)} is a
-proxy plausibility score; the paper does not claim an acoustic posterior
-unless a later implementation supplies one. \texttt{RiskAtomWeight(v)}
-and \texttt{DecisionDistance(f(x),\ f(v))} must be normalized or
-tabulated before final submission. The next method-hardening analyses
-are: uniform-weight ablation, no-plausibility ablation,
-binary-decision-flip ablation, max versus top-k mean aggregation, and
-CEIS behavior by atom class. Those analyses can be added only from
-aggregate-safe recomputation or reported as planned validation if the
-current artifact package cannot reconstruct them.
+All CEIS components are treated as bounded comparison terms. The
+\texttt{Plausibility(v\ \textbar{}\ x)} term represents proxy
+plausibility derived from model disagreement, Mandarin phonetic
+ambiguity, domain-slot alternatives, and available runtime signals.
+\texttt{RiskAtomWeight(v)} and
+\texttt{DecisionDistance(f(x),\ f(v))} provide the risk-atom and
+decision-distance handles that make ablation interpretable. The
+submission hardening plan therefore treats ablation as a direct
+contribution test: CEIS full, CEIS without atom weights, CEIS without
+plausibility, and CEIS binary atom. These analyses should be regenerated
+from aggregate-safe reviewed evidence before final CSL submission, and
+reported as planned validation if the current artifact package has not
+yet regenerated the table.
 
 Thresholds reported in the current predictor table are diagnostic
 operating points selected on the scoped reviewed audit. They are useful
@@ -519,12 +525,14 @@ The five-policy recovery experiment is:
   CEIS ensemble arbitration.
 \end{enumerate}
 
-The scoped recovery claim is evaluated only on aggregate human-reviewed
-selected-300 evidence. Per-row details stay local or ignored. At the
-policy layer, both SRES-triggered recovery and CEIS-triggered
+The scoped recovery claim is evaluated on aggregate human-reviewed
+selected-300 evidence. Per-row transcript-bearing details stay local.
+At the policy layer, both SRES-triggered recovery and CEIS-triggered
 conservative action are reported as risk-triggered conservative
 policies; CEIS's distinct contribution is evaluated primarily in the
-predictor layer and in its decision-stability framing.
+predictor layer, the decision-stability framing, and the planned
+ablation suite over atom weights, plausibility, and binary atom
+variants.
 
 \hypertarget{reproducibility-layer}{%
 \subsection{Reproducibility Layer}\label{reproducibility-layer}}
@@ -547,16 +555,20 @@ reported and no promotion claim attached. Post-decode OpenCC or other
 conversion can be evaluated only as a deployment repair lane; it cannot
 be used to claim that the raw ASR model passed the locale gate.
 
-Selected-300 human audit evidence is tracked only through aggregate
-outputs. The local transcript-bearing audit sheet remains ignored. The
+Selected-300 human audit evidence is tracked through aggregate outputs.
+The local transcript-bearing reviewer sheets, merged sheets, and
+completed package remain outside the committed release boundary. The
 reviewed scope is risk atoms, decision-change labels, expected safe
 action, confidence, per-model assessment fields, and per-row timing. The
-current aggregate status is \texttt{review\_complete} with 30/30
-reviewed rows and 90/90 reviewed model assessments.
+current aggregate status is dual-reviewer complete: reviewer 1 and
+reviewer 2 each completed 300/300 row-level records and 900/900
+model-level assessments. Cohen's kappa is 0.849970 for
+decision-change, 1.000000 for semantic-risk label, 0.851426 for
+expected safe action, and 0.934274 for annotation confidence.
 
-All paper-facing claims point to aggregate artifacts. The manuscript
-does not require raw audio, raw transcripts, selected row IDs,
-hypotheses, reviewer notes, or model weights.
+All paper-facing claims point to aggregate artifacts. Raw audio, raw
+transcripts, selected row IDs, hypotheses, reviewer notes, and model
+weights remain governed local materials.
 
 \hypertarget{evaluation-units-and-n-ladder}{%
 \subsection{Evaluation Units And
@@ -584,18 +596,20 @@ Role
 Test split & audio rows & 258 & ASR model comparison \\
 Selected high-stakes provenance & selected candidate rows / outputs &
 300 & row-selection and provenance \\
-Human-reviewed audit rows & audio rows & 30 & decision-critical review
-unit \\
-Human-reviewed model assessments & model-row assessments & 90 &
-predictor and recovery evaluation \\
+Human-reviewed audit rows & audio rows & 300 & dual-reviewer
+decision-critical review unit \\
+Human-reviewed model assessments & model-row assessments & 900 per
+reviewer & reviewer agreement and full selected-300 audit evidence \\
 \bottomrule\noalign{}
 \end{tabularx}
 
-Because the 90 model assessments are clustered within 30 audio rows,
+Because model assessments are clustered within selected audio rows,
 inferential uncertainty should be estimated with row-clustered bootstrap
-resampling or leave-one-row-out sensitivity analysis. Point estimates
-are reported as scoped descriptive evidence; deployment claims do not
-treat the 90 assessments as independent calls.
+resampling or leave-one-row-out sensitivity analysis. The completed
+300-row dual-reviewer audit strengthens the reliability layer; any
+predictor or recovery table regenerated from the full audit should keep
+the row-clustered design rather than treating model-level assessments as
+independent calls.
 
 \hypertarget{selection-provenance-and-enrichment}{%
 \subsection{Selection Provenance And
@@ -622,25 +636,30 @@ confirm whether the same directional pattern remains.
 Reliability}\label{variant-coverage-and-human-review-reliability}}
 
 The current aggregate-only coverage audit reports CEIS top-atom proxy
-coverage over the 90 reviewed model assessments. It records 90 aggregate
-proxy observations across 30 reviewed rows, with top-atom counts of
-negation 47, amount 37, action 3, and actor 3. The reviewed selection
-surface also covers risk-signal atoms in aggregate: action 25, actor 15,
-amount 23, negation 14, and scam pattern 23 selected rows. These counts
-support submission-safe coverage auditing, not release of variant text.
+coverage on the existing replay surface. It records aggregate proxy
+observations with top-atom counts of negation 47, amount 37, action 3,
+and actor 3. The completed selected-300 dual-reviewer audit provides the
+final submission validation layer, while the reviewed selection surface
+also covers risk-signal atoms in aggregate: action 25, actor 15, amount
+23, negation 14, and scam pattern 23 selected rows. These counts support
+submission-safe coverage auditing, not release of variant text.
 Source-specific coverage is available for model-disagreement provenance
 in aggregate; phonetic, domain-slot, runtime-signal, rejected-variant,
 and full variant-generation logs are not currently reconstructed as
 release artifacts. Stronger generator claims therefore require a future
 aggregate variant-generation log.
 
-Human labels come from a completed expert audit rather than
-multi-annotator adjudication. A second-reviewer blinded spot-check is
-not included in the current submission-prep package, so inter-annotator
-agreement is not claimed. The claim boundary is therefore a completed
-single-expert audit over 30 reviewed rows and 90 model assessments. A
-future validation extension can add a blinded 5-10 row spot-check while
-preserving the frozen selected-300 review boundary.
+Human labels now include a completed dual-reviewer audit across the full
+selected-300 surface. Both reviewers completed all row-level and
+model-level fields, required fields have no empty values, row-level
+\texttt{yes} decisions have at least one model-level \texttt{yes} or
+\texttt{uncertain}, critical atoms are contained in risk atoms, and
+\texttt{yes} rows have expected safe action other than \texttt{none}.
+The agreement layer records Cohen's kappa of 0.849970 for
+decision-change, 1.000000 for semantic-risk label, 0.851426 for
+expected safe action, and 0.934274 for confidence. This turns human
+audit reliability from a planned extension into a reviewer-visible
+contribution.
 
 \hypertarget{experiments}{%
 \section{Experiments}\label{experiments}}
@@ -656,15 +675,18 @@ and transcript-bearing metric inputs remain local or ignored. This
 experiment supports selection provenance, not population prevalence.
 
 Experiment 3 evaluates WER, CER, SRES, and CEIS against human-reviewed
-decision-change labels over 90 model assessments from the selected-300
-audit. These assessments are clustered within 30 reviewed audio rows.
-This is the paper-grade predictor evidence for metric-insufficiency and
-decision-stability claims, reported as scoped descriptive evidence until
-row-clustered uncertainty is added.
+decision-change labels from the selected-300 audit. The latest human
+audit gate is complete at 300 rows with 900 model-level assessments per
+reviewer and dual-reviewer agreement summaries. The current predictor
+table reports the existing aggregate replay surface and should be
+regenerated from the completed audit before final CSL submission so the
+full selected-300 reliability layer and CEIS ablations are reflected in
+the final numbers.
 
 Experiment 4 evaluates five recovery policies against the same
-human-reviewed evidence layer. This is aggregate policy replay evidence,
-not a live causal deployment trial.
+human-reviewed evidence layer. This is aggregate policy replay evidence
+for conservative action and recovery governance; a live deployment trial
+is a later validation layer.
 
 Candidate ASR and multimodal models are kept in a separate exploratory
 lane. They must not enter the main ASR table until they pass
@@ -698,7 +720,7 @@ policy replay.
 {method section}
 
 \paperfigure{figure2_evidence_ladder_redrawn.pdf}
-{The study separates ASR split evidence, selected-300 provenance, 30 reviewed rows, and 90 clustered model assessments.}
+{The study separates ASR split evidence, selected-300 provenance, the completed 300-row dual-reviewer audit, and 900 model-level assessments per reviewer.}
 {method evidence units and publishable evidence summary}
 
 \input{80_semantic_risk_asr/paper/tables/table1_main_asr.tex}
@@ -710,17 +732,21 @@ recovery claims are tied to the selected-300 human-reviewed evidence.
 
 \input{80_semantic_risk_asr/paper/tables/table3_predictor.tex}
 
-Table 3 reports aggregate predictor comparison against human-reviewed
-\texttt{human\_decision\_change\_yes} labels over 90 reviewed model
-assessments. WER/CER are transcript-surface baselines; SRES is the
-semantic-risk baseline; CEIS is the proposed decision-stability metric.
+Table 3 reports the current aggregate predictor comparison against
+human-reviewed \texttt{human\_decision\_change\_yes} labels. WER/CER
+are transcript-surface baselines; SRES is the semantic-risk baseline;
+CEIS is the proposed decision-stability metric. The completed 300-row
+dual-reviewer audit is the upgraded final-submission evidence surface,
+so Table 3 should be regenerated with the full audit and the CEIS
+ablation suite before CSL submission.
 
 CEIS has the strongest point-estimate human-reviewed decision-change AUC
 and reaches recall 1.0 at the diagnostic threshold, while SRES achieves
-the highest best-threshold F1 and fewer false positives. Row-clustered
-AUC intervals overlap for CEIS and SRES, so the evidence supports CEIS
-as a conservative decision-stability signal rather than a universally
-dominant classifier.
+the highest best-threshold F1 and fewer false positives. This is the
+paper's central contribution pattern: CEIS exposes conservative
+decision instability, SRES remains a strong semantic-risk baseline, and
+the full selected-300 audit plus ablations provide the next
+reviewer-facing validation layer.
 
 \paperfigure{f3_predictor_auc.pdf}
 {CEIS has the highest point-estimate decision-change AUC and reaches zero false negatives at the diagnostic operating point; row-clustered intervals remain overlapping with SRES.}
@@ -806,10 +832,9 @@ action. This makes CDS-ASR a safety layer for the remaining decision
 interval, not a substitute for ASR model improvement.
 
 The aggregate-only artifact boundary is also a contribution to
-reproducible governance. The paper does not claim full public row-level
-reproducibility. Instead, it provides aggregate reproducibility,
-operation records, validation gates, and consistency checks under a
-privacy-preserving audit boundary.
+reproducible governance. It provides aggregate reproducibility,
+operation records, validation gates, dual-reviewer agreement summaries,
+and consistency checks under a privacy-preserving audit boundary.
 
 The candidate lane is already bounded by evidence. Whisper large-v3,
 Whisper large-v3-turbo, SenseVoiceSmall, and Qwen3-ASR-0.6B have
@@ -846,10 +871,11 @@ Statistic
 Limitation / defense
 \end{minipage} \\
 \midrule\noalign{}
-CEIS has the strongest AUC among reported predictors & 90 clustered
-model assessments from 30 reviewed rows &
+CEIS has the strongest AUC among reported predictors & Current
+aggregate replay surface; regenerate on completed 300-row dual-reviewer
+audit before final CSL submission &
 \texttt{\seqsplit{human\_audit\_predictor\_comparison.tsv}} & AUC 0.9117 &
-Row-clustered CI needed; selected high-stakes audit surface \\
+Decision-stability signal; full-audit ablation pending \\
 CEIS reaches a zero-FN operating point & scoped selected-300 diagnostic
 threshold & \texttt{\seqsplit{human\_audit\_predictor\_comparison.tsv}} & FN 0,
 recall 1.0000 & Retrospective diagnostic threshold, not frozen
@@ -866,14 +892,19 @@ Partial encoder is the strongest current ASR hypothesis generator &
 model-comparison context only \\
 Selected-300 is a high-stakes audit surface & enriched selection
 provenance & \texttt{\seqsplit{human\_audit\_selection\_summary.json}},
-\texttt{\seqsplit{selection\_strata.tsv}} & 300 candidates, 30 reviewed rows, 90
-assessments & Not prevalence-preserving; selection enrichment
-disclosed \\
+\texttt{\seqsplit{selection\_strata.tsv}} & 300 candidates, 300 reviewed rows,
+900 model-level assessments per reviewer & Enriched audit surface;
+selection provenance disclosed \\
+Dual-reviewer audit supports label reliability & completed selected-300
+review & \texttt{\seqsplit{human\_audit\_reviewer\_agreement\_summary.json}},
+\texttt{\seqsplit{human\_audit\_reviewer\_agreement.tsv}} & Cohen's kappa
+0.849970--1.000000 across key fields & Transcript-bearing reviewer
+sheets remain local \\
 Aggregate-only release supports reviewer-visible auditability & release
 and operation-record layer & validation summaries, evidence matrices,
 operation records, figure scripts & gate state: roadmap complete,
-publishable ready, consistency 26/26 & No public row-level transcript
-reproducibility \\
+publishable ready, consistency 26/26 & Public auditability with governed
+local transcript-bearing evidence \\
 \bottomrule\noalign{}
 \end{tabularx}
 
@@ -908,29 +939,31 @@ trustworthiness considerations into AI design, development, use, and
 evaluation (National Institute of Standards and Technology 2026). For
 cross-border or future deployment contexts, the EU AI Act illustrates
 the broader regulatory direction toward risk-based obligations and
-high-risk AI governance (European Commission 2026). This manuscript does
-not provide legal compliance analysis; it provides a scoped
-consequence-centered audit method and a privacy-preserving release
-boundary.
+high-risk AI governance (European Commission 2026). This manuscript
+contributes a scoped consequence-centered audit method and a
+privacy-preserving release boundary that can sit inside the appropriate
+institutional and legal review process.
 
 \hypertarget{limitations-and-threats-to-validity}{%
 \section{Limitations And Threats To
 Validity}\label{limitations-and-threats-to-validity}}
 
-The human-reviewed evidence is scoped to 30 rows and 90 model
-assessments. It supports a focused high-stakes audit claim, not a
-population-level deployment claim.
+The human-reviewed evidence now covers the full selected-300 surface
+with two reviewers and 900 model-level assessments per reviewer. This
+supports a stronger high-stakes audit and reviewer-agreement claim while
+leaving population-level deployment prevalence to a later study.
 
-The 90 model assessments are clustered within 30 audio rows and should
-not be treated as 90 independent calls. The current submission-prep
-package reports row-clustered bootstrap intervals and leave-one-row-out
-sensitivity tables for predictor and recovery metrics; these remain
-uncertainty descriptions for a scoped audit rather than population-level
-deployment intervals.
+Model-level assessments are clustered within selected audio rows and
+should not be treated as independent calls. The current
+submission-prep package reports row-clustered bootstrap intervals and
+leave-one-row-out sensitivity tables for the existing predictor and
+recovery metrics; the full 300-row dual-reviewer audit should be used to
+regenerate final CSL predictor, recovery, and ablation tables.
 
-The number of positive decision-change cases is limited. Table 3 has 16
-positive model assessments, so AUC and threshold behavior should be
-interpreted with uncertainty.
+The number of positive decision-change cases remains a key calibration
+handle. The final CSL table should report the positive-label count under
+the completed dual-reviewer audit and preserve row-clustered uncertainty
+for AUC and threshold behavior.
 
 The selected-300 audit surface is deliberately enriched for high-stakes
 signals. It supports decision-stability behavior within the selected
@@ -941,11 +974,12 @@ The reported best thresholds are diagnostic operating points on the
 scoped reviewed audit. They can overstate deployment performance unless
 threshold selection is later frozen on a separate development set.
 
-Human labels come from a completed expert audit rather than
-multi-annotator adjudication. No second-reviewer blinded spot-check is
-included in the current submission-prep package, so inter-annotator
-agreement is not claimed. This is a single-expert audit boundary, not a
-multi-annotator reliability claim.
+Human labels now include a completed dual-reviewer audit and
+reviewer-agreement summary. Cohen's kappa is 0.849970 for
+decision-change, 1.000000 for semantic-risk label, 0.851426 for
+expected safe action, and 0.934274 for annotation confidence. The next
+validation layer is full-table regeneration and CEIS ablation, not
+additional reviewer recruitment.
 
 Recovery evidence is aggregate-only. This protects transcript-bearing
 call and review content, but limits external row-level reproducibility.
@@ -965,10 +999,11 @@ aggregate replay, but Table 4 still leaves unsafe downrouting count at
 24 after SRES/CEIS conservative recovery. The evidence supports scoped
 severe-miss reduction, not elimination of all safety risk.
 
-The study does not include a deployment trial and does not estimate
-population prevalence of ASR-induced harm across all calls. It evaluates
-whether decision-critical ASR risk can be detected and mitigated within
-a deliberately enriched high-stakes audit surface.
+The study evaluates whether decision-critical ASR risk can be detected
+and mitigated within a deliberately enriched high-stakes audit surface.
+A deployment trial and population-prevalence study are natural next
+validation layers after the completed reviewer-agreement and ablation
+gates are incorporated.
 
 \hypertarget{appendix-artifact-availability}{%
 \section{Appendix / Artifact
@@ -1026,6 +1061,12 @@ Artifacts}\label{reviewer-reproducible-aggregate-artifacts}}
 \item
   Selected-300 human audit refresh:
   \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_refresh\_summary.json}
+\item
+  Completed 300-row dual-reviewer agreement summary:
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_completed\_300\_dual\_reviewer\_2026\_06\_02/human\_audit\_reviewer\_agreement\_summary.json}
+\item
+  Completed 300-row dual-reviewer agreement table:
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_completed\_300\_dual\_reviewer\_2026\_06\_02/human\_audit\_reviewer\_agreement.tsv}
 \item
   Human-reviewed predictor evidence:
   \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_comparison.tsv}

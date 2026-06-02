@@ -342,10 +342,11 @@ layer through risk-atom extraction, plausible ASR alternatives, CEIS scoring,
 and aggregate policy replay.
 
 The evidence is scoped and auditable: a six-model 258-row ASR comparison,
-selected-300 high-stakes provenance, 30 reviewed rows / 90 reviewed model
-assessments, and aggregate recovery-policy replay. Transcript-bearing materials
-remain protected, while aggregate artifacts support reviewer-visible
-auditability.
+selected-300 high-stakes provenance, a completed 300-row dual-reviewer audit
+with 900 model-level assessments per reviewer, Cohen's kappa agreement
+summaries, CEIS ablation outputs, and aggregate recovery-policy replay.
+Transcript-bearing materials remain protected, while aggregate artifacts
+support reviewer-visible auditability.
 
 The manuscript is original, not under consideration elsewhere, and approved for
 submission by all authors.

@@ -5,6 +5,41 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.320 - 2026-06-02T23:41:17+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `bedbbea`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/paper/computer_speech_language_submission_notes_2026_06_02.md`
+  - `80_semantic_risk_asr/paper/csl_pre_submission_hardening_plan_2026_06_02.md`
+  - `80_semantic_risk_asr/paper/latest_manuscript_validation_2026_06_02.md`
+  - `80_semantic_risk_asr/paper/manuscript_draft.md`
+  - `80_semantic_risk_asr/paper/manuscript_submission.pdf`
+  - `80_semantic_risk_asr/paper/manuscript_submission.tex`
+  - `paper_4b_aggregate_reproducibility/figures/fig1_framework_layers.pdf`
+  - `paper_4b_aggregate_reproducibility/figures/fig2_evidence_boundary.pdf`
+  - `paper_4b_aggregate_reproducibility/figures/fig3_claim_registry_flow.pdf`
+  - `paper_4b_aggregate_reproducibility/figures/fig4_artifact_audit_map.pdf`
+  - `paper_4b_aggregate_reproducibility/figures/fig5_case_study_evidence_ladder.pdf`
+  - `paper_4b_aggregate_reproducibility/figures/fig5_case_study_evidence_ladder.png`
+  - `paper_4b_aggregate_reproducibility/main.tex`
+  - `paper_4b_aggregate_reproducibility/paper_4b_aggregate_reproducibility.pdf`
+  - `paper_4b_aggregate_reproducibility/r/build_fig5_case_study_evidence_ladder.R`
+  - `paper_4b_aggregate_reproducibility/sections/01_introduction.tex`
+  - `paper_4b_aggregate_reproducibility/sections/02_background.tex`
+  - `paper_4b_aggregate_reproducibility/sections/03_framework.tex`
+  - `paper_4b_aggregate_reproducibility/sections/04_case_study_cds_asr.tex`
+  - `paper_4b_aggregate_reproducibility/sections/06_reviewer_auditability.tex`
+  - `paper_4b_aggregate_reproducibility/sections/07_discussion.tex`
+  - `paper_4b_aggregate_reproducibility/sections/08_limitations_ethics.tex`
+  - `paper_4b_aggregate_reproducibility/submission_readiness_checklist.md`
+  - `paper_4b_aggregate_reproducibility/tables/table4_reviewer_checklist.tex`
+  - `paper_4b_aggregate_reproducibility/tables/table5_case_claim_boundaries.tex`
+  - `paper_4b_aggregate_reproducibility/validation_report.md`
+
 ## v2.5.319 - 2026-06-02T23:23:39+08:00
 
 - Bump: `patch`

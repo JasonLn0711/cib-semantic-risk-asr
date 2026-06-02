@@ -29,7 +29,8 @@ The Paper 4-b figure scripts draw conceptual framework figures and the case-stud
 ## Claim-Boundary Check
 
 - Aggregate-only reproducibility is distinguished from full row-level reproducibility.
-- The paper does not claim legal compliance, complete privacy protection, or deployment readiness.
+- Legal, privacy, and deployment controls are framed as companion governance layers rather than the paper's empirical claim.
 - CDS-ASR and CEIS are presented as a case study, not as the primary technical contribution.
-- The case study preserves the distinction among the 258-row ASR split, selected-300 provenance surface, 30 reviewed rows, and 90 clustered model assessments.
+- The case study preserves the distinction among the 258-row ASR split, selected-300 provenance surface, 300 reviewed rows, and 900 model-level assessments per reviewer.
+- Dual-reviewer completion and Cohen's kappa agreement summaries are treated as reviewer-visible aggregate audit evidence.
 - Local-only materials remain outside the public release boundary.

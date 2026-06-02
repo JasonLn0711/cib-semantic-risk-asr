@@ -2,8 +2,9 @@
 
 Date: 2026-06-02
 
-Status: human audit expansion, dual-reviewer agreement, and CEIS ablation
-completed; final manuscript/PDF validation remains before CSL submission.
+Status: human audit expansion, dual-reviewer agreement, CEIS ablation, and
+latest manuscript/PDF validation recorded; final full-surface table
+regeneration remains before CSL submission.
 
 ## 判斷
 
@@ -11,8 +12,9 @@ completed; final manuscript/PDF validation remains before CSL submission.
 manuscript foundation。2026-06-02 expert review 已完成 selected-300 全量
 human audit 與 dual-reviewer agreement，讓 100+ human audit 與 Kappa gate
 升級為 completed evidence layer。CEIS ablation 也已在同一 dual-reviewer
-surface 上完成。正式投稿前的剩餘補強是 manuscript/table/figure/PDF 的最後
-validation。
+surface 上完成。Latest manuscript surfaces 已更新並可編譯。正式投稿前的
+剩餘補強是從 completed selected-300 dual-reviewer evidence surface 重新產生
+final predictor、recovery、CEIS ablation tables，然後做最後 PDF validation。
 
 ## 必補 Gate
 
@@ -75,5 +77,9 @@ The text should no longer describe the main validation surface as a
 single-reviewer pilot, a 30/90 assessment-only evidence layer, an agreement-free
 review, or a pending-ablation state.
 
-Next step: rebuild figures, tables, appendix, claim registry, and PDF, then run
-the final submission readiness check.
+Latest manuscript validation is recorded in
+`80_semantic_risk_asr/paper/latest_manuscript_validation_2026_06_02.md`.
+
+Next step: regenerate final predictor, recovery, and CEIS ablation tables from
+the completed selected-300 dual-reviewer evidence surface, then re-run PDF and
+submission readiness validation.

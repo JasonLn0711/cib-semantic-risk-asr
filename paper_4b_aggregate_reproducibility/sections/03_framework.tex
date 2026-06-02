@@ -22,7 +22,7 @@ The evidence boundary defines which materials are public aggregate artifacts and
 
 \subsection{Layer 2: Aggregate Artifact Layer}
 
-The aggregate artifact layer releases transcript-free summary tables, metric outputs, validation summaries, manifest rows, and figure inputs. It does not release raw transcripts, row identifiers, reviewer notes, response sheets, model hypotheses, or transcript-bearing logs.
+The aggregate artifact layer releases transcript-free summary tables, metric outputs, validation summaries, manifest rows, figure inputs, agreement summaries, and completion checks. Transcript-bearing rows, identifiers, reviewer notes, response sheets, model hypotheses, and transcript-bearing logs remain governed local evidence.
 
 \subsection{Layer 3: Claim Registry}
 
@@ -41,4 +41,4 @@ Operation records and validation gates provide process-level audit trails withou
 
 \subsection{Layer 5: Reviewer Audit Protocol}
 
-The reviewer audit protocol specifies what reviewers can inspect: artifact completeness, claim-evidence alignment, consistency checks, metric definitions, scope boundaries, and R-based figure regeneration. It also specifies what reviewers cannot inspect in a public package: raw transcript content, row-level qualitative interpretation, and hidden local-only sensitive evidence.
+The reviewer audit protocol specifies what reviewers can inspect: artifact completeness, claim-evidence alignment, consistency checks, metric definitions, agreement summaries, scope boundaries, and R-based figure regeneration. Row-level qualitative interpretation remains a governed local validation layer when public release would expose sensitive transcript-bearing content.

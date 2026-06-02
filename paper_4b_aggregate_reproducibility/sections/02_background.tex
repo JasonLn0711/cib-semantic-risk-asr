@@ -1,13 +1,13 @@
 \section{Background}
 
 \paragraph{Reproducibility in AI evaluation.}
-AI evaluation commonly relies on public datasets, executable code, fixed metrics, and artifact checklists. Sensitive speech settings complicate this model because the evaluation evidence may include personally revealing acoustic or transcript-bearing content.
+AI evaluation commonly relies on public datasets, executable code, fixed metrics, and artifact checklists. Sensitive speech settings add a governance layer because the evaluation evidence may include personally revealing acoustic or transcript-bearing content. Aggregate-only reproducibility keeps the audit goal intact by making metric definitions, manifests, validation records, and claim mappings visible even when transcript-bearing rows stay local.
 
 \paragraph{Sensitive speech data.}
 Speech data can contain identity cues, operational details, medical or financial information, emotional content, and contextual signals that remain sensitive even after transcription. Releasing row-level examples can therefore create privacy and governance risks.
 
 \paragraph{Claim-evidence alignment.}
-For sensitive AI evaluation, the paper claim should specify its evidence layer, statistic, scope, limitation, privacy class, and validation status. This turns limitations into a claim-evidence alignment discipline rather than a defensive caveat. The framework is compatible with documentation-oriented responsible-AI practice such as dataset documentation \citep{datasheets} and risk-management framing \citep{nistairmf}, while making no legal-compliance claim.
+For sensitive AI evaluation, the paper claim should specify its evidence layer, statistic, scope, validation status, privacy class, and next validation path. This turns scope control into a claim-evidence alignment discipline. The framework is compatible with documentation-oriented responsible-AI practice such as dataset documentation \citep{datasheets} and risk-management framing \citep{nistairmf}, and it gives reviewers a concrete way to audit what each claim can support.
 
 \paragraph{Audit trails and operation records.}
 Operation records preserve process-level reproducibility: what generator or validator produced an artifact, from which source inputs, under which version and environment, with which checksum. They do not expose local-only content, but they make the aggregate evidence trail inspectable.
