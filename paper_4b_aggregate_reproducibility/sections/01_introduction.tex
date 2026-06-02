@@ -1,0 +1,7 @@
+\section{Introduction}
+
+Sensitive speech AI research often cannot release raw audio, raw transcripts, row identifiers, reviewer notes, response sheets, model hypotheses, or transcript-bearing runtime logs. These materials can contain private operational speech content and contextual details that remain subject to institutional, contractual, ethical, or safety constraints. At the same time, reviewers need to evaluate whether empirical claims are traceable, scoped, and supported.
+
+This paper asks how reviewers can audit empirical claims when row-level transcript release is not appropriate. The answer proposed here is aggregate-only reproducibility: a bounded reproducibility mode that exposes aggregate evidence, artifact manifests, validation gates, operation records, claim registries, and release-boundary decisions while keeping transcript-bearing evidence local-only.
+
+The paper uses the CDS-ASR project as a case study. The technical details of CDS-ASR and CEIS belong to the companion speech-evaluation manuscript. Here, CDS-ASR provides an example of a sensitive speech AI evaluation where reviewer-visible auditability must be achieved without raw transcript release.

@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering
+\caption{Artifact manifest fields and purpose.}
+\label{tab:manifest_schema}
+\begin{tabularx}{\linewidth}{@{}lL@{}}
+\toprule
+Field & Purpose \\
+\midrule
+Path & Locates the aggregate artifact \\
+Role & Explains paper-facing function \\
+Generator & Identifies the script or process that produced it \\
+Source inputs & Defines upstream aggregate evidence \\
+Checksum & Supports integrity checks \\
+Source commit & Links artifact to repository state \\
+Environment & Records runtime and package context \\
+Privacy class & Confirms release boundary \\
+\bottomrule
+\end{tabularx}
+\end{table}

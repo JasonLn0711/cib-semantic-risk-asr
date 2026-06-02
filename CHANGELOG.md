@@ -5,6 +5,52 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.316 - 2026-06-02T18:35:34+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `f143d12`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `paper_4b_aggregate_reproducibility/CHANGELOG.md`
+  - `paper_4b_aggregate_reproducibility/figures/fig1_framework_layers.pdf`
+  - `paper_4b_aggregate_reproducibility/figures/fig1_framework_layers.png`
+  - `paper_4b_aggregate_reproducibility/figures/fig2_evidence_boundary.pdf`
+  - `paper_4b_aggregate_reproducibility/figures/fig2_evidence_boundary.png`
+  - `paper_4b_aggregate_reproducibility/figures/fig3_claim_registry_flow.pdf`
+  - `paper_4b_aggregate_reproducibility/figures/fig3_claim_registry_flow.png`
+  - `paper_4b_aggregate_reproducibility/figures/fig4_artifact_audit_map.pdf`
+  - `paper_4b_aggregate_reproducibility/figures/fig4_artifact_audit_map.png`
+  - `paper_4b_aggregate_reproducibility/figures/fig5_case_study_evidence_ladder.pdf`
+  - `paper_4b_aggregate_reproducibility/figures/fig5_case_study_evidence_ladder.png`
+  - `paper_4b_aggregate_reproducibility/main.tex`
+  - `paper_4b_aggregate_reproducibility/paper_4b_aggregate_reproducibility.pdf`
+  - `paper_4b_aggregate_reproducibility/r/build_all_figures.R`
+  - `paper_4b_aggregate_reproducibility/r/build_fig1_framework_layers.R`
+  - `paper_4b_aggregate_reproducibility/r/build_fig2_evidence_boundary.R`
+  - `paper_4b_aggregate_reproducibility/r/build_fig3_claim_registry_flow.R`
+  - `paper_4b_aggregate_reproducibility/r/build_fig4_artifact_audit_map.R`
+  - `paper_4b_aggregate_reproducibility/r/build_fig5_case_study_evidence_ladder.R`
+  - `paper_4b_aggregate_reproducibility/r/plot_common.R`
+  - `paper_4b_aggregate_reproducibility/references.bib`
+  - `paper_4b_aggregate_reproducibility/sections/01_introduction.tex`
+  - `paper_4b_aggregate_reproducibility/sections/02_background.tex`
+  - `paper_4b_aggregate_reproducibility/sections/03_framework.tex`
+  - `paper_4b_aggregate_reproducibility/sections/04_case_study_cds_asr.tex`
+  - `paper_4b_aggregate_reproducibility/sections/05_artifact_protocol.tex`
+  - `paper_4b_aggregate_reproducibility/sections/06_reviewer_auditability.tex`
+  - `paper_4b_aggregate_reproducibility/sections/07_discussion.tex`
+  - `paper_4b_aggregate_reproducibility/sections/08_limitations_ethics.tex`
+  - `paper_4b_aggregate_reproducibility/sections/appendix.tex`
+  - `paper_4b_aggregate_reproducibility/submission_readiness_checklist.md`
+  - `paper_4b_aggregate_reproducibility/tables/table1_evidence_classes.tex`
+  - `paper_4b_aggregate_reproducibility/tables/table2_claim_schema.tex`
+  - `paper_4b_aggregate_reproducibility/tables/table3_manifest_schema.tex`
+  - `paper_4b_aggregate_reproducibility/tables/table4_reviewer_checklist.tex`
+  - `paper_4b_aggregate_reproducibility/tables/table5_case_claim_boundaries.tex`
+  - `paper_4b_aggregate_reproducibility/validation_report.md`
+
 ## v2.5.315 - 2026-06-02T18:35:22+08:00
 
 - Bump: `patch`
