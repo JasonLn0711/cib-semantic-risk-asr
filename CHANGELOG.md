@@ -5,6 +5,25 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.314 - 2026-06-02T18:35:09+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `bf855b7`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/paper/computer_speech_language_submission_notes_2026_06_02.md`
+  - `80_semantic_risk_asr/paper/csl_human_audit_completion_record_2026_06_02.md`
+  - `80_semantic_risk_asr/paper/csl_pre_submission_hardening_plan_2026_06_02.md`
+  - `80_semantic_risk_asr/paper/paper4_latex_transformation_instructions_2026_06_02.md`
+  - `80_semantic_risk_asr/paper/paper4_split_diagnosis_2026_06_02.md`
+  - `80_semantic_risk_asr/paper/paper4a_cds_asr_codex_goal_prompt_2026_06_02.md`
+  - `80_semantic_risk_asr/paper/paper4a_speech_technology_blueprint_2026_06_02.md`
+  - `80_semantic_risk_asr/paper/paper4b_aggregate_reproducibility_codex_goal_prompt_2026_06_02.md`
+  - `80_semantic_risk_asr/paper/paper4b_trustworthy_ai_blueprint_2026_06_02.md`
+  - `80_semantic_risk_asr/paper/submission_readiness_package_zh.md`
+
 ## v2.5.313 - 2026-06-02T18:34:56+08:00
 
 - Bump: `patch`

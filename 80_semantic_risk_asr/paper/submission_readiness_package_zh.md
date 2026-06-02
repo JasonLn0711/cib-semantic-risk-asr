@@ -1,11 +1,24 @@
 # 投稿準備包：CDS-ASR 論文下一步
 
 Date: 2026-05-26
-Latest status update: 2026-06-01
+Latest status update: 2026-06-02
 
-Status: Route A direct-submission package active; manuscript figure/table
-convergence implemented on 2026-06-01 with R-generated figures, R-generated
-LaTeX table fragments, and a rebuilt `manuscript_submission.pdf`.
+Status: 暫緩直接投稿，等待 CEIS ablation 與 manuscript regeneration。
+`Computer Speech & Language` 是 2026-06-02 的 named target journal。專家建議
+的三個 evidence layers 中，100+ human audit 與雙 reviewer agreement 已在
+selected-300 full surface 完成；CEIS ablation 仍是正式投稿前的剩餘 hardening gate。
+
+Venue-specific note:
+
+- `80_semantic_risk_asr/paper/computer_speech_language_submission_notes_2026_06_02.md`
+
+CSL pre-submission hardening plan:
+
+- `80_semantic_risk_asr/paper/csl_pre_submission_hardening_plan_2026_06_02.md`
+
+CSL human audit completion record:
+
+- `80_semantic_risk_asr/paper/csl_human_audit_completion_record_2026_06_02.md`
 
 Canonical draft:
 
@@ -17,48 +30,84 @@ Second-reviewer decision record:
 
 Primary rule:
 
-> 目前不新增 full-split ASR 實驗。下一步是把已完成的 evidence chain 轉成可投稿的 manuscript、表格、圖、appendix、artifact statement 與 reviewer-facing claim map。
+> 目前不急著投。human audit 已擴到 300 rows，第二位 reviewer 與 Cohen's
+> Kappa 已完成。下一步不是新增 full-split ASR 實驗，而是在 completed
+> dual-reviewer surface 上補 CEIS ablation，然後重建 manuscript、表格、圖、
+> appendix 與 claim map。
 
 2026-06-01 FIRST PRINCIPLE update:
 
 > 現在的投稿瓶頸不是「再多放圖」或「再塞 manifest」，而是把 reviewer 需要判斷的證據線收斂成方法、核心證據、風險機制、政策 replay 四條主線。主文保留強圖與核心表；完整 F1-F11、候選模型表、fixed-budget frontier 明細與 claim registry 作為補充/manifest trace，讓 reproducibility 完整但不干擾主文論證。
 
+2026-06-02 Computer Speech & Language update:
+
+> 這個期刊的第一層 fit 不是一般 AI governance，而是 speech / spoken-language
+> system evaluation。投稿版本應把 CDS-ASR 寫成「speech-to-decision ASR 的
+> consequence-centered evaluation」：ASR hypothesis、spoken risk atom、
+> plausible ASR alternative、CEIS decision-stability score、conservative
+> recovery / abstention。治理、反詐、privacy boundary 是應用場景與 release
+> stewardship，不要取代 speech-processing contribution。
+
 2026-05-28 FIRST PRINCIPLE update:
 
-> 現在最稀缺的資源不是更多模型實驗，而是 reviewer 第一頁注意力與可防守的 claim-evidence alignment。因此投稿面要把 frozen evidence chain 寫成有吸引力、可 citation 支撐、可重建、aggregate-only 的 decision-stability 故事；不要重開 selected-300 審查，也不要等待 second-reviewer spot-check 才進入 Route A。
+> 這段原本支撐 Route A 直接投稿；2026-06-02 專家建議更新後，現在最稀缺的資源是 CSL reviewer 會要求的 validation layer。投稿面仍要保持有吸引力、可 citation 支撐、可重建、aggregate-only 的 decision-stability 故事，但正式投稿前先完成 100+ human audit、dual reviewer Kappa、CEIS ablation。
 
 今日完成狀態：
 
+- 2026-06-02 expert hardening gate 已更新：投稿前先補 100+ human audit、
+  dual reviewer Kappa、CEIS ablation。
+- 2026-06-02 expert review 已完成 row 1-300；Reviewer 1 與 Reviewer 2 都達到
+  300/300 row-level complete、900/900 model-level complete。
+- Cohen's Kappa 已記錄：decision change `0.849970`、semantic risk label
+  `1.000000`、expected safe action `0.851426`、annotation confidence
+  `0.934274`。
+- Repo-safe aggregate completion record：
+  `70_experiments/runs/janus_300_high_stakes_human_audit_completed_300_dual_reviewer_2026_06_02/`。
+- 120-row human audit expansion queue 已建立：
+  `70_experiments/runs/janus_300_high_stakes_human_audit_expansion_120_csl_2026_06_02/`。
+- Reviewer agreement helper 已新增：
+  `80_semantic_risk_asr/annotation/compute_human_audit_agreement.py`。
 - `80_semantic_risk_asr/paper/generate_paper_figures.R` 已成為 R 端 canonical figure/table generator，輸出主文圖、補充圖與 `80_semantic_risk_asr/paper/tables/*.tex`。
 - `manuscript_submission.tex` 已移除主文 Figure Package table，主文圖表收斂為 F1、F2 evidence design、F3、F4、F7、F10，加上 R-generated Table 1、Table 3、Table 4。
 - F8、F9、F11、candidate lane 表與 Appendix Table A1 已放入 supplement/appendix；Claim Registry 轉為 supplementary governance evidence。
 - `manuscript_submission.pdf` 已以 `latexmk -xelatex` 重建；R-generated table fragments 使用 `tabularx` 自動換行，最新 LaTeX log 無 `Overfull`。
 - Introduction 已依老師建議改成「現實世界 speech-to-decision 問題 → 既有 ASR / semantic metric / correction / selective prediction 解法 → decision-stability 缺口 → CDS-ASR 新觀點」。
 - `manuscript_submission.tex` 的主要表格已改成自動換行與比例欄寬，長模型名稱、artifact 路徑與 reviewer-facing 說明不再依賴固定欄寬硬塞。
-- Route A cover note 保持直接投稿、不等待 second reviewer 的界線：single-expert audit limitation 明講，inter-annotator agreement 不宣稱。
+- Route A 直接投稿界線已被 2026-06-02 expert hardening gate 取代；目前 cover note 不應送出，應等 second reviewer agreement 與 ablation 完成後重寫。
 - PDF 與 aggregate-only package 已重建在 local `/tmp`：`/tmp/cib_tex_build/manuscript_submission.pdf`、`/tmp/cib_submission_route_a_2026_05_28.zip`。
 - 最新已推到 domain repo `origin/main` 的投稿 polish commit 到 `4734cd9`；本文件更新只記錄狀態與下一步，不改 evidence boundary。
+- CSL venue scan 已完成：abstract 226 words，符合 250-word ceiling；但正式投稿前
+  仍需補 title page、1-7 keywords、highlights、declarations、formal data
+  availability statement、CRediT、funding/competing-interest/generative-AI
+  statements，並把 reference style 轉成 CSL 要求的 numeric square-bracket
+  style。
 
 ## 1. Current Gate Verdict
 
-目前 evidence gate 已經可以支撐 scoped paper-ready manuscript package：
+目前 evidence gate 可以支撐 expanded dual-reviewer audit manuscript package；
+CSL 投稿前仍需完成 CEIS ablation 並重建 manuscript/table/figure/appendix 後再
+改為 submission-ready：
 
 | Gate | Current status | Paper meaning | Evidence |
 | --- | --- | --- | --- |
 | Roadmap completion | `roadmap_complete=true`, `blocking_gate=none` | 原先 0-6 研究路線已完成 | `postdoc_roadmap_completion_summary.json` |
-| Publishable evidence | `publishable_ready=true` | 主要論文證據可依 scoped claims 使用 | `publishable_evidence_completion_summary.json` |
+| Publishable evidence | `publishable_ready=true` | 主要論文證據可依 scoped pilot claims 使用；CSL final claim 需新增三個 validation layers | `publishable_evidence_completion_summary.json` |
 | Consistency audit | `26/26` pass | reviewer workflow、candidate boundary、proxy/human-reviewed boundary 一致 | `evidence_chain_consistency_summary.json` |
-| Selected-300 human audit | `review_complete` | 30/30 rows、90/90 model assessments 可支撐 paper-grade risk claims | `human_audit_refresh_summary.json` |
-| Human-reviewed recovery | `human_reviewed_complete` | recovery claims 可使用 reviewed labels | `janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json` |
+| Selected-300 human audit | `dual_reviewer_complete` | 300/300 rows per reviewer、900/900 model-level assessments per reviewer；Kappa recorded | `janus_300_high_stakes_human_audit_completed_300_dual_reviewer_2026_06_02/` |
+| Human-reviewed recovery | `human_reviewed_complete` | recovery claims 可使用目前 reviewed labels；投稿版需用 expanded audit 與 ablation 重新整理 | `janus_300_high_stakes_recovery_human_reviewed_2026_05_26/summary.json` |
 | Candidate ASR/Gemma lane | bounded, no promotion | 候選模型是 exploratory/runtime evidence，不進 main table | `asr_candidate_current_recheck_2026_05_26/summary.json` |
 
 Immediate implication:
 
-> 下一個完整步驟不是「再跑模型」，而是完成 manuscript expansion、table/figure package、citation coverage、artifact appendix、submission checklist。
+> 下一個完整步驟不是「再跑 full-split 模型」，而是在 completed selected-300
+> dual-reviewer surface 上補 CEIS ablation，再重建 manuscript/table/figure/appendix/submission checklist。
 
 Second reviewer verdict:
 
-> `conditional pass with manuscript revisions`。selected-300 人工審查不用重開；稿件可以進入 submission-prep，但需要做 claim tightening、citation completion、method operationalization、limitations 補強。現在不是資料或實驗 gate 卡住，而是論文表述還沒完全達到 reviewer-proof。
+> 2026-05-26 的 `conditional pass with manuscript revisions` 現在保留為歷史
+> evidence-boundary review。2026-06-02 的 CSL hardening gate 是較新的投稿判斷：
+> human audit 與 dual reviewer Kappa 已完成；正式投稿前剩 CEIS ablation 與
+> manuscript regeneration。
 
 ## 2. Frozen Evidence Boundary
 
