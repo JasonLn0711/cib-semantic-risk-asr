@@ -1,24 +1,22 @@
 {
-  "version": "v2.5.311",
+  "version": "v2.5.312",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 311
+    "patch": 312
   },
-  "updated_at": "2026-06-02T14:34:47+08:00",
+  "updated_at": "2026-06-02T18:34:37+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "c965f61",
+  "base_commit": "fe0cfe8",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "80_semantic_risk_asr/paper/figures/figure1_cds_asr_pipeline_redrawn.pdf",
-    "80_semantic_risk_asr/paper/figures/figure2_evidence_ladder_redrawn.pdf",
-    "80_semantic_risk_asr/paper/manuscript_submission.pdf",
-    "80_semantic_risk_asr/paper/manuscript_submission.tex"
+    "80_semantic_risk_asr/annotation/compute_human_audit_agreement.py",
+    "tests/test_human_audit_agreement.py"
   ]
 }
