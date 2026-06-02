@@ -1,0 +1,65 @@
+{
+  "ok": true,
+  "status": "audit_selection_created_review_pending",
+  "inputs": {
+    "sres_scored": "70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/artifacts/metric_inputs_three_model/sres_scored.tsv",
+    "ceis_scored": "70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/artifacts/metric_inputs_three_model/ceis_scored.tsv",
+    "downstream_decisions": "70_experiments/runs/janus_300_high_stakes_cds_proxy_2026_05_25/artifacts/metric_inputs_three_model/downstream_escalation_decisions.tsv"
+  },
+  "thresholds": {
+    "low_wer_threshold": 10.0,
+    "sres_threshold": 20.0,
+    "ceis_threshold": 5.0
+  },
+  "privacy_boundary": [
+    "Tracked outputs omit audio IDs, sample IDs, transcripts, and hypothesis text.",
+    "The human audit sheet is written under ignored artifacts/ and must stay local-only."
+  ],
+  "candidate_audio_count": 300,
+  "selected_audio_count": 120,
+  "selected_model_sample_count": 360,
+  "stratum_counts": {
+    "critical_or_high_risk_missed": 6,
+    "unsafe_downrouting": 16,
+    "high_proxy_risk": 3,
+    "clean_control": 16,
+    "risk_score_fill": 79
+  },
+  "available_signal_counts": {
+    "critical_miss": 1,
+    "high_risk_missed": 6,
+    "unsafe_downrouting": 22,
+    "label_flip": 25,
+    "low_wer_danger": 2,
+    "high_proxy_risk": 25,
+    "model_disagreement": 22,
+    "crosses_high_risk_boundary": 6
+  },
+  "selected_signal_counts": {
+    "critical_miss": 1,
+    "high_risk_missed": 6,
+    "unsafe_downrouting": 22,
+    "label_flip": 25,
+    "low_wer_danger": 2,
+    "high_proxy_risk": 25,
+    "model_disagreement": 22,
+    "crosses_high_risk_boundary": 6
+  },
+  "reference_label_counts": {
+    "critical_escalation": 50,
+    "priority_review": 70
+  },
+  "split_counts": {
+    "train": 99,
+    "validation": 11,
+    "test": 10
+  },
+  "artifact_outputs": {
+    "local_audit_sheet": "70_experiments/runs/janus_300_high_stakes_human_audit_expansion_120_csl_2026_06_02/artifacts/human_risk_atom_audit_sheet.tsv",
+    "aggregate_summary": "70_experiments/runs/janus_300_high_stakes_human_audit_expansion_120_csl_2026_06_02/human_audit_selection_summary.json",
+    "selection_strata": "70_experiments/runs/janus_300_high_stakes_human_audit_expansion_120_csl_2026_06_02/selection_strata.tsv",
+    "risk_atom_coverage": "70_experiments/runs/janus_300_high_stakes_human_audit_expansion_120_csl_2026_06_02/risk_atom_coverage.tsv",
+    "model_signal_coverage": "70_experiments/runs/janus_300_high_stakes_human_audit_expansion_120_csl_2026_06_02/model_signal_coverage.tsv"
+  },
+  "wall_time_seconds": 0.0417
+}

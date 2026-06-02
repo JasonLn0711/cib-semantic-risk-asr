@@ -1,0 +1,9 @@
+check_name	status	detail
+reviewer_1_row_level_complete	pass	300/300 row-level complete
+reviewer_1_model_level_complete	pass	900/900 model-level complete
+reviewer_2_row_level_complete	pass	300/300 row-level complete
+reviewer_2_model_level_complete	pass	900/900 model-level complete
+required_fields_have_no_empty_values	pass	Required fields have no empty values
+row_level_yes_has_model_level_yes_or_uncertain	pass	Row-level yes rows all have at least one model-level yes or uncertain
+critical_atoms_contained_in_risk_atoms	pass	Critical atoms are contained in risk atoms
+yes_expected_safe_action_non_none	pass	Rows with yes all have expected safe action other than none

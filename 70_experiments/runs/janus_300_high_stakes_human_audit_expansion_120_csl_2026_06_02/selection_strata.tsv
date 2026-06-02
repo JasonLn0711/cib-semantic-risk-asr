@@ -1,0 +1,9 @@
+stratum	target_quota	available_audio_count	selected_audio_count	selected_signal_audio_count	selection_rule
+critical_or_high_risk_missed	24	6	6	6	Includes critical miss or high-risk missed signal.
+unsafe_downrouting	24	22	16	22	At least one ASR hypothesis routes below reference escalation.
+low_wer_danger	16	2	0	2	Low row-level WER still has downstream or proxy risk signal.
+high_proxy_risk	24	25	3	25	SRES or CEIS crosses proxy risk threshold.
+model_disagreement	16	22	0	22	ASR-family labels disagree or cross the high-risk boundary.
+clean_control	16	275	16	95	No current proxy danger signal; selected as control.
+risk_atom_coverage			0		risk_atom_coverage
+risk_score_fill			79		Fills remaining audit quota by composite risk score.

@@ -5,6 +5,25 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.313 - 2026-06-02T18:34:56+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `0899c12`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_completed_300_dual_reviewer_2026_06_02/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_completed_300_dual_reviewer_2026_06_02/human_audit_completion_checks.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_completed_300_dual_reviewer_2026_06_02/human_audit_reviewer_agreement.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_completed_300_dual_reviewer_2026_06_02/human_audit_reviewer_agreement_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_completed_300_dual_reviewer_2026_06_02/human_audit_row_level_distribution.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_expansion_120_csl_2026_06_02/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_expansion_120_csl_2026_06_02/human_audit_selection_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_expansion_120_csl_2026_06_02/model_signal_coverage.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_expansion_120_csl_2026_06_02/risk_atom_coverage.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_human_audit_expansion_120_csl_2026_06_02/selection_strata.tsv`
+
 ## v2.5.312 - 2026-06-02T18:34:37+08:00
 
 - Bump: `patch`

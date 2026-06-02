@@ -1,0 +1,42 @@
+{
+  "ok": true,
+  "status": "dual_reviewer_agreement_recorded",
+  "source": "expert_completion_report",
+  "package_name": "csl-cds-asr-human-audit-300-review-package-20260602_completed.zip",
+  "local_completed_package_path": "/home/jnln3799/Downloads/csl-cds-asr-human-audit-300-review-package-20260602_completed.zip",
+  "review_scope": {
+    "reviewed_rows_per_reviewer": 300,
+    "model_level_assessments_per_reviewer": 900,
+    "reviewer_count": 2
+  },
+  "completion_checks": {
+    "reviewer_1_row_level_complete": "300/300",
+    "reviewer_1_model_level_complete": "900/900",
+    "reviewer_2_row_level_complete": "300/300",
+    "reviewer_2_model_level_complete": "900/900",
+    "required_fields_have_no_empty_values": true,
+    "row_level_yes_has_model_level_yes_or_uncertain": true,
+    "critical_atoms_contained_in_risk_atoms": true,
+    "yes_expected_safe_action_non_none": true
+  },
+  "row_level_distribution": {
+    "reviewer_1": {
+      "no": 280,
+      "yes": 14,
+      "uncertain": 6
+    },
+    "reviewer_2": {
+      "no": 285,
+      "yes": 14,
+      "uncertain": 1
+    }
+  },
+  "cohen_kappa": {
+    "reviewer_would_asr_error_change_decision": 0.849970,
+    "reviewer_semantic_risk_label": 1.000000,
+    "reviewer_expected_safe_action": 0.851426,
+    "reviewer_annotation_confidence": 0.934274
+  },
+  "privacy_boundary": "Tracked record is aggregate-only. Transcript-bearing reviewer sheets, merged TSVs, and completed package zip remain local/download artifacts and must not be committed.",
+  "next_submission_gate": "Run CEIS ablations on completed reviewed surface, then regenerate manuscript figures, tables, appendix, and claim-boundary text."
+}

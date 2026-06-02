@@ -1,0 +1,4 @@
+asr_run_id	selected_model_samples	label_flip_count	unsafe_downrouting_count	high_risk_missed_count	critical_miss_count	mean_wer	mean_cer	mean_sres_total	mean_ceis_max
+breeze_asr25_base_high_stakes_300	120	22	20	5	1	40.5301	31.9286	50.375	1.125
+breeze_asr25_lora_high_stakes_300	120	9	6	0	0	30.4465	22.4322	21.25	0.375
+breeze_asr25_partial_encoder_high_stakes_300	120	4	3	1	0	12.9108	9.7663	9.125	0.2083

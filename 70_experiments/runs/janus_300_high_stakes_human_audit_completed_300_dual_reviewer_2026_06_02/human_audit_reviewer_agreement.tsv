@@ -1,0 +1,5 @@
+field_name	cohen_kappa
+reviewer_would_asr_error_change_decision	0.849970
+reviewer_semantic_risk_label	1.000000
+reviewer_expected_safe_action	0.851426
+reviewer_annotation_confidence	0.934274
