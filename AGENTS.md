@@ -33,3 +33,19 @@ opportunity. Avoid making negation, apology, or defensive posture the document's
 organizing voice. Reserve exact negative prohibitions for machine-facing
 validators, safety rules, legal boundaries, and operational checklists where
 precision matters.
+
+## CSL Positive Narrative Contracts
+
+For CSL manuscript, cover-letter, highlights, reviewer-facing package, and
+agent-generated paper edits, use the local contracts in:
+
+- `80_semantic_risk_asr/paper/writing_voice_contract.md`
+- `80_semantic_risk_asr/paper/positive_problem_solution_narrative_contract.md`
+- `80_semantic_risk_asr/paper/intro_positive_rewrite_seed.md`
+
+The manuscript voice is confident, generous, and evidence-led. Build the first
+page from cited reality, fair current-method landscape, precise remaining
+decision-stability target, CDS-ASR / CEIS contribution, final scoped evidence,
+and next validation layer. Present WER/CER, semantic ASR metrics, correction,
+selective prediction, reject-option methods, and conformal prediction as
+foundation layers that open the path to counterfactual decision stability.
