@@ -1,27 +1,22 @@
 {
-  "version": "v2.5.326",
+  "version": "v2.5.327",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 326
+    "patch": 327
   },
-  "updated_at": "2026-06-03T15:28:00+08:00",
+  "updated_at": "2026-06-03T15:32:17+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "443b534",
+  "base_commit": "8b1b74e",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "80_semantic_risk_asr/paper/build_final_csl_tables.py",
-    "80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/package_manifest_hashes.tsv",
-    "80_semantic_risk_asr/paper/manuscript_submission.pdf",
-    "80_semantic_risk_asr/paper/manuscript_submission.tex",
-    "80_semantic_risk_asr/paper/tables/table3_predictor.tex",
-    "80_semantic_risk_asr/paper/tables/table4_recovery.tex",
-    "80_semantic_risk_asr/paper/tables/table_a1_fixed_budget_frontier.tex"
+    "80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/final_freeze_report.md",
+    "80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/package_manifest_hashes.tsv"
   ]
 }
