@@ -1,28 +1,31 @@
 {
-  "version": "v2.5.333",
+  "version": "v2.5.334",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 333
+    "patch": 334
   },
-  "updated_at": "2026-06-03T17:50:24+08:00",
+  "updated_at": "2026-06-03T17:51:38+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "5e9422a",
+  "base_commit": "fa95f1f",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "80_semantic_risk_asr/paper/build_final_csl_figures.py",
-    "80_semantic_risk_asr/paper/figures/f2_evidence_design.pdf",
-    "80_semantic_risk_asr/paper/figures/f2_evidence_design.png",
-    "80_semantic_risk_asr/paper/figures/f6_n_ladder.pdf",
-    "80_semantic_risk_asr/paper/figures/f6_n_ladder.png",
-    "80_semantic_risk_asr/paper/figures/figure2_evidence_ladder_redrawn.pdf",
-    "80_semantic_risk_asr/paper/figures/figure2_evidence_ladder_redrawn.png",
-    "80_semantic_risk_asr/paper/manuscript_submission.pdf"
+    "80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r4.zip",
+    "80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r4/clean_clone_pdf_text_grep_r4.md",
+    "80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r4/cover_letter_csl_r4.md",
+    "80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r4/data_code_availability_r4.md",
+    "80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r4/figure2_flowchart_visual_check_r4.md",
+    "80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r4/final_freeze_report_r4.md",
+    "80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r4/highlights_r4.md",
+    "80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r4/manuscript_submission_r4.pdf",
+    "80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r4/manuscript_submission_r4.tex",
+    "80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r4/package_manifest_hashes_r4.tsv",
+    "80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r4/submission_package_manifest_r4.tsv"
   ]
 }
