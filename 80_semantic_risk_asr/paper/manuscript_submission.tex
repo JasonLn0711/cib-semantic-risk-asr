@@ -792,7 +792,7 @@ recovery claims are tied to the selected-300 human-reviewed evidence.
 
 \input{80_semantic_risk_asr/paper/tables/table3_predictor.tex}
 
-Table 3 reports the current aggregate predictor comparison against
+Table 2 reports the final aggregate predictor comparison against
 human-reviewed \texttt{human\_decision\_change\_yes} labels. WER/CER
 are transcript-surface baselines; SRES is the semantic-risk baseline;
 CEIS is the proposed decision-stability metric. The completed 300-row /
@@ -837,20 +837,14 @@ remain useful for inspecting how many severe rows are captured at
 pre-specified row budgets, while residual unsafe downrouting remains a
 separate taxonomy and governance question.
 
-\paperfigure{f4_recovery_outcomes.pdf}
-{Risk-triggered policies are interpreted as descriptive conservative-action replay; residual unsafe downrouting is reported separately rather than treated as solved.}
-{final_csl_residual_unsafe_breakdown.tsv}
-
 A fixed-budget replay provides an additional operating view. In the
 final row-level regeneration, 10\%, 20\%, 30\%, and 40\% budgets
 correspond to 30, 60, 90, and 120 triggered rows. CEIS, SRES, and simple
 fusion policies all capture the sparse severe rows in the current
 aggregate replay, so the frontier supports descriptive stress testing
 and complementarity analysis rather than a CEIS superiority claim.
-Appendix Table A1 should be regenerated from
-\codepath{final\_csl\_fixed\_budget\_frontier\_row\_level.tsv} and
-reported explicitly as an operating-point frontier rather than a
-deployment-threshold claim.
+Appendix Table A1 reports the row-level fixed-budget frontier from
+\codepath{final\_csl\_fixed\_budget\_frontier\_row\_level.tsv}.
 
 \paperfigure{f7_budget_risk_frontier.pdf}
 {Fixed-budget policy replay reports row-level trigger budgets and tie-boundary ranges for descriptive severe-miss stress testing.}
@@ -874,10 +868,11 @@ after privacy review.
 
 The evidence supports a consequence-centered ASR evaluation claim:
 correct WER/CER reporting is necessary, but transcript similarity alone
-does not capture high-stakes decision instability. The reviewed
-selected-300 predictor table shows that SRES and CEIS align more
-strongly with human-reviewed decision-change labels than WER/CER in this
-scoped evidence layer.
+does not capture high-stakes decision instability. The final
+selected-300 predictor table shows that transcript-surface metrics
+retain strong AUC on this scoped audit surface, while SRES remains the
+strongest thresholded F1 baseline and CEIS is retained as a
+counterfactual decision-stability layer and fusion input.
 
 The model comparison should be presented as an evidence layer, not as a
 model leaderboard. The partial encoder is the strongest current ASR
@@ -1024,11 +1019,11 @@ supports a stronger high-stakes audit and reviewer-agreement claim while
 leaving population-level deployment prevalence to a later study.
 
 Model-level assessments are clustered within selected audio rows and
-should not be treated as independent calls. The current
-submission-prep package reports row-clustered bootstrap intervals and
-leave-one-row-out sensitivity tables for the existing predictor and
-recovery metrics; the full 300-row dual-reviewer audit should be used to
-regenerate final CSL predictor, recovery, and ablation tables.
+should not be treated as independent calls. The final 300/900 aggregate
+regeneration and CEIS ablation suite are incorporated in the present
+release-candidate. Remaining validation concerns are source-specific
+variant-generation coverage, population-prevalence estimation, and
+deployment-threshold calibration.
 
 The number of positive decision-change cases remains a key calibration
 handle. The final CSL table should report the positive-label count under
@@ -1047,9 +1042,10 @@ threshold selection is later frozen on a separate development set.
 Human labels now include a completed dual-reviewer audit and
 reviewer-agreement summary. Cohen's kappa is 0.849970 for
 decision-change, 1.000000 for semantic-risk label, 0.851426 for
-expected safe action, and 0.934274 for annotation confidence. The next
-validation layer is full-table regeneration and CEIS ablation, not
-additional reviewer recruitment.
+expected safe action, and 0.934274 for annotation confidence. The
+present release-candidate incorporates final table regeneration and the
+CEIS ablation suite; the next validation layer is source-specific
+variant-generation coverage and deployment-threshold calibration.
 
 Recovery evidence is aggregate-only. This protects transcript-bearing
 call and review content, but limits external row-level reproducibility.
@@ -1072,7 +1068,8 @@ The evidence supports scoped decision-stability evaluation and
 conservative-action stress testing, not elimination of all safety risk.
 
 The study evaluates whether decision-critical ASR risk can be detected
-and mitigated within a deliberately enriched high-stakes audit surface.
+and stress-tested under conservative-action replay within a deliberately
+enriched high-stakes audit surface.
 A deployment trial and population-prevalence study are natural next
 validation layers after the completed reviewer-agreement and ablation
 gates are incorporated.
@@ -1131,8 +1128,32 @@ Artifacts}\label{reviewer-reproducible-aggregate-artifacts}}
   Metric-definition audit:
   \codepath{70\_experiments/runs/wer\_metric\_audit\_2026\_05\_25/journal\_compliance\_summary.json}
 \item
-  Selected-300 human audit refresh:
-  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_refresh\_summary.json}
+  \textbf{Final CSL evidence artifacts:}
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_final\_csl\_2026\_06\_03/}
+\item
+  Final predictor table:
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_final\_csl\_2026\_06\_03/final\_csl\_predictor\_performance.tsv}
+\item
+  Final AUC delta bootstrap:
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_final\_csl\_2026\_06\_03/final\_csl\_auc\_delta\_bootstrap.tsv}
+\item
+  Final SRES residual-gain diagnostic:
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_final\_csl\_2026\_06\_03/final\_csl\_residual\_gain\_after\_sres.tsv}
+\item
+  Final row-level positive counts:
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_final\_csl\_2026\_06\_03/final\_csl\_row\_level\_positive\_counts.tsv}
+\item
+  Final fixed-budget frontier:
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_final\_csl\_2026\_06\_03/final\_csl\_fixed\_budget\_frontier\_row\_level.tsv}
+\item
+  Final residual unsafe breakdown:
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_final\_csl\_2026\_06\_03/final\_csl\_residual\_unsafe\_breakdown.tsv}
+\item
+  Final CEIS ablation artifacts:
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_ceis\_ablation\_final\_csl\_2026\_06\_03/}
+\item
+  Final CEIS ablation delta summary:
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_ceis\_ablation\_final\_csl\_2026\_06\_03/ceis\_ablation\_delta\_summary.tsv}
 \item
   Completed 300-row dual-reviewer agreement summary:
   \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_completed\_300\_dual\_reviewer\_2026\_06\_02/human\_audit\_reviewer\_agreement\_summary.json}
@@ -1140,26 +1161,14 @@ Artifacts}\label{reviewer-reproducible-aggregate-artifacts}}
   Completed 300-row dual-reviewer agreement table:
   \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_completed\_300\_dual\_reviewer\_2026\_06\_02/human\_audit\_reviewer\_agreement.tsv}
 \item
-  Human-reviewed predictor evidence:
+  \textbf{Legacy / provenance artifacts:} selected-300 human-audit refresh:
+  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_refresh\_summary.json}
+\item
+  Legacy predictor comparison, retained as pre-final provenance:
   \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_comparison.tsv}
 \item
-  Human-reviewed predictor row-clustered CI:
-  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_clustered\_ci.tsv}
-\item
-  Human-reviewed predictor leave-one-row-out sensitivity:
-  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_human\_audit\_selection\_2026\_05\_25/human\_audit\_predictor\_leave\_one\_row\_out.tsv}
-\item
-  Human-reviewed recovery evidence:
+  Legacy recovery replay, retained as pre-final provenance:
   \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison.tsv}
-\item
-  Human-reviewed recovery row-clustered CI:
-  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_clustered\_ci.tsv}
-\item
-  Human-reviewed recovery leave-one-row-out sensitivity:
-  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/policy\_comparison\_leave\_one\_row\_out.tsv}
-\item
-  Human-reviewed recovery fixed-budget frontier:
-  \codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/fixed\_budget\_recovery\_frontier.tsv}
 \item
   Claim registry:
   \codepath{70\_experiments/runs/postdoc\_evidence\_chain\_2026\_05\_25/claim\_registry.tsv}
