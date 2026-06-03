@@ -5,6 +5,27 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.330 - 2026-06-03T16:33:10+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `86ce0b8`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r2.zip`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r2/clean_clone_pdf_text_grep_r2.md`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r2/cover_letter_csl_r2.md`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r2/data_code_availability_r2.md`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r2/final_freeze_report_r2.md`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r2/highlights_r2.md`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r2/manuscript_submission_r2.pdf`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r2/manuscript_submission_r2.tex`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r2/package_manifest_hashes_r2.tsv`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r2/submission_package_manifest_r2.tsv`
+  - `80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/final_freeze_report.md`
+  - `80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/package_manifest_hashes.tsv`
+
 ## v2.5.329 - 2026-06-03T16:05:55+08:00
 
 - Bump: `patch`
