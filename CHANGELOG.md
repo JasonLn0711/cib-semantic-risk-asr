@@ -5,6 +5,25 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.322 - 2026-06-03T14:52:42+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `438b2e4`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/paper/csl_final_execution_plan_2026_06_03.md`
+  - `80_semantic_risk_asr/paper/csl_first_principle_pressure_test_round3_2026_06_03.md`
+  - `80_semantic_risk_asr/paper/csl_pre_submission_hardening_plan_2026_06_02.md`
+  - `80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/README.md`
+  - `80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/ceis_config.json`
+  - `80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/downstream_decision_contract.md`
+  - `80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/package_manifest_hashes.tsv`
+  - `80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/statistical_analysis_plan.md`
+  - `80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/synthetic_mandarin_minimal_pairs.tsv`
+  - `80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/variant_generator_contract.md`
+
 ## v2.5.321 - 2026-06-03T11:29:23+08:00
 
 - Bump: `patch`

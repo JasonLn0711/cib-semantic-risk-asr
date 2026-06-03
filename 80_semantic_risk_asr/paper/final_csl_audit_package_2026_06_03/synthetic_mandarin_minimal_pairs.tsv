@@ -1,0 +1,11 @@
+pair_id	base_phrase	variant_phrase	atom	mandarin_ambiguity_type	base_action	variant_action	decision_distance	plausibility_proxy	risk_atom_weight	ceis_component	note
+mp01	沒有匯款	有匯款	negation	action_negation_deletion	no_escalation	priority_review	2	0.80	5.0	8.00	Mechanism demo only; not prevalence evidence.
+mp02	三萬	三十萬	amount	mandarin_numeral_scale	review	critical_escalation	2	0.70	5.0	7.00	Amount scale alternatives can cross escalation boundaries.
+mp03	昨天	今天	time	temporal_slot_substitution	review	priority_review	1	0.65	3.0	1.95	Timing can change urgency.
+mp04	今天	下週	time	temporal_slot_substitution	priority_review	review	1	0.60	3.0	1.80	Delayed timing can reduce action priority.
+mp05	客服	警察	actor	role_substitution	review	priority_review	1	0.75	4.0	3.00	Actor role changes scam-pattern interpretation.
+mp06	銀行	假檢警	actor	role_substitution	priority_review	critical_escalation	1	0.55	4.0	2.20	Role substitution can trigger critical escalation.
+mp07	取消分期	繼續分期	action	domain_phrase_confusion	review	priority_review	1	0.70	5.0	3.50	Domain action phrase affects active-risk routing.
+mp08	不確定	確定	uncertainty	epistemic_stance_change	review	priority_review	1	0.80	3.0	2.40	Certainty can change review threshold.
+mp09	先不要轉帳	先轉帳	action	negation_or_action_deletion	no_escalation	critical_escalation	3	0.60	5.0	9.00	Small deletion can create maximum decision distance.
+mp10	已報警	未報警	action	negation_or_status_flip	review	priority_review	1	0.65	5.0	3.25	Status flip affects expected safe action.

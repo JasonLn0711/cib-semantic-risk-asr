@@ -1,0 +1,67 @@
+{
+  "schema_version": "2026-06-03-final-csl-freeze",
+  "score_name": "Counterfactual Escalation Instability Score",
+  "score_abbreviation": "CEIS",
+  "formula": "max_v Plausibility(v | x) * RiskAtomWeight(v) * DecisionDistance(f(x), f(v))",
+  "scope": {
+    "primary_unit": "audio_row",
+    "model_level_unit": "secondary_clustered_within_audio_row",
+    "audit_surface": "selected_high_risk_mandarin_anti_fraud_300_rows",
+    "claim_boundary": "scoped_companion_metric_not_general_asr_metric"
+  },
+  "plausibility": {
+    "type": "bounded_proxy",
+    "range": [0.0, 1.0],
+    "not_claimed_as": "calibrated_acoustic_posterior",
+    "allowed_sources": [
+      "model_disagreement",
+      "mandarin_phonetic_or_near_phonetic_ambiguity",
+      "domain_slot_alternatives",
+      "runtime_or_quality_signals",
+      "acoustic_ambiguity_evidence_when_available"
+    ]
+  },
+  "risk_atom_weights": {
+    "negation": 5.0,
+    "amount": 5.0,
+    "action": 5.0,
+    "actor": 4.0,
+    "intent": 4.0,
+    "scam_pattern": 4.0,
+    "time": 3.0,
+    "uncertainty": 3.0,
+    "default": 1.0
+  },
+  "decision_function": {
+    "contract_file": "downstream_decision_contract.md",
+    "ordinary_labels": {
+      "no_escalation": 0,
+      "review": 1,
+      "manual_review": 1,
+      "priority_review": 2,
+      "critical_escalation": 3
+    },
+    "conservative_actions": [
+      "conservative_machine_action",
+      "abstain"
+    ]
+  },
+  "aggregation": {
+    "model_level_score": "max_over_plausible_variants",
+    "row_level_score": "max_over_model_hypotheses_in_audio_row",
+    "tie_handling": "report_best_and_worst_case_at_fixed_budget_cutoff_claim_uses_worst_case"
+  },
+  "required_ablation_variants": [
+    "full_ceis",
+    "without_plausibility",
+    "without_atom_weights",
+    "binary_atom",
+    "policy_distance_only"
+  ],
+  "threshold_policy": {
+    "fixed_budget_rates": [0.1, 0.2, 0.3, 0.4],
+    "budget_denominator": "selected_300_audio_rows",
+    "diagnostic_thresholds": "not_deployment_thresholds"
+  },
+  "privacy_boundary": "aggregate_only_outputs_no_raw_audio_transcripts_row_ids_hypotheses_or_reviewer_notes"
+}
