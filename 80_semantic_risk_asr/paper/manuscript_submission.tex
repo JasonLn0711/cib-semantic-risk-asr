@@ -142,12 +142,12 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={When Low WER Becomes Dangerous: Counterfactual Decision-Stability ASR for High-Stakes Speech-Driven Decision Systems},
+  pdftitle={Counterfactual Decision Stability for High-Stakes Mandarin ASR: Evaluating Safety-Relevant Instability Beyond Transcript Accuracy},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{When Low WER Becomes Dangerous: Counterfactual Decision-Stability
-ASR for High-Stakes Speech-Driven Decision Systems}
+\title{Counterfactual Decision Stability for High-Stakes Mandarin ASR:
+Evaluating Safety-Relevant Instability Beyond Transcript Accuracy}
 \author{}
 \date{2026-05-28}
 
@@ -174,18 +174,20 @@ sensitive call evidence.
 
 Across a six-model 258-row split comparison, selected-300 high-stakes
 provenance outputs, and a completed 300-row dual-reviewer human audit
-with 900 model-level assessments per reviewer, CDS-ASR provides a
+with 900 model-level assessments, CDS-ASR provides a
 consequence-centered evidence layer beyond transcript similarity. The
 dual-reviewer audit records strong agreement for decision-change,
 semantic-risk, expected-safe-action, and confidence labels, with Cohen's
 kappa values of 0.849970, 1.000000, 0.851426, and 0.934274,
-respectively. In the current aggregate predictor and policy-replay
-surface, CEIS achieves the highest decision-change AUC and a
-zero-false-negative operating point, while risk-triggered policies,
-including CEIS-triggered conservative action, eliminate high-risk missed
-and critical miss counts under the aggregate-only claim boundary. These
-results support decision-stability evaluation as a scoped companion to
-transcript accuracy, semantic metrics, confidence-aware correction, and
+respectively. Final 300/900 aggregate regeneration uses audio row as the
+primary unit and finds 6 row-level severe missed-escalation positives,
+below the pre-specified primary-endpoint threshold of 20. The manuscript
+therefore uses the pre-declared failover endpoint: CEIS is evaluated as
+a decision-change prediction and decision-stability signal under
+row-clustered analysis, while severe missed-escalation replay is
+reported as descriptive high-severity evidence. These results support
+decision-stability evaluation as a scoped companion to transcript
+accuracy, semantic-risk metrics, confidence-aware correction, and
 reviewer-visible human-audit reliability.
 \end{abstract}
 
@@ -217,14 +219,14 @@ caller is certain, and whether the scenario matches a known scam
 pattern. These are not merely words. They are decision atoms.
 
 This paper starts from the following practical risk: a transcript can be
-linguistically close and still operationally unsafe. A single ASR
+linguistically close and still operationally unstable. A single ASR
 ambiguity around negation, amount, actor, action, time, intent, or scam
 pattern can move a case from routine review to priority review, or from
-escalation to unsafe downrouting. In this paper, ``dangerous'' is
-operationalized as ASR-induced decision change that can produce unsafe
-downrouting, high-risk missed escalation, or critical miss under the
-declared anti-fraud triage policy. The title is therefore a measurable
-claim about decision consequences, not a general safety slogan.
+escalation to unsafe downrouting. In this paper, the operational target
+is safety-relevant decision instability: a plausible ASR alternative or
+ASR hypothesis changes the declared anti-fraud triage action in a
+direction that affects expected safe handling. This is a scoped
+policy-conditioned proxy, not a claim about measured downstream harm.
 
 Existing ASR evaluation and repair methods provide the foundation for
 this problem. WER and CER remain necessary because they make transcript
@@ -350,9 +352,10 @@ plausible transcript difference lands on a decision-critical atom.
 We study speech-driven decision systems where an audio segment is
 transcribed by ASR and then used by a downstream escalation workflow.
 The downstream label space includes routine review and higher-priority
-escalation states. The central unit is a model-sample: one ASR
-hypothesis for one audio row, evaluated against aggregate risk and
-decision-stability evidence.
+escalation states. The primary unit is the audio row / case. Model-level
+hypotheses are secondary observations clustered within the row and are
+used to form row-level scores by taking the maximum score over eligible
+model hypotheses.
 
 The paper asks whether the decision remains stable under plausible
 transcript alternatives. This makes transcript accuracy a supporting
@@ -406,9 +409,9 @@ for conservative action.
 \subsection{Downstream Decision
 Function}\label{downstream-decision-function}}
 
-The downstream decision function \texttt{f} is fixed before CEIS
-scoring. It maps each transcript or plausible variant into a declared
-triage action:
+The downstream decision function \texttt{f} is a declared retrospective
+policy abstraction for the final aggregate regeneration. It maps each
+transcript or plausible variant into a declared triage action:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -429,9 +432,11 @@ review/escalation states have distance 1, and movement from no
 escalation or routine handling to critical escalation receives the
 largest distance. Unsafe downrouting of a critical event receives the
 maximum penalty used by the policy replay. The method contract is
-versioned in \codepath{docs/downstream\_decision\_contract.md} and
-\codepath{80\_semantic\_risk\_asr/scoring/ceis\_config.json} so CEIS
-rankings can be reconstructed from aggregate artifacts.
+versioned in
+\codepath{80\_semantic\_risk\_asr/paper/final\_csl\_audit\_package\_2026\_06\_03/downstream\_decision\_contract.md}
+and
+\codepath{80\_semantic\_risk\_asr/paper/final\_csl\_audit\_package\_2026\_06\_03/ceis\_config.json}
+so CEIS rankings can be reconstructed from aggregate artifacts.
 
 \hypertarget{ceis-scale-discipline}{%
 \subsection{CEIS Scale Discipline}\label{ceis-scale-discipline}}
@@ -445,10 +450,12 @@ ambiguity, domain-slot alternatives, and available runtime signals.
 decision-distance handles that make ablation interpretable. The
 submission hardening plan therefore treats ablation as a direct
 contribution test: CEIS full, CEIS without atom weights, CEIS without
-plausibility, and CEIS binary atom. These analyses should be regenerated
-from aggregate-safe reviewed evidence before final CSL submission, and
-reported as planned validation if the current artifact package has not
-yet regenerated the table.
+plausibility, CEIS binary atom, and policy-distance-only. The final
+ablation suite shows that policy-distance-only matches full CEIS on the
+aggregate reviewed surface. The final manuscript therefore treats
+plausibility and atom weights as explicit method components,
+calibration handles, and interpretability/localization layers rather
+than empirically proven performance drivers on this selected surface.
 
 Thresholds reported in the current predictor table are diagnostic
 operating points selected on the scoped reviewed audit. They are useful
@@ -611,6 +618,41 @@ predictor or recovery table regenerated from the full audit should keep
 the row-clustered design rather than treating model-level assessments as
 independent calls.
 
+\hypertarget{statistical-inference-and-operating-point-selection}{%
+\subsection{Statistical Inference And Operating-Point
+Selection}\label{statistical-inference-and-operating-point-selection}}
+
+The primary statistical unit is the audio row. Model-level assessments
+are clustered within row and are secondary evidence. Final aggregate
+regeneration defines
+\texttt{row\_score = max\_h score(row,h)} and
+\texttt{row\_severe = any\_h severe\_miss(row,h)}. Fixed-budget replay
+uses the selected-300 rows as the denominator, so 10\%, 20\%, 30\%, and
+40\% budgets correspond to 30, 60, 90, and 120 triggered rows.
+
+The final dual-reviewer decision-change label uses a deterministic
+two-reviewer consensus rule. Agreement cases map directly to
+\texttt{yes} or \texttt{no}; unresolved mixed cases remain
+\texttt{uncertain} and are reported through the yes-or-uncertain
+sensitivity target. This rule is reproducible and does not claim a
+separate adjudication panel.
+
+The pre-specified primary endpoint was row-level severe-miss remaining
+at 10--20\% fixed row budgets. The final 300/900 regeneration found only
+6 row-level severe-miss positives, below the planned threshold of 20.
+The manuscript therefore activates the pre-declared failover:
+decision-change prediction under clustered analysis is the primary
+empirical endpoint, while severe missed-escalation replay remains
+descriptive high-severity evidence.
+
+At fixed-budget cutoffs, tied score groups are reported with best-case
+and worst-case severe-miss remaining; claims use the worst-case
+boundary. Thresholds selected on the same reviewed audit surface are
+diagnostic operating points, not deployment thresholds. Selection
+sensitivity is reported as pattern-preserving, pattern-reversing, or
+underpowered; it is not presented as proof that enrichment or
+selection-circularity risk has been removed.
+
 \hypertarget{selection-provenance-and-enrichment}{%
 \subsection{Selection Provenance And
 Enrichment}\label{selection-provenance-and-enrichment}}
@@ -676,17 +718,16 @@ experiment supports selection provenance, not population prevalence.
 
 Experiment 3 evaluates WER, CER, SRES, and CEIS against human-reviewed
 decision-change labels from the selected-300 audit. The latest human
-audit gate is complete at 300 rows with 900 model-level assessments per
-reviewer and dual-reviewer agreement summaries. The current predictor
-table reports the existing aggregate replay surface and should be
-regenerated from the completed audit before final CSL submission so the
-full selected-300 reliability layer and CEIS ablations are reflected in
-the final numbers.
+audit gate is complete at 300 rows with 900 model-level assessments and
+dual-reviewer agreement summaries. Final aggregate regeneration uses a
+deterministic two-reviewer consensus rule, treats model-level
+assessments as clustered within row, and uses decision-change prediction
+as the primary endpoint because row-level severe positives are sparse.
 
 Experiment 4 evaluates five recovery policies against the same
 human-reviewed evidence layer. This is aggregate policy replay evidence
-for conservative action and recovery governance; a live deployment trial
-is a later validation layer.
+for conservative action and descriptive high-severity replay; a live
+deployment trial is a later validation layer.
 
 Candidate ASR and multimodal models are kept in a separate exploratory
 lane. They must not enter the main ASR table until they pass
@@ -735,54 +776,54 @@ recovery claims are tied to the selected-300 human-reviewed evidence.
 Table 3 reports the current aggregate predictor comparison against
 human-reviewed \texttt{human\_decision\_change\_yes} labels. WER/CER
 are transcript-surface baselines; SRES is the semantic-risk baseline;
-CEIS is the proposed decision-stability metric. The completed 300-row
-dual-reviewer audit is the upgraded final-submission evidence surface,
-so Table 3 should be regenerated with the full audit and the CEIS
-ablation suite before CSL submission.
+CEIS is the proposed decision-stability metric. The completed 300-row /
+900-assessment regeneration is now recorded in
+\codepath{70\_experiments/runs/janus\_300\_high\_stakes\_final\_csl\_2026\_06\_03/}.
+It reports 14 row-level decision-change positives, 20
+yes-or-uncertain rows, and 6 row-level severe-miss positives. Because
+the severe count is below the pre-specified threshold of 20, the primary
+claim shifts to decision-change prediction and CEIS/SRES
+complementarity; severe-miss replay is descriptive.
 
-CEIS has the strongest point-estimate human-reviewed decision-change AUC
-and reaches recall 1.0 at the diagnostic threshold, while SRES achieves
-the highest best-threshold F1 and fewer false positives. This is the
-paper's central contribution pattern: CEIS exposes conservative
-decision instability, SRES remains a strong semantic-risk baseline, and
-the full selected-300 audit plus ablations provide the next
-reviewer-facing validation layer.
+This is the paper's central contribution pattern: CEIS operationalizes
+counterfactual decision stability, SRES remains the strongest
+semantic-risk baseline for several thresholded operating points, and
+the final claim is scoped to what the completed 300/900 evidence can
+support.
 
 \paperfigure{f3_predictor_auc.pdf}
-{CEIS has the highest point-estimate decision-change AUC and reaches zero false negatives at the diagnostic operating point; row-clustered intervals remain overlapping with SRES.}
-{human_audit_predictor_comparison.tsv and human_audit_predictor_clustered_ci.tsv}
+{Final 300/900 regeneration evaluates decision-change prediction under clustered analysis; severe-miss replay is descriptive because row-level severe positives are sparse.}
+{final_csl_predictor_performance.tsv; final_csl_auc_delta_bootstrap.tsv}
 
 \input{80_semantic_risk_asr/paper/tables/table4_recovery.tex}
 
-Without recovery, the reviewed evidence contains 6 high-risk misses and
-1 critical miss. SRES-triggered recovery and CEIS-triggered conservative
-action both eliminate high-risk missed and critical miss counts in
-aggregate policy replay at the same 0.3889 trigger budget, corresponding
-to 35 triggers for 7 severe missed outcomes eliminated. CEIS ensemble
-arbitration preserves this 0/0 result while introducing abstention
-behavior at a higher 0.5222 budget. The policy replay eliminates the
-most severe missed-risk outcomes under the scoped labels, while residual
-unsafe downrouting remains at 24 and requires separate governance.
+Final regeneration finds 6 row-level severe missed-escalation positives
+and 1 row-level critical miss. Because this positive count is below the
+pre-specified primary-endpoint threshold, recovery and fixed-budget
+frontiers are reported as descriptive high-severity replay rather than
+the primary empirical endpoint. Risk-triggered conservative policies
+remain useful for inspecting how many severe rows are captured at
+pre-specified row budgets, while residual unsafe downrouting remains a
+separate taxonomy and governance question.
 
 \paperfigure{f4_recovery_outcomes.pdf}
-{Risk-triggered policies eliminate high-risk missed and critical miss counts in aggregate replay, while residual unsafe downrouting remains.}
-{policy_comparison.tsv}
+{Risk-triggered policies are interpreted as descriptive conservative-action replay; residual unsafe downrouting is reported separately rather than treated as solved.}
+{final_csl_residual_unsafe_breakdown.tsv}
 
-A fixed-budget replay provides an additional operating view. At 10\%,
-20\%, 30\%, and 40\% requested trigger budgets, CEIS-ranked conservative
-replay leaves 0 high-risk misses and 0 critical misses under the scoped
-labels; the 10\% point uses 9 triggers. SRES-ranked conservative replay
-leaves 4, 2, 2, and 0 severe missed outcomes at the same requested
-budgets, reaching 0 severe misses only when all 35 eligible SRES
-triggers are used. This frontier supports CEIS as a conservative
-decision-stability signal while preserving the Table 4 result that the
-diagnostic SRES and CEIS policies tie at the selected 0.3889 budget.
-Appendix Table A1 reports the fixed-budget replay explicitly as an
-operating-point frontier rather than a deployment-threshold claim.
+A fixed-budget replay provides an additional operating view. In the
+final row-level regeneration, 10\%, 20\%, 30\%, and 40\% budgets
+correspond to 30, 60, 90, and 120 triggered rows. CEIS, SRES, and simple
+fusion policies all capture the sparse severe rows in the current
+aggregate replay, so the frontier supports descriptive stress testing
+and complementarity analysis rather than a CEIS superiority claim.
+Appendix Table A1 should be regenerated from
+\codepath{final\_csl\_fixed\_budget\_frontier\_row\_level.tsv} and
+reported explicitly as an operating-point frontier rather than a
+deployment-threshold claim.
 
 \paperfigure{f7_budget_risk_frontier.pdf}
-{Fixed-budget policy replay shows the trigger-budget tradeoff needed to eliminate severe missed outcomes under scoped labels.}
-{fixed_budget_recovery_frontier.tsv}
+{Fixed-budget policy replay reports row-level trigger budgets and tie-boundary ranges for descriptive severe-miss stress testing.}
+{final_csl_fixed_budget_frontier_row_level.tsv}
 
 \paperfigure{f10_human_reviewed_atom_outcomes.pdf}
 {Human review connects risk-atom coverage to criticality and decision-change evidence across reviewed rows.}
@@ -813,16 +854,13 @@ hypothesis generator on the comparable split, and the selected-300
 human-reviewed evidence shows how downstream decision evidence refines
 transcript-centered model comparison.
 
-The recovery result supports a scoped replay claim. Under human-reviewed
-selected-300 labels, risk-triggered conservative policies, including
-CEIS-triggered conservative action, eliminate high-risk missed and
-critical miss counts in aggregate replay. SRES-triggered recovery and
-CEIS-triggered conservative action reach this result at the same 0.3889
-trigger budget, while ensemble arbitration adds interval/abstention
-behavior as a higher-budget governance option. CEIS is therefore best
-presented as the more conservative decision-instability signal at the
-predictor layer, while SRES remains a strong semantic-risk recovery
-baseline.
+The recovery result supports a scoped descriptive replay claim. Under
+the final row-level regeneration, severe missed-escalation positives are
+sparse, so risk-triggered conservative policies are used to inspect
+high-severity capture and residual unsafe categories rather than to
+carry the primary endpoint. CEIS is therefore best presented as a
+counterfactual decision-instability layer, while SRES remains a strong
+semantic-risk recovery and thresholding baseline.
 
 Improving ASR remains necessary, but stronger transcript models do not
 replace decision-stability analysis. The paper studies residual
@@ -871,20 +909,21 @@ Statistic
 Limitation / defense
 \end{minipage} \\
 \midrule\noalign{}
-CEIS has the strongest AUC among reported predictors & Current
-aggregate replay surface; regenerate on completed 300-row dual-reviewer
-audit before final CSL submission &
-\texttt{\seqsplit{human\_audit\_predictor\_comparison.tsv}} & AUC 0.9117 &
-Decision-stability signal; full-audit ablation pending \\
-CEIS reaches a zero-FN operating point & scoped selected-300 diagnostic
-threshold & \texttt{\seqsplit{human\_audit\_predictor\_comparison.tsv}} & FN 0,
-recall 1.0000 & Retrospective diagnostic threshold, not frozen
-deployment threshold \\
-SRES and CEIS conservative policies eliminate severe misses in replay &
-aggregate policy replay over reviewed assessments &
-\texttt{\seqsplit{policy\_comparison.tsv}} & high-risk missed 0, critical miss 0 &
-Replay evidence, not live causal deployment; policies tie at 0.3889
-budget \\
+CEIS supplies a counterfactual decision-stability signal & Final
+300-row / 900-assessment aggregate regeneration &
+\texttt{\seqsplit{final\_csl\_predictor\_performance.tsv}} & decision-change
+prediction table & Scoped companion metric; SRES remains the strongest
+semantic-risk baseline for several thresholded views \\
+Primary endpoint failover is active & Row-level severe positives are
+below the pre-specified threshold &
+\texttt{\seqsplit{final\_csl\_row\_level\_positive\_counts.tsv}} & row-level
+severe positives 6 & Severe frontier is descriptive high-severity evidence,
+not the primary endpoint \\
+Fixed-budget replay is descriptive & Row-level selected-300 conservative
+replay &
+\texttt{\seqsplit{final\_csl\_fixed\_budget\_frontier\_row\_level.tsv}} &
+10--40\% row budgets & Replay evidence, not live causal deployment or all-risk
+mitigation \\
 Partial encoder is the strongest current ASR hypothesis generator &
 258-row split/model-comparison layer &
 \texttt{\seqsplit{asr\_cds\_proxy\_comparison.tsv}} & \texttt{\seqsplit{cer\_zh\_micro}}
@@ -994,10 +1033,12 @@ The Taiwan Traditional Chinese locale policy is strict by design.
 Candidate model rejection may reflect deployment-locale mismatch, not
 universal ASR inferiority.
 
-Recovery policies eliminate high-risk missed and critical miss counts in
-aggregate replay, but Table 4 still leaves unsafe downrouting count at
-24 after SRES/CEIS conservative recovery. The evidence supports scoped
-severe-miss reduction, not elimination of all safety risk.
+Final row-level regeneration reports 6 severe missed-escalation rows and
+22 unsafe-downrouting rows. The recovery frontier is therefore
+descriptive high-severity replay, and residual unsafe downrouting is
+reported through an aggregate breakdown rather than treated as handled.
+The evidence supports scoped decision-stability evaluation and
+conservative-action stress testing, not elimination of all safety risk.
 
 The study evaluates whether decision-critical ASR risk can be detected
 and mitigated within a deliberately enriched high-stakes audit surface.
@@ -1148,15 +1189,15 @@ core predictor evidence, risk mechanism, and policy replay.
 Frontier}\label{appendix-table-a1.-fixed-budget-recovery-frontier}}
 
 The fixed-budget frontier is a retrospective aggregate replay over the
-same 90 reviewed model assessments. It reports what remains after
-applying ranked conservative triggers at requested trigger budgets.
-Requested 40\% budget maps to 35 eligible triggers, so the observed
-budget is 0.3889.
+selected 300 audio rows. It reports what remains after applying ranked
+conservative triggers at pre-specified 10\%, 20\%, 30\%, and 40\%
+row-level budgets. Tied cutoff groups are reported as best/worst-case
+severe remaining, and claims use the worst-case boundary.
 
 \input{80_semantic_risk_asr/paper/tables/table_a1_fixed_budget_frontier.tex}
 
 Evidence source:
-\codepath{70\_experiments/runs/janus\_300\_high\_stakes\_recovery\_human\_reviewed\_2026\_05\_26/fixed\_budget\_recovery\_frontier.tsv}.
+\codepath{70\_experiments/runs/janus\_300\_high\_stakes\_final\_csl\_2026\_06\_03/final\_csl\_fixed\_budget\_frontier\_row\_level.tsv}.
 
 \hypertarget{operation-records}{%
 \subsection{Operation Records}\label{operation-records}}

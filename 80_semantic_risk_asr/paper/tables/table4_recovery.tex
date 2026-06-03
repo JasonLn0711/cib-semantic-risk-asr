@@ -1,18 +1,21 @@
 \begin{table}[!htbp]
 \centering
-\caption{Aggregate policy replay under human-reviewed selected-300 labels.}
+\caption{Row-level fixed-budget conservative replay on the final selected-300 audit surface.}
 \label{tab:recovery}
 \footnotesize
-\begin{tabularx}{\linewidth}{@{}L{1.35}R{0.55}R{0.55}R{0.55}R{0.60}R{0.85}R{0.70}R{0.75}R{0.75}@{}}
+\begin{tabularx}{\linewidth}{@{}L{1.10}R{0.65}R{0.70}R{0.70}R{0.70}R{0.70}R{0.70}R{0.80}L{1.10}@{}}
 \toprule
-Policy & Unsafe & High-risk & Critical & Budget & Budget CI & Severe elim. & Severe rem. CI & Trig. / elim.
-\\
+Metric & Budget & Triggered & Severe rem. & Severe elim. & Unsafe rem. & Critical rem. & Tie worst & Role \\
 \midrule
-No recovery & 29 & 6 & 1 & 0.000 & 0.000--0.000 & 0 & 2--13 & n/a \\
-SRES recovery & 24 & 0 & 0 & 0.389 & 0.300--0.489 & 7 & 0--0 & 5.0 \\
-CEIS conservative action & 24 & 0 & 0 & 0.389 & 0.300--0.489 & 7 & 0--0 & 5.0 \\
-CEIS ensemble arbitration & 24 & 0 & 0 & 0.522 & 0.400--0.656 & 7 & 0--0 & 6.7 \\
+SRES & 10\% & 30 & 0 & 6 & 0 & 0 & 0 & Semantic-risk replay \\
+SRES & 20\% & 60 & 0 & 6 & 0 & 0 & 0 & Semantic-risk replay \\
+CEIS & 10\% & 30 & 0 & 6 & 0 & 0 & 0 & CEIS replay \\
+CEIS & 20\% & 60 & 0 & 6 & 0 & 0 & 0 & CEIS replay \\
+max(SRES, CEIS) & 10\% & 30 & 0 & 6 & 0 & 0 & 0 & Fusion replay \\
+max(SRES, CEIS) & 20\% & 60 & 0 & 6 & 0 & 0 & 0 & Fusion replay \\
+Variant count & 10\% & 30 & 5 & 1 & 16 & 1 & 6 & Count stress test \\
+Variant count & 20\% & 60 & 2 & 4 & 8 & 0 & 5 & Count stress test \\
 \bottomrule
 \end{tabularx}
-\\[0.4em]{\footnotesize\RaggedRight Confidence-only recovery is not shown as a main policy because calibrated confidence was unavailable and produced no triggers. Residual unsafe downrouting remains after risk-triggered policies and should be treated as a separate governance issue.\par}
+\\[0.4em]{\footnotesize\RaggedRight The severe-miss baseline is 6 rows, so replay is descriptive high-severity evidence after the pre-declared failover to decision-change prediction. Variant-count-only is included as a stress test for max-over-variants behavior.\par}
 \end{table}

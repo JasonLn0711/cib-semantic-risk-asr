@@ -1,18 +1,18 @@
 \begin{table}[!htbp]
 \centering
-\caption{Predictor performance against human-reviewed decision-change labels. Unit: 90 model assessments clustered within 30 reviewed audio rows.}
+\caption{Final 300/900 predictor performance against deterministic dual-reviewer decision-change labels. Unit: model assessments clustered within 300 audio rows; primary endpoint uses the decision-change failover because row-level severe positives are 6.}
 \label{tab:predictor}
 \footnotesize
-\begin{tabularx}{\linewidth}{@{}L{0.75}R{0.70}R{0.95}R{0.92}R{0.70}R{0.95}R{0.70}R{0.70}R{0.50}L{1.35}@{}}
+\begin{tabularx}{\linewidth}{@{}L{1.10}R{0.75}R{0.75}R{0.75}R{0.75}R{0.75}R{0.75}R{0.65}L{1.25}@{}}
 \toprule
-Predictor & AUC & AUC CI & Threshold & Best F1 & F1 CI & Precision & Recall & FN & Role
-\\
+Predictor & AUC & Threshold & Best F1 & Precision & Recall & FN & Positives & Role \\
 \midrule
-WER & 0.696 & 0.570--0.812 & 42.59 & 0.462 & 0.286--0.667 & 0.391 & 0.562 & 7 & Surface baseline \\
-CER & 0.728 & 0.608--0.837 & 16.42 & 0.452 & 0.316--0.667 & 0.304 & 0.875 & 2 & Surface baseline \\
-SRES & 0.899 & 0.812--0.966 & 270.00 & 0.651 & 0.467--0.842 & 0.518 & 0.875 & 2 & Semantic-risk baseline \\
-CEIS & 0.912 & 0.852--0.962 & 5.00 & 0.627 & 0.468--0.815 & 0.457 & 1.000 & 0 & Decision-stability metric \\
+WER & 0.811 & 42.590 & 0.253 & 0.189 & 0.385 & 16 & 26 & Surface baseline \\
+CER & 0.832 & 37.500 & 0.321 & 0.300 & 0.346 & 17 & 26 & Chinese surface baseline \\
+SRES & 0.720 & 270.000 & 0.453 & 0.444 & 0.462 & 14 & 26 & Semantic-risk baseline \\
+CEIS & 0.718 & 5.000 & 0.407 & 0.364 & 0.462 & 14 & 26 & Decision-stability layer \\
+max(SRES, CEIS) & 0.720 & 0.783 & 0.453 & 0.444 & 0.462 & 14 & 26 & Fusion baseline \\
 \bottomrule
 \end{tabularx}
-\\[0.4em]{\footnotesize\RaggedRight Thresholds are diagnostic operating points selected on the scoped audit set, not frozen deployment thresholds. CEIS has the highest point-estimate AUC and zero false negatives at the diagnostic threshold; SRES has the highest best-threshold F1.\par}
+\\[0.4em]{\footnotesize\RaggedRight Thresholds are diagnostic operating points selected on the scoped reviewed audit, not deployment thresholds. SRES has the strongest thresholded F1 in this table; CEIS is retained as a scoped decision-stability layer and fusion input rather than a total-superiority claim.\par}
 \end{table}

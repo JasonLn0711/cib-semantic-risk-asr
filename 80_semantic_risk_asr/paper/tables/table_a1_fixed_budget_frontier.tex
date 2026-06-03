@@ -1,22 +1,33 @@
 \begin{table}[!htbp]
 \centering
-\caption{Fixed-budget conservative replay frontier.}
+\caption{Final row-level fixed-budget conservative replay frontier.}
 \label{tab:a1-frontier}
 \footnotesize
-\begin{tabularx}{\linewidth}{@{}L{0.70}R{0.70}R{0.65}R{0.70}R{0.60}R{0.70}R{0.60}R{0.60}R{0.75}R{0.70}@{}}
+\begin{tabularx}{\linewidth}{@{}L{0.95}R{0.55}R{0.65}R{0.65}R{0.65}R{0.65}R{0.75}R{0.80}R{0.80}@{}}
 \toprule
-Metric & Requested & Triggers & Observed & Unsafe & High-risk & Critical & Severe & Eliminated & Trig. / elim.
-\\
+Metric & Budget & Triggers & Severe & Eliminated & Unsafe & Critical & Tie best & Tie worst \\
 \midrule
-SRES & 10\% &  9 & 10.0\% & 28 & 4 & 0 & 4 & 3 & 3.00 \\
-SRES & 20\% & 18 & 20.0\% & 26 & 2 & 0 & 2 & 5 & 3.60 \\
-SRES & 30\% & 27 & 30.0\% & 26 & 2 & 0 & 2 & 5 & 5.40 \\
-SRES & 40\% & 35 & 38.9\% & 24 & 0 & 0 & 0 & 7 & 5.00 \\
-CEIS & 10\% &  9 & 10.0\% & 24 & 0 & 0 & 0 & 7 & 1.29 \\
-CEIS & 20\% & 18 & 20.0\% & 24 & 0 & 0 & 0 & 7 & 2.57 \\
-CEIS & 30\% & 27 & 30.0\% & 24 & 0 & 0 & 0 & 7 & 3.86 \\
-CEIS & 40\% & 35 & 38.9\% & 24 & 0 & 0 & 0 & 7 & 5.00 \\
+SRES & 10\% & 30 & 0 & 6 & 0 & 0 & 0 & 0 \\
+SRES & 20\% & 60 & 0 & 6 & 0 & 0 & 0 & 0 \\
+SRES & 30\% & 90 & 0 & 6 & 0 & 0 & 0 & 0 \\
+SRES & 40\% & 120 & 0 & 6 & 0 & 0 & 0 & 0 \\
+CEIS & 10\% & 30 & 0 & 6 & 0 & 0 & 0 & 0 \\
+CEIS & 20\% & 60 & 0 & 6 & 0 & 0 & 0 & 0 \\
+CEIS & 30\% & 90 & 0 & 6 & 0 & 0 & 0 & 0 \\
+CEIS & 40\% & 120 & 0 & 6 & 0 & 0 & 0 & 0 \\
+max(SRES, CEIS) & 10\% & 30 & 0 & 6 & 0 & 0 & 0 & 0 \\
+max(SRES, CEIS) & 20\% & 60 & 0 & 6 & 0 & 0 & 0 & 0 \\
+max(SRES, CEIS) & 30\% & 90 & 0 & 6 & 0 & 0 & 0 & 0 \\
+max(SRES, CEIS) & 40\% & 120 & 0 & 6 & 0 & 0 & 0 & 0 \\
+Variant count & 10\% & 30 & 5 & 1 & 16 & 1 & 5 & 6 \\
+Variant count & 20\% & 60 & 2 & 4 & 8 & 0 & 2 & 5 \\
+Variant count & 30\% & 90 & 2 & 4 & 6 & 0 & 2 & 5 \\
+Variant count & 40\% & 120 & 2 & 4 & 6 & 0 & 2 & 5 \\
+CEIS capped & 10\% & 30 & 0 & 6 & 0 & 0 & 0 & 0 \\
+CEIS capped & 20\% & 60 & 0 & 6 & 0 & 0 & 0 & 0 \\
+CEIS capped & 30\% & 90 & 0 & 6 & 0 & 0 & 0 & 0 \\
+CEIS capped & 40\% & 120 & 0 & 6 & 0 & 0 & 0 & 0 \\
 \bottomrule
 \end{tabularx}
-\\[0.4em]{\footnotesize\RaggedRight Retrospective aggregate replay over 90 reviewed model assessments. Requested 40\% budget maps to 35 eligible triggers, so the observed budget is 38.9\%.\par}
+\\[0.4em]{\footnotesize\RaggedRight Retrospective aggregate replay over 300 audio rows. Tied cutoff groups are reported as best/worst-case severe remaining; claims use the worst-case boundary.\par}
 \end{table}

@@ -1,61 +1,9 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='489.60pt' height='144.00pt' viewBox='0 0 489.60 144.00'>
-<g class='svglite'>
-<defs>
-  <style type='text/css'><![CDATA[
-    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
-      fill: none;
-      stroke: #000000;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-miterlimit: 10.00;
-    }
-    .svglite text {
-      white-space: pre;
-    }
-    .svglite g.glyphgroup path {
-      fill: inherit;
-      stroke: none;
-    }
-  ]]></style>
-</defs>
-<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
-<defs>
-  <clipPath id='cpMC4wMHw0ODkuNjB8MC4wMHwxNDQuMDA='>
-    <rect x='0.00' y='0.00' width='489.60' height='144.00' />
-  </clipPath>
-</defs>
-<g clip-path='url(#cpMC4wMHw0ODkuNjB8MC4wMHwxNDQuMDA=)'>
-<rect x='0.00' y='0.00' width='489.60' height='144.00' style='stroke-width: 0.00; stroke: none;' />
-<rect x='35.28' y='28.05' width='93.36' height='73.38' style='stroke-width: 0.96; stroke: #404040; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
-<rect x='143.84' y='28.05' width='93.36' height='73.38' style='stroke-width: 0.96; stroke: #404040; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
-<rect x='252.40' y='28.05' width='93.36' height='73.38' style='stroke-width: 0.96; stroke: #404040; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
-<rect x='360.96' y='28.05' width='93.36' height='73.38' style='stroke-width: 0.96; stroke: #404040; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFFFFF;' />
-<line x1='128.64' y1='64.75' x2='143.84' y2='64.75' style='stroke-width: 0.75; stroke-linecap: butt;' />
-<polyline points='138.85,67.63 143.84,64.75 138.85,61.87 ' style='stroke-width: 0.75; stroke-linecap: butt;' />
-<line x1='237.20' y1='64.75' x2='252.40' y2='64.75' style='stroke-width: 0.75; stroke-linecap: butt;' />
-<polyline points='247.41,67.63 252.40,64.75 247.41,61.87 ' style='stroke-width: 0.75; stroke-linecap: butt;' />
-<line x1='345.76' y1='64.75' x2='360.96' y2='64.75' style='stroke-width: 0.75; stroke-linecap: butt;' />
-<polyline points='355.97,67.63 360.96,64.75 355.97,61.87 ' style='stroke-width: 0.75; stroke-linecap: butt;' />
-<text x='81.96' y='48.22' text-anchor='middle' style='font-size: 7.68px; font-family: "EB Garamond Initials";' textLength='30.05px' lengthAdjust='spacingAndGlyphs'>ASR split</text>
-<text x='190.52' y='48.22' text-anchor='middle' style='font-size: 7.68px; font-family: "EB Garamond Initials";' textLength='54.14px' lengthAdjust='spacingAndGlyphs'>Selected provenance</text>
-<text x='299.08' y='48.22' text-anchor='middle' style='font-size: 7.68px; font-family: "EB Garamond Initials";' textLength='55.94px' lengthAdjust='spacingAndGlyphs'>Human-reviewed audit</text>
-<text x='407.64' y='48.22' text-anchor='middle' style='font-size: 7.68px; font-family: "EB Garamond Initials";' textLength='55.94px' lengthAdjust='spacingAndGlyphs'>Reviewed assessments</text>
-<text x='81.96' y='63.33' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='41.53px' lengthAdjust='spacingAndGlyphs'>Unit: audio rows</text>
-<text x='81.96' y='70.71' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='21.73px' lengthAdjust='spacingAndGlyphs'>N = 258</text>
-<text x='190.52' y='63.33' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='76.31px' lengthAdjust='spacingAndGlyphs'>Unit: candidate rows / outputs</text>
-<text x='190.52' y='70.71' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='21.73px' lengthAdjust='spacingAndGlyphs'>N = 300</text>
-<text x='299.08' y='63.33' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='41.53px' lengthAdjust='spacingAndGlyphs'>Unit: audio rows</text>
-<text x='299.08' y='70.71' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='19.25px' lengthAdjust='spacingAndGlyphs'>N = 30</text>
-<text x='407.64' y='63.33' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='68.86px' lengthAdjust='spacingAndGlyphs'>Unit: model-row assessments</text>
-<text x='407.64' y='70.71' text-anchor='middle' style='font-size: 6.83px; font-family: "EB Garamond Initials";' textLength='19.25px' lengthAdjust='spacingAndGlyphs'>N = 90</text>
-<text x='81.96' y='87.33' text-anchor='middle' style='font-size: 6.12px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='56.50px' lengthAdjust='spacingAndGlyphs'>model-comparison context</text>
-<text x='190.52' y='87.33' text-anchor='middle' style='font-size: 6.12px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='48.81px' lengthAdjust='spacingAndGlyphs'>enriched audit surface</text>
-<text x='299.08' y='87.33' text-anchor='middle' style='font-size: 6.12px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='65.16px' lengthAdjust='spacingAndGlyphs'>decision-critical review unit</text>
-<text x='407.64' y='87.33' text-anchor='middle' style='font-size: 6.12px;fill: #4D4D4D; font-family: "EB Garamond Initials";' textLength='65.16px' lengthAdjust='spacingAndGlyphs'>predictor and replay evidence</text>
-<polygon points='143.17,126.49 346.43,126.49 346.38,126.49 346.59,126.48 346.79,126.44 346.98,126.36 347.16,126.26 347.32,126.13 347.46,125.98 347.57,125.80 347.65,125.61 347.70,125.41 347.72,125.21 347.72,125.21 347.72,118.76 347.72,118.76 347.70,118.56 347.65,118.36 347.57,118.17 347.46,117.99 347.32,117.84 347.16,117.71 346.98,117.61 346.79,117.53 346.59,117.49 346.43,117.48 143.17,117.48 143.32,117.49 143.11,117.48 142.91,117.51 142.71,117.57 142.52,117.65 142.36,117.77 142.21,117.91 142.08,118.08 141.99,118.26 141.92,118.46 141.89,118.66 141.88,118.76 141.88,125.21 141.89,125.10 141.89,125.31 141.92,125.51 141.99,125.71 142.08,125.89 142.21,126.06 142.36,126.20 142.52,126.32 142.71,126.40 142.91,126.46 143.11,126.49 ' style='stroke-width: 0.44; fill: #F7F7F7;' />
-<text x='244.80' y='124.35' text-anchor='middle' style='font-size: 7.11px; font-family: "EB Garamond Initials";' textLength='201.56px' lengthAdjust='spacingAndGlyphs'>Cluster rule: the 90 model assessments are clustered within 30 reviewed rows.</text>
-<text x='0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000' y='11.68' style='font-size: 10.80px;fill: #1F2933; font-family: "EB Garamond Initials";' textLength='166.78px' lengthAdjust='spacingAndGlyphs'>Study evidence ladder and release boundary</text>
-</g>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="310" viewBox="0 0 1600 310">
+<rect width="1600" height="100%" fill="white"/>
+<text x="70" y="70" font-family="DejaVu Sans, Arial, sans-serif" font-size="42" font-weight="700" fill="#1F2933">Study evidence ladder and release boundary</text>
+<text x="70" y="120" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">ASR split: 258 audio rows for model-comparison context.</text>
+<text x="70" y="154" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">Selected provenance: 300 candidate rows for the enriched audit surface.</text>
+<text x="70" y="188" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">Human-reviewed audit: 300 audio rows with dual-reviewer row labels.</text>
+<text x="70" y="222" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">Reviewed assessments: 900 model-row assessments clustered within 300 rows.</text>
+<text x="70" y="256" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">Primary analysis uses audio rows; model assessments are clustered secondary evidence.</text>
 </svg>

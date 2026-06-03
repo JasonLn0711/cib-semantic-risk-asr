@@ -5,6 +5,44 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.324 - 2026-06-03T14:53:16+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `5dd67f2`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/paper/build_final_csl_figures.py`
+  - `80_semantic_risk_asr/paper/build_final_csl_tables.py`
+  - `80_semantic_risk_asr/paper/figures/f10_human_reviewed_atom_outcomes.pdf`
+  - `80_semantic_risk_asr/paper/figures/f10_human_reviewed_atom_outcomes.png`
+  - `80_semantic_risk_asr/paper/figures/f10_human_reviewed_atom_outcomes.svg`
+  - `80_semantic_risk_asr/paper/figures/f2_evidence_boundary.svg`
+  - `80_semantic_risk_asr/paper/figures/f2_evidence_design.pdf`
+  - `80_semantic_risk_asr/paper/figures/f2_evidence_design.png`
+  - `80_semantic_risk_asr/paper/figures/f2_evidence_design.svg`
+  - `80_semantic_risk_asr/paper/figures/f3_predictor_auc.pdf`
+  - `80_semantic_risk_asr/paper/figures/f3_predictor_auc.png`
+  - `80_semantic_risk_asr/paper/figures/f3_predictor_auc.svg`
+  - `80_semantic_risk_asr/paper/figures/f4_recovery_outcomes.pdf`
+  - `80_semantic_risk_asr/paper/figures/f4_recovery_outcomes.png`
+  - `80_semantic_risk_asr/paper/figures/f4_recovery_outcomes.svg`
+  - `80_semantic_risk_asr/paper/figures/f6_n_ladder.pdf`
+  - `80_semantic_risk_asr/paper/figures/f6_n_ladder.png`
+  - `80_semantic_risk_asr/paper/figures/f6_n_ladder.svg`
+  - `80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.pdf`
+  - `80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.png`
+  - `80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.svg`
+  - `80_semantic_risk_asr/paper/figures/figure2_evidence_ladder_redrawn.pdf`
+  - `80_semantic_risk_asr/paper/figures/figure2_evidence_ladder_redrawn.png`
+  - `80_semantic_risk_asr/paper/figures/figure2_evidence_ladder_redrawn.svg`
+  - `80_semantic_risk_asr/paper/manuscript_submission.pdf`
+  - `80_semantic_risk_asr/paper/manuscript_submission.tex`
+  - `80_semantic_risk_asr/paper/tables/table3_predictor.tex`
+  - `80_semantic_risk_asr/paper/tables/table4_recovery.tex`
+  - `80_semantic_risk_asr/paper/tables/table_a1_fixed_budget_frontier.tex`
+
 ## v2.5.323 - 2026-06-03T14:52:53+08:00
 
 - Bump: `patch`
