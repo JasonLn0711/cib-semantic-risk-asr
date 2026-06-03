@@ -118,7 +118,7 @@ def draw_wrapped(
     bold: bool = False,
     line_gap: int = 8,
 ) -> int:
-    words = value.split()
+    words = value.replace(" / ", " / ").split()
     lines: list[str] = []
     current = ""
     fnt = font(size, bold)
@@ -140,36 +140,60 @@ def draw_wrapped(
 
 
 def make_f2_evidence_ladder() -> None:
-    image, draw = canvas(1600, 620)
+    image, draw = canvas(1600, 1050)
     text(draw, (70, 50), "Study evidence ladder and release boundary", 42, bold=True)
+    text(
+        draw,
+        (70, 105),
+        "Each layer contributes a distinct evidence role; reviewer-visible release remains aggregate-only.",
+        24,
+        fill=MUTED,
+    )
     steps = [
         ("ASR split", "audio rows", "258", "model-comparison context"),
         ("Selected provenance", "candidate rows", "300", "enriched audit surface"),
         ("Human-reviewed audit", "audio rows", "300", "dual-reviewer row labels"),
         ("Reviewed assessments", "model-row assessments", "900", "clustered within rows"),
     ]
-    box_w, box_h = 320, 230
-    y = 165
-    for i, (name, unit, n, claim) in enumerate(steps):
-        x = 70 + i * 380
-        draw.rounded_rectangle((x, y, x + box_w, y + box_h), radius=12, fill="white", outline=INK, width=3)
-        text(draw, (x + 28, y + 28), name, 28, bold=True)
-        text(draw, (x + 28, y + 78), f"Unit: {unit}", 23, fill=MUTED)
-        text(draw, (x + 28, y + 118), f"N = {n}", 36, bold=True, fill=BLUE if i >= 2 else INK)
-        draw_wrapped(draw, (x + 28, y + 170), claim, box_w - 56, 22, fill=MUTED)
-        if i < len(steps) - 1:
-            draw.line((x + box_w + 22, y + box_h // 2, x + box_w + 62, y + box_h // 2), fill=INK, width=4)
+    box_x, box_w, box_h = 110, 1380, 145
+    ys = [165, 355, 545, 735]
+
+    def arrow(start: tuple[int, int], end: tuple[int, int]) -> None:
+        sx, sy = start
+        ex, ey = end
+        draw.line((sx, sy, ex, ey), fill=INK, width=4)
+        if abs(ex - sx) >= abs(ey - sy):
+            direction = 1 if ex >= sx else -1
             draw.polygon(
-                [
-                    (x + box_w + 62, y + box_h // 2),
-                    (x + box_w + 48, y + box_h // 2 - 10),
-                    (x + box_w + 48, y + box_h // 2 + 10),
-                ],
+                [(ex, ey), (ex - direction * 18, ey - 12), (ex - direction * 18, ey + 12)],
                 fill=INK,
             )
+        else:
+            direction = 1 if ey >= sy else -1
+            draw.polygon(
+                [(ex, ey), (ex - 12, ey - direction * 18), (ex + 12, ey - direction * 18)],
+                fill=INK,
+            )
+
+    # Mermaid-like vertical ladder: one wide node per layer prevents label overflow
+    # after manuscript scaling and keeps the evidence order unambiguous.
+    for y1, y2 in zip(ys, ys[1:]):
+        arrow((800, y1 + box_h + 12), (800, y2 - 16))
+
+    for i, ((name, unit, n, claim), y) in enumerate(zip(steps, ys)):
+        x = box_x
+        border = BLUE if i >= 2 else INK
+        draw.rounded_rectangle((x, y, x + box_w, y + box_h), radius=16, fill="white", outline=border, width=3)
+        step_fill = BLUE if i >= 2 else INK
+        draw.ellipse((x + 28, y + 34, x + 90, y + 96), fill=step_fill)
+        text(draw, (x + 59, y + 48), str(i + 1), 29, bold=True, fill="white", anchor="ma")
+        draw_wrapped(draw, (x + 120, y + 24), name, 500, 31, bold=True, line_gap=6)
+        text(draw, (x + 120, y + 83), f"N = {n}", 35, bold=True, fill=step_fill)
+        draw_wrapped(draw, (x + 650, y + 34), f"Unit: {unit}", 310, 24, fill=MUTED, line_gap=6)
+        draw_wrapped(draw, (x + 980, y + 34), claim, 390, 24, fill=MUTED, line_gap=6)
     note = "Cluster rule: 900 model assessments are clustered within 300 reviewed rows; row-level analysis is primary."
-    draw.rounded_rectangle((300, 470, 1300, 540), radius=10, fill=LIGHT, outline=GRID, width=2)
-    text(draw, (330, 490), note, 24, fill=INK)
+    draw.rounded_rectangle((210, 930, 1390, 1000), radius=10, fill=LIGHT, outline=GRID, width=2)
+    draw_wrapped(draw, (240, 950), note, 1120, 23, fill=INK, line_gap=5)
     save_pdf(image, "figure2_evidence_ladder_redrawn")
     save_pdf(image, "f2_evidence_design")
     save_pdf(image, "f6_n_ladder")

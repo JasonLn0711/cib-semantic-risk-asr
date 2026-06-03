@@ -1,24 +1,28 @@
 {
-  "version": "v2.5.332",
+  "version": "v2.5.333",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 332
+    "patch": 333
   },
-  "updated_at": "2026-06-03T17:33:40+08:00",
+  "updated_at": "2026-06-03T17:50:24+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "96de271",
+  "base_commit": "5e9422a",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
   "summary": "Auto version bump for staged repo changes.",
   "changed_files": [
-    "80_semantic_risk_asr/paper/intro_positive_rewrite_seed.md",
-    "80_semantic_risk_asr/paper/positive_problem_solution_narrative_contract.md",
-    "80_semantic_risk_asr/paper/writing_voice_contract.md",
-    "AGENTS.md"
+    "80_semantic_risk_asr/paper/build_final_csl_figures.py",
+    "80_semantic_risk_asr/paper/figures/f2_evidence_design.pdf",
+    "80_semantic_risk_asr/paper/figures/f2_evidence_design.png",
+    "80_semantic_risk_asr/paper/figures/f6_n_ladder.pdf",
+    "80_semantic_risk_asr/paper/figures/f6_n_ladder.png",
+    "80_semantic_risk_asr/paper/figures/figure2_evidence_ladder_redrawn.pdf",
+    "80_semantic_risk_asr/paper/figures/figure2_evidence_ladder_redrawn.png",
+    "80_semantic_risk_asr/paper/manuscript_submission.pdf"
   ]
 }
