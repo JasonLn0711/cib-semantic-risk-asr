@@ -1,7 +1,8 @@
 # Final CSL Release-Candidate Freeze Report
 
 Date: 2026-06-03
-Repo commit: 8b1b74e1fefbb990b10b6df14132a4b818f5e850
+Verified manuscript commit: 8b1b74e1fefbb990b10b6df14132a4b818f5e850
+Release-candidate tag commit: latest pushed main commit containing this freeze report
 Manuscript PDF pages: 28
 Primary endpoint: adjudicated decision-change AUC / complementarity
 Failover reason: row-level severe positives = 6 < 20

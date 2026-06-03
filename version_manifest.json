@@ -1,16 +1,16 @@
 {
-  "version": "v2.5.327",
+  "version": "v2.5.328",
   "versioning_scheme": "SemVer",
   "semver": {
     "major": 2,
     "minor": 5,
-    "patch": 327
+    "patch": 328
   },
-  "updated_at": "2026-06-03T15:32:17+08:00",
+  "updated_at": "2026-06-03T15:32:51+08:00",
   "bump": "patch",
   "trigger": "pre-commit",
   "branch": "main",
-  "base_commit": "8b1b74e",
+  "base_commit": "f94f13f",
   "rules": "VERSIONING.md",
   "changelog": "CHANGELOG.md",
   "history": "version_history.jsonl",
