@@ -1,0 +1,2 @@
+unit	comparison	target	iterations	delta_mean	delta_ci_low	delta_ci_high
+audio_row_cluster_bootstrap	ceis_max_minus_sres_total	decision_change_yes	2000	-0.002731	-0.006422	0.000246

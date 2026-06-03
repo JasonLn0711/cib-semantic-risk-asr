@@ -1,0 +1,15 @@
+reviewer_id	policy	ablation_variant	threshold_source	threshold	evaluated_model_assessments	triggered_count	trigger_rate	machine_abstention_count	machine_abstention_rate	unsafe_downrouting_count	unsafe_downrouting_rate	high_risk_missed_count	high_risk_missed_rate	critical_miss_count	critical_miss_rate	over_escalation_count	over_escalation_rate	unsafe_downrouting_reduction_vs_no_recovery	high_risk_missed_reduction_vs_no_recovery	critical_miss_reduction_vs_no_recovery
+reviewer_1	no_recovery	none	none		900	0	0.0	0	0.0	29	0.032222	6	0.006667	1	0.001111	6	0.006667	0	0	0
+reviewer_1	ablation_triggered_conservative_action	ceis_full	best_f1_on_decision_change_yes	5.0	900	35	0.038889	0	0.0	24	0.026667	0	0.0	0	0.0	6	0.006667	5	6	1
+reviewer_1	ablation_triggered_conservative_action	ceis_without_atom_weights	best_f1_on_decision_change_yes	1.0	900	35	0.038889	0	0.0	24	0.026667	0	0.0	0	0.0	6	0.006667	5	6	1
+reviewer_1	ablation_triggered_conservative_action	ceis_without_plausibility	best_f1_on_decision_change_yes	5.0	900	35	0.038889	0	0.0	24	0.026667	0	0.0	0	0.0	6	0.006667	5	6	1
+reviewer_1	ablation_triggered_conservative_action	ceis_binary_atom	best_f1_on_decision_change_yes	1.0	900	35	0.038889	0	0.0	24	0.026667	0	0.0	0	0.0	6	0.006667	5	6	1
+reviewer_1	ablation_triggered_conservative_action	ceis_policy_distance_only	best_f1_on_decision_change_yes	1.0	900	35	0.038889	0	0.0	24	0.026667	0	0.0	0	0.0	6	0.006667	5	6	1
+reviewer_1	ablation_triggered_conservative_action	ceis_full_top3_mean	best_f1_on_decision_change_yes	4.666667	900	35	0.038889	0	0.0	24	0.026667	0	0.0	0	0.0	6	0.006667	5	6	1
+reviewer_2	no_recovery	none	none		900	0	0.0	0	0.0	29	0.032222	6	0.006667	1	0.001111	6	0.006667	0	0	0
+reviewer_2	ablation_triggered_conservative_action	ceis_full	best_f1_on_decision_change_yes	5.0	900	35	0.038889	0	0.0	24	0.026667	0	0.0	0	0.0	6	0.006667	5	6	1
+reviewer_2	ablation_triggered_conservative_action	ceis_without_atom_weights	best_f1_on_decision_change_yes	1.0	900	35	0.038889	0	0.0	24	0.026667	0	0.0	0	0.0	6	0.006667	5	6	1
+reviewer_2	ablation_triggered_conservative_action	ceis_without_plausibility	best_f1_on_decision_change_yes	5.0	900	35	0.038889	0	0.0	24	0.026667	0	0.0	0	0.0	6	0.006667	5	6	1
+reviewer_2	ablation_triggered_conservative_action	ceis_binary_atom	best_f1_on_decision_change_yes	1.0	900	35	0.038889	0	0.0	24	0.026667	0	0.0	0	0.0	6	0.006667	5	6	1
+reviewer_2	ablation_triggered_conservative_action	ceis_policy_distance_only	best_f1_on_decision_change_yes	1.0	900	35	0.038889	0	0.0	24	0.026667	0	0.0	0	0.0	6	0.006667	5	6	1
+reviewer_2	ablation_triggered_conservative_action	ceis_full_top3_mean	best_f1_on_decision_change_yes	4.666667	900	35	0.038889	0	0.0	24	0.026667	0	0.0	0	0.0	6	0.006667	5	6	1

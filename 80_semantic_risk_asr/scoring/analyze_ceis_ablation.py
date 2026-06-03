@@ -41,6 +41,7 @@ VARIANT_ORDER = [
     "ceis_without_atom_weights",
     "ceis_without_plausibility",
     "ceis_binary_atom",
+    "ceis_policy_distance_only",
     "ceis_full_top3_mean",
 ]
 
@@ -141,6 +142,7 @@ def variant_scores_for_row(row: dict[str, str]) -> dict[str, float]:
         "ceis_without_atom_weights": max(plaus * distance, 0.0),
         "ceis_without_plausibility": max(weight * distance, 0.0),
         "ceis_binary_atom": 1.0 if unstable else 0.0,
+        "ceis_policy_distance_only": max(distance, 0.0),
     }
 
 
@@ -555,6 +557,7 @@ def write_readme(path: Path, payload: dict[str, Any]) -> None:
         "- `ceis_without_atom_weights`: plausibility * decision distance.",
         "- `ceis_without_plausibility`: risk-atom weight * decision distance.",
         "- `ceis_binary_atom`: binary atom-level instability trigger.",
+        "- `ceis_policy_distance_only`: decision distance only.",
         "- `ceis_full_top3_mean`: top-3 mean over full CEIS variant components.",
         "",
         "## Outputs",

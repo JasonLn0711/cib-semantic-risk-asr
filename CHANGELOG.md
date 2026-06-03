@@ -5,6 +5,39 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.323 - 2026-06-03T14:52:53+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `2a2d175`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/registry.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_ceis_ablation_final_csl_2026_06_03/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_ceis_ablation_final_csl_2026_06_03/ceis_ablation_delta_summary.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_ceis_ablation_final_csl_2026_06_03/ceis_ablation_model_summary.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_ceis_ablation_final_csl_2026_06_03/ceis_ablation_policy_replay.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_ceis_ablation_final_csl_2026_06_03/ceis_ablation_predictor_summary.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_ceis_ablation_final_csl_2026_06_03/ceis_ablation_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_atom_linguistic_evidence.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_auc_delta_bootstrap.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_fixed_budget_frontier_row_level.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_gate_status.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_manifest_hashes.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_predictor_performance.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_red_team_check.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_residual_unsafe_breakdown.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_row_level_positive_counts.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_selection_exclusion_sensitivity.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_summary.json`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_variant_count_distribution.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_variant_reject_reasons.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_variant_source_coverage.tsv`
+  - `80_semantic_risk_asr/annotation/build_final_csl_aggregate_outputs.py`
+  - `80_semantic_risk_asr/scoring/analyze_ceis_ablation.py`
+
 ## v2.5.322 - 2026-06-03T14:52:42+08:00
 
 - Bump: `patch`

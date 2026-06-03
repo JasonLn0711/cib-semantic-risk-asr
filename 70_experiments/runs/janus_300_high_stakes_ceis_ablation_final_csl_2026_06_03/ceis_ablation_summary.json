@@ -1,0 +1,46 @@
+{
+  "ok": true,
+  "status": "ceis_ablation_complete",
+  "date": "2026-06-02",
+  "input_boundary": "local completed reviewer sheets and local CEIS metric input",
+  "output_boundary": "aggregate-only CEIS ablation summaries with no row-level content",
+  "reviewer_count": 2,
+  "reviewer_counters": {
+    "reviewer_1": {
+      "audit_rows": 300,
+      "model_assessments": 900,
+      "pending_model_assessments": 0,
+      "reviewed_model_assessments": 900
+    },
+    "reviewer_2": {
+      "audit_rows": 300,
+      "model_assessments": 900,
+      "pending_model_assessments": 0,
+      "reviewed_model_assessments": 900
+    }
+  },
+  "ceis_metric_samples": 900,
+  "ceis_variant_rows": 3298,
+  "unstable_atom_counts": {
+    "action": 35,
+    "actor": 25,
+    "amount": 31,
+    "negation": 20,
+    "scam_pattern": 29
+  },
+  "ablation_variants": [
+    "ceis_full",
+    "ceis_without_atom_weights",
+    "ceis_without_plausibility",
+    "ceis_binary_atom",
+    "ceis_policy_distance_only",
+    "ceis_full_top3_mean"
+  ],
+  "policy_threshold_source": "best_f1_on_decision_change_yes",
+  "notes": [
+    "Ablation metrics are reported separately for each reviewer label source.",
+    "No adjudication is inferred in this run.",
+    "Policy replay is conservative-action replay using each variant's best-F1 threshold."
+  ],
+  "runtime_seconds": 0.0557
+}

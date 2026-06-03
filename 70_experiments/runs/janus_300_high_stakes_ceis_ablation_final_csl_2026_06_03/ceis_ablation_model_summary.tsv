@@ -1,0 +1,7 @@
+reviewer_id	asr_run_id	model_assessments	reviewed_model_assessments	decision_change_yes_count	decision_change_yes_or_uncertain_count
+reviewer_1	breeze_asr25_base_high_stakes_300	300	300	13	18
+reviewer_1	breeze_asr25_lora_high_stakes_300	300	300	10	13
+reviewer_1	breeze_asr25_partial_encoder_high_stakes_300	300	300	3	4
+reviewer_2	breeze_asr25_base_high_stakes_300	300	300	13	13
+reviewer_2	breeze_asr25_lora_high_stakes_300	300	300	10	10
+reviewer_2	breeze_asr25_partial_encoder_high_stakes_300	300	300	3	4

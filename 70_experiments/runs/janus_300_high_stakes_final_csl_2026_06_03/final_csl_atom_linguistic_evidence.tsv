@@ -1,0 +1,5 @@
+atom_type	model_assessment_count	decision_change_positive_count	decision_change_rate	severe_miss_count	severe_miss_rate	unsafe_downrouting_count	median_ceis	median_sres
+action	122	5	0.040984	0	0.0	0	0.0	0.0
+actor	31	0	0.0	0	0.0	0	0.0	0.0
+amount	342	11	0.032164	2	0.005848	14	0.0	0.0
+negation	405	10	0.024691	4	0.009877	15	0.0	0.0

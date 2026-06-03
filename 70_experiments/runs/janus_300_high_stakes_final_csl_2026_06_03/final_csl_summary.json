@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "status": "final_csl_aggregate_outputs_built",
+  "date": "2026-06-03",
+  "input_boundary": "local completed reviewer package and local CEIS scored variants",
+  "output_boundary": "aggregate-only tracked outputs",
+  "definitions": {
+    "primary_unit": "audio_row",
+    "row_score": "max_h score(row,h)",
+    "row_severe_label": "any_h severe_miss(row,h)",
+    "budget_denominator": "selected-300 audio rows",
+    "tie_rule": "best/worst-case range at cutoff; claim uses worst-case",
+    "adjudication_rule": "deterministic consensus over two reviewers; disagreement/uncertain retained as sensitivity"
+  },
+  "counts": {
+    "unit": "audio_row",
+    "selected_rows": 300,
+    "model_assessments": 900,
+    "row_decision_change_yes": 14,
+    "row_decision_change_yes_or_uncertain": 20,
+    "row_severe_miss": 6,
+    "row_critical_miss": 1,
+    "row_unsafe_downrouting": 22,
+    "primary_endpoint": "failover_to_decision_change_auc"
+  },
+  "gate_summary": [
+    {
+      "gate": "full_300_900_regeneration",
+      "status": "complete",
+      "evidence": "300 rows / 900 model assessments"
+    },
+    {
+      "gate": "primary_endpoint_positive_count",
+      "status": "failover_required",
+      "evidence": "row-level severe positives=6"
+    },
+    {
+      "gate": "ceis_ablation_suite",
+      "status": "complete_with_claim_downgrade",
+      "evidence": "final ablation run covers full/no-plausibility/no-atom-weight/binary/policy-distance-only/top3; policy-distance-only equals full, so three-component performance-driver claim must be downgraded"
+    },
+    {
+      "gate": "variant_count_source_audit",
+      "status": "complete_with_reject_reason_boundary",
+      "evidence": "local row/run bridge used in memory for variant-count distribution; source coverage reported aggregate-only; reject reasons unavailable if absent from CEIS scored input"
+    },
+    {
+      "gate": "residual_unsafe_breakdown",
+      "status": "complete_aggregate",
+      "evidence": "aggregate residual unsafe table produced for CEIS 20% row budget"
+    }
+  ],
+  "runtime_seconds": 2.5953
+}

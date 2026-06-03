@@ -1,0 +1,13 @@
+unit	target	metric	evaluated_model_assessments	positive_count	positive_rate	auc	best_threshold	best_f1	precision	recall	true_positive	false_positive	false_negative
+model_assessment_clustered_within_row	decision_change_yes	wer	891	26	0.029181	0.810582	42.59	0.253165	0.188679	0.384615	10	43	16
+model_assessment_clustered_within_row	decision_change_yes	cer	891	26	0.029181	0.831747	37.5	0.321429	0.3	0.346154	9	21	17
+model_assessment_clustered_within_row	decision_change_yes	sres_total	891	26	0.029181	0.720276	270.0	0.45283	0.444444	0.461538	12	15	14
+model_assessment_clustered_within_row	decision_change_yes	ceis_max	891	26	0.029181	0.718275	5.0	0.40678	0.363636	0.461538	12	21	14
+model_assessment_clustered_within_row	decision_change_yes	max_norm_sres_ceis	891	26	0.029181	0.720142	0.782609	0.45283	0.444444	0.461538	12	15	14
+model_assessment_clustered_within_row	decision_change_yes	rank_fusion_sres_ceis	891	26	0.029181	0.575189	0.967778	0.40678	0.363636	0.461538	12	21	14
+model_assessment_clustered_within_row	decision_change_yes_or_uncertain	wer	900	35	0.038889	0.801123	40.98	0.262626	0.203125	0.371429	13	51	22
+model_assessment_clustered_within_row	decision_change_yes_or_uncertain	cer	900	35	0.038889	0.810801	37.5	0.276923	0.3	0.257143	9	21	26
+model_assessment_clustered_within_row	decision_change_yes_or_uncertain	sres_total	900	35	0.038889	0.688588	210.0	0.4	0.4	0.4	14	21	21
+model_assessment_clustered_within_row	decision_change_yes_or_uncertain	ceis_max	900	35	0.038889	0.687828	5.0	0.4	0.4	0.4	14	21	21
+model_assessment_clustered_within_row	decision_change_yes_or_uncertain	max_norm_sres_ceis	900	35	0.038889	0.688555	0.666667	0.40625	0.448276	0.371429	13	16	22
+model_assessment_clustered_within_row	decision_change_yes_or_uncertain	rank_fusion_sres_ceis	900	35	0.038889	0.546309	0.967778	0.4	0.4	0.4	14	21	21

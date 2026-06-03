@@ -1,0 +1,6 @@
+gate	status	evidence
+full_300_900_regeneration	complete	300 rows / 900 model assessments
+primary_endpoint_positive_count	failover_required	row-level severe positives=6
+ceis_ablation_suite	complete_with_claim_downgrade	final ablation run covers full/no-plausibility/no-atom-weight/binary/policy-distance-only/top3; policy-distance-only equals full, so three-component performance-driver claim must be downgraded
+variant_count_source_audit	complete_with_reject_reason_boundary	local row/run bridge used in memory for variant-count distribution; source coverage reported aggregate-only; reject reasons unavailable if absent from CEIS scored input
+residual_unsafe_breakdown	complete_aggregate	aggregate residual unsafe table produced for CEIS 20% row budget

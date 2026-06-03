@@ -1,0 +1,6 @@
+question	status
+main_text_has_30_90_result_claim	pass_after_2026_06_03_search; no manuscript main-claim hit for 30/90 or 30-row/90-assessment result wording
+ceis_written_as_general_asr_metric	pass_after_2026_06_03_search; CEIS framed as scoped companion decision-stability layer
+ceis_claims_total_superiority_over_sres	pass_after_2026_06_03_search; manuscript states SRES remains strong baseline and CEIS/SRES complementarity
+retrospective_replay_written_as_deployment_proof	pass_after_2026_06_03_search; thresholds and replay are diagnostic/descriptive not deployment proof
+unsafe_downrouting_claim_without_24_case_breakdown	pass_with_scope_boundary; manuscript now reports residual unsafe as aggregate breakdown/descriptive governance question, not handled risk
