@@ -1,0 +1,2 @@
+unit	target	comparison	evaluated_model_assessments	positive_count	sres_only_auc	sres_plus_ceis_auc	delta_auc	sres_only_log_loss	sres_plus_ceis_log_loss	delta_log_loss	sres_only_best_f1	sres_plus_ceis_best_f1	delta_best_f1	ceis_coefficient	interpretation
+model_assessment_clustered_within_row	decision_change_yes	logistic_label_sres_plus_ceis_vs_sres	891	26	0.720276	0.720342	6.7e-05	0.121516	0.120202	-0.001314	0.45283	0.45283	0.0	0.386167	diagnostic_residual_gain_after_sres_not_deployment_model

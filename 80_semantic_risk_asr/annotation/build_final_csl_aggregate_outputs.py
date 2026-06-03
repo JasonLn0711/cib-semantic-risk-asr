@@ -241,6 +241,89 @@ def bootstrap_auc_delta(
     }
 
 
+def sigmoid(value: float) -> float:
+    if value >= 0:
+        z = math.exp(-value)
+        return 1 / (1 + z)
+    z = math.exp(value)
+    return z / (1 + z)
+
+
+def fit_logistic(
+    features: list[list[float]],
+    labels: list[int],
+    *,
+    iterations: int = 6000,
+    learning_rate: float = 0.08,
+    l2: float = 0.01,
+) -> list[float]:
+    weights = [0.0 for _ in features[0]]
+    n = len(labels)
+    for _ in range(iterations):
+        gradients = [0.0 for _ in weights]
+        for row, label in zip(features, labels):
+            pred = sigmoid(sum(weight * value for weight, value in zip(weights, row)))
+            error = pred - label
+            for index, value in enumerate(row):
+                gradients[index] += error * value
+        for index in range(len(weights)):
+            penalty = 0.0 if index == 0 else l2 * weights[index]
+            weights[index] -= learning_rate * ((gradients[index] / n) + penalty)
+    return weights
+
+
+def predict_logistic(features: list[list[float]], weights: list[float]) -> list[float]:
+    return [sigmoid(sum(weight * value for weight, value in zip(weights, row))) for row in features]
+
+
+def log_loss(probs: list[float], labels: list[int]) -> float:
+    eps = 1e-12
+    total = 0.0
+    for prob, label in zip(probs, labels):
+        p = min(max(prob, eps), 1 - eps)
+        total += -(label * math.log(p) + (1 - label) * math.log(1 - p))
+    return total / len(labels) if labels else 0.0
+
+
+def residual_gain_after_sres(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    evaluable = [row for row in rows if row["decision_change_label"] in {"yes", "no"}]
+    labels = [int(row["decision_change_yes"]) for row in evaluable]
+    sres_norm = minmax([float(row["sres_total"]) for row in evaluable])
+    ceis_norm = minmax([float(row["ceis_max"]) for row in evaluable])
+    sres_features = [[1.0, sres_norm[index]] for index in range(len(evaluable))]
+    joint_features = [[1.0, sres_norm[index], ceis_norm[index]] for index in range(len(evaluable))]
+    sres_weights = fit_logistic(sres_features, labels)
+    joint_weights = fit_logistic(joint_features, labels)
+    sres_probs = predict_logistic(sres_features, sres_weights)
+    joint_probs = predict_logistic(joint_features, joint_weights)
+    sres_auc = auc_roc(sres_probs, labels)
+    joint_auc = auc_roc(joint_probs, labels)
+    sres_threshold = threshold_metrics(sres_probs, labels)
+    joint_threshold = threshold_metrics(joint_probs, labels)
+    return [
+        {
+            "unit": "model_assessment_clustered_within_row",
+            "target": "decision_change_yes",
+            "comparison": "logistic_label_sres_plus_ceis_vs_sres",
+            "evaluated_model_assessments": len(evaluable),
+            "positive_count": sum(labels),
+            "sres_only_auc": "" if sres_auc is None else round(sres_auc, 6),
+            "sres_plus_ceis_auc": "" if joint_auc is None else round(joint_auc, 6),
+            "delta_auc": ""
+            if sres_auc is None or joint_auc is None
+            else round(joint_auc - sres_auc, 6),
+            "sres_only_log_loss": round(log_loss(sres_probs, labels), 6),
+            "sres_plus_ceis_log_loss": round(log_loss(joint_probs, labels), 6),
+            "delta_log_loss": round(log_loss(joint_probs, labels) - log_loss(sres_probs, labels), 6),
+            "sres_only_best_f1": sres_threshold["best_f1"],
+            "sres_plus_ceis_best_f1": joint_threshold["best_f1"],
+            "delta_best_f1": round(joint_threshold["best_f1"] - sres_threshold["best_f1"], 6),
+            "ceis_coefficient": round(joint_weights[2], 6),
+            "interpretation": "diagnostic_residual_gain_after_sres_not_deployment_model",
+        }
+    ]
+
+
 def load_model_rows(
     reviewer_1_flat: Path,
     reviewer_2_flat: Path,
@@ -676,6 +759,7 @@ def main() -> int:
             ),
         }
     ]
+    residual_gain = residual_gain_after_sres(model_rows)
     variant_source_rows = [
         {
             "source_or_atom_proxy": source,
@@ -739,6 +823,11 @@ def main() -> int:
             "status": "complete_aggregate",
             "evidence": "aggregate residual unsafe table produced for CEIS 20% row budget",
         },
+        {
+            "gate": "ceis_residual_gain_after_sres",
+            "status": "complete_diagnostic",
+            "evidence": "diagnostic logistic residual-gain table compares SRES-only with SRES+CEIS on deterministic consensus labels",
+        },
     ]
     red_team_rows = [
         {"question": "main_text_has_30_90_result_claim", "status": "not_checked_in_this_script"},
@@ -752,6 +841,7 @@ def main() -> int:
     tables = [
         ("final_csl_predictor_performance.tsv", predictor),
         ("final_csl_auc_delta_bootstrap.tsv", delta),
+        ("final_csl_residual_gain_after_sres.tsv", residual_gain),
         ("final_csl_row_level_positive_counts.tsv", row_counts),
         ("final_csl_fixed_budget_frontier_row_level.tsv", frontier),
         ("final_csl_selection_exclusion_sensitivity.tsv", sensitivity),
@@ -815,7 +905,8 @@ def main() -> int:
                 "with audio row as the primary unit, pre-specified row budgets,",
                 "deterministic consensus labels, CEIS/SRES/fusion frontiers,",
                 "selection-exclusion sensitivity, atom-level linguistic evidence,",
-                "and residual unsafe aggregate breakdown.",
+                "residual-gain diagnostics after SRES, and residual unsafe",
+                "aggregate breakdown.",
                 "Variant count matching uses local IDs in memory and releases only",
                 "aggregate distributions.",
                 "",

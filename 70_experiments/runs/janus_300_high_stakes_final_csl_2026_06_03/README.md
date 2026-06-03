@@ -9,7 +9,8 @@ boundary. It regenerates selected-300 / 900-assessment evidence
 with audio row as the primary unit, pre-specified row budgets,
 deterministic consensus labels, CEIS/SRES/fusion frontiers,
 selection-exclusion sensitivity, atom-level linguistic evidence,
-and residual unsafe aggregate breakdown.
+residual-gain diagnostics after SRES, and residual unsafe
+aggregate breakdown.
 Variant count matching uses local IDs in memory and releases only
 aggregate distributions.
 

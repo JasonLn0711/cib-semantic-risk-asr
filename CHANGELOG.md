@@ -5,6 +5,24 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.325 - 2026-06-03T14:56:53+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `8fc275d`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/README.md`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_gate_status.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_manifest_hashes.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_residual_gain_after_sres.tsv`
+  - `70_experiments/runs/janus_300_high_stakes_final_csl_2026_06_03/final_csl_summary.json`
+  - `80_semantic_risk_asr/annotation/build_final_csl_aggregate_outputs.py`
+  - `80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/package_manifest_hashes.tsv`
+  - `80_semantic_risk_asr/paper/manuscript_submission.pdf`
+  - `80_semantic_risk_asr/paper/manuscript_submission.tex`
+
 ## v2.5.324 - 2026-06-03T14:53:16+08:00
 
 - Bump: `patch`

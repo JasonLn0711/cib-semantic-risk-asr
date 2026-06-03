@@ -48,7 +48,12 @@
       "gate": "residual_unsafe_breakdown",
       "status": "complete_aggregate",
       "evidence": "aggregate residual unsafe table produced for CEIS 20% row budget"
+    },
+    {
+      "gate": "ceis_residual_gain_after_sres",
+      "status": "complete_diagnostic",
+      "evidence": "diagnostic logistic residual-gain table compares SRES-only with SRES+CEIS on deterministic consensus labels"
     }
   ],
-  "runtime_seconds": 2.5953
+  "runtime_seconds": 6.271
 }

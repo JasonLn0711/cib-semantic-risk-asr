@@ -790,10 +790,15 @@ counterfactual decision stability, SRES remains the strongest
 semantic-risk baseline for several thresholded operating points, and
 the final claim is scoped to what the completed 300/900 evidence can
 support.
+A diagnostic residual-gain check fits \texttt{label \textasciitilde{}
+SRES} and \texttt{label \textasciitilde{} SRES + CEIS} on the
+evaluable model-level consensus rows. The fused diagnostic model yields
+a small log-loss improvement with nearly unchanged AUC and F1, which
+supports complementarity rather than a total-superiority claim.
 
 \paperfigure{f3_predictor_auc.pdf}
 {Final 300/900 regeneration evaluates decision-change prediction under clustered analysis; severe-miss replay is descriptive because row-level severe positives are sparse.}
-{final_csl_predictor_performance.tsv; final_csl_auc_delta_bootstrap.tsv}
+{final_csl_predictor_performance.tsv; final_csl_auc_delta_bootstrap.tsv; final_csl_residual_gain_after_sres.tsv}
 
 \input{80_semantic_risk_asr/paper/tables/table4_recovery.tex}
 
