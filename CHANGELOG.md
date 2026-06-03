@@ -5,6 +5,37 @@ This file is maintained by `scripts/auto_version.py`.
 Every automatic bump is also recorded as a machine-readable JSON line in
 `version_history.jsonl`.
 
+## v2.5.331 - 2026-06-03T16:58:53+08:00
+
+- Bump: `patch`
+- Trigger: `pre-commit`
+- Base commit: `8dce46e`
+- Branch: `main`
+- Summary: Auto version bump for staged repo changes.
+- Changed files:
+  - `80_semantic_risk_asr/paper/build_final_csl_figures.py`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r3.zip`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r3/clean_clone_pdf_text_grep_r3.md`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r3/cover_letter_csl_r3.md`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r3/data_code_availability_r3.md`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r3/final_freeze_report_r3.md`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r3/highlights_r3.md`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r3/manuscript_submission_r3.pdf`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r3/manuscript_submission_r3.tex`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r3/package_manifest_hashes_r3.tsv`
+  - `80_semantic_risk_asr/paper/csl_submission_package_2026_06_03_r3/submission_package_manifest_r3.tsv`
+  - `80_semantic_risk_asr/paper/figures/f10_human_reviewed_atom_outcomes.pdf`
+  - `80_semantic_risk_asr/paper/figures/f2_evidence_design.pdf`
+  - `80_semantic_risk_asr/paper/figures/f3_predictor_auc.pdf`
+  - `80_semantic_risk_asr/paper/figures/f3_predictor_auc.png`
+  - `80_semantic_risk_asr/paper/figures/f3_predictor_auc.svg`
+  - `80_semantic_risk_asr/paper/figures/f4_recovery_outcomes.pdf`
+  - `80_semantic_risk_asr/paper/figures/f6_n_ladder.pdf`
+  - `80_semantic_risk_asr/paper/figures/f7_budget_risk_frontier.pdf`
+  - `80_semantic_risk_asr/paper/figures/figure2_evidence_ladder_redrawn.pdf`
+  - `80_semantic_risk_asr/paper/final_csl_audit_package_2026_06_03/final_freeze_report.md`
+  - `80_semantic_risk_asr/paper/manuscript_submission.pdf`
+
 ## v2.5.330 - 2026-06-03T16:33:10+08:00
 
 - Bump: `patch`

@@ -197,7 +197,7 @@ def make_f3_predictor() -> None:
     text(
         draw,
         (70, 98),
-        "Model assessments are clustered within 300 audio rows; severe-miss positives are sparse, so the primary endpoint fails over to decision-change AUC.",
+        "Rows are clustered by audio case; sparse severe positives trigger endpoint failover to decision-change AUC.",
         23,
         fill=MUTED,
     )
@@ -219,19 +219,25 @@ def make_f3_predictor() -> None:
         draw.line((left, y, right, y), fill=(235, 239, 244), width=2)
         x = scale(auc, 0, 1, left, right)
         draw.ellipse((x - 15, y - 15, x + 15, y + 15), fill=color, outline=INK)
-        text(draw, (x + 28, y - 18), f"AUC {fmt(auc)} | F1 {fmt(f1)} | recall {fmt(recall)} | FN {fn}", 23, fill=INK)
+        label_x = x + 24
+        label_anchor = None
+        if x > right - 255:
+            label_x = x - 24
+            label_anchor = "ra"
+        text(draw, (label_x, y - 25), f"AUC {fmt(auc)}", 20, fill=INK, anchor=label_anchor)
+        text(draw, (label_x, y + 1), f"F1 {fmt(f1)}", 20, fill=INK, anchor=label_anchor)
     text(draw, (left, top + 475), "AUC", 26, bold=True)
-    text(draw, (70, 700), "Supported scope: CEIS remains a scoped decision-stability layer and fusion input; SRES is the stronger thresholded F1 baseline in this final table.", 23, fill=MUTED)
+    text(draw, (70, 700), "Supported scope: CEIS is a decision-stability layer and fusion input; SRES has stronger thresholded F1.", 23, fill=MUTED)
     save_pdf(image, "f3_predictor_auc")
     save_text_svg(
         "f3_predictor_auc",
         "Decision-change prediction after full 300/900 regeneration",
         [
-            "WER AUC 0.811, best F1 0.253, FN 16.",
-            "CER AUC 0.832, best F1 0.321, FN 17.",
-            "SRES AUC 0.720, best F1 0.453, FN 14.",
-            "CEIS AUC 0.718, best F1 0.407, FN 14.",
-            "max(SRES, CEIS) AUC 0.720, best F1 0.453, FN 14.",
+            "WER: AUC 0.811, F1 0.253.",
+            "CER: AUC 0.832, F1 0.321.",
+            "SRES: AUC 0.720, F1 0.453.",
+            "CEIS: AUC 0.718, F1 0.407.",
+            "max(SRES, CEIS): AUC 0.720, F1 0.453.",
             "Severe-miss positives are sparse, so the primary endpoint fails over to decision-change AUC.",
         ],
     )

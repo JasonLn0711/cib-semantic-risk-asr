@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="344" viewBox="0 0 1600 344">
 <rect width="1600" height="100%" fill="white"/>
 <text x="70" y="70" font-family="DejaVu Sans, Arial, sans-serif" font-size="42" font-weight="700" fill="#1F2933">Decision-change prediction after full 300/900 regeneration</text>
-<text x="70" y="120" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">WER AUC 0.811, best F1 0.253, FN 16.</text>
-<text x="70" y="154" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">CER AUC 0.832, best F1 0.321, FN 17.</text>
-<text x="70" y="188" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">SRES AUC 0.720, best F1 0.453, FN 14.</text>
-<text x="70" y="222" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">CEIS AUC 0.718, best F1 0.407, FN 14.</text>
-<text x="70" y="256" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">max(SRES, CEIS) AUC 0.720, best F1 0.453, FN 14.</text>
+<text x="70" y="120" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">WER: AUC 0.811, F1 0.253.</text>
+<text x="70" y="154" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">CER: AUC 0.832, F1 0.321.</text>
+<text x="70" y="188" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">SRES: AUC 0.720, F1 0.453.</text>
+<text x="70" y="222" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">CEIS: AUC 0.718, F1 0.407.</text>
+<text x="70" y="256" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">max(SRES, CEIS): AUC 0.720, F1 0.453.</text>
 <text x="70" y="290" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#52606D">Severe-miss positives are sparse, so the primary endpoint fails over to decision-change AUC.</text>
 </svg>
