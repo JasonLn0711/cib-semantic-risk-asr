@@ -386,19 +386,24 @@ CEIS scores the maximum decision-flip risk among plausible variants. In
 this paper-facing implementation, the plausibility term is a bounded
 proxy rather than a calibrated acoustic posterior:
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{CEIS(x) = max over v in V(x) [}
-\NormalTok{    Plausibility(v | x) * RiskAtomWeight(v) * DecisionDistance(f(x), f(v))}
-\NormalTok{]}
-\end{Highlighting}
-\end{Shaded}
+\[
+\begin{aligned}
+\operatorname{CEIS}(x)
+&=
+\max_{v \in V(x)}
+\Big[
+  P(v \mid x)
+  \cdot w_{\mathrm{atom}}(v)
+  \cdot d_f\!\big(f(x), f(v)\big)
+\Big].
+\end{aligned}
+\]
 
-\texttt{Plausibility(v\ \textbar{}\ x)} denotes a bounded proxy
+\(P(v \mid x)\) denotes a bounded proxy
 plausibility score derived from model disagreement, Mandarin phonetic
 ambiguity, domain-slot alternatives, and available ASR/runtime signals.
-\texttt{RiskAtomWeight(v)} is a risk-atom class weight defined by the
-decision-critical atom schema. \texttt{DecisionDistance} maps the
+\(w_{\mathrm{atom}}(v)\) is a risk-atom class weight defined by the
+decision-critical atom schema. \(d_f(f(x), f(v))\) maps the
 downstream label space into an ordinal safety distance over
 \texttt{no\_escalation}, \texttt{review}, \texttt{priority\_review},
 \texttt{critical\_escalation}, conservative machine action, and
@@ -413,18 +418,21 @@ The downstream decision function \texttt{f} is a declared retrospective
 policy abstraction for the final aggregate regeneration. It maps each
 transcript or plausible variant into a declared triage action:
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{f(transcript) in \{}
-\NormalTok{    no\_escalation,}
-\NormalTok{    manual\_review,}
-\NormalTok{    priority\_review,}
-\NormalTok{    critical\_escalation,}
-\NormalTok{    conservative\_machine\_action,}
-\NormalTok{    abstain}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+\[
+\begin{aligned}
+f(t) \in \mathcal{A}
+&=
+\{
+\text{no escalation},
+\text{manual review},
+\text{priority review},
+\text{critical escalation},\\
+&\qquad
+\text{conservative machine action},
+\text{abstain}
+\}.
+\end{aligned}
+\]
 
 The distance function is policy-aligned rather than
 language-model-generated: same-action pairs have distance 0, neighboring
@@ -442,11 +450,11 @@ so CEIS rankings can be reconstructed from aggregate artifacts.
 \subsection{CEIS Scale Discipline}\label{ceis-scale-discipline}}
 
 All CEIS components are treated as bounded comparison terms. The
-\texttt{Plausibility(v\ \textbar{}\ x)} term represents proxy
+\(P(v \mid x)\) term represents proxy
 plausibility derived from model disagreement, Mandarin phonetic
 ambiguity, domain-slot alternatives, and available runtime signals.
-\texttt{RiskAtomWeight(v)} and
-\texttt{DecisionDistance(f(x),\ f(v))} provide the risk-atom and
+\(w_{\mathrm{atom}}(v)\) and
+\(d_f(f(x), f(v))\) provide the risk-atom and
 decision-distance handles that make ablation interpretable. The
 submission hardening plan therefore treats ablation as a direct
 contribution test: CEIS full, CEIS without atom weights, CEIS without
@@ -625,8 +633,19 @@ Selection}\label{statistical-inference-and-operating-point-selection}}
 The primary statistical unit is the audio row. Model-level assessments
 are clustered within row and are secondary evidence. Final aggregate
 regeneration defines
-\texttt{row\_score = max\_h score(row,h)} and
-\texttt{row\_severe = any\_h severe\_miss(row,h)}. Fixed-budget replay
+\[
+\begin{aligned}
+s_i &= \max_{h \in H_i} s_{ih},\\
+y^{\mathrm{severe}}_i
+&=
+\mathbb{I}\!\left[
+  \exists h \in H_i:
+  y^{\mathrm{severe}}_{ih}=1
+\right].
+\end{aligned}
+\]
+Here \(i\) indexes an audio row and \(H_i\) is the set of eligible
+model hypotheses for that row. Fixed-budget replay
 uses the selected-300 rows as the denominator, so 10\%, 20\%, 30\%, and
 40\% budgets correspond to 30, 60, 90, and 120 triggered rows.
 
@@ -790,8 +809,15 @@ counterfactual decision stability, SRES remains the strongest
 semantic-risk baseline for several thresholded operating points, and
 the final claim is scoped to what the completed 300/900 evidence can
 support.
-A diagnostic residual-gain check fits \texttt{label \textasciitilde{}
-SRES} and \texttt{label \textasciitilde{} SRES + CEIS} on the
+A diagnostic residual-gain check fits
+\[
+\begin{aligned}
+\operatorname{logit}\Pr(y_i=1) &= \beta_0 + \beta_1\,\operatorname{SRES}_i,\\
+\operatorname{logit}\Pr(y_i=1) &= \beta_0 + \beta_1\,\operatorname{SRES}_i
+  + \beta_2\,\operatorname{CEIS}_i
+\end{aligned}
+\]
+on the
 evaluable model-level consensus rows. The fused diagnostic model yields
 a small log-loss improvement with nearly unchanged AUC and F1, which
 supports complementarity rather than a total-superiority claim.

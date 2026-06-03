@@ -42,7 +42,7 @@ def metric_label(metric: str) -> str:
         "cer": "CER",
         "sres_total": "SRES",
         "ceis_max": "CEIS",
-        "max_norm_sres_ceis": "max(SRES, CEIS)",
+        "max_norm_sres_ceis": "Fusion",
         "rank_fusion_sres_ceis": "Rank fusion",
         "variant_count_only": "Variant count",
         "ceis_top1_capped": "CEIS capped",
@@ -97,7 +97,7 @@ def build_predictor() -> None:
         [
             r"\bottomrule",
             r"\end{tabularx}",
-            r"\\[0.4em]{\footnotesize\RaggedRight Thresholds are diagnostic operating points selected on the scoped reviewed audit, not deployment thresholds. SRES has the strongest thresholded F1 in this table; CEIS is retained as a scoped decision-stability layer and fusion input rather than a total-superiority claim.\par}",
+            r"\\[0.4em]{\footnotesize\RaggedRight Thresholds are diagnostic operating points selected on the scoped reviewed audit, not deployment thresholds. Fusion denotes the normalized maximum of SRES and CEIS. SRES has the strongest thresholded F1 in this table; CEIS is retained as a scoped decision-stability layer and fusion input rather than a total-superiority claim.\par}",
             r"\end{table}",
         ]
     )
