@@ -80,6 +80,16 @@ review, or a pending-ablation state.
 Latest manuscript validation is recorded in
 `80_semantic_risk_asr/paper/latest_manuscript_validation_2026_06_02.md`.
 
+First-principle Round 1 pressure-test answers and derived blocking gates are
+recorded in
+`80_semantic_risk_asr/paper/csl_first_principle_pressure_test_round1_2026_06_03.md`.
+
+First-principle Round 2 pressure-test answers are recorded in
+`80_semantic_risk_asr/paper/csl_first_principle_pressure_test_round2_2026_06_03.md`.
+Round 2 fixes the primary endpoint as severe-miss remaining at pre-specified
+early fixed budgets, defines CEIS as complementary to SRES, and sets the five
+hard CSL red lines for final submission.
+
 Next step: regenerate final predictor, recovery, and CEIS ablation tables from
 the completed selected-300 dual-reviewer evidence surface, then re-run PDF and
 submission readiness validation.
