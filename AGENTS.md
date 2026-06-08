@@ -28,11 +28,27 @@ contribution, the distinctive viewpoint, the real problem it answers, the
 evidence now available, and the next validation layer. Organize boundaries as
 scope controls, calibration surfaces, and planned evidence expansion.
 
-Critique prior work by first naming what it enables, then stating the next
-opportunity. Avoid making negation, apology, or defensive posture the document's
-organizing voice. Reserve exact negative prohibitions for machine-facing
-validators, safety rules, legal boundaries, and operational checklists where
-precision matters.
+## Related Work Positive Extension Rule
+
+When writing Related Work, do not organize the section around negation,
+apology, or defensive claims. Use a foundation-to-extension structure:
+
+```text
+current research layer and what it enables
+-> citation-backed technical value
+-> next measurable opportunity opened by that layer
+-> how this paper extends the line with a new target, method, or evidence layer
+```
+
+Write prior work generously. Prefer verbs such as `provides`, `establishes`,
+`enables`, `motivates`, `supports`, `connects`, and `opens the path to`. The
+section should make the reader feel that the manuscript is a natural, attractive
+next step in the field, not a rebuttal memo against previous methods.
+
+For gap sentences, avoid making the grammar negative. Use positive forms such as
+`CDS-ASR adds`, `this paper extends`, `the next measurable target is`, and `the
+framework makes X visible`. Keep strict negative prohibitions for machine-facing
+validators, safety rules, legal boundaries, and operational checklists.
 
 ## CSL Positive Narrative Contracts
 
