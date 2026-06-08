@@ -11,4 +11,4 @@ Figure 2 was redrawn as a vertical Mermaid-like evidence ladder with four wide n
 
 Visual inspection confirms that node titles, unit labels, N labels, evidence-role text, and the cluster-rule note remain inside their boxes in the regenerated PNG and manuscript PDF. The diagram uses a 1 -> 2 -> 3 -> 4 vertical flow to preserve evidence order and avoid the previous horizontal narrow-box overflow.
 
-Manuscript PDF pages after rebuild: 30
+Manuscript PDF pages after rebuild: 31

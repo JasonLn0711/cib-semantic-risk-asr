@@ -155,122 +155,180 @@ Evaluating Safety-Relevant Instability Beyond Transcript Accuracy}
 \sloppy
 \maketitle
 \begin{abstract}
-Speech-driven decision systems increasingly transform conversations into
-operational signals for routing, escalation, compliance monitoring, and
-case-handling decisions. In high-stakes anti-fraud calls, small ASR
-differences can land on decision atoms such as negation, amount, actor,
-action, time, and intent. A transcript can therefore remain close under
-WER or CER while a plausible alternative transcript changes the
-downstream decision.
+Speech-driven decision systems increasingly use automatic speech
+recognition (ASR) outputs to support routing, compliance monitoring,
+escalation, and abstention. In high-stakes Mandarin anti-fraud calls, a
+small ambiguity in negation, amount, actor, action, time, intent, or scam
+pattern may leave a transcript close under conventional similarity
+metrics while changing the safe downstream action. Current ASR
+evaluation remains primarily transcript- or semantic-similarity centered
+and does not directly test whether decisions are stable under plausible
+ASR alternatives.
 
-We propose Counterfactual Decision-Stability ASR (CDS-ASR), a framework
-that evaluates whether downstream decisions remain stable under
-acoustically and semantically plausible transcript alternatives. CDS-ASR
-extracts risk atoms, constructs plausible ASR alternatives, scores
-decision instability with Counterfactual Escalation Instability Score
-(CEIS), and applies constrained recovery or conservative machine action
-for high-risk spans while preserving aggregate-only reproducibility for
-sensitive call evidence.
+We propose Counterfactual Decision-Stability ASR (CDS-ASR), a
+consequence-centered evaluation framework for high-stakes
+speech-to-decision workflows. CDS-ASR extracts decision-critical risk
+atoms, generates acoustically and semantically plausible transcript
+variants, maps each transcript or variant to a declared triage action,
+and scores decision instability using Counterfactual Escalation
+Instability Score (CEIS). We evaluate the framework in a Mandarin
+anti-fraud setting using a six-model 258-row ASR split comparison, a
+selected-300 high-stakes provenance surface, and a completed 300-row
+dual-reviewer audit covering 900 model-level assessments per reviewer.
 
-Across a six-model 258-row split comparison, selected-300 high-stakes
-provenance outputs, and a completed 300-row dual-reviewer human audit
-with 900 model-level assessments, CDS-ASR provides a
-consequence-centered evidence layer beyond transcript similarity. The
-dual-reviewer audit records strong agreement for decision-change,
-semantic-risk, expected-safe-action, and confidence labels, with Cohen's
-kappa values of 0.849970, 1.000000, 0.851426, and 0.934274,
-respectively. Final 300/900 aggregate regeneration uses audio row as the
-primary unit and finds 6 row-level severe missed-escalation positives,
-below the pre-specified primary-endpoint threshold of 20. The manuscript
-therefore uses the pre-declared failover endpoint: CEIS is evaluated as
-a decision-change prediction and decision-stability signal under
-row-clustered analysis, while severe missed-escalation replay is
-reported as descriptive high-severity evidence. These results support
-decision-stability evaluation as a scoped companion to transcript
-accuracy, semantic-risk metrics, confidence-aware correction, and
-reviewer-visible human-audit reliability.
+The audit shows strong inter-reviewer reliability across
+decision-change, semantic-risk, expected-safe-action, and confidence
+labels, with Cohen's kappa values of 0.850, 1.000, 0.851, and 0.934,
+respectively. Final aggregate regeneration finds 14 row-level
+decision-change positives and 6 row-level severe missed-escalation
+positives. Because the severe-positive count is below the pre-specified
+primary-endpoint threshold, severe-miss recovery is reported as
+descriptive high-severity replay, while decision-change prediction
+becomes the empirical endpoint. WER and CER remain necessary surface
+baselines, SRES remains the strongest thresholded semantic-risk
+baseline, and CEIS provides a scoped decision-stability layer and fusion
+input. The results support CDS-ASR as a privacy-preserving companion to
+transcript accuracy for high-stakes ASR evaluation.
 \end{abstract}
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-Speech is no longer only a record of what happened in a call. In modern
-contact centers, speech is increasingly converted into operational
-signals: categories, summaries, compliance cues, real-time alerts,
-routing decisions, and escalation support. Commercial contact-center
-analytics already describe voice conversations and transcripts as inputs
-for automated categorization, summarization, compliance monitoring, and
-real-time assistance (Amazon Web Services 2026a, 2026b). This turns ASR
-output into a decision substrate. A transcript can influence how a case
-is categorized, which queue receives it, whether an alert is raised, and
-whether a human reviewer ever sees the full call context.
+Speech is no longer used only as an archival record of what happened in
+a call. In modern contact-center systems, spoken interaction is
+increasingly converted into operational evidence: transcripts,
+summaries, categories, compliance cues, real-time alerts, routing
+signals, escalation support, and machine-generated assistance.
+Commercial contact-center analytics already describe voice conversations
+and transcripts as inputs for automated categorization, summarization,
+compliance monitoring, and real-time assistance (Amazon Web Services
+2026a, 2026b). This shift changes the role of automatic speech
+recognition (ASR). A transcript is not merely an intermediate text
+artifact; it can become a decision substrate that influences whether a
+case is routed to routine handling, priority review, conservative
+escalation, or no further action.
 
-Anti-fraud calls make this speech-to-decision pipeline concrete.
-Taiwan's National Police Agency describes the 165 hotline as a public
-anti-fraud channel where staff record incident details and provide
-information to victims (National Police Agency, Ministry of the Interior
-2024). The operational scale is large: the FBI's 2025 Internet Crime
-Report context reported more than one million IC3 complaints and large
-cyber-enabled fraud losses (Federal Bureau of Investigation 2026b,
-2026a). In this setting, the important spoken facts are often small:
-whether money was already transferred, whether the amount was 30,000 or
-300,000, who initiated contact, when the event happened, whether the
-caller is certain, and whether the scenario matches a known scam
-pattern. These are not merely words. They are decision atoms.
+This speech-to-decision setting is especially consequential in
+anti-fraud calls. Taiwan's National Police Agency describes the 165
+hotline as a public anti-fraud channel where staff record incident
+details and provide information to victims (National Police Agency,
+Ministry of the Interior 2024). The operational scale is large: the
+FBI's 2025 Internet Crime Report context reported more than one million
+IC3 complaints and large cyber-enabled fraud losses (Federal Bureau of
+Investigation 2026b, 2026a). Public anti-fraud hotlines and
+fraud-reporting channels receive calls in which small spoken details may
+carry large operational consequences: whether money has already been
+transferred, whether the amount is 30,000 or 300,000, whether the caller
+is certain or uncertain, who initiated contact, when the event occurred,
+and whether the scenario matches a known scam pattern. These details are
+often short lexical spans, but they are not minor transcription errors.
+They are decision atoms. If an ASR system misrecognizes or ambiguously
+represents such atoms, the downstream system may change the expected
+safe action even when the overall transcript remains close to a
+reference transcript.
 
-This paper starts from the following practical risk: a transcript can be
-linguistically close and still operationally unstable. A single ASR
-ambiguity around negation, amount, actor, action, time, intent, or scam
-pattern can move a case from routine review to priority review, or from
-escalation to unsafe downrouting. In this paper, the operational target
-is safety-relevant decision instability: a plausible ASR alternative or
-ASR hypothesis changes the declared anti-fraud triage action in a
-direction that affects expected safe handling. This is a scoped
-policy-conditioned proxy, not a claim about measured downstream harm.
+Conventional ASR evaluation provides an essential starting point for
+this problem. Word error rate (WER) and character error rate (CER) make
+transcript quality auditable, comparable, and reproducible across models
+and datasets. They remain necessary surface metrics, especially for
+Mandarin ASR, where tokenization and character-level reporting policies
+must be explicit. However, transcript similarity alone does not describe
+the consequence of an error. Two transcripts can have similar WER or CER
+while differing on a negation, an amount, an actor, or a transfer action
+that changes the operational interpretation of the call.
 
-Existing ASR evaluation and repair methods provide the foundation for
-this problem. WER and CER remain necessary because they make transcript
-accuracy auditable and comparable. Semantic ASR metrics make the
-evidence more task-aware: Kim et al.~motivate Semantic Distance by
-showing that WER can fail to reflect downstream
-spoken-language-understanding behavior, and Rugayan et al.~evaluate
-Aligned Semantic Distance as a semantic metric that better aligns with
-human judgments and downstream tasks (Kim et al. 2021; Rugayan, Salvi,
-and Svendsen 2023). Transcript repair also advances the pipeline. Naderi
-et al.~study post-hoc ASR correction with LLMs and use confidence-based
-filtering to reduce harmful changes to likely accurate transcripts
-(Naderi et al. 2024). Selective prediction, reject-option, and conformal
-prediction work further show how systems can trade coverage, abstention,
-and uncertainty when acting on uncertain predictions is costly (Chow
-1970; Geifman and El-Yaniv 2017, 2019; Angelopoulos and Bates 2021).
+Recent semantic and downstream-aware ASR metrics address part of this
+limitation. Semantic Distance and Aligned Semantic Distance move ASR
+evaluation beyond literal string matching by measuring whether
+recognition errors preserve meaning or align with downstream task
+behavior (Kim et al. 2021; Rugayan, Salvi, and Svendsen 2023).
+Confidence-aware transcript correction and post-hoc repair methods
+further improve the pipeline by attempting to correct likely ASR errors
+while avoiding harmful changes to already accurate transcripts (Naderi
+et al. 2024). Selective prediction, reject-option classification, and
+conformal prediction also provide a broader methodological basis for
+abstention and uncertainty-aware action when prediction risk is high
+(Chow 1970; Geifman and El-Yaniv 2017, 2019; Angelopoulos and Bates
+2021).
 
-These methods make speech systems more measurable, semantic,
-correctable, and uncertainty-aware. The remaining gap is the
-decision-stability question. A semantic metric can report that two
-transcripts are close or far. A correction model can make a transcript
-more fluent or more likely. A confidence filter can avoid some risky
-changes. Yet a high-stakes workflow also needs to know whether plausible
-ASR alternatives would change the downstream action. In anti-fraud
-triage, the actionable question is not only ``How accurate is the
-transcript?'' but also: ``Would another plausible transcript lead to a
-different safe action?''
+These methods make ASR systems more measurable, more semantic, more
+correctable, and more uncertainty-aware. The remaining gap is decision
+stability. A semantic metric can indicate whether two transcripts are
+close in meaning. A correction model can produce a more fluent or more
+likely transcript. A confidence filter can reduce unnecessary
+correction. Yet a high-stakes speech-driven workflow also needs to know
+whether another acoustically and semantically plausible transcript would
+change the downstream decision. In anti-fraud triage, the relevant
+safety question is therefore not only ``How accurate is the transcript?''
+but also ``Would a plausible ASR alternative lead to a different safe
+action?''
 
-We propose Counterfactual Decision-Stability ASR (CDS-ASR) to answer
-that question directly. CDS-ASR extracts decision-critical risk atoms,
-generates acoustically and semantically plausible transcript
-alternatives, measures decision instability with Counterfactual
-Escalation Instability Score (CEIS), and evaluates constrained recovery
-or conservative machine action for high-risk spans. WER, CER, semantic
-metrics, SRES, confidence, and correction baselines remain comparison
-layers. The central contribution is the new evaluation view: ASR for
-high-stakes speech-driven systems should be judged by whether the
-downstream decision remains stable under plausible transcript
-alternatives.
+This paper proposes Counterfactual Decision-Stability ASR (CDS-ASR) to
+answer that question directly. CDS-ASR treats high-stakes ASR evaluation
+as a counterfactual decision-stability problem. Given an ASR transcript,
+the framework extracts decision-critical risk atoms, constructs
+acoustically and semantically plausible transcript alternatives around
+those atoms, maps the original and alternative transcripts to a declared
+downstream triage action, and scores the resulting instability using
+Counterfactual Escalation Instability Score (CEIS). The central idea is
+that ASR evaluation for high-stakes speech-to-decision systems should
+include whether the downstream decision remains stable under plausible
+transcript alternatives.
 
-Verified source anchors for this introduction are maintained in
-\texttt{citation\_seed.md} and \texttt{references.bib}, with access
-dates refreshed on 2026-05-28. Empirical manuscript claims point to the
-aggregate artifacts listed in the Appendix.
+CDS-ASR is designed as a companion layer to transcript accuracy metrics.
+WER and CER remain necessary for surface-level model comparison.
+Semantic-risk scores remain important for meaning-aware evaluation.
+Confidence-aware correction remains useful for transcript repair.
+CDS-ASR adds a different evidence layer: it asks whether recognition
+uncertainty reaches a decision-critical atom and changes escalation,
+routing, conservative machine action, or abstention. This makes the
+proposed framework a scoped companion to ASR accuracy and semantic-risk
+evaluation.
+
+We evaluate CDS-ASR in a Mandarin anti-fraud ASR setting. The evidence
+design separates four layers: a six-model 258-row split comparison for
+ASR model context, a selected-300 high-stakes provenance surface, a
+completed 300-row dual-reviewer audit, and 900 model-level assessments
+per reviewer. This separation is important because model-level
+hypotheses are clustered within audio rows and should not be treated as
+independent calls. The selected-300 audit surface is deliberately
+enriched for high-stakes decision evidence; it supports
+decision-stability analysis within the reviewed surface, with
+population-level fraud prevalence and deployment-wide risk estimation
+reserved for a separate validation layer.
+
+The empirical endpoint is also scoped. The pre-specified primary
+endpoint concerned row-level severe missed-escalation positives under
+fixed-budget replay. Final aggregate regeneration found only six such
+positives, below the pre-specified threshold. The manuscript therefore
+uses the pre-declared failover endpoint: decision-change prediction
+under row-clustered analysis is treated as the primary empirical
+endpoint, while severe missed-escalation replay is reported as
+descriptive high-severity evidence. This claim-evidence alignment
+supports the main methodological contribution: measuring
+consequence-relevant instability beyond transcript similarity.
+
+The contributions of this paper are fourfold. First, we formulate
+high-stakes ASR evaluation as a counterfactual decision-stability
+problem for speech-to-decision workflows. Second, we introduce CDS-ASR,
+including a risk-atom schema, plausible ASR alternative construction, a
+declared downstream decision function, and CEIS as a
+decision-instability score. Third, we provide a Mandarin anti-fraud
+evaluation with six-model ASR comparison, selected high-stakes
+provenance, completed dual-reviewer human audit, and aggregate-only
+reproducibility boundaries for sensitive speech evidence. Fourth, we
+show how decision-stability evidence can support conservative action,
+abstention, and reviewer-visible governance within a human-review
+workflow.
+
+By shifting the evaluation question from transcript similarity alone to
+decision stability under plausible ASR alternatives, CDS-ASR provides a
+consequence-centered companion layer for high-stakes ASR. The proposed
+framework is designed for ASR safety audit, risk-aware routing,
+manual-review prioritization, conservative escalation, and machine
+abstention. Its operating scope is staff-review intake support and
+aggregate evaluation, with production governance and adverse-action
+settings reserved for separate validation and human-review controls.
 
 \hypertarget{related-work}{%
 \section{Related Work}\label{related-work}}
@@ -842,7 +900,7 @@ final row-level regeneration, 10\%, 20\%, 30\%, and 40\% budgets
 correspond to 30, 60, 90, and 120 triggered rows. CEIS, SRES, and simple
 fusion policies all capture the sparse severe rows in the current
 aggregate replay, so the frontier supports descriptive stress testing
-and complementarity analysis rather than a CEIS superiority claim.
+and complementarity analysis rather than metric-replacement framing.
 Appendix Table A1 reports the row-level fixed-budget frontier from
 \codepath{final\_csl\_fixed\_budget\_frontier\_row\_level.tsv}.
 
