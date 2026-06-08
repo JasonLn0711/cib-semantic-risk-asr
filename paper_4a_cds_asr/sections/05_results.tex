@@ -1,14 +1,18 @@
 \section{Results}
 
+\subsection{Evidence Chain Overview}
+
+The results follow the same evidence chain as the experimental design. First, the ASR benchmark establishes transcript-model context on the 258-row split. Second, the pilot predictor layer compares transcript, semantic-risk, and counterfactual decision-stability signals against human-reviewed decision-change labels. Third, aggregate policy replay evaluates how each signal supports conservative review allocation. Fourth, the completed dual-reviewer ablation tests the CEIS architecture on the expanded selected-300 surface. This order keeps the reader focused on the paper's main claim: CDS-ASR makes decision stability measurable as an ASR evaluation layer.
+
 \subsection{ASR Model-Comparison Context}
 
-Table~\ref{tab:asr_benchmark} reports the 258-row ASR benchmark context. The partial-encoder run has the strongest current aggregate CER and WER profile in this split. This table anchors transcript-model context, while the human audit and CEIS ablation sections supply downstream decision-stability evidence.
+Table~\ref{tab:asr_benchmark} reports the 258-row ASR benchmark context. The partial-encoder run has the strongest aggregate CER and WER profile in this split. This table anchors the transcript-model layer, and the following sections add human-reviewed decision-stability evidence.
 
 \input{tables/table1_asr_benchmark}
 
 \subsection{Pilot Predictor Comparison}
 
-Table~\ref{tab:predictor} and Figure~\ref{fig:predictor_auc} compare WER, CER, SRES, and CEIS against the earlier human-reviewed pilot decision-change labels. CEIS has the strongest point AUC in that scoped predictor layer and reaches a zero-false-negative diagnostic operating point. This pilot comparison motivates the expanded dual-reviewer ablation reported below: the paper's submission-critical claim is that CEIS operationalizes decision-stability evidence, and the completed 300-row ablation tests that mechanism on the larger reviewer surface.
+Table~\ref{tab:predictor} and Figure~\ref{fig:predictor_auc} compare WER, CER, SRES, and CEIS against the earlier human-reviewed pilot decision-change labels. The comparison shows the progression from transcript-centered metrics to semantic-risk evidence and then to counterfactual decision-stability evidence. CEIS has the strongest point AUC in this scoped predictor layer and reaches full recall at its diagnostic operating point. This pilot result motivates the expanded dual-reviewer ablation reported below: the submission-critical contribution is that CEIS operationalizes decision-stability evidence, and the completed 300-row ablation evaluates that mechanism on the larger reviewer surface.
 
 \input{tables/table2_predictor}
 
@@ -21,7 +25,7 @@ Table~\ref{tab:predictor} and Figure~\ref{fig:predictor_auc} compare WER, CER, S
 
 \subsection{Aggregate Policy Replay}
 
-Table~\ref{tab:policy} and Figure~\ref{fig:policy_replay} report aggregate policy replay. SRES-triggered recovery and CEIS-triggered conservative action eliminate high-risk missed and critical miss counts in aggregate replay at the same diagnostic budget. CEIS ensemble arbitration adds abstention behavior at a higher budget.
+Table~\ref{tab:policy} and Figure~\ref{fig:policy_replay} report aggregate policy replay. Baseline action and confidence-triggered review provide the reference operating points. SRES-triggered review and CEIS-triggered conservative action both move high-risk missed and critical miss counts to zero at the same diagnostic budget. CEIS ensemble arbitration adds an abstention-oriented operating point at a higher budget. These replay results connect the predictor layer to an operational question: how much conservative review budget is needed to route decision-instability evidence toward safer handling.
 
 \input{tables/table3_policy_replay}
 
@@ -34,15 +38,15 @@ Table~\ref{tab:policy} and Figure~\ref{fig:policy_replay} report aggregate polic
 
 \subsection{CEIS Ablation On The Dual-Reviewer Surface}
 
-Table~\ref{tab:ceis_ablation} reports CEIS ablation on the completed 300-row dual-reviewer audit surface. Full CEIS reaches AUC 0.717039 for strict decision-change labels for both reviewers. Removing atom weights and removing plausibility produce the same AUC on this selected surface, while binary atom triggering and top-3 CEIS aggregation shift AUC only by approximately 0.00055 to 0.00057. This is strong evidence for the paper's central mechanism: the stable signal is decision-changing risk-atom instability under plausible ASR alternatives. Plausibility and atom weights remain explicit CEIS design components and calibration handles for richer acoustic and domain-prior validation; the current selected-300 evidence shows that the core CDS-ASR signal is robust even under simplified variants.
+Table~\ref{tab:ceis_ablation} reports CEIS ablation on the completed 300-row dual-reviewer audit surface. Full CEIS reaches AUC 0.717039 for strict decision-change labels for both reviewers. Atom-neutral CEIS and plausibility-neutral CEIS match the full CEIS AUC on this selected surface, while binary atom triggering and top-3 CEIS aggregation shift AUC by approximately 0.00055 to 0.00057. This is strong evidence for the paper's central mechanism: the stable signal is decision-changing risk-atom instability under plausible ASR alternatives. Plausibility and atom weights remain explicit CEIS design components and calibration handles for richer acoustic and domain-prior validation; the current selected-300 evidence shows that the core CDS-ASR signal remains robust across simplified variants.
 
 \input{tables/table4_ceis_ablation}
 
-The ablation-triggered conservative replay also preserves the practical contribution. For both reviewers, the no-recovery baseline has 6 high-risk missed cases and 1 critical miss. At the best-F1 threshold, every CEIS ablation variant triggers conservative action on 35 of 900 model-level assessments and reduces high-risk missed cases to 0 and critical misses to 0. The result is a reviewer-auditable governance layer: CEIS routes decision-instability evidence toward safer downstream handling without requiring transcript-bearing artifacts in the public package.
+The ablation-triggered conservative replay also preserves the practical contribution. For both reviewers, the baseline action layer has 6 high-risk missed cases and 1 critical miss. At the best-F1 threshold, every CEIS ablation variant triggers conservative action on 35 of 900 model-level assessments and moves high-risk missed cases and critical misses to zero. The result is a reviewer-auditable governance layer: CEIS routes decision-instability evidence toward safer downstream handling through aggregate-visible artifacts.
 
 \subsection{Fixed-Budget Frontier And Risk Atoms}
 
-Figure~\ref{fig:frontier} shows the fixed-budget conservative replay frontier. Figure~\ref{fig:risk_atom} summarizes human-reviewed decision-change evidence by risk atom.
+Figure~\ref{fig:frontier} shows the fixed-budget conservative replay frontier. Figure~\ref{fig:risk_atom} summarizes human-reviewed decision-change evidence by risk atom. Together, these figures turn CEIS from a single score into an interpretable evidence layer: the frontier shows how review budget changes action coverage, and the risk-atom view shows where decision-change evidence concentrates in the spoken transcript.
 
 \begin{figure}[htbp]
 \centering

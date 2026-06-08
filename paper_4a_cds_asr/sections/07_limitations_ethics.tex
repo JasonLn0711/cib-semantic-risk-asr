@@ -1,7 +1,49 @@
-\section{Scope, Ethics, And Validation Path}
+\section{Limitations And Threats To Validity}
 
-The reviewed audit is a selected high-stakes validation surface: 300 human-reviewed rows per reviewer and 900 model-level assessments per reviewer clustered within those rows. The 900 assessments are not 900 independent calls; they are model-level assessments nested within 300 selected rows. The two-reviewer design adds an agreement layer over the same surface, with reviewer-specific labels preserved for ablation rather than converted into an inferred adjudication. The selected-300 layer is an enriched high-stakes audit surface, not a prevalence-preserving sample.
+\subsection{Scope-Controlled Evidence Surface}
 
-Thresholds are diagnostic operating points on the scoped audit set. Aggregate replay provides retrospective validation evidence for review prioritization, conservative escalation, and abstention policy design.
+The selected-300 audit surface is deliberately enriched for high-stakes decision-stability analysis. This design concentrates reviewer attention on the speech segments where ASR alternatives can carry operational consequence. Population prevalence estimation is a follow-on sampling layer, while the present study supplies a focused validation surface for the proposed ASR evaluation target.
 
-Raw audio, raw transcripts, selected row identifiers, reviewer notes, and transcript-bearing runtime logs remain outside the public release boundary. The intended use is ASR safety audit, review prioritization, conservative escalation, and abstention. CDS-ASR is not proposed for automatic punitive action, account restriction, guilt determination, or direct law-enforcement reporting without human review.
+The primary empirical unit is the audio row. Model-level assessments are clustered within the reviewed rows, and row-clustered reporting keeps the analysis aligned with the speech input. This design supports two complementary views: row-level decision-stability evidence for the reviewed case surface and model-level comparison evidence for ASR hypothesis behavior within the same rows.
+
+\subsection{Endpoint And Sensitivity Controls}
+
+The final evidence chain uses the pre-declared failover endpoint. Decision-change prediction becomes the primary empirical endpoint, and severe missed-escalation replay is reported as descriptive high-severity evidence. This endpoint structure keeps the statistical claim aligned with the density of reviewed positives and preserves the high-severity replay as operationally meaningful stress evidence.
+
+Sensitivity reporting supports this claim boundary. Row-clustered intervals, leave-one-row-out summaries, and aggregate replay artifacts make the stability of the reported results visible. The study therefore presents decision-stability evidence through multiple lenses: predictor behavior, reviewer agreement, CEIS ablation, conservative replay, and fixed-budget frontiers.
+
+\subsection{Variant And Calibration Path}
+
+The counterfactual variants are bounded audit artifacts around Mandarin risk atoms, model disagreement, and quality signals. This contract focuses the evaluation on alternatives that can plausibly move the declared downstream action. Future calibration can expand the same framework with acoustic posterior evidence, larger domain-prior tables, speaker- and channel-specific ambiguity models, and prospective deployment logs.
+
+CEIS uses audit-bounded plausibility and atom weights as interpretable design components. The dual-reviewer ablation shows that the central decision-stability signal remains visible across simplified variants, and it positions plausibility and atom weighting as calibration handles for richer acoustic and domain validation.
+
+\subsection{Generalization Path}
+
+The empirical setting is Mandarin anti-fraud speech. This setting is valuable because short spoken facts such as amount, actor, action, time, negation, uncertainty, intent, and scam pattern can carry the action boundary. Generalization to other languages and high-stakes speech domains follows the same design path: define the domain risk atoms, construct plausible ASR alternatives, declare the downstream action function, and validate decision stability with human-reviewed evidence.
+
+\section{Ethics, Privacy, Intended Use, And Data Availability}
+
+\subsection{Ethical Positioning}
+
+CDS-ASR is designed for safety audit, review prioritization, conservative escalation, and abstention in speech-to-decision systems. This positioning is aligned with uncertainty-aware decision support: the method routes decision-instability evidence toward additional review when spoken risk atoms carry action consequence. Reject-option and conformal-prediction work provide the broader foundation for conservative action under uncertainty \citep{chow1970reject,angelopoulos2021conformal}.
+
+The intended-use envelope is human-supervised. CDS-ASR supports reviewer-visible ASR evaluation, audit dashboards, risk-aware routing, and conservative handling policies. Direct punitive enforcement, automatic account restriction, guilt determination, and direct law-enforcement action sit outside this intended-use envelope. Human review remains the action context for high-stakes outcomes.
+
+\subsection{Privacy And Release Boundary}
+
+The release uses aggregate-only reproducibility to protect sensitive speech and reviewer material while preserving scientific traceability. Public artifacts expose aggregate counts, scores, tables, figure inputs, manifests, and method summaries. Audio, transcripts, selected row identifiers, transcript-bearing runtime logs, reviewer notes, and completed review packages are governed by the private release boundary.
+
+This design creates a balanced reproducibility model. Reviewers can inspect the evidence chain, validation artifacts, model-comparison summaries, ablation outputs, and policy replay summaries, while sensitive spoken content remains protected. The artifact manifest records the reviewer-visible package used for manuscript claims.
+
+\subsection{Data Availability Statement}
+
+The public package provides aggregate artifacts, tables, figures, source scripts, validation summaries, and artifact manifests sufficient to reproduce the manuscript's aggregate claims. Sensitive speech materials, transcript-bearing files, row identifiers, reviewer notes, and completed review packages are controlled under the aggregate-only privacy boundary. The available artifact set is listed in Appendix~\ref{app:aggregate_artifacts}.
+
+\section{Conclusion}
+
+This paper introduces CDS-ASR, a counterfactual decision-stability framework for high-stakes speech-to-decision ASR evaluation. The central idea is simple and operational: when ASR transcripts support routing, escalation, conservative review, or abstention, evaluation should measure whether plausible transcript alternatives around spoken risk atoms preserve the downstream action.
+
+The study provides an evidence chain for that idea. WER and CER anchor transcript-model context. SRES provides semantic-risk evidence. CEIS adds the action-stability layer by scoring policy-space movement under plausible ASR alternatives. On the selected-300 dual-reviewer surface, reviewer agreement supports the human-label foundation, the CEIS ablation identifies decision-changing risk-atom instability as the core signal, and aggregate replay shows how CEIS-supported conservative action can route high-severity evidence toward safer handling.
+
+CDS-ASR therefore shifts high-stakes ASR evaluation from transcript quality alone to a layered view of transcript fidelity, semantic movement, and decision stability. This gives CSL a speech-centered evaluation contribution: the unit of concern becomes the spoken decision atom, and the evaluation target becomes stability of the downstream action under plausible recognition alternatives.

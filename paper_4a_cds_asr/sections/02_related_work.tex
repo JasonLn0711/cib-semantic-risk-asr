@@ -1,13 +1,33 @@
 \section{Related Work}
 
-\paragraph{Transcript-centered ASR evaluation.}
-WER and CER remain core ASR evaluation metrics because they provide auditable transcript-similarity measures. For Chinese-language ASR, this manuscript treats character-level reporting as the primary paper-facing accuracy layer and segmented word metrics as supplemental evidence. Clinical-documentation reviews also show why transcript quality matters in operational settings where spoken input becomes institutional record content \citep{hodgson2016risks,blackley2019speech}. The aggregate metric-compliance audit is recorded in \artifact{70_experiments/runs/wer_metric_audit_2026_05_25/journal_compliance_summary.json}.
+This paper connects five streams of speech and spoken-language research that make ASR increasingly useful for speech-driven decisions: transcript-centered evaluation, semantic and downstream-aware metrics, transcript repair, selective action under uncertainty, and high-stakes speech evaluation. Each stream contributes an essential layer to the evidence chain. CDS-ASR extends this chain with a consequence-centered target: decision stability under plausible ASR alternatives around spoken risk atoms.
 
-\paragraph{Semantic and downstream-aware ASR evaluation.}
-Semantic ASR metrics extend transcript-centered evaluation by asking whether a transcript preserves meaning or downstream task behavior. Semantic-WER proposes an end-usability transcript metric, and SemDist connects ASR quality to user perception and downstream NLU behavior \citep{roy2021semantic,kim2022semdist}. CDS-ASR builds on this direction and targets a specific decision-stability question: whether plausible ASR alternatives around decision-critical atoms would change downstream action.
+\subsection{Transcript-centered ASR evaluation}
 
-\paragraph{ASR correction and confidence-aware repair.}
-ASR correction and confidence filtering improve transcript usability and reduce avoidable repair risk. CDS-ASR complements correction by evaluating whether the remaining uncertainty interval around risk atoms is still decision-stable.
+Transcript-centered metrics provide the reproducible foundation for ASR comparison. WER and CER make transcript quality auditable across systems, datasets, and reporting policies. For Chinese-language ASR, this manuscript treats character-level reporting as the primary paper-facing accuracy layer and segmented word metrics as supplemental evidence, with normalization and metric-compliance details recorded in the aggregate audit artifact \artifact{70_experiments/runs/wer_metric_audit_2026_05_25/journal_compliance_summary.json}.
 
-\paragraph{Selective prediction, reject option, and abstention.}
-Selective prediction and reject-option methods provide background for conservative action under uncertainty \citep{chow1970reject,angelopoulos2021conformal}. In CDS-ASR, conservative action means abstention, review prioritization, or escalation for human confirmation. It is not an automated punitive or adverse-action decision.
+Operational speech applications also show why reliable transcription remains a central evaluation layer. Clinical-documentation studies describe speech recognition as part of institutional record production, where transcript quality shapes downstream use and review \citep{hodgson2016risks,blackley2019speech}. CDS-ASR starts from this transcript layer and adds consequence tracing: it identifies which surface differences reach decision-critical atoms such as negation, amount, actor, action, time, intent, uncertainty, and scam pattern. This preserves the comparability value of WER/CER while adding a speech-to-decision view of how transcript variation reaches action boundaries.
+
+\subsection{Semantic and downstream-aware ASR evaluation}
+
+Semantic ASR evaluation extends transcript scoring toward meaning preservation, user perception, and downstream language behavior. Semantic-WER proposes an end-usability transcript metric \citep{roy2021semantic}. Semantic Distance connects ASR quality to spoken-language understanding tasks such as intent recognition, slot filling, semantic parsing, and named entity recognition \citep{kim2021semanticdistance}. Later SemDist work evaluates user perception of speech recognition quality \citep{kim2022semdist}, and Aligned Semantic Distance studies perceptual and task-oriented assessment of semantic ASR metrics \citep{rugayan2023asd}.
+
+These contributions make ASR evaluation more task-aware and more aligned with the meaning that users and downstream systems consume. CDS-ASR follows this trajectory at the action layer. It treats semantic preservation as an important part of the evidence chain and adds a direct decision-stability question: when an acoustically and semantically plausible ASR alternative changes a spoken risk atom, does the downstream triage action remain stable? This positions CEIS as a companion signal to semantic ASR metrics for high-stakes speech-to-decision workflows.
+
+\subsection{Transcript repair and confidence-aware ASR}
+
+Transcript repair and confidence-aware filtering strengthen ASR pipelines by improving transcript usability and by guiding when automatic edits are appropriate. Recent work on interfacing large language models with ASR systems uses confidence measures and prompting to support post-hoc correction while managing repair risk \citep{naderi2024llmconfidence}. This line of work makes the transcript layer more useful for downstream processing and motivates explicit treatment of residual uncertainty.
+
+CDS-ASR complements transcript repair by evaluating the decision interval that remains around risk atoms. A repaired transcript can be more fluent, more consistent, or more likely under a correction model; the speech-to-decision system also benefits from knowing whether plausible alternatives around the repaired span lead to the same action. The CDS-ASR contribution is to make that residual action stability measurable through bounded variants, a declared downstream decision function, and CEIS.
+
+\subsection{Selective prediction, reject option, and conservative action}
+
+Selective prediction, reject-option recognition, and conformal uncertainty provide the action policy background for CDS-ASR. Chow's reject-option formulation establishes the classical risk--reject tradeoff for recognition systems \citep{chow1970reject}. Selective classification and SelectiveNet develop neural approaches for controlling prediction risk through coverage and rejection \citep{geifman2017selective,geifman2019selectivenet}. Conformal prediction supplies a distribution-free perspective on uncertainty sets for high-risk prediction settings \citep{angelopoulos2021conformal}.
+
+CDS-ASR instantiates this risk--coverage logic for spoken-language decision evidence. The framework localizes uncertainty to spoken risk atoms, constructs plausible ASR alternatives, and evaluates whether conservative machine action, review prioritization, escalation, or abstention is supported by the decision-stability signal. This connects ASR evaluation to action selection while keeping the empirical claim grounded in aggregate replay and human-reviewed labels.
+
+\subsection{High-stakes speech-to-decision evaluation}
+
+High-stakes speech applications show that evaluation criteria should follow the intended use of the transcript. In psychotherapy ASR, Miner et al. distinguish population-level language analysis from individual-level safety monitoring and show that the acceptable evidence threshold depends on the clinical use case \citep{miner2020psychotherapy_asr}. This use-case-sensitive principle transfers naturally to anti-fraud calls, where small Mandarin spoken details can define the safe triage action.
+
+CDS-ASR uses this principle to structure ASR evaluation around the downstream decision. Transcript accuracy, semantic similarity, confidence-aware repair, and selective action each supply a foundation layer. CDS-ASR contributes the connecting layer for high-stakes speech-to-decision systems: plausible ASR alternatives are evaluated by their effect on downstream action. The resulting view keeps established ASR metrics visible and adds counterfactual decision stability as a measurable, reviewer-visible evaluation target.
